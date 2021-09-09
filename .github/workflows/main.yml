@@ -24,6 +24,6 @@ jobs:
       - name: Install dependencies
         run: yarn install:all
       - name: Run tests
-        run: test:all
+        run: yarn test:all
       - name: Build
-        run: build:all
+        run: yarn build:all
