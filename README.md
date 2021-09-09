@@ -1,11 +1,23 @@
-[![Website](https://img.shields.io/badge/Scale8-Website-9042e7)](https://scale8.com)
-[![Documentation](https://img.shields.io/badge/Scale8-Documentation-39cce0)](https://scale8.github.io/docs)
-[![API Documentation](https://img.shields.io/badge/Scale8-API%20Documentation-ff0084)](https://scale8.github.io/api-docs)
+<p align="center">
+    <a href="https://scale8.com"><img src="https://scale8.com/img/logo.png" width="100px" /></a>
+</p>
 
-# Scale8 - Tag Manager & Data Manager
+<h1 align="center">
+    Scale8 - Tag Manager & Data Manager
+</h1>
 
-[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/scale8/tag-manager/graphs/commit-activity)
+<p align="center">
+    <a href="https://scale8.com"><img src="https://img.shields.io/badge/Scale8-Website-9042e7" height="20"/></a>
+    <a href="https://scale8.github.io/docs"><img src="https://img.shields.io/badge/Scale8-Documentation-39cce0" height="20"/></a>
+    <a href="https://scale8.github.io/api-docs"><img src="https://img.shields.io/badge/Scale8-API%20Documentation-ff0084" height="20"/></a>
+</p>
+
+<p align="center">
+    <a href="https://www.gnu.org/licenses/agpl-3.0"><img src="https://img.shields.io/badge/License-AGPL%20v3-blue.svg" height="20"/></a>
+    <a href="https://github.com/scale8/tag-manager/graphs/commit-activity"><img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" height="20"/></a>
+</p>
+
+<br />
 
 > :warning: &nbsp;**Pre-launch**: We're currently in the final stage of testing before publishing the first stable release. :rocket:
 
@@ -60,7 +72,7 @@ We're scripting hard to provide complete one-click production ready setups for b
 
 As not everyone has the requirement to use a full Tag Manager, we've also provided an option to generate an extremely light version that only requires a few lines of JavaScript.
 
-[![Analytics](https://scale8.github.io/img/tag-manager/tag-manager-analytics.png)](https://scale8.github.io/docs/creating-application)
+<p align="center"><a href="https://scale8.github.io/docs/creating-application"><img src="https://scale8.github.io/img/tag-manager/tag-manager-analytics.png" width="100%"/></a><a href="#"><img src="https://scale8.com/img/shadow.png" width="100%"/></a></p>
 
 We have also provided full support for tracking Single Page Applications (SPAs) and hash-routing. These can be enabled when you install your application.
 
@@ -107,14 +119,14 @@ The Tag Manager is based on an **event-driven**, **rule-based** engine whereby a
 A triggered event within the browser can be easily managed by our simple interface.
 A clicked link, a page coming into focus, or a submitted form are all examples of events you may wish to listen to.
 
-[![Event Compose](https://scale8.github.io/img/tag-manager/tag-manager-add-event.png)](https://scale8.github.io/docs/events)
+<p align="center"><a href="https://scale8.github.io/docs/events"><img src="https://scale8.github.io/img/tag-manager/tag-manager-add-event.png" width="100%"/></a><a href="#"><img src="https://scale8.com/img/shadow.png" width="100%"/></a></p>
 
 ### Conditions & Exceptions
 
 A condition is a test made on a data container and aims to assert that some key belonging to a data container object is aligned with the expected value.
 An exception aims to make the same test, but instead exclude the rule should the test pass.
 
-[![Condition Compose](https://scale8.github.io/img/tag-manager/tag-manager-condition-equal-gb.png)](https://scale8.github.io/docs/conditions-and-exceptions)
+<p align="center"><a href="https://scale8.github.io/docs/conditions-and-exceptions"><img src="https://scale8.github.io/img/tag-manager/tag-manager-condition-equal-gb.png" width="100%"/></a><a href="#"><img src="https://scale8.com/img/shadow.png" width="100%"/></a></p>
 
 ### Actions
 
