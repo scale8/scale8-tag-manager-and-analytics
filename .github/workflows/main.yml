@@ -7,6 +7,8 @@ on:
         branches: [ master ]
     pull_request:
         branches: [ master ]
+    release:
+        types: [published]
 
     # Allows you to run this workflow manually from the Actions tab
     workflow_dispatch:
@@ -29,7 +31,7 @@ jobs:
             -   name: Build
                 run: yarn build:all
     push:
-        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'release'
         runs-on: ubuntu-latest
         steps:
             -   name: Check out code
@@ -49,13 +51,15 @@ jobs:
                 with:
                     username: ${{ secrets.DOCKER_HUB_USERNAME }}
                     password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-            -   name: Push Router
+            -   name: Push Latest
+                if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
                 run: |
-                    docker push scale8/router:latest
-            -   name: Push API
+                    docker push scale8/router:latest && docker push scale8/api:latest && docker push scale8/edge:latest
+            -   name: Tag for Release
+                if: github.event_name == 'release'
                 run: |
-                    docker push scale8/api:latest
-            -   name: Push Edge
+                    docker tag scale8/router:latest scale8/router:${GITHUB_REF##*/} && docker tag scale8/api:latest scale8/api:${GITHUB_REF##*/} && docker tag scale8/edge:latest scale8/edge:${GITHUB_REF##*/}
+            -   name: Push for Release
+                if: github.event_name == 'release'
                 run: |
-                    docker push scale8/edge:latest
-
+                    docker push scale8/router:${GITHUB_REF##*/} && docker push scale8/api:${GITHUB_REF##*/} && docker push scale8/edge:${GITHUB_REF##*/}
