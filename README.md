@@ -37,11 +37,11 @@ to be balanced with the business requirement to monetise a property and personal
 
 Here is a one-line example of how to get started if you already have [Docker Compose](https://docs.docker.com/compose/) installed.
 
-**We are moving to GitHub actions. For now, please run ```~> yarn build:all```. This will be released soon**
-
 ```bash
 ~> curl -L https://github.com/scale8/tag-manager/raw/master/docker-compose.yml | docker-compose -f - up
 ```
+
+Once the command above has started the services, point your browser at **```http://127.0.0.1:8080```**. You will be prompted to enter some basic details to configure the project.
 
 Or if you have checked out the project already and installed the dependencies via ```~> yarn install:all``` and wish to run it locally: -
 
