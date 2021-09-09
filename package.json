@@ -11,6 +11,7 @@
         "lint:fix": "yarn lint --fix",
         "install:all": "yarn install && yarn --cwd api/ install && yarn --cwd platforms/ install && yarn --cwd ui/ install && mvn -f edge/pom.xml clean install",
         "build:all": "(cd router && exec ./build.sh) && (cd edge && exec ./build.sh) && (cd api && exec ./build.sh)",
+        "test:all": "yarn --cwd api/ test && yarn --cwd ui/ test && mvn -f edge/pom.xml test",
         "run:all": "docker-compose up",
         "stop:all": "docker-compose stop",
         "start:mongodb": "docker run --name mongodb-dev -p 27017:27017 -d mongo:4.4",
