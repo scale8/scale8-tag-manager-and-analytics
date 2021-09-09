@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PlatformAssetManager fetches a platform asset via platform 1`] = `
+Object {
+  "data": Object {
+    "getPlatformRevision": Object {
+      "id": "5edf4c48e9615d9a1c66cbbb",
+      "platform_assets": Array [
+        Object {
+          "id": "5edf4c48e9615d9a1c660ccc",
+          "name": "test platform asset",
+        },
+      ],
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;

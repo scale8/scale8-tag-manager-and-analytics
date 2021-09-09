@@ -1,0 +1,17 @@
+{% extends 'BaseEmail.twig' %}
+
+{% block body %}{% apply spaceless %}
+    {{ bodyStart|raw }}
+
+    {{ hiFirstName|raw }}
+
+    {{ parSpacer|raw }}
+
+    {{ parStart|raw }}
+        This is a test email...
+    {{ parEnd|raw }}
+
+    {{ parSpacer|raw }}
+
+    {{ bodyEnd|raw }}
+{% endapply %}{% endblock %}

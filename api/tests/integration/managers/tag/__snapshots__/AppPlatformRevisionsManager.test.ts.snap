@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AppPlatformRevisionManager fetches a single app platform revision 1`] = `
+Object {
+  "data": Object {
+    "getAppPlatformRevision": Object {
+      "id": "5edf4c48e9615d9a1c66cadd",
+      "platform_revision": Object {
+        "id": "5edf4c48e9615d9a1c66cadd",
+        "name": "test platform revision",
+      },
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;

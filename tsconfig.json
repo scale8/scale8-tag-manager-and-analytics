@@ -1,0 +1,34 @@
+{
+    "compilerOptions": {
+        "target": "ES2019",
+        "module": "commonjs",
+        "lib": ["dom","es2019"],
+        "outDir": "dist",
+        "typeRoots": ["./node_modules/@types", "./typings"],
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitReturns": true,
+        "importHelpers": true,
+        "esModuleInterop": true,
+        "strict": true
+    },
+    "exclude": [ "node_modules" ],
+    "include": [
+        "typings/**/*",
+        "src/**/*",
+        "tests/**/*",
+        "api/typings/**/*",
+        "api/src/**/*",
+        "api/tests/**/*",
+        "core/typings/**/*",
+        "core/src/**/*",
+        "core/tests/**/*",
+        "ui/typings/**/*",
+        "ui/src/**/*",
+        "ui/tests/**/*",
+        "platforms/**/*",
+        "common/**/*"
+    ]
+}

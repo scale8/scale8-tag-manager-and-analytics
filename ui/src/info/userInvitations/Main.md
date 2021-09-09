@@ -1,0 +1,1 @@
+In this area you can see and manage the user **invitations** still pending.

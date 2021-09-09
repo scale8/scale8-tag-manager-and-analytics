@@ -1,0 +1,33 @@
+{
+    "name": "s8",
+    "version": "0.0.1",
+    "description": "Scale8 - Self Hosted Services",
+    "license": "AGPL-3.0",
+    "engines": {
+        "node": "12.16"
+    },
+    "scripts": {
+        "lint": "eslint . --ext .ts",
+        "lint:fix": "yarn lint --fix",
+        "install:all": "yarn install && yarn --cwd api/ install && yarn --cwd platforms/ install && yarn --cwd ui/ install && mvn -f edge/pom.xml clean install",
+        "build:all": "(cd router && exec ./build.sh) && (cd edge && exec ./build.sh) && (cd api && exec ./build.sh)",
+        "run:all": "docker-compose up",
+        "stop:all": "docker-compose stop",
+        "start:mongodb": "docker run --name mongodb-dev -p 27017:27017 -d mongo:4.4",
+        "stop:mongodb": "docker stop mongodb-dev && docker rm mongodb-dev"
+    },
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^4.28.4",
+        "@typescript-eslint/parser": "^4.28.4",
+        "eslint": "^7.31.0",
+        "eslint-config-prettier": "^8.3.0",
+        "eslint-plugin-jest": "^24.4.0",
+        "eslint-plugin-prettier": "^3.4.0",
+        "eslint-plugin-unused-imports": "^1.1.2",
+        "jest": "^27.0.6",
+        "prettier": "^2.3.2",
+        "typescript": "^4.0.2"
+    },
+    "dependencies": {
+    }
+}

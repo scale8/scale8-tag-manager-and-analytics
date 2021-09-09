@@ -1,0 +1,1 @@
+In this area you can manage the **Platforms** installed in your **Application**.

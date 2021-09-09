@@ -1,0 +1,30 @@
+{% extends 'BaseEmail.twig' %}
+{% from 'partials/button.twig' import button as button %}
+
+{% block body %}{% apply spaceless %}
+    {{ bodyStart|raw }}
+
+    {{ hiFirstName|raw }}
+
+    {{ parSpacer|raw }}
+
+    {{ parStart|raw }}
+        Thank you for registering for a Scale8 account.
+        In order to complete your sign up request, we first need to validate your email address.
+    {{ parEnd|raw }}
+
+    {{ parSpacer|raw }}
+
+    {{ parStart|raw }}
+        Please click on the link below to confirm your email address.
+        If you did not make this request, please ignore this email.
+    {{ parEnd|raw }}
+
+    {{ parSpacer|raw }}
+
+    {{ button(uiUrl,'Complete Sign Up') }}
+
+    {{ parSpacer|raw }}
+
+    {{ bodyEnd|raw }}
+{% endapply %}{% endblock %}

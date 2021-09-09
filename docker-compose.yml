@@ -1,0 +1,43 @@
+version: "3.7"
+services:
+    mongodb:
+        image: mongo:4.4
+        # for testing with mongo running as a replica set. this is useful for transaction support.
+        # command: --replSet rs0
+        # once started, it needs to be configured
+        # start the DB server - example: -
+        # docker-compose up -d mongodb && sh -c 'while ! mongo --eval "db.version()" > /dev/null 2>&1; do sleep 0.1; done' && mongo --username=s8-admin --password=s8-admin --host=127.0.0.1 --port=27017 --eval 'rs.initiate()'
+        container_name: mongodb
+        expose:
+            - "27017"
+
+    edge:
+        image: scale8/edge:latest
+        container_name: edge
+        depends_on:
+            - mongodb
+        expose:
+            - "6080"
+        environment:
+            MONGO_CONNECT_STRING: "mongodb://mongodb"
+            S8_API_SERVER: "http://api:8082"
+            S8_ROOT_SERVER: "http://127.0.0.1:8080"
+
+    api:
+        image: scale8/api:latest
+        container_name: api
+        depends_on:
+            - mongodb
+        expose:
+            - "8082"
+        environment:
+            MONGO_CONNECT_STRING: "mongodb://mongodb"
+
+    router:
+        image: scale8/router:latest
+        container_name: router
+        depends_on:
+            - edge
+            - api
+        ports:
+            - "8080:80"

@@ -1,0 +1,1 @@
+This is the [Timezone]({{DOCUMENTATION_URL}}/#/api/TimeZone) of your **organization**.

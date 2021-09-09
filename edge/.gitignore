@@ -1,0 +1,6 @@
+logs
+target
+.DS_Store
+.idea
+*.iml
+gc-creds.json

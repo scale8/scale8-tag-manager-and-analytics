@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "target": "ES2019",
+        "module": "commonjs",
+        "lib": ["dom","es2019"],
+        "outDir": "dist",
+        "typeRoots": ["./node_modules/@types", "./typings"],
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitReturns": true,
+        "importHelpers": true,
+        "esModuleInterop": true,
+        "strict": true,
+        "resolveJsonModule": true
+    },
+    "exclude": [ "node_modules" ],
+    "include": [
+        "typings/**/*",
+        "src/**/*",
+        "tests/**/*"
+    ]
+}

@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PlatformEventManager fetches a single platform event 1`] = `
+Object {
+  "data": Object {
+    "getPlatformEvent": Object {
+      "id": "5edf4c48e9615d9a1c66cddd",
+      "name": "test platform event",
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;

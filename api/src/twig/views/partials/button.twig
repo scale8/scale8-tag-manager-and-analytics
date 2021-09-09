@@ -1,0 +1,11 @@
+{% macro button(link, text) %}
+    {% set bgColor = '#f3f3f3' %}
+    {% set buttonStyle = "font-family:'Source Sans Pro',Arial,sans-serif;font-weight:300;font-size:18px;color:#ffffff;background:#9042e7;;display:inline-block;line-height:100%;margin:0;text-decoration:none;text-transform:none;padding:10px 34px 10px 34px;mso-padding-alt:0px;border-radius:10px;" %}
+    <tr>
+        <td bgcolor='{{ bgColor }}' align="center"  style="{{ spanBodyStyle }}">
+            <a href="{{ link }}" style="{{ buttonStyle }}" target="_blank">
+                <div>{{ text }}</div>
+            </a>
+        </td>
+    </tr>
+{% endmacro %}

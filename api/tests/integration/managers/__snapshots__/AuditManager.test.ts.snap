@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AuditManager gets HistoryForEntities 1`] = `
+Object {
+  "data": Object {
+    "getHistoryForEntities": Array [
+      Object {
+        "action": "Create",
+        "comments": "comment",
+        "connected_models": Array [
+          Object {
+            "id": "5edf4c48e9615d9a1c66bbbb",
+            "type": "Org",
+          },
+        ],
+        "created_at": 1608175440000,
+        "id": "5edf4c48e9615d9a1c66bccc",
+        "method": "INDIRECT_METHOD",
+        "model": "Org",
+        "model_id": "5edf4c48e9615d9a1c66bbbb",
+        "model_persisting_id": "pId",
+        "owner": "SYSTEM",
+        "user": null,
+      },
+      Object {
+        "action": "Create",
+        "comments": "comment",
+        "connected_models": Array [
+          Object {
+            "id": "5edf4c48e9615d9a1c66bbbb",
+            "type": "Org",
+          },
+        ],
+        "created_at": 1608175440000,
+        "id": "aaaf4c48e9615d9a1c66bccc",
+        "method": "INDIRECT_METHOD",
+        "model": "Org",
+        "model_id": "5edf4c48e9615d9a1c66bbbb",
+        "model_persisting_id": "pId",
+        "owner": "SYSTEM",
+        "user": null,
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;

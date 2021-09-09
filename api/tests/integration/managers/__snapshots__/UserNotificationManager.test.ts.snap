@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UserNotificationManager fetch UserNotification through user me 1`] = `
+Object {
+  "data": Object {
+    "me": Object {
+      "id": "5edf4c48e9615d9a1c66baaa",
+      "user_notifications": Array [
+        Object {
+          "id": "5edf4c48e9615d9a1c66beee",
+          "is_viewed": false,
+          "type": "WELCOME",
+        },
+      ],
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;

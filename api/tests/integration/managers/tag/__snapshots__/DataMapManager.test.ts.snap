@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DataMapManager fetches a data map via event 1`] = `
+Object {
+  "data": Object {
+    "getEvent": Object {
+      "data_maps": Array [
+        Object {
+          "id": "5edf4c48e9615d9a1c66cccc",
+          "key": "tdm",
+          "value": Object {
+            "__typename": "DataMapValueContainer",
+            "value": "value 1",
+          },
+          "var_type": "STRING",
+        },
+      ],
+      "id": "5edf4c48e9615d9a1c66ceee",
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;

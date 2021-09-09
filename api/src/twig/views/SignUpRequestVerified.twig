@@ -1,0 +1,32 @@
+{% extends 'BaseEmail.twig' %}
+
+{% block body %}{% apply spaceless %}
+    {{ bodyStart|raw }}
+
+    {{ parStart|raw }}
+        Welcome {{ firstName }}!
+    {{ parEnd|raw }}
+
+    {{ parStart|raw }}
+        Thank you for signing up.
+    {{ parEnd|raw }}
+
+    {{ parSpacer|raw }}
+
+    {% if password|default is not empty %}
+        {{ parStart|raw }}
+            Your new password is:
+        {{ parEnd|raw }}
+        {{ parStart|raw }}
+            <b>{{ password }}</b>
+        {{ parEnd|raw }}
+
+        {{ parSpacer|raw }}
+    {% endif %}
+
+    {{ pleaseLogin|raw }}
+
+    {{ parSpacer|raw }}
+
+    {{ bodyEnd|raw }}
+{% endapply %}{% endblock %}

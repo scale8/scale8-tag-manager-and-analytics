@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PlatformDataMapManager fetches a platform data map via event 1`] = `
+Object {
+  "data": Object {
+    "getPlatformEvent": Object {
+      "id": "5edf4c48e9615d9a1c66cddd",
+      "name": "test platform event",
+      "platform_data_maps": Array [
+        Object {
+          "default_value": null,
+          "description": "platform data map description",
+          "icon": null,
+          "id": "5edf4c48e9615d9a1c66cdd0",
+          "input_type": "TEXT",
+          "is_optional": true,
+          "key": "pdm",
+          "option_values": null,
+          "validation_rules": null,
+          "var_type": "STRING",
+        },
+      ],
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;

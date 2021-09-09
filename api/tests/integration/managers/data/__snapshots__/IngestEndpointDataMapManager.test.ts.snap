@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`IngestEndpointDataMapManager fetches ingest endpoint DataMap 1`] = `
+Object {
+  "data": Object {
+    "getIngestEndpointDataMap": Object {
+      "default_value": null,
+      "id": "5edf4c48e9615d9a1c66badd",
+      "is_optional": true,
+      "key": "DataMapKey",
+      "validation_rules": null,
+      "var_type": "STRING",
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;

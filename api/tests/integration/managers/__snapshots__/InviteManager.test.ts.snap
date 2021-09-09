@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InviteManager fetch invite through org 1`] = `
+Object {
+  "data": Object {
+    "getOrg": Object {
+      "id": "5edf4c48e9615d9a1c66bbbb",
+      "invites": Array [
+        Object {
+          "created_at": 1608175440000,
+          "email": "test@mail.com",
+          "id": "5edf4c48e9615d9a1c66bddd",
+          "org_permissions": Object {
+            "can_create": false,
+            "can_delete": false,
+            "can_edit": false,
+            "can_view": true,
+            "is_admin": false,
+          },
+          "updated_at": 1608441840000,
+        },
+      ],
+      "name": "testOrg",
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;

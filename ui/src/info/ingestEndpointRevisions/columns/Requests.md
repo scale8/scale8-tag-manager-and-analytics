@@ -1,0 +1,1 @@
+This will show the trend in the endpoint revision **number of requests**.

@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "moduleResolution": "node",
+        "module": "esnext",
+        "lib": [
+            "dom",
+            "esnext"
+        ],
+        "outDir": "dist",
+        "sourceMap": true,
+        "experimentalDecorators": false,
+        "strict": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "jsx": "react"
+    },
+    "exclude": [
+        "node_modules"
+    ],
+    "include": [
+        "providers/**/*",
+        "tests/**/*"
+    ]
+}

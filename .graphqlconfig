@@ -1,0 +1,23 @@
+{
+  "name": "GQL API Internal and UI Remote",
+  "projects": {
+    "ui": {
+      "includes": ["src/gql/**"],
+      "schemaPath": "remote-schema.graphql",
+      "extensions": {
+        "endpoints": {
+          "Remote GraphQL Endpoint": {
+            "url": "http://localhost:8082/graphql",
+            "headers": {
+              "user-agent": "JS GraphQL"
+            },
+            "introspect": true
+          }
+        }
+      }
+    },
+    "api": {
+      "includes": ["src/**"]
+    }
+  }
+}

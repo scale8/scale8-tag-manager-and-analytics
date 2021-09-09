@@ -1,0 +1,14 @@
+export enum VarType {
+    DATETIME = 'DATETIME',
+    TIMESTAMP = 'TIMESTAMP',
+    STRING = 'STRING',
+    BOOLEAN = 'BOOLEAN',
+    INT = 'INT',
+    FLOAT = 'FLOAT',
+    NULL = 'NULL',
+    OBJECT = 'OBJECT',
+    ARRAY_STRING = 'ARRAY_STRING',
+    ARRAY_INT = 'ARRAY_INT',
+    ARRAY_FLOAT = 'ARRAY_FLOAT',
+    ARRAY_OBJECT = 'ARRAY_OBJECT',
+}

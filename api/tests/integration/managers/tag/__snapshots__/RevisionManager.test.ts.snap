@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RevisionManager fetches a single revision 1`] = `
+Object {
+  "data": Object {
+    "getRevision": Object {
+      "id": "5edf4c48e9615d9a1c66bbbb",
+      "name": "test revision",
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;

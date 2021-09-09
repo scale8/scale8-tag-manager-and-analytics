@@ -1,0 +1,19 @@
+micronaut:
+  server:
+    port: 6080
+    cors:
+      enabled: true
+  application:
+    name: edge
+  caches:
+    app:
+      expire-after-write: "60s"
+      expire-after-access: "60s"
+    ingest:
+      expire-after-write: "60s"
+      expire-after-access: "60s"
+    geo:
+      expire-after-write: "600s"
+      expire-after-access: "600s"
+
+backend-storage: "mongodb"

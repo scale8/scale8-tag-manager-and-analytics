@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PlatformManager fetches a single platform 1`] = `
+Object {
+  "data": Object {
+    "getPlatform": Object {
+      "id": "5edf4c48e9615d9a1c66caaa",
+      "name": "test platform",
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;

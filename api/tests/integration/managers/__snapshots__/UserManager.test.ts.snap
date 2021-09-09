@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UserManager get me 1`] = `
+Object {
+  "data": Object {
+    "me": Object {
+      "email": "test@mail.com",
+      "first_name": "FirstName",
+      "id": "5edf4c48e9615d9a1c66baaa",
+      "is_admin": false,
+      "last_name": "LastName",
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;

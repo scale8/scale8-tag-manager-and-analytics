@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PlatformActionPermissionManager fetches a single platform action permission 1`] = `
+Object {
+  "data": Object {
+    "getPlatformActionPermission": Object {
+      "id": "5edf4c48e9615d9a1c66caef",
+      "permission": "LOG_TO_CONSOLE",
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;

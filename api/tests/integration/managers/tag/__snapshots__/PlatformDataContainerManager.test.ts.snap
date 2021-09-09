@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PlatformDataContainerManager fetches a single platform 1`] = `
+Object {
+  "data": Object {
+    "getPlatformDataContainer": Object {
+      "id": "5edf4c48e9615d9a1c66cabb",
+      "name": "test platform data container",
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;

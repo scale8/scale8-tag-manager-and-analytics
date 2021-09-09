@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RuleManager fetches a single rule 1`] = `
+Object {
+  "data": Object {
+    "getRule": Object {
+      "id": "5edf4c48e9615d9a1c66bbee",
+      "name": "test rule",
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;

@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TagManagerAccountManager fetches tag manager account 1`] = `
+Object {
+  "data": Object {
+    "getTagManagerAccount": Object {
+      "id": "5edf4c48e9615d9a1c66baee",
+      "org": Object {
+        "id": "5edf4c48e9615d9a1c66bbbb",
+        "name": "testOrg",
+      },
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;

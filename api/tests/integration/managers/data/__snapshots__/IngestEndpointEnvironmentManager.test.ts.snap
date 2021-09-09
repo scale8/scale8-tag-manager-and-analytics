@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`IngestEndpointEnvironmentManager fetches ingest endpoint environment 1`] = `
+Object {
+  "data": Object {
+    "getIngestEndpointEnvironment": Object {
+      "custom_domain": null,
+      "id": "5edf4c48e9615d9a1c66baff",
+      "ingest_endpoint_revision": Object {
+        "id": "5edf4c48e9615d9a1c66baff",
+      },
+      "name": "test environment",
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;

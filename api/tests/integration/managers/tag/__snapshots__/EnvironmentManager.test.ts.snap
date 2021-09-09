@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EnvironmentManager fetches a single environment 1`] = `
+Object {
+  "data": Object {
+    "getEnvironment": Object {
+      "id": "5edf4c48e9615d9a1c66cfff",
+      "name": "test environment",
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;

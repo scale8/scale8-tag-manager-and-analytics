@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OrgManager fetches single org 1`] = `
+Object {
+  "data": Object {
+    "getOrg": Object {
+      "id": "5edf4c48e9615d9a1c66bbbb",
+      "name": "testOrg",
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;

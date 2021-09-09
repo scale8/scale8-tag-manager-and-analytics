@@ -1,0 +1,598 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LoggedInTemplate renders LoggedInTemplate unchanged 1`] = `
+Array [
+  <div
+    className="makeStyles-root-1"
+  >
+    <div
+      className="makeStyles-root-10"
+    >
+      <div
+        className="makeStyles-logo-12"
+        onClick={[Function]}
+      >
+        <svg
+          viewBox="0 0 186 339"
+          width={27}
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M 55.03,16.48 C 76.14,-4.63 110.37,-4.63 131.48,16.48 131.48,16.48 93.25,54.69 93.25,54.69 93.25,54.69 55.03,16.48 55.03,16.48 Z"
+            id="top-1"
+            style={
+              Object {
+                "fill": "#c6e54b",
+                "fillOpacity": 1,
+                "fillRule": "nonzero",
+                "stroke": "none",
+                "strokeWidth": "0.352777",
+              }
+            }
+          />
+          <path
+            d="M 93.25,54.69 C 93.25,54.69 131.66,16.29 131.66,16.29 131.66,16.29 169.93,54.55 169.93,54.55 169.93,54.55 131.52,92.95 131.52,92.95 131.52,92.95 93.25,54.69 93.25,54.69 Z"
+            id="top-2"
+            style={
+              Object {
+                "fill": "#fab300",
+                "fillOpacity": 1,
+                "fillRule": "nonzero",
+                "stroke": "none",
+                "strokeWidth": "0.352777",
+              }
+            }
+          />
+          <path
+            d="M 169.75,54.74 C 190.86,75.84 190.86,110.06 169.75,131.16 169.75,131.16 131.52,92.95 131.52,92.95 131.52,92.95 169.75,54.74 169.75,54.74 Z"
+            id="top-3"
+            style={
+              Object {
+                "fill": "#ffdc51",
+                "fillOpacity": 1,
+                "fillRule": "nonzero",
+                "stroke": "none",
+                "strokeWidth": "0.352777",
+              }
+            }
+          />
+          <path
+            d="M 16.25,131.77 C -4.86,110.67 -4.86,76.45 16.25,55.34 16.25,55.34 54.47,93.56 54.47,93.56 54.47,93.56 16.25,131.77 16.25,131.77 Z"
+            id="mid-1"
+            style={
+              Object {
+                "fill": "#01c8a1",
+                "fillOpacity": 1,
+                "fillRule": "nonzero",
+                "stroke": "none",
+                "strokeWidth": "0.352777",
+              }
+            }
+          />
+          <path
+            d="M 16.25,131.77 C 16.25,131.77 54.65,93.38 54.65,93.38 54.65,93.38 92.92,131.64 92.92,131.64 92.92,131.64 54.52,170.03 54.52,170.03 54.52,170.03 16.25,131.77 16.25,131.77 Z"
+            id="mid-2"
+            style={
+              Object {
+                "fill": "#0096a6",
+                "fillOpacity": 1,
+                "fillRule": "nonzero",
+                "stroke": "none",
+                "strokeWidth": "0.352777",
+              }
+            }
+          />
+          <path
+            d="M 54.52,170.03 C 54.52,170.03 92.92,131.64 92.92,131.64 92.92,131.64 131.19,169.90 131.19,169.90 131.19,169.90 92.79,208.29 92.79,208.29 92.79,208.29 54.52,170.03 54.52,170.03 Z"
+            id="mid-3"
+            style={
+              Object {
+                "fill": "#39cce0",
+                "fillOpacity": 1,
+                "fillRule": "nonzero",
+                "stroke": "none",
+                "strokeWidth": "0.352777",
+              }
+            }
+          />
+          <path
+            d="M 169.46,208.16 C 169.46,208.16 131.05,246.55 131.05,246.55 131.05,246.55 92.78,208.29 92.78,208.29 92.78,208.29 131.19,169.90 131.19,169.90 131.19,169.90 169.46,208.16 169.46,208.16 Z"
+            id="mid-4"
+            style={
+              Object {
+                "fill": "#aa74e6",
+                "fillOpacity": 1,
+                "fillRule": "nonzero",
+                "stroke": "none",
+                "strokeWidth": "0.352777",
+              }
+            }
+          />
+          <path
+            d="M 169.46,208.16 C 190.57,229.26 190.57,263.48 169.46,284.59 169.46,284.59 131.24,246.37 131.24,246.37 131.24,246.37 169.46,208.16 169.46,208.16 Z"
+            id="mid-5"
+            style={
+              Object {
+                "fill": "#9042e7",
+                "fillOpacity": 1,
+                "fillRule": "nonzero",
+                "stroke": "none",
+                "strokeWidth": "0.352777",
+              }
+            }
+          />
+          <path
+            d="M 16.16,284.90 C -4.95,263.80 -4.95,229.58 16.16,208.47 16.16,208.47 54.38,246.69 54.38,246.69 54.38,246.69 16.16,284.90 16.16,284.90 Z"
+            id="bottom-1"
+            style={
+              Object {
+                "fill": "#ff0084",
+                "fillOpacity": 1,
+                "fillRule": "nonzero",
+                "stroke": "none",
+                "strokeWidth": "0.352777",
+              }
+            }
+          />
+          <path
+            d="M 92.65,284.95 C 92.65,284.95 54.25,323.35 54.25,323.35 54.25,323.35 15.98,285.08 15.98,285.08 15.98,285.08 54.38,246.69 54.38,246.69 54.38,246.69 92.65,284.95 92.65,284.95 Z"
+            id="bottom-2"
+            style={
+              Object {
+                "fill": "#fe657a",
+                "fillOpacity": 1,
+                "fillRule": "nonzero",
+                "stroke": "none",
+                "strokeWidth": "0.352777",
+              }
+            }
+          />
+          <path
+            d="M 130.87,323.16 C 109.76,344.27 75.54,344.27 54.43,323.16 54.43,323.16 92.65,284.95 92.65,284.95 92.65,284.95 130.87,323.16 130.87,323.16 Z"
+            id="bottom-3"
+            style={
+              Object {
+                "fill": "#c63d51",
+                "fillOpacity": 1,
+                "fillRule": "nonzero",
+                "stroke": "none",
+                "strokeWidth": "0.352777",
+              }
+            }
+          />
+        </svg>
+      </div>
+      <div
+        className="makeStyles-main-11"
+      />
+      <div
+        className="makeStyles-admin-14"
+      >
+        <button
+          aria-describedby={null}
+          className="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit"
+          disabled={false}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onDragLeave={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          onMouseDown={[Function]}
+          onMouseLeave={[Function]}
+          onMouseOver={[Function]}
+          onMouseUp={[Function]}
+          onTouchEnd={[Function]}
+          onTouchMove={[Function]}
+          onTouchStart={[Function]}
+          tabIndex={0}
+          title="Admin Area"
+          type="button"
+        >
+          <span
+            className="MuiIconButton-label"
+          >
+            <svg
+              aria-hidden={true}
+              className="MuiSvgIcon-root"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm7-7H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-1.75 9c0 .23-.02.46-.05.68l1.48 1.16c.13.11.17.3.08.45l-1.4 2.42c-.09.15-.27.21-.43.15l-1.74-.7c-.36.28-.76.51-1.18.69l-.26 1.85c-.03.17-.18.3-.35.3h-2.8c-.17 0-.32-.13-.35-.29l-.26-1.85c-.43-.18-.82-.41-1.18-.69l-1.74.7c-.16.06-.34 0-.43-.15l-1.4-2.42c-.09-.15-.05-.34.08-.45l1.48-1.16c-.03-.23-.05-.46-.05-.69 0-.23.02-.46.05-.68l-1.48-1.16c-.13-.11-.17-.3-.08-.45l1.4-2.42c.09-.15.27-.21.43-.15l1.74.7c.36-.28.76-.51 1.18-.69l.26-1.85c.03-.17.18-.3.35-.3h2.8c.17 0 .32.13.35.29l.26 1.85c.43.18.82.41 1.18.69l1.74-.7c.16-.06.34 0 .43.15l1.4 2.42c.09.15.05.34-.08.45l-1.48 1.16c.03.23.05.46.05.69z"
+              />
+            </svg>
+          </span>
+          <span
+            className="MuiTouchRipple-root"
+          />
+        </button>
+      </div>
+      <div
+        className="makeStyles-iconButton-16"
+      >
+        <div
+          className="MuiBox-root MuiBox-root-18"
+        >
+          <button
+            aria-describedby={null}
+            className="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit"
+            disabled={false}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onDragLeave={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseDown={[Function]}
+            onMouseLeave={[Function]}
+            onMouseOver={[Function]}
+            onMouseUp={[Function]}
+            onTouchEnd={[Function]}
+            onTouchMove={[Function]}
+            onTouchStart={[Function]}
+            tabIndex={0}
+            title="Manage Organizations"
+            type="button"
+          >
+            <span
+              className="MuiIconButton-label"
+            >
+              <svg
+                aria-hidden={true}
+                className="MuiSvgIcon-root"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"
+                />
+              </svg>
+            </span>
+            <span
+              className="MuiTouchRipple-root"
+            />
+          </button>
+        </div>
+      </div>
+      <div
+        className="makeStyles-iconButton-16"
+      >
+        <div
+          aria-describedby={null}
+          className="MuiBox-root MuiBox-root-19"
+          onBlur={[Function]}
+          onFocus={[Function]}
+          onMouseLeave={[Function]}
+          onMouseOver={[Function]}
+          onTouchEnd={[Function]}
+          onTouchStart={[Function]}
+          title="Notifications"
+        >
+          <button
+            className="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit"
+            disabled={false}
+            onBlur={[Function]}
+            onClick={[MockFunction]}
+            onDragLeave={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseDown={[Function]}
+            onMouseLeave={[Function]}
+            onMouseUp={[Function]}
+            onTouchEnd={[Function]}
+            onTouchMove={[Function]}
+            onTouchStart={[Function]}
+            tabIndex={0}
+            type="button"
+          >
+            <span
+              className="MuiIconButton-label"
+            >
+              <span
+                className="MuiBadge-root"
+              >
+                <svg
+                  aria-hidden={true}
+                  className="MuiSvgIcon-root"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"
+                  />
+                </svg>
+                <span
+                  className="MuiBadge-badge MuiBadge-anchorOriginTopRightRectangle MuiBadge-colorSecondary"
+                >
+                  5
+                </span>
+              </span>
+            </span>
+            <span
+              className="MuiTouchRipple-root"
+            />
+          </button>
+        </div>
+      </div>
+      <div
+        className="makeStyles-userSelector-17"
+      >
+        <button
+          aria-controls="simple-menu"
+          aria-haspopup="true"
+          className="MuiButtonBase-root MuiIconButton-root makeStyles-root-25 MuiIconButton-colorInherit"
+          disabled={false}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onDragLeave={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          onMouseDown={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          onTouchEnd={[Function]}
+          onTouchMove={[Function]}
+          onTouchStart={[Function]}
+          tabIndex={0}
+          type="button"
+        >
+          <span
+            className="MuiIconButton-label"
+          >
+            <div
+              className="MuiAvatar-root MuiAvatar-circular makeStyles-avatar-26 MuiAvatar-colorDefault"
+            >
+              <svg
+                aria-hidden={true}
+                className="MuiSvgIcon-root MuiAvatar-fallback"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                />
+              </svg>
+            </div>
+          </span>
+          <span
+            className="MuiTouchRipple-root"
+          />
+        </button>
+        <
+          disablePortal={false}
+        >
+          <div
+            className="MuiPopover-root"
+            id="simple-menu"
+            onKeyDown={[Function]}
+            role="presentation"
+            style={
+              Object {
+                "bottom": 0,
+                "left": 0,
+                "position": "fixed",
+                "right": 0,
+                "top": 0,
+                "visibility": "hidden",
+                "zIndex": 1300,
+              }
+            }
+          >
+            <div
+              data-test="sentinelStart"
+              tabIndex={0}
+            />
+            <div
+              className="MuiPaper-root MuiMenu-paper MuiPopover-paper MuiPaper-elevation8 MuiPaper-rounded"
+              style={
+                Object {
+                  "opacity": 0,
+                  "transform": "scale(0.75, 0.5625)",
+                  "visibility": "hidden",
+                }
+              }
+              tabIndex="-1"
+            >
+              <ul
+                className="MuiList-root MuiMenu-list MuiList-padding"
+                onKeyDown={[Function]}
+                role="menu"
+                tabIndex={-1}
+              >
+                <li
+                  aria-disabled={true}
+                  className="MuiButtonBase-root MuiListItem-root MuiMenuItem-root makeStyles-menuContent-23 MuiMenuItem-gutters MuiListItem-gutters Mui-disabled MuiListItem-button Mui-disabled"
+                  onBlur={[Function]}
+                  onDragLeave={[Function]}
+                  onFocus={[Function]}
+                  onKeyDown={[Function]}
+                  onKeyUp={[Function]}
+                  onMouseDown={[Function]}
+                  onMouseLeave={[Function]}
+                  onMouseUp={[Function]}
+                  onTouchEnd={[Function]}
+                  onTouchMove={[Function]}
+                  onTouchStart={[Function]}
+                  role="menuitem"
+                  tabIndex={-1}
+                >
+                  <div
+                    className="MuiBox-root MuiBox-root-27"
+                  >
+                    <div
+                      className="MuiAvatar-root MuiAvatar-circular makeStyles-large-22 MuiAvatar-colorDefault"
+                    >
+                      <svg
+                        aria-hidden={true}
+                        className="MuiSvgIcon-root MuiAvatar-fallback"
+                        focusable="false"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <div
+                    className="MuiBox-root MuiBox-root-28"
+                  >
+                    <span
+                      className="MuiTypography-root MuiTypography-noWrap"
+                    >
+                      name
+                    </span>
+                  </div>
+                  <div
+                    className="MuiBox-root MuiBox-root-29"
+                  >
+                    <span
+                      className="MuiTypography-root MuiTypography-noWrap"
+                    >
+                      email
+                    </span>
+                  </div>
+                </li>
+                <li
+                  aria-disabled={false}
+                  className="MuiButtonBase-root MuiListItem-root MuiMenuItem-root MuiMenuItem-gutters MuiListItem-gutters MuiListItem-button"
+                  onBlur={[Function]}
+                  onClick={[Function]}
+                  onDragLeave={[Function]}
+                  onFocus={[Function]}
+                  onKeyDown={[Function]}
+                  onKeyUp={[Function]}
+                  onMouseDown={[Function]}
+                  onMouseLeave={[Function]}
+                  onMouseUp={[Function]}
+                  onTouchEnd={[Function]}
+                  onTouchMove={[Function]}
+                  onTouchStart={[Function]}
+                  role="menuitem"
+                  tabIndex={0}
+                >
+                  <div
+                    className="MuiListItemIcon-root"
+                  >
+                    <svg
+                      aria-hidden={true}
+                      className="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"
+                      focusable="false"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                      />
+                    </svg>
+                  </div>
+                  <span
+                    className="MuiTypography-root"
+                  >
+                    Manage account
+                  </span>
+                  <span
+                    className="MuiTouchRipple-root"
+                  />
+                </li>
+                <li
+                  aria-disabled={false}
+                  className="MuiButtonBase-root MuiListItem-root MuiMenuItem-root MuiMenuItem-gutters MuiListItem-gutters MuiListItem-button"
+                  onBlur={[Function]}
+                  onClick={[Function]}
+                  onDragLeave={[Function]}
+                  onFocus={[Function]}
+                  onKeyDown={[Function]}
+                  onKeyUp={[Function]}
+                  onMouseDown={[Function]}
+                  onMouseLeave={[Function]}
+                  onMouseUp={[Function]}
+                  onTouchEnd={[Function]}
+                  onTouchMove={[Function]}
+                  onTouchStart={[Function]}
+                  role="menuitem"
+                  tabIndex={-1}
+                >
+                  <div
+                    className="MuiListItemIcon-root"
+                  >
+                    <svg
+                      aria-hidden={true}
+                      className="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"
+                      focusable="false"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
+                      />
+                    </svg>
+                  </div>
+                  <span
+                    className="MuiTypography-root"
+                  >
+                    Logout
+                  </span>
+                  <span
+                    className="MuiTouchRipple-root"
+                  />
+                </li>
+              </ul>
+            </div>
+            <div
+              data-test="sentinelEnd"
+              tabIndex={0}
+            />
+          </div>
+        </>
+      </div>
+    </div>
+    <div
+      className="makeStyles-main-2"
+    >
+      <div
+        className="makeStyles-corner-3"
+      />
+      <div
+        className="makeStyles-content-4"
+      >
+        <div
+          className="MuiBox-root MuiBox-root-30 makeStyles-breadcrumbContainer-8"
+        >
+          <div />
+        </div>
+        <div
+          className="makeStyles-body-5"
+        >
+          <div
+            className="MuiBox-root MuiBox-root-31"
+          >
+            <div
+              className="MuiBox-root MuiBox-root-32 makeStyles-sideMenuContainer-7"
+            >
+              <div />
+            </div>
+            <div
+              className="MuiBox-root MuiBox-root-33 makeStyles-innerContainer-9"
+            >
+              <div
+                className="makeStyles-cornerColor-6"
+                style={
+                  Object {
+                    "borderColor": "#000000 transparent transparent transparent",
+                  }
+                }
+              />
+              <div>
+                <div />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>,
+  " ",
+]
+`;

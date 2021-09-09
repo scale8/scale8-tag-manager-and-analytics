@@ -1,0 +1,5617 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+"""
+
+@union
+Match can either be a custom key (string) or a direct property of some DataMap
+"""
+union ConditionMatch = CustomMatch | PlatformDataMap
+
+"@union"
+union DataMapValueEntity = DataMapObject | DataMapObjects | DataMapValueContainer | DataMapValueContainerArray
+
+"@union"
+union DefaultValue = DefaultValueContainer | DefaultValueContainerArray
+
+"""
+
+@union
+Can either be a `CustomEvent` or `PlatformEvent`. See `Event`
+"""
+union EventType = CustomEvent | PlatformEvent
+
+"@union"
+union GQLScalarBox = BooleanArrayBox | BooleanBox | DateArrayBox | DateBox | EmptyArrayBox | FloatArrayBox | FloatBox | IntArrayBox | IntBox | StringArrayBox | StringBox
+
+"""
+
+@model
+Either session type (Temp/User) depending on the 2-factor auth settings.
+"""
+union Session = TempSession | UserSession
+
+"@model"
+type Action {
+    "`DataMap`'s that implements the `PlatformDataMap` of the connected `PlatformAction`"
+    data_maps: [DataMap!]!
+    "`Action` ID"
+    id: ID!
+    "`Action` name"
+    name: String!
+    "`PlatformAction` that this `Action` implements"
+    platform_action: PlatformAction!
+}
+
+"@model"
+type ActionGroup {
+    "`Action`'s linked to this `ActionGroup`"
+    actions: [Action!]!
+    "Distribution value. -1 = Not distributed. Value is between -1 and 1000 inclusive."
+    distribution: Int!
+    "`ActionGroup` ID"
+    id: ID!
+    "If the distribution of this `ActionGroup` is locked"
+    is_locked: Boolean!
+    "`ActionGroup` name"
+    name: String!
+}
+
+"@model"
+type ActionGroupDistribution {
+    "`ActionGroupDistribution` distribution type (see `ActionGroupDistributionType`)"
+    action_group_distribution_type: ActionGroupDistributionType!
+    "`ActionGroup`'s associated with this `ActionGroupDistribution`"
+    action_groups: [ActionGroup!]!
+    "Date the action group distribution was created"
+    created_at: DateTime!
+    "`ActionGroupDistribution` ID"
+    id: ID!
+    "`ActionGroupDistribution` name"
+    name: String!
+    "Type of entity this model is bound to"
+    parent_type: RevisionEntityParentType!
+    "Revision"
+    revision: Revision!
+    "Date the action group distribution was last updated"
+    updated_at: DateTime!
+}
+
+"""
+
+@model
+App is the container for your Tag Revisions and connected Platforms. This model is not under revision control as it is layer above Revisions.
+"""
+type App {
+    "All the platforms that a user has connected to (installed on) the `App`. The is the master connected list that will appear in revised models."
+    app_platforms: [AppPlatform!]!
+    "Average session duration"
+    average_session_duration_stats(query_options: AppQueryOptions!): IntResponse!
+    "Bounce ratio"
+    bounce_ratio_stats(query_options: AppQueryOptions!): FloatResponse!
+    "Browsers"
+    browser_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+    "Countries"
+    country_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+    "Date the `App` was created"
+    created_at: DateTime!
+    "Devices"
+    device_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+    "The domain name of the `App`"
+    domain: String!
+    "Entry Pages"
+    entry_page_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+    "Environments connected to the `App`. Environments are used to create a fixed deployment of a Revision"
+    environments: [Environment!]!
+    "Event Groups"
+    event_group_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+    "Event request stats"
+    event_request_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+    "Events"
+    event_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+    "Exit Pages"
+    exit_page_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+    "ID of the `App`"
+    id: ID!
+    "Name of the Application"
+    name: String!
+    "Operating Systems"
+    operating_system_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+    "Pages"
+    page_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+    "Referrers"
+    referrer_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+    "Referrer TLDs"
+    referrer_tld_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+    "Revisions linked to the `App`. All `App` entities such as `Tag`, `RuleGroup`, `Rule` etc. sit under a revisioning system."
+    revisions: [Revision!]!
+    "The `TagManagerAccount` that contains the `App`"
+    tag_manager_account: TagManagerAccount!
+    "The `AppType` associated with this App. Please note that currently on WEB is supported. MOBILE_APP will be introduced soon!"
+    type: AppType!
+    "Date the `App` was last updated"
+    updated_at: DateTime!
+    "UTM Campaigns"
+    utm_campaign_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+    "UTM Mediums"
+    utm_medium_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+    "UTM Sources"
+    utm_source_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+}
+
+"@type"
+type AppGroupingCount {
+    event_count: Int!
+    key: String!
+    user_count: Int!
+}
+
+"@type"
+type AppGroupingCountsResponse {
+    from: DateTime!
+    result: [AppGroupingCount!]!
+    to: DateTime!
+}
+
+"@model"
+type AppPlatform {
+    "The date the `AppPlatform` was created at"
+    created_at: DateTime!
+    "`Platform` that is currently linked to this `AppPlatform`"
+    platform: Platform!
+    "The date the `AppPlatform` was last updated at"
+    updated_at: DateTime!
+}
+
+"""
+
+@model
+The `AppPlatformRevision` model holds the relationship between `Revision` and `PlatformRevision` with respect to the `App`. A `Revision` is therefore tied to one or more `PlatformRevision`s although only one `PlatformRevision` per `Platform`
+"""
+type AppPlatformRevision {
+    "The date the `AppPlatformRevision` was created at"
+    created_at: DateTime!
+    "`AppPlatformRevision` ID"
+    id: ID!
+    "`PlatformRevision` that is currently linked to this `AppPlatformRevision`"
+    platform_revision: PlatformRevision!
+    "`DataMap` that implements platform settings and currently attached to this `AppPlatformRevision`"
+    platform_settings: [DataMap!]!
+    "The date the `AppPlatformRevision` was last updated at"
+    updated_at: DateTime!
+}
+
+"""
+
+@model
+`Audit` contains the details of an operation performed on an entity.
+"""
+type Audit {
+    "Action Preformed"
+    action: AuditAction!
+    "Optional user comments linked to this operation"
+    comments: String
+    "Models directly connected to (or influenced by) this operation"
+    connected_models: [OperationConnectedModel!]!
+    "The date the `Audit` was created"
+    created_at: DateTime!
+    "Unique audit id for this operation"
+    id: ID!
+    "Method in which the action was performed"
+    method: GQLMethod!
+    "Name of the model"
+    model: String!
+    "Entity on which the operation was performed"
+    model_id: ID!
+    "Model's persisting id"
+    model_persisting_id: String!
+    "Operation owner"
+    owner: OperationOwner!
+    "Model extends from"
+    parent_model_ids: [ID!]!
+    "Person performing the operation, can be undefined if the system has performed the operation instead"
+    user: OrgUser
+}
+
+"@type"
+type BigQueryDateTime {
+    value: String!
+}
+
+"""
+
+@type
+Used as a container object
+"""
+type BooleanArrayBox {
+    "Represents a list of booleans"
+    ba: [Boolean!]!
+}
+
+"""
+
+@type
+Used as a container object
+"""
+type BooleanBox {
+    "Represents a single boolean value"
+    b: Boolean!
+}
+
+"@model"
+type ConditionRule {
+    "`ConditionRule` ID"
+    id: ID!
+    "`ConditionRule` type, see `ConditionMatch` enum."
+    match: ConditionMatch!
+    "Match condition, see `ConditionType` enum."
+    match_condition: ConditionType!
+    "Match key (used on object types)"
+    match_key: String
+    "Match value (see `DataMapValue`), the value to match againt data property key specificed by `ConditionMatch`."
+    match_value: DataMapValue!
+    "`ConditionRule` name"
+    name: String!
+    "The `PlatformDataContainer` to match against"
+    platform_data_container: PlatformDataContainer!
+}
+
+"@model"
+type Config {
+    "A list of supported `ActionGroupDistribution` types"
+    action_group_distribution_types: [StringMap!]!
+    "A list of supported `App` types"
+    app_types: [StringMap!]!
+    "A list of supported condition types, for use with `ConditionRule`"
+    condition_types: [StringMap!]!
+    "A list of consent purposes"
+    consent_purposes: [ConsentPurpose!]!
+    "A list of consent vendors"
+    consent_vendors: [ConsentVendor!]!
+    "A list of core actions"
+    core_actions: [CoreElementDescription]!
+    "A list of core data containers"
+    core_data_containers: [CoreElementDescription]!
+    "A list of core events"
+    core_events: [CoreElementDescription]!
+    "A list of supported countries"
+    countries: [StringMap!]!
+    "A list of Data Manager Products"
+    data_manager_products: [DataManagerProduct!]!
+    "A list of supported input types, for use with `PlatformDataMap`"
+    input_types: [StringMap!]!
+    "If the platform has been setup and configured yet"
+    is_configured: Boolean
+    "The application mode currently in use"
+    mode: Mode!
+    "A list of Tag Manager Products"
+    tag_manager_products: [TagManagerProduct!]!
+    "A list of supported `Tag` types"
+    tag_types: [StringMap!]!
+    "A list of supported time zones"
+    time_zones: [StringMap!]!
+    "Whether the application will allow sending emails"
+    use_email: Boolean
+    "Whether the application will allow github single sign on"
+    use_github_sso: Boolean
+    "Whether the application will allow signup"
+    use_signup: Boolean
+    "Whether the application will allow two-factor authentication"
+    use_two_factor_auth: Boolean
+}
+
+"@model"
+type ConsentPurpose {
+    "Consent Purpose ID"
+    id: Int!
+    "Consent Purpose Name"
+    name: String!
+}
+
+"@model"
+type ConsentVendor {
+    "Consent Vendor ID"
+    id: Int!
+    "Consent Vendor Name"
+    name: String!
+}
+
+"@model"
+type CoreElementDataMapDescription {
+    default_value: String!
+    description: String!
+    is_required: String!
+    name: String!
+    var_type: String!
+}
+
+"@model"
+type CoreElementDescription {
+    description: String!
+    inputs: [CoreElementDataMapDescription]!
+    name: String!
+}
+
+"""
+
+@type
+A container for custom event name
+"""
+type CustomEvent {
+    "The name of the event to listen for."
+    custom_name: String!
+}
+
+"""
+
+@type
+A custom match container
+"""
+type CustomMatch {
+    "The data key to match against"
+    custom_key: String!
+}
+
+"""
+
+@model
+The Data Manager Account is linked to directly to an organisation. It holds the plan type (account_type) and all the ingest endpoints linked to this Org.
+"""
+type DataManagerAccount {
+    "Date the `DataManagerAccount` was created"
+    created_at: DateTime!
+    "`DataManagerAccount` ID"
+    id: ID!
+    "A list of `IngestEndpoint`s linked to the `DataManagerAccount`"
+    ingest_endpoints: [IngestEndpoint!]!
+    "If the account is in a trial period"
+    is_trial: Boolean!
+    "`Org` that owns this `DataManagerAccount`"
+    org: Org!
+    "The current product id associated with this account. If this is free plan or managed, this will not be provided"
+    stripe_product_id: String
+    "If the free trial is expired"
+    trial_expired: Boolean!
+    "The amount of days until the trial expires"
+    trial_expires_in: Int!
+    "Date the `DataManagerAccount` was last updated"
+    updated_at: DateTime!
+    "Account usage"
+    usage: [DataManagerAccountUsage!]!
+}
+
+"""
+
+@model
+Metrics to describe the `Usage` of a Data Manager account.
+"""
+type DataManagerAccountUsage {
+    bytes: Int!
+    day: DateTime!
+    requests: Int!
+}
+
+"@model"
+type DataManagerProduct {
+    amount: Int!
+    gbs: Float!
+    id: String!
+    name: String!
+    requests: Int!
+}
+
+"@model"
+type DataMap {
+    "`DataMap` ID"
+    id: ID!
+    "`DataMap` key"
+    key: String!
+    "`DataMap` value"
+    value: DataMapValueEntity
+    "`DataMap` variable type (string, int, boolean, array of strings, object etc.)"
+    var_type: VarType!
+}
+
+"""
+
+@type
+Used as a container object
+"""
+type DataMapObject {
+    "Contains a list of `DataMap`"
+    object: [DataMap!]!
+}
+
+"""
+
+@type
+Used as a container object
+"""
+type DataMapObjects {
+    "Contains a list of lists of `DataMap`. This implements repeated object patterns."
+    objects: [[DataMap!]!]!
+}
+
+"""
+
+@type
+Used as a container object
+"""
+type DataMapValueContainer {
+    "Contains a `DataMapValue`"
+    value: DataMapValue
+}
+
+"""
+
+@type
+Used as a container object
+"""
+type DataMapValueContainerArray {
+    "Contains a list of `DataMapValue`"
+    values: [DataMapValue!]
+}
+
+"""
+
+@type
+Used as a container object
+"""
+type DateArrayBox {
+    "Represents a list of dates"
+    da: [DateTime!]!
+}
+
+"""
+
+@type
+Used as a container object
+"""
+type DateBox {
+    "Represents a single date value"
+    d: DateTime!
+}
+
+"@type"
+type DefaultValueContainer {
+    value: DataMapValue
+}
+
+"@type"
+type DefaultValueContainerArray {
+    values: [DataMapValue!]
+}
+
+"""
+
+@type
+Used as a container object
+"""
+type EmptyArrayBox {
+    "Represents an empty array"
+    ea: Boolean
+}
+
+"@model"
+type Environment {
+    "`Environment`'s CNAME"
+    cname: String!
+    "The date the `Environment` was created at"
+    created_at: DateTime!
+    "`Environment`'s custom domain name if configured"
+    custom_domain: String
+    "Environment variables associated with this `Environment`"
+    environment_variables: [EnvironmentVariable!]!
+    "Event request stats - Pleae note that environment is automatically set in the filter options"
+    event_request_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+    "`Environment` ID"
+    id: ID!
+    "`Environment`'s install domain used to embed in web page"
+    install_domain: String!
+    "`Environment` name"
+    name: String!
+    "`Revision` currently attached to the `Environment`"
+    revision: Revision!
+    "The date the `Environment` was last updated at"
+    updated_at: DateTime!
+    "`Environment` URL"
+    url: String
+}
+
+"@type"
+type EnvironmentVariable {
+    key: String!
+    value: String!
+}
+
+"@model"
+type Event {
+    "The period after which the event state should be cleared. -1 = Inactive, 0 = Immidately, > 0, after some time specified in milliseconds. This useful for events that need to be re-triggered within some period of time to pass the check stage."
+    clear_state_ms: Int!
+    "`DataMap`'s that implements the `PlatformDataMap` of the connected `PlatformEvent`"
+    data_maps: [DataMap!]!
+    "Either a `CustomEvent` or `PlatformEvent`"
+    event: EventType!
+    "The `Event` ID"
+    id: ID!
+    "The `Event` name"
+    name: String!
+}
+
+"""
+
+@model
+Used to share extra enumeration types with frontends
+"""
+type ExtraTypes {
+    dm_macros_date: DataManagerDateTimeMacros
+    dm_macros_integer: DataManagerIntegerMacros
+    dm_macros_string: DataManagerStringMacros
+    dm_macros_ts: DataManagerTimestampMacros
+    notification_type: NotificationType
+}
+
+"""
+
+@type
+Used as a container object
+"""
+type FloatArrayBox {
+    "Represents a list of floats"
+    fa: [Float!]!
+}
+
+"""
+
+@type
+Used as a container object
+"""
+type FloatBox {
+    "Represents a single float value"
+    f: Float!
+}
+
+"@type"
+type FloatResponse {
+    from: DateTime!
+    result: Float!
+    to: DateTime!
+}
+
+"@type"
+type GroupingCount {
+    count: Int!
+    key: String!
+}
+
+"@type"
+type GroupingCountsResponse {
+    from: DateTime!
+    result: [GroupingCount!]!
+    to: DateTime!
+}
+
+"""
+
+@model
+This entity sits under the `DataManagerAccount` entity. It links all the revisions and environments associated with it and also provides a basic usage summary.
+"""
+type IngestEndpoint {
+    "Byte stats"
+    byte_stats(query_options: IngestQueryOptions!): GroupingCountsResponse!
+    "Date the `IngestEndpoint` was created"
+    created_at: DateTime!
+    "The `DataManagerAccount` that contains the `IngestEndpoint`"
+    data_manager_account: DataManagerAccount!
+    "ID of the `IngestEndpoint`"
+    id: ID!
+    "The `IngestEndpointEnvironment`s owned by the `IngestEndpoint`"
+    ingest_endpoint_environments: [IngestEndpointEnvironment!]!
+    "The `IngestEndpointRevision`s connected to the `IngestEndpoint`"
+    ingest_endpoint_revisions: [IngestEndpointRevision!]!
+    "Name of the `IngestEndpoint`"
+    name: String!
+    "Request stats"
+    request_stats(query_options: IngestQueryOptions!): GroupingCountsResponse!
+    "Date the `IngestEndpoint` was last updated"
+    updated_at: DateTime!
+}
+
+"""
+
+@model
+This entity maps key-value properties together. It is able to hold child key-value pairs in a recursive structure. This is used directly by the `IngestEndpoint` to hold all the key-value mappings required to structure the desired payload.
+"""
+type IngestEndpointDataMap {
+    "If the variable type (see `VarType`) has been specified as an object or array of objects, then this contains the child property definitions"
+    child_ingest_endpoint_data_maps: [IngestEndpointDataMap!]!
+    "The default value. If no input is provided for this property, then the default value will be applied automatically"
+    default_value: DefaultValue
+    "ID of the `IngestEndpointDataMap`"
+    id: ID!
+    "Whether or not the property is optional or not"
+    is_optional: Boolean!
+    "Key (Property Key) of the `IngestEndpointDataMap`"
+    key: String!
+    "A list of validation rules associated with this `IngestEndpointDataMap`."
+    validation_rules: [IngestEndpointDataMapValidation!]
+    "Variable type (see `VarType`)"
+    var_type: String!
+}
+
+"""
+
+@model
+A validation rule to be associated with an `IngestEndpointDataMap`.
+"""
+type IngestEndpointDataMapValidation {
+    "Input value to check against"
+    input_value: DataMapValue
+    "Validation type"
+    type: ValidationType!
+}
+
+"""
+
+@model
+This entity holds the nessessary configuration to configure the `IngestEndpoint` for deployment. Please note that we are unable to retrieve cert_pem and key_pem in this model as a security precaution. There is no API access to our encrypted vault where we hold secure information.
+"""
+type IngestEndpointEnvironment {
+    "Byte stats - Please note that environment is automatically applied in the filter"
+    byte_stats(query_options: IngestQueryOptions!): GroupingCountsResponse!
+    "`IngestEndpointEnvironment`'s CNAME"
+    cname: String!
+    "A hint of the credentials currently in use by the `IngestEndpointEnvironment`. For security reasons we don't enable to full retrival of this information via the API. It does not persist in our database or servers and remains in our vault."
+    config_hint: String!
+    "Date the `IngestEndpointEnvironment` was created"
+    created_at: DateTime!
+    "A custom domain name associated with this `IngestEndpointEnvironment`"
+    custom_domain: String
+    "ID of the `IngestEndpointEnvironment`"
+    id: ID!
+    "The `IngestEndpointRevision` currently bound to the `IngestEndpointEnvironment`"
+    ingest_endpoint_revision: IngestEndpointRevision!
+    "`IngestEndpointEnvironment`'s install domain used to push data to"
+    install_domain: String!
+    "Name of the `IngestEndpointEnvironment`"
+    name: String!
+    "Request stats - Please note that environment is automatically applied in the filter"
+    request_stats(query_options: IngestQueryOptions!): GroupingCountsResponse!
+    "The storage provider used by the `IngestEndpointEnvironment` to store ingested data"
+    storage_provider: StorageProvider!
+    "Date the `IngestEndpointEnvironment` last updated"
+    updated_at: DateTime!
+}
+
+"""
+
+@model
+This entity contains a set of data maps (`IngestEndpointDataMap`). These describe the supported payload structure.
+"""
+type IngestEndpointRevision {
+    "Byte stats - Please note that revision is automatically applied in the filter"
+    byte_stats(query_options: IngestQueryOptions!): GroupingCountsResponse!
+    "Date the `IngestEndpointRevision` was created"
+    created_at: DateTime!
+    "ID of the `IngestEndpointRevision`"
+    id: ID!
+    "The `IngestEndpoint` that the `IngestEndpointRevision` belongs to"
+    ingest_endpoint: IngestEndpoint!
+    "The `IngestEndpointDataMaps`s that construct the payload (key => value) configuration for the `IngestEndpointRevision`"
+    ingest_endpoint_data_maps: [IngestEndpointDataMap!]!
+    "The `IngestEndpointRevision` has been finalised and locked to prevent further changes"
+    locked: Boolean!
+    "Name of the `IngestEndpointRevision`"
+    name: String!
+    "Request stats - Please note that revision is automatically applied in the filter"
+    request_stats(query_options: IngestQueryOptions!): GroupingCountsResponse!
+    "Date the `IngestEndpointRevision` was last updated"
+    updated_at: DateTime!
+}
+
+"""
+
+@type
+Used as a container object
+"""
+type IntArrayBox {
+    "Represents a list of integers"
+    ia: [Int!]!
+}
+
+"""
+
+@type
+Used as a container object
+"""
+type IntBox {
+    "Represents a single integer value"
+    i: Int!
+}
+
+"@type"
+type IntResponse {
+    from: DateTime!
+    result: Int!
+    to: DateTime!
+}
+
+"""
+
+@model
+`Invite` is used to manage the user invites to a join an organization.
+"""
+type Invite {
+    "The date the `Invite` was created"
+    created_at: DateTime!
+    "The email of the user invited"
+    email: String!
+    "Unique `Invite` id for this operation"
+    id: ID!
+    "The `Org` the user is invited to join"
+    org: Org!
+    "The permissions the user wil have on the org once joined"
+    org_permissions: OrgUserPermissions!
+    "DateTime the `Invite` was last updated"
+    updated_at: DateTime!
+}
+
+"""
+
+@type
+When a model in the system is deleted, we return this acknowledgement structure to better inform of what has been deleted.
+"""
+type ModelDeleteAcknowledgement {
+    "The ID of the model that has been deleted"
+    id: ID!
+    "Name of the model that the entity belonged to"
+    model: String!
+    "The name of the model that has been deleted"
+    name: String!
+}
+
+type Mutation {
+    """
+
+    @bound=Org
+    Accept a user invite to join an `Org`
+    """
+    acceptInvite(orgAcceptInviteInput: OrgAcceptInviteInput!): Boolean!
+    """
+
+    @bound=Org
+    Subscribe To TagManager
+
+    This will generate a new link that the user can follow to checkout if
+    it has no subscription yet, it will return null otherwise.
+    """
+    accountSubscribe(accountSubscribeInput: AccountSubscribeInput): String
+    """
+
+    @bound=Org
+    Cancel subscription
+    """
+    accountUnsubscribe(accountUnsubscribeInput: AccountUnsubscribeInput): Boolean!
+    """
+
+    @bound=IngestEndpointDataMap
+    Add a new child `IngestEndpointDataMap` to a parent `IngestEndpointDataMap`
+    """
+    addChildrenIngestEndpointDataMaps(addChildrenIngestEndpointDataMapsInput: AddChildrenIngestEndpointDataMapsInput): [IngestEndpointDataMap!]!
+    """
+
+    @bound=Environment
+    Add an environment variable
+    """
+    addEnvironmentVariable(environmentVariableAddInput: EnvironmentVariableAddInput!): Boolean!
+    """
+
+    @bound=IngestEndpointRevision
+    Add one or more `IngestEndpointDataMap`s to the `IngestEndpointRevision`.
+    """
+    addIngestEndpointDataMaps(ingestEndpointAddIngestEndpointDataMapsInput: IngestEndpointAddIngestEndpointDataMapsInput): [IngestEndpointDataMap!]!
+    """
+
+    @bound=Org
+    Add a user to an `Org`
+    """
+    addUser(orgAddUserInput: OrgAddUserInput!): User!
+    """
+
+    @bound=Org
+    Cancel a user invite to join an `Org`
+    """
+    cancelInvite(orgCancelInviteInput: OrgCancelInviteInput!): Boolean!
+    """
+
+    @bound=User
+    Change currently logged `User`'s password
+    """
+    changePassword(changePasswordInput: ChangePasswordInput!): Boolean!
+    "@bound=User"
+    completeSignUp(completeSignUpInput: CompleteSignUpInput!): UserSessionLink!
+    """
+
+    @bound=Action
+    Create a new `Action`.
+    """
+    createAction(actionCreateInput: ActionCreateInput!): Action!
+    """
+
+    @bound=ActionGroup
+    Create a new `ActionGroup`. `ActionGroupDistribution` ID is required here to ensure `ActionGroup` is placed inside the correct `ActionGroupDistribution`
+    """
+    createActionGroup(actionGroupCreateInput: ActionGroupCreateInput!): ActionGroup!
+    """
+
+    @bound=ActionGroupDistribution
+    Create a new `ActionGroupDistribution`. `Rule` ID is required here to ensure `ActionGroupDistribution` is placed inside the correct version
+    """
+    createActionGroupDistribution(actionGroupDistributionCreateInput: ActionGroupDistributionCreateInput!): ActionGroupDistribution!
+    """
+
+    @bound=App
+    Create a new `App`.
+    """
+    createApp(appCreateInput: AppCreateInput!): App!
+    """
+
+    @bound=ConditionRule
+    Create a new `ConditionRule`. `Trigger` ID is required here to ensure `ConditionRule` is placed inside the correct `Trigger`
+    """
+    createConditionRule(conditionRuleCreateInput: ConditionRuleCreateInput!): Rule!
+    """
+
+    @bound=Environment
+    Create a new `Environment`.
+    """
+    createEnvironment(environmentCreateInput: EnvironmentCreateInput!): Environment!
+    """
+
+    @bound=Event
+    Create a new `Event`.
+    """
+    createEvent(eventCreateInput: EventCreateInput!): Event!
+    """
+
+    @bound=Org
+    This endpoint is only enabled to configure the first org.
+    """
+    createFirstOrg(createFirstOrgInput: CreateFirstOrgInput): Org!
+    """
+
+    @bound=IngestEndpoint
+    Create a new `IngestEndpoint`.
+    """
+    createIngestEndpoint(ingestEndpointCreateInput: IngestEndpointCreateInput!): IngestEndpoint!
+    """
+
+    @bound=IngestEndpointEnvironment
+    Create a new `IngestEndpointEnvironment`.
+    """
+    createIngestEndpointEnvironment(ingestEndpointEnvironmentCreateInput: IngestEndpointEnvironmentCreateInput!): IngestEndpointEnvironment!
+    """
+
+    @bound=PlatformRevision
+    Create a new `PlatformRevision` from the input spec.
+    """
+    createNewPlatformRevision(newRevisionInput: NewRevisionInput!): PlatformRevision!
+    """
+
+    @bound=Org
+    Create a new `Org`
+    """
+    createOrg(orgCreateInput: OrgCreateInput!): Org!
+    """
+
+    @bound=Platform
+    Create a new `Platform`.
+    """
+    createPlatform(platformCreateInput: PlatformCreateInput!): Platform!
+    """
+
+    @bound=Rule
+    Create a new `Rule`. `RuleGroup` ID is required here to ensure `Rule` is placed inside the correct version
+    """
+    createRule(ruleCreateInput: RuleCreateInput!): Rule!
+    """
+
+    @bound=RuleGroup
+    Create a new `RuleGroup`. `Tag` ID is required here to ensure `RuleGroup` is placed inside the correct version
+    """
+    createRuleGroup(ruleGroupCreateInput: RuleGroupCreateInput!): RuleGroup!
+    """
+
+    @bound=Tag
+    Create a new `Tag`. `Revision` ID is required here to ensure `Tag` is placed inside the correct version
+    """
+    createTag(tagCreateInput: TagCreateInput!): Tag!
+    """
+
+    @bound=PlatformAction
+    Create a new templated `PlatformAction`
+    """
+    createTemplatedAction(platformActionTemplatedCreateInput: PlatformActionTemplatedCreateInput!): PlatformAction!
+    """
+
+    @bound=Trigger
+    Create a new `Trigger`
+    """
+    createTrigger(triggerCreateInput: TriggerCreateInput!): Trigger!
+    """
+
+    @bound=Org
+    Decline a user invite to join an `Org`
+    """
+    declineInvite(orgDeclineInviteInput: OrgDeclineInviteInput!): Boolean!
+    """
+
+    @bound=Action
+    Delete an `Action` and its children.
+    """
+    deleteAction(actionDeleteInput: ActionDeleteInput!): [ModelDeleteAcknowledgement!]!
+    """
+
+    @bound=ActionGroup
+    Delete a `ActionGroup` and its children.
+    """
+    deleteActionGroup(actionGroupDeleteInput: ActionGroupDeleteInput!): [ModelDeleteAcknowledgement!]!
+    """
+
+    @bound=ActionGroupDistribution
+    Delete a `ActionGroupDistribution` and its children.
+    """
+    deleteActionGroupDistribution(actionGroupDistributionDeleteInput: ActionGroupDistributionDeleteInput!): [ModelDeleteAcknowledgement!]!
+    """
+
+    @bound=App
+    Delete a `App` and its children.
+    """
+    deleteApp(appDeleteInput: AppDeleteInput!): Boolean!
+    """
+
+    @bound=ConditionRule
+    Delete a `ConditionRule` and its children.
+    """
+    deleteConditionRule(conditionRuleDeleteInput: ConditionRuleDeleteInput!): [ModelDeleteAcknowledgement!]!
+    """
+
+    @bound=Environment
+    Delete an `Environment`.
+    """
+    deleteEnvironment(environmentDeleteInput: EnvironmentDeleteInput!): Boolean!
+    """
+
+    @bound=Environment
+    Delete an environment variable
+    """
+    deleteEnvironmentVariable(environmentVariableDeleteInput: EnvironmentVariableDeleteInput!): Boolean!
+    """
+
+    @bound=Event
+    Delete an `Event` and its children.
+    """
+    deleteEvent(eventDeleteInput: EventDeleteInput!): [ModelDeleteAcknowledgement!]!
+    """
+
+    @bound=IngestEndpoint
+    Delete a `IngestEndpoint` and its children.
+    """
+    deleteIngestEndpoint(ingestEndpointDeleteInput: IngestEndpointDeleteInput!): Boolean!
+    """
+
+    @bound=IngestEndpointDataMap
+    Delete an `IngestEndpointDataMap` and all child relationships beneath it
+    """
+    deleteIngestEndpointDataMap(deleteChildIngestEndpointDataMapInput: DeleteChildIngestEndpointDataMapInput): [ModelDeleteAcknowledgement!]!
+    """
+
+    @bound=IngestEndpointEnvironment
+    Delete a `IngestEndpointEnvironment`.
+    """
+    deleteIngestEndpointEnvironment(ingestEndpointEnvironmentDeleteInput: IngestEndpointEnvironmentDeleteInput!): Boolean!
+    """
+
+    @bound=User
+    Delete currently logged `User` (Account removal)
+    """
+    deleteMe: Boolean!
+    """
+
+    @bound=Org
+    Delete an `Org` and all child entities
+    """
+    deleteOrg(orgDeleteInput: OrgDeleteInput!): Boolean!
+    """
+
+    @bound=Rule
+    Delete a `Rule` and its children.
+    """
+    deleteRule(ruleDeleteInput: RuleDeleteInput!): [ModelDeleteAcknowledgement!]!
+    """
+
+    @bound=RuleGroup
+    Delete a `RuleGroup` and its children.
+    """
+    deleteRuleGroup(ruleGroupDeleteInput: RuleGroupDeleteInput!): [ModelDeleteAcknowledgement!]!
+    """
+
+    @bound=Tag
+    Delete a `Tag` and its children.
+    """
+    deleteTag(tagDeleteInput: TagDeleteInput!): [ModelDeleteAcknowledgement!]!
+    """
+
+    @bound=PlatformAction
+    Delete a templated `PlatformAction`
+    """
+    deleteTemplatedAction(platformActionTemplatedDeleteInput: PlatformActionTemplatedDeleteInput!): Boolean!
+    """
+
+    @bound=Trigger
+    Delete a `Trigger` and its children.
+    """
+    deleteTrigger(triggerDeleteInput: TriggerDeleteInput!): [ModelDeleteAcknowledgement!]!
+    "@bound=User"
+    disableTwoFactorAuth(twoFactorAuthDisableInput: TwoFactorAuthDisableInput!): Boolean!
+    """
+
+    @bound=UserNotification
+    Mark the current notification as viewed
+    """
+    dismissNotification(dismissNotificationInput: DismissNotificationInput!): Boolean!
+    """
+
+    @bound=ActionGroup
+    Duplicate an existing `ActionGroup`. The duplicated will copy everything beneath `ActionGroup`, creating a new `ActionGroup` entity and linking it to the same `ActionGroupDistribution`
+    """
+    duplicateActionGroup(actionGroupDuplicateInput: ActionGroupDuplicateInput!): ActionGroup!
+    """
+
+    @bound=ActionGroupDistribution
+    Duplicate an existing `ActionGroupDistribution`. The duplicated will copy everything beneath `ActionGroupDistribution`, creating a new `ActionGroupDistribution` entity and linking it to the same `Rule`
+    """
+    duplicateActionGroupDistribution(actionGroupDistributionDuplicateInput: ActionGroupDistributionDuplicateInput!): ActionGroupDistribution!
+    """
+
+    @bound=IngestEndpointRevision
+    Duplicating a `IngestEndpointRevision` will clone any linked items and return a new `IngestEndpointRevision`
+    """
+    duplicateIngestEndpointRevision(duplicateIngestEndpointRevisionInput: DuplicateIngestEndpointRevisionInput): Revision!
+    """
+
+    @bound=PlatformRevision
+    Duplicate platform revision will clone any linked items and return a new platform revision
+    """
+    duplicatePlatformRevision(duplicatePlatformRevisionInput: DuplicatePlatformRevisionInput!): PlatformRevision!
+    """
+
+    @bound=Revision
+    Duplicate revision will clone any linked items and return a new revision
+    """
+    duplicateRevision(duplicateRevisionInput: DuplicateRevisionInput): Revision!
+    """
+
+    @bound=Rule
+    Duplicate a new `Rule`. The duplicated will copy everything beneath `Rule`, creating a new `Rule` entity and linking it to the same `RuleGroup`
+    """
+    duplicateRule(ruleDuplicateInput: RuleDuplicateInput!): Rule!
+    """
+
+    @bound=RuleGroup
+    Duplicate a new `RuleGroup`. The duplicated will copy everything beneath `RuleGroup`, creating a new `RuleGroup` entity and linking it to the same `Tag`
+    """
+    duplicateRuleGroup(ruleGroupDuplicateInput: RuleGroupDuplicateInput!): RuleGroup!
+    """
+
+    @bound=Tag
+    Duplicate a new `Tag`. The duplicated will copy everything beneath `Tag`, creating a new `Tag` entity and linking it to the same Revision
+    """
+    duplicateTag(tagDuplicateInput: TagDuplicateInput!): Tag!
+    """
+
+    @bound=Trigger
+    Duplicate a `Trigger`. The duplicated will copy everything beneath `Trigger`, creating a new `Trigger` entity and linking it back to the same parent entity.
+    """
+    duplicateTrigger(triggerDuplicateInput: TriggerDuplicateInput!): Trigger!
+    "@bound=User"
+    enableTwoFactorAuth(twoFactorAuthEnableInput: TwoFactorAuthEnableInput!): Boolean!
+    """
+
+    @bound=IngestEndpointRevision
+    To link a `IngestEndpointRevision` to a `IngestEndpointEnvironment` it must be 'locked', i.e in its final state
+    """
+    finaliseIngestEndpointRevision(finaliseIngestEndpointRevisionInput: FinaliseIngestEndpointRevisionInput): Boolean!
+    """
+
+    @bound=Revision
+    To link a revision to an environment it must be 'locked', i.e in its final state
+    """
+    finaliseRevision(finaliseRevisionInput: FinaliseRevisionInput): [RevisionIssue!]!
+    """
+
+    @bound=Org
+    Billing portal
+    """
+    getBillingPortalUrl(billingPortalInput: BillingPortalInput): String!
+    """
+
+    @bound=App
+    Install a new `Platform`.
+    """
+    installPlatform(appInstallPlatformInput: AppInstallPlatformInput!): App!
+    """
+
+    @bound=Org
+    Invite a user to join an `Org`
+    """
+    inviteUser(orgInviteUserInput: OrgInviteUserInput!): Boolean!
+    """
+
+    @bound=Rule
+    Link a global `ActionGroupDistribution`'s to a `Rule`
+    """
+    linkGlobalActionGroupDistribution(globalActionGroupDistributionLinkInput: GlobalActionGroupDistributionLinkInput!): Boolean!
+    """
+
+    @bound=AppPlatformRevision
+    Link an app and platform together via their corresponding revisions.
+    """
+    linkPlatformRevision(appPlatformRevisionLinkInput: AppPlatformRevisionLinkInput!): [PlatformRevisionMergeIssue!]!
+    "@bound=User"
+    login(login: LoginInput!): Session!
+    "@bound=User"
+    login2fa(login2faInput: Login2FAInput!): UserSession!
+    """
+
+    @bound=User
+    Prepare currently logged `User` be linked with GitHub
+    """
+    prepareGitHubLink(prepareGitHubLinkInput: PrepareGitHubLinkInput!): User!
+    """
+
+    @bound=Platform
+    Update a `Platform`.
+    """
+    publishPlatform(platformPublishInput: PlatformPublishInput!): Boolean!
+    """
+
+    @bound=PlatformRevision
+    This will attempt to finalise and publish the `PlatformRevision` and make it avalible for publishers to use, implement and upgrade to.
+    """
+    publishPlatformRevision(publishPlatformRevisionInput: PublishPlatformRevisionInput!): Boolean!
+    """
+
+    @bound=Org
+    Add a user to an `Org`
+    """
+    regenerateUserPassword(regenerateUserPasswordInput: RegenerateUserPasswordInput!): String!
+    """
+
+    @bound=User
+    Remove currently logged `User`'s link to GitHub
+    """
+    removeGitHubLink: Boolean!
+    """
+
+    @bound=Org
+    Remove currently logged `User` from an `Org`.
+    """
+    removeMe(orgRemoveMeInput: OrgRemoveMeInput!): Boolean!
+    """
+
+    @bound=Org
+    Remove a `User` from an `Org`.
+    """
+    removeUser(orgRemoveUserInput: OrgRemoveUserInput!): Boolean!
+    "@bound=User"
+    resetAPIToken: String!
+    "@bound=User"
+    resetPassword(resetPasswordInput: ResetPasswordInput!): UserSession!
+    "@bound=User"
+    sendPasswordResetEmail(sendPasswordResetInput: SendPasswordResetInput!): Boolean!
+    "@bound=User"
+    signUp(signUpInput: SignUpInput!): SignUpResult!
+    """
+
+    @bound=Org
+    Start Data Manager Trial
+    """
+    startDataManagerTrial(startDataManagerTrialInput: StartDataManagerTrialInput): DataManagerAccount!
+    """
+
+    @bound=Org
+    Start Tag Manager Trial
+    """
+    startTagManagerTrial(startTagManagerTrialInput: StartTagManagerTrialInput): TagManagerAccount!
+    """
+
+    @bound=Org
+    Trasfer the `Org` ownership to a target `User`.
+    """
+    transferOwnership(transferOwnershipInput: TransferOwnershipInput!): Boolean!
+    """
+
+    @bound=Rule
+    Link a global `ActionGroupDistribution`'s to a `Rule`
+    """
+    unlinkGlobalActionGroupDistribution(globalActionGroupDistributionUnlinkInput: GlobalActionGroupDistributionUnlinkInput!): Boolean!
+    """
+
+    @bound=AppPlatformRevision
+    Delete an `AppPlatformRevision` and its children.
+    """
+    unlinkPlatformRevision(appPlatformRevisionUnlinkInput: AppPlatformRevisionUnlinkInput!): [PlatformRevisionMergeIssue!]!
+    """
+
+    @bound=Action
+    Update an `Action`.
+    """
+    updateAction(actionUpdateInput: ActionUpdateInput!): Boolean!
+    """
+
+    @bound=Rule
+    Update the order of `ActionDistribution`'s curently linked to `Rule`
+    """
+    updateActionDistributionsOrder(ruleOrderInput: RuleOrderInput!): Boolean!
+    """
+
+    @bound=ActionGroup
+    Update a `ActionGroup`'s details.
+    """
+    updateActionGroup(actionGroupUpdateInput: ActionGroupUpdateInput!): Boolean!
+    """
+
+    @bound=ActionGroupDistribution
+    Update a `ActionGroupDistribution`'s details.
+    """
+    updateActionGroupDistribution(actionGroupDistributionUpdateInput: ActionGroupDistributionUpdateInput!): Boolean!
+    """
+
+    @bound=ActionGroup
+    Update a set of `ActionGroup`'s details.
+    """
+    updateActionGroups(actionGroupUpdateInputs: [ActionGroupUpdateInput!]!): Boolean!
+    """
+
+    @bound=ActionGroupDistribution
+    Update the order of `ActionGroup`'s curently linked to `ActionGroupDistribution`
+    """
+    updateActionGroupsOrder(actionGroupDistributionOrderInput: ActionGroupDistributionOrderInput!): Boolean!
+    """
+
+    @bound=ActionGroup
+    Update the order of `Action`'s curently linked to `ActionGroup`
+    """
+    updateActionsOrder(actionGroupOrderInput: ActionGroupOrderInput!): Boolean!
+    """
+
+    @bound=App
+    Update a `App`'s details.
+    """
+    updateApp(appUpdateInput: AppUpdateInput!): Boolean!
+    """
+
+    @bound=ConditionRule
+    Update a `ConditionRule`.
+    """
+    updateConditionRule(conditionRuleUpdateInput: ConditionRuleUpdateInput!): Boolean!
+    """
+
+    @bound=Trigger
+    Update the order of `Condition`'s curently linked to `Trigger`
+    """
+    updateConditionsOrder(triggerOrderInput: TriggerOrderInput!): Boolean!
+    """
+
+    @bound=Environment
+    Update an `Environment`'s details.
+    """
+    updateEnvironment(environmentUpdateInput: EnvironmentUpdateInput!): Boolean!
+    """
+
+    @bound=Event
+    Update an `Event`.
+    """
+    updateEvent(eventUpdateInput: EventUpdateInput!): Boolean!
+    """
+
+    @bound=Trigger
+    Update the order of `Event`'s curently linked to `Trigger`
+    """
+    updateEventsOrder(triggerOrderInput: TriggerOrderInput!): Boolean!
+    """
+
+    @bound=Trigger
+    Update the order of `Exception`'s curently linked to `Trigger`
+    """
+    updateExceptionsOrder(triggerOrderInput: TriggerOrderInput!): Boolean!
+    """
+
+    @bound=IngestEndpoint
+    Update a `IngestEndpoint`'s details.
+    """
+    updateIngestEndpoint(ingestEndpointUpdateInput: IngestEndpointUpdateInput!): Boolean!
+    """
+
+    @bound=IngestEndpointDataMap
+    Update an `IngestEndpointDataMap`
+    """
+    updateIngestEndpointDataMap(ingestEndpointDataMapUpdateInput: IngestEndpointDataMapUpdateInput): Boolean!
+    """
+
+    @bound=IngestEndpointEnvironment
+    Update a `IngestEndpointEnvironment`.
+    """
+    updateIngestEndpointEnvironment(ingestEndpointEnvironmentUpdateInput: IngestEndpointEnvironmentUpdateInput!): Boolean!
+    """
+
+    @bound=IngestEndpointRevision
+    Update a `IngestEndpointRevision`'s details.
+    """
+    updateIngestEndpointRevision(ingestEndpointRevisionUpdateInput: IngestEndpointRevisionUpdateInput): Boolean!
+    """
+
+    @bound=User
+    Update currently logged `User`
+    """
+    updateMe(meUpdateInput: MeUpdateInput!): Boolean!
+    """
+
+    @bound=Org
+    Update an existing `Org`
+    """
+    updateOrg(orgUpdateInput: OrgUpdateInput!): Boolean!
+    """
+
+    @bound=Platform
+    Update a `Platform`.
+    """
+    updatePlatform(platformUpdateInput: PlatformUpdateInput!): Boolean!
+    """
+
+    @bound=PlatformRevision
+    Update a `PlatformRevision`'s details.
+    """
+    updatePlatformRevision(revisionPlatformUpdateInput: RevisionPlatformUpdateInput!): Boolean!
+    """
+
+    @bound=Revision
+    Update a `Revision`'s details.
+    """
+    updateRevision(revisionUpdateInput: RevisionUpdateInput): Boolean!
+    """
+
+    @bound=Rule
+    Update a `Rule`'s details.
+    """
+    updateRule(ruleUpdateInput: RuleUpdateInput!): Boolean!
+    """
+
+    @bound=RuleGroup
+    Update a `RuleGroup`'s details.
+    """
+    updateRuleGroup(ruleGroupUpdateInput: RuleGroupUpdateInput!): Boolean!
+    """
+
+    @bound=Tag
+    Update the order of `RuleGroup`'s curently linked to `Tag`
+    """
+    updateRuleGroupsOrder(tagRuleGroupOrderInput: TagRuleGroupOrderInput!): Boolean!
+    """
+
+    @bound=RuleGroup
+    Update the order of `Rule`'s curently linked to `RuleGroup`
+    """
+    updateRulesOrder(ruleGroupRuleOrderInput: RuleGroupRuleOrderInput!): Boolean!
+    """
+
+    @bound=Tag
+    Update a `Tag`'s details.
+    """
+    updateTag(tagUpdateInput: TagUpdateInput!): Boolean!
+    """
+
+    @bound=PlatformAction
+    Update a templated `PlatformAction`
+    """
+    updateTemplatedAction(platformActionTemplatedUpdateInput: PlatformActionTemplatedUpdateInput!): Boolean!
+    """
+
+    @bound=Trigger
+    Update a `Trigger`'s details.
+    """
+    updateTrigger(triggerUpdateInput: TriggerUpdateInput!): Boolean!
+    """
+
+    @bound=Org
+    Update a `User`'s permissions against an `Org`
+    """
+    updateUserPermissions(orgUpdateUserInput: OrgUpdateUserInput!): Boolean!
+    "S8 Version"
+    v: String
+}
+
+"""
+
+@model
+Contains the ID and Type of a model.
+Used by `Audit` to describe a model that is connected to an operation.
+"""
+type OperationConnectedModel {
+    "Model ID"
+    id: ID!
+    "Model Type"
+    type: String!
+}
+
+"""
+
+@model
+An `Org` is the top level of abstraction.
+A set of `OrgUser`'s are associated with an `Org` and each of these `OrgUser`'s can have granular access permissions associated with them.
+Depending on your `User`, your may be limited to the number of `Org`'s you are able to create.
+"""
+type Org {
+    "DateTime the `Org` was created"
+    created_at: DateTime!
+    "A `DataManagerAccount` associated with this `Org`. A Scale8 Data Manager account might not exist yet unless a trial has been requested or product has been subscribed to."
+    data_manager_account: DataManagerAccount
+    "If this org has a stripeCustomerId and can use the custumer portal"
+    has_billing: Boolean!
+    "A unique `Org` ID"
+    id: ID!
+    "List of `Invite`'s associated with this `Org`"
+    invites: [Invite!]!
+    "If this org is subscribed to any of the Scale8 services"
+    is_paid: Boolean!
+    "If the org is under manual invoicing"
+    manual_invoicing: Boolean!
+    "`OrgUser` representation of current `User`"
+    me: OrgUser!
+    "Name used to describe the `Org`"
+    name: String!
+    "A `TagManagerAccount` associated with this `Org`. A Scale8 Tag Manager account might not exist yet unless a trial has been requested or product has been subscribed to."
+    tag_manager_account: TagManagerAccount
+    "A valid timezone"
+    tz: TimeZone!
+    "DateTime the `Org` was last updated"
+    updated_at: DateTime!
+    "List of `OrgUser`'s associated with this `Org`"
+    users: [OrgUser!]!
+}
+
+"""
+
+@model
+An `OrgUser` is a limited representation of User and is linked to an `Org`
+"""
+type OrgUser {
+    can_create_data_manager_trial: Boolean!
+    can_create_tag_manager_trial: Boolean!
+    "The date the `OrgUser` was created"
+    created_at: DateTime!
+    "`OrgUser`'s email address"
+    email: String!
+    "`OrgUser`'s first name"
+    first_name: String!
+    "`OrgUser` ID"
+    id: ID!
+    "`OrgUser`'s last name"
+    last_name: String!
+    "If the `OrgUser` currently has ownership of this `Org`. Ownership is required to manage billing, upgrades, downgrades and termination of an Org."
+    owner: Boolean!
+    "`OrgUser`'s permissions as described in `OrgUserPermissions`"
+    permissions: OrgUserPermissions!
+    "`OrgUser`'s two-factor auth enabled"
+    two_factor_auth: Boolean!
+    "The date the `OrgUser` was last updated"
+    updated_at: DateTime!
+}
+
+"""
+
+@model
+The granular permission associated with an `OrgUser`
+"""
+type OrgUserPermissions {
+    "`Org` user is able to create new entities"
+    can_create: Boolean!
+    "`Org` user is able to delete entities"
+    can_delete: Boolean!
+    "`Org` user is able to edit entities"
+    can_edit: Boolean!
+    "`Org` user is able to view the org entities"
+    can_view: Boolean!
+    "`Org` user has admin level access"
+    is_admin: Boolean!
+}
+
+"@model"
+type Platform {
+    "Date the `Platform` was created at"
+    created_at: DateTime!
+    "`Platform` description"
+    description: String!
+    "`Platform` ID"
+    id: ID!
+    "If the platform has been published, this flag will be true."
+    is_public: Boolean!
+    "`Platform` name"
+    name: String!
+    "`PlatformRevision`s the are linked to this `Platform`. Please note that if the `Platform` has been made public and `PlatformRevision` has been published, it will be avalible to ***any*** Scale8 Tag Manager User to install in their `App`"
+    platform_revisions: [PlatformRevision!]!
+    "The `TagManagerAccount` that contains this `Platform`"
+    tag_manager_account: TagManagerAccount!
+    "Platform type"
+    type: PlatformType!
+    "Date the `Platform` was last updated at"
+    updated_at: DateTime!
+}
+
+"@model"
+type PlatformAction {
+    "Code, if applicable and running in templated mode."
+    code: String
+    "Description of the `PlatformAction`"
+    description: String!
+    "If the code should be executed in an iframe, bypassing the sandbox and effectively executing as raw code."
+    exec_raw_in_iframe: Boolean!
+    "Icon"
+    icon: TypeIcon
+    "ID of the `PlatformAction`"
+    id: ID!
+    "Name of the `PlatformAction`"
+    name: String!
+    "List of `PlatformActionPermission`s linked to this action"
+    permissions_requests: [PlatformActionPermission!]!
+    "Persisting ID, this reference will stay the same across all revisions of this entity"
+    persisting_id: String!
+    "`Platform` that contains this `PlatformAction`"
+    platform: Platform!
+    "List of `PlatformDataMap`s that create a document style key => value map. This can be directly accessed by the action when called."
+    platform_data_maps: [PlatformDataMap!]!
+    "`PlatformRevision` that contains this `PlatformAction`"
+    platform_revision: PlatformRevision!
+    "[Optional]. This will force the `PlatformAction` server side and direct the payload described in 'platform_data_maps' as JSON POST request at the provided server-to-server endpoint."
+    s2s_endpoint: String
+}
+
+"@model"
+type PlatformActionPermission {
+    "List of event names, if applicable to this permission"
+    event_names: [String!]
+    "List of host matches, if applicable to this permission"
+    host_matches: [String!]
+    "ID of the `PlatformActionPermission`"
+    id: ID!
+    "Permission required"
+    permission: PlatformActionPermissionRequest!
+    "Persisting ID, this reference will stay the same across all revisions of this entity"
+    persisting_id: String!
+    "List of url parts accessible by this permission, if applicable"
+    url_parts: [PlatformActionPermissionURLParts!]
+    "List of variable read/write scopes, if applicable to this permission"
+    variable_read_write_execute_scopes: [VariableReadWriteExecuteScope!]
+}
+
+"@model"
+type PlatformAsset {
+    "ID of the `PlatformAsset`"
+    id: ID!
+    "Asset mime-type"
+    mime_type: String!
+    "Name of the `PlatformAsset`"
+    name: String!
+    "Persisting ID, this reference will stay the same across all revisions of this entity"
+    persisting_id: String!
+    "Size of asset in bytes"
+    size: Int!
+}
+
+"@model"
+type PlatformDataContainer {
+    "Whether or not to allow custom keys to be defined by the user to access properties within this data layer"
+    allow_custom: Boolean!
+    "Description of the `PlatformDataContainer`"
+    description: String!
+    "Icon"
+    icon: TypeIcon
+    "ID of the `PlatformDataContainer`"
+    id: ID!
+    "Name of the `PlatformDataContainer`"
+    name: String!
+    "Persisting ID, this reference will stay the same across all revisions of this entity"
+    persisting_id: String!
+    "`Platform` that contains this `PlatformDataContainer`"
+    platform: Platform!
+    "A list of `PlatformDataMap` that describe the document style structure of this data layer"
+    platform_data_maps: [PlatformDataMap!]!
+    "`PlatformRevision` that contains this `PlatformDataContainer`"
+    platform_revision: PlatformRevision!
+}
+
+"@model"
+type PlatformDataMap {
+    "Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These contain nested `PlatformDataMap` in a document or array document structure respectivly"
+    child_platform_data_maps: [PlatformDataMap!]!
+    "Default value - used when `PlatformDataMap` has been created as optional and `PlatformDataMap` has not been implemented"
+    default_value: DefaultValue
+    "Description of the `PlatformDataMap`"
+    description: String!
+    "Icon"
+    icon: TypeIcon
+    "ID of the `PlatformDataMap`"
+    id: ID!
+    "See `InputType`"
+    input_type: InputType!
+    "If this value is optional or not. If the value is optional then this `PlatformDataMap` must be implemented correctly."
+    is_optional: Boolean!
+    "Key (Property Key) of the `PlatformDataMap`"
+    key: String!
+    "Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from"
+    option_values: [DataMapValue!]
+    "Persisting ID, this reference will stay the same across all revisions of this entity"
+    persisting_id: String!
+    "`Platform` that contains this `PlatformDataMap`"
+    platform: Platform!
+    "`PlatformRevision` that contains this `PlatformDataMap`"
+    platform_revision: PlatformRevision!
+    "A list of validation rules associated with this `PlatformDataMap`."
+    validation_rules: [PlatformDataMapValidation!]
+    "See `VarType`"
+    var_type: VarType!
+}
+
+"@model"
+type PlatformDataMapValidation {
+    "Input value to check against"
+    input_value: DataMapValue
+    "Validation type"
+    type: ValidationType!
+}
+
+"@model"
+type PlatformEvent {
+    "Description of the `PlatformEvent`"
+    description: String!
+    "Event that is being used"
+    event: String!
+    "Icon"
+    icon: TypeIcon
+    "ID of the `PlatformEvent`"
+    id: ID!
+    "Name of the `PlatformEvent`"
+    name: String!
+    "Persisting ID, this reference will stay the same across all revisions of this entity"
+    persisting_id: String!
+    "`Platform` that contains this `PlatformEvent`"
+    platform: Platform!
+    "List of `PlatformDataMap`s that create a document style key => value map. This can be directly accessed by the event when called."
+    platform_data_maps: [PlatformDataMap!]!
+    "`PlatformRevision` that contains this `PlatformEvent`"
+    platform_revision: PlatformRevision!
+}
+
+"@model"
+type PlatformRevision {
+    "The date the `PlatformRevision` was created"
+    created_at: DateTime!
+    "ID of the `PlatformRevision`"
+    id: ID!
+    "Whether or not the `PlatformRevision` has been published. Once published the `PlatformRevision` can be installed by publishers in to their `App`s."
+    is_published: Boolean!
+    "Whether or not the `PlatformRevision` has been locked or not. When locked no future changes can be made to the `PlatformRevision` or any of its connected entities"
+    locked: Boolean!
+    "The name of the `PlatformRevision`"
+    name: String!
+    "The `Platform` that owns this `PlatformRevision`"
+    platform: Platform!
+    "A list of actions that are associated with this `PlatformRevision`"
+    platform_actions: [PlatformAction!]!
+    "A list of assets that are associated with this `PlatformRevision`"
+    platform_assets: [PlatformAsset!]!
+    "A list of data containers (data layers) that are associated with this `PlatformRevision`"
+    platform_data_containers: [PlatformDataContainer!]!
+    "A list of events that are associated with this `PlatformRevision`"
+    platform_events: [PlatformEvent!]!
+    "A list of `PlatformDataMap`s that create a document style container of key => value pairs"
+    platform_settings: [PlatformDataMap!]!
+    "The date the `PlatformRevision` was last updated"
+    updated_at: DateTime!
+}
+
+"@type"
+type PlatformRevisionMergeIssue {
+    "Type of model"
+    entity: String!
+    "ID of the model"
+    id: ID!
+    "Name of the model"
+    name: String!
+}
+
+type Query {
+    "The S8 `Config`. Contains all the common mappings for countries, time zones, condition types etc."
+    config: Config!
+    "Type exposure to share enumeration types with frontends"
+    extra_types: ExtraTypes
+    """
+
+    @bound=Action
+    Get a `Action` model from the `Action` ID
+    """
+    getAction(id: ID!): Action!
+    """
+
+    @bound=ActionGroup
+    Get a `ActionGroup` model from the `ActionGroup` ID
+    """
+    getActionGroup(id: ID!): ActionGroup!
+    """
+
+    @bound=ActionGroupDistribution
+    Get a `ActionGroupDistribution` model from the `ActionGroupDistribution` ID
+    """
+    getActionGroupDistribution(id: ID!): ActionGroupDistribution!
+    """
+
+    @bound=App
+    Get an App model from the App ID
+    """
+    getApp(id: ID!): App!
+    """
+
+    @bound=AppPlatformRevision
+    Get an `AppPlatformRevision` model from `AppPlatformRevision` ID
+    """
+    getAppPlatformRevision(id: ID!): AppPlatformRevision!
+    """
+
+    @bound=ConditionRule
+    Get a `ConditionRule` model from the `ConditionRule` ID
+    """
+    getConditionRule(id: ID!): ConditionRule!
+    """
+
+    @bound=DataManagerAccount
+    Returns a `DataManagerAccount` instance provided a valid ID is given and the user has sufficient priviledges to view it.
+    """
+    getDataManagerAccount(id: ID!): DataManagerAccount!
+    """
+
+    @bound=Environment
+    Get an `Environment` model from `Environment` ID
+    """
+    getEnvironment(id: ID!): Environment!
+    """
+
+    @bound=Event
+    Get a `Event` model from the `Event` ID
+    """
+    getEvent(id: ID!): Event!
+    """
+
+    @bound=Audit
+    Get the history for all entities
+    """
+    getHistoryForEntities(
+        "Any valid list of entity ids"
+        entities: [ID!]!
+    ): [Audit!]!
+    "@bound=IngestEndpoint"
+    getIngestEndpoint(id: ID!): IngestEndpoint!
+    "@bound=IngestEndpointDataMap"
+    getIngestEndpointDataMap(id: ID!): IngestEndpointDataMap!
+    """
+
+    @bound=IngestEndpointEnvironment
+    Get an `IngestEndpointEnvironment` model from `IngestEndpointEnvironment` ID
+    """
+    getIngestEndpointEnvironment(id: ID!): IngestEndpointEnvironment!
+    """
+
+    @bound=IngestEndpointRevision
+    Get a `IngestEndpointRevision` by it's ID
+    """
+    getIngestEndpointRevision(id: ID!): IngestEndpointRevision!
+    """
+
+    @bound=Org
+    Given a valid `Org` ID, this function will return an `Org` provided the API `User` has been granted at least **view** access.
+    """
+    getOrg(
+        "Any valid `Org` ID"
+        id: ID!
+    ): Org!
+    """
+
+    @bound=Org
+    Given a valid `Org` ID and the ID of an `User` connected to the org it will return the permissions for that `User`
+    """
+    getOrgUserPermissions(
+        "Any valid `Org` ID"
+        orgId: ID!,
+        "The ID of an `User` connected to the org"
+        userId: ID!
+    ): OrgUserPermissions!
+    """
+
+    @bound=Platform
+    Method will return a `Platform` instance from its ID.
+
+    !> Note that if the `Platform` has been made public, it will be accessible to ***any*** Scale8 Tag Manager User.
+    """
+    getPlatform(id: ID!): Platform!
+    """
+
+    @bound=PlatformAction
+    Method will return a `PlatformAction` instance from its ID.
+    """
+    getPlatformAction(id: ID!): PlatformAction!
+    """
+
+    @bound=PlatformActionPermission
+    Method will return a `PlatformActionPermission` instance from its ID.
+    """
+    getPlatformActionPermission(id: ID!): PlatformActionPermission!
+    """
+
+    @bound=PlatformDataContainer
+    Method will return a `PlatformDataContainer` instance from its ID.
+    """
+    getPlatformDataContainer(id: ID!): PlatformDataContainer!
+    """
+
+    @bound=PlatformEvent
+    Method will return a `PlatformEvent` instance from its ID.
+    """
+    getPlatformEvent(id: ID!): PlatformEvent!
+    """
+
+    @bound=PlatformRevision
+    Returns a `PlatformRevision` associated withthe ID provided
+    """
+    getPlatformRevision(id: ID!): PlatformRevision!
+    """
+
+    @bound=Platform
+    Method will return a list of public `Platform`'s.
+
+    !> Note that if the `Platform` has not been made public it will not be in the list.
+    """
+    getPublicPlatforms: [Platform!]!
+    """
+
+    @bound=PlatformRevision
+    Get a list of locked and published `PlatformRevision`'s.
+
+    !> Note that if the `Platform` has not been made public `PlatformRevision`'s linked to that entity will not be in the list.
+    """
+    getPublishedPlatformRevisions(platformId: ID!): [PlatformRevision!]!
+    """
+
+    @bound=Revision
+    Finds a Revision By Id
+    """
+    getRevision(id: ID!): Revision!
+    """
+
+    @bound=Rule
+    Get a `Rule` model from the `Rule` ID
+    """
+    getRule(id: ID!): Rule!
+    """
+
+    @bound=RuleGroup
+    Get a `RuleGroup` model from the `RuleGroup` ID
+    """
+    getRuleGroup(id: ID!): RuleGroup!
+    """
+
+    @bound=Tag
+    Get an Tag model from the Tag ID
+    """
+    getTag(id: ID!): Tag!
+    "@bound=TagManagerAccount"
+    getTagManagerAccount(id: ID!): TagManagerAccount!
+    """
+
+    @bound=Trigger
+    Get a `Trigger` model from the `Trigger` ID
+    """
+    getTrigger(id: ID!): Trigger!
+    """
+
+    @bound=IngestEndpointRevision
+    Provides the left and right comparison of two revisions
+    """
+    ingestEndpointRevisionDifference(leftRevisionId: ID!, rightRevisionId: ID!): [RevisionDiff!]!
+    """
+
+    @bound=User
+    Get a the session user
+    """
+    me: User!
+    """
+
+    @bound=PlatformRevision
+    Provides the left and right comparison of two revisions
+    """
+    platformRevisionDifference(leftRevisionId: ID!, rightRevisionId: ID!): [RevisionDiff!]!
+    """
+
+    @bound=User
+    Generate and get a new two factor secret
+    """
+    prepareTwoFactor: String!
+    """
+
+    @bound=Revision
+    Provides the left and right comparison of two revisions
+    """
+    revisionDifference(leftRevisionId: ID!, rightRevisionId: ID!): [RevisionDiff!]!
+    "S8 Version"
+    v: String
+}
+
+"""
+
+@model
+A revision contains properties linked to an App. As these properties changes, we can track revisions and compare changes
+"""
+type Revision {
+    "App"
+    app: App!
+    "Get all the `AppPlatformRevision`'s linked to this revision"
+    app_platform_revisions: [AppPlatformRevision!]!
+    "Revision Creation Time"
+    created_at: DateTime!
+    "Event request stats - Please note that revision is automatically set in the filter options"
+    event_request_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+    "Get all the global triggers linked to this revision"
+    global_action_group_distributions: [ActionGroupDistribution!]!
+    "Get all the global triggers linked to this revision"
+    global_triggers: [Trigger!]!
+    "Revision ID"
+    id: ID!
+    "Revision has been finalised and locked to prevent further changes"
+    locked: Boolean!
+    "Revision Name"
+    name: String!
+    "Get all the tags linked to this revision"
+    tags: [Tag!]!
+    "Revision Last Update Time"
+    updated_at: DateTime!
+}
+
+"@type"
+type RevisionDiff {
+    "The ID that symbolically links the two models. One will have been cloned from the other if both exist"
+    id: String!
+    "The model held on the left"
+    left: String
+    "Name of the model"
+    model: String!
+    "The properties of the model"
+    props: [RevisionDiffProp!]!
+    "The model held on the right"
+    right: String
+    "The overall state of the model"
+    state: String
+}
+
+"@type"
+type RevisionDiffProp {
+    "The name of the field belonging to the model"
+    field: String!
+    "The name of the field belonging to the model as described in GraphQL"
+    gqlField: String!
+    "The value associated with the left model's field"
+    left: GQLScalarBox
+    "If the field is a reference to another model"
+    ref: Boolean!
+    "The value associated with the right model's field"
+    right: GQLScalarBox
+    "The state of the fields when compared with each other"
+    state: String!
+}
+
+"@type"
+type RevisionIssue {
+    "If available, the field associated with the model causing an issue"
+    gqlField: String
+    "A simple explaination of the issue itself"
+    issue: String!
+    "Name of the model that is producting an issue"
+    model: String!
+    "The ID of the model producing the issue"
+    modelId: String!
+}
+
+"""
+
+@model
+A `Rule` links a trigger and action group distributions together.
+"""
+type Rule {
+    "All set of `ActionGroupDistribution`'s attached to this `Rule` and will be triggered once `Event` and `ConditionRule`'s are considered"
+    action_groups_distributions: [ActionGroupDistribution!]!
+    "The ID of the `Rule`"
+    id: ID!
+    "If the `Rule` is currently active or inactive"
+    is_active: Boolean!
+    "The minimum refresh interval. -1 = the rule can't repeat. 0 = the rule can repeat. > 0 the rule must wait this many milliseconds before being allowed to repeat again."
+    min_repeat_interval: Int!
+    "The name of the `Rule`"
+    name: String!
+    "A `Trigger` attached to the `Rule`."
+    trigger: Trigger!
+}
+
+"""
+
+@model
+A `RuleGroup` provides a way to group a number of rules together. This is useful for both encapsulation of specific behaviours and also provides the ability to clone and disable in bulk.
+"""
+type RuleGroup {
+    "The `RuleGroup` ID"
+    id: ID!
+    "If the `RuleGroup` is active or inactive"
+    is_active: Boolean!
+    "Name associated with the `RuleGroup`"
+    name: String!
+    "A set of rules attached to the `RuleGroup`."
+    rules: [Rule!]!
+}
+
+"""
+
+@model
+The value returned after the sign up start.
+"""
+type SignUpResult {
+    "The email of the user signing up"
+    email: String!
+}
+
+"""
+
+@type
+Used as a container object
+"""
+type StringArrayBox {
+    "Represents a list of strings"
+    sa: [String!]!
+}
+
+"""
+
+@type
+Used as a container object
+"""
+type StringBox {
+    "Represents a single string value"
+    s: String!
+}
+
+"@model"
+type StringMap {
+    "Property key"
+    k: String!
+    "Property value"
+    v: String!
+}
+
+"""
+
+@model
+Tags contain `RuleGroup`'s that describe under what events and conditions a tag execute certain actions.
+"""
+type Tag {
+    "If the tag should be automatically loaded on all pages."
+    auto_load: Boolean!
+    "Date the tag was created"
+    created_at: DateTime!
+    "An optional height parameter, used for placements."
+    height: Int!
+    "Tag ID"
+    id: ID!
+    "If the `Tag` is active or inactive. If this property is set to false, the tag will be ignored"
+    is_active: Boolean!
+    "Tag name"
+    name: String!
+    "Revision"
+    revision: Revision!
+    "A set of `RuleGroup`s attached to this tag."
+    rule_groups: [RuleGroup!]!
+    "Tag code, this persists when cloned. It is generated by the parent tag and inherited by all other tags cloned from this point. It is immutable by design."
+    tag_code: String!
+    "Tag type, see `TagType`"
+    type: TagType!
+    "Date the tag was last updated"
+    updated_at: DateTime!
+    "An optional width parameter, used for placements."
+    width: Int!
+}
+
+"@model"
+type TagManagerAccount {
+    apps: [App!]!
+    created_at: DateTime!
+    id: ID!
+    "If the account is in a trial period"
+    is_trial: Boolean!
+    org: Org!
+    platforms: [Platform!]!
+    "The current product id associated with this account. If this is free plan or managed, this will not be provided"
+    stripe_product_id: String
+    "If the free trial is expired"
+    trial_expired: Boolean!
+    "The amount of days until the trial expires"
+    trial_expires_in: Int!
+    updated_at: DateTime!
+    "Account Usage"
+    usage: [TagManagerAccountUsage!]!
+}
+
+"@model"
+type TagManagerAccountUsage {
+    day: DateTime!
+    requests: Int!
+}
+
+"@model"
+type TagManagerProduct {
+    amount: Int!
+    id: String!
+    name: String!
+    page_views: Int!
+}
+
+"""
+
+@model
+This type of session is returned after the first part of a 2-factor auth is completed.
+"""
+type TempSession {
+    "Temporary token to povide on next step of 2-factor auth (see Login2FAInput)"
+    temp_token: String!
+    "`User` ID"
+    uid: String!
+}
+
+"""
+
+@model
+A `Trigger` describes a set of events that must all be fired for a `Trigger` to complete. It also specifies an optional list of both conditions and exceptions (`ConditionRule`) that too must all be satisfied in order for the `Trigger` to be fired.
+"""
+type Trigger {
+    "A series of `ConditionRule`'s that must all happen before any actions can be performed from this `Trigger`"
+    condition_rules: [ConditionRule!]!
+    "Date the trigger was created"
+    created_at: DateTime!
+    "A list of events that must be satisfied in order for a `Trigger` to be triggered."
+    events: [Event!]!
+    "Exceptions describe an optional set of `ConditionRule`'s that will preclude a `Trigger` from being triggered"
+    exception_rules: [ConditionRule!]!
+    "The ID of the `Trigger`"
+    id: ID!
+    "The name of the `Trigger`"
+    name: String!
+    "Type of entity this model is bound to"
+    parent_type: RevisionEntityParentType!
+    "Revision"
+    revision: Revision!
+    "Date the trigger was last updated"
+    updated_at: DateTime!
+}
+
+"""
+
+@model
+Metrics to describe the `Usage` of an account.
+"""
+type Usage {
+    "The bytes of data transferred"
+    bytes: Int!
+    "The day the `Usage` metrics are referring to"
+    day: DateTime!
+    "The total number of requests"
+    requests: Int!
+    "The type account the `Usage` is calculated for"
+    usage_entity: String!
+    "The id of the account the `Usage` is calculated for"
+    usage_entity_id: ID!
+}
+
+"""
+
+@model
+Represents a `User` in the system.
+"""
+type User {
+    "`User`'s API token"
+    api_token: String!
+    "Whether the `User` can create a Data Manager trial"
+    can_create_data_manager_trial: Boolean!
+    "Whether the `User` can create a Tag Manager trial"
+    can_create_tag_manager_trial: Boolean!
+    "The date the `User` was created"
+    created_at: DateTime!
+    "`User`'s email address"
+    email: String!
+    "`User`'s email notifications enabled"
+    email_notifications: Boolean!
+    "`User`'s first name"
+    first_name: String!
+    "Whether the `User` is connected with a GitHub account"
+    github_connected: Boolean!
+    "`User`'s GitHub username"
+    github_user: String
+    "`User` ID"
+    id: ID!
+    "List of `Invite`s the `User` has sent"
+    invites: [Invite!]!
+    "Whether the `User` is an admin"
+    is_admin: Boolean!
+    "`User`'s last name"
+    last_name: String!
+    "List of `Org`s the `User` has access to"
+    orgs(filters: [Filter]): [Org!]!
+    "`User`'s two-factor auth enabled"
+    two_factor_auth: Boolean!
+    "The date the `User` was last updated"
+    updated_at: DateTime!
+    "List of `Notification`s for the `User`"
+    user_notifications: [UserNotification!]!
+}
+
+"""
+
+@model
+`User Notification`s in the system.
+They are described with a type and an optional referred entity (via id).
+"""
+type UserNotification {
+    "Optional referred entity id"
+    entity_id: ID
+    "`User Notification` ID"
+    id: ID!
+    "Whether the `User Notification` has been viewed"
+    is_viewed: Boolean!
+    "`User Notification` Type"
+    type: String!
+}
+
+"@model"
+type UserPermissions {
+    "User can create new entities"
+    can_create: Boolean!
+    "User can delete existing entities"
+    can_delete: Boolean!
+    "User can edit existing entities"
+    can_edit: Boolean!
+    "User is able to view / list."
+    can_view: Boolean!
+    "User can manage every entity from the parent down."
+    is_admin: Boolean!
+}
+
+"""
+
+@model
+This type of session is returned after the login is completed.
+"""
+type UserSession {
+    "The `Session` token"
+    token: String!
+    "`User` ID"
+    uid: String!
+}
+
+"""
+
+@model
+The value returned the sign up is completed.
+"""
+type UserSessionLink {
+    "The id of the `environment` created during the signup"
+    environment_id: String
+    "The `Session` token"
+    token: String!
+    "`User` ID"
+    uid: String!
+    "The target url after the signup process"
+    url: String!
+}
+
+"@model"
+type VariableReadWriteExecuteScope {
+    "Can execute variable?"
+    execute: Boolean!
+    "Variable name"
+    name: String!
+    "Can read variable?"
+    read: Boolean!
+    "Can modify variable?"
+    write: Boolean!
+}
+
+"A set of supported AWS regions for use with `TrackeEnvironment`s"
+enum AWSRegion {
+    "*Af South 1*"
+    AF_SOUTH_1
+    "*Ap East 1*"
+    AP_EAST_1
+    "*Ap Northeast 1*"
+    AP_NORTHEAST_1
+    "*Ap Northeast 2*"
+    AP_NORTHEAST_2
+    "*Ap Northeast 3*"
+    AP_NORTHEAST_3
+    "*Ap Southeast 1*"
+    AP_SOUTHEAST_1
+    "*Ap Southeast 2*"
+    AP_SOUTHEAST_2
+    "*Ap South 1*"
+    AP_SOUTH_1
+    "*Ca Central 1*"
+    CA_CENTRAL_1
+    "*Cn Northwest 1*"
+    CN_NORTHWEST_1
+    "*Eu Central 1*"
+    EU_CENTRAL_1
+    "*Eu West 1*"
+    EU_WEST_1
+    "*Us East 1*"
+    US_EAST_1
+    "*Us East 2*"
+    US_EAST_2
+    "*Us West 1*"
+    US_WEST_1
+    "*Us West 2*"
+    US_WEST_2
+}
+
+"A set of supported `AccountProduct`s"
+enum AccountProduct {
+    "*Data Manager*"
+    DATA_MANAGER
+    "*Tag Manager*"
+    TAG_MANAGER
+}
+
+"A set of supported `ActionGroupDistributionType`s for use with `ActionGroupDistribution`s"
+enum ActionGroupDistributionType {
+    "*None*"
+    NONE
+    "*Page Load*"
+    PAGE_LOAD
+    "*Session*"
+    SESSION
+}
+
+"The type of `App` being created. `MOBILE` support will be added soon!"
+enum AppType {
+    "An app that is executed within a web browser context"
+    WEB
+}
+
+"A set of supported `AuditAction`s used by `Audit`"
+enum AuditAction {
+    "*Clone*"
+    Clone
+    "*Create*"
+    Create
+    "*Delete*"
+    Delete
+    "*Update*"
+    Update
+}
+
+enum CacheControlScope {
+    PRIVATE
+    PUBLIC
+}
+
+"To be used with `ConditionRuleCreateInput`"
+enum ConditionMode {
+    "If the `ConditionRule` is a **condition** to be applied to the `Rule`"
+    CONDITION
+    "If the `ConditionRule` is an **exception** to be applied to the `Rule`"
+    EXCEPTION
+}
+
+"To be used with `ConditionRule`, these are the valid condition types currently supported."
+enum ConditionType {
+    "*Begins With*"
+    BEGINS_WITH
+    "*Contains*"
+    CONTAINS
+    "*Ends With*"
+    ENDS_WITH
+    "*Equal*"
+    EQUAL
+    "*Greater Than*"
+    GREATER_THAN
+    "*Greater Than Equal*"
+    GREATER_THAN_EQUAL
+    "*Is Defined*"
+    IS_DEFINED
+    "*Is Not Defined*"
+    IS_NOT_DEFINED
+    "*Less Than*"
+    LESS_THAN
+    "*Less Than Equal*"
+    LESS_THAN_EQUAL
+    "*Not Equal*"
+    NOT_EQUAL
+    "*Regular Expression*"
+    REGULAR_EXPRESSION
+}
+
+"A set of supported country codes"
+enum CountryCode {
+    "*Andorra*"
+    AD
+    "*United Arab Emirates*"
+    AE
+    "*Afghanistan*"
+    AF
+    "*Antigua And Barbuda*"
+    AG
+    "*Anguilla*"
+    AI
+    "*Albania*"
+    AL
+    "*Armenia*"
+    AM
+    "*Angola*"
+    AO
+    "*Antarctica*"
+    AQ
+    "*Argentina*"
+    AR
+    "*American Samoa*"
+    AS
+    "*Austria*"
+    AT
+    "*Australia*"
+    AU
+    "*Aruba*"
+    AW
+    "*Aland Islands*"
+    AX
+    "*Azerbaijan*"
+    AZ
+    "*Bosnia And Herzegovina*"
+    BA
+    "*Barbados*"
+    BB
+    "*Bangladesh*"
+    BD
+    "*Belgium*"
+    BE
+    "*Burkina Faso*"
+    BF
+    "*Bulgaria*"
+    BG
+    "*Bahrain*"
+    BH
+    "*Burundi*"
+    BI
+    "*Benin*"
+    BJ
+    "*Saint Barthelemy*"
+    BL
+    "*Bermuda*"
+    BM
+    "*Brunei Darussalam*"
+    BN
+    "*Bolivia*"
+    BO
+    "*Brazil*"
+    BR
+    "*Bahamas*"
+    BS
+    "*Bhutan*"
+    BT
+    "*Bouvet Island*"
+    BV
+    "*Botswana*"
+    BW
+    "*Belarus*"
+    BY
+    "*Belize*"
+    BZ
+    "*Canada*"
+    CA
+    "*Cocos (Keeling) Islands*"
+    CC
+    "*Congo, Democratic Republic*"
+    CD
+    "*Central African Republic*"
+    CF
+    "*Congo*"
+    CG
+    "*Switzerland*"
+    CH
+    "*Cote D'Ivoire*"
+    CI
+    "*Cook Islands*"
+    CK
+    "*Chile*"
+    CL
+    "*Cameroon*"
+    CM
+    "*China*"
+    CN
+    "*Colombia*"
+    CO
+    "*Costa Rica*"
+    CR
+    "*Cuba*"
+    CU
+    "*Cape Verde*"
+    CV
+    "*Christmas Island*"
+    CX
+    "*Cyprus*"
+    CY
+    "*Czech Republic*"
+    CZ
+    "*Germany*"
+    DE
+    "*Djibouti*"
+    DJ
+    "*Denmark*"
+    DK
+    "*Dominica*"
+    DM
+    "*Dominican Republic*"
+    DO
+    "*Algeria*"
+    DZ
+    "*Ecuador*"
+    EC
+    "*Estonia*"
+    EE
+    "*Egypt*"
+    EG
+    "*Western Sahara*"
+    EH
+    "*Eritrea*"
+    ER
+    "*Spain*"
+    ES
+    "*Ethiopia*"
+    ET
+    "*Finland*"
+    FI
+    "*Fiji*"
+    FJ
+    "*Falkland Islands (Malvinas)*"
+    FK
+    "*Micronesia, Federated States Of*"
+    FM
+    "*Faroe Islands*"
+    FO
+    "*France*"
+    FR
+    "*Gabon*"
+    GA
+    "*United Kingdom*"
+    GB
+    "*Grenada*"
+    GD
+    "*Georgia*"
+    GE
+    "*French Guiana*"
+    GF
+    "*Guernsey*"
+    GG
+    "*Ghana*"
+    GH
+    "*Gibraltar*"
+    GI
+    "*Greenland*"
+    GL
+    "*Gambia*"
+    GM
+    "*Guinea*"
+    GN
+    "*Guadeloupe*"
+    GP
+    "*Equatorial Guinea*"
+    GQ
+    "*Greece*"
+    GR
+    "*South Georgia And Sandwich Isl.*"
+    GS
+    "*Guatemala*"
+    GT
+    "*Guam*"
+    GU
+    "*Guinea-Bissau*"
+    GW
+    "*Guyana*"
+    GY
+    "*Hong Kong*"
+    HK
+    "*Heard Island & Mcdonald Islands*"
+    HM
+    "*Honduras*"
+    HN
+    "*Croatia*"
+    HR
+    "*Haiti*"
+    HT
+    "*Hungary*"
+    HU
+    "*Indonesia*"
+    ID
+    "*Ireland*"
+    IE
+    "*Israel*"
+    IL
+    "*Isle Of Man*"
+    IM
+    "*India*"
+    IN
+    "*British Indian Ocean Territory*"
+    IO
+    "*Iraq*"
+    IQ
+    "*Iran, Islamic Republic Of*"
+    IR
+    "*Iceland*"
+    IS
+    "*Italy*"
+    IT
+    "*Jersey*"
+    JE
+    "*Jamaica*"
+    JM
+    "*Jordan*"
+    JO
+    "*Japan*"
+    JP
+    "*Kenya*"
+    KE
+    "*Kyrgyzstan*"
+    KG
+    "*Cambodia*"
+    KH
+    "*Kiribati*"
+    KI
+    "*Comoros*"
+    KM
+    "*Saint Kitts And Nevis*"
+    KN
+    "*Korea*"
+    KR
+    "*Kuwait*"
+    KW
+    "*Cayman Islands*"
+    KY
+    "*Kazakhstan*"
+    KZ
+    "*Lao People's Democratic Republic*"
+    LA
+    "*Lebanon*"
+    LB
+    "*Saint Lucia*"
+    LC
+    "*Liechtenstein*"
+    LI
+    "*Sri Lanka*"
+    LK
+    "*Liberia*"
+    LR
+    "*Lesotho*"
+    LS
+    "*Lithuania*"
+    LT
+    "*Luxembourg*"
+    LU
+    "*Latvia*"
+    LV
+    "*Libyan Arab Jamahiriya*"
+    LY
+    "*Morocco*"
+    MA
+    "*Monaco*"
+    MC
+    "*Moldova*"
+    MD
+    "*Montenegro*"
+    ME
+    "*Saint Martin*"
+    MF
+    "*Madagascar*"
+    MG
+    "*Marshall Islands*"
+    MH
+    "*Macedonia*"
+    MK
+    "*Mali*"
+    ML
+    "*Myanmar*"
+    MM
+    "*Mongolia*"
+    MN
+    "*Macao*"
+    MO
+    "*Northern Mariana Islands*"
+    MP
+    "*Martinique*"
+    MQ
+    "*Mauritania*"
+    MR
+    "*Montserrat*"
+    MS
+    "*Malta*"
+    MT
+    "*Mauritius*"
+    MU
+    "*Maldives*"
+    MV
+    "*Malawi*"
+    MW
+    "*Mexico*"
+    MX
+    "*Malaysia*"
+    MY
+    "*Mozambique*"
+    MZ
+    "*Namibia*"
+    NA
+    "*New Caledonia*"
+    NC
+    "*Niger*"
+    NE
+    "*Norfolk Island*"
+    NF
+    "*Nigeria*"
+    NG
+    "*Nicaragua*"
+    NI
+    "*Netherlands*"
+    NL
+    "*Norway*"
+    NO
+    "*Nepal*"
+    NP
+    "*Nauru*"
+    NR
+    "*Niue*"
+    NU
+    "*New Zealand*"
+    NZ
+    "*Oman*"
+    OM
+    "*Panama*"
+    PA
+    "*Peru*"
+    PE
+    "*French Polynesia*"
+    PF
+    "*Papua New Guinea*"
+    PG
+    "*Philippines*"
+    PH
+    "*Pakistan*"
+    PK
+    "*Poland*"
+    PL
+    "*Saint Pierre And Miquelon*"
+    PM
+    "*Pitcairn*"
+    PN
+    "*Puerto Rico*"
+    PR
+    "*Palestinian Territory, Occupied*"
+    PS
+    "*Portugal*"
+    PT
+    "*Palau*"
+    PW
+    "*Paraguay*"
+    PY
+    "*Qatar*"
+    QA
+    "*Reunion*"
+    RE
+    "*Romania*"
+    RO
+    "*Serbia*"
+    RS
+    "*Russian Federation*"
+    RU
+    "*Rwanda*"
+    RW
+    "*Saudi Arabia*"
+    SA
+    "*Solomon Islands*"
+    SB
+    "*Seychelles*"
+    SC
+    "*Sudan*"
+    SD
+    "*Sweden*"
+    SE
+    "*Singapore*"
+    SG
+    "*Saint Helena*"
+    SH
+    "*Slovenia*"
+    SI
+    "*Svalbard And Jan Mayen*"
+    SJ
+    "*Slovakia*"
+    SK
+    "*Sierra Leone*"
+    SL
+    "*San Marino*"
+    SM
+    "*Senegal*"
+    SN
+    "*Somalia*"
+    SO
+    "*Suriname*"
+    SR
+    "*Sao Tome And Principe*"
+    ST
+    "*El Salvador*"
+    SV
+    "*Syrian Arab Republic*"
+    SY
+    "*Swaziland*"
+    SZ
+    "*Turks And Caicos Islands*"
+    TC
+    "*Chad*"
+    TD
+    "*French Southern Territories*"
+    TF
+    "*Togo*"
+    TG
+    "*Thailand*"
+    TH
+    "*Tajikistan*"
+    TJ
+    "*Tokelau*"
+    TK
+    "*Timor-Leste*"
+    TL
+    "*Turkmenistan*"
+    TM
+    "*Tunisia*"
+    TN
+    "*Tonga*"
+    TO
+    "*Turkey*"
+    TR
+    "*Trinidad And Tobago*"
+    TT
+    "*Tuvalu*"
+    TV
+    "*Taiwan*"
+    TW
+    "*Tanzania*"
+    TZ
+    "*Ukraine*"
+    UA
+    "*Uganda*"
+    UG
+    "*United States Outlying Islands*"
+    UM
+    "*United States*"
+    US
+    "*Uruguay*"
+    UY
+    "*Uzbekistan*"
+    UZ
+    "*Holy See (Vatican City State)*"
+    VA
+    "*Saint Vincent And Grenadines*"
+    VC
+    "*Venezuela*"
+    VE
+    "*Virgin Islands, British*"
+    VG
+    "*Virgin Islands, U.S.*"
+    VI
+    "*Vietnam*"
+    VN
+    "*Vanuatu*"
+    VU
+    "*Wallis And Futuna*"
+    WF
+    "*Samoa*"
+    WS
+    "*Yemen*"
+    YE
+    "*Mayotte*"
+    YT
+    "*South Africa*"
+    ZA
+    "*Zambia*"
+    ZM
+    "*Zimbabwe*"
+    ZW
+}
+
+"A set of supported `Data Manager Macros` for `DateTime` values."
+enum DataManagerDateTimeMacros {
+    "*S8 Date Time Utc*"
+    S8_DATE_TIME_UTC
+}
+
+"A set of supported `Data Manager Macros` for `Integer` values."
+enum DataManagerIntegerMacros {
+    "*S8 Random Integer*"
+    S8_RANDOM_INTEGER
+    "*S8 Time Stamp Utc*"
+    S8_TIME_STAMP_UTC
+}
+
+"A set of supported `Data Manager Macros` for `String` values."
+enum DataManagerStringMacros {
+    "*S8 Browser Minor Version*"
+    S8_BROWSER_MINOR_VERSION
+    "*S8 Browser Name*"
+    S8_BROWSER_NAME
+    "*S8 Browser Version*"
+    S8_BROWSER_VERSION
+    "*S8 Date Time Utc*"
+    S8_DATE_TIME_UTC
+    "*S8 Device Brand*"
+    S8_DEVICE_BRAND
+    "*S8 Device Model*"
+    S8_DEVICE_MODEL
+    "*S8 Device Name*"
+    S8_DEVICE_NAME
+    "*S8 Ingest Endpoint Id*"
+    S8_INGEST_ENDPOINT_ID
+    "*S8 Ingest Env Id*"
+    S8_INGEST_ENV_ID
+    "*S8 Ingest Revision Id*"
+    S8_INGEST_REVISION_ID
+    "*S8 Org Id*"
+    S8_ORG_ID
+    "*S8 Os Minor Version*"
+    S8_OS_MINOR_VERSION
+    "*S8 Os Name*"
+    S8_OS_NAME
+    "*S8 Os Patch Version*"
+    S8_OS_PATCH_VERSION
+    "*S8 Os Version*"
+    S8_OS_VERSION
+    "*S8 User Agent*"
+    S8_USER_AGENT
+    "*S8 User Country Code*"
+    S8_USER_COUNTRY_CODE
+    "*S8 User Hash*"
+    S8_USER_HASH
+    "*S8 User Ip*"
+    S8_USER_IP
+}
+
+"A set of supported `Data Manager Macros` for `Timestamp` values."
+enum DataManagerTimestampMacros {
+    "*S8 Time Stamp Utc*"
+    S8_TIME_STAMP_UTC
+}
+
+"A set of supported `GQLMethod`s used by `Audit`"
+enum GQLMethod {
+    "*Add Linked Entity*"
+    ADD_LINKED_ENTITY
+    "*Auto Merge*"
+    AUTO_MERGE
+    "*Create*"
+    CREATE
+    "*Delete*"
+    DELETE
+    "*Delete Linked Entity*"
+    DELETE_LINKED_ENTITY
+    "*Duplicate*"
+    DUPLICATE
+    "*Finalize Revision*"
+    FINALIZE_REVISION
+    "*Indirect Method*"
+    INDIRECT_METHOD
+    "*Publish Platform*"
+    PUBLISH_PLATFORM
+    "*Reorder Linked Entities*"
+    REORDER_LINKED_ENTITIES
+    "*Update Properties*"
+    UPDATE_PROPERTIES
+}
+
+"A set of supported `InputType`s for use with `PlatformDataMap`s"
+enum InputType {
+    "*Boolean Input*"
+    BOOLEAN_INPUT
+    "*Checkbox*"
+    CHECKBOX
+    "*Color*"
+    COLOR
+    "*Consent Purposes*"
+    CONSENT_PURPOSES
+    "*Consent Vendors*"
+    CONSENT_VENDORS
+    "*Country Code Select*"
+    COUNTRY_CODE_SELECT
+    "*Css*"
+    CSS
+    "*Datetime Stamp*"
+    DATETIME_STAMP
+    "*Datetime String*"
+    DATETIME_STRING
+    "*Date Stamp*"
+    DATE_STAMP
+    "*Date String*"
+    DATE_STRING
+    "*Dom Selector Input*"
+    DOM_SELECTOR_INPUT
+    "*Email*"
+    EMAIL
+    "*Environment Select*"
+    ENVIRONMENT_SELECT
+    "*Float Array Input*"
+    FLOAT_ARRAY_INPUT
+    "*Float Input*"
+    FLOAT_INPUT
+    "*Generic Condition*"
+    GENERIC_CONDITION
+    "*Html*"
+    HTML
+    "*Ingest Endpoint Payload Designer*"
+    INGEST_ENDPOINT_PAYLOAD_DESIGNER
+    "*Int Array Input*"
+    INT_ARRAY_INPUT
+    "*Int Input*"
+    INT_INPUT
+    "*Javascript*"
+    JAVASCRIPT
+    "*Json*"
+    JSON
+    "*Multiple Select*"
+    MULTIPLE_SELECT
+    "*Number Condition*"
+    NUMBER_CONDITION
+    "*Object Array Input*"
+    OBJECT_ARRAY_INPUT
+    "*Object Input*"
+    OBJECT_INPUT
+    "*Radio*"
+    RADIO
+    "*Revision Select*"
+    REVISION_SELECT
+    "*Select*"
+    SELECT
+    "*String Condition*"
+    STRING_CONDITION
+    "*Text*"
+    TEXT
+    "*Textarea*"
+    TEXTAREA
+    "*Textarea Array Input*"
+    TEXTAREA_ARRAY_INPUT
+    "*Text Array Input*"
+    TEXT_ARRAY_INPUT
+    "*Text With Macro Support*"
+    TEXT_WITH_MACRO_SUPPORT
+    "*Url*"
+    URL
+    "*Url With Macro Support*"
+    URL_WITH_MACRO_SUPPORT
+}
+
+"Application mode."
+enum Mode {
+    "*Commercial*"
+    COMMERCIAL
+    "*Self Hosted*"
+    SELF_HOSTED
+}
+
+"A set of supported `Notification` types."
+enum NotificationType {
+    "*Welcome*"
+    WELCOME
+}
+
+"A set of supported `OperationOwner`s used by `Audit`"
+enum OperationOwner {
+    "*System*"
+    SYSTEM
+    "*User*"
+    USER
+}
+
+"A set of supported `PlatformActionPermissionRequest`s used by `PlatformActionPermission`"
+enum PlatformActionPermissionRequest {
+    "*Cookie*"
+    COOKIE
+    "*Create Iframe*"
+    CREATE_IFRAME
+    "*Data Layer*"
+    DATA_LAYER
+    "*Emit Event*"
+    EMIT_EVENT
+    "*Global Variable*"
+    GLOBAL_VARIABLE
+    "*Image Pixel*"
+    IMAGE_PIXEL
+    "*Inject Javascript*"
+    INJECT_JAVASCRIPT
+    "*Listen Event*"
+    LISTEN_EVENT
+    "*Local Storage*"
+    LOCAL_STORAGE
+    "*Log To Console*"
+    LOG_TO_CONSOLE
+    "*Read Document Character Set*"
+    READ_DOCUMENT_CHARACTER_SET
+    "*Read Page Title*"
+    READ_PAGE_TITLE
+    "*Read Page Url*"
+    READ_PAGE_URL
+    "*Read Referrer Url*"
+    READ_REFERRER_URL
+}
+
+"A set of supported `PlatformActionPermissionURLParts`s used by `PlatformActionPermission`"
+enum PlatformActionPermissionURLParts {
+    "*Fragment*"
+    FRAGMENT
+    "*Host*"
+    HOST
+    "*Path*"
+    PATH
+    "*Protocol*"
+    PROTOCOL
+    "*Query*"
+    QUERY
+}
+
+"A set of supported `PlatformTypes`s used by `Platform`"
+enum PlatformType {
+    "*Custom*"
+    CUSTOM
+    "*Templated*"
+    TEMPLATED
+}
+
+"A set of supported `RevisionEntityParentType`s for use with `ActionGroupDistribution`s and `Trigger`s"
+enum RevisionEntityParentType {
+    "*Revision*"
+    REVISION
+    "*Rule*"
+    RULE
+}
+
+"To be used with `SignUpRequest`, these are the valid signup types currently supported."
+enum SignUpType {
+    "*Data Manager*"
+    DATA_MANAGER
+    "*Invite*"
+    INVITE
+    "*Tag Manager*"
+    TAG_MANAGER
+}
+
+"A set of supported storage providers for use with `TrackeEnvironment`s"
+enum StorageProvider {
+    "*Aws S3*"
+    AWS_S3
+    "*Gc Bigquery Stream*"
+    GC_BIGQUERY_STREAM
+    "*Mongodb*"
+    MONGODB
+}
+
+"A tag can either be a `HEAD` tag or `PLACEMENT` tag, but can't be both. Please take a look at the descriptions of each below and select the one that fits your use case."
+enum TagType {
+    "Tag type HEAD will load this tag in the `HEAD` of the page. This is used calling libraries that **do not** require rendering a specific slot on the page. Width and height requirements will be ingored on HEAD tags."
+    HEAD
+    "A PLACEMENT tag is used for rendering widgets, ads or other types of media where they are required to load in slot on the page. These tags will be loaded in the `BODY` of the page. A width and height is requirement for all PLACEMENT tags."
+    PLACEMENT
+}
+
+enum TimeSlice {
+    DAY
+    HOUR
+    MINUTE
+    MONTH
+    YEAR
+}
+
+"A set of supported timezones"
+enum TimeZone {
+    "*Africa / Abidjan*"
+    AFRICA_ABIDJAN
+    "*Africa / Accra*"
+    AFRICA_ACCRA
+    "*Africa / Addis Ababa*"
+    AFRICA_ADDIS_ABABA
+    "*Africa / Algiers*"
+    AFRICA_ALGIERS
+    "*Africa / Asmara*"
+    AFRICA_ASMARA
+    "*Africa / Asmera*"
+    AFRICA_ASMERA
+    "*Africa / Bamako*"
+    AFRICA_BAMAKO
+    "*Africa / Bangui*"
+    AFRICA_BANGUI
+    "*Africa / Banjul*"
+    AFRICA_BANJUL
+    "*Africa / Bissau*"
+    AFRICA_BISSAU
+    "*Africa / Blantyre*"
+    AFRICA_BLANTYRE
+    "*Africa / Brazzaville*"
+    AFRICA_BRAZZAVILLE
+    "*Africa / Bujumbura*"
+    AFRICA_BUJUMBURA
+    "*Africa / Cairo*"
+    AFRICA_CAIRO
+    "*Africa / Casablanca*"
+    AFRICA_CASABLANCA
+    "*Africa / Ceuta*"
+    AFRICA_CEUTA
+    "*Africa / Conakry*"
+    AFRICA_CONAKRY
+    "*Africa / Dakar*"
+    AFRICA_DAKAR
+    "*Africa / Dar es Salaam*"
+    AFRICA_DAR_ES_SALAAM
+    "*Africa / Djibouti*"
+    AFRICA_DJIBOUTI
+    "*Africa / Douala*"
+    AFRICA_DOUALA
+    "*Africa / El Aaiun*"
+    AFRICA_EL_AAIUN
+    "*Africa / Freetown*"
+    AFRICA_FREETOWN
+    "*Africa / Gaborone*"
+    AFRICA_GABORONE
+    "*Africa / Harare*"
+    AFRICA_HARARE
+    "*Africa / Johannesburg*"
+    AFRICA_JOHANNESBURG
+    "*Africa / Juba*"
+    AFRICA_JUBA
+    "*Africa / Kampala*"
+    AFRICA_KAMPALA
+    "*Africa / Khartoum*"
+    AFRICA_KHARTOUM
+    "*Africa / Kigali*"
+    AFRICA_KIGALI
+    "*Africa / Kinshasa*"
+    AFRICA_KINSHASA
+    "*Africa / Lagos*"
+    AFRICA_LAGOS
+    "*Africa / Libreville*"
+    AFRICA_LIBREVILLE
+    "*Africa / Lome*"
+    AFRICA_LOME
+    "*Africa / Luanda*"
+    AFRICA_LUANDA
+    "*Africa / Lubumbashi*"
+    AFRICA_LUBUMBASHI
+    "*Africa / Lusaka*"
+    AFRICA_LUSAKA
+    "*Africa / Malabo*"
+    AFRICA_MALABO
+    "*Africa / Maputo*"
+    AFRICA_MAPUTO
+    "*Africa / Maseru*"
+    AFRICA_MASERU
+    "*Africa / Mbabane*"
+    AFRICA_MBABANE
+    "*Africa / Mogadishu*"
+    AFRICA_MOGADISHU
+    "*Africa / Monrovia*"
+    AFRICA_MONROVIA
+    "*Africa / Nairobi*"
+    AFRICA_NAIROBI
+    "*Africa / Ndjamena*"
+    AFRICA_NDJAMENA
+    "*Africa / Niamey*"
+    AFRICA_NIAMEY
+    "*Africa / Nouakchott*"
+    AFRICA_NOUAKCHOTT
+    "*Africa / Ouagadougou*"
+    AFRICA_OUAGADOUGOU
+    "*Africa / Sao Tome*"
+    AFRICA_SAO_TOME
+    "*Africa / Timbuktu*"
+    AFRICA_TIMBUKTU
+    "*Africa / Tripoli*"
+    AFRICA_TRIPOLI
+    "*Africa / Tunis*"
+    AFRICA_TUNIS
+    "*Africa / Windhoek*"
+    AFRICA_WINDHOEK
+    "*America / Adak*"
+    AMERICA_ADAK
+    "*America / Anchorage*"
+    AMERICA_ANCHORAGE
+    "*America / Anguilla*"
+    AMERICA_ANGUILLA
+    "*America / Antigua*"
+    AMERICA_ANTIGUA
+    "*America / Araguaina*"
+    AMERICA_ARAGUAINA
+    "*America / Aruba*"
+    AMERICA_ARUBA
+    "*America / Asuncion*"
+    AMERICA_ASUNCION
+    "*America / Atikokan*"
+    AMERICA_ATIKOKAN
+    "*America / Atka*"
+    AMERICA_ATKA
+    "*America / Bahia*"
+    AMERICA_BAHIA
+    "*America / Bahia Banderas*"
+    AMERICA_BAHIA_BANDERAS
+    "*America / Barbados*"
+    AMERICA_BARBADOS
+    "*America / Belem*"
+    AMERICA_BELEM
+    "*America / Belize*"
+    AMERICA_BELIZE
+    "*America / Boa Vista*"
+    AMERICA_BOA_VISTA
+    "*America / Bogota*"
+    AMERICA_BOGOTA
+    "*America / Boise*"
+    AMERICA_BOISE
+    "*America / Buenos Aires*"
+    AMERICA_BUENOS_AIRES
+    "*America / Cambridge Bay*"
+    AMERICA_CAMBRIDGE_BAY
+    "*America / Campo Grande*"
+    AMERICA_CAMPO_GRANDE
+    "*America / Cancun*"
+    AMERICA_CANCUN
+    "*America / Caracas*"
+    AMERICA_CARACAS
+    "*America / Catamarca*"
+    AMERICA_CATAMARCA
+    "*America / Cayenne*"
+    AMERICA_CAYENNE
+    "*America / Cayman*"
+    AMERICA_CAYMAN
+    "*America / Chicago*"
+    AMERICA_CHICAGO
+    "*America / Chihuahua*"
+    AMERICA_CHIHUAHUA
+    "*America / Coral Harbour*"
+    AMERICA_CORAL_HARBOUR
+    "*America / Cordoba*"
+    AMERICA_CORDOBA
+    "*America / Costa Rica*"
+    AMERICA_COSTA_RICA
+    "*America / Creston*"
+    AMERICA_CRESTON
+    "*America / Cuiaba*"
+    AMERICA_CUIABA
+    "*America / Curacao*"
+    AMERICA_CURACAO
+    "*America / Danmarkshavn*"
+    AMERICA_DANMARKSHAVN
+    "*America / Dawson*"
+    AMERICA_DAWSON
+    "*America / Dawson Creek*"
+    AMERICA_DAWSON_CREEK
+    "*America / Denver*"
+    AMERICA_DENVER
+    "*America / Detroit*"
+    AMERICA_DETROIT
+    "*America / Dominica*"
+    AMERICA_DOMINICA
+    "*America / Edmonton*"
+    AMERICA_EDMONTON
+    "*America / Eirunepe*"
+    AMERICA_EIRUNEPE
+    "*America / El Salvador*"
+    AMERICA_EL_SALVADOR
+    "*America / Ensenada*"
+    AMERICA_ENSENADA
+    "*America / Fortaleza*"
+    AMERICA_FORTALEZA
+    "*America / Fort Nelson*"
+    AMERICA_FORT_NELSON
+    "*America / Fort Wayne*"
+    AMERICA_FORT_WAYNE
+    "*America / Glace Bay*"
+    AMERICA_GLACE_BAY
+    "*America / Godthab*"
+    AMERICA_GODTHAB
+    "*America / Goose Bay*"
+    AMERICA_GOOSE_BAY
+    "*America / Grand Turk*"
+    AMERICA_GRAND_TURK
+    "*America / Grenada*"
+    AMERICA_GRENADA
+    "*America / Guadeloupe*"
+    AMERICA_GUADELOUPE
+    "*America / Guatemala*"
+    AMERICA_GUATEMALA
+    "*America / Guayaquil*"
+    AMERICA_GUAYAQUIL
+    "*America / Guyana*"
+    AMERICA_GUYANA
+    "*America / Halifax*"
+    AMERICA_HALIFAX
+    "*America / Havana*"
+    AMERICA_HAVANA
+    "*America / Hermosillo*"
+    AMERICA_HERMOSILLO
+    "*America / Indianapolis*"
+    AMERICA_INDIANAPOLIS
+    "*America / Inuvik*"
+    AMERICA_INUVIK
+    "*America / Iqaluit*"
+    AMERICA_IQALUIT
+    "*America / Jamaica*"
+    AMERICA_JAMAICA
+    "*America / Jujuy*"
+    AMERICA_JUJUY
+    "*America / Juneau*"
+    AMERICA_JUNEAU
+    "*America / Knox IN*"
+    AMERICA_KNOX_IN
+    "*America / Kralendijk*"
+    AMERICA_KRALENDIJK
+    "*America / La Paz*"
+    AMERICA_LA_PAZ
+    "*America / Lima*"
+    AMERICA_LIMA
+    "*America / Los Angeles*"
+    AMERICA_LOS_ANGELES
+    "*America / Louisville*"
+    AMERICA_LOUISVILLE
+    "*America / Lower Princes*"
+    AMERICA_LOWER_PRINCES
+    "*America / Maceio*"
+    AMERICA_MACEIO
+    "*America / Managua*"
+    AMERICA_MANAGUA
+    "*America / Manaus*"
+    AMERICA_MANAUS
+    "*America / Marigot*"
+    AMERICA_MARIGOT
+    "*America / Martinique*"
+    AMERICA_MARTINIQUE
+    "*America / Matamoros*"
+    AMERICA_MATAMOROS
+    "*America / Mazatlan*"
+    AMERICA_MAZATLAN
+    "*America / Mendoza*"
+    AMERICA_MENDOZA
+    "*America / Menominee*"
+    AMERICA_MENOMINEE
+    "*America / Merida*"
+    AMERICA_MERIDA
+    "*America / Metlakatla*"
+    AMERICA_METLAKATLA
+    "*America / Mexico City*"
+    AMERICA_MEXICO_CITY
+    "*America / Miquelon*"
+    AMERICA_MIQUELON
+    "*America / Moncton*"
+    AMERICA_MONCTON
+    "*America / Monterrey*"
+    AMERICA_MONTERREY
+    "*America / Montevideo*"
+    AMERICA_MONTEVIDEO
+    "*America / Montreal*"
+    AMERICA_MONTREAL
+    "*America / Montserrat*"
+    AMERICA_MONTSERRAT
+    "*America / Nassau*"
+    AMERICA_NASSAU
+    "*America / New York*"
+    AMERICA_NEW_YORK
+    "*America / Nipigon*"
+    AMERICA_NIPIGON
+    "*America / Nome*"
+    AMERICA_NOME
+    "*America / Noronha*"
+    AMERICA_NORONHA
+    "*America / Nuuk*"
+    AMERICA_NUUK
+    "*America / Ojinaga*"
+    AMERICA_OJINAGA
+    "*America / Panama*"
+    AMERICA_PANAMA
+    "*America / Pangnirtung*"
+    AMERICA_PANGNIRTUNG
+    "*America / Paramaribo*"
+    AMERICA_PARAMARIBO
+    "*America / Phoenix*"
+    AMERICA_PHOENIX
+    "*America / Porto Acre*"
+    AMERICA_PORTO_ACRE
+    "*America / Porto Velho*"
+    AMERICA_PORTO_VELHO
+    "*America / Port of Spain*"
+    AMERICA_PORT_OF_SPAIN
+    "*America / Puerto Rico*"
+    AMERICA_PUERTO_RICO
+    "*America / Punta Arenas*"
+    AMERICA_PUNTA_ARENAS
+    "*America / Rainy River*"
+    AMERICA_RAINY_RIVER
+    "*America / Rankin Inlet*"
+    AMERICA_RANKIN_INLET
+    "*America / Recife*"
+    AMERICA_RECIFE
+    "*America / Regina*"
+    AMERICA_REGINA
+    "*America / Resolute*"
+    AMERICA_RESOLUTE
+    "*America / Rio Branco*"
+    AMERICA_RIO_BRANCO
+    "*America / Rosario*"
+    AMERICA_ROSARIO
+    "*America / Santarem*"
+    AMERICA_SANTAREM
+    "*America / Santa Isabel*"
+    AMERICA_SANTA_ISABEL
+    "*America / Santiago*"
+    AMERICA_SANTIAGO
+    "*America / Santo Domingo*"
+    AMERICA_SANTO_DOMINGO
+    "*America / Sao Paulo*"
+    AMERICA_SAO_PAULO
+    "*America / Scoresbysund*"
+    AMERICA_SCORESBYSUND
+    "*America / Shiprock*"
+    AMERICA_SHIPROCK
+    "*America / Sitka*"
+    AMERICA_SITKA
+    "*America / St Barthelemy*"
+    AMERICA_ST_BARTHELEMY
+    "*America / St Johns*"
+    AMERICA_ST_JOHNS
+    "*America / St Kitts*"
+    AMERICA_ST_KITTS
+    "*America / St Lucia*"
+    AMERICA_ST_LUCIA
+    "*America / St Thomas*"
+    AMERICA_ST_THOMAS
+    "*America / St Vincent*"
+    AMERICA_ST_VINCENT
+    "*America / Swift Current*"
+    AMERICA_SWIFT_CURRENT
+    "*America / Tegucigalpa*"
+    AMERICA_TEGUCIGALPA
+    "*America / Thule*"
+    AMERICA_THULE
+    "*America / Thunder Bay*"
+    AMERICA_THUNDER_BAY
+    "*America / Tijuana*"
+    AMERICA_TIJUANA
+    "*America / Toronto*"
+    AMERICA_TORONTO
+    "*America / Tortola*"
+    AMERICA_TORTOLA
+    "*America / Vancouver*"
+    AMERICA_VANCOUVER
+    "*America / Virgin*"
+    AMERICA_VIRGIN
+    "*America / Whitehorse*"
+    AMERICA_WHITEHORSE
+    "*America / Winnipeg*"
+    AMERICA_WINNIPEG
+    "*America / Yakutat*"
+    AMERICA_YAKUTAT
+    "*America / Yellowknife*"
+    AMERICA_YELLOWKNIFE
+    "*Antarctica / Casey*"
+    ANTARCTICA_CASEY
+    "*Antarctica / Davis*"
+    ANTARCTICA_DAVIS
+    "*Antarctica / DumontDUrville*"
+    ANTARCTICA_DUMONTDURVILLE
+    "*Antarctica / Macquarie*"
+    ANTARCTICA_MACQUARIE
+    "*Antarctica / Mawson*"
+    ANTARCTICA_MAWSON
+    "*Antarctica / McMurdo*"
+    ANTARCTICA_MCMURDO
+    "*Antarctica / Palmer*"
+    ANTARCTICA_PALMER
+    "*Antarctica / Rothera*"
+    ANTARCTICA_ROTHERA
+    "*Antarctica / South Pole*"
+    ANTARCTICA_SOUTH_POLE
+    "*Antarctica / Syowa*"
+    ANTARCTICA_SYOWA
+    "*Antarctica / Troll*"
+    ANTARCTICA_TROLL
+    "*Antarctica / Vostok*"
+    ANTARCTICA_VOSTOK
+    "*Arctic / Longyearbyen*"
+    ARCTIC_LONGYEARBYEN
+    "*Asia / Aden*"
+    ASIA_ADEN
+    "*Asia / Almaty*"
+    ASIA_ALMATY
+    "*Asia / Amman*"
+    ASIA_AMMAN
+    "*Asia / Anadyr*"
+    ASIA_ANADYR
+    "*Asia / Aqtau*"
+    ASIA_AQTAU
+    "*Asia / Aqtobe*"
+    ASIA_AQTOBE
+    "*Asia / Ashgabat*"
+    ASIA_ASHGABAT
+    "*Asia / Ashkhabad*"
+    ASIA_ASHKHABAD
+    "*Asia / Atyrau*"
+    ASIA_ATYRAU
+    "*Asia / Baghdad*"
+    ASIA_BAGHDAD
+    "*Asia / Bahrain*"
+    ASIA_BAHRAIN
+    "*Asia / Baku*"
+    ASIA_BAKU
+    "*Asia / Bangkok*"
+    ASIA_BANGKOK
+    "*Asia / Barnaul*"
+    ASIA_BARNAUL
+    "*Asia / Beirut*"
+    ASIA_BEIRUT
+    "*Asia / Bishkek*"
+    ASIA_BISHKEK
+    "*Asia / Brunei*"
+    ASIA_BRUNEI
+    "*Asia / Calcutta*"
+    ASIA_CALCUTTA
+    "*Asia / Chita*"
+    ASIA_CHITA
+    "*Asia / Choibalsan*"
+    ASIA_CHOIBALSAN
+    "*Asia / Chongqing*"
+    ASIA_CHONGQING
+    "*Asia / Chungking*"
+    ASIA_CHUNGKING
+    "*Asia / Colombo*"
+    ASIA_COLOMBO
+    "*Asia / Dacca*"
+    ASIA_DACCA
+    "*Asia / Damascus*"
+    ASIA_DAMASCUS
+    "*Asia / Dhaka*"
+    ASIA_DHAKA
+    "*Asia / Dili*"
+    ASIA_DILI
+    "*Asia / Dubai*"
+    ASIA_DUBAI
+    "*Asia / Dushanbe*"
+    ASIA_DUSHANBE
+    "*Asia / Famagusta*"
+    ASIA_FAMAGUSTA
+    "*Asia / Gaza*"
+    ASIA_GAZA
+    "*Asia / Harbin*"
+    ASIA_HARBIN
+    "*Asia / Hebron*"
+    ASIA_HEBRON
+    "*Asia / Hong Kong*"
+    ASIA_HONG_KONG
+    "*Asia / Hovd*"
+    ASIA_HOVD
+    "*Asia / Ho Chi Minh*"
+    ASIA_HO_CHI_MINH
+    "*Asia / Irkutsk*"
+    ASIA_IRKUTSK
+    "*Asia / Istanbul*"
+    ASIA_ISTANBUL
+    "*Asia / Jakarta*"
+    ASIA_JAKARTA
+    "*Asia / Jayapura*"
+    ASIA_JAYAPURA
+    "*Asia / Jerusalem*"
+    ASIA_JERUSALEM
+    "*Asia / Kabul*"
+    ASIA_KABUL
+    "*Asia / Kamchatka*"
+    ASIA_KAMCHATKA
+    "*Asia / Karachi*"
+    ASIA_KARACHI
+    "*Asia / Kashgar*"
+    ASIA_KASHGAR
+    "*Asia / Kathmandu*"
+    ASIA_KATHMANDU
+    "*Asia / Katmandu*"
+    ASIA_KATMANDU
+    "*Asia / Khandyga*"
+    ASIA_KHANDYGA
+    "*Asia / Kolkata*"
+    ASIA_KOLKATA
+    "*Asia / Krasnoyarsk*"
+    ASIA_KRASNOYARSK
+    "*Asia / Kuala Lumpur*"
+    ASIA_KUALA_LUMPUR
+    "*Asia / Kuching*"
+    ASIA_KUCHING
+    "*Asia / Kuwait*"
+    ASIA_KUWAIT
+    "*Asia / Macao*"
+    ASIA_MACAO
+    "*Asia / Macau*"
+    ASIA_MACAU
+    "*Asia / Magadan*"
+    ASIA_MAGADAN
+    "*Asia / Makassar*"
+    ASIA_MAKASSAR
+    "*Asia / Manila*"
+    ASIA_MANILA
+    "*Asia / Muscat*"
+    ASIA_MUSCAT
+    "*Asia / Nicosia*"
+    ASIA_NICOSIA
+    "*Asia / Novokuznetsk*"
+    ASIA_NOVOKUZNETSK
+    "*Asia / Novosibirsk*"
+    ASIA_NOVOSIBIRSK
+    "*Asia / Omsk*"
+    ASIA_OMSK
+    "*Asia / Oral*"
+    ASIA_ORAL
+    "*Asia / Phnom Penh*"
+    ASIA_PHNOM_PENH
+    "*Asia / Pontianak*"
+    ASIA_PONTIANAK
+    "*Asia / Pyongyang*"
+    ASIA_PYONGYANG
+    "*Asia / Qatar*"
+    ASIA_QATAR
+    "*Asia / Qostanay*"
+    ASIA_QOSTANAY
+    "*Asia / Qyzylorda*"
+    ASIA_QYZYLORDA
+    "*Asia / Rangoon*"
+    ASIA_RANGOON
+    "*Asia / Riyadh*"
+    ASIA_RIYADH
+    "*Asia / Saigon*"
+    ASIA_SAIGON
+    "*Asia / Sakhalin*"
+    ASIA_SAKHALIN
+    "*Asia / Samarkand*"
+    ASIA_SAMARKAND
+    "*Asia / Seoul*"
+    ASIA_SEOUL
+    "*Asia / Shanghai*"
+    ASIA_SHANGHAI
+    "*Asia / Singapore*"
+    ASIA_SINGAPORE
+    "*Asia / Srednekolymsk*"
+    ASIA_SREDNEKOLYMSK
+    "*Asia / Taipei*"
+    ASIA_TAIPEI
+    "*Asia / Tashkent*"
+    ASIA_TASHKENT
+    "*Asia / Tbilisi*"
+    ASIA_TBILISI
+    "*Asia / Tehran*"
+    ASIA_TEHRAN
+    "*Asia / Tel Aviv*"
+    ASIA_TEL_AVIV
+    "*Asia / Thimbu*"
+    ASIA_THIMBU
+    "*Asia / Thimphu*"
+    ASIA_THIMPHU
+    "*Asia / Tokyo*"
+    ASIA_TOKYO
+    "*Asia / Tomsk*"
+    ASIA_TOMSK
+    "*Asia / Ujung Pandang*"
+    ASIA_UJUNG_PANDANG
+    "*Asia / Ulaanbaatar*"
+    ASIA_ULAANBAATAR
+    "*Asia / Ulan Bator*"
+    ASIA_ULAN_BATOR
+    "*Asia / Urumqi*"
+    ASIA_URUMQI
+    "*Asia / Vientiane*"
+    ASIA_VIENTIANE
+    "*Asia / Vladivostok*"
+    ASIA_VLADIVOSTOK
+    "*Asia / Yakutsk*"
+    ASIA_YAKUTSK
+    "*Asia / Yangon*"
+    ASIA_YANGON
+    "*Asia / Yekaterinburg*"
+    ASIA_YEKATERINBURG
+    "*Asia / Yerevan*"
+    ASIA_YEREVAN
+    "*Atlantic / Azores*"
+    ATLANTIC_AZORES
+    "*Atlantic / Bermuda*"
+    ATLANTIC_BERMUDA
+    "*Atlantic / Canary*"
+    ATLANTIC_CANARY
+    "*Atlantic / Cape Verde*"
+    ATLANTIC_CAPE_VERDE
+    "*Atlantic / Faeroe*"
+    ATLANTIC_FAEROE
+    "*Atlantic / Faroe*"
+    ATLANTIC_FAROE
+    "*Atlantic / Jan Mayen*"
+    ATLANTIC_JAN_MAYEN
+    "*Atlantic / Madeira*"
+    ATLANTIC_MADEIRA
+    "*Atlantic / Reykjavik*"
+    ATLANTIC_REYKJAVIK
+    "*Atlantic / South Georgia*"
+    ATLANTIC_SOUTH_GEORGIA
+    "*Atlantic / Stanley*"
+    ATLANTIC_STANLEY
+    "*Atlantic / St Helena*"
+    ATLANTIC_ST_HELENA
+    "*Australia / ACT*"
+    AUSTRALIA_ACT
+    "*Australia / Adelaide*"
+    AUSTRALIA_ADELAIDE
+    "*Australia / Brisbane*"
+    AUSTRALIA_BRISBANE
+    "*Australia / Broken Hill*"
+    AUSTRALIA_BROKEN_HILL
+    "*Australia / Canberra*"
+    AUSTRALIA_CANBERRA
+    "*Australia / Currie*"
+    AUSTRALIA_CURRIE
+    "*Australia / Darwin*"
+    AUSTRALIA_DARWIN
+    "*Australia / Eucla*"
+    AUSTRALIA_EUCLA
+    "*Australia / Hobart*"
+    AUSTRALIA_HOBART
+    "*Australia / LHI*"
+    AUSTRALIA_LHI
+    "*Australia / Lindeman*"
+    AUSTRALIA_LINDEMAN
+    "*Australia / Lord Howe*"
+    AUSTRALIA_LORD_HOWE
+    "*Australia / Melbourne*"
+    AUSTRALIA_MELBOURNE
+    "*Australia / North*"
+    AUSTRALIA_NORTH
+    "*Australia / NSW*"
+    AUSTRALIA_NSW
+    "*Australia / Perth*"
+    AUSTRALIA_PERTH
+    "*Australia / Queensland*"
+    AUSTRALIA_QUEENSLAND
+    "*Australia / South*"
+    AUSTRALIA_SOUTH
+    "*Australia / Sydney*"
+    AUSTRALIA_SYDNEY
+    "*Australia / Tasmania*"
+    AUSTRALIA_TASMANIA
+    "*Australia / Victoria*"
+    AUSTRALIA_VICTORIA
+    "*Australia / West*"
+    AUSTRALIA_WEST
+    "*Australia / Yancowinna*"
+    AUSTRALIA_YANCOWINNA
+    "*Brazil / Acre*"
+    BRAZIL_ACRE
+    "*Brazil / DeNoronha*"
+    BRAZIL_DENORONHA
+    "*Brazil / East*"
+    BRAZIL_EAST
+    "*Brazil / West*"
+    BRAZIL_WEST
+    "*Canada / Atlantic*"
+    CANADA_ATLANTIC
+    "*Canada / Central*"
+    CANADA_CENTRAL
+    "*Canada / Eastern*"
+    CANADA_EASTERN
+    "*Canada / Mountain*"
+    CANADA_MOUNTAIN
+    "*Canada / Newfoundland*"
+    CANADA_NEWFOUNDLAND
+    "*Canada / Pacific*"
+    CANADA_PACIFIC
+    "*Canada / Saskatchewan*"
+    CANADA_SASKATCHEWAN
+    "*Canada / Yukon*"
+    CANADA_YUKON
+    "*Chile / Continental*"
+    CHILE_CONTINENTAL
+    "*Chile / EasterIsland*"
+    CHILE_EASTERISLAND
+    "*Etc / GMT*"
+    ETC_GMT
+    "*Etc / Greenwich*"
+    ETC_GREENWICH
+    "*Etc / UCT*"
+    ETC_UCT
+    "*Etc / Universal*"
+    ETC_UNIVERSAL
+    "*Etc / UTC*"
+    ETC_UTC
+    "*Etc / Zulu*"
+    ETC_ZULU
+    "*Europe / Amsterdam*"
+    EUROPE_AMSTERDAM
+    "*Europe / Andorra*"
+    EUROPE_ANDORRA
+    "*Europe / Astrakhan*"
+    EUROPE_ASTRAKHAN
+    "*Europe / Athens*"
+    EUROPE_ATHENS
+    "*Europe / Belfast*"
+    EUROPE_BELFAST
+    "*Europe / Belgrade*"
+    EUROPE_BELGRADE
+    "*Europe / Berlin*"
+    EUROPE_BERLIN
+    "*Europe / Bratislava*"
+    EUROPE_BRATISLAVA
+    "*Europe / Brussels*"
+    EUROPE_BRUSSELS
+    "*Europe / Bucharest*"
+    EUROPE_BUCHAREST
+    "*Europe / Budapest*"
+    EUROPE_BUDAPEST
+    "*Europe / Busingen*"
+    EUROPE_BUSINGEN
+    "*Europe / Chisinau*"
+    EUROPE_CHISINAU
+    "*Europe / Copenhagen*"
+    EUROPE_COPENHAGEN
+    "*Europe / Dublin*"
+    EUROPE_DUBLIN
+    "*Europe / Gibraltar*"
+    EUROPE_GIBRALTAR
+    "*Europe / Guernsey*"
+    EUROPE_GUERNSEY
+    "*Europe / Helsinki*"
+    EUROPE_HELSINKI
+    "*Europe / Isle of Man*"
+    EUROPE_ISLE_OF_MAN
+    "*Europe / Istanbul*"
+    EUROPE_ISTANBUL
+    "*Europe / Jersey*"
+    EUROPE_JERSEY
+    "*Europe / Kaliningrad*"
+    EUROPE_KALININGRAD
+    "*Europe / Kiev*"
+    EUROPE_KIEV
+    "*Europe / Kirov*"
+    EUROPE_KIROV
+    "*Europe / Lisbon*"
+    EUROPE_LISBON
+    "*Europe / Ljubljana*"
+    EUROPE_LJUBLJANA
+    "*Europe / London*"
+    EUROPE_LONDON
+    "*Europe / Luxembourg*"
+    EUROPE_LUXEMBOURG
+    "*Europe / Madrid*"
+    EUROPE_MADRID
+    "*Europe / Malta*"
+    EUROPE_MALTA
+    "*Europe / Mariehamn*"
+    EUROPE_MARIEHAMN
+    "*Europe / Minsk*"
+    EUROPE_MINSK
+    "*Europe / Monaco*"
+    EUROPE_MONACO
+    "*Europe / Moscow*"
+    EUROPE_MOSCOW
+    "*Europe / Nicosia*"
+    EUROPE_NICOSIA
+    "*Europe / Oslo*"
+    EUROPE_OSLO
+    "*Europe / Paris*"
+    EUROPE_PARIS
+    "*Europe / Podgorica*"
+    EUROPE_PODGORICA
+    "*Europe / Prague*"
+    EUROPE_PRAGUE
+    "*Europe / Riga*"
+    EUROPE_RIGA
+    "*Europe / Rome*"
+    EUROPE_ROME
+    "*Europe / Samara*"
+    EUROPE_SAMARA
+    "*Europe / San Marino*"
+    EUROPE_SAN_MARINO
+    "*Europe / Sarajevo*"
+    EUROPE_SARAJEVO
+    "*Europe / Saratov*"
+    EUROPE_SARATOV
+    "*Europe / Simferopol*"
+    EUROPE_SIMFEROPOL
+    "*Europe / Skopje*"
+    EUROPE_SKOPJE
+    "*Europe / Sofia*"
+    EUROPE_SOFIA
+    "*Europe / Stockholm*"
+    EUROPE_STOCKHOLM
+    "*Europe / Tallinn*"
+    EUROPE_TALLINN
+    "*Europe / Tirane*"
+    EUROPE_TIRANE
+    "*Europe / Tiraspol*"
+    EUROPE_TIRASPOL
+    "*Europe / Ulyanovsk*"
+    EUROPE_ULYANOVSK
+    "*Europe / Uzhgorod*"
+    EUROPE_UZHGOROD
+    "*Europe / Vaduz*"
+    EUROPE_VADUZ
+    "*Europe / Vatican*"
+    EUROPE_VATICAN
+    "*Europe / Vienna*"
+    EUROPE_VIENNA
+    "*Europe / Vilnius*"
+    EUROPE_VILNIUS
+    "*Europe / Volgograd*"
+    EUROPE_VOLGOGRAD
+    "*Europe / Warsaw*"
+    EUROPE_WARSAW
+    "*Europe / Zagreb*"
+    EUROPE_ZAGREB
+    "*Europe / Zaporozhye*"
+    EUROPE_ZAPOROZHYE
+    "*Europe / Zurich*"
+    EUROPE_ZURICH
+    "*Indian / Antananarivo*"
+    INDIAN_ANTANANARIVO
+    "*Indian / Chagos*"
+    INDIAN_CHAGOS
+    "*Indian / Christmas*"
+    INDIAN_CHRISTMAS
+    "*Indian / Cocos*"
+    INDIAN_COCOS
+    "*Indian / Comoro*"
+    INDIAN_COMORO
+    "*Indian / Kerguelen*"
+    INDIAN_KERGUELEN
+    "*Indian / Mahe*"
+    INDIAN_MAHE
+    "*Indian / Maldives*"
+    INDIAN_MALDIVES
+    "*Indian / Mauritius*"
+    INDIAN_MAURITIUS
+    "*Indian / Mayotte*"
+    INDIAN_MAYOTTE
+    "*Indian / Reunion*"
+    INDIAN_REUNION
+    "*Mexico / BajaNorte*"
+    MEXICO_BAJANORTE
+    "*Mexico / BajaSur*"
+    MEXICO_BAJASUR
+    "*Mexico / General*"
+    MEXICO_GENERAL
+    "*Pacific / Apia*"
+    PACIFIC_APIA
+    "*Pacific / Auckland*"
+    PACIFIC_AUCKLAND
+    "*Pacific / Bougainville*"
+    PACIFIC_BOUGAINVILLE
+    "*Pacific / Chatham*"
+    PACIFIC_CHATHAM
+    "*Pacific / Chuuk*"
+    PACIFIC_CHUUK
+    "*Pacific / Easter*"
+    PACIFIC_EASTER
+    "*Pacific / Efate*"
+    PACIFIC_EFATE
+    "*Pacific / Enderbury*"
+    PACIFIC_ENDERBURY
+    "*Pacific / Fakaofo*"
+    PACIFIC_FAKAOFO
+    "*Pacific / Fiji*"
+    PACIFIC_FIJI
+    "*Pacific / Funafuti*"
+    PACIFIC_FUNAFUTI
+    "*Pacific / Galapagos*"
+    PACIFIC_GALAPAGOS
+    "*Pacific / Gambier*"
+    PACIFIC_GAMBIER
+    "*Pacific / Guadalcanal*"
+    PACIFIC_GUADALCANAL
+    "*Pacific / Guam*"
+    PACIFIC_GUAM
+    "*Pacific / Honolulu*"
+    PACIFIC_HONOLULU
+    "*Pacific / Johnston*"
+    PACIFIC_JOHNSTON
+    "*Pacific / Kiritimati*"
+    PACIFIC_KIRITIMATI
+    "*Pacific / Kosrae*"
+    PACIFIC_KOSRAE
+    "*Pacific / Kwajalein*"
+    PACIFIC_KWAJALEIN
+    "*Pacific / Majuro*"
+    PACIFIC_MAJURO
+    "*Pacific / Marquesas*"
+    PACIFIC_MARQUESAS
+    "*Pacific / Midway*"
+    PACIFIC_MIDWAY
+    "*Pacific / Nauru*"
+    PACIFIC_NAURU
+    "*Pacific / Niue*"
+    PACIFIC_NIUE
+    "*Pacific / Norfolk*"
+    PACIFIC_NORFOLK
+    "*Pacific / Noumea*"
+    PACIFIC_NOUMEA
+    "*Pacific / Pago Pago*"
+    PACIFIC_PAGO_PAGO
+    "*Pacific / Palau*"
+    PACIFIC_PALAU
+    "*Pacific / Pitcairn*"
+    PACIFIC_PITCAIRN
+    "*Pacific / Pohnpei*"
+    PACIFIC_POHNPEI
+    "*Pacific / Ponape*"
+    PACIFIC_PONAPE
+    "*Pacific / Port Moresby*"
+    PACIFIC_PORT_MORESBY
+    "*Pacific / Rarotonga*"
+    PACIFIC_RAROTONGA
+    "*Pacific / Saipan*"
+    PACIFIC_SAIPAN
+    "*Pacific / Samoa*"
+    PACIFIC_SAMOA
+    "*Pacific / Tahiti*"
+    PACIFIC_TAHITI
+    "*Pacific / Tarawa*"
+    PACIFIC_TARAWA
+    "*Pacific / Tongatapu*"
+    PACIFIC_TONGATAPU
+    "*Pacific / Truk*"
+    PACIFIC_TRUK
+    "*Pacific / Wake*"
+    PACIFIC_WAKE
+    "*Pacific / Wallis*"
+    PACIFIC_WALLIS
+    "*Pacific / Yap*"
+    PACIFIC_YAP
+    "*US / Alaska*"
+    US_ALASKA
+    "*US / Aleutian*"
+    US_ALEUTIAN
+    "*US / Arizona*"
+    US_ARIZONA
+    "*US / Central*"
+    US_CENTRAL
+    "*US / Eastern*"
+    US_EASTERN
+    "*US / Hawaii*"
+    US_HAWAII
+    "*US / Michigan*"
+    US_MICHIGAN
+    "*US / Mountain*"
+    US_MOUNTAIN
+    "*US / Pacific*"
+    US_PACIFIC
+    "*US / Samoa*"
+    US_SAMOA
+    "*UTC*"
+    UTC
+}
+
+"A set of supported `TypeIcon`s used by `Platform` entities"
+enum TypeIcon {
+    "*Add Action*"
+    ADD_ACTION
+    "*Browser Data Container*"
+    BROWSER_DATA_CONTAINER
+    "*Browser Event*"
+    BROWSER_EVENT
+    "*Checkbox*"
+    CHECKBOX
+    "*Code*"
+    CODE
+    "*Code Action*"
+    CODE_ACTION
+    "*Code Event*"
+    CODE_EVENT
+    "*Color*"
+    COLOR
+    "*Data Action*"
+    DATA_ACTION
+    "*Date*"
+    DATE
+    "*Default*"
+    DEFAULT
+    "*Default Action*"
+    DEFAULT_ACTION
+    "*Default Data Container*"
+    DEFAULT_DATA_CONTAINER
+    "*Default Data Map*"
+    DEFAULT_DATA_MAP
+    "*Default Event*"
+    DEFAULT_EVENT
+    "*Delete Action*"
+    DELETE_ACTION
+    "*Environment Data Container*"
+    ENVIRONMENT_DATA_CONTAINER
+    "*Geo*"
+    GEO
+    "*List*"
+    LIST
+    "*Log Action*"
+    LOG_ACTION
+    "*Number*"
+    NUMBER
+    "*Object*"
+    OBJECT
+    "*Objects*"
+    OBJECTS
+    "*Page Event*"
+    PAGE_EVENT
+    "*Platform Data Container*"
+    PLATFORM_DATA_CONTAINER
+    "*Pull Action*"
+    PULL_ACTION
+    "*Push Action*"
+    PUSH_ACTION
+    "*Radio*"
+    RADIO
+    "*Reset Action*"
+    RESET_ACTION
+    "*Selector*"
+    SELECTOR
+    "*Sync Action*"
+    SYNC_ACTION
+    "*Tag Event*"
+    TAG_EVENT
+    "*Text*"
+    TEXT
+    "*Update Action*"
+    UPDATE_ACTION
+    "*User Action*"
+    USER_ACTION
+    "*Visual Action*"
+    VISUAL_ACTION
+}
+
+"A set of supported `ValidationType`s used by `PlatformDataMap` entities"
+enum ValidationType {
+    "*Valid Number Max*"
+    VALID_NUMBER_MAX
+    "*Valid Number Min*"
+    VALID_NUMBER_MIN
+    "*Valid Regex*"
+    VALID_REGEX
+    "*Valid String Max Length*"
+    VALID_STRING_MAX_LENGTH
+    "*Valid String Min Length*"
+    VALID_STRING_MIN_LENGTH
+}
+
+"A set of supported `VarType`s for use with `DataMap`s and `PlatformDataMap`s"
+enum VarType {
+    "*Array Float*"
+    ARRAY_FLOAT
+    "*Array Int*"
+    ARRAY_INT
+    "*Array Object*"
+    ARRAY_OBJECT
+    "*Array String*"
+    ARRAY_STRING
+    "*Boolean*"
+    BOOLEAN
+    "*Datetime*"
+    DATETIME
+    "*Float*"
+    FLOAT
+    "*Int*"
+    INT
+    "*Null*"
+    NULL
+    "*Object*"
+    OBJECT
+    "*String*"
+    STRING
+    "*Timestamp*"
+    TIMESTAMP
+}
+
+"In order to use AWS as your storage engine, you will need to create an AWS account and create a new service account for Scale8. Please see our documentation on how to configure this."
+input AWSStorageConfig {
+    "Your AWS access key. We recommend following our tutorial and creating Scale8 credentials to be used with the region / bucket selected only. We only require the ability to list and add files. We never require the ability to read your data."
+    access_key_id: String!
+    "The name of the storage bucket currently in use"
+    bucket_name: String!
+    "An optional path prefix. By default the path prefix is '/'"
+    path_prefix: String = "/"
+    "The AWS region in which you want the data to be placed and your bucket has been created."
+    region: AWSRegion!
+    "Your AWS secret key."
+    secret_access_key: String!
+}
+
+input AccountSubscribeInput {
+    cancel_url: String!
+    org_id: ID!
+    product: AccountProduct
+    product_id: String!
+    success_url: String!
+}
+
+input AccountUnsubscribeInput {
+    org_id: ID!
+    product: AccountProduct
+}
+
+input ActionCreateInput {
+    "The `ActionGroup` under which the `Action` should be created"
+    action_group_id: ID!
+    "Any additional user comments for the audit"
+    comments: String
+    "An array of `DataMapInput` that will create corresponding `DataMap`'s and implement the `PlatformDataMap` of the connected `PlatformAction`"
+    data_maps: [DataMapInput!]!
+    "The new `Action`'s name"
+    name: String!
+    "The `PlatformAction` ID being implemented"
+    platform_action_id: ID!
+}
+
+input ActionDeleteInput {
+    "`Action` ID to delete against"
+    action_id: ID!
+    "Any additional user comments for the audit"
+    comments: String
+}
+
+input ActionGroupCreateInput {
+    "The `ActionGroupDistribution` under which the `ActionGroup` should be created"
+    action_group_distribution_id: ID!
+    "Any additional user comments for the audit"
+    comments: String
+    "The distribution value the new `ActionGroup`"
+    distribution: Int = -1
+    "If the distribution of the new `ActionGroup` should be locked"
+    is_locked: Boolean = false
+    "The name of the new `ActionGroup`"
+    name: String!
+}
+
+input ActionGroupDeleteInput {
+    "`ActionGroup` ID to delete against"
+    action_group_id: ID!
+    "Any additional user comments for the audit"
+    comments: String
+    "If true, we can do a dry-run and check what the outcome of this delete will be before commiting to it"
+    preview: Boolean = false
+}
+
+"Only one attachment point should be provided for the action group distribution. Either a rule_id or a revision_id, not both."
+input ActionGroupDistributionCreateInput {
+    "The distribution type of the new `ActionGroupDistribution`"
+    action_group_distribution_type: ActionGroupDistributionType!
+    "Any additional user comments for the audit"
+    comments: String
+    "The name of the new `ActionGroupDistribution`"
+    name: String!
+    "The `Revision` under which the `ActionGroupDistribution` should be created"
+    revision_id: ID
+    "The `Rule` under which the `ActionGroupDistribution` should be created"
+    rule_id: ID
+}
+
+input ActionGroupDistributionDeleteInput {
+    "`ActionGroupDistribution` ID to delete against"
+    action_group_distribution_id: ID!
+    "Any additional user comments for the audit"
+    comments: String
+    "If true, we can do a dry-run and check what the outcome of this delete will be before commiting to it"
+    preview: Boolean = false
+}
+
+input ActionGroupDistributionDuplicateInput {
+    "`ActionGroupDistribution` ID to clone against"
+    action_group_distribution_id: ID!
+    "New name for the `ActionGroupDistribution`"
+    name: String!
+}
+
+input ActionGroupDistributionOrderInput {
+    "`ActionGroupDistribution` ID to order rules against"
+    action_group_distribution_id: ID!
+    "A new order of `Rule` IDs"
+    new_order: [ID!]!
+}
+
+input ActionGroupDistributionUpdateInput {
+    "`ActionGroupDistribution` ID to update against"
+    action_group_distribution_id: ID!
+    "Any additional user comments for the audit"
+    comments: String
+    "`ActionGroupDistribution` name"
+    name: String
+}
+
+input ActionGroupDuplicateInput {
+    "`ActionGroup` ID to clone against"
+    action_group_id: ID!
+    "New name for the `ActionGroup`"
+    name: String!
+}
+
+input ActionGroupOrderInput {
+    "`ActionGroup` ID to order `Action`'s against"
+    action_group_id: ID!
+    "A new order of `Action` IDs"
+    new_order: [ID!]!
+}
+
+input ActionGroupUpdateInput {
+    "`ActionGroup` ID to update against"
+    action_group_id: ID!
+    "Any additional user comments for the audit"
+    comments: String
+    "The distribution value the `ActionGroup`"
+    distribution: Int
+    "If the distribution of the new `ActionGroup` should be locked"
+    is_locked: Boolean
+    "`ActionGroup` name"
+    name: String
+}
+
+input ActionUpdateInput {
+    "`Action` ID to update against"
+    action_id: ID!
+    "Any additional user comments for the audit"
+    comments: String
+    "An array of `DataMapInput` that will create corresponding `DataMap`'s and implement the `PlatformDataMap` of the connected `PlatformAction`"
+    data_maps: [DataMapInput!]
+    "The `Action`'s name"
+    name: String
+}
+
+input AddChildrenIngestEndpointDataMapsInput {
+    "`IngestEndpointDataMap` ID to add new child `IngestEndpointDataMap` against"
+    ingest_endpoint_data_map_id: ID!
+    "A list of new `IngestEndpointDataMap` to create under the parent"
+    ingest_endpoint_data_maps: [IngestEndpointDataMapInput!]!
+}
+
+input AppCreateInput {
+    "`App`'s domain name"
+    domain: String!
+    "The name of the new `App` being created"
+    name: String!
+    "The `TagManagerAccount` under which the `App` should be created"
+    tag_manager_account_id: ID!
+    "The type of `App` to be created"
+    type: AppType!
+}
+
+input AppDeleteInput {
+    "`APP` ID to delete against"
+    app_id: ID!
+}
+
+input AppInstallPlatformInput {
+    "`App` ID to install the `Platform` on"
+    app_id: ID!
+    "`Platform` ID to install"
+    platform_id: ID!
+}
+
+"Parameters required to link a `PlatformRevision` with a `Revision`. The 'data_maps' provided are used to implement the `Platform` settings of the `Platform`."
+input AppPlatformRevisionLinkInput {
+    "An array of `DataMapInput`s that will create corresponding `DataMap`s that implement the `PlatformDataMap` described by platform settings on `Platform`"
+    data_maps: [DataMapInput!]!
+    "`PlatformRevision` ID"
+    platform_revision_id: ID!
+    "Preview the outcome before commiting"
+    preview: Boolean = false
+    "`Revision` ID"
+    revision_id: ID!
+}
+
+input AppPlatformRevisionUnlinkInput {
+    "`AppPlatformRevision` ID to delete against"
+    app_platform_revision_id: ID!
+    "Preview the outcome before commiting"
+    preview: Boolean = false
+}
+
+input AppQueryFilterOptions {
+    browser: String
+    country: String
+    environment: ID
+    event: String
+    event_group: String
+    from: DateTime!
+    mobile: Boolean
+    os: String
+    page: String
+    referrer: String
+    referrer_tld: String
+    revision: ID
+    to: DateTime!
+    utm_campaign: String
+    utm_content: String
+    utm_medium: String
+    utm_source: String
+    utm_term: String
+}
+
+input AppQueryOptions {
+    filter_options: AppQueryFilterOptions!
+    limit: Int = 10000
+    time_slice: TimeSlice = DAY
+}
+
+"Update an `App`'s properties. Please note that `AppType` can't be changed once a tag has been created."
+input AppUpdateInput {
+    "`App` ID to update data against"
+    app_id: ID!
+    "`App`'s domain name"
+    domain: String
+    "`App` name"
+    name: String
+}
+
+input BillingPortalInput {
+    "The `Org` ID"
+    org_id: ID!
+    "Return URL"
+    return_url: String!
+}
+
+input ChangePasswordInput {
+    "`Logged in User` new password"
+    new_password: String
+    "`Logged in User` old password"
+    old_password: String
+}
+
+input CompleteSignUpInput {
+    sign_up_type: SignUpType!
+    token: String!
+}
+
+"Either 'match' or 'match_id' must be provided. See `ConditionMatch` for more information."
+input ConditionRuleCreateInput {
+    "Any additional user comments for the audit"
+    comments: String
+    "Is this a condition or exception when attaching to the `Trigger`?"
+    condition_mode: ConditionMode!
+    "The custom value to match against"
+    match: String
+    "The `PlatformDataMap` condition to match against. See `ConditionType` enum."
+    match_condition: ConditionType!
+    "The `PlatformDataMap` value to match against"
+    match_id: ID
+    "Match key (used on object types)"
+    match_key: String
+    "The `PlatformDataMap` value to match against (see `DataMapValue`)."
+    match_value: DataMapValue!
+    "The name of the new `ConditionRule`"
+    name: String!
+    "The `PlatformDataContainer` under which data layer exists"
+    platform_data_container_id: ID!
+    "The `Trigger` under which the `ConditionRule` should be created"
+    trigger_id: ID!
+}
+
+input ConditionRuleDeleteInput {
+    "Any additional user comments for the audit"
+    comments: String
+    "`ConditionRule` ID to delete against"
+    condition_rule_id: ID!
+}
+
+"Either 'match' or 'match_id' must be provided when updating a match value. See `ConditionMatch` for more information."
+input ConditionRuleUpdateInput {
+    "Any additional user comments for the audit"
+    comments: String
+    "`ConditionRule` ID to update against"
+    condition_rule_id: ID!
+    "The custom value to match against"
+    match: String
+    "The `PlatformDataMap` condition to match against. See `ConditionType` enum."
+    match_condition: ConditionType
+    "The `PlatformDataMap` value to match against"
+    match_id: ID
+    "Match key (used on object types)"
+    match_key: String
+    "The `PlatformDataMap` value to match against (see `DataMapValue`)."
+    match_value: DataMapValue
+    "The name of the new `ConditionRule`"
+    name: String
+}
+
+input CreateFirstOrgInput {
+    "Email of Org owner"
+    email: String!
+    "First name of Org owner"
+    first_name: String!
+    "Last name of Org owner"
+    last_name: String!
+    "Name of new Org"
+    org_name: String!
+    "Password of Org owner"
+    password: String!
+}
+
+input DataMapInput {
+    "A single object, {...}"
+    children: [DataMapInput!]
+    "`DataMap` key"
+    key: String!
+    "An array of objects, {...}[]"
+    repeated_children: [[DataMapInput!]]
+    "A single value, string, int, boolean etc."
+    value: DataMapValue
+    "An array of values, string[], int[], boolean[] etc."
+    values: [DataMapValue!]
+    "`DataMap` variable type (string, int, boolean, array of strings, object etc.)"
+    var_type: VarType!
+}
+
+input DeleteChildIngestEndpointDataMapInput {
+    "`IngestEndpointDataMap` ID to delete against"
+    ingest_endpoint_data_map_id: ID!
+}
+
+input DismissNotificationInput {
+    notification_id: ID!
+}
+
+"Data structure for duplicating an existing revision. This will clone the entire structure and change the name if 'new_name' is provided."
+input DuplicateIngestEndpointRevisionInput {
+    "ID of the `IngestEndpointRevision` to be duplicated"
+    ingest_endpoint_revision_id: ID!
+    "Optionally provide a new name for the `IngestEndpointRevision`"
+    new_name: String
+}
+
+input DuplicatePlatformRevisionInput {
+    "Optionally provide a new name for the platform revision"
+    new_name: String
+    "ID of the platform revision to be duplicated"
+    platform_revision_id: ID!
+}
+
+input DuplicateRevisionInput {
+    "Optionally provide a new name for the revision"
+    new_name: String
+    "ID of the revision to be duplicated"
+    revision_id: ID!
+}
+
+input EnvironmentCreateInput {
+    "The `App` under which the `Environment` should be created"
+    app_id: ID!
+    "If a custom domain is provided, a certificate is required to handle secure web traffic"
+    cert_pem: String
+    "Any additional user comments for the audit"
+    comments: String
+    "A custom domain name to be associated with this `Environment`"
+    custom_domain: String
+    "Environment variables"
+    env_vars: [EnvironmentVariableInput!]
+    "If a custom domain is provided, a key is required to handle secure web traffic"
+    key_pem: String
+    "The name of the new `Environment` being created"
+    name: String!
+    "`Revision` ID to be connected with the `Environment`"
+    revision_id: ID!
+    "The base URL of the new `Environment` being created"
+    url: String
+}
+
+input EnvironmentDeleteInput {
+    "`Environment` ID to delete against"
+    environment_id: ID!
+}
+
+"Update an `Environment`'s properties"
+input EnvironmentUpdateInput {
+    "If a custom domain is used a new certificate can be installed which will replace the exiting one"
+    cert_pem: String
+    "Any additional user comments for the audit"
+    comments: String
+    "`Environment` ID to update data against"
+    environment_id: ID!
+    "If a custom domain is used a new key can be installed which will replace the exiting one"
+    key_pem: String
+    "`Environment` name"
+    name: String
+    "`Revision` ID to be connected with the `Environment`"
+    revision_id: ID!
+    "The base URL of the `Environment`"
+    url: String
+}
+
+input EnvironmentVariableAddInput {
+    "`Environment` ID to add a new environment variable against"
+    environment_id: ID!
+    "Environment variable key"
+    key: String!
+    "Environment variable value"
+    value: String!
+}
+
+input EnvironmentVariableDeleteInput {
+    "`Environment` ID to reference to delete an environment variable against"
+    environment_id: ID!
+    "Environment variable key to be deleted"
+    key: String!
+}
+
+input EnvironmentVariableInput {
+    "Environment variable key"
+    key: String!
+    "Environment variable value"
+    value: String!
+}
+
+"Either 'browser_event' or 'platform_event_id' is required."
+input EventCreateInput {
+    "The custom browser event"
+    browser_event: String
+    "The period after which the event state should be cleared. -1 = Inactive, 0 = Immidately, > 0, after some time specified in milliseconds."
+    clear_state_ms: Int = -1
+    "Any additional user comments for the audit"
+    comments: String
+    "An array of `DataMapInput` that will create corresponding `DataMap`'s and implement the `PlatformDataMap` of the connected `PlatformEvent`"
+    data_maps: [DataMapInput!]!
+    "The name of the event"
+    name: String
+    "The `PlatformEvent` ID"
+    platform_event_id: ID
+    "The `Trigger` under which the `Event` should be created"
+    trigger_id: ID!
+}
+
+input EventDeleteInput {
+    "Any additional user comments for the audit"
+    comments: String
+    "`Event` ID to delete against"
+    event_id: ID!
+}
+
+input EventUpdateInput {
+    "The period after which the event state should be cleared. -1 = Inactive, 0 = Immidately, > 0, after some time specified in milliseconds."
+    clear_state_ms: Int
+    "Any additional user comments for the audit"
+    comments: String
+    "An array of `DataMapInput` that will create corresponding `DataMap`'s and implement the `PlatformDataMap` of the connected `PlatformEvent`"
+    data_maps: [DataMapInput!]
+    "`Event` ID to update against"
+    event_id: ID!
+    "The name of the event"
+    name: String
+}
+
+input Filter {
+    prop_name: String!
+    regex: String!
+}
+
+"Data structure for finalising a revision. This action is final and can't be undone. Once locked the revision can be attached to an environment."
+input FinaliseIngestEndpointRevisionInput {
+    "ID of the `IngestEndpointRevision` to be finalised"
+    ingest_endpoint_revision_id: ID!
+}
+
+input FinaliseRevisionInput {
+    "ID of the revision to be finalised"
+    revision_id: ID!
+}
+
+"BigQuery stream configuration required a Google Cloud Services account to be setup and configured. PLease follow our guide and configure this properly before attempting to use this service."
+input GCBigQueryStreamConfig {
+    "The location of the data set, if it doesn't exist, we'll try and create it using the location specified"
+    data_set_location: String = "US"
+    "The 'Data Set' under which a new table will be created."
+    data_set_name: String!
+    "If this is set to true, a WHERE clause will be required when querying data in order to reduce costs. See BigQuery documentation for more details."
+    require_partition_filter_in_queries: Boolean = false
+    "Service Account JSON for Google Cloud's BigQuery administrative role."
+    service_account_json: JSON!
+}
+
+input GlobalActionGroupDistributionLinkInput {
+    "Any additional user comments for the audit"
+    comments: String
+    "Global `ActionGroupDistribution` ID"
+    global_action_group_distribution_id: ID!
+    "`Rule` ID"
+    rule_id: ID!
+}
+
+input GlobalActionGroupDistributionUnlinkInput {
+    "Any additional user comments for the audit"
+    comments: String
+    "Global `ActionGroupDistribution` ID"
+    global_action_group_distribution_id: ID!
+    "`Rule` ID"
+    rule_id: ID!
+}
+
+"Data structure for creating new data maps and linking this directly the the revision. To add a child data map, this will need to be attached directly to the parent. Please see `IngestEndpointDataMap`."
+input IngestEndpointAddIngestEndpointDataMapsInput {
+    "`IngestEndpointRevision` name"
+    ingest_endpoint_data_maps: [IngestEndpointDataMapInput!]!
+    "`IngestEndpointRevision` ID to update data against"
+    ingest_endpoint_revision_id: ID!
+}
+
+"Data structure for creating a new `IngestEndpoint`. This new entity is then used to contain both revisions and environments."
+input IngestEndpointCreateInput {
+    "The `DataManagerAccount` under which the `IngestEndpoint` should be created"
+    data_manager_account_id: ID!
+    "The name of the new `IngestEndpoint` being created"
+    name: String!
+}
+
+input IngestEndpointDataMapInput {
+    "A fully recurisve structure, this is used to acheive 'Object' and 'Array of Object' type structures"
+    child_ingest_endpoint_data_maps: [IngestEndpointDataMapInput!]
+    "The default value associated with this key-value pair. (optional)"
+    default_value: DataMapValue
+    "A list of default values associated with this key-value pair. (optional)"
+    default_values: [DataMapValue!]
+    "`IngestEndpointDataMap` property key"
+    key: String!
+    "Whether or not the `IngestEndpointDataMap` is optional"
+    optional: Boolean = false
+    "Optional validation rules"
+    validation_rules: [IngestEndpointDataMapValidationInput!]
+    "`IngestEndpointDataMap` variable type (see `VarType`)"
+    var_type: VarType!
+}
+
+input IngestEndpointDataMapUpdateInput {
+    "The default value associated with this key-value pair. (optional)"
+    default_value: DataMapValue
+    "A list of default values associated with this key-value pair. (optional)"
+    default_values: [DataMapValue!]
+    "`IngestEndpointDataMap` ID"
+    ingest_endpoint_data_map_id: ID!
+    "Whether or not the `IngestEndpointDataMap` is optional"
+    optional: Boolean
+    "If true, this remove the default value"
+    remove_default_value: Boolean
+    "Optional validation rules"
+    validation_rules: [IngestEndpointDataMapValidationInput!]
+}
+
+input IngestEndpointDataMapValidationInput {
+    "Input value to check against"
+    input_value: DataMapValue
+    "Validation type"
+    type: ValidationType!
+}
+
+"Data structure for deleting an existing `IngestEndpoint`. It will remove all child entities, however no attempt will be made to clean any data from your storage engines / streams that are linked at the environment level. There is no flag supposed to clean up data in your services."
+input IngestEndpointDeleteInput {
+    "`IngestEndpoint` ID to delete against"
+    ingest_endpoint_id: ID!
+}
+
+"Multiple deployments can be configured here, the same `IngestEndpoint` can be configured to work with different engines and adapted to your own specific use cases. A storage engine must be provided however to successfully create and configure and new environment."
+input IngestEndpointEnvironmentCreateInput {
+    "The AWS specific configuration linked to this new `IngestEndpointEnvironment`"
+    aws_storage_config: AWSStorageConfig
+    "If a custom domain is provided, a certificate is required to handle secure web traffic"
+    cert_pem: String
+    "A custom domain name to be associated with this `IngestEndpointEnvironment`"
+    custom_domain: String
+    "The Google Cloud BigQuery Stream specific configuration linked to this new `IngestEndpointEnvironment`"
+    gc_bigquery_stream_config: GCBigQueryStreamConfig
+    "The ID of the `IngestEndpoint` under which the new `IngestEndpointEnvironment` should be created"
+    ingest_endpoint_id: ID!
+    "The `IngestEndpointRevision` ID to be linked to the new `IngestEndpointEnvironment`"
+    ingest_endpoint_revision_id: ID!
+    "If a custom domain is provided, a key is required to handle secure web traffic"
+    key_pem: String
+    "Name of the new `IngestEndpointEnvironment`"
+    name: String!
+    "The storage provider to be used by the `IngestEndpointEnvironment` to store ingested data"
+    storage_provider: StorageProvider!
+}
+
+"Deleting an environment will remove the deployment permanently. It will not delete the information from your storage/stream engines however. We will make no attempt to clean and data from your cloud services."
+input IngestEndpointEnvironmentDeleteInput {
+    "ID of the `IngestEndpointEnvironment` to be deleted"
+    ingest_endpoint_environment_id: ID!
+}
+
+"We do not currently allow changes to a storage engine to be made, doing so could cause a number of potential issues. If you find yourself requiring any assistance, please contact us and we'll do our best to support your setup issues."
+input IngestEndpointEnvironmentUpdateInput {
+    "If a custom domain is used a new certificate can be installed which will replace the exiting one"
+    cert_pem: String
+    "ID of the `IngestEndpointEnvironment`"
+    ingest_endpoint_environment_id: ID!
+    "ID of the `IngestEndpointRevision` to attach to the `IngestEndpointEnvironment`"
+    ingest_endpoint_revision_id: ID!
+    "If a custom domain is used a new key can be installed which will replace the exiting one"
+    key_pem: String
+    "`IngestEndpointEnvironment` name"
+    name: String
+}
+
+"Data structure for updating a revision. The only property that can be changed directly is the name of the revision."
+input IngestEndpointRevisionUpdateInput {
+    "`IngestEndpointRevision` ID to update data against"
+    ingest_endpoint_revision_id: ID!
+    "`IngestEndpointRevision` name"
+    name: String
+}
+
+"Data structure for updating of properties associated with this entity."
+input IngestEndpointUpdateInput {
+    "`IngestEndpoint` ID to update data against"
+    ingest_endpoint_id: ID!
+    "`IngestEndpoint` name"
+    name: String
+}
+
+"Options to add filter values on IngestQueryOptions."
+input IngestQueryFilterOptions {
+    environment: ID
+    "DateTime the stats range should start"
+    from: DateTime!
+    revision: ID
+    "DateTime the stats range should finish"
+    to: DateTime!
+}
+
+"Options to query stats."
+input IngestQueryOptions {
+    filter_options: IngestQueryFilterOptions!
+    limit: Int = 10000
+    time_slice: TimeSlice = DAY
+}
+
+input Login2FAInput {
+    "2-factor auth code"
+    code: String!
+    "Temporary token for 2-factor auth (from TempSession)"
+    temp_token: String!
+    "`User` ID"
+    uid: String!
+}
+
+input LoginInput {
+    "`User`'s Email"
+    email: String!
+    "`User`'s Password"
+    password: String!
+}
+
+input MeUpdateInput {
+    "If provided the `Logged in User` email to update"
+    email: String
+    "If provided the `Logged in User` email notifications setting to update"
+    email_notifications: Boolean
+    "If provided the `Logged in User` first name to update"
+    first_name: String
+    "If provided the `Logged in User` last name to update"
+    last_name: String
+}
+
+input NewRevisionInput {
+    "A list of actions associated with this new `PlatformRevision`"
+    actions: [PlatformActionInput!]
+    "A list of data containers (data layers) associated with this new `PlatformRevision`"
+    data_containers: [PlatformDataContainerInput!]
+    "A list of events associated with this new `PlatformRevision`"
+    events: [PlatformEventInput!]
+    "The name of the new `PlatformRevision`"
+    name: String!
+    "The `Platform` under which the new `PlatformRevision` should be created."
+    platform_id: ID!
+    "Whether or not to automatically publish this revision once all the models have been sucessfully created. By default the value here is false"
+    publish: Boolean = false
+    "A list of settings described as `PlatformDataMap`s that create a document style container of key => value pairs"
+    settings: [PlatformDataMapInput!]
+}
+
+input OrgAcceptInviteInput {
+    "The ID of the `Invite` being accepted"
+    invite_id: ID!
+}
+
+input OrgAddUserInput {
+    "The Email of the `User` being added to this `Org`"
+    email: String!
+    "The Name of the `User` being added to this `Org`"
+    first_name: String!
+    "The Surna,me of the `User` being added to this `Org`"
+    last_name: String!
+    "The ID of the `Org` for which the user is being created"
+    org_id: ID!
+    "A set of `Org` permissions which will be granted to the `User`"
+    org_permission_group: OrgPermissionGroupInput!
+}
+
+input OrgCancelInviteInput {
+    "The ID of the `Invite` being cancelled"
+    invite_id: ID!
+    "The ID of the `Org` for which the invite was created"
+    org_id: ID!
+}
+
+input OrgCreateInput {
+    "Any additional user comments for the audit"
+    comments: String
+    "Name of the new `Org` being created"
+    name: String!
+}
+
+input OrgDeclineInviteInput {
+    "The ID of the `Invite` being cancelled"
+    invite_id: ID!
+}
+
+input OrgDeleteInput {
+    "Any additional user comments for the audit"
+    comments: String
+    "The ID of the `Org` being deleted"
+    id: ID!
+}
+
+input OrgInviteUserInput {
+    "The Email of the `User` being invited to this `Org`"
+    email: String!
+    "The ID of the `Org` for which the invited is being created"
+    org_id: ID!
+    "A set of `Org` permissions which will be granted to the `User`"
+    org_permission_group: OrgPermissionGroupInput!
+}
+
+input OrgPermissionGroupInput {
+    "Grants permission to create `Org` entities"
+    can_create: Boolean!
+    "Grants permission to delete `Org` entities"
+    can_delete: Boolean!
+    "Grants permission to update `Org` entities"
+    can_edit: Boolean!
+    "Grants permission to view `Org` entities."
+    can_view: Boolean!
+    "Grants full admin access on an `Org`."
+    is_admin: Boolean!
+}
+
+input OrgRemoveMeInput {
+    "The `Org` ID that the currently logged `User` is connected to"
+    org_id: ID!
+}
+
+input OrgRemoveUserInput {
+    "The `Org` ID that the `User` is connected to"
+    org_id: ID!
+    "The `User` ID of the connected user"
+    user_id: ID!
+}
+
+input OrgUpdateInput {
+    "Any additional user comments for the audit"
+    comments: String
+    "The ID of the `Org` being updated"
+    id: ID!
+    "If provided the `Org` name to update"
+    name: String
+}
+
+input OrgUpdateUserInput {
+    "The `Org` ID that the `User` is connected to"
+    org_id: ID!
+    "A new set of `User` permissions that will replace the existing permission set"
+    permission_group: OrgPermissionGroupInput!
+    "The `User` ID of the connected user"
+    user_id: ID!
+}
+
+input PlatformActionInput {
+    "The description of the new `PlatformAction` being created."
+    description: String!
+    "Optional Icon"
+    icon: TypeIcon
+    "The name of the new `PlatformAction` being created."
+    name: String!
+    "The persistence id associated with this `PlatformAction`. This ID should be unique to the action, however it can be shared across `PlatformRevision`s. We will provide a difference between two `PlatformRevision`s when they have the same persistence id."
+    persistence_id: String!
+    "A list of action inputs described as `PlatformDataMap`s."
+    platform_data_maps: [PlatformDataMapInput!]
+    "[Optional]. This will force the `PlatformAction` server side and direct the payload described in 'platform_data_maps' as JSON POST request at the provided server-to-server endpoint."
+    s2s_endpoint: String
+}
+
+input PlatformActionPermissionTemplatedCreateInput {
+    "List of event names, if applicable to this permission"
+    event_names: [String!]
+    "List of host matches, if applicable to this permission"
+    host_matches: [String!]
+    "Permission required"
+    permission: PlatformActionPermissionRequest!
+    "List of url parts accessible by this permission, if applicable"
+    url_parts: [PlatformActionPermissionURLParts!]
+    "List of variable read/write scopes, if applicable to this permission"
+    variable_read_write_execute_scopes: [VariableReadWriteExecuteScopeInput!]
+}
+
+input PlatformActionTemplatedCreateInput {
+    "Template code, see docs."
+    code: String!
+    "The description of the new `PlatformAction` being created."
+    description: String!
+    "If the code should be executed in an iframe, bypassing the sandbox and effectively executing as raw code."
+    exec_raw_in_iframe: Boolean
+    "Optional Icon"
+    icon: TypeIcon
+    "The name of the new `PlatformAction` being created."
+    name: String!
+    "A list of action inputs described as `PlatformDataMap`s."
+    permission_requests: [PlatformActionPermissionTemplatedCreateInput!]
+    "A list of action inputs described as `PlatformDataMap`s."
+    platform_data_maps: [PlatformActionTemplatedDataMapCreateInput!]
+    "The ID of the `PlatformRevision` under which the `PlatformAction` is being created."
+    platform_revision_id: ID!
+}
+
+input PlatformActionTemplatedDataMapCreateInput {
+    "If `VarType` is an OBJECT or ARRAY_OBJECT then it may contain child key => value pairs."
+    child_platform_data_maps: [PlatformActionTemplatedDataMapCreateInput!]
+    "An optional default value to be applied when the value from the data layer is not retrievable"
+    default_value: DataMapValue
+    "An optional list of default values to be applied when the value from the data layer is not retrievable"
+    default_values: [DataMapValue!]
+    "Description"
+    description: String = "A description has not been provided"
+    "Optional Icon"
+    icon: TypeIcon
+    "(See `InputType`)"
+    input_type: InputType!
+    "The key of the new `PlatformDataMap`"
+    key: String!
+    "An optional list of values to be used with SELECT or RADIO `InputType`"
+    option_values: [DataMapValue!]
+    "Whether or not this `PlatformDataMap` is optional. We will flag missing data in debug mode (console)."
+    optional: Boolean
+    "Optional validation rules"
+    validation_rules: [PlatformDataMapValidationInput!]
+}
+
+input PlatformActionTemplatedDeleteInput {
+    "The ID of the `PlatformAction` to be deleted."
+    platform_action_id: ID!
+}
+
+input PlatformActionTemplatedUpdateInput {
+    "Template code, see docs."
+    code: String
+    "Any additional user comments for the audit"
+    comments: String
+    "The description of the new `PlatformAction` being created."
+    description: String
+    "Optional Icon"
+    icon: TypeIcon
+    "The name of the new `PlatformAction` being created."
+    name: String
+    "A list of action inputs described as `PlatformDataMap`s."
+    permission_requests: [PlatformActionPermissionTemplatedCreateInput!]
+    "The ID of the `PlatformAction` to be updated."
+    platform_action_id: ID!
+    "A list of action inputs described as `PlatformDataMap`s."
+    platform_data_maps: [PlatformActionTemplatedDataMapCreateInput!]
+}
+
+input PlatformCreateInput {
+    "Description of the new `Platform`"
+    description: String!
+    "Name of the new `Platform`"
+    name: String!
+    "ID of the `TagManagerAccount` under which to create the platform"
+    tag_manager_account_id: ID!
+    "Platform type"
+    type: PlatformType!
+}
+
+input PlatformDataContainerInput {
+    "Whether or not to enable user defined keys to access key => value pairs that have not been explicity mapped"
+    allow_custom: Boolean
+    "Description"
+    description: String = "A description has not been provided"
+    "Optional Icon"
+    icon: TypeIcon
+    "The name of the new `PlatformDataContainer` being created."
+    name: String!
+    "The persistence id associated with this `PlatformDataContainer`. This ID should be unique to the action, however it can be shared across `PlatformRevision`s. We will provide a difference between two `PlatformRevision`s when they have the same persistence id."
+    persistence_id: String!
+    "A list of key => value pairs described as `PlatformDataMap`s."
+    platform_data_maps: [PlatformDataMapInput!]
+}
+
+input PlatformDataMapInput {
+    "If `VarType` is an OBJECT or ARRAY_OBJECT then it may contain child key => value pairs."
+    child_platform_data_maps: [PlatformDataMapInput!]
+    "An optional default value to be applied when the value from the data layer is not retrievable"
+    default_value: DataMapValue
+    "An optional list of default values to be applied when the value from the data layer is not retrievable"
+    default_values: [DataMapValue!]
+    "Description"
+    description: String = "A description has not been provided"
+    "Optional Icon"
+    icon: TypeIcon
+    "(See `InputType`)"
+    input_type: InputType!
+    "The key of the new `PlatformDataMap`"
+    key: String!
+    "An optional list of values to be used with SELECT or RADIO `InputType`"
+    option_values: [DataMapValue!]
+    "Whether or not this `PlatformDataMap` is optional. We will flag missing data in debug mode (console)."
+    optional: Boolean
+    "The persistence id associated with this `PlatformDataMap`. This ID should be unique to the action, however it can be shared across `PlatformRevision`s. We will provide a difference between two `PlatformRevision`s when they have the same persistence id."
+    persistence_id: String!
+    "Optional validation rules"
+    validation_rules: [PlatformDataMapValidationInput!]
+}
+
+input PlatformDataMapValidationInput {
+    "Input value to check against"
+    input_value: DataMapValue
+    "Validation type"
+    type: ValidationType!
+}
+
+input PlatformEventInput {
+    "The description of the new `PlatformEvent` being created."
+    description: String!
+    "The name of the event being used by the new `PlatformEvent`."
+    event: String!
+    "Optional Icon"
+    icon: TypeIcon
+    "The name of the new `PlatformEvent` being created."
+    name: String!
+    "The persistence id associated with this `PlatformEvent`. This ID should be unique to the action, however it can be shared across `PlatformRevision`s. We will provide a difference between two `PlatformRevision`s when they have the same persistence id."
+    persistence_id: String!
+    "A list of action settings described as `PlatformDataMap`s that create a document style container of key => value pairs"
+    platform_data_maps: [PlatformDataMapInput!]
+}
+
+input PlatformPublishInput {
+    "ID of the `Platform` to be updated"
+    platform_id: ID!
+}
+
+input PlatformUpdateInput {
+    "Description of the `Platform`"
+    description: String
+    "Name of the `Platform`"
+    name: String
+    "ID of the `Platform` to be updated"
+    platform_id: ID!
+}
+
+input PrepareGitHubLinkInput {
+    "`Logged in User` github username to link"
+    github_user: String
+}
+
+input PublishPlatformRevisionInput {
+    "The ID of the `PlatformRevision` to be marked as published"
+    platform_revision_id: ID!
+}
+
+input RegenerateUserPasswordInput {
+    "The ID of the `Org` that hold the target user"
+    org_id: ID!
+    "The ID of the target `User`"
+    user_id: ID!
+}
+
+input ResetPasswordInput {
+    "New Password"
+    new_password: String!
+    "Reset Password Token (provided via email)"
+    token: String!
+}
+
+"Update a `PlatformRevision`'s properties"
+input RevisionPlatformUpdateInput {
+    "Any additional user comments for the audit"
+    comments: String
+    "`PlatformRevision` name"
+    name: String
+    "`PlatformRevision` ID to update data against"
+    platform_revision_id: ID!
+}
+
+"Update a `Revision`'s properties"
+input RevisionUpdateInput {
+    "Any additional user comments for the audit"
+    comments: String
+    "`Revision` name"
+    name: String
+    "`Revision` ID to update data against"
+    revision_id: ID!
+}
+
+input RuleCreateInput {
+    "Any additional user comments for the audit"
+    comments: String
+    "If provided, this rule will be bound to the `Trigger` id from `Revision` globals. It can't be changed to a custom trigger once set."
+    global_trigger_id: ID
+    "The minimum refresh interval. -1 = the rule can't repeat. 0 = the rule can repeat. > 0 the rule must wait this many milliseconds before being allowed to repeat again."
+    min_repeat_interval: Int = -1
+    "The name of the new `Rule`"
+    name: String!
+    "The `RuleGroup` under which the `Rule` should be created"
+    rule_group_id: ID!
+}
+
+input RuleDeleteInput {
+    "Any additional user comments for the audit"
+    comments: String
+    "If true, we can do a dry-run and check what the outcome of this delete will be before commiting to it"
+    preview: Boolean = false
+    "`Rule` ID to delete against"
+    rule_id: ID!
+}
+
+input RuleDuplicateInput {
+    "New name for the `Rule`"
+    name: String!
+    "`Rule` ID to clone against"
+    rule_id: ID!
+}
+
+input RuleGroupCreateInput {
+    "Any additional user comments for the audit"
+    comments: String
+    "The name of the new `RuleGroup`"
+    name: String!
+    "The `Tag` under which the `RuleGroup` should be created"
+    tag_id: ID!
+}
+
+input RuleGroupDeleteInput {
+    "Any additional user comments for the audit"
+    comments: String
+    "If true, we can do a dry-run and check what the outcome of this delete will be before commiting to it"
+    preview: Boolean = false
+    "`RuleGroup` ID to delete against"
+    rule_group_id: ID!
+}
+
+input RuleGroupDuplicateInput {
+    "New name for the `RuleGroup`"
+    name: String!
+    "`RuleGroup` ID to clone against"
+    rule_group_id: ID!
+}
+
+input RuleGroupRuleOrderInput {
+    "A new order of `Rule` IDs"
+    new_order: [ID!]!
+    "`RuleGroup` ID to order rules against"
+    rule_group_id: ID!
+}
+
+input RuleGroupUpdateInput {
+    "Any additional user comments for the audit"
+    comments: String
+    "If the `RuleGroup` should be active or not"
+    is_active: Boolean
+    "`RuleGroup` name"
+    name: String
+    "`RuleGroup` ID to update against"
+    rule_group_id: ID!
+}
+
+input RuleOrderInput {
+    "A new order of `Rule` IDs"
+    new_order: [ID!]!
+    "`Rule` ID to order rules against"
+    rule_id: ID!
+}
+
+input RuleUpdateInput {
+    "Any additional user comments for the audit"
+    comments: String
+    "If the `Rule` should be active or not"
+    is_active: Boolean
+    "The minimum refresh interval. -1 = the rule can't repeat. 0 = the rule can repeat. > 0 the rule must wait this many milliseconds before being allowed to repeat again."
+    min_repeat_interval: Int
+    "`Rule` name"
+    name: String
+    "`Rule` ID to update against"
+    rule_id: ID!
+}
+
+input SendPasswordResetInput {
+    "`User`'s Email"
+    email: String!
+}
+
+input SignUpInput {
+    captcha_token: String!
+    domain: String
+    email: String
+    full_name: String!
+    git_hub_user: String
+    invite_id: String
+    org_name: String
+    password: String
+    sign_up_type: SignUpType!
+    temp_access_code: String!
+}
+
+input StartDataManagerTrialInput {
+    "The `Org` ID for which the new Data Manager account will be created under"
+    org_id: ID!
+}
+
+input StartTagManagerTrialInput {
+    "The `Org` ID for which the new Tag Manager account will be created under"
+    org_id: ID!
+}
+
+input TagCreateInput {
+    "Auto-load tag. Only avalible to HEAD tags."
+    auto_load: Boolean = false
+    "Any additional user comments for the audit"
+    comments: String
+    "An optional height parameter, used for placements."
+    height: Int = 0
+    "The name of the new `Tag`"
+    name: String!
+    "The `Revision` under which the `Tag` should be created"
+    revision_id: ID!
+    "The type of `Tag` to be created"
+    type: TagType!
+    "An optional width parameter, used for placements."
+    width: Int = 0
+}
+
+input TagDeleteInput {
+    "Any additional user comments for the audit"
+    comments: String
+    "If true, we can do a dry-run and check what the outcome of this delete will be before commiting to it"
+    preview: Boolean = false
+    "`Tag` ID to delete against"
+    tag_id: ID!
+}
+
+input TagDuplicateInput {
+    "New name for the `Tag`"
+    name: String!
+    "`Tag` ID to clone against"
+    tag_id: ID!
+}
+
+input TagRuleGroupOrderInput {
+    "A new order of `RuleGroup`'s IDs"
+    new_order: [ID!]!
+    "`Tag` ID to re-order rule groups against"
+    tag_id: ID!
+}
+
+"Update a `Tag`'s properties. Please note that `TagType` can't be changed once a tag has been created."
+input TagUpdateInput {
+    "Auto-load tag. Only avalible to HEAD tags."
+    auto_load: Boolean
+    "Any additional user comments for the audit"
+    comments: String
+    "`Tag` height, used for placements"
+    height: Int
+    "If the `Tag` should be active or not"
+    is_active: Boolean
+    "`Tag` name"
+    name: String
+    "`Tag` ID to update data against"
+    tag_id: ID!
+    "`Tag` width, used for placements"
+    width: Int
+}
+
+input TransferOwnershipInput {
+    "The `Org` ID of the Organization whose owneship will be transferred"
+    org_id: ID!
+    "The `User` ID of the recipient of the ownership transfer"
+    user_id: ID!
+}
+
+"A `Trigger` can only be created on a `Revision`. A `Rule` has an immutable, persistant `Trigger` associated with it."
+input TriggerCreateInput {
+    "Any additional user comments for the audit"
+    comments: String
+    "The name of the new `Rule`"
+    name: String!
+    "The `Rule` under which the `Trigger` should be created"
+    revision_id: ID!
+}
+
+input TriggerDeleteInput {
+    "Any additional user comments for the audit"
+    comments: String
+    "If true, we can do a dry-run and check what the outcome of this delete will be before commiting to it"
+    preview: Boolean = false
+    "`Trigger` ID to delete against"
+    trigger_id: ID!
+}
+
+input TriggerDuplicateInput {
+    "New name for the `Trigger`"
+    name: String!
+    "`Trigger` ID to clone against"
+    trigger_id: ID!
+}
+
+input TriggerOrderInput {
+    "A new order of entity IDs"
+    new_order: [ID!]!
+    "`Trigger` ID to order rules against"
+    trigger_id: ID!
+}
+
+input TriggerUpdateInput {
+    "Any additional user comments for the audit"
+    comments: String
+    "`Trigger` name"
+    name: String
+    "`Trigger` ID to update against"
+    trigger_id: ID!
+}
+
+input TwoFactorAuthDisableInput {
+    "2-factor auth code"
+    code: String!
+}
+
+input TwoFactorAuthEnableInput {
+    "2-factor auth code"
+    code: String!
+}
+
+input VariableReadWriteExecuteScopeInput {
+    "Can execute variable?"
+    execute: Boolean!
+    "Variable name"
+    name: String!
+    "Can read variable?"
+    read: Boolean!
+    "Can modify variable?"
+    write: Boolean!
+}
+
+
+"Handles valid data map values. It will return either number | string | boolean. It will also accept either number | string | boolean when used in a Query/Mutation"
+scalar DataMapValue
+
+"Handles date-time"
+scalar DateTime
+
+"The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf)."
+scalar JSON
+
+"The `Upload` scalar type represents a file upload."
+scalar Upload

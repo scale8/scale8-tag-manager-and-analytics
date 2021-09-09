@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns='http://www.w3.org/1999/xhtml' lang='en'>
+<head>
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+    <style type="text/css">
+        @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;700&display=swap');
+    </style>
+    <title></title>
+</head>
+{% apply spaceless %}
+<body style='height: 100%; background-color:#d9d9d9;margin:0;padding:0'>
+{% set parSpace = 30 %}
+{% set imageHeaderStyle = 'border:0;display:block;outline:none;text-decoration:none;height:36px;width:auto;font-size:13px;' %}
+{% set imageFooterStyle = 'border:0;display:block;outline:none;text-decoration:none;height:28px;width:auto;font-size:13px;' %}
+{% set spanTitleStyle = "font-family:'Source Sans Pro',Arial,sans-serif;font-weight:400;font-size:20px;color:#434343" %}
+{% set spanBodyStyle = "font-family:'Source Sans Pro',Arial,sans-serif;font-weight:400;font-size:16px;color:#666666" %}
+{% set spanFooterStyle = "font-family:'Source Sans Pro',Arial,sans-serif;font-weight:300;font-size:14px;color:#999999" %}
+{% set linkFooterStyle = "font-family:'Source Sans Pro',Arial,sans-serif;font-weight:700;font-size:14px;color:#9042e7;text-decoration:none;text-transform:none;" %}
+{% set bgColor = '#f3f3f3' %}
+
+{% set bodyStart = include('partials/bodyStart.twig') %}
+{% set bodyEnd = include('partials/bodyEnd.twig') %}
+{% set parStart = include('partials/parStart.twig') %}
+{% set parEnd = include('partials/parEnd.twig') %}
+{% set parSpacer = include('partials/parSpacer.twig') %}
+{% set pleaseLogin = include('partials/pleaseLogin.twig') %}
+{% set hiFirstName = include('partials/hiFirstName.twig') %}
+
+<table width='100%' height='100%' cellpadding='0' cellspacing='0' bgcolor='#d9d9d9'>
+    <tr>
+        <td align='center' valign='top'>
+            <!-- Header -->
+            <table width='600' cellpadding='0' cellspacing='0' bgcolor='{{ bgColor }}'>
+                <tr>
+                    <td height='20' width='600' colspan='3' bgcolor='{{ bgColor }}'></td>
+                </tr>
+                <tr>
+                    <td width='250' height='50' bgcolor='{{ bgColor }}'></td>
+                    <td width='100' height='50' bgcolor='{{ bgColor }}' align='center' valign='middle'>
+                        <img alt='scale8' height="36" src="cid:s8-email-logo" style="{{ imageHeaderStyle }}" width="auto">
+                    </td>
+                    <td width='250' height='50' bgcolor='{{ bgColor }}'></td>
+                </tr>
+                <tr>
+                    <td height='20' width='600' colspan='4' bgcolor='{{ bgColor }}'></td>
+                </tr>
+            </table>
+            <!-- Body -->
+            <table width='600' cellpadding='0' cellspacing='0' bgcolor='{{ bgColor }}'>
+                <tr>
+                    <td height='20' width='600' colspan='3' bgcolor='{{ bgColor }}'></td>
+                </tr>
+                <tr>
+                    <td width='50' bgcolor='{{ bgColor }}'></td>
+                    <td width='500' bgcolor='{{ bgColor }}' align='left' valign='middle'>
+                        {% block body %}{% endblock %}
+                    </td>
+                    <td width='50' bgcolor='{{ bgColor }}'></td>
+                </tr>
+            </table>
+            <!-- Greetings -->
+            <table width='600' cellpadding='0' cellspacing='0' bgcolor='{{ bgColor }}'>
+                <tr>
+                    <td width='50' bgcolor='{{ bgColor }}'></td>
+                    <td width='500' bgcolor='{{ bgColor }}'>
+                        <table width='500' cellpadding='0' cellspacing='0' bgcolor='{{ bgColor }}'>
+                            <tr>
+                                <td bgcolor='{{ bgColor }}' style="{{ spanBodyStyle }}">Best,</td>
+                            </tr>
+                            <tr>
+                                <td height='{{ parSpace }}' width='500' bgcolor='{{ bgColor }}'></td>
+                            </tr>
+                            <tr>
+                                <td bgcolor='{{ bgColor }}' style="{{ spanBodyStyle }}">Scale8 Team.</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td width='50' bgcolor='{{ bgColor }}'></td>
+                </tr>
+                <tr>
+                    <td height='60' width='600' colspan='3' bgcolor='{{ bgColor }}'></td>
+                </tr>
+            </table>
+            <!-- Foot Note -->
+            <table width='600' cellpadding='0' cellspacing='0' bgcolor='{{ bgColor }}'>
+                <tr>
+                    <td width='50' bgcolor='{{ bgColor }}'></td>
+                    <td width='500' bgcolor='{{ bgColor }}' align='left' style="word-break:break-word;">
+                        <span style="{{ spanFooterStyle }}">
+                            If you require technical assistance, please contact
+                            <a href="mailto:support@scale8.com" target="_blank" style="{{ linkFooterStyle }}">Scale8 Support</a>.
+                            Our Privacy and Cookie Policy can be found on the
+                           <a href="https://www.scale8.com/" target="_blank" style="{{ linkFooterStyle }}">Scale8</a>
+                            website.
+                        </span>
+                    </td>
+                    <td width='50' bgcolor='{{ bgColor }}'></td>
+                </tr>
+                <tr>
+                    <td height='20' width='600' colspan='3' bgcolor='{{ bgColor }}'></td>
+                </tr>
+            </table>
+            <!-- Footer -->
+            <table width='600' cellpadding='0' cellspacing='0' bgcolor='{{ bgColor }}'>
+                <tr>
+                    <td width='50' bgcolor='{{ bgColor }}'></td>
+                    <td width='500' bgcolor='{{ bgColor }}' align='left' style="word-break:break-word;">
+                        <span style="{{ spanFooterStyle }}">
+                            Scale8, a BarzantiBeck Ltd company.
+                        </span>
+                    </td>
+                    <td width='50' bgcolor='{{ bgColor }}'></td>
+                </tr>
+                <tr>
+                    <td height='50' width='600' colspan='3' bgcolor='{{ bgColor }}'></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+{% endapply %}
+</html>

@@ -1,0 +1,29 @@
+{% extends 'BaseEmail.twig' %}
+
+{% block body %}{% apply spaceless %}
+    {{ bodyStart|raw }}
+
+    {{ parStart|raw }}
+        Hi, we received a contact request with the following details:
+    {{ parEnd|raw }}
+
+    {{ parSpacer|raw }}
+
+    {{ parStart|raw }}
+        First Name: {{ firstName }}
+    {{ parEnd|raw }}
+    {{ parStart|raw }}
+        Last Name: {{ lastName }}
+    {{ parEnd|raw }}
+    {{ parStart|raw }}
+        Email: {{ email }}
+    {{ parEnd|raw }}
+    {{ parStart|raw }}
+        Message:
+        <pre style="{{ spanBodyStyle }}">{{ message }}</pre>
+    {{ parEnd|raw }}
+
+    {{ parSpacer|raw }}
+
+    {{ bodyEnd|raw }}
+{% endapply %}{% endblock %}

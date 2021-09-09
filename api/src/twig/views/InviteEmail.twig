@@ -1,0 +1,25 @@
+{% extends 'BaseEmail.twig' %}
+{% from 'partials/button.twig' import button as button %}
+
+{% block body %}{% apply spaceless %}
+    {{ bodyStart|raw }}
+
+    {{ parStart|raw }}
+        Hi,
+    {{ parEnd|raw }}
+
+    {{ parSpacer|raw }}
+
+    {{ parStart|raw }}
+        You have been invited to join {{ orgName }}.
+        To accept this invite, please follow the link below.
+    {{ parEnd|raw }}
+
+    {{ parSpacer|raw }}
+
+    {{ button(uiUrl,'Accept Invite') }}
+
+    {{ parSpacer|raw }}
+
+    {{ bodyEnd|raw }}
+{% endapply %}{% endblock %}

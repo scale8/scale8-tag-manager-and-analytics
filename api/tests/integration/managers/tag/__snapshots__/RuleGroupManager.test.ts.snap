@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RuleGroupManager fetches a single rule group 1`] = `
+Object {
+  "data": Object {
+    "getRuleGroup": Object {
+      "id": "5edf4c48e9615d9a1c66bbff",
+      "name": "test rule group",
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
