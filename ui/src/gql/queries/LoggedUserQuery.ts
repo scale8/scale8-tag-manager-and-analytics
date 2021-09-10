@@ -33,6 +33,7 @@ const LoggedUserQuery = gql`
             use_email
             use_github_sso
             use_two_factor_auth
+            is_audit_enabled
             consent_purposes {
                 id
                 name

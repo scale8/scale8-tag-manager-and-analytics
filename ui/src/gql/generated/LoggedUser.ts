@@ -169,6 +169,10 @@ export interface LoggedUser_config {
    */
   use_two_factor_auth: boolean | null;
   /**
+   * Whether the application will record an audit trail
+   */
+  is_audit_enabled: boolean | null;
+  /**
    * A list of consent purposes
    */
   consent_purposes: LoggedUser_config_consent_purposes[];

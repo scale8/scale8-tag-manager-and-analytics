@@ -14,6 +14,8 @@ import { moveDownId, moveUpId } from '../../../utils/ArrayUtils';
 import RuleContainerDivider from '../../atoms/RuleContainerDivider';
 import { RulePageSection } from './RulePageSection';
 import RulesAddButton from '../../atoms/RulesAddButton';
+import { SectionAction } from '../../molecules/SectionActionsSpeedDial';
+import { useConfigState } from '../../../context/AppContext';
 
 type RuleGroupSectionProps = {
     ruleGroup: RuleGroup;
@@ -35,6 +37,9 @@ const RuleGroupPageSection: FC<RuleGroupSectionProps> = (props: RuleGroupSection
         revisionLocked,
         pageActionProps,
     } = props;
+
+    const { isAuditEnabled } = useConfigState();
+
     return (
         <TagElementContainer
             dark
@@ -42,64 +47,74 @@ const RuleGroupPageSection: FC<RuleGroupSectionProps> = (props: RuleGroupSection
             id={ruleGroup.id}
             title={ruleGroup.name}
             actions={[
-                {
-                    icon: <FileCopyIcon />,
-                    name: 'Duplicate',
-                    onClick: (id, event) => {
-                        pageActions.duplicateRuleGroup(pageActionProps, id);
-                        event.currentTarget.blur();
+                ...([
+                    {
+                        icon: <FileCopyIcon />,
+                        name: 'Duplicate',
+                        onClick: (id, event) => {
+                            pageActions.duplicateRuleGroup(pageActionProps, id);
+                            event.currentTarget.blur();
+                        },
                     },
-                },
-                {
-                    icon: <ArrowDownwardIcon />,
-                    name: 'Move Down',
-                    onClick: (id, event) => {
-                        pageActions.updateRuleGroupOrder(
-                            pageActionProps,
-                            tagId,
-                            moveDownId(ruleGroupsIds, id),
-                        );
-                        event.currentTarget.blur();
+                    {
+                        icon: <ArrowDownwardIcon />,
+                        name: 'Move Down',
+                        onClick: (id, event) => {
+                            pageActions.updateRuleGroupOrder(
+                                pageActionProps,
+                                tagId,
+                                moveDownId(ruleGroupsIds, id),
+                            );
+                            event.currentTarget.blur();
+                        },
+                        disabled: ruleGroupIndex === ruleGroupsIds.length - 1,
                     },
-                    disabled: ruleGroupIndex === ruleGroupsIds.length - 1,
-                },
-                {
-                    icon: <ArrowUpwardIcon />,
-                    name: 'Move Up',
-                    onClick: (id, event) => {
-                        pageActions.updateRuleGroupOrder(
-                            pageActionProps,
-                            tagId,
-                            moveUpId(ruleGroupsIds, id),
-                        );
-                        event.currentTarget.blur();
+                    {
+                        icon: <ArrowUpwardIcon />,
+                        name: 'Move Up',
+                        onClick: (id, event) => {
+                            pageActions.updateRuleGroupOrder(
+                                pageActionProps,
+                                tagId,
+                                moveUpId(ruleGroupsIds, id),
+                            );
+                            event.currentTarget.blur();
+                        },
+                        disabled: ruleGroupIndex === 0,
                     },
-                    disabled: ruleGroupIndex === 0,
-                },
-                {
-                    icon: <DeleteIcon />,
-                    name: 'Delete',
-                    onClick: (id, event) => {
-                        pageActions.deleteRuleGroup(pageActionProps, id);
-                        event.currentTarget.blur();
+                    {
+                        icon: <DeleteIcon />,
+                        name: 'Delete',
+                        onClick: (id, event) => {
+                            pageActions.deleteRuleGroup(pageActionProps, id);
+                            event.currentTarget.blur();
+                        },
                     },
-                },
-                {
-                    icon: <EditIcon />,
-                    name: 'Edit',
-                    onClick: (id, event) => {
-                        pageActions.updateRuleGroup(pageActionProps, id);
-                        event.currentTarget.blur();
+                    {
+                        icon: <EditIcon />,
+                        name: 'Edit',
+                        onClick: (id, event) => {
+                            pageActions.updateRuleGroup(pageActionProps, id);
+                            event.currentTarget.blur();
+                        },
                     },
-                },
-                {
-                    icon: <HistoryIcon />,
-                    name: 'History',
-                    onClick: (id, event) => {
-                        pageActions.showRuleGroupHistory(pageActionProps, id, ruleGroup.name);
-                        event.currentTarget.blur();
-                    },
-                },
+                ] as SectionAction[]),
+                ...((isAuditEnabled
+                    ? [
+                          {
+                              icon: <HistoryIcon />,
+                              name: 'History',
+                              onClick: (id, event) => {
+                                  pageActions.showRuleGroupHistory(
+                                      pageActionProps,
+                                      id,
+                                      ruleGroup.name,
+                                  );
+                                  event.currentTarget.blur();
+                              },
+                          },
+                      ]
+                    : []) as SectionAction[]),
             ]}
         >
             <Box component="div" fontSize="15px" mb={3} color="#888888" fontWeight="normal">

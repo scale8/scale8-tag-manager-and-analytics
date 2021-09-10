@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useQuery } from '@apollo/client';
-import { useLoggedInState } from '../../context/AppContext';
+import { useConfigState, useLoggedInState } from '../../context/AppContext';
 import { TableRowBase } from '../../types/TableRow';
 import { useRouter } from 'next/router';
 import { DynamicPageProps } from '../../pageLoader/DynamicPageLoader';
@@ -41,6 +41,7 @@ const AppRevisionsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
 
     const { orgUserState, templateInteractions } = useLoggedInState();
     const { ask } = templateInteractions;
+    const { isAuditEnabled } = useConfigState();
     const currentOrgPermissions = extractPermissionsFromOrgUser(orgUserState);
 
     const appRevisionsTablePageProps: TablePageProps<AppRevisionTableRow, AppRevisionPageData> = {
@@ -81,6 +82,7 @@ const AppRevisionsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
                 ({ id, name }) => pageActions.showAppRevisionHistory(pageActionProps, id, name),
                 'Revision History',
                 () => !currentOrgPermissions.canView,
+                () => !isAuditEnabled,
             ),
             buildPreviewAction(
                 ({ id }) => pageActions.previewAppRevision(pageActionProps, id),

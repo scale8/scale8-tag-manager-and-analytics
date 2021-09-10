@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useQuery } from '@apollo/client';
 import { DynamicPageProps } from '../../pageLoader/DynamicPageLoader';
-import { useLoggedInState } from '../../context/AppContext';
+import { useConfigState, useLoggedInState } from '../../context/AppContext';
 import { useRouter } from 'next/router';
 import { TableRowBase } from '../../types/TableRow';
 import { extractPermissionsFromOrgUser } from '../../context/OrgUserReducer';
@@ -32,6 +32,7 @@ const GlobalActionsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const revisionId = props.params.id ?? '';
 
     const router = useRouter();
+    const { isAuditEnabled } = useConfigState();
     const { templateInteractions, orgUserState } = useLoggedInState();
     const { dispatchDialogAction } = templateInteractions;
     const currentOrgPermissions = extractPermissionsFromOrgUser(orgUserState);
@@ -75,6 +76,7 @@ const GlobalActionsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
                     pageActions.showActionGroupDistributionHistory(pageActionProps, id, name),
                 'Action Group Distribution History',
                 () => !currentOrgPermissions.canView,
+                () => !isAuditEnabled,
             ),
             buildEditAction(
                 ({ id }) => pageActions.updateGlobalAction(pageActionProps, id),

@@ -8,6 +8,7 @@ export type ConfigState = {
     useEmail: boolean;
     useGithubSSO: boolean;
     useTwoFactorAuth: boolean;
+    isAuditEnabled: boolean;
     isConfigured: boolean;
     consentPurposes: { id: number; name: string }[];
     consentVendors: { id: number; name: string }[];
@@ -21,6 +22,7 @@ export const configInitialState = {
     useEmail: false,
     useGithubSSO: false,
     useTwoFactorAuth: false,
+    isAuditEnabled: false,
     isConfigured: false,
     consentPurposes: [],
     consentVendors: [],
@@ -34,6 +36,7 @@ export const configStateFromData = (data?: ConfigQueryData): ConfigState => ({
     useEmail: data?.config.use_email ?? false,
     useGithubSSO: data?.config.use_github_sso ?? false,
     useTwoFactorAuth: data?.config.use_two_factor_auth ?? false,
+    isAuditEnabled: data?.config.is_audit_enabled ?? false,
     isConfigured: data?.config.is_configured ?? false,
     consentPurposes: data?.config.consent_purposes ?? [],
     consentVendors: data?.config.consent_vendors ?? [],

@@ -198,11 +198,13 @@ export const buildHistoryAction = (
     onClick: (data: RowData) => void,
     tooltip: string,
     disabled: (data: RowData) => boolean,
+    hidden?: (data: RowData) => boolean,
 ): RowAction<RowData> => ({
     icon: HistoryIcon,
     tooltip,
     onClick,
     disabled,
+    hidden,
 });
 
 export const buildPublishAction = (
