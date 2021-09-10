@@ -1057,10 +1057,10 @@
   dependencies:
     any-observable "^0.3.0"
 
-"@scale8/s8-interpreter@^0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@scale8/s8-interpreter/-/s8-interpreter-0.3.1.tgz#e61669945357f4e90879bfa2031d386babf41f95"
-  integrity sha512-Vk41nYZB3dN+ILzoUIVxA8rI8grXC+aX23fZ6NDE0vQRwWC9woMF2S3bs2akGRn01OzvpnWmW8IqSr3g5kHE7Q==
+"@scale8/s8-interpreter@^0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@scale8/s8-interpreter/-/s8-interpreter-0.3.2.tgz#db4a43887b82dbd80d917ceb8ac7ee3de328649f"
+  integrity sha512-lVnOJ8yFcZ+S4PDUYXqRp59WLcZgleHmL5/l/4VRYxbR8se/4fXt4jdbP2CmoO7dFW76OimxB+pJat7sroUk6g==
   dependencies:
     "@types/node" "^16.7.13"
     babel-loader "^8.2.2"

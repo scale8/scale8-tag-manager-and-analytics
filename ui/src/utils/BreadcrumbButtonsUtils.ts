@@ -31,7 +31,7 @@ import EventIcon from '../components/atoms/Icons/EventIcon';
 import ServiceIcon from '../components/atoms/Icons/ServiceIcon';
 import AdminIcon from '../components/atoms/Icons/AdminIcon';
 import TriggerIcon from '../components/atoms/Icons/TriggerIcon';
-import { NextRouter } from 'next/dist/next-server/lib/router/router';
+import { NextRouter } from 'next/router';
 
 export type BreadcrumbAction = {
     text: string;

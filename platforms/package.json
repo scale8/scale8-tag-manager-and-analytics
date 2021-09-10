@@ -48,7 +48,7 @@
         "write-file-webpack-plugin": "^4.5.1"
     },
     "dependencies": {
-        "@scale8/s8-interpreter": "^0.3.1",
+        "@scale8/s8-interpreter": "^0.3.2",
         "glob-parent": "^5.1.2",
         "node-notifier": "^8.0.1",
         "serialize-javascript": "^3.1.0"
