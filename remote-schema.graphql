@@ -284,6 +284,8 @@ type Config {
     data_manager_products: [DataManagerProduct!]!
     "A list of supported input types, for use with `PlatformDataMap`"
     input_types: [StringMap!]!
+    "Whether the application will record an audit trail"
+    is_audit_enabled: Boolean
     "If the platform has been setup and configured yet"
     is_configured: Boolean
     "The application mode currently in use"

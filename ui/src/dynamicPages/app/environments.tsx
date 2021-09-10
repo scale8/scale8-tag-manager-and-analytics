@@ -35,7 +35,7 @@ const AppEnvironmentsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const appId = props.params.id ?? '';
 
     const { orgUserState, templateInteractions } = useLoggedInState();
-    const { mode } = useConfigState();
+    const { mode, isAuditEnabled } = useConfigState();
     const { ask } = templateInteractions;
     const currentOrgPermissions = extractPermissionsFromOrgUser(orgUserState);
 
@@ -98,6 +98,7 @@ const AppEnvironmentsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
                 ({ id, name }) => pageActions.showAppEnvironmentHistory(pageActionProps, id, name),
                 'Environment History',
                 () => !currentOrgPermissions.canView,
+                () => !isAuditEnabled,
             ),
             buildInstallInstructionsAction(
                 ({ id }) => pageActions.installAppEnvironment(pageActionProps, id),

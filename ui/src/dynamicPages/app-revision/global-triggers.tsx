@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useQuery } from '@apollo/client';
 import { DynamicPageProps } from '../../pageLoader/DynamicPageLoader';
-import { useLoggedInState } from '../../context/AppContext';
+import { useConfigState, useLoggedInState } from '../../context/AppContext';
 import { useRouter } from 'next/router';
 import { TableRowBase } from '../../types/TableRow';
 import { extractPermissionsFromOrgUser } from '../../context/OrgUserReducer';
@@ -33,6 +33,7 @@ const GlobalTriggersPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const revisionId = props.params.id ?? '';
 
     const router = useRouter();
+    const { isAuditEnabled } = useConfigState();
     const { templateInteractions, orgUserState } = useLoggedInState();
     const { dispatchDialogAction } = templateInteractions;
     const currentOrgPermissions = extractPermissionsFromOrgUser(orgUserState);
@@ -77,6 +78,7 @@ const GlobalTriggersPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
                 ({ id, name }) => pageActions.showGlobalTriggerHistory(pageActionProps, id, name),
                 'Trigger History',
                 () => !currentOrgPermissions.canView,
+                () => !isAuditEnabled,
             ),
             buildEditAction(
                 ({ id }) => pageActions.updateGlobalTrigger(pageActionProps, id),

@@ -17,7 +17,7 @@ import {
     buildSelectAction,
 } from '../../utils/TableActionsUtils';
 import { useRouter } from 'next/router';
-import { useLoggedInState } from '../../context/AppContext';
+import { useConfigState, useLoggedInState } from '../../context/AppContext';
 import { extractPermissionsFromOrgUser } from '../../context/OrgUserReducer';
 import PageTagQuery from '../../gql/queries/PageTagQuery';
 import { buildStandardMainInfo, buildTableColumns } from '../../utils/InfoLabelsUtils';
@@ -38,7 +38,7 @@ const TagsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const revisionId = props.params.id ?? '';
 
     const router = useRouter();
-
+    const { isAuditEnabled } = useConfigState();
     const { templateInteractions, orgUserState } = useLoggedInState();
     const { dispatchDialogAction } = templateInteractions;
     const currentOrgPermissions = extractPermissionsFromOrgUser(orgUserState);
@@ -98,6 +98,7 @@ const TagsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
                 ({ id, name }) => pageActions.showTagHistory(pageActionProps, id, name),
                 'Tag History',
                 () => !currentOrgPermissions.canView,
+                () => !isAuditEnabled,
             ),
             buildEditAction(
                 ({ id }) => pageActions.updateTag(pageActionProps, id),

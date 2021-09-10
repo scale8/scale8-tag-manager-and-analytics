@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useQuery } from '@apollo/client';
 import { DynamicPageProps } from '../../pageLoader/DynamicPageLoader';
 import { TableRowBase } from '../../types/TableRow';
-import { useLoggedInState } from '../../context/AppContext';
+import { useConfigState, useLoggedInState } from '../../context/AppContext';
 import { extractPermissionsFromOrgUser } from '../../context/OrgUserReducer';
 import { useRouter } from 'next/router';
 import { PageActionProps, pageActions } from '../../actions/PageActions';
@@ -29,6 +29,7 @@ const AppPlatformRevisionsPage: FC<DynamicPageProps> = (props: DynamicPageProps)
     const revisionId = props.params.id ?? '';
 
     const router = useRouter();
+    const { isAuditEnabled } = useConfigState();
     const { templateInteractions, orgUserState } = useLoggedInState();
     const { dispatchDialogAction } = templateInteractions;
     const currentOrgPermissions = extractPermissionsFromOrgUser(orgUserState);
@@ -71,6 +72,7 @@ const AppPlatformRevisionsPage: FC<DynamicPageProps> = (props: DynamicPageProps)
                     pageActions.showAppPlatformRevisionHistory(pageActionProps, id, name),
                 'Platform Revision History',
                 () => !currentOrgPermissions.canView,
+                () => !isAuditEnabled,
             ),
             buildEditAction(
                 ({ id }) => pageActions.updateAppPlatformRevision(pageActionProps, id, revisionId),

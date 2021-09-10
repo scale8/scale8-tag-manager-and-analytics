@@ -36,7 +36,7 @@ const IngestEndpointEnvironmentsPage: FC<DynamicPageProps> = (props: DynamicPage
     const ingestEndpointId = props.params.id ?? '';
 
     const { orgUserState, templateInteractions } = useLoggedInState();
-    const { mode } = useConfigState();
+    const { mode, isAuditEnabled } = useConfigState();
     const { ask } = templateInteractions;
     const currentOrgPermissions = extractPermissionsFromOrgUser(orgUserState);
 
@@ -128,6 +128,7 @@ const IngestEndpointEnvironmentsPage: FC<DynamicPageProps> = (props: DynamicPage
                     pageActions.showIngestEndpointEnvironmentHistory(pageActionProps, id, name),
                 'Environment History',
                 () => !currentOrgPermissions.canView,
+                () => !isAuditEnabled,
             ),
             buildEditAction(
                 ({ id }) =>

@@ -10,6 +10,8 @@ import { ActionGroup } from '../../../types/TagRulesTypes';
 import { PageActionProps, pageActions } from '../../../actions/PageActions';
 import { DistributionElementContainer } from '../../molecules/DistributionElementContainer';
 import { moveDownId, moveUpId } from '../../../utils/ArrayUtils';
+import { SectionAction } from '../../molecules/SectionActionsSpeedDial';
+import { useConfigState } from '../../../context/AppContext';
 
 type ActionGroupSectionProps = {
     actionGroup: ActionGroup;
@@ -42,6 +44,8 @@ const ActionGroupPageSection: FC<ActionGroupSectionProps> = (props: ActionGroupS
         pageActionProps,
     } = props;
 
+    const { isAuditEnabled } = useConfigState();
+
     return (
         <DistributionElementContainer
             readonly={revisionLocked}
@@ -54,64 +58,74 @@ const ActionGroupPageSection: FC<ActionGroupSectionProps> = (props: ActionGroupS
             setDistributionValue={setDistributionValue}
             commitDistribution={commitDistribution}
             actions={[
-                {
-                    icon: <FileCopyIcon />,
-                    name: 'Duplicate',
-                    onClick: (id, event) => {
-                        pageActions.duplicateActionGroup(pageActionProps, id);
-                        event.currentTarget.blur();
+                ...([
+                    {
+                        icon: <FileCopyIcon />,
+                        name: 'Duplicate',
+                        onClick: (id, event) => {
+                            pageActions.duplicateActionGroup(pageActionProps, id);
+                            event.currentTarget.blur();
+                        },
                     },
-                },
-                {
-                    icon: <ArrowDownwardIcon />,
-                    name: 'Move Down',
-                    onClick: (id, event) => {
-                        pageActions.updateActionGroupOrder(
-                            pageActionProps,
-                            actionGroupsDistributionId,
-                            moveDownId(actionGroupsIds, id),
-                        );
-                        event.currentTarget.blur();
+                    {
+                        icon: <ArrowDownwardIcon />,
+                        name: 'Move Down',
+                        onClick: (id, event) => {
+                            pageActions.updateActionGroupOrder(
+                                pageActionProps,
+                                actionGroupsDistributionId,
+                                moveDownId(actionGroupsIds, id),
+                            );
+                            event.currentTarget.blur();
+                        },
+                        disabled: actionGroupIndex === actionGroupsIds.length - 1,
                     },
-                    disabled: actionGroupIndex === actionGroupsIds.length - 1,
-                },
-                {
-                    icon: <ArrowUpwardIcon />,
-                    name: 'Move Up',
-                    onClick: (id, event) => {
-                        pageActions.updateActionGroupOrder(
-                            pageActionProps,
-                            actionGroupsDistributionId,
-                            moveUpId(actionGroupsIds, id),
-                        );
-                        event.currentTarget.blur();
+                    {
+                        icon: <ArrowUpwardIcon />,
+                        name: 'Move Up',
+                        onClick: (id, event) => {
+                            pageActions.updateActionGroupOrder(
+                                pageActionProps,
+                                actionGroupsDistributionId,
+                                moveUpId(actionGroupsIds, id),
+                            );
+                            event.currentTarget.blur();
+                        },
+                        disabled: actionGroupIndex === 0,
                     },
-                    disabled: actionGroupIndex === 0,
-                },
-                {
-                    icon: <DeleteIcon />,
-                    name: 'Delete',
-                    onClick: (id, event) => {
-                        pageActions.deleteActionGroup(pageActionProps, id);
-                        event.currentTarget.blur();
+                    {
+                        icon: <DeleteIcon />,
+                        name: 'Delete',
+                        onClick: (id, event) => {
+                            pageActions.deleteActionGroup(pageActionProps, id);
+                            event.currentTarget.blur();
+                        },
                     },
-                },
-                {
-                    icon: <EditIcon />,
-                    name: 'Edit',
-                    onClick: (id, event) => {
-                        pageActions.updateActionGroup(pageActionProps, id);
-                        event.currentTarget.blur();
+                    {
+                        icon: <EditIcon />,
+                        name: 'Edit',
+                        onClick: (id, event) => {
+                            pageActions.updateActionGroup(pageActionProps, id);
+                            event.currentTarget.blur();
+                        },
                     },
-                },
-                {
-                    icon: <HistoryIcon />,
-                    name: 'History',
-                    onClick: (id, event) => {
-                        pageActions.showActionGroupHistory(pageActionProps, id, actionGroup.name);
-                        event.currentTarget.blur();
-                    },
-                },
+                ] as SectionAction[]),
+                ...((isAuditEnabled
+                    ? [
+                          {
+                              icon: <HistoryIcon />,
+                              name: 'History',
+                              onClick: (id, event) => {
+                                  pageActions.showActionGroupHistory(
+                                      pageActionProps,
+                                      id,
+                                      actionGroup.name,
+                                  );
+                                  event.currentTarget.blur();
+                              },
+                          },
+                      ]
+                    : []) as SectionAction[]),
             ]}
         >
             <ActionsPageSection

@@ -17,6 +17,8 @@ import Link from '../../atoms/Next/Link';
 import { TriggerSection } from './TriggerSection';
 import RulesAddButton from '../../atoms/RulesAddButton';
 import { ActionGroupDistributionPageSection } from './ActionGroupDistributionPageSection';
+import { SectionAction } from '../../molecules/SectionActionsSpeedDial';
+import { useConfigState } from '../../../context/AppContext';
 
 type RuleSectionProps = {
     tagId: string;
@@ -42,6 +44,8 @@ const RulePageSection: FC<RuleSectionProps> = (props: RuleSectionProps) => {
         pageActionProps,
     } = props;
 
+    const { isAuditEnabled } = useConfigState();
+
     return (
         <TagElementContainer
             readonly={revisionLocked}
@@ -49,71 +53,77 @@ const RulePageSection: FC<RuleSectionProps> = (props: RuleSectionProps) => {
             id={rule.id}
             title={rule.name}
             actions={[
-                {
-                    icon: <FileCopyIcon />,
-                    name: 'Duplicate',
-                    onClick: (id, event) => {
-                        pageActions.duplicateRule(pageActionProps, id);
-                        event.currentTarget.blur();
+                ...([
+                    {
+                        icon: <FileCopyIcon />,
+                        name: 'Duplicate',
+                        onClick: (id, event) => {
+                            pageActions.duplicateRule(pageActionProps, id);
+                            event.currentTarget.blur();
+                        },
                     },
-                },
-                {
-                    icon: <ArrowDownwardIcon />,
-                    name: 'Move Down',
-                    onClick: (id, event) => {
-                        pageActions.updateRuleOrder(
-                            pageActionProps,
-                            ruleGroupId,
-                            moveDownId(rulesIds, id),
-                        );
-                        event.currentTarget.blur();
+                    {
+                        icon: <ArrowDownwardIcon />,
+                        name: 'Move Down',
+                        onClick: (id, event) => {
+                            pageActions.updateRuleOrder(
+                                pageActionProps,
+                                ruleGroupId,
+                                moveDownId(rulesIds, id),
+                            );
+                            event.currentTarget.blur();
+                        },
+                        disabled: ruleIndex === rulesIds.length - 1,
                     },
-                    disabled: ruleIndex === rulesIds.length - 1,
-                },
-                {
-                    icon: <ArrowUpwardIcon />,
-                    name: 'Move Up',
-                    onClick: (id, event) => {
-                        pageActions.updateRuleOrder(
-                            pageActionProps,
-                            ruleGroupId,
-                            moveUpId(rulesIds, id),
-                        );
-                        event.currentTarget.blur();
+                    {
+                        icon: <ArrowUpwardIcon />,
+                        name: 'Move Up',
+                        onClick: (id, event) => {
+                            pageActions.updateRuleOrder(
+                                pageActionProps,
+                                ruleGroupId,
+                                moveUpId(rulesIds, id),
+                            );
+                            event.currentTarget.blur();
+                        },
+                        disabled: ruleIndex === 0,
                     },
-                    disabled: ruleIndex === 0,
-                },
-                {
-                    icon: <DeleteIcon />,
-                    name: 'Delete',
-                    onClick: (id, event) => {
-                        pageActions.deleteRule(pageActionProps, id);
-                        event.currentTarget.blur();
+                    {
+                        icon: <DeleteIcon />,
+                        name: 'Delete',
+                        onClick: (id, event) => {
+                            pageActions.deleteRule(pageActionProps, id);
+                            event.currentTarget.blur();
+                        },
                     },
-                },
-                {
-                    icon: <EditIcon />,
-                    name: 'Edit',
-                    onClick: (id, event) => {
-                        pageActions.updateRule(pageActionProps, id);
-                        event.currentTarget.blur();
+                    {
+                        icon: <EditIcon />,
+                        name: 'Edit',
+                        onClick: (id, event) => {
+                            pageActions.updateRule(pageActionProps, id);
+                            event.currentTarget.blur();
+                        },
                     },
-                },
-                {
-                    icon: <HistoryIcon />,
-                    name: 'History',
-                    onClick: (id, event) => {
-                        pageActions.showRuleHistory(
-                            pageActionProps,
-                            id,
-                            rule.name,
-                            // rule.trigger.parent_type === 'REVISION'
-                            //     ? undefined
-                            //     : rule.trigger.id,
-                        );
-                        event.currentTarget.blur();
-                    },
-                },
+                ] as SectionAction[]),
+                ...((isAuditEnabled
+                    ? [
+                          {
+                              icon: <HistoryIcon />,
+                              name: 'History',
+                              onClick: (id, event) => {
+                                  pageActions.showRuleHistory(
+                                      pageActionProps,
+                                      id,
+                                      rule.name,
+                                      // rule.trigger.parent_type === 'REVISION'
+                                      //     ? undefined
+                                      //     : rule.trigger.id,
+                                  );
+                                  event.currentTarget.blur();
+                              },
+                          },
+                      ]
+                    : []) as SectionAction[]),
             ]}
         >
             <RuleSection main="If" secondary="the events, conditions and exceptions are all met">

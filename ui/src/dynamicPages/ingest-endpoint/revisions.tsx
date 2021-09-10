@@ -22,7 +22,7 @@ import { extractPermissionsFromOrgUser } from '../../context/OrgUserReducer';
 import { DynamicPageProps } from '../../pageLoader/DynamicPageLoader';
 import { TablePage, TablePageProps } from '../../abstractions/TablePage';
 import { useRouter } from 'next/router';
-import { useLoggedInState } from '../../context/AppContext';
+import { useConfigState, useLoggedInState } from '../../context/AppContext';
 
 export type IngestEndpointRevisionTableRow = TableRowBase & {
     name: string;
@@ -36,6 +36,7 @@ const IngestEndpointRevisionsPage: FC<DynamicPageProps> = (props: DynamicPagePro
     const ingestEndpointId = props.params.id ?? '';
 
     const router = useRouter();
+    const { isAuditEnabled } = useConfigState();
     const { orgUserState, templateInteractions } = useLoggedInState();
     const { ask } = templateInteractions;
     const currentOrgPermissions = extractPermissionsFromOrgUser(orgUserState);
@@ -103,6 +104,7 @@ const IngestEndpointRevisionsPage: FC<DynamicPageProps> = (props: DynamicPagePro
                     pageActions.showIngestEndpointRevisionHistory(pageActionProps, id, name),
                 'Revision History',
                 () => !currentOrgPermissions.canView,
+                () => !isAuditEnabled,
             ),
             buildEditAction(
                 ({ id }) => pageActions.updateIngestEndpointRevision(pageActionProps, id),
