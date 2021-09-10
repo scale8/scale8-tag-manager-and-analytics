@@ -11,8 +11,8 @@ import { DialogAction } from '../context/DialogReducer';
 import { CurrentOrgPermissions } from '../context/OrgUserReducer';
 import { SectionKey } from '../containers/SectionsDetails';
 import { SectionHistory } from '../context/SectionHistoryReducer';
-import { NextRouter } from 'next/dist/next-server/lib/router/router';
 import { appRevisionFromPath, toAppRevision } from './NavigationPaths';
+import { NextRouter } from 'next/router';
 
 export const buildAppRevisionBreadcrumbActions = (
     revisionId: string,

@@ -26,7 +26,7 @@ const theme = (outerTheme: Theme) => ({
     overrides: {
         MuiCssBaseline: {
             '@global': {
-                'html, body, div#root': {
+                'html, body, div#root, div#__next': {
                     height: '100%',
                 },
             },
@@ -102,11 +102,6 @@ const PreviewLayout: FC = () => {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
-            <style global jsx>{`
-                div#__next {
-                    height: 100%;
-                }
-            `}</style>
             <div className={classes.root}>
                 <PreviewFrameToolbar />
                 <PreviewMainBody />
