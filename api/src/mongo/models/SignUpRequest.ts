@@ -64,11 +64,12 @@ export default class SignUpRequest extends Model {
 
     constructor(
         signUpType: SignUpType,
+        passwordSalt: string,
         fullName: string | undefined,
         email: string,
-        passwordHash: string,
         domain?: string,
         orgName?: string,
+        password?: string,
         gitHubId?: string,
     ) {
         super();
@@ -86,7 +87,8 @@ export default class SignUpRequest extends Model {
 
         this._email = email;
 
-        this._password = passwordHash;
+        this._password =
+            password !== undefined ? Hash.hashString(password, passwordSalt) : undefined;
 
         this._git_hub_user = gitHubId !== undefined ? gitHubId : undefined;
 

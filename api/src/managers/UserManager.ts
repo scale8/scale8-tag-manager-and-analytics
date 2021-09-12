@@ -589,14 +589,12 @@ export default class UserManager extends Manager<User> {
             const signUpRequest = await this.repoFactory(SignUpRequest).save(
                 new SignUpRequest(
                     args.signUpInput.sign_up_type,
+                    await this.config.getEncryptionSalt(),
                     args.signUpInput.full_name,
                     email,
-                    Hash.hashString(
-                        args.signUpInput.password,
-                        await this.config.getEncryptionSalt(),
-                    ),
                     args.signUpInput.domain,
                     args.signUpInput.org_name,
+                    args.signUpInput.password,
                     args.signUpInput.git_hub_user,
                 ),
                 'SYSTEM',
