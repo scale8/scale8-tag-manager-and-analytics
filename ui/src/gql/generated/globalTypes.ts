@@ -810,6 +810,7 @@ export interface IngestEndpointEnvironmentCreateInput {
   ingest_endpoint_revision_id: string;
   aws_storage_config?: AWSStorageConfig | null;
   gc_bigquery_stream_config?: GCBigQueryStreamConfig | null;
+  mongo_push_config?: MongoDbPushConfig | null;
 }
 
 /**
@@ -881,6 +882,14 @@ export interface MeUpdateInput {
   last_name?: string | null;
   email?: string | null;
   email_notifications?: boolean | null;
+}
+
+/**
+ * In order to use MongoDB as your storage engine, you just need to provide connection string and database name.
+ */
+export interface MongoDbPushConfig {
+  connection_string: string;
+  database_name: string;
 }
 
 export interface OrgAcceptInviteInput {

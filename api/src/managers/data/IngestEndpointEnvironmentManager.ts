@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 import Manager from '../../abstractions/Manager';
 import { gql } from 'apollo-server-express';
 import CTX from '../../gql/ctx/CTX';
-import { ObjectID } from 'mongodb';
+import { MongoClient, ObjectID } from 'mongodb';
 import TYPES from '../../container/IOC.types';
 import GQLError from '../../errors/GQLError';
 import S3Service from '../../aws/S3Service';
@@ -22,6 +22,7 @@ import {
 import { StorageProvider } from '../../enums/StorageProvider';
 import BaseDatabase from '../../backends/databases/abstractions/BaseDatabase';
 import { withUnManagedAccount } from '../../utils/DataManagerAccountUtils';
+import Hash from '../../core/Hash';
 
 @injectable()
 export default class IngestEndpointEnvironmentManager extends Manager<IngestEndpointEnvironment> {
@@ -76,6 +77,20 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
             If this is set to true, a WHERE clause will be required when querying data in order to reduce costs. See BigQuery documentation for more details.
             """
             require_partition_filter_in_queries: Boolean = false
+        }
+
+        """
+        In order to use MongoDB as your storage engine, you just need to provide connection string and database name.
+        """
+        input MongoDbPushConfig {
+            """
+            Your MongoDB server connection string.
+            """
+            connection_string: String!
+            """
+            The name of the database that will store your data
+            """
+            database_name: String!
         }
 
         """
@@ -173,6 +188,10 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
             The Google Cloud BigQuery Stream specific configuration linked to this new \`IngestEndpointEnvironment\`
             """
             gc_bigquery_stream_config: GCBigQueryStreamConfig
+            """
+            The MongoDB specific configuration linked to this new \`IngestEndpointEnvironment\`
+            """
+            mongo_push_config: MongoDbPushConfig
         }
 
         """
@@ -368,103 +387,21 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
                             data.storage_provider === StorageProvider.AWS_S3 &&
                             data.aws_storage_config !== undefined
                         ) {
-                            //trying to use S3, so test credentials...
-                            //we need to test AWS setup is correct...
-                            const s3 = this.s3Service.getS3Client(
-                                data.aws_storage_config.access_key_id,
-                                data.aws_storage_config.secret_access_key,
-                                data.aws_storage_config.region,
-                            );
-                            if (
-                                !(await this.s3Service.bucketExists(
-                                    s3,
-                                    data.aws_storage_config.bucket_name,
-                                ))
-                            ) {
-                                throw new GQLError(
-                                    userMessages.awsNoBucket(data.aws_storage_config.bucket_name),
-                                    true,
-                                );
-                            }
-                            if (
-                                !(await this.s3Service.isWriteable(
-                                    s3,
-                                    data.aws_storage_config.bucket_name,
-                                ))
-                            ) {
-                                throw new GQLError(
-                                    userMessages.awsBucketCantWrite(
-                                        data.aws_storage_config.bucket_name,
-                                    ),
-                                    true,
-                                );
-                            }
-                            return {
-                                config: data.aws_storage_config,
-                                hint: `Using AWS Access Key: ${data.aws_storage_config.access_key_id}`,
-                            };
+                            return await this.getAwsS3ProviderConfig(data.aws_storage_config);
                         } else if (
                             data.storage_provider === StorageProvider.GC_BIGQUERY_STREAM &&
                             data.gc_bigquery_stream_config !== undefined
                         ) {
-                            //trying to use GCS BigQuery Stream...
-
-                            if (
-                                typeof data.gc_bigquery_stream_config.service_account_json !==
-                                'object'
-                            ) {
-                                throw new GQLError(userMessages.invalidServiceAccount, true);
-                            }
-
-                            const bq = new BigQuery({
-                                projectId:
-                                    data.gc_bigquery_stream_config.service_account_json.project_id,
-                                credentials: {
-                                    client_email:
-                                        data.gc_bigquery_stream_config.service_account_json
-                                            .client_email,
-                                    private_key:
-                                        data.gc_bigquery_stream_config.service_account_json
-                                            .private_key,
-                                },
-                            });
-
-                            const dataset = data.gc_bigquery_stream_config.data_set_name;
-                            const datasetLocation =
-                                data.gc_bigquery_stream_config.data_set_location;
-
-                            try {
-                                //check dataset exists. if not attempt to create it...
-                                const [exists] = await bq.dataset(dataset).exists();
-                                if (!exists) {
-                                    try {
-                                        await bq.createDataset(dataset, {
-                                            location: datasetLocation,
-                                        });
-                                    } catch (e) {
-                                        // is rethrown if of type GQLError
-                                        // noinspection ExceptionCaughtLocallyJS
-                                        throw new GQLError(
-                                            userMessages.datasetFailure(dataset),
-                                            true,
-                                        );
-                                    }
-                                }
-                            } catch (e) {
-                                if (e instanceof GQLError) {
-                                    throw e;
-                                } else {
-                                    throw new GQLError(
-                                        userMessages.datasetVerificationFailure(dataset),
-                                        true,
-                                    );
-                                }
-                            }
-
-                            return {
-                                config: data.gc_bigquery_stream_config,
-                                hint: `Using GC Service Account: ${data.gc_bigquery_stream_config.service_account_json.client_email}`,
-                            };
+                            return await IngestEndpointEnvironmentManager.getBigQueryProviderConfig(
+                                data.gc_bigquery_stream_config,
+                            );
+                        } else if (
+                            data.storage_provider === StorageProvider.MONGODB &&
+                            data.mongo_push_config !== undefined
+                        ) {
+                            return await IngestEndpointEnvironmentManager.getMongoDbProviderConfig(
+                                data.mongo_push_config,
+                            );
                         } else {
                             throw new GQLError(userMessages.noStorageProvider, true);
                         }
@@ -564,4 +501,106 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
             },
         },
     };
+
+    private async getAwsS3ProviderConfig(awsStorageConfig: any) {
+        //we need to test AWS setup is correct...
+        const s3 = this.s3Service.getS3Client(
+            awsStorageConfig.access_key_id,
+            awsStorageConfig.secret_access_key,
+            awsStorageConfig.region,
+        );
+        if (!(await this.s3Service.bucketExists(s3, awsStorageConfig.bucket_name))) {
+            throw new GQLError(userMessages.awsNoBucket(awsStorageConfig.bucket_name), true);
+        }
+        if (!(await this.s3Service.isWriteable(s3, awsStorageConfig.bucket_name))) {
+            throw new GQLError(userMessages.awsBucketCantWrite(awsStorageConfig.bucket_name), true);
+        }
+        return {
+            config: awsStorageConfig,
+            hint: `Using AWS Access Key: ${awsStorageConfig.access_key_id}`,
+        };
+    }
+
+    private static async getBigQueryProviderConfig(bigqueryStreamConfig: any) {
+        if (typeof bigqueryStreamConfig.service_account_json !== 'object') {
+            throw new GQLError(userMessages.invalidServiceAccount, true);
+        }
+
+        const bq = new BigQuery({
+            projectId: bigqueryStreamConfig.service_account_json.project_id,
+            credentials: {
+                client_email: bigqueryStreamConfig.service_account_json.client_email,
+                private_key: bigqueryStreamConfig.service_account_json.private_key,
+            },
+        });
+
+        const dataset = bigqueryStreamConfig.data_set_name;
+        const datasetLocation = bigqueryStreamConfig.data_set_location;
+
+        try {
+            //check dataset exists. if not attempt to create it...
+            const [exists] = await bq.dataset(dataset).exists();
+            if (!exists) {
+                try {
+                    await bq.createDataset(dataset, {
+                        location: datasetLocation,
+                    });
+                } catch (e) {
+                    // is rethrown if of type GQLError
+                    // noinspection ExceptionCaughtLocallyJS
+                    throw new GQLError(userMessages.datasetFailure(dataset), true);
+                }
+            }
+        } catch (e) {
+            if (e instanceof GQLError) {
+                throw e;
+            } else {
+                throw new GQLError(userMessages.datasetVerificationFailure(dataset), true);
+            }
+        }
+
+        return {
+            config: bigqueryStreamConfig,
+            hint: `Using GC Service Account: ${bigqueryStreamConfig.service_account_json.client_email}`,
+        };
+    }
+
+    private static async getMongoDbProviderConfig(mongoPushConfig: any) {
+        const getMongoConnection = async () => {
+            try {
+                const client = new MongoClient(mongoPushConfig.connection_string, {
+                    useNewUrlParser: true,
+                });
+                return await client.connect();
+            } catch (e) {
+                throw new GQLError(
+                    userMessages.mongoConnectionStringVerificationFailure(
+                        mongoPushConfig.connection_string,
+                    ),
+                    true,
+                );
+            }
+        };
+
+        const connection = await getMongoConnection();
+
+        try {
+            const database = connection.db(mongoPushConfig.database_name);
+
+            await database
+                .collection(`s8_${Hash.shortRandomHash()}_verification`)
+                .insertOne({ s8: true });
+        } catch (e) {
+            throw new GQLError(
+                userMessages.mongoDatabaseVerificationFailure(mongoPushConfig.database_name),
+                true,
+            );
+        } finally {
+            connection.close(true).then();
+        }
+        return {
+            config: mongoPushConfig,
+            hint: `Using MongoDB database: ${mongoPushConfig.database_name}`,
+        };
+    }
 }
