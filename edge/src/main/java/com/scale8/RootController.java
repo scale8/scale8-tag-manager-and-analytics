@@ -214,10 +214,4 @@ public class RootController {
       throws Exception {
     return handleJsAsset(request, id, platformId, revisionId, asset);
   }
-
-  //    @Error(status = HttpStatus.NOT_FOUND, global = true)
-  //    public HttpResponse<?> notFound(HttpRequest<String> request) {
-  //        System.out.println("GOT HERE");
-  //        return HttpResponse.ok("Not Found");
-  //    }
 }

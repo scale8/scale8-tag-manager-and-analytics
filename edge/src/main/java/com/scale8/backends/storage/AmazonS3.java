@@ -55,7 +55,6 @@ public class AmazonS3 implements StorageInterface {
   @Override
   public String get(String bucket, String key) {
     String safeBucketName = getSafeBucketName(bucket);
-    System.out.println(safeBucketName);
     return new BufferedReader(
             new InputStreamReader(
                 getStorage()
