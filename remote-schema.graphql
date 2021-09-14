@@ -4933,6 +4933,8 @@ input IngestEndpointEnvironmentCreateInput {
     ingest_endpoint_revision_id: ID!
     "If a custom domain is provided, a key is required to handle secure web traffic"
     key_pem: String
+    "The MongoDB specific configuration linked to this new `IngestEndpointEnvironment`"
+    mongo_push_config: MongoDbPushConfig
     "Name of the new `IngestEndpointEnvironment`"
     name: String!
     "The storage provider to be used by the `IngestEndpointEnvironment` to store ingested data"
@@ -5017,6 +5019,14 @@ input MeUpdateInput {
     first_name: String
     "If provided the `Logged in User` last name to update"
     last_name: String
+}
+
+"In order to use MongoDB as your storage engine, you just need to provide connection string and database name."
+input MongoDbPushConfig {
+    "Your MongoDB server connection string."
+    connection_string: String!
+    "The name of the database that will store your data"
+    database_name: String!
 }
 
 input NewRevisionInput {
