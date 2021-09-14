@@ -192,6 +192,24 @@ const IngestEndpointEnvironmentForm: FC<IngestEndpointEnvironmentFormProps> = (
                             />
                         </BoxedInputs>
                     )}
+                    {props.values.storageProvider === StorageProvider.MONGODB && (
+                        <BoxedInputs label="MongoDb Push Config">
+                            <ControlledTextInput
+                                name="connectionString"
+                                label="Connection String"
+                                formProps={props}
+                                className="DrawerFormField"
+                                required
+                            />
+                            <ControlledTextInput
+                                name="databaseName"
+                                label="Database Name"
+                                formProps={props}
+                                className="DrawerFormField"
+                                required
+                            />
+                        </BoxedInputs>
+                    )}
                 </>
             )}
         </DrawerFormLayout>

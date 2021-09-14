@@ -11,6 +11,7 @@ import {
     GCBigQueryStreamConfig,
     IngestEndpointEnvironmentCreateInput,
     Mode,
+    MongoDbPushConfig,
     StorageProvider,
 } from '../../gql/generated/globalTypes';
 import nameValidator from '../../utils/validators/nameValidator';
@@ -34,6 +35,8 @@ export type IngestEndpointEnvironmentValues = {
     dataSetName?: string;
     requirePartitionFilterInQueries?: boolean;
     domain?: string;
+    connectionString?: string;
+    databaseName?: string;
     certificate: string;
     key: string;
 };
@@ -91,6 +94,8 @@ const IngestEndpointEnvironmentCreate: FC<DialogPageProps> = (props: DialogPageP
             dataSetName: '',
             requirePartitionFilterInQueries: false,
             domain: '',
+            connectionString: '',
+            databaseName: '',
             certificate: '',
             key: '',
         }),
@@ -121,6 +126,11 @@ const IngestEndpointEnvironmentCreate: FC<DialogPageProps> = (props: DialogPageP
                     !!ingestEndpointEnvironmentValues.requirePartitionFilterInQueries,
             };
 
+            const mongo_push_config: MongoDbPushConfig = {
+                connection_string: ingestEndpointEnvironmentValues.connectionString ?? '',
+                database_name: ingestEndpointEnvironmentValues.databaseName ?? '',
+            };
+
             const ingestEndpointEnvironmentCreateInput: IngestEndpointEnvironmentCreateInput = {
                 ingest_endpoint_id: ingestEndpointId,
                 ingest_endpoint_revision_id: ingestEndpointEnvironmentValues.revisionId,
@@ -139,6 +149,10 @@ const IngestEndpointEnvironmentCreate: FC<DialogPageProps> = (props: DialogPageP
             ) {
                 ingestEndpointEnvironmentCreateInput.gc_bigquery_stream_config =
                     gc_bigquery_stream_config;
+            }
+
+            if (ingestEndpointEnvironmentValues.storageProvider === StorageProvider.MONGODB) {
+                ingestEndpointEnvironmentCreateInput.mongo_push_config = mongo_push_config;
             }
 
             if (ingestEndpointEnvironmentValues.domain !== '') {

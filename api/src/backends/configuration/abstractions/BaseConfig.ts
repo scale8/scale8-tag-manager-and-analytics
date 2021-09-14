@@ -249,4 +249,8 @@ export default abstract class BaseConfig {
     public async getStripeWebhookSecret(): Promise<string> {
         return await this.getConfigEntryThrows('STRIPE_WEBHOOK_SECRET');
     }
+
+    public async getEncryptionSalt(): Promise<string> {
+        return await this.getConfigEntryOrElse('ENCRYPTION_SALT', 's8s4ltysug4r');
+    }
 }

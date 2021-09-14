@@ -19,6 +19,7 @@ import Hash from '../core/Hash';
 import OperationOwner from '../enums/OperationOwner';
 import GQLMethod from '../enums/GQLMethod';
 import Dependency from '../mongo/models/Dependency';
+import BaseConfig from '../backends/configuration/abstractions/BaseConfig';
 
 export const duplicateModel = async <T extends Model>(
     actor: User,
@@ -34,6 +35,7 @@ export const duplicateModel = async <T extends Model>(
         TYPES.RepoFromRepoNameFactory,
     );
     const modelFromRepoFactory = container.get<ModelFromRepoFactory>(TYPES.ModelFromRepoFactory);
+    const config = container.get<BaseConfig>(TYPES.BackendConfig);
 
     const isParentModel = revisionId === undefined;
     const parentModelId = revisionId === undefined ? new ObjectID() : revisionId;
@@ -168,7 +170,7 @@ export const duplicateModel = async <T extends Model>(
     });
 
     if (asNewBranch === true) {
-        (newModel as any)['___persisting_id'] = Hash.randomHash();
+        (newModel as any)['___persisting_id'] = Hash.randomHash(await config.getEncryptionSalt());
         delete (newModel as any)['_tag_code']; //if we are creating a hard fork, then need to generate this...
     }
 

@@ -508,7 +508,7 @@ export default class UserManager extends Manager<User> {
     protected gqlExtendedMutationResolvers = {
         resetAPIToken: async (parent: any, args: any, ctx: CTX) => {
             return await this.userAuth.asUser(ctx, async (me) => {
-                me.resetAPIToken();
+                me.resetAPIToken(await this.config.getEncryptionSalt());
                 await this.repoFactory(User).save(me, 'SYSTEM', OperationOwner.SYSTEM);
                 return me.apiToken;
             });
@@ -589,6 +589,7 @@ export default class UserManager extends Manager<User> {
             const signUpRequest = await this.repoFactory(SignUpRequest).save(
                 new SignUpRequest(
                     args.signUpInput.sign_up_type,
+                    await this.config.getEncryptionSalt(),
                     args.signUpInput.full_name,
                     email,
                     args.signUpInput.domain,
@@ -675,14 +676,20 @@ export default class UserManager extends Manager<User> {
                 };
             }
 
-            const newPassword: string = Hash.simpleRandomHash(9);
+            const generatedPassword: string = Hash.simpleRandomHash(9);
+
+            const passwordHash: string =
+                signUpRequest.password !== undefined
+                    ? signUpRequest.password
+                    : Hash.hashString(generatedPassword, await this.config.getEncryptionSalt());
 
             const buildNewUser = async () => {
                 const user = new User(
                     signUpRequest.first_name,
                     signUpRequest.last_name,
-                    newPassword,
+                    passwordHash,
                     signUpRequest.email,
+                    Hash.randomHash(await this.config.getEncryptionSalt()),
                     [],
                     true,
                 );
@@ -691,9 +698,6 @@ export default class UserManager extends Manager<User> {
                     user.github_user = signUpRequest.git_hub_user;
                 }
 
-                if (signUpRequest.password !== undefined) {
-                    user.setPasswordHash(signUpRequest.password);
-                }
                 return this.repoFactory(User).save(user, 'SYSTEM', OperationOwner.SYSTEM);
             };
 
@@ -762,7 +766,7 @@ export default class UserManager extends Manager<User> {
                 'SignUpRequestVerified.twig',
                 {
                     firstName: user.firstName,
-                    password: signUpRequest.password === undefined ? newPassword : undefined,
+                    password: signUpRequest.password === undefined ? generatedPassword : undefined,
                     uiUrl: `${await this.config.getUiUrl()}/login`,
                 },
             );
@@ -905,11 +909,17 @@ export default class UserManager extends Manager<User> {
                 const user = await this.repo.findOneThrows(
                     {
                         _email: me.email,
-                        _password: Hash.hashString(args.changePasswordInput.old_password),
+                        _password: Hash.hashString(
+                            args.changePasswordInput.old_password,
+                            await this.config.getEncryptionSalt(),
+                        ),
                     },
                     userMessages.userFailed,
                 );
-                user.password = args.changePasswordInput.new_password;
+                user.setPassword(
+                    args.changePasswordInput.new_password,
+                    await this.config.getEncryptionSalt(),
+                );
                 await this.repoFactory(User).save(user, 'SYSTEM', OperationOwner.SYSTEM);
                 return true;
             });
@@ -1054,7 +1064,10 @@ export default class UserManager extends Manager<User> {
                 passwordReset.userId,
                 userMessages.userFailed,
             );
-            user.password = args.resetPasswordInput.new_password;
+            user.setPassword(
+                args.resetPasswordInput.new_password,
+                await this.config.getEncryptionSalt(),
+            );
             user.twoFactorAuth = false;
             await this.repoFactory(User).save(user, 'SYSTEM', OperationOwner.SYSTEM);
             //send email

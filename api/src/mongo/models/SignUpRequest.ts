@@ -34,7 +34,7 @@ export default class SignUpRequest extends Model {
     @Field<string>({
         required: false,
     })
-    private _password: string | undefined;
+    private readonly _password: string | undefined;
 
     @Field<string>({
         required: true,
@@ -64,7 +64,8 @@ export default class SignUpRequest extends Model {
 
     constructor(
         signUpType: SignUpType,
-        fullName: string,
+        passwordSalt: string,
+        fullName: string | undefined,
         email: string,
         domain?: string,
         orgName?: string,
@@ -86,7 +87,8 @@ export default class SignUpRequest extends Model {
 
         this._email = email;
 
-        this._password = password !== undefined ? Hash.hashString(password) : undefined;
+        this._password =
+            password !== undefined ? Hash.hashString(password, passwordSalt) : undefined;
 
         this._git_hub_user = gitHubId !== undefined ? gitHubId : undefined;
 

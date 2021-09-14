@@ -670,7 +670,15 @@ export default class OrgManager extends Manager<Org> {
             } else {
                 const data = args.createFirstOrgInput;
                 const newUser = await this.repoFactory(User).save(
-                    new User(data.first_name, data.last_name, data.password, data.email, [], true),
+                    new User(
+                        data.first_name,
+                        data.last_name,
+                        Hash.hashString(data.password, await this.config.getEncryptionSalt()),
+                        data.email,
+                        Hash.randomHash(await this.config.getEncryptionSalt()),
+                        [],
+                        true,
+                    ),
                     'SYSTEM',
                     OperationOwner.SYSTEM,
                 );
@@ -764,7 +772,7 @@ export default class OrgManager extends Manager<Org> {
                     throw new GenericError(userMessages.userNotIncluded, LogPriority.DEBUG, true);
                 }
                 const newPassword = Hash.simpleRandomHash(9);
-                user.password = newPassword;
+                user.setPassword(newPassword, await this.config.getEncryptionSalt());
                 await this.repoFactory(User).save(user, me);
                 return newPassword;
             });
@@ -784,8 +792,9 @@ export default class OrgManager extends Manager<Org> {
                               new User(
                                   data.first_name,
                                   data.last_name,
-                                  Hash.randomHash(),
+                                  Hash.randomHash(await this.config.getEncryptionSalt()),
                                   data.email,
+                                  Hash.randomHash(await this.config.getEncryptionSalt()),
                               ),
                               me,
                           );
