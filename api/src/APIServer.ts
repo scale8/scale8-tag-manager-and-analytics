@@ -22,6 +22,7 @@ import BaseLogger from './backends/logging/abstractions/BaseLogger';
 import Scale8Setup from './bootstrap/Scale8Setup';
 import BaseConfig from './backends/configuration/abstractions/BaseConfig';
 import { Mode } from './enums/Mode';
+import BaseStorage from './backends/storage/abstractions/BaseStorage';
 
 // noinspection JSUnusedLocalSymbols
 @injectable()
@@ -34,6 +35,7 @@ export default class APIServer {
     protected readonly gqlServer: ApolloServer;
     protected readonly routing: Routing;
     protected readonly config: BaseConfig;
+    protected readonly storage: BaseStorage;
 
     protected httpsServer?: https.Server;
     protected httpServer?: http.Server;
@@ -45,6 +47,7 @@ export default class APIServer {
         @inject(TYPES.Shell) shell: Shell,
         @inject(TYPES.Routing) routing: Routing,
         @inject(TYPES.BackendConfig) config: BaseConfig,
+        @inject(TYPES.BackendStorage) storage: BaseStorage,
     ) {
         this.resolverRegister = resolverRegister;
         this.typeDefRegister = typeDefRegister;
@@ -52,6 +55,7 @@ export default class APIServer {
         this.shell = shell;
         this.routing = routing;
         this.config = config;
+        this.storage = storage;
         this.gqlServer = this.getGQLServer();
         this.app = this.getApp();
     }
@@ -218,8 +222,7 @@ export default class APIServer {
     }
 
     public async startServer(): Promise<void> {
-        //this.logger.info(`Stripe Product & Plan Checks...`);
-        //await container.resolve(StripeSetup).createProductsAndPlans();
+        await this.storage.configure(); //we need to make sure our storage backend is properly configured
         this.logger.info(`Connecting to MongoDB...`).then();
         await this.shell.connect();
         await container.resolve(Scale8Setup).setup();

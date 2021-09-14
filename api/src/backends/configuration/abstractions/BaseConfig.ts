@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import GenericError from '../../../errors/GenericError';
 import { LogPriority } from '../../../enums/LogPriority';
 import { Mode } from '../../../enums/Mode';
+import { AwsRegion } from '../../../enums/AwsRegion';
 
 dotenv.config();
 
@@ -131,14 +132,14 @@ export default abstract class BaseConfig {
         return await this.getConfigEntryThrows('GC_PROJECT_ID');
     }
 
-    public async getGCAssetBucket(): Promise<string> {
+    public async getAssetBucket(): Promise<string> {
         return await this.getConfigEntryOrElse(
             'ASSET_BUCKET',
             `scale8_com_${this.getEnvironment().toLowerCase()}_assets`,
         );
     }
 
-    public async getGCConfigsBucket(): Promise<string> {
+    public async getConfigsBucket(): Promise<string> {
         return await this.getConfigEntryOrElse(
             'CONFIGS_BUCKET',
             `scale8_com_${this.getEnvironment().toLowerCase()}_configs`,
@@ -195,6 +196,10 @@ export default abstract class BaseConfig {
 
     public async getAwsSecret(): Promise<string> {
         return await this.getConfigEntryThrows('AWS_SECRET');
+    }
+
+    public async getAwsRegion(): Promise<AwsRegion> {
+        return (await this.getConfigEntryThrows('AWS_REGION')) as AwsRegion;
     }
 
     public async getDatabaseUrl(): Promise<string> {

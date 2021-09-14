@@ -250,8 +250,8 @@ export const buildConfig = async (environment: Environment): Promise<void> => {
     );
 
     const uploadTo = async (fileName: string) =>
-        storage.put(
-            await config.getGCConfigsBucket(),
+        storage.setAsString(
+            await config.getConfigsBucket(),
             `tag-domain/${fileName}`,
             JSON.stringify(await buildRevisionConfig(revision, environment)),
             {

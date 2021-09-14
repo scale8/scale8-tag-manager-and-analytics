@@ -27,7 +27,7 @@ export default class MongoDBStorage extends BaseStorage {
         return this.shell.getCollection(`${bucketName}_bucket`);
     }
 
-    public async get(bucketName: string, key: string): Promise<any> {
+    public async getAsString(bucketName: string, key: string): Promise<any> {
         const collection = await this.getCollection(bucketName);
         const doc = await collection.findOne({ key: key });
         if (doc) {
@@ -40,10 +40,10 @@ export default class MongoDBStorage extends BaseStorage {
         }
     }
 
-    public async put(
+    public async setAsString(
         bucketName: string,
         key: string,
-        content: string,
+        config: string,
         options?: StorageOptions,
     ): Promise<void> {
         this.logger.info(`Adding ${key} to ${bucketName}`).then();
@@ -53,7 +53,7 @@ export default class MongoDBStorage extends BaseStorage {
                 { key: key },
                 {
                     key: key,
-                    blob: content,
+                    blob: config,
                     meta: { contentType: options?.contentType || this.DEFAULT_MIME_TYPE },
                 },
                 { upsert: true },
