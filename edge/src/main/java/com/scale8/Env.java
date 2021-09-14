@@ -21,13 +21,20 @@ public class Env {
 
   public final Boolean IS_PROD = ENV.equals("production");
 
+  public final String AWS_ID = getOrElse("AWS_ID", "");
+
+  public final String AWS_SECRET = getOrElse("AWS_SECRET", "");
+
+  public final String AWS_REGION = getOrElse("AWS_REGION", "");
+
   public final String GOOGLE_CREDENTIALS_FILE = getOrElse("GOOGLE_CREDENTIALS_FILE", "");
 
-  public final String MONGO_CONNECT_STRING = getOrElse("MONGO_CONNECT_STRING", "mongodb://s8-admin:s8-admin@127.0.0.1:27017");
+  public final String MONGO_CONNECT_STRING =
+      getOrElse("MONGO_CONNECT_STRING", "mongodb://s8-admin:s8-admin@127.0.0.1:27017");
 
-  public final String ASSETS_BUCKET = "scale8_com_" + ENV + "_assets";
+  public final String ASSETS_BUCKET = getOrElse("ASSET_BUCKET", "scale8_com_" + ENV + "_assets");
 
-  public final String CONFIG_BUCKET = "scale8_com_" + ENV + "_configs";
+  public final String CONFIG_BUCKET = getOrElse("CONFIGS_BUCKET", "scale8_com_" + ENV + "_configs");
 
   public final String PROXY_LOCATION = getOrElse("PROXY_ENDPOINT", "http://127.0.0.1:3123/main.js");
 

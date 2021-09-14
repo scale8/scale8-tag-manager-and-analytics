@@ -65,8 +65,8 @@ export const getStorageProviderConfig = async (
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
 
     try {
-        const obj = await getStorageBackend().get(
-            await config.getGCConfigsBucket(),
+        const obj = await getStorageBackend().getAsString(
+            await config.getConfigsBucket(),
             `ingest-endpoint/storage-provider-config-${ingestEndpointEnvironment.id}.json`,
         );
         return JSON.parse((obj as any).toString('utf-8'));
@@ -118,8 +118,8 @@ export const buildIngestEndpointConfig = async (
         storageProviderConfig;
 
     const uploadTo = async (fileName: string) =>
-        getStorageBackend().put(
-            await backendConfig.getGCConfigsBucket(),
+        getStorageBackend().setAsString(
+            await backendConfig.getConfigsBucket(),
             `ingest-domain/${fileName}`,
             JSON.stringify(config),
             { contentType: 'application/json' },
@@ -193,8 +193,8 @@ export const createIngestEndpointEnvironment = async (
         { forceCreate: fixedId !== undefined },
     );
 
-    await getStorageBackend().put(
-        await config.getGCConfigsBucket(),
+    await getStorageBackend().setAsString(
+        await config.getConfigsBucket(),
         `ingest-endpoint/storage-provider-config-${ingestEndpointEnvironment.id}.json`,
         JSON.stringify(providerConfig.config),
         { contentType: 'application/json' },

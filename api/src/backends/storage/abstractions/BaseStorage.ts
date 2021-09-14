@@ -20,12 +20,12 @@ export default abstract class BaseStorage {
         }
     }
 
-    public abstract put(
+    public abstract setAsString(
         bucketName: string,
         key: string,
-        blob: any,
+        config: string,
         options?: StorageOptions,
     ): Promise<void>;
 
-    public abstract get(bucketName: string, key: string): Promise<any>;
+    public abstract getAsString(bucketName: string, key: string): Promise<string>;
 }

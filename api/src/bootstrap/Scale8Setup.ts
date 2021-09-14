@@ -130,8 +130,8 @@ export default class Scale8Setup {
                 await Promise.all(
                     Array.from(assets).map(async (value) => {
                         const [fileName] = value;
-                        return this.backendStorage.put(
-                            await this.config.getGCAssetBucket(),
+                        return this.backendStorage.setAsString(
+                            await this.config.getAssetBucket(),
                             `${revision.platformId.toString()}/${revision.id.toString()}-${fileName}`,
                             fs.readFileSync(`${buildsPath}/${build}/${fileName}`, 'utf8'),
                             {

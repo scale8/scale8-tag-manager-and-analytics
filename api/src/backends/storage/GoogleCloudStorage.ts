@@ -20,8 +20,8 @@ export default class GoogleCloudStorage extends BaseStorage {
     }
 
     public async configure(): Promise<void> {
-        await this.createBucketIfNotExists(await this.config.getGCAssetBucket());
-        await this.createBucketIfNotExists(await this.config.getGCConfigsBucket());
+        await this.createBucketIfNotExists(await this.config.getAssetBucket());
+        await this.createBucketIfNotExists(await this.config.getConfigsBucket());
     }
 
     public async bucketExists(bucketName: string): Promise<boolean> {
@@ -39,15 +39,15 @@ export default class GoogleCloudStorage extends BaseStorage {
         });
     }
 
-    public async get(bucketName: string, key: string): Promise<any> {
+    public async getAsString(bucketName: string, key: string): Promise<any> {
         const data = await (await this.getStorage()).bucket(bucketName).file(key).download();
         return data[0];
     }
 
-    public async put(
+    public async setAsString(
         bucketName: string,
         key: string,
-        blob: any,
+        content: string,
         options?: StorageOptions,
     ): Promise<void> {
         await (
@@ -55,7 +55,7 @@ export default class GoogleCloudStorage extends BaseStorage {
         )
             .bucket(bucketName)
             .file(key)
-            .save(blob, {
+            .save(content, {
                 contentType: options?.contentType || this.DEFAULT_MIME_TYPE,
             });
     }

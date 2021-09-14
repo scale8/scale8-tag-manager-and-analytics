@@ -21,7 +21,7 @@ export const uploadCertificate = async (
         })
     ) {
         const upload = async (uri: string, data: string) =>
-            storage.put(await config.getGCConfigsBucket(), uri, data, {
+            storage.setAsString(await config.getConfigsBucket(), uri, data, {
                 contentType: 'text/plain',
             });
 
