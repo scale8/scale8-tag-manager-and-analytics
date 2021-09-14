@@ -38,7 +38,6 @@ export default class User extends Model {
     @Field<string>({
         required: true,
         exposeToGQLAs: 'api_token',
-        defaultValue: () => Hash.randomHash(),
     })
     private _api_token!: string;
 
@@ -120,8 +119,9 @@ export default class User extends Model {
     constructor(
         firstName: string,
         lastName: string,
-        password: string,
+        passwordHash: string,
         email: string,
+        apiToken: string,
         sessions: Session[] = [],
         canManageOrgs = false,
         isAdmin = false,
@@ -133,10 +133,9 @@ export default class User extends Model {
         super();
         this._first_name = firstName;
         this._last_name = lastName;
-        if (password !== undefined) {
-            this.password = password;
-        }
+        this._password = passwordHash;
         this._email = email;
+        this._api_token = apiToken;
         this._sessions = sessions;
         this._temp_sessions = tempSessions;
         this._can_manage_orgs = canManageOrgs;
@@ -147,8 +146,8 @@ export default class User extends Model {
         this._can_create_data_manager_trial = canCreateDataManagerTrial;
     }
 
-    public resetAPIToken(): void {
-        this._api_token = Hash.randomHash();
+    public resetAPIToken(salt: string): void {
+        this._api_token = Hash.randomHash(salt);
     }
 
     get firstName(): string {
@@ -171,8 +170,8 @@ export default class User extends Model {
         return this._password;
     }
 
-    set password(value: string) {
-        this._password = Hash.hashString(value);
+    setPassword(value: string, salt: string) {
+        this._password = Hash.hashString(value, salt);
     }
 
     get email(): string {
@@ -289,9 +288,5 @@ export default class User extends Model {
 
     set canCreateDataManagerTrial(value: boolean) {
         this._can_create_data_manager_trial = value;
-    }
-
-    setPasswordHash(hash: string) {
-        this._password = hash;
     }
 }

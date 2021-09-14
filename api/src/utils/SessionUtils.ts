@@ -8,6 +8,7 @@ import TYPES from '../container/IOC.types';
 import AuthenticationError from '../errors/AuthenticationError';
 import userMessages from '../errors/UserMessages';
 import { ObjectID } from 'mongodb';
+import BaseConfig from '../backends/configuration/abstractions/BaseConfig';
 
 export type SessionData = {
     uid: string;
@@ -15,10 +16,15 @@ export type SessionData = {
     isTemp: boolean;
 };
 
+export const generateSessionToken = async (): Promise<string> => {
+    const config = container.get<BaseConfig>(TYPES.BackendConfig);
+    return Hash.randomHash(await config.getEncryptionSalt());
+};
+
 export const generateNewSession = async (user: User, isTemp = false): Promise<SessionData> => {
     const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
 
-    const session = new Session(Hash.randomHash());
+    const session = new Session(await generateSessionToken());
     if (isTemp) {
         user.tempSessions === undefined
             ? (user.tempSessions = [session])
@@ -38,11 +44,12 @@ export const generateNewSession = async (user: User, isTemp = false): Promise<Se
 
 export const createSession = async (email: string, password: string): Promise<SessionData> => {
     const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
+    const config = container.get<BaseConfig>(TYPES.BackendConfig);
 
     const user = await repoFactory(User).findOneThrows(
         {
             _email: email,
-            _password: Hash.hashString(password),
+            _password: Hash.hashString(password, await config.getEncryptionSalt()),
         },
         undefined,
         undefined,
