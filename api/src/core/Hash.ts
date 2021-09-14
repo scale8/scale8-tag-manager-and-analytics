@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 
 export default class Hash {
-    public static hashString(str: string, salt = ''): string {
+    public static hashString(str: string, salt: string): string {
         return crypto
             .createHash('sha512')
             .update(str + salt)
@@ -22,7 +22,7 @@ export default class Hash {
         );
     }
 
-    public static randomHash(salt = 's8s4ltysug4r'): string {
+    public static randomHash(salt: string): string {
         return this.hashString(
             crypto.randomBytes(20).toString('hex') +
                 crypto.randomBytes(20).toString('hex') +

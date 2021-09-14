@@ -1,12 +1,10 @@
 import Model from '../abstractions/Model';
 import Field from '../decorators/Field';
-import Hash from '../../core/Hash';
 
 export default class Session extends Model {
     @Field<string>({
         required: true,
         exposeToGQLAs: 'token',
-        defaultValue: () => Hash.randomHash(),
     })
     private _token: string;
 

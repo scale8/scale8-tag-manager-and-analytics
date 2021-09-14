@@ -145,6 +145,10 @@ const userMessages = {
         `Failed when trying to create the new data set '${dataset}' as it does not currently exist.`,
     datasetVerificationFailure: (dataset: string) =>
         `Unable to verify data set '${dataset}' exists. Please check the service account details provided have the correct permissions.`,
+    mongoConnectionStringVerificationFailure: (connectionString: string) =>
+        `Unable to connect with: '${connectionString}'.`,
+    mongoDatabaseVerificationFailure: (databaseName: string) =>
+        `Unable to access to: '${databaseName}'. Please check that the user specified have the correct permissions.`,
     incompatibleRevisions: 'Incompatible revisions.',
     cannotFindAccount: (accountType: string) =>
         `Cannot find a ${accountType} account for this Org.`,
