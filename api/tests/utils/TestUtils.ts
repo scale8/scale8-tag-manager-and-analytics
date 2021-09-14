@@ -108,7 +108,7 @@ export default class TestUtils {
     }
 
     public static buildMockUser(id = '5edf4c48e9615d9a1c66baaa'): User {
-        const m = new User('FirstName', 'LastName', 'password', 'test@mail.com', []);
+        const m = new User('FirstName', 'LastName', 'password', 'test@mail.com', 'apiToken', []);
         return TestUtils.addModelFields<User>(m, id);
     }
 

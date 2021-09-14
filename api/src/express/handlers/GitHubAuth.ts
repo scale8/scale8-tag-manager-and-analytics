@@ -5,7 +5,6 @@ import { inject, injectable } from 'inversify';
 import TYPES from '../../container/IOC.types';
 import UserRepo from '../../mongo/repos/UserRepo';
 import Handler from './abstractions/Handler';
-import Hash from '../../core/Hash';
 import Session from '../../mongo/models/Session';
 import GitHub from '../../mongo/models/GitHub';
 import OperationOwner from '../../enums/OperationOwner';
@@ -14,6 +13,7 @@ import BaseConfig from '../../backends/configuration/abstractions/BaseConfig';
 import GenericError from '../../errors/GenericError';
 import userMessages from '../../errors/UserMessages';
 import { LogPriority } from '../../enums/LogPriority';
+import { generateSessionToken } from '../../utils/SessionUtils';
 
 @injectable()
 export default class GitHubAuth extends Handler {
@@ -75,7 +75,7 @@ export default class GitHubAuth extends Handler {
                     const user = await this.userRepo.findOne({
                         '_github._user_id': id,
                     });
-                    const sessionToken = Hash.randomHash();
+                    const sessionToken = await generateSessionToken();
 
                     if (user === null) {
                         const requestingUser = await this.userRepo.findOne({
