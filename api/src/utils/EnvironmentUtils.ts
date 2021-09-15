@@ -299,7 +299,6 @@ export const createEnvironment = async (
     customDomainCert?: string,
     customDomainKey?: string,
     environmentVariables: EnvironmentVariable[] = [],
-    fixedEnvironmentId?: ObjectID,
     comments?: string,
 ): Promise<Environment> => {
     const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
@@ -336,13 +335,9 @@ export const createEnvironment = async (
         environmentVariables,
         await getCustomDomain(),
     );
-    if (fixedEnvironmentId !== undefined) {
-        environment['_id'] = fixedEnvironmentId;
-    }
     environment = await repoFactory(Environment).save(environment, actor, OperationOwner.USER, {
         gqlMethod: GQLMethod.CREATE,
         userComments: comments,
-        forceCreate: fixedEnvironmentId !== undefined,
     });
     await createCname(environment);
     await buildConfig(environment);

@@ -33,6 +33,10 @@ export default abstract class BaseConfig {
         }
     }
 
+    public getStorageBackend(): string {
+        return BaseConfig.getFromEnvVarOrElse('STORAGE_BACKEND', 'mongodb');
+    }
+
     public getMode(): Mode {
         const mode = BaseConfig.getFromEnvVarOrElse('SERVER_MODE', Mode.SELF_HOSTED);
         return mode === Mode.COMMERCIAL ? Mode.COMMERCIAL : Mode.SELF_HOSTED;

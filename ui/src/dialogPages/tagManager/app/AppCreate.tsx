@@ -15,6 +15,19 @@ export type AppValues = {
     name: string;
     domain: string;
     type: AppType;
+    analyticsEnabled?: boolean;
+    errorTrackingEnabled?: boolean;
+    storageProvider?: string;
+    bucketName?: string;
+    accessKeyId?: string;
+    secretAccessKey?: string;
+    region?: string;
+    pathPrefix?: string;
+    serviceAccountJSON?: string;
+    dataSetName?: string;
+    requirePartitionFilterInQueries?: boolean;
+    connectionString?: string;
+    databaseName?: string;
 };
 
 export type AppFormProps = FormProps<AppValues> & {

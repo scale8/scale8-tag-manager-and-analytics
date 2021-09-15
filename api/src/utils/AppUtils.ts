@@ -4,7 +4,6 @@ import User from '../mongo/models/User';
 import IngestEndpointEnvironment from '../mongo/models/data/IngestEndpointEnvironment';
 import { createUsageEndpointEnvironment } from './IngestEndpointEnvironmentUtils';
 import TagManagerAccount from '../mongo/models/tag/TagManagerAccount';
-import { ObjectID } from 'mongodb';
 import Platform from '../mongo/models/tag/Platform';
 import userMessages from '../errors/UserMessages';
 import AppPlatform from '../mongo/models/tag/AppPlatform';
@@ -28,6 +27,8 @@ import { AppType } from '../enums/AppType';
 import { ActionGroupDistributionType } from '../enums/ActionGroupDistributionType';
 import { SortDirection } from '../enums/SortDirection';
 import { TagType } from '../enums/TagType';
+import { StorageProvider } from '../enums/StorageProvider';
+import { StorageProviderConfig } from '../mongo/types/Types';
 
 const createAppUsageEndpointEnvironment = async (
     org: Org,
@@ -209,10 +210,10 @@ export const createApp = async (
     name: string,
     domain: string,
     type: AppType,
-    appId?: ObjectID,
-    appRevisionId?: ObjectID,
-    appEnvironmentId?: ObjectID,
-    appEnvironmentUrl?: string,
+    provider: StorageProvider,
+    providerConfig: StorageProviderConfig,
+    analyticsEnabled: boolean,
+    errorTrackingEnabled: boolean,
 ): Promise<App> => {
     const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
 
@@ -225,12 +226,8 @@ export const createApp = async (
     );
 
     let app = new App(name, tagManagerAccount, domain, type, [new AppPlatform(corePlatform)]);
-    if (appId !== undefined) {
-        app['_id'] = appId;
-    }
     app = await repoFactory(App).save(app, actor, OperationOwner.USER, {
         gqlMethod: GQLMethod.CREATE,
-        forceCreate: appId !== undefined,
     });
 
     //we need to create an ingest endpoint environment to track usage...
@@ -244,13 +241,9 @@ export const createApp = async (
 
     //create first revision...
     let revision = new Revision('Revision 1', app);
-    if (appRevisionId !== undefined) {
-        revision['_id'] = appRevisionId;
-    }
     revision = await repoFactory(Revision).save(revision, actor, OperationOwner.USER, {
         gqlMethod: GQLMethod.CREATE,
         userComments: 'Auto-generated the first revision for the App',
-        forceCreate: appRevisionId !== undefined,
     });
 
     //create a global trigger...
@@ -312,12 +305,11 @@ export const createApp = async (
         app,
         'Production',
         revision,
-        typeof appEnvironmentUrl === 'string' ? appEnvironmentUrl : `https://${domain}`,
+        `https://${domain}`,
         undefined,
         undefined,
         undefined,
         [],
-        appEnvironmentId,
     );
 
     //finally clone first revision ready for editing...

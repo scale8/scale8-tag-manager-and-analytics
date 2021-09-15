@@ -1,5 +1,5 @@
 import IngestEndpointEnvironment from '../mongo/models/data/IngestEndpointEnvironment';
-import { ObjectID } from 'mongodb';
+import { MongoClient, ObjectID } from 'mongodb';
 import User from '../mongo/models/User';
 import IngestEndpoint from '../mongo/models/data/IngestEndpoint';
 import IngestEndpointRevision from '../mongo/models/data/IngestEndpointRevision';
@@ -25,6 +25,9 @@ import BaseStorage from '../backends/storage/abstractions/BaseStorage';
 import BaseConfig from '../backends/configuration/abstractions/BaseConfig';
 import BaseDatabase from '../backends/databases/abstractions/BaseDatabase';
 import { createCname } from './EnvironmentUtils';
+import { BigQuery } from '@google-cloud/bigquery';
+import Hash from '../core/Hash';
+import S3Service from '../aws/S3Service';
 
 export const getIngestEndpointCNAME = (ingestEndpointEnvironmentId: ObjectID | string): string => {
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
@@ -202,6 +205,127 @@ export const createIngestEndpointEnvironment = async (
     await createCname(ingestEndpointEnvironment);
     await buildIngestEndpointConfig(ingestEndpointEnvironment);
     return ingestEndpointEnvironment;
+};
+
+const getAwsS3ProviderConfig = async (awsStorageConfig: any) => {
+    const s3Service = container.get<S3Service>(TYPES.S3Service);
+    //we need to test AWS setup is correct...
+    const s3 = s3Service.getS3Client(
+        awsStorageConfig.access_key_id,
+        awsStorageConfig.secret_access_key,
+        awsStorageConfig.region,
+    );
+    if (!(await s3Service.bucketExists(s3, awsStorageConfig.bucket_name))) {
+        throw new GQLError(userMessages.awsNoBucket(awsStorageConfig.bucket_name), true);
+    }
+    if (!(await s3Service.isWriteable(s3, awsStorageConfig.bucket_name))) {
+        throw new GQLError(userMessages.awsBucketCantWrite(awsStorageConfig.bucket_name), true);
+    }
+    return {
+        config: awsStorageConfig,
+        hint: `Using AWS Access Key: ${awsStorageConfig.access_key_id}`,
+    };
+};
+
+const getBigQueryProviderConfig = async (bigqueryStreamConfig: any) => {
+    if (typeof bigqueryStreamConfig.service_account_json !== 'object') {
+        throw new GQLError(userMessages.invalidServiceAccount, true);
+    }
+
+    const bq = new BigQuery({
+        projectId: bigqueryStreamConfig.service_account_json.project_id,
+        credentials: {
+            client_email: bigqueryStreamConfig.service_account_json.client_email,
+            private_key: bigqueryStreamConfig.service_account_json.private_key,
+        },
+    });
+
+    const dataset = bigqueryStreamConfig.data_set_name;
+    const datasetLocation = bigqueryStreamConfig.data_set_location;
+
+    try {
+        //check dataset exists. if not attempt to create it...
+        const [exists] = await bq.dataset(dataset).exists();
+        if (!exists) {
+            try {
+                await bq.createDataset(dataset, {
+                    location: datasetLocation,
+                });
+            } catch (e) {
+                // is rethrown if of type GQLError
+                // noinspection ExceptionCaughtLocallyJS
+                throw new GQLError(userMessages.datasetFailure(dataset), true);
+            }
+        }
+    } catch (e) {
+        if (e instanceof GQLError) {
+            throw e;
+        } else {
+            throw new GQLError(userMessages.datasetVerificationFailure(dataset), true);
+        }
+    }
+
+    return {
+        config: bigqueryStreamConfig,
+        hint: `Using GC Service Account: ${bigqueryStreamConfig.service_account_json.client_email}`,
+    };
+};
+
+const getMongoDbProviderConfig = async (mongoPushConfig: any) => {
+    const getMongoConnection = async () => {
+        try {
+            const client = new MongoClient(mongoPushConfig.connection_string, {
+                useNewUrlParser: true,
+            });
+            return await client.connect();
+        } catch (e) {
+            throw new GQLError(
+                userMessages.mongoConnectionStringVerificationFailure(
+                    mongoPushConfig.connection_string,
+                ),
+                true,
+            );
+        }
+    };
+
+    const connection = await getMongoConnection();
+
+    try {
+        const database = connection.db(mongoPushConfig.database_name);
+
+        await database
+            .collection(`s8_${Hash.shortRandomHash()}_verification`)
+            .insertOne({ s8: true });
+    } catch (e) {
+        throw new GQLError(
+            userMessages.mongoDatabaseVerificationFailure(mongoPushConfig.database_name),
+            true,
+        );
+    } finally {
+        connection.close(true).then();
+    }
+    return {
+        config: mongoPushConfig,
+        hint: `Using MongoDB database: ${mongoPushConfig.database_name}`,
+    };
+};
+
+export const getProviderConfig = async (data: any): Promise<StorageProviderConfig> => {
+    if (data.storage_provider === StorageProvider.AWS_S3 && data.aws_storage_config !== undefined) {
+        return await getAwsS3ProviderConfig(data.aws_storage_config);
+    } else if (
+        data.storage_provider === StorageProvider.GC_BIGQUERY_STREAM &&
+        data.gc_bigquery_stream_config !== undefined
+    ) {
+        return await getBigQueryProviderConfig(data.gc_bigquery_stream_config);
+    } else if (
+        data.storage_provider === StorageProvider.MONGODB &&
+        data.mongo_push_config !== undefined
+    ) {
+        return await getMongoDbProviderConfig(data.mongo_push_config);
+    } else {
+        throw new GQLError(userMessages.noStorageProvider, true);
+    }
 };
 
 export const createUsageEndpointEnvironment = async (

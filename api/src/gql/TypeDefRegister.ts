@@ -491,6 +491,68 @@ export default class TypeDefRegister {
             }
 
             """
+            In order to use AWS as your storage engine, you will need to create an AWS account and create a new service account for Scale8. Please see our documentation on how to configure this.
+            """
+            input AWSStorageConfig {
+                """
+                Your AWS access key. We recommend following our tutorial and creating Scale8 credentials to be used with the region / bucket selected only. We only require the ability to list and add files. We never require the ability to read your data.
+                """
+                access_key_id: String!
+                """
+                Your AWS secret key.
+                """
+                secret_access_key: String!
+                """
+                The AWS region in which you want the data to be placed and your bucket has been created.
+                """
+                region: AWSRegion!
+                """
+                An optional path prefix. By default the path prefix is '/'
+                """
+                path_prefix: String = "/"
+                """
+                The name of the storage bucket currently in use
+                """
+                bucket_name: String!
+            }
+
+            """
+            BigQuery stream configuration required a Google Cloud Services account to be setup and configured. PLease follow our guide and configure this properly before attempting to use this service.
+            """
+            input GCBigQueryStreamConfig {
+                """
+                Service Account JSON for Google Cloud's BigQuery administrative role.
+                """
+                service_account_json: JSON!
+                """
+                The 'Data Set' under which a new table will be created.
+                """
+                data_set_name: String!
+                """
+                The location of the data set, if it doesn't exist, we'll try and create it using the location specified
+                """
+                data_set_location: String = "US"
+                """
+                If this is set to true, a WHERE clause will be required when querying data in order to reduce costs. See BigQuery documentation for more details.
+                """
+                require_partition_filter_in_queries: Boolean = false
+            }
+
+            """
+            In order to use MongoDB as your storage engine, you just need to provide connection string and database name.
+            """
+            input MongoDbPushConfig {
+                """
+                Your MongoDB server connection string.
+                """
+                connection_string: String!
+                """
+                The name of the database that will store your data
+                """
+                database_name: String!
+            }
+
+            """
             @union
             """
             union DefaultValue = DefaultValueContainer | DefaultValueContainerArray

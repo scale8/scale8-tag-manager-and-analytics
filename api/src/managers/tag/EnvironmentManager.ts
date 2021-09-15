@@ -402,7 +402,6 @@ export default class EnvironmentManager extends Manager<Environment> {
                     this.config.isCommercial() ? data.cert_pem : undefined,
                     this.config.isCommercial() ? data.key_pem : undefined,
                     environmentVariables,
-                    undefined,
                     data.comments,
                 );
                 return environment.toGQLType();

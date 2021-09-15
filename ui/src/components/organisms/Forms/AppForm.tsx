@@ -4,6 +4,8 @@ import DrawerFormLayout from '../../molecules/DrawerFormLayout';
 import { Box, Checkbox, Divider, FormControlLabel, useTheme } from '@material-ui/core';
 import Loader from '../Loader';
 import { AppFormProps } from '../../../dialogPages/tagManager/app/AppCreate';
+import StorageProviderSelector from '../../molecules/StorageProviderSelector';
+import ControlledBooleanSelect from '../../atoms/ControlledInputs/ControlledBooleanSelect';
 
 const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
     const theme = useTheme();
@@ -62,7 +64,7 @@ const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
                                 color="primary"
                             />
                         }
-                        label="Use domain as Application name?"
+                        label="Use domain as Application name"
                     />
                     {!useDomainName && (
                         <ControlledTextInput
@@ -72,6 +74,23 @@ const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
                             className="DrawerFormField"
                             required
                         />
+                    )}
+                    <ControlledBooleanSelect
+                        label="Enable Analytics"
+                        name="analyticsEnabled"
+                        formProps={props}
+                        className="DrawerFormField"
+                        required
+                    />
+                    <ControlledBooleanSelect
+                        label="Enable Error Tracking"
+                        name="errorTrackingEnabled"
+                        className="DrawerFormField"
+                        formProps={props}
+                        required
+                    />
+                    {(values.errorTrackingEnabled || values.analyticsEnabled) && (
+                        <StorageProviderSelector {...props} />
                     )}
                 </DrawerFormLayout>
             )}

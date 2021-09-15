@@ -15,6 +15,7 @@ import DataError from '../../errors/DataError';
 import userMessages from '../../errors/UserMessages';
 import { createApp } from '../../utils/AppUtils';
 import BaseDatabase from '../../backends/databases/abstractions/BaseDatabase';
+import { getProviderConfig } from '../../utils/IngestEndpointEnvironmentUtils';
 
 @injectable()
 export default class AppManager extends Manager<App> {
@@ -235,6 +236,30 @@ export default class AppManager extends Manager<App> {
             The type of \`App\` to be created
             """
             type: AppType!
+            """
+            The storage provider to be used by the \`IngestEndpointEnvironment\` to store ingested data
+            """
+            storage_provider: StorageProvider!
+            """
+            The AWS specific configuration linked to this new \`IngestEndpointEnvironment\`
+            """
+            aws_storage_config: AWSStorageConfig
+            """
+            The Google Cloud BigQuery Stream specific configuration linked to this new \`IngestEndpointEnvironment\`
+            """
+            gc_bigquery_stream_config: GCBigQueryStreamConfig
+            """
+            The MongoDB specific configuration linked to this new \`IngestEndpointEnvironment\`
+            """
+            mongo_push_config: MongoDbPushConfig
+            """
+            If the analytics on the \`App\` should be enabled
+            """
+            analytics_enabled: Boolean!
+            """
+            If the error tracking on the \`App\` should be enabled
+            """
+            error_tracking_enabled: Boolean!
         }
 
         input AppDeleteInput {
@@ -260,6 +285,30 @@ export default class AppManager extends Manager<App> {
             \`App\`'s domain name
             """
             domain: String
+            """
+            The storage provider to be used by the \`IngestEndpointEnvironment\` to store ingested data
+            """
+            storage_provider: StorageProvider!
+            """
+            The AWS specific configuration linked to this new \`IngestEndpointEnvironment\`
+            """
+            aws_storage_config: AWSStorageConfig
+            """
+            The Google Cloud BigQuery Stream specific configuration linked to this new \`IngestEndpointEnvironment\`
+            """
+            gc_bigquery_stream_config: GCBigQueryStreamConfig
+            """
+            The MongoDB specific configuration linked to this new \`IngestEndpointEnvironment\`
+            """
+            mongo_push_config: MongoDbPushConfig
+            """
+            If the analytics on the \`App\` should be enabled
+            """
+            analytics_enabled: Boolean!
+            """
+            If the error tracking on the \`App\` should be enabled
+            """
+            error_tracking_enabled: Boolean!
         }
 
         input AppInstallPlatformInput {
@@ -350,6 +399,7 @@ export default class AppManager extends Manager<App> {
         },
         createApp: async (parent: any, args: any, ctx: CTX) => {
             const data = args.appCreateInput;
+            const providerConfig = await getProviderConfig(data);
             const tagManagerAccount = await this.repoFactory(TagManagerAccount).findByIdThrows(
                 new ObjectId(data.tag_manager_account_id),
                 userMessages.accountFailed,
@@ -363,7 +413,17 @@ export default class AppManager extends Manager<App> {
                     throw new DataError(userMessages.maxApps, true);
                 }
                 return (
-                    await createApp(me, tagManagerAccount, data.name, data.domain, data.type)
+                    await createApp(
+                        me,
+                        tagManagerAccount,
+                        data.name,
+                        data.domain,
+                        data.type,
+                        data.storage_provider,
+                        providerConfig,
+                        data.analytics_enabled,
+                        data.error_tracking_enabled,
+                    )
                 ).toGQLType();
             });
         },

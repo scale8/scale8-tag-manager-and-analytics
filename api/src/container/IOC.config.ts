@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { Container } from 'inversify';
+import { Container, interfaces } from 'inversify';
 import TYPES from './IOC.types';
 import UserManager from '../managers/UserManager';
 import ResolverRegister from '../gql/ResolverRegister';
@@ -148,14 +148,38 @@ import ConsoleLogger from '../backends/logging/ConsoleLogger';
 import BaseConfig from '../backends/configuration/abstractions/BaseConfig';
 import EnvironmentConfig from '../backends/configuration/EnvironmentConfig';
 import MongoDb from '../backends/databases/MongoDb';
+import AmazonS3Storage from '../backends/storage/AmazonS3Storage';
+import GoogleCloudStorage from '../backends/storage/GoogleCloudStorage';
+import Context = interfaces.Context;
 
 const container = new Container();
 
 //bind first, this is a core dep, with no further dependencies...
 container.bind<Shell>(TYPES.Shell).to(Shell).inSingletonScope();
 
+container.bind<AmazonS3Storage>(TYPES.AmazonS3Storage).to(AmazonS3Storage).inSingletonScope();
+container
+    .bind<GoogleCloudStorage>(TYPES.GoogleCloudStorage)
+    .to(GoogleCloudStorage)
+    .inSingletonScope();
+container.bind<MongoDBStorage>(TYPES.MongoDBStorage).to(MongoDBStorage).inSingletonScope();
+
 //pluggable
-container.bind<BaseStorage>(TYPES.BackendStorage).to(MongoDBStorage).inSingletonScope();
+container
+    .bind<BaseStorage>(TYPES.BackendStorage)
+    .toDynamicValue((context: Context) => {
+        const config = context.container.get<BaseConfig>(TYPES.BackendConfig);
+        const storageBackend = config.getStorageBackend();
+        if (storageBackend === 's3') {
+            return context.container.get<AmazonS3Storage>(TYPES.AmazonS3Storage);
+        } else if (storageBackend === 'google') {
+            return context.container.get<GoogleCloudStorage>(TYPES.GoogleCloudStorage);
+        } else {
+            return context.container.get<MongoDBStorage>(TYPES.MongoDBStorage);
+        }
+    })
+    .inSingletonScope();
+
 container.bind<BaseDatabase>(TYPES.BackendDatabase).to(MongoDb).inSingletonScope();
 container.bind<BaseLogger>(TYPES.BackendLogger).to(ConsoleLogger).inSingletonScope();
 container.bind<BaseEmail>(TYPES.BackendEmail).to(Mailer).inSingletonScope();
