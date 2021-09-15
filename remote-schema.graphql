@@ -3215,6 +3215,8 @@ enum SignUpType {
 enum StorageProvider {
     "*Aws S3*"
     AWS_S3
+    "*Clickhouse*"
+    CLICKHOUSE
     "*Gc Bigquery Stream*"
     GC_BIGQUERY_STREAM
     "*Mongodb*"
@@ -4590,6 +4592,18 @@ input ChangePasswordInput {
     old_password: String
 }
 
+"In order to use ClickHouse as your storage engine, you just need to provide connection details and credentials."
+input ClickHouseStreamConfig {
+    "Your ClickHouse basicAuth password."
+    password: String!
+    "Your ClickHouse server port."
+    port: Int!
+    "Your ClickHouse server url."
+    url: String!
+    "Your ClickHouse basicAuth username."
+    username: String!
+}
+
 input CompleteSignUpInput {
     sign_up_type: SignUpType!
     token: String!
@@ -4923,6 +4937,8 @@ input IngestEndpointEnvironmentCreateInput {
     aws_storage_config: AWSStorageConfig
     "If a custom domain is provided, a certificate is required to handle secure web traffic"
     cert_pem: String
+    "The ClickHouse specific configuration linked to this new `IngestEndpointEnvironment`"
+    clickhouse_stream_config: ClickHouseStreamConfig
     "A custom domain name to be associated with this `IngestEndpointEnvironment`"
     custom_domain: String
     "The Google Cloud BigQuery Stream specific configuration linked to this new `IngestEndpointEnvironment`"

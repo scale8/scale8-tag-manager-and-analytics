@@ -149,6 +149,8 @@ const userMessages = {
         `Unable to connect with: '${connectionString}'.`,
     mongoDatabaseVerificationFailure: (databaseName: string) =>
         `Unable to access to: '${databaseName}'. Please check that the user specified have the correct permissions.`,
+    clickHouseServerVerificationFailure: (url: string) =>
+        `Unable to connect with: '${url}'.`,
     incompatibleRevisions: 'Incompatible revisions.',
     cannotFindAccount: (accountType: string) =>
         `Cannot find a ${accountType} account for this Org.`,

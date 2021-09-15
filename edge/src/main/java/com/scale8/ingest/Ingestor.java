@@ -22,6 +22,8 @@ import java.util.stream.Collectors;
 @Singleton
 public class Ingestor {
 
+  @Inject StreamToClickHouse streamToClickHouse;
+
   @Inject StreamToBigQuery streamToBigQuery;
 
   @Inject PushToMongoDb pushToMongoDb;
@@ -114,6 +116,9 @@ public class Ingestor {
                             switch (storageProvider) {
                               case "MONGODB":
                                 pushToMongoDb.push(ingestSettings, job.y);
+                                return Either.<Boolean, Exception>left(true);
+                              case "CLICKHOUSE":
+                                streamToClickHouse.push(ingestSettings, job.y);
                                 return Either.<Boolean, Exception>left(true);
                               case "GC_BIGQUERY_STREAM":
                                 streamToBigQuery.push(ingestSettings, job.y);

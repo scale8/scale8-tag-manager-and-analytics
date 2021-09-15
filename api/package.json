@@ -54,6 +54,7 @@
         "aws-sdk": "2.738.0",
         "body-parser": "^1.19.0",
         "browserslist": "^4.16.5",
+        "clickhouse": "^2.4.1",
         "colors": "^1.4.0",
         "colorts": "^0.1.63",
         "date-fns": "^2.21.2",

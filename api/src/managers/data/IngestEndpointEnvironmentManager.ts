@@ -23,6 +23,7 @@ import { StorageProvider } from '../../enums/StorageProvider';
 import BaseDatabase from '../../backends/databases/abstractions/BaseDatabase';
 import { withUnManagedAccount } from '../../utils/DataManagerAccountUtils';
 import Hash from '../../core/Hash';
+import { ClickHouse } from 'clickhouse';
 
 @injectable()
 export default class IngestEndpointEnvironmentManager extends Manager<IngestEndpointEnvironment> {
@@ -91,6 +92,28 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
             The name of the database that will store your data
             """
             database_name: String!
+        }
+
+        """
+        In order to use ClickHouse as your storage engine, you just need to provide connection details and credentials.
+        """
+        input ClickHouseStreamConfig {
+            """
+            Your ClickHouse server url.
+            """
+            url: String!
+            """
+            Your ClickHouse server port.
+            """
+            port: Int!
+            """
+            Your ClickHouse basicAuth username.
+            """
+            username: String!
+            """
+            Your ClickHouse basicAuth password.
+            """
+            password: String!
         }
 
         """
@@ -192,6 +215,10 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
             The MongoDB specific configuration linked to this new \`IngestEndpointEnvironment\`
             """
             mongo_push_config: MongoDbPushConfig
+            """
+            The ClickHouse specific configuration linked to this new \`IngestEndpointEnvironment\`
+            """
+            clickhouse_stream_config: ClickHouseStreamConfig
         }
 
         """
@@ -402,6 +429,13 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
                             return await IngestEndpointEnvironmentManager.getMongoDbProviderConfig(
                                 data.mongo_push_config,
                             );
+                        } else if (
+                            data.storage_provider === StorageProvider.CLICKHOUSE &&
+                            data.clickhouse_stream_config !== undefined
+                        ) {
+                            return await IngestEndpointEnvironmentManager.getClickHouseProviderConfig(
+                                data.clickhouse_stream_config,
+                            );
                         } else {
                             throw new GQLError(userMessages.noStorageProvider, true);
                         }
@@ -601,6 +635,35 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
         return {
             config: mongoPushConfig,
             hint: `Using MongoDB database: ${mongoPushConfig.database_name}`,
+        };
+    }
+
+    private static async getClickHouseProviderConfig(clickhouseStreamConfig: any) {
+        const clickhouse = new ClickHouse({
+            url: clickhouseStreamConfig.url,
+            port: clickhouseStreamConfig.port,
+            debug: false,
+            basicAuth: {
+                username: clickhouseStreamConfig.username,
+                password: clickhouseStreamConfig.password,
+            },
+            isUseGzip: false,
+            format: 'json',
+            raw: false,
+        });
+
+        try {
+            await clickhouse.query('show databases').toPromise();
+        } catch (e) {
+            throw new GQLError(
+                userMessages.clickHouseServerVerificationFailure(clickhouseStreamConfig.url),
+                true,
+            );
+        }
+
+        return {
+            config: clickhouseStreamConfig,
+            hint: `Using ClickHouse Server At: ${clickhouseStreamConfig.url}`,
         };
     }
 }
