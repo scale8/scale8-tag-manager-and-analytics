@@ -4498,10 +4498,22 @@ input AddChildrenIngestEndpointDataMapsInput {
 }
 
 input AppCreateInput {
+    "If the analytics on the `App` should be enabled"
+    analytics_enabled: Boolean!
+    "The AWS specific configuration linked to this new `App`"
+    aws_storage_config: AWSStorageConfig
     "`App`'s domain name"
     domain: String!
+    "If the error tracking on the `App` should be enabled"
+    error_tracking_enabled: Boolean!
+    "The Google Cloud BigQuery Stream specific configuration linked to this new `App`"
+    gc_bigquery_stream_config: ManagedGCBigQueryStreamConfig
+    "The MongoDB specific configuration linked to this new `App`"
+    mongo_push_config: MongoDbPushConfig
     "The name of the new `App` being created"
     name: String!
+    "The storage provider to be used by the `App` to store analytics data"
+    storage_provider: StorageProvider
     "The `TagManagerAccount` under which the `App` should be created"
     tag_manager_account_id: ID!
     "The type of `App` to be created"
@@ -4568,12 +4580,24 @@ input AppQueryOptions {
 
 "Update an `App`'s properties. Please note that `AppType` can't be changed once a tag has been created."
 input AppUpdateInput {
+    "If the analytics on the `App` should be enabled"
+    analytics_enabled: Boolean!
     "`App` ID to update data against"
     app_id: ID!
+    "The AWS specific configuration linked to this new `App`"
+    aws_storage_config: AWSStorageConfig
     "`App`'s domain name"
     domain: String
+    "If the error tracking on the `App` should be enabled"
+    error_tracking_enabled: Boolean!
+    "The Google Cloud BigQuery Stream specific configuration linked to this new `App`"
+    gc_bigquery_stream_config: ManagedGCBigQueryStreamConfig
+    "The MongoDB specific configuration linked to this new `App`"
+    mongo_push_config: MongoDbPushConfig
     "`App` name"
     name: String
+    "The storage provider to be used by the `App` to store analytics data"
+    storage_provider: StorageProvider
 }
 
 input BillingPortalInput {
@@ -4866,10 +4890,20 @@ input IngestEndpointAddIngestEndpointDataMapsInput {
 
 "Data structure for creating a new `IngestEndpoint`. This new entity is then used to contain both revisions and environments."
 input IngestEndpointCreateInput {
+    "If the analytics on the `App` should be enabled"
+    analytics_enabled: Boolean!
+    "The AWS specific configuration linked to this new `App`"
+    aws_storage_config: AWSStorageConfig
     "The `DataManagerAccount` under which the `IngestEndpoint` should be created"
     data_manager_account_id: ID!
+    "The Google Cloud BigQuery Stream specific configuration linked to this new `App`"
+    gc_bigquery_stream_config: ManagedGCBigQueryStreamConfig
+    "The MongoDB specific configuration linked to this new `App`"
+    mongo_push_config: MongoDbPushConfig
     "The name of the new `IngestEndpoint` being created"
     name: String!
+    "The storage provider to be used by the `App` to store analytics data"
+    storage_provider: StorageProvider
 }
 
 input IngestEndpointDataMapInput {
@@ -4971,10 +5005,20 @@ input IngestEndpointRevisionUpdateInput {
 
 "Data structure for updating of properties associated with this entity."
 input IngestEndpointUpdateInput {
+    "If the analytics on the `App` should be enabled"
+    analytics_enabled: Boolean!
+    "The AWS specific configuration linked to this new `App`"
+    aws_storage_config: AWSStorageConfig
+    "The Google Cloud BigQuery Stream specific configuration linked to this new `App`"
+    gc_bigquery_stream_config: ManagedGCBigQueryStreamConfig
     "`IngestEndpoint` ID to update data against"
     ingest_endpoint_id: ID!
+    "The MongoDB specific configuration linked to this new `App`"
+    mongo_push_config: MongoDbPushConfig
     "`IngestEndpoint` name"
     name: String
+    "The storage provider to be used by the `App` to store analytics data"
+    storage_provider: StorageProvider
 }
 
 "Options to add filter values on IngestQueryOptions."
@@ -5010,6 +5054,16 @@ input LoginInput {
     password: String!
 }
 
+"BigQuery stream configuration for managed endpoints."
+input ManagedGCBigQueryStreamConfig {
+    "The location of the data set, if it doesn't exist, we'll try and create it using the location specified"
+    data_set_location: String = "US"
+    "The 'Data Set' under which a new table will be created."
+    data_set_name: String!
+    "Service Account JSON for Google Cloud's BigQuery administrative role."
+    service_account_json: JSON!
+}
+
 input MeUpdateInput {
     "If provided the `Logged in User` email to update"
     email: String
@@ -5024,9 +5078,11 @@ input MeUpdateInput {
 "In order to use MongoDB as your storage engine, you just need to provide connection string and database name."
 input MongoDbPushConfig {
     "Your MongoDB server connection string."
-    connection_string: String!
+    connection_string: String
     "The name of the database that will store your data"
-    database_name: String!
+    database_name: String
+    "Use the api MongoDB server as storage provider"
+    use_api_mongo_server: Boolean!
 }
 
 input NewRevisionInput {

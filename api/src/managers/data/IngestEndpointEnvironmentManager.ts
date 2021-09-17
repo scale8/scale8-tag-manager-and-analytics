@@ -4,18 +4,17 @@ import { gql } from 'apollo-server-express';
 import CTX from '../../gql/ctx/CTX';
 import { ObjectID } from 'mongodb';
 import TYPES from '../../container/IOC.types';
-import GQLError from '../../errors/GQLError';
 import IngestEndpointEnvironment from '../../mongo/models/data/IngestEndpointEnvironment';
 import IngestEndpointRevision from '../../mongo/models/data/IngestEndpointRevision';
 import IngestEndpoint from '../../mongo/models/data/IngestEndpoint';
 import userMessages from '../../errors/UserMessages';
-import { uploadCertificate } from '../../utils/CertificateUtils';
 import {
-    buildIngestEndpointConfig,
     createIngestEndpointEnvironment,
     getIngestEndpointCNAME,
     getIngestEndpointInstallDomain,
     getProviderConfig,
+    getUpdateProviderConfig,
+    updateIngestEndpointEnvironment,
 } from '../../utils/IngestEndpointEnvironmentUtils';
 import BaseDatabase from '../../backends/databases/abstractions/BaseDatabase';
 import { withUnManagedAccount } from '../../utils/DataManagerAccountUtils';
@@ -160,6 +159,18 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
             If a custom domain is used a new key can be installed which will replace the exiting one
             """
             key_pem: String
+            """
+            The AWS specific configuration linked to this new \`IngestEndpointEnvironment\`
+            """
+            aws_storage_config: AWSStorageConfig
+            """
+            The Google Cloud BigQuery Stream specific configuration linked to this new \`IngestEndpointEnvironment\`
+            """
+            gc_bigquery_stream_config: GCBigQueryStreamConfig
+            """
+            The MongoDB specific configuration linked to this new \`IngestEndpointEnvironment\`
+            """
+            mongo_push_config: MongoDbPushConfig
         }
 
         # noinspection GraphQLMemberRedefinition
@@ -234,48 +245,20 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
                     ctx,
                     ingestEndpointEnvironment.orgId,
                     async (me) => {
-                        if (
-                            this.config.isCommercial() &&
-                            data.cert_pem !== undefined &&
-                            data.key_pem !== undefined
-                        ) {
-                            //trying to install a new certificate...
-                            if (ingestEndpointEnvironment.customDomain === undefined) {
-                                throw new GQLError(userMessages.noCustomDomain, true);
-                            } else {
-                                await uploadCertificate(
-                                    ingestEndpointEnvironment.customDomain,
-                                    data.cert_pem,
-                                    data.key_pem,
-                                );
-                            }
-                        }
-                        ingestEndpointEnvironment.bulkGQLSet(data, ['name']);
-
-                        //we are trying to attach a new revision to this environment
-                        const revision = await this.repoFactory(
-                            IngestEndpointRevision,
-                        ).findOneThrows(
-                            {
-                                _id: new ObjectID(data.ingest_endpoint_revision_id),
-                                _ingest_endpoint_id: ingestEndpointEnvironment.ingestEndpointId,
-                            },
-                            userMessages.revisionFailed,
+                        const providerConfig = await getUpdateProviderConfig(
+                            data,
+                            ingestEndpointEnvironment,
                         );
 
-                        //we need to check this revision is ok to attach...
-                        if (revision.isFinal) {
-                            ingestEndpointEnvironment.ingestEndpointRevisionId = revision.id;
-                            await this.repoFactory(IngestEndpointEnvironment).save(
-                                ingestEndpointEnvironment,
-                                me,
-                            );
-                            //now build the config...
-                            await buildIngestEndpointConfig(ingestEndpointEnvironment);
-                        } else {
-                            throw new GQLError(userMessages.revisionNotFinalAttaching, true);
-                        }
-
+                        await updateIngestEndpointEnvironment(
+                            me,
+                            ingestEndpointEnvironment,
+                            providerConfig,
+                            data.name,
+                            data.ingest_endpoint_revision_id,
+                            this.config.isCommercial() ? data.cert_pem : undefined,
+                            this.config.isCommercial() ? data.key_pem : undefined,
+                        );
                         return true;
                     },
                 ),

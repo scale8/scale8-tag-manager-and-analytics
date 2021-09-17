@@ -34,6 +34,18 @@ export default class App extends Model {
     })
     private _usage_ingest_endpoint_environment_id?: ObjectID;
 
+    @Field<boolean>({
+        required: true,
+        exposeToGQLAs: 'analytics_enabled',
+    })
+    private _analytics_enabled: boolean;
+
+    @Field<boolean>({
+        required: true,
+        exposeToGQLAs: 'error_tracking_enabled',
+    })
+    private _error_tracking_enabled: boolean;
+
     @Field<AppPlatform[]>({
         repository: AppPlatformRepo,
         required: true,
@@ -61,6 +73,8 @@ export default class App extends Model {
         domain: string,
         type: AppType = AppType.WEB,
         appPlatforms: AppPlatform[] = [],
+        analyticsEnabled = true,
+        errorTrackingEnabled = true,
     ) {
         super();
         if (tagManagerAccount !== undefined) {
@@ -71,6 +85,8 @@ export default class App extends Model {
         this._name = name;
         this._type = type;
         this._domain = domain;
+        this._analytics_enabled = analyticsEnabled;
+        this._error_tracking_enabled = errorTrackingEnabled;
     }
 
     get orgId(): ObjectID {
@@ -115,5 +131,21 @@ export default class App extends Model {
 
     set domain(value: string) {
         this._domain = value;
+    }
+
+    get analytics_enabled(): boolean {
+        return this._analytics_enabled;
+    }
+
+    set analytics_enabled(value: boolean) {
+        this._analytics_enabled = value;
+    }
+
+    get error_tracking_enabled(): boolean {
+        return this._error_tracking_enabled;
+    }
+
+    set error_tracking_enabled(value: boolean) {
+        this._error_tracking_enabled = value;
     }
 }

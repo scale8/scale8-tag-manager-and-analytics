@@ -3,6 +3,8 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
+import { StorageProvider } from "./globalTypes";
+
 // ====================================================
 // GraphQL query operation: UpdateIngestEndpointEnvironmentGetData
 // ====================================================
@@ -29,6 +31,10 @@ export interface UpdateIngestEndpointEnvironmentGetData_getIngestEndpointEnviron
    * A custom domain name associated with this `IngestEndpointEnvironment`
    */
   custom_domain: string | null;
+  /**
+   * The storage provider used by the `IngestEndpointEnvironment` to store ingested data
+   */
+  storage_provider: StorageProvider;
   /**
    * The `IngestEndpointRevision` currently bound to the `IngestEndpointEnvironment`
    */

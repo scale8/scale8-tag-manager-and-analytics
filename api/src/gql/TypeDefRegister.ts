@@ -539,17 +539,39 @@ export default class TypeDefRegister {
             }
 
             """
+            BigQuery stream configuration for managed endpoints.
+            """
+            input ManagedGCBigQueryStreamConfig {
+                """
+                Service Account JSON for Google Cloud's BigQuery administrative role.
+                """
+                service_account_json: JSON!
+                """
+                The 'Data Set' under which a new table will be created.
+                """
+                data_set_name: String!
+                """
+                The location of the data set, if it doesn't exist, we'll try and create it using the location specified
+                """
+                data_set_location: String = "US"
+            }
+
+            """
             In order to use MongoDB as your storage engine, you just need to provide connection string and database name.
             """
             input MongoDbPushConfig {
                 """
+                Use the api MongoDB server as storage provider
+                """
+                use_api_mongo_server: Boolean!
+                """
                 Your MongoDB server connection string.
                 """
-                connection_string: String!
+                connection_string: String
                 """
                 The name of the database that will store your data
                 """
-                database_name: String!
+                database_name: String
             }
 
             """

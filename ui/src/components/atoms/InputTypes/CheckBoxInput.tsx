@@ -11,13 +11,20 @@ export type BooleanInputProps = Omit<FormControlLabelProps, 'children' | 'contro
 
 const CheckBoxInput: FC<BooleanInputProps> = (props: BooleanInputProps) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { value, setValue, label, disabled, validationError, ...formControlProps } = props;
+    const { value, setValue, label, disabled, validationError, color, ...formControlProps } = props;
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => setValue(event.target.checked);
 
     return (
         <FormControlLabel
-            control={<Checkbox checked={value} onChange={handleChange} disabled={disabled} />}
+            control={
+                <Checkbox
+                    checked={value}
+                    onChange={handleChange}
+                    disabled={disabled}
+                    color={color as 'primary' | 'secondary' | 'default' | undefined}
+                />
+            }
             label={label}
             {...formControlProps}
         />

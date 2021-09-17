@@ -12,28 +12,11 @@ import { BigQuery } from '@google-cloud/bigquery';
 import { LogPriority } from '../../enums/LogPriority';
 import TYPES from '../../container/IOC.types';
 import BaseConfig from '../configuration/abstractions/BaseConfig';
-import { StorageProvider } from '../../enums/StorageProvider';
-import { StorageProviderConfig } from '../../mongo/types/Types';
 
 @injectable()
 export default class GoogleCloudBigQuery extends BaseDatabase {
     @inject(TYPES.BackendConfig) private readonly config!: BaseConfig;
     private bigQuery: BigQuery | undefined;
-
-    public getStorageProvider(): StorageProvider {
-        return StorageProvider.GC_BIGQUERY_STREAM;
-    }
-
-    public async getStorageProviderConfig(): Promise<StorageProviderConfig> {
-        return {
-            config: {
-                service_account_json: '',
-                data_set_name: await this.config.getAnalyticsDataSetName(),
-                require_partition_filter_in_queries: true,
-            },
-            hint: `S8 Managed Ingest Endpoint`,
-        };
-    }
 
     protected async getBigQuery() {
         if (this.bigQuery === undefined) {
@@ -47,20 +30,6 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
 
     protected readonly MOBILE_TEST =
         '(INSTR(browser_name, "Mobile") > 0 OR device_name = "iPhone" OR device_name = "iPad" OR os_name = "iOS" OR os_name = "Android")';
-
-    public async configure(): Promise<void> {
-        const createDatasetIfNotExists = async (name: string) => {
-            const bq = await this.getBigQuery();
-            const [exists] = await bq.dataset(name).exists();
-            if (!exists) {
-                await bq.createDataset(name, {
-                    location: 'EU',
-                });
-            }
-        };
-        await createDatasetIfNotExists(await this.config.getDataSetName());
-        await createDatasetIfNotExists(await this.config.getAnalyticsDataSetName());
-    }
 
     protected async query(query: string, params?: { [p: string]: any }): Promise<any[]> {
         const bq = await this.getBigQuery();

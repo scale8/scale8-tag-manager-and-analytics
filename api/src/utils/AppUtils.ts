@@ -34,8 +34,10 @@ const createAppUsageEndpointEnvironment = async (
     org: Org,
     trackingEntity: App,
     actor: User,
+    provider: StorageProvider,
+    providerConfig: StorageProviderConfig,
 ): Promise<IngestEndpointEnvironment> => {
-    return createUsageEndpointEnvironment(org, trackingEntity, actor, [
+    return createUsageEndpointEnvironment(org, trackingEntity, actor, provider, providerConfig, [
         {
             varType: VarType.STRING,
             key: 'uiid',
@@ -225,7 +227,15 @@ export const createApp = async (
         userMessages.platformFailed,
     );
 
-    let app = new App(name, tagManagerAccount, domain, type, [new AppPlatform(corePlatform)]);
+    let app = new App(
+        name,
+        tagManagerAccount,
+        domain,
+        type,
+        [new AppPlatform(corePlatform)],
+        analyticsEnabled,
+        errorTrackingEnabled,
+    );
     app = await repoFactory(App).save(app, actor, OperationOwner.USER, {
         gqlMethod: GQLMethod.CREATE,
     });
@@ -235,6 +245,8 @@ export const createApp = async (
         await fetchOrg(tagManagerAccount.orgId),
         app,
         actor,
+        provider,
+        providerConfig,
     );
     app.usageIngestEndpointEnvironmentId = usageEndpointEnvironment.id;
     app = await repoFactory(App).save(app, actor, OperationOwner.USER);

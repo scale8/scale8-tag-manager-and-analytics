@@ -5,7 +5,7 @@ import { Box, Checkbox, Divider, FormControlLabel, useTheme } from '@material-ui
 import Loader from '../Loader';
 import { AppFormProps } from '../../../dialogPages/tagManager/app/AppCreate';
 import StorageProviderSelector from '../../molecules/StorageProviderSelector';
-import ControlledBooleanSelect from '../../atoms/ControlledInputs/ControlledBooleanSelect';
+import CheckBoxInput from '../../atoms/InputTypes/CheckBoxInput';
 
 const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
     const theme = useTheme();
@@ -75,22 +75,30 @@ const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
                             required
                         />
                     )}
-                    <ControlledBooleanSelect
-                        label="Enable Analytics"
+                    <CheckBoxInput
                         name="analyticsEnabled"
-                        formProps={props}
+                        value={props.values.analyticsEnabled}
+                        setValue={(v) => {
+                            props.handleChange('analyticsEnabled', v);
+                        }}
+                        label="Enable Analytics"
                         className="DrawerFormField"
-                        required
+                        style={{ marginLeft: '-11px' }}
+                        color="primary"
                     />
-                    <ControlledBooleanSelect
-                        label="Enable Error Tracking"
+                    <CheckBoxInput
                         name="errorTrackingEnabled"
+                        value={props.values.errorTrackingEnabled}
+                        setValue={(v) => {
+                            props.handleChange('errorTrackingEnabled', v);
+                        }}
+                        label="Enable Error Tracking"
                         className="DrawerFormField"
-                        formProps={props}
-                        required
+                        style={{ marginLeft: '-11px' }}
+                        color="primary"
                     />
                     {(values.errorTrackingEnabled || values.analyticsEnabled) && (
-                        <StorageProviderSelector {...props} />
+                        <StorageProviderSelector {...props} warnGraphDisabled />
                     )}
                 </DrawerFormLayout>
             )}

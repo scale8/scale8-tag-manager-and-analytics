@@ -44,7 +44,10 @@ import { NotificationType } from '../enums/NotificationType';
 import { AppType } from '../enums/AppType';
 import BaseEmail from '../backends/email/abstractions/BaseEmail';
 import { LogPriority } from '../enums/LogPriority';
-import BaseDatabase from '../backends/databases/abstractions/BaseDatabase';
+import {
+    getCommercialStorageProvider,
+    getCommercialStorageProviderConfig,
+} from '../utils/IngestEndpointEnvironmentUtils';
 
 @injectable()
 export default class UserManager extends Manager<User> {
@@ -733,7 +736,6 @@ export default class UserManager extends Manager<User> {
             const org = await createNewOrg();
 
             const createAppForUser = async (): Promise<App | null> => {
-                const baseDatabase = container.get<BaseDatabase>(TYPES.BackendDatabase);
                 if (isTag) {
                     if (signUpRequest.domain === undefined) {
                         throw new ValidationError(userMessages.validationAppDomain, true);
@@ -755,8 +757,8 @@ export default class UserManager extends Manager<User> {
                         signUpRequest.domain,
                         signUpRequest.domain,
                         AppType.WEB,
-                        baseDatabase.getStorageProvider(),
-                        await baseDatabase.getStorageProviderConfig(),
+                        getCommercialStorageProvider(),
+                        await getCommercialStorageProviderConfig(),
                         true,
                         true,
                     );

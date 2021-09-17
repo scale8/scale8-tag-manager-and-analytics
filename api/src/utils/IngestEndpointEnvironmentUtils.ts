@@ -23,7 +23,6 @@ import DataManagerAccountRepo from '../mongo/repos/data/DataManagerAccountRepo';
 import { StorageProvider } from '../enums/StorageProvider';
 import BaseStorage from '../backends/storage/abstractions/BaseStorage';
 import BaseConfig from '../backends/configuration/abstractions/BaseConfig';
-import BaseDatabase from '../backends/databases/abstractions/BaseDatabase';
 import { createCname } from './EnvironmentUtils';
 import { BigQuery } from '@google-cloud/bigquery';
 import Hash from '../core/Hash';
@@ -33,6 +32,23 @@ export const getIngestEndpointCNAME = (ingestEndpointEnvironmentId: ObjectID | s
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
 
     return `${config.getEnvironmentIdPrefix()}${ingestEndpointEnvironmentId.toString()}.scale8.com`;
+};
+
+export const getCommercialStorageProviderConfig = async (): Promise<StorageProviderConfig> => {
+    const config = container.get<BaseConfig>(TYPES.BackendConfig);
+
+    return {
+        config: {
+            service_account_json: '',
+            data_set_name: await config.getAnalyticsDataSetName(),
+            require_partition_filter_in_queries: true,
+        },
+        hint: `S8 Managed Ingest Endpoint`,
+    };
+};
+
+export const getCommercialStorageProvider = (): StorageProvider => {
+    return StorageProvider.GC_BIGQUERY_STREAM;
 };
 
 const getStorageBackend = (): BaseStorage => container.get<BaseStorage>(TYPES.BackendStorage);
@@ -135,6 +151,76 @@ export const buildIngestEndpointConfig = async (
     }
 
     return config;
+};
+
+export const updateIngestEndpointEnvironment = async (
+    actor: User,
+    ingestEndpointEnvironment: IngestEndpointEnvironment,
+    providerConfig?: StorageProviderConfig,
+    newName?: string,
+    ingestEndpointRevisionId?: string,
+    customDomainCert?: string,
+    customDomainKey?: string,
+): Promise<IngestEndpointEnvironment> => {
+    const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
+    const config = container.get<BaseConfig>(TYPES.BackendConfig);
+
+    if (config.isCommercial() && customDomainCert !== undefined && customDomainKey !== undefined) {
+        //trying to install a new certificate...
+        if (ingestEndpointEnvironment.customDomain === undefined) {
+            throw new GQLError(userMessages.noCustomDomain, true);
+        } else {
+            await uploadCertificate(
+                ingestEndpointEnvironment.customDomain,
+                customDomainCert,
+                customDomainKey,
+            );
+        }
+    }
+
+    if (newName !== undefined) {
+        ingestEndpointEnvironment.name = newName;
+    }
+
+    //we are trying to attach a new revision to this environment
+    const findRevision = async () => {
+        if (ingestEndpointRevisionId !== undefined) {
+            return await repoFactory(IngestEndpointRevision).findOneThrows(
+                {
+                    _id: new ObjectID(ingestEndpointRevisionId),
+                    _ingest_endpoint_id: ingestEndpointEnvironment.ingestEndpointId,
+                },
+                userMessages.revisionFailed,
+            );
+        }
+        return null;
+    };
+
+    const revision = await findRevision();
+
+    //we need to check this revision is ok to attach...
+    if (revision !== null && revision.isFinal) {
+        ingestEndpointEnvironment.ingestEndpointRevisionId = revision.id;
+    } else {
+        throw new GQLError(userMessages.revisionNotFinalAttaching, true);
+    }
+
+    if (providerConfig !== undefined) {
+        ingestEndpointEnvironment.configHint = providerConfig.hint;
+
+        await getStorageBackend().setAsString(
+            await config.getConfigsBucket(),
+            `ingest-endpoint/storage-provider-config-${ingestEndpointEnvironment.id}.json`,
+            JSON.stringify(providerConfig.config),
+            { contentType: 'application/json' },
+        );
+    }
+
+    await repoFactory(IngestEndpointEnvironment).save(ingestEndpointEnvironment, actor);
+    //now build the config...
+    await buildIngestEndpointConfig(ingestEndpointEnvironment);
+
+    return ingestEndpointEnvironment;
 };
 
 export const createIngestEndpointEnvironment = async (
@@ -272,17 +358,27 @@ const getBigQueryProviderConfig = async (bigqueryStreamConfig: any) => {
 };
 
 const getMongoDbProviderConfig = async (mongoPushConfig: any) => {
+    const config = container.get<BaseConfig>(TYPES.BackendConfig);
+
+    console.log(mongoPushConfig);
+
+    const connectionString = mongoPushConfig.use_api_mongo_server
+        ? await config.getDatabaseUrl()
+        : mongoPushConfig.connection_string;
+
+    const databaseName = mongoPushConfig.use_api_mongo_server
+        ? await config.getDefaultDatabase()
+        : mongoPushConfig.database_name;
+
     const getMongoConnection = async () => {
         try {
-            const client = new MongoClient(mongoPushConfig.connection_string, {
+            const client = new MongoClient(connectionString, {
                 useNewUrlParser: true,
             });
             return await client.connect();
         } catch (e) {
             throw new GQLError(
-                userMessages.mongoConnectionStringVerificationFailure(
-                    mongoPushConfig.connection_string,
-                ),
+                userMessages.mongoConnectionStringVerificationFailure(connectionString),
                 true,
             );
         }
@@ -291,22 +387,21 @@ const getMongoDbProviderConfig = async (mongoPushConfig: any) => {
     const connection = await getMongoConnection();
 
     try {
-        const database = connection.db(mongoPushConfig.database_name);
+        const database = connection.db(databaseName);
 
         await database
             .collection(`s8_${Hash.shortRandomHash()}_verification`)
             .insertOne({ s8: true });
     } catch (e) {
-        throw new GQLError(
-            userMessages.mongoDatabaseVerificationFailure(mongoPushConfig.database_name),
-            true,
-        );
+        throw new GQLError(userMessages.mongoDatabaseVerificationFailure(databaseName), true);
     } finally {
         connection.close(true).then();
     }
     return {
         config: mongoPushConfig,
-        hint: `Using MongoDB database: ${mongoPushConfig.database_name}`,
+        hint: mongoPushConfig.use_api_mongo_server
+            ? 'Sharing API MongoDB database'
+            : `Using MongoDB database: ${mongoPushConfig.database_name}`,
     };
 };
 
@@ -328,14 +423,39 @@ export const getProviderConfig = async (data: any): Promise<StorageProviderConfi
     }
 };
 
+export const getUpdateProviderConfig = async (
+    data: any,
+    ingestEndpointEnvironment: IngestEndpointEnvironment,
+): Promise<StorageProviderConfig | undefined> => {
+    if (
+        ingestEndpointEnvironment.storageProvider === StorageProvider.AWS_S3 &&
+        data.aws_storage_config !== undefined
+    ) {
+        return await getAwsS3ProviderConfig(data.aws_storage_config);
+    } else if (
+        ingestEndpointEnvironment.storageProvider === StorageProvider.GC_BIGQUERY_STREAM &&
+        data.gc_bigquery_stream_config !== undefined
+    ) {
+        return await getBigQueryProviderConfig(data.gc_bigquery_stream_config);
+    } else if (
+        ingestEndpointEnvironment.storageProvider === StorageProvider.MONGODB &&
+        data.mongo_push_config !== undefined
+    ) {
+        return await getMongoDbProviderConfig(data.mongo_push_config);
+    } else {
+        return undefined;
+    }
+};
+
 export const createUsageEndpointEnvironment = async (
     org: Org,
     trackingEntity: App | IngestEndpoint,
     actor: User,
+    provider: StorageProvider,
+    providerConfig: StorageProviderConfig,
     schema: IngestEndpointDataMapSchema[],
 ): Promise<IngestEndpointEnvironment> => {
     const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
-    const baseDatabase = container.get<BaseDatabase>(TYPES.BackendDatabase);
 
     const dataManagerAccount = await repoFactory<DataManagerAccountRepo>(
         DataManagerAccount,
@@ -346,6 +466,7 @@ export const createUsageEndpointEnvironment = async (
         new IngestEndpoint(
             `S8 - Track Usage (${trackingEntity.id.toString()})`,
             dataManagerAccount,
+            false,
         ),
         actor,
     );
@@ -366,8 +487,8 @@ export const createUsageEndpointEnvironment = async (
         actor,
         ingestEndpoint,
         'production',
-        baseDatabase.getStorageProvider(),
-        await baseDatabase.getStorageProviderConfig(),
+        provider,
+        providerConfig,
         ingestEndpointRevision,
     );
     //create the new env...

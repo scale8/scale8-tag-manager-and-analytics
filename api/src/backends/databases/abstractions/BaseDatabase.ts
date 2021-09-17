@@ -1,8 +1,6 @@
 import { injectable } from 'inversify';
 import App from '../../../mongo/models/tag/App';
 import IngestEndpoint from '../../../mongo/models/data/IngestEndpoint';
-import { StorageProvider } from '../../../enums/StorageProvider';
-import { StorageProviderConfig } from '../../../mongo/types/Types';
 
 export interface BaseQueryOptions {
     time_slice: string;
@@ -49,12 +47,6 @@ export interface IngestQueryOptions extends BaseQueryOptions {
 
 @injectable()
 export default abstract class BaseDatabase {
-    public abstract configure(): Promise<void>;
-
-    public abstract getStorageProvider(): StorageProvider;
-
-    public abstract getStorageProviderConfig(): Promise<StorageProviderConfig>;
-
     protected getRangeFromAsDate(options: BaseQueryOptions): Date {
         return new Date(options.filter_options.from);
     }

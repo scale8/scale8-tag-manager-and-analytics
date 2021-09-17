@@ -181,6 +181,7 @@ container
     .inSingletonScope();
 
 container.bind<BaseDatabase>(TYPES.BackendDatabase).to(MongoDb).inSingletonScope();
+
 container.bind<BaseLogger>(TYPES.BackendLogger).to(ConsoleLogger).inSingletonScope();
 container.bind<BaseEmail>(TYPES.BackendEmail).to(Mailer).inSingletonScope();
 container.bind<BaseConfig>(TYPES.BackendConfig).to(EnvironmentConfig).inSingletonScope();

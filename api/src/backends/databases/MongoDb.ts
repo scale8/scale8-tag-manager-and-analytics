@@ -5,34 +5,16 @@ import BaseDatabase, {
     IngestQueryOptions,
 } from './abstractions/BaseDatabase';
 import TYPES from '../../container/IOC.types';
-import BaseConfig from '../configuration/abstractions/BaseConfig';
 import App from '../../mongo/models/tag/App';
 import IngestEndpoint from '../../mongo/models/data/IngestEndpoint';
 import Shell from '../../mongo/database/Shell';
 import GenericError from '../../errors/GenericError';
 import { LogPriority } from '../../enums/LogPriority';
 import { Collection } from 'mongodb';
-import { StorageProvider } from '../../enums/StorageProvider';
-import { StorageProviderConfig } from '../../mongo/types/Types';
 
 @injectable()
 export default class MongoDb extends BaseDatabase {
-    @inject(TYPES.BackendConfig) private readonly config!: BaseConfig;
     @inject(TYPES.Shell) protected readonly shell!: Shell;
-
-    public getStorageProvider(): StorageProvider {
-        return StorageProvider.MONGODB;
-    }
-
-    public async getStorageProviderConfig(): Promise<StorageProviderConfig> {
-        return {
-            config: {
-                connection_string: '',
-                database_name: 's8',
-            },
-            hint: `S8 Managed Ingest Endpoint`,
-        };
-    }
 
     protected readonly MOBILE_TEST: [string, RegExp][] = [
         ['browser_name', /mobile/i],
@@ -58,9 +40,6 @@ export default class MongoDb extends BaseDatabase {
             [input]: regex,
         }));
     }
-
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    public async configure(): Promise<void> {}
 
     protected getCollection(entity: App | IngestEndpoint): Promise<Collection> {
         if (entity.usageIngestEndpointEnvironmentId === undefined) {

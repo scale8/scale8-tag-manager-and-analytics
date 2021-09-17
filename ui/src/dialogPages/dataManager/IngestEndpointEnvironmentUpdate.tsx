@@ -15,6 +15,10 @@ import { UpdateIngestEndpointEnvironmentResult } from '../../gql/generated/Updat
 import { buildStandardFormInfo } from '../../utils/InfoLabelsUtils';
 import { DialogPageProps } from '../../types/DialogTypes';
 import { DialogPreloadForm, DialogPreloadFormProps } from '../abstractions/DialogPreloadForm';
+import {
+    buildStorageProviderSaveProperties,
+    initialStorageProviderFieldsWithPartitionFilterChoice,
+} from '../../utils/StorageProviderUtils';
 
 const IngestEndpointEnvironmentUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
     const ingestEndpointId = props.contextId;
@@ -37,6 +41,8 @@ const IngestEndpointEnvironmentUpdate: FC<DialogPageProps> = (props: DialogPageP
             name: formLoadedData.getIngestEndpointEnvironment.name,
             revisionId:
                 formLoadedData.getIngestEndpointEnvironment.ingest_endpoint_revision?.id ?? '',
+            ...initialStorageProviderFieldsWithPartitionFilterChoice,
+            storageProvider: formLoadedData.getIngestEndpointEnvironment.storage_provider ?? '',
             certificate: '',
             key: '',
         }),
@@ -46,6 +52,7 @@ const IngestEndpointEnvironmentUpdate: FC<DialogPageProps> = (props: DialogPageP
                 ingest_endpoint_environment_id: props.id,
                 ingest_endpoint_revision_id: ingestEndpointEnvironmentValues.revisionId,
                 name: ingestEndpointEnvironmentValues.name,
+                ...buildStorageProviderSaveProperties(ingestEndpointEnvironmentValues, false, true),
             };
 
             if (ingestEndpointEnvironmentValues.certificate !== '') {

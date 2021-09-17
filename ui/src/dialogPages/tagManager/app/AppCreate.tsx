@@ -3,31 +3,21 @@ import AppForm from '../../../components/organisms/Forms/AppForm';
 import { FormProps, FormValidationResult } from '../../../hooks/form/useFormValidation';
 import { ApolloError, useMutation } from '@apollo/client';
 import CreateAppQuery from '../../../gql/mutations/CreateAppQuery';
-import { AppType } from '../../../gql/generated/globalTypes';
+import { AppType, StorageProvider } from '../../../gql/generated/globalTypes';
 import domainValidator from '../../../utils/validators/domainValidator';
 import nameValidator from '../../../utils/validators/nameValidator';
 import { CreateApp } from '../../../gql/generated/CreateApp';
 import { DialogPageProps } from '../../../types/DialogTypes';
 import { buildStandardFormInfo } from '../../../utils/InfoLabelsUtils';
 import { DialogForm, DialogFormProps } from '../../abstractions/DialogForm';
+import { StorageProviderFields } from '../../../utils/StorageProviderUtils';
 
-export type AppValues = {
+export type AppValues = StorageProviderFields & {
     name: string;
     domain: string;
     type: AppType;
-    analyticsEnabled?: boolean;
-    errorTrackingEnabled?: boolean;
-    storageProvider?: string;
-    bucketName?: string;
-    accessKeyId?: string;
-    secretAccessKey?: string;
-    region?: string;
-    pathPrefix?: string;
-    serviceAccountJSON?: string;
-    dataSetName?: string;
-    requirePartitionFilterInQueries?: boolean;
-    connectionString?: string;
-    databaseName?: string;
+    analyticsEnabled: boolean;
+    errorTrackingEnabled: boolean;
 };
 
 export type AppFormProps = FormProps<AppValues> & {
@@ -42,6 +32,9 @@ const AppCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
         buildInitialState: () => ({
             name: '',
             domain: '',
+            analyticsEnabled: true,
+            errorTrackingEnabled: true,
+            storageProvider: StorageProvider.MONGODB,
             type: AppType.WEB,
         }),
         saveQuery: useMutation(CreateAppQuery),

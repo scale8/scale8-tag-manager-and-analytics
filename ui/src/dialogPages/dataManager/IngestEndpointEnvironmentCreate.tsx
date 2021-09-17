@@ -6,12 +6,8 @@ import CreateIngestEndpointEnvironmentQuery from '../../gql/mutations/CreateInge
 import FetchIngestEndpointRevisionsQuery from '../../gql/queries/FetchIngestEndpointRevisionsQuery';
 import { IngestEndpointRevisionsData } from '../../gql/generated/IngestEndpointRevisionsData';
 import {
-    AWSRegion,
-    AWSStorageConfig,
-    GCBigQueryStreamConfig,
     IngestEndpointEnvironmentCreateInput,
     Mode,
-    MongoDbPushConfig,
     StorageProvider,
 } from '../../gql/generated/globalTypes';
 import nameValidator from '../../utils/validators/nameValidator';
@@ -21,22 +17,17 @@ import { buildStandardFormInfo } from '../../utils/InfoLabelsUtils';
 import { DialogPageProps } from '../../types/DialogTypes';
 import { useConfigState } from '../../context/AppContext';
 import { DialogPreloadForm, DialogPreloadFormProps } from '../abstractions/DialogPreloadForm';
+import {
+    buildStorageProviderSaveProperties,
+    initialStorageProviderFieldsWithPartitionFilterChoice,
+    storageProviderCustomValueSetter,
+    StorageProviderFieldsWithPartitionFilterChoice,
+} from '../../utils/StorageProviderUtils';
 
-export type IngestEndpointEnvironmentValues = {
+export type IngestEndpointEnvironmentValues = StorageProviderFieldsWithPartitionFilterChoice & {
     name: string;
     revisionId: string;
-    storageProvider?: string;
-    bucketName?: string;
-    accessKeyId?: string;
-    secretAccessKey?: string;
-    region?: string;
-    pathPrefix?: string;
-    serviceAccountJSON?: string;
-    dataSetName?: string;
-    requirePartitionFilterInQueries?: boolean;
     domain?: string;
-    connectionString?: string;
-    databaseName?: string;
     certificate: string;
     key: string;
 };
@@ -53,6 +44,9 @@ const customValueSetter = (
     values: IngestEndpointEnvironmentValues,
     setValues: Dispatch<SetStateAction<IngestEndpointEnvironmentValues>>,
 ) => {
+    if (storageProviderCustomValueSetter(valueKey, value, values, setValues)) {
+        return;
+    }
     if (valueKey === 'domain') {
         setValues({
             ...values,
@@ -82,78 +76,23 @@ const IngestEndpointEnvironmentCreate: FC<DialogPageProps> = (props: DialogPageP
             variables: { id: ingestEndpointId },
         }),
         buildInitialStatePreload: () => ({
+            ...initialStorageProviderFieldsWithPartitionFilterChoice,
             name: '',
             revisionId: '',
-            bucketName: '',
-            storageProvider: '',
-            accessKeyId: '',
-            secretAccessKey: '',
-            region: '',
-            pathPrefix: '',
-            serviceAccountJSON: '',
-            dataSetName: '',
-            requirePartitionFilterInQueries: false,
             domain: '',
-            connectionString: '',
-            databaseName: '',
             certificate: '',
             key: '',
         }),
         saveQuery: useMutation(CreateIngestEndpointEnvironmentQuery),
         mapSaveData: (ingestEndpointEnvironmentValues: IngestEndpointEnvironmentValues) => {
-            const pathPrefix = ingestEndpointEnvironmentValues.pathPrefix ?? '';
-
-            const aws_storage_config: AWSStorageConfig = {
-                access_key_id: ingestEndpointEnvironmentValues.accessKeyId ?? '',
-                secret_access_key: ingestEndpointEnvironmentValues.secretAccessKey ?? '',
-                region: ingestEndpointEnvironmentValues.region as AWSRegion,
-                bucket_name: ingestEndpointEnvironmentValues.bucketName ?? '',
-                path_prefix: pathPrefix === '' ? pathPrefix : undefined,
-            };
-
-            const parseServiceAccountJson = (): S8JSON => {
-                try {
-                    return JSON.parse(ingestEndpointEnvironmentValues.serviceAccountJSON ?? '{}');
-                } catch {
-                    return JSON.parse('{}');
-                }
-            };
-
-            const gc_bigquery_stream_config: GCBigQueryStreamConfig = {
-                service_account_json: parseServiceAccountJson(),
-                data_set_name: ingestEndpointEnvironmentValues.dataSetName ?? '',
-                require_partition_filter_in_queries:
-                    !!ingestEndpointEnvironmentValues.requirePartitionFilterInQueries,
-            };
-
-            const mongo_push_config: MongoDbPushConfig = {
-                connection_string: ingestEndpointEnvironmentValues.connectionString ?? '',
-                database_name: ingestEndpointEnvironmentValues.databaseName ?? '',
-            };
-
             const ingestEndpointEnvironmentCreateInput: IngestEndpointEnvironmentCreateInput = {
                 ingest_endpoint_id: ingestEndpointId,
                 ingest_endpoint_revision_id: ingestEndpointEnvironmentValues.revisionId,
                 storage_provider:
                     ingestEndpointEnvironmentValues.storageProvider as StorageProvider,
                 name: ingestEndpointEnvironmentValues.name,
+                ...buildStorageProviderSaveProperties(ingestEndpointEnvironmentValues, true, true),
             };
-
-            if (ingestEndpointEnvironmentValues.storageProvider === StorageProvider.AWS_S3) {
-                ingestEndpointEnvironmentCreateInput.aws_storage_config = aws_storage_config;
-            }
-
-            if (
-                ingestEndpointEnvironmentValues.storageProvider ===
-                StorageProvider.GC_BIGQUERY_STREAM
-            ) {
-                ingestEndpointEnvironmentCreateInput.gc_bigquery_stream_config =
-                    gc_bigquery_stream_config;
-            }
-
-            if (ingestEndpointEnvironmentValues.storageProvider === StorageProvider.MONGODB) {
-                ingestEndpointEnvironmentCreateInput.mongo_push_config = mongo_push_config;
-            }
 
             if (ingestEndpointEnvironmentValues.domain !== '') {
                 ingestEndpointEnvironmentCreateInput.custom_domain =

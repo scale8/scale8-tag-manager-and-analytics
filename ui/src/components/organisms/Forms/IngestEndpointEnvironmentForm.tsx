@@ -94,7 +94,7 @@ const IngestEndpointEnvironmentForm: FC<IngestEndpointEnvironmentFormProps> = (
                 </>
             )}
 
-            {props.isCreate && <StorageProviderSelector {...props} />}
+            <StorageProviderSelector {...props} />
         </DrawerFormLayout>
     );
 };

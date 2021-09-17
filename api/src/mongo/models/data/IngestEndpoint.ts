@@ -32,9 +32,16 @@ export default class IngestEndpoint extends Model {
     })
     private _usage_ingest_endpoint_environment_id?: ObjectID;
 
-    constructor(name: string, dataManagerAccount: DataManagerAccount) {
+    @Field<boolean>({
+        required: true,
+        exposeToGQLAs: 'analytics_enabled',
+    })
+    private _analytics_enabled: boolean;
+
+    constructor(name: string, dataManagerAccount: DataManagerAccount, analyticsEnabled = true) {
         super();
         this._name = name;
+        this._analytics_enabled = analyticsEnabled;
         if (dataManagerAccount !== undefined) {
             this._org_id = dataManagerAccount.orgId;
             this._data_manager_account_id = dataManagerAccount.id;
@@ -63,5 +70,13 @@ export default class IngestEndpoint extends Model {
 
     get dataManagerAccountId(): ObjectID {
         return this._data_manager_account_id;
+    }
+
+    get analytics_enabled(): boolean {
+        return this._analytics_enabled;
+    }
+
+    set analytics_enabled(value: boolean) {
+        this._analytics_enabled = value;
     }
 }

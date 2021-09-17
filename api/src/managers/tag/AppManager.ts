@@ -237,19 +237,19 @@ export default class AppManager extends Manager<App> {
             """
             type: AppType!
             """
-            The storage provider to be used by the \`IngestEndpointEnvironment\` to store ingested data
+            The storage provider to be used by the \`App\` to store analytics data
             """
-            storage_provider: StorageProvider!
+            storage_provider: StorageProvider
             """
-            The AWS specific configuration linked to this new \`IngestEndpointEnvironment\`
+            The AWS specific configuration linked to this new \`App\`
             """
             aws_storage_config: AWSStorageConfig
             """
-            The Google Cloud BigQuery Stream specific configuration linked to this new \`IngestEndpointEnvironment\`
+            The Google Cloud BigQuery Stream specific configuration linked to this new \`App\`
             """
-            gc_bigquery_stream_config: GCBigQueryStreamConfig
+            gc_bigquery_stream_config: ManagedGCBigQueryStreamConfig
             """
-            The MongoDB specific configuration linked to this new \`IngestEndpointEnvironment\`
+            The MongoDB specific configuration linked to this new \`App\`
             """
             mongo_push_config: MongoDbPushConfig
             """
@@ -286,19 +286,19 @@ export default class AppManager extends Manager<App> {
             """
             domain: String
             """
-            The storage provider to be used by the \`IngestEndpointEnvironment\` to store ingested data
+            The storage provider to be used by the \`App\` to store analytics data
             """
-            storage_provider: StorageProvider!
+            storage_provider: StorageProvider
             """
-            The AWS specific configuration linked to this new \`IngestEndpointEnvironment\`
+            The AWS specific configuration linked to this new \`App\`
             """
             aws_storage_config: AWSStorageConfig
             """
-            The Google Cloud BigQuery Stream specific configuration linked to this new \`IngestEndpointEnvironment\`
+            The Google Cloud BigQuery Stream specific configuration linked to this new \`App\`
             """
-            gc_bigquery_stream_config: GCBigQueryStreamConfig
+            gc_bigquery_stream_config: ManagedGCBigQueryStreamConfig
             """
-            The MongoDB specific configuration linked to this new \`IngestEndpointEnvironment\`
+            The MongoDB specific configuration linked to this new \`App\`
             """
             mongo_push_config: MongoDbPushConfig
             """
