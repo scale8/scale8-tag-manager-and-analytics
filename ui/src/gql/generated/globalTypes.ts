@@ -846,6 +846,9 @@ export interface IngestEndpointEnvironmentUpdateInput {
   name?: string | null;
   cert_pem?: string | null;
   key_pem?: string | null;
+  aws_storage_config?: AWSStorageConfig | null;
+  gc_bigquery_stream_config?: GCBigQueryStreamConfig | null;
+  mongo_push_config?: MongoDbPushConfig | null;
 }
 
 /**

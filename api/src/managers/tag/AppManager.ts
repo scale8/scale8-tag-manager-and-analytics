@@ -208,6 +208,18 @@ export default class AppManager extends Manager<App> {
             Event Groups
             """
             event_group_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+            """
+            Whether the analytics on the \`App\` is enabled
+            """
+            analytics_enabled: Boolean!
+            """
+            Whether the error tracking on the \`App\` is enabled
+            """
+            error_tracking_enabled: Boolean!
+            """
+            The storage provider used by the \`App\` to track data
+            """
+            storage_provider: StorageProvider!
         }
 
         # noinspection GraphQLMemberRedefinition

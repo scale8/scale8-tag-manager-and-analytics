@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import AppForm from '../../../components/organisms/Forms/AppForm';
 import { FormProps, FormValidationResult } from '../../../hooks/form/useFormValidation';
 import { ApolloError, useMutation } from '@apollo/client';
@@ -10,7 +10,13 @@ import { CreateApp } from '../../../gql/generated/CreateApp';
 import { DialogPageProps } from '../../../types/DialogTypes';
 import { buildStandardFormInfo } from '../../../utils/InfoLabelsUtils';
 import { DialogForm, DialogFormProps } from '../../abstractions/DialogForm';
-import { StorageProviderFields } from '../../../utils/StorageProviderUtils';
+import {
+    buildStorageProviderSaveProperties,
+    initialStorageProviderFields,
+    storageProviderCustomValueSetter,
+    StorageProviderFields,
+    storageProviderValidators,
+} from '../../../utils/StorageProviderUtils';
 
 export type AppValues = StorageProviderFields & {
     name: string;
@@ -28,8 +34,24 @@ export type AppFormProps = FormProps<AppValues> & {
 const AppCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
     const accountId = props.contextId;
 
+    const customValueSetter = (
+        valueKey: string,
+        value: any,
+        values: AppValues,
+        setValues: Dispatch<SetStateAction<AppValues>>,
+    ) => {
+        if (storageProviderCustomValueSetter(valueKey, value, values, setValues)) {
+            return;
+        }
+        setValues({
+            ...values,
+            [valueKey]: value,
+        });
+    };
+
     const appCreateProps: DialogFormProps<AppValues, AppFormProps, CreateApp> = {
         buildInitialState: () => ({
+            ...initialStorageProviderFields,
             name: '',
             domain: '',
             analyticsEnabled: true,
@@ -44,6 +66,10 @@ const AppCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
                 name: appValues.name,
                 domain: appValues.domain,
                 type: appValues.type,
+                analytics_enabled: appValues.analyticsEnabled,
+                error_tracking_enabled: appValues.errorTrackingEnabled,
+                storage_provider: appValues.storageProvider as StorageProvider,
+                ...buildStorageProviderSaveProperties(appValues, true),
             },
         }),
         buildFormProps: (
@@ -73,7 +99,9 @@ const AppCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
                 validator: domainValidator,
                 error: () => 'Invalid domain',
             },
+            ...storageProviderValidators,
         ],
+        customValueSetter,
         ...props,
     };
 

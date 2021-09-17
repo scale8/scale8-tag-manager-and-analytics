@@ -7,6 +7,7 @@ const PageIngestEndpointQuery = gql`
             ingest_endpoints {
                 id
                 name
+                analytics_enabled
                 ingest_endpoint_revisions {
                     id
                 }

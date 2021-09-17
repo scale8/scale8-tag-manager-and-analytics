@@ -14,6 +14,10 @@ import {
     IngestEndpointValues,
 } from '../../utils/forms/IngestEndpointFormUtils';
 import { DialogPreloadForm, DialogPreloadFormProps } from '../abstractions/DialogPreloadForm';
+import {
+    buildStorageProviderSaveProperties,
+    initialStorageProviderFields,
+} from '../../utils/StorageProviderUtils';
 
 const IngestEndpointUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
     const ingestEndpointUpdateProps: DialogPreloadFormProps<
@@ -26,13 +30,18 @@ const IngestEndpointUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
             variables: { id: props.id },
         }),
         buildInitialStatePreload: (formLoadedData: UpdateIngestEndpointGetData) => ({
+            ...initialStorageProviderFields,
+            storageProvider: formLoadedData.getIngestEndpoint.storage_provider,
             name: formLoadedData.getIngestEndpoint.name,
+            analyticsEnabled: formLoadedData.getIngestEndpoint.analytics_enabled,
         }),
         saveQuery: useMutation(UpdateIngestEndpointQuery),
         mapSaveData: (formValues: IngestEndpointValues) => ({
             ingestEndpointUpdateInput: {
                 ingest_endpoint_id: props.id,
                 name: formValues.name,
+                analytics_enabled: formValues.analyticsEnabled,
+                ...buildStorageProviderSaveProperties(formValues, false),
             },
         }),
         buildFormProps: (
@@ -46,6 +55,7 @@ const IngestEndpointUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
             title: 'Update Ingest Endpoint',
             formInfoProps: buildStandardFormInfo('ingestEndpoints', 'Update'),
             handleDialogClose: props.handleDialogClose,
+            isCreate: false,
         }),
         checkSuccessfullySubmitted: (formMutationData) => formMutationData?.updateIngestEndpoint,
         pageComponent: IngestEndpointForm,

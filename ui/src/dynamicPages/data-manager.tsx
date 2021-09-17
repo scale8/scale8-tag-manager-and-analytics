@@ -23,6 +23,7 @@ import { toIngestEndpoint } from '../utils/NavigationPaths';
 
 export type IngestEndpointTableRow = TableRowBase & {
     name: string;
+    analyticsEnabled: boolean;
     revisions: number;
     environments: number;
     bytes: number[];
@@ -54,6 +55,7 @@ const IngestEndpointsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
                 { field: 'id' },
                 { field: 'requests', type: 'graph' },
                 { field: 'bytes', type: 'graph' },
+                { field: 'analyticsEnabled', type: 'boolean', hidden: true },
                 { field: 'revisions', type: 'numeric', hidden: true },
                 { field: 'environments', type: 'numeric', hidden: true },
                 { field: 'updatedAt' },
@@ -65,6 +67,7 @@ const IngestEndpointsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
                         return {
                             ...extractBaseColumns(ingestEndpoint),
                             name: ingestEndpoint.name,
+                            analyticsEnabled: ingestEndpoint.analytics_enabled,
                             bytes: groupingCountToSparkData(
                                 ingestEndpoint.byte_stats.from as number,
                                 ingestEndpoint.byte_stats.to as number,

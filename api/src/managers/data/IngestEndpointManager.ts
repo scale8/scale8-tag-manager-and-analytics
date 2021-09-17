@@ -94,6 +94,14 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
             Byte stats
             """
             byte_stats(query_options: IngestQueryOptions!): GroupingCountsResponse!
+            """
+            Whether the analytics on the \`IngestEndpoint\` is enabled
+            """
+            analytics_enabled: Boolean!
+            """
+            The storage provider used by the \`IngestEndpoint\` to track data
+            """
+            storage_provider: StorageProvider!
         }
 
         # noinspection GraphQLMemberRedefinition
@@ -133,7 +141,7 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
             """
             mongo_push_config: MongoDbPushConfig
             """
-            If the analytics on the \`App\` should be enabled
+            If the analytics on the \`IngestEndpoint\` should be enabled
             """
             analytics_enabled: Boolean!
         }
@@ -177,7 +185,7 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
             """
             mongo_push_config: MongoDbPushConfig
             """
-            If the analytics on the \`App\` should be enabled
+            If the analytics on the \`IngestEndpoint\` should be enabled
             """
             analytics_enabled: Boolean!
         }
@@ -280,7 +288,7 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                 analyticsEnabled: boolean,
             ): Promise<IngestEndpoint> => {
                 let ingestEndpoint = await this.repoFactory(IngestEndpoint).save(
-                    new IngestEndpoint(name, dataManagerAccount, analyticsEnabled),
+                    new IngestEndpoint(name, dataManagerAccount, analyticsEnabled, provider),
                     actor,
                 );
                 //we need to create an ingest endpoint environment to track usage...

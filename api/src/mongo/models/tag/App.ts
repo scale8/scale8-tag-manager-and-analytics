@@ -5,6 +5,7 @@ import AppPlatform from './AppPlatform';
 import AppPlatformRepo from '../../repos/tag/AppPlatformRepo';
 import TagManagerAccount from './TagManagerAccount';
 import { AppType } from '../../../enums/AppType';
+import { StorageProvider } from '../../../enums/StorageProvider';
 
 export default class App extends Model {
     public getOrgEntityId(): ObjectID {
@@ -58,6 +59,12 @@ export default class App extends Model {
     })
     private readonly _type: AppType;
 
+    @Field<string>({
+        required: true,
+        exposeToGQLAs: 'storage_provider',
+    })
+    private readonly _storage_provider!: StorageProvider;
+
     /**
      * _domain - All apps, web, mobile web, desktop apps and mobile apps need this. (Ads.txt!)
      */
@@ -71,6 +78,7 @@ export default class App extends Model {
         name: string,
         tagManagerAccount: TagManagerAccount,
         domain: string,
+        storageProvider: StorageProvider,
         type: AppType = AppType.WEB,
         appPlatforms: AppPlatform[] = [],
         analyticsEnabled = true,
@@ -87,6 +95,7 @@ export default class App extends Model {
         this._domain = domain;
         this._analytics_enabled = analyticsEnabled;
         this._error_tracking_enabled = errorTrackingEnabled;
+        this._storage_provider = storageProvider;
     }
 
     get orgId(): ObjectID {

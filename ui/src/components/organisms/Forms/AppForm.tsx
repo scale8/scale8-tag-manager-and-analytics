@@ -97,9 +97,7 @@ const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
                         style={{ marginLeft: '-11px' }}
                         color="primary"
                     />
-                    {(values.errorTrackingEnabled || values.analyticsEnabled) && (
-                        <StorageProviderSelector {...props} warnGraphDisabled />
-                    )}
+                    <StorageProviderSelector {...props} warnGraphDisabled />
                 </DrawerFormLayout>
             )}
         </>

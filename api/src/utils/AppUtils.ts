@@ -231,6 +231,7 @@ export const createApp = async (
         name,
         tagManagerAccount,
         domain,
+        provider,
         type,
         [new AppPlatform(corePlatform)],
         analyticsEnabled,

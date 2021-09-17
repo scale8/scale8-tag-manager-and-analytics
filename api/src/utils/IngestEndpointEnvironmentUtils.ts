@@ -288,6 +288,9 @@ export const createIngestEndpointEnvironment = async (
         JSON.stringify(providerConfig.config),
         { contentType: 'application/json' },
     );
+
+    console.log(providerConfig.config);
+
     await createCname(ingestEndpointEnvironment);
     await buildIngestEndpointConfig(ingestEndpointEnvironment);
     return ingestEndpointEnvironment;
@@ -359,8 +362,6 @@ const getBigQueryProviderConfig = async (bigqueryStreamConfig: any) => {
 
 const getMongoDbProviderConfig = async (mongoPushConfig: any) => {
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
-
-    console.log(mongoPushConfig);
 
     const connectionString = mongoPushConfig.use_api_mongo_server
         ? await config.getDatabaseUrl()
@@ -467,6 +468,7 @@ export const createUsageEndpointEnvironment = async (
             `S8 - Track Usage (${trackingEntity.id.toString()})`,
             dataManagerAccount,
             false,
+            provider,
         ),
         actor,
     );

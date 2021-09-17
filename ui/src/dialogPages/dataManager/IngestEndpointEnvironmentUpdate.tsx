@@ -18,6 +18,7 @@ import { DialogPreloadForm, DialogPreloadFormProps } from '../abstractions/Dialo
 import {
     buildStorageProviderSaveProperties,
     initialStorageProviderFieldsWithPartitionFilterChoice,
+    storageProviderValidators,
 } from '../../utils/StorageProviderUtils';
 
 const IngestEndpointEnvironmentUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
@@ -52,7 +53,7 @@ const IngestEndpointEnvironmentUpdate: FC<DialogPageProps> = (props: DialogPageP
                 ingest_endpoint_environment_id: props.id,
                 ingest_endpoint_revision_id: ingestEndpointEnvironmentValues.revisionId,
                 name: ingestEndpointEnvironmentValues.name,
-                ...buildStorageProviderSaveProperties(ingestEndpointEnvironmentValues, false, true),
+                ...buildStorageProviderSaveProperties(ingestEndpointEnvironmentValues, false),
             };
 
             if (ingestEndpointEnvironmentValues.certificate !== '') {
@@ -98,6 +99,7 @@ const IngestEndpointEnvironmentUpdate: FC<DialogPageProps> = (props: DialogPageP
                 validator: nameValidator,
                 error: () => 'Ingest Endpoint Environment name too short',
             },
+            ...storageProviderValidators,
         ],
         ...props,
     };

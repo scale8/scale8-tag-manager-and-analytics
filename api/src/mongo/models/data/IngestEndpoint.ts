@@ -2,6 +2,7 @@ import Model from '../../abstractions/Model';
 import Field from '../../decorators/Field';
 import { ObjectID } from 'mongodb';
 import DataManagerAccount from './DataManagerAccount';
+import { StorageProvider } from '../../../enums/StorageProvider';
 
 export default class IngestEndpoint extends Model {
     public getOrgEntityId(): ObjectID {
@@ -38,7 +39,18 @@ export default class IngestEndpoint extends Model {
     })
     private _analytics_enabled: boolean;
 
-    constructor(name: string, dataManagerAccount: DataManagerAccount, analyticsEnabled = true) {
+    @Field<string>({
+        required: true,
+        exposeToGQLAs: 'storage_provider',
+    })
+    private readonly _storage_provider!: StorageProvider;
+
+    constructor(
+        name: string,
+        dataManagerAccount: DataManagerAccount,
+        analyticsEnabled = true,
+        storageProvider: StorageProvider,
+    ) {
         super();
         this._name = name;
         this._analytics_enabled = analyticsEnabled;
@@ -46,6 +58,7 @@ export default class IngestEndpoint extends Model {
             this._org_id = dataManagerAccount.orgId;
             this._data_manager_account_id = dataManagerAccount.id;
         }
+        this._storage_provider = storageProvider;
     }
 
     get orgId(): ObjectID {

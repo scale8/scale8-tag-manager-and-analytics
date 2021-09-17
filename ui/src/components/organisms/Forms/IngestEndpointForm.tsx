@@ -2,6 +2,8 @@ import { FC } from 'react';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import DrawerFormLayout from '../../molecules/DrawerFormLayout';
 import { IngestEndpointFormProps } from '../../../dialogPages/dataManager/IngestEndpointCreate';
+import StorageProviderSelector from '../../molecules/StorageProviderSelector';
+import CheckBoxInput from '../../atoms/InputTypes/CheckBoxInput';
 
 const IngestEndpointForm: FC<IngestEndpointFormProps> = (props: IngestEndpointFormProps) => {
     return (
@@ -14,6 +16,18 @@ const IngestEndpointForm: FC<IngestEndpointFormProps> = (props: IngestEndpointFo
                 required
                 autoFocus
             />
+            <CheckBoxInput
+                name="analyticsEnabled"
+                value={props.values.analyticsEnabled}
+                setValue={(v) => {
+                    props.handleChange('analyticsEnabled', v);
+                }}
+                label="Enable Analytics"
+                className="DrawerFormField"
+                style={{ marginLeft: '-11px' }}
+                color="primary"
+            />
+            <StorageProviderSelector {...props} warnGraphDisabled />
         </DrawerFormLayout>
     );
 };

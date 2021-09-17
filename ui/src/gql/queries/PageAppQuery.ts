@@ -9,6 +9,8 @@ const PageAppQuery = gql`
                 name
                 type
                 domain
+                analytics_enabled
+                error_tracking_enabled
                 revisions {
                     id
                 }

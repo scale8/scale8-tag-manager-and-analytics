@@ -146,7 +146,12 @@ export default class TestUtils {
     }
 
     public static buildIngestEndpoint(id = '5edf4c48e9615d9a1c66babb'): IngestEndpoint {
-        const m = new IngestEndpoint('test ingest endpoint', TestUtils.buildDataManagerAccount());
+        const m = new IngestEndpoint(
+            'test ingest endpoint',
+            TestUtils.buildDataManagerAccount(),
+            true,
+            StorageProvider.MONGODB,
+        );
         return TestUtils.addModelFields<IngestEndpoint>(m, id);
     }
 
@@ -190,7 +195,12 @@ export default class TestUtils {
     }
 
     public static buildMockApp(id = '5edf4c48e9615d9a1c66bbaa'): App {
-        const m = new App('test app', TestUtils.buildTagManagerAccount(), 'testdomain.com');
+        const m = new App(
+            'test app',
+            TestUtils.buildTagManagerAccount(),
+            'testdomain.com',
+            StorageProvider.MONGODB,
+        );
         return TestUtils.addModelFields<App>(m, id);
     }
 

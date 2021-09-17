@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import IngestEndpointForm from '../../components/organisms/Forms/IngestEndpointForm';
 import { FormProps, FormValidationResult } from '../../hooks/form/useFormValidation';
 import CreateIngestEndpointQuery from '../../gql/mutations/CreateIngestEndpointQuery';
@@ -11,11 +11,34 @@ import {
     IngestEndpointValues,
 } from '../../utils/forms/IngestEndpointFormUtils';
 import { DialogForm, DialogFormProps } from '../abstractions/DialogForm';
+import {
+    buildStorageProviderSaveProperties,
+    initialStorageProviderFields,
+    storageProviderCustomValueSetter,
+} from '../../utils/StorageProviderUtils';
+import { StorageProvider } from '../../gql/generated/globalTypes';
 
-export type IngestEndpointFormProps = FormProps<IngestEndpointValues>;
+export type IngestEndpointFormProps = FormProps<IngestEndpointValues> & {
+    isCreate: boolean;
+};
 
 const IngestEndpointCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
     const dataManagerId = props.contextId;
+
+    const customValueSetter = (
+        valueKey: string,
+        value: any,
+        values: IngestEndpointValues,
+        setValues: Dispatch<SetStateAction<IngestEndpointValues>>,
+    ) => {
+        if (storageProviderCustomValueSetter(valueKey, value, values, setValues)) {
+            return;
+        }
+        setValues({
+            ...values,
+            [valueKey]: value,
+        });
+    };
 
     const ingestEndpointCreateProps: DialogFormProps<
         IngestEndpointValues,
@@ -23,13 +46,19 @@ const IngestEndpointCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
         CreateIngestEndpointResult
     > = {
         buildInitialState: () => ({
+            ...initialStorageProviderFields,
             name: '',
+            analyticsEnabled: true,
+            storageProvider: StorageProvider.MONGODB,
         }),
         saveQuery: useMutation<CreateIngestEndpointResult>(CreateIngestEndpointQuery),
         mapSaveData: (formValues: IngestEndpointValues) => ({
             ingestEndpointCreateInput: {
                 data_manager_account_id: dataManagerId,
                 name: formValues.name,
+                analytics_enabled: formValues.analyticsEnabled,
+                storage_provider: formValues.storageProvider as StorageProvider,
+                ...buildStorageProviderSaveProperties(formValues, true),
             },
         }),
         buildFormProps: (
@@ -42,11 +71,13 @@ const IngestEndpointCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
             title: 'Create Ingest Endpoint',
             formInfoProps: buildStandardFormInfo('ingestEndpoints', 'Create'),
             handleDialogClose: props.handleDialogClose,
+            isCreate: true,
         }),
         checkSuccessfullySubmitted: (formMutationData) =>
             formMutationData?.createIngestEndpoint.id !== undefined,
         pageComponent: IngestEndpointForm,
         validators: IngestEndpointValidators,
+        customValueSetter,
         ...props,
     };
 

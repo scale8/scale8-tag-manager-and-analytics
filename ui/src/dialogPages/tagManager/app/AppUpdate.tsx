@@ -12,6 +12,11 @@ import { UpdateApp } from '../../../gql/generated/UpdateApp';
 import { DialogPageProps } from '../../../types/DialogTypes';
 import { DialogPreloadForm, DialogPreloadFormProps } from '../../abstractions/DialogPreloadForm';
 import { buildStandardFormInfo } from '../../../utils/InfoLabelsUtils';
+import {
+    buildStorageProviderSaveProperties,
+    initialStorageProviderFields,
+    storageProviderValidators,
+} from '../../../utils/StorageProviderUtils';
 
 const AppUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
     const appUpdaterProps: DialogPreloadFormProps<
@@ -24,9 +29,13 @@ const AppUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
             variables: { id: props.id },
         }),
         buildInitialStatePreload: (formLoadedData: UpdateAppGetData) => ({
+            ...initialStorageProviderFields,
+            storageProvider: formLoadedData.getApp.storage_provider,
             name: formLoadedData.getApp.name,
             domain: formLoadedData.getApp.domain,
             type: formLoadedData.getApp.type,
+            analyticsEnabled: formLoadedData.getApp.analytics_enabled,
+            errorTrackingEnabled: formLoadedData.getApp.error_tracking_enabled,
         }),
         saveQuery: useMutation(UpdateAppQuery),
         mapSaveData: (appValues: AppValues) => ({
@@ -34,6 +43,9 @@ const AppUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
                 app_id: props.id,
                 name: appValues.name,
                 domain: appValues.domain,
+                analytics_enabled: appValues.analyticsEnabled,
+                error_tracking_enabled: appValues.errorTrackingEnabled,
+                ...buildStorageProviderSaveProperties(appValues, true),
             },
         }),
         buildFormProps: (
@@ -63,6 +75,7 @@ const AppUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
                 validator: domainValidator,
                 error: () => 'Invalid domain',
             },
+            ...storageProviderValidators,
         ],
         ...props,
     };

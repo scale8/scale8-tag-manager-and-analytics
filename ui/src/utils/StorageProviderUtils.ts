@@ -6,6 +6,7 @@ import {
     StorageProvider,
 } from '../gql/generated/globalTypes';
 import { Dispatch, SetStateAction } from 'react';
+import { ValidateConfiguration } from './validators/validateFormValues';
 
 export const getStorageProviderLabel = (key: string): string => {
     switch (key) {
@@ -14,7 +15,7 @@ export const getStorageProviderLabel = (key: string): string => {
         case StorageProvider.AWS_S3:
             return 'Amazon AWS S3';
         case StorageProvider.MONGODB:
-            return 'MongoDb Database';
+            return 'MongoDB Database';
         default:
             return key;
     }
@@ -76,6 +77,30 @@ export const storageProviderCustomValueSetter = (
         return false;
     }
 };
+
+export const storageProviderValidators: ValidateConfiguration<any>[] = [
+    {
+        field: 'serviceAccountJSON',
+        validator: async (value, values): Promise<-1 | 0 | string> => {
+            if (values.storageProvider === StorageProvider.GC_BIGQUERY_STREAM) {
+                const gcJSON = value === undefined ? '' : (value as string);
+                if (gcJSON.length === 0) {
+                    return 'Service Account Config is required';
+                } else {
+                    try {
+                        JSON.parse(gcJSON);
+                    } catch {
+                        return 'Service Account Config is not in a valid JSON format';
+                    }
+                    return -1;
+                }
+            } else {
+                return -1;
+            }
+        },
+        error: (result) => (result === 0 ? 'Invalid' : result),
+    },
+];
 
 export const buildStorageProviderSaveProperties = (
     values: StorageProviderFieldsWithPartitionFilterChoice,
