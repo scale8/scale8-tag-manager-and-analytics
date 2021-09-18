@@ -3,6 +3,8 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
+import { StorageProvider } from "./globalTypes";
+
 // ====================================================
 // GraphQL query operation: NavApp
 // ====================================================
@@ -131,6 +133,14 @@ export interface NavApp_getApp {
    * Name of the Application
    */
   name: string;
+  /**
+   * Whether the analytics on the `App` is enabled
+   */
+  analytics_enabled: boolean;
+  /**
+   * The storage provider used by the `App` to track data
+   */
+  storage_provider: StorageProvider;
   /**
    * The `TagManagerAccount` that contains the `App`
    */

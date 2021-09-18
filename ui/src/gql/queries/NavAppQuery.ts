@@ -7,6 +7,8 @@ const NavAppQuery = gql`
         getApp(id: $id) {
             id
             name
+            analytics_enabled
+            storage_provider
             tag_manager_account {
                 id
                 apps {

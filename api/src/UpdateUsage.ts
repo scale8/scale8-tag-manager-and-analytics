@@ -15,6 +15,7 @@ import { AccountType } from './enums/AccountType';
 import { getUsageCycle } from './utils/UsageUtils';
 import BaseDatabase from './backends/databases/abstractions/BaseDatabase';
 import BaseLogger from './backends/logging/abstractions/BaseLogger';
+import { StorageProvider } from './enums/StorageProvider';
 
 //register .env as soon as possible...
 dotenv.config();
@@ -23,7 +24,8 @@ dotenv.config();
 class UpdateUsage {
     @inject(TYPES.RepoFromModelFactory) protected readonly repoFactory!: RepoFromModelFactory;
     @inject(TYPES.BackendLogger) protected readonly logger!: BaseLogger;
-    @inject(TYPES.BackendDatabase) protected readonly backendDatabase!: BaseDatabase;
+    @inject(TYPES.BackendDatabaseFactory)
+    protected readonly backendDatabaseFactory!: (storage_provider: StorageProvider) => BaseDatabase;
 
     public async updateTagManagerUsage() {
         const accounts = await this.repoFactory(TagManagerAccount).find({});
@@ -39,14 +41,17 @@ class UpdateUsage {
                     const dayUsage = (
                         await Promise.all(
                             apps.map((app) =>
-                                this.backendDatabase.eventRequests(app, {
-                                    time_slice: 'DAY',
-                                    filter_options: {
-                                        from: startOfDay(usageCycle.start).getTime(),
-                                        to: endOfDay(usageCycle.end).getTime(),
+                                this.backendDatabaseFactory(app.storageProvider).eventRequests(
+                                    app,
+                                    {
+                                        time_slice: 'DAY',
+                                        filter_options: {
+                                            from: startOfDay(usageCycle.start).getTime(),
+                                            to: endOfDay(usageCycle.end).getTime(),
+                                        },
+                                        limit: 1000,
                                     },
-                                    limit: 1000,
-                                }),
+                                ),
                             ),
                         )
                     ).reduce((v: { [k: string]: number }, appDayUsage) => {
@@ -104,14 +109,17 @@ class UpdateUsage {
                     const dayUsage = (
                         await Promise.all(
                             ingestEndpoints.map((ingestEndpoint) =>
-                                this.backendDatabase.usage(ingestEndpoint, {
-                                    time_slice: 'DAY',
-                                    filter_options: {
-                                        from: startOfDay(usageCycle.start).getTime(),
-                                        to: endOfDay(usageCycle.end).getTime(),
+                                this.backendDatabaseFactory(ingestEndpoint.storageProvider).usage(
+                                    ingestEndpoint,
+                                    {
+                                        time_slice: 'DAY',
+                                        filter_options: {
+                                            from: startOfDay(usageCycle.start).getTime(),
+                                            to: endOfDay(usageCycle.end).getTime(),
+                                        },
+                                        limit: 1000,
                                     },
-                                    limit: 1000,
-                                }),
+                                ),
                             ),
                         )
                     ).reduce(

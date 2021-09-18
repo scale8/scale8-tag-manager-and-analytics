@@ -18,10 +18,13 @@ import {
 } from '../../utils/IngestEndpointEnvironmentUtils';
 import BaseDatabase from '../../backends/databases/abstractions/BaseDatabase';
 import { withUnManagedAccount } from '../../utils/DataManagerAccountUtils';
+import { StorageProvider } from '../../enums/StorageProvider';
 
 @injectable()
 export default class IngestEndpointEnvironmentManager extends Manager<IngestEndpointEnvironment> {
-    @inject(TYPES.BackendDatabase) private backendDatabase!: BaseDatabase;
+    @inject(TYPES.BackendDatabaseFactory) private backendDatabaseFactory!: (
+        storage_provider: StorageProvider,
+    ) => BaseDatabase;
 
     protected gqlSchema = gql`
         """
@@ -362,11 +365,19 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, env.orgId, async () => {
                     args.query_options.filter_options.environment = env.id.toString();
-                    return this.backendDatabase.requests(
-                        await this.repoFactory(IngestEndpoint).findByIdThrows(
-                            env.ingestEndpointId,
-                            userMessages.ingestEndpointFailed,
-                        ),
+                    const ingestEndpoint = await this.repoFactory(IngestEndpoint).findByIdThrows(
+                        env.ingestEndpointId,
+                        userMessages.ingestEndpointFailed,
+                    );
+                    if (ingestEndpoint.storageProvider === StorageProvider.AWS_S3) {
+                        return {
+                            result: [],
+                            from: new Date(),
+                            to: new Date(),
+                        };
+                    }
+                    return this.backendDatabaseFactory(ingestEndpoint.storageProvider).requests(
+                        ingestEndpoint,
                         args.query_options,
                     );
                 });
@@ -378,11 +389,19 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, env.orgId, async () => {
                     args.query_options.filter_options.environment = env.id.toString();
-                    return this.backendDatabase.bytes(
-                        await this.repoFactory(IngestEndpoint).findByIdThrows(
-                            env.ingestEndpointId,
-                            userMessages.ingestEndpointFailed,
-                        ),
+                    const ingestEndpoint = await this.repoFactory(IngestEndpoint).findByIdThrows(
+                        env.ingestEndpointId,
+                        userMessages.ingestEndpointFailed,
+                    );
+                    if (ingestEndpoint.storageProvider === StorageProvider.AWS_S3) {
+                        return {
+                            result: [],
+                            from: new Date(),
+                            to: new Date(),
+                        };
+                    }
+                    return this.backendDatabaseFactory(ingestEndpoint.storageProvider).bytes(
+                        ingestEndpoint,
                         args.query_options,
                     );
                 });

@@ -29,7 +29,9 @@ import { LogPriority } from '../../enums/LogPriority';
 
 @injectable()
 export default class IngestEndpointManager extends Manager<IngestEndpoint> {
-    @inject(TYPES.BackendDatabase) private backendDatabase!: BaseDatabase;
+    @inject(TYPES.BackendDatabaseFactory) private backendDatabaseFactory!: (
+        storage_provider: StorageProvider,
+    ) => BaseDatabase;
 
     protected gqlSchema = gql`
         """
@@ -445,10 +447,21 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                     new ObjectID(parent.id),
                     userMessages.ingestEndpointFailed,
                 );
+                if (ingestEndpoint.storageProvider === StorageProvider.AWS_S3) {
+                    return {
+                        result: [],
+                        from: new Date(),
+                        to: new Date(),
+                    };
+                }
                 return await this.orgAuth.asUserWithViewAccess(
                     ctx,
                     ingestEndpoint.orgId,
-                    async () => this.backendDatabase.requests(ingestEndpoint, args.query_options),
+                    async () =>
+                        this.backendDatabaseFactory(ingestEndpoint.storageProvider).requests(
+                            ingestEndpoint,
+                            args.query_options,
+                        ),
                 );
             },
             byte_stats: async (parent: any, args: any, ctx: CTX) => {
@@ -456,10 +469,21 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                     new ObjectID(parent.id),
                     userMessages.ingestEndpointFailed,
                 );
+                if (ingestEndpoint.storageProvider === StorageProvider.AWS_S3) {
+                    return {
+                        result: [],
+                        from: new Date(),
+                        to: new Date(),
+                    };
+                }
                 return await this.orgAuth.asUserWithViewAccess(
                     ctx,
                     ingestEndpoint.orgId,
-                    async () => this.backendDatabase.bytes(ingestEndpoint, args.query_options),
+                    async () =>
+                        this.backendDatabaseFactory(ingestEndpoint.storageProvider).bytes(
+                            ingestEndpoint,
+                            args.query_options,
+                        ),
                 );
             },
         },

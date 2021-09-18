@@ -23,8 +23,9 @@ export type SectionProps<Q> = {
     children?: ReactNode;
     sectionKey: symbol;
     queryResult: QueryResult<Q>;
+    initContext?: (data: Q) => void;
     buildButtonsProps: (data: Q) => BreadcrumbButtonProps[];
-    buildMenuItemsProps: (orgPermissions: CurrentOrgPermissions) => SideMenuButtonProps[];
+    buildMenuItemsProps: (orgPermissions: CurrentOrgPermissions, data: Q) => SideMenuButtonProps[];
     extractOrgUserDetails: (data: Q) => GqlOrgUserState;
     buildBreadcrumbActions?: (data: Q) => RowAction<any>[];
     requireValidTagManagerAccount?: boolean;
@@ -43,6 +44,7 @@ const Section = <Q extends { [key: string]: any }>(props: SectionProps<Q>): Reac
         buildBreadcrumbActions,
         accountExpireIn,
         accountIsTrial,
+        initContext,
     } = props;
 
     const sectionDetails = getSectionDetails(sectionKey);
@@ -130,9 +132,15 @@ const Section = <Q extends { [key: string]: any }>(props: SectionProps<Q>): Reac
         }
     }, [refreshCurrentSection]);
 
+    useEffect(() => {
+        if (initContext && data) {
+            initContext(data);
+        }
+    }, [initContext, data]);
+
     const buttonsProps = data ? buildButtonsProps(data) : [];
     const menuItemsProps = data
-        ? buildMenuItemsProps(extractPermissionsFromOrgUser(orgUserState))
+        ? buildMenuItemsProps(extractPermissionsFromOrgUser(orgUserState), data)
         : [];
     const breadcrumbActions =
         !data || buildBreadcrumbActions === undefined ? [] : buildBreadcrumbActions(data);

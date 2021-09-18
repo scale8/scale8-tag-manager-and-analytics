@@ -160,4 +160,8 @@ export default class App extends Model {
     set error_tracking_enabled(value: boolean) {
         this._error_tracking_enabled = value;
     }
+
+    get storageProvider(): StorageProvider {
+        return this._storage_provider;
+    }
 }

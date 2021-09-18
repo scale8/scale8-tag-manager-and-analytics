@@ -61,6 +61,7 @@ const LoggedInSection: FC<ChildrenOnlyProps> = (props: ChildrenOnlyProps) => {
         current: undefined,
         previous: undefined,
     });
+    const [sectionHasAnalytics, setSectionHasAnalytics] = useState(false);
 
     const [gates, dispatchGatesAction] = useReducer(
         (
@@ -96,6 +97,8 @@ const LoggedInSection: FC<ChildrenOnlyProps> = (props: ChildrenOnlyProps) => {
                     setRefreshCurrentSection,
                     sectionHistory,
                     dispatchSectionAction,
+                    sectionHasAnalytics,
+                    setSectionHasAnalytics,
                 },
                 loggedInUserState: {
                     loggedUserId: data?.me.id ?? '',

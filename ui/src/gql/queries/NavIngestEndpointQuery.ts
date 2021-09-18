@@ -7,6 +7,8 @@ const NavIngestEndpointQuery = gql`
         getIngestEndpoint(id: $id) {
             id
             name
+            analytics_enabled
+            storage_provider
             data_manager_account {
                 id
                 ingest_endpoints {

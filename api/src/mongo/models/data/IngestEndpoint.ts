@@ -94,4 +94,8 @@ export default class IngestEndpoint extends Model {
     set analytics_enabled(value: boolean) {
         this._analytics_enabled = value;
     }
+
+    get storageProvider(): StorageProvider {
+        return this._storage_provider;
+    }
 }

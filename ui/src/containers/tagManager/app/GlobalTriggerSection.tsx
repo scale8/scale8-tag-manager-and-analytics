@@ -16,6 +16,7 @@ import { SectionKey } from '../../SectionsDetails';
 import { useLoggedInState } from '../../../context/AppContext';
 import { useRouter } from 'next/router';
 import { ChildrenAndIdProps } from '../../../types/props/ChildrenAndIdProps';
+import { analyticsEnabled } from '../../../utils/AnalyticsUtils';
 
 const GlobalTriggerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
     const router = useRouter();
@@ -34,6 +35,11 @@ const GlobalTriggerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps)
         queryResult: useQuery<NavGlobalTrigger>(NavGlobalTriggerQuery, {
             variables: { id },
         }),
+        initContext: (data) => {
+            templateInteractions.setSectionHasAnalytics(
+                analyticsEnabled(data.getTrigger.revision.app),
+            );
+        },
         buildButtonsProps: (data) => [
             buildOrgButtonProps(
                 router,

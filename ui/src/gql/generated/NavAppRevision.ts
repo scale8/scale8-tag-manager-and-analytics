@@ -3,6 +3,8 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
+import { StorageProvider } from "./globalTypes";
+
 // ====================================================
 // GraphQL query operation: NavAppRevision
 // ====================================================
@@ -143,6 +145,14 @@ export interface NavAppRevision_getRevision_app {
    * Name of the Application
    */
   name: string;
+  /**
+   * Whether the analytics on the `App` is enabled
+   */
+  analytics_enabled: boolean;
+  /**
+   * The storage provider used by the `App` to track data
+   */
+  storage_provider: StorageProvider;
   /**
    * Revisions linked to the `App`. All `App` entities such as `Tag`, `RuleGroup`, `Rule` etc. sit under a revisioning system.
    */

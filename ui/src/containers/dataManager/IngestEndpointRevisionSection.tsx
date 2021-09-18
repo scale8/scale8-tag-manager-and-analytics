@@ -17,6 +17,7 @@ import { useLoggedInState } from '../../context/AppContext';
 import { useRouter } from 'next/router';
 import { toIngestEndpointRevision } from '../../utils/NavigationPaths';
 import { ChildrenAndIdProps } from '../../types/props/ChildrenAndIdProps';
+import { analyticsEnabled } from '../../utils/AnalyticsUtils';
 
 const IngestEndpointRevisionSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
     const router = useRouter();
@@ -33,6 +34,11 @@ const IngestEndpointRevisionSection: FC<ChildrenAndIdProps> = (props: ChildrenAn
         queryResult: useQuery<NavIngestEndpointRevision>(NavIngestEndpointRevisionQuery, {
             variables: { id },
         }),
+        initContext: (data) => {
+            templateInteractions.setSectionHasAnalytics(
+                analyticsEnabled(data.getIngestEndpointRevision.ingest_endpoint),
+            );
+        },
         buildButtonsProps: (data) => [
             buildOrgButtonProps(
                 router,
