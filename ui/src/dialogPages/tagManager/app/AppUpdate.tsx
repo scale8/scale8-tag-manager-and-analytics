@@ -45,7 +45,7 @@ const AppUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
                 domain: appValues.domain,
                 analytics_enabled: appValues.analyticsEnabled,
                 error_tracking_enabled: appValues.errorTrackingEnabled,
-                ...buildStorageProviderSaveProperties(appValues, true),
+                ...buildStorageProviderSaveProperties(appValues, false),
             },
         }),
         buildFormProps: (

@@ -199,10 +199,12 @@ export const updateIngestEndpointEnvironment = async (
     const revision = await findRevision();
 
     //we need to check this revision is ok to attach...
-    if (revision !== null && revision.isFinal) {
-        ingestEndpointEnvironment.ingestEndpointRevisionId = revision.id;
-    } else {
-        throw new GQLError(userMessages.revisionNotFinalAttaching, true);
+    if (revision !== null) {
+        if (revision.isFinal) {
+            ingestEndpointEnvironment.ingestEndpointRevisionId = revision.id;
+        } else {
+            throw new GQLError(userMessages.revisionNotFinalAttaching, true);
+        }
     }
 
     if (providerConfig !== undefined) {
@@ -288,8 +290,6 @@ export const createIngestEndpointEnvironment = async (
         JSON.stringify(providerConfig.config),
         { contentType: 'application/json' },
     );
-
-    console.log(providerConfig.config);
 
     await createCname(ingestEndpointEnvironment);
     await buildIngestEndpointConfig(ingestEndpointEnvironment);

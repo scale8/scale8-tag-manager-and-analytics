@@ -35,12 +35,14 @@ export default class IngestEndpoint extends Model {
 
     @Field<boolean>({
         required: true,
+        defaultValue: () => true,
         exposeToGQLAs: 'analytics_enabled',
     })
     private _analytics_enabled: boolean;
 
     @Field<string>({
         required: true,
+        defaultValue: () => StorageProvider.MONGODB,
         exposeToGQLAs: 'storage_provider',
     })
     private readonly _storage_provider!: StorageProvider;

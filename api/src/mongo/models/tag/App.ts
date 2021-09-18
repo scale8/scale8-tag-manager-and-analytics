@@ -37,12 +37,14 @@ export default class App extends Model {
 
     @Field<boolean>({
         required: true,
+        defaultValue: () => true,
         exposeToGQLAs: 'analytics_enabled',
     })
     private _analytics_enabled: boolean;
 
     @Field<boolean>({
         required: true,
+        defaultValue: () => true,
         exposeToGQLAs: 'error_tracking_enabled',
     })
     private _error_tracking_enabled: boolean;
@@ -61,6 +63,7 @@ export default class App extends Model {
 
     @Field<string>({
         required: true,
+        defaultValue: () => StorageProvider.MONGODB,
         exposeToGQLAs: 'storage_provider',
     })
     private readonly _storage_provider!: StorageProvider;

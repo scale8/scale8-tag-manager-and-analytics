@@ -15,7 +15,14 @@ import DataError from '../../errors/DataError';
 import userMessages from '../../errors/UserMessages';
 import { createApp } from '../../utils/AppUtils';
 import BaseDatabase from '../../backends/databases/abstractions/BaseDatabase';
-import { getProviderConfig } from '../../utils/IngestEndpointEnvironmentUtils';
+import {
+    getProviderConfig,
+    getUpdateProviderConfig,
+    updateIngestEndpointEnvironment,
+} from '../../utils/IngestEndpointEnvironmentUtils';
+import GenericError from '../../errors/GenericError';
+import { LogPriority } from '../../enums/LogPriority';
+import IngestEndpointEnvironment from '../../mongo/models/data/IngestEndpointEnvironment';
 
 @injectable()
 export default class AppManager extends Manager<App> {
@@ -384,7 +391,36 @@ export default class AppManager extends Manager<App> {
                 userMessages.appFailed,
             );
             return this.orgAuth.asUserWithEditAccess(ctx, app.orgId, async (me) => {
-                app.bulkGQLSet(data, ['name', 'domain']); //only is a safety check against this function
+                if (app.usageIngestEndpointEnvironmentId === undefined) {
+                    throw new GenericError(
+                        `Failed to get usage Ingest Endpoint for App: ${app.id.toString()}`,
+                        LogPriority.DEBUG,
+                    );
+                }
+
+                const trackingIngestEndpointEnvironment = await this.repoFactory(
+                    IngestEndpointEnvironment,
+                ).findByIdThrows(app.usageIngestEndpointEnvironmentId, userMessages.usageFailed);
+
+                console.log(data);
+
+                const providerConfig = await getUpdateProviderConfig(
+                    data,
+                    trackingIngestEndpointEnvironment,
+                );
+
+                await updateIngestEndpointEnvironment(
+                    me,
+                    trackingIngestEndpointEnvironment,
+                    providerConfig,
+                );
+
+                app.bulkGQLSet(data, [
+                    'name',
+                    'domain',
+                    'analytics_enabled',
+                    'error_tracking_enabled',
+                ]); //only is a safety check against this function
                 await this.repoFactory(App).save(app, me);
                 return true;
             });

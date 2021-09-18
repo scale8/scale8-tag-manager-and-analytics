@@ -15,6 +15,8 @@ import Org from '../../mongo/models/Org';
 import {
     createUsageEndpointEnvironment,
     getProviderConfig,
+    getUpdateProviderConfig,
+    updateIngestEndpointEnvironment,
 } from '../../utils/IngestEndpointEnvironmentUtils';
 import { VarType } from '../../enums/VarType';
 import TYPES from '../../container/IOC.types';
@@ -22,6 +24,8 @@ import BaseDatabase from '../../backends/databases/abstractions/BaseDatabase';
 import { withUnManagedAccount } from '../../utils/DataManagerAccountUtils';
 import { StorageProvider } from '../../enums/StorageProvider';
 import { StorageProviderConfig } from '../../mongo/types/Types';
+import GenericError from '../../errors/GenericError';
+import { LogPriority } from '../../enums/LogPriority';
 
 @injectable()
 export default class IngestEndpointManager extends Manager<IngestEndpoint> {
@@ -230,8 +234,34 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
         updateIngestEndpoint: async (parent: any, args: any, ctx: CTX) => {
             const data = args.ingestEndpointUpdateInput;
             const ingestEndpoint = await this.findAndCheckIngestEndpoint(data);
+
             return this.orgAuth.asUserWithEditAccess(ctx, ingestEndpoint.orgId, async (me) => {
-                ingestEndpoint.bulkGQLSet(data, ['name']); //only is a safety check against this function
+                if (ingestEndpoint.usageIngestEndpointEnvironmentId === undefined) {
+                    throw new GenericError(
+                        `Failed to get usage Ingest Endpoint for Ingest Endpoint: ${ingestEndpoint.id.toString()}`,
+                        LogPriority.DEBUG,
+                    );
+                }
+
+                const trackingIngestEndpointEnvironment = await this.repoFactory(
+                    IngestEndpointEnvironment,
+                ).findByIdThrows(
+                    ingestEndpoint.usageIngestEndpointEnvironmentId,
+                    userMessages.usageFailed,
+                );
+
+                const providerConfig = await getUpdateProviderConfig(
+                    data,
+                    trackingIngestEndpointEnvironment,
+                );
+
+                await updateIngestEndpointEnvironment(
+                    me,
+                    trackingIngestEndpointEnvironment,
+                    providerConfig,
+                );
+
+                ingestEndpoint.bulkGQLSet(data, ['name', 'analytics_enabled']); //only is a safety check against this function
                 await this.repoFactory(IngestEndpoint).save(ingestEndpoint, me);
                 return true;
             });
