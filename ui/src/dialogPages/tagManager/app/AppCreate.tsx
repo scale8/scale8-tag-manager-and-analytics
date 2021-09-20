@@ -43,10 +43,26 @@ const AppCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
         if (storageProviderCustomValueSetter(valueKey, value, values, setValues)) {
             return;
         }
-        setValues({
-            ...values,
-            [valueKey]: value,
-        });
+        if (valueKey === 'analyticsEnabled' || valueKey === 'errorTrackingEnabled') {
+            if (!values.analyticsEnabled && !values.errorTrackingEnabled) {
+                setValues({
+                    ...values,
+                    ...initialStorageProviderFields,
+                    storageProvider: StorageProvider.MONGODB,
+                    [valueKey]: value,
+                });
+            } else {
+                setValues({
+                    ...values,
+                    [valueKey]: value,
+                });
+            }
+        } else {
+            setValues({
+                ...values,
+                [valueKey]: value,
+            });
+        }
     };
 
     const appCreateProps: DialogFormProps<AppValues, AppFormProps, CreateApp> = {

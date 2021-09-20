@@ -15,6 +15,7 @@ import CheckBoxInput from '../atoms/InputTypes/CheckBoxInput';
 
 const StorageProviderSelector = <T extends { [key: string]: any }>(
     props: FormProps<T> & {
+        includeBigQueryPartitionFilter?: boolean;
         warnGraphDisabled?: boolean;
         isCreate: boolean;
     },
@@ -123,13 +124,15 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
                             className="DrawerFormField"
                             required
                         />
-                        <ControlledBooleanSelect
-                            className="DrawerFormField"
-                            label="Require partition filter in queries"
-                            name="requirePartitionFilterInQueries"
-                            formProps={props}
-                            required
-                        />
+                        {props.includeBigQueryPartitionFilter && (
+                            <ControlledBooleanSelect
+                                className="DrawerFormField"
+                                label="Require partition filter in queries"
+                                name="requirePartitionFilterInQueries"
+                                formProps={props}
+                                required
+                            />
+                        )}
                     </BoxedInputs>
                 )}
             {(props.isCreate || props.values.editStorageProviderSettings) &&

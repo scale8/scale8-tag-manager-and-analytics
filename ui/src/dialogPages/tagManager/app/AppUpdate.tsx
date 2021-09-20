@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import { FormValidationResult } from '../../../hooks/form/useFormValidation';
 import { ApolloError, useMutation, useQuery } from '@apollo/client';
 import UpdateAppGetQuery from '../../../gql/queries/UpdateAppGetQuery';
@@ -19,6 +19,33 @@ import {
 } from '../../../utils/StorageProviderUtils';
 
 const AppUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
+    const customValueSetter = (
+        valueKey: string,
+        value: any,
+        values: AppValues,
+        setValues: Dispatch<SetStateAction<AppValues>>,
+    ) => {
+        if (valueKey === 'analyticsEnabled' || valueKey === 'errorTrackingEnabled') {
+            if (!values.analyticsEnabled && !values.errorTrackingEnabled) {
+                setValues({
+                    ...values,
+                    editStorageProviderSettings: false,
+                    [valueKey]: value,
+                });
+            } else {
+                setValues({
+                    ...values,
+                    [valueKey]: value,
+                });
+            }
+        } else {
+            setValues({
+                ...values,
+                [valueKey]: value,
+            });
+        }
+    };
+
     const appUpdaterProps: DialogPreloadFormProps<
         UpdateAppGetData,
         AppValues,
@@ -77,6 +104,7 @@ const AppUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
             },
             ...storageProviderValidators,
         ],
+        customValueSetter,
         ...props,
     };
 

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import IngestEndpointForm from '../../components/organisms/Forms/IngestEndpointForm';
 import { ApolloError, useMutation, useQuery } from '@apollo/client';
 import { UpdateIngestEndpointGetData } from '../../gql/generated/UpdateIngestEndpointGetData';
@@ -20,6 +20,33 @@ import {
 } from '../../utils/StorageProviderUtils';
 
 const IngestEndpointUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
+    const customValueSetter = (
+        valueKey: string,
+        value: any,
+        values: IngestEndpointValues,
+        setValues: Dispatch<SetStateAction<IngestEndpointValues>>,
+    ) => {
+        if (valueKey === 'analyticsEnabled') {
+            if (!values.analyticsEnabled) {
+                setValues({
+                    ...values,
+                    editStorageProviderSettings: false,
+                    [valueKey]: value,
+                });
+            } else {
+                setValues({
+                    ...values,
+                    [valueKey]: value,
+                });
+            }
+        } else {
+            setValues({
+                ...values,
+                [valueKey]: value,
+            });
+        }
+    };
+
     const ingestEndpointUpdateProps: DialogPreloadFormProps<
         UpdateIngestEndpointGetData,
         IngestEndpointValues,
@@ -60,6 +87,7 @@ const IngestEndpointUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
         checkSuccessfullySubmitted: (formMutationData) => formMutationData?.updateIngestEndpoint,
         pageComponent: IngestEndpointForm,
         validators: IngestEndpointValidators,
+        customValueSetter,
         ...props,
     };
 

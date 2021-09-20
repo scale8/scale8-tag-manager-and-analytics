@@ -34,10 +34,26 @@ const IngestEndpointCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
         if (storageProviderCustomValueSetter(valueKey, value, values, setValues)) {
             return;
         }
-        setValues({
-            ...values,
-            [valueKey]: value,
-        });
+        if (valueKey === 'analyticsEnabled') {
+            if (!values.analyticsEnabled) {
+                setValues({
+                    ...values,
+                    ...initialStorageProviderFields,
+                    storageProvider: StorageProvider.MONGODB,
+                    [valueKey]: value,
+                });
+            } else {
+                setValues({
+                    ...values,
+                    [valueKey]: value,
+                });
+            }
+        } else {
+            setValues({
+                ...values,
+                [valueKey]: value,
+            });
+        }
     };
 
     const ingestEndpointCreateProps: DialogFormProps<

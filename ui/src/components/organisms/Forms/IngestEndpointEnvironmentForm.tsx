@@ -94,7 +94,7 @@ const IngestEndpointEnvironmentForm: FC<IngestEndpointEnvironmentFormProps> = (
                 </>
             )}
 
-            <StorageProviderSelector {...props} />
+            <StorageProviderSelector {...props} includeBigQueryPartitionFilter />
         </DrawerFormLayout>
     );
 };
