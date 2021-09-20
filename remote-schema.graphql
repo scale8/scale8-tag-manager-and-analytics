@@ -4517,7 +4517,7 @@ input AppCreateInput {
     "If the error tracking on the `App` should be enabled"
     error_tracking_enabled: Boolean!
     "The Google Cloud BigQuery Stream specific configuration linked to this new `App`"
-    gc_bigquery_stream_config: ManagedGCBigQueryStreamConfig
+    gc_bigquery_stream_config: GCBigQueryStreamConfig
     "The MongoDB specific configuration linked to this new `App`"
     mongo_push_config: MongoDbPushConfig
     "The name of the new `App` being created"
@@ -4601,7 +4601,7 @@ input AppUpdateInput {
     "If the error tracking on the `App` should be enabled"
     error_tracking_enabled: Boolean!
     "The Google Cloud BigQuery Stream specific configuration linked to this new `App`"
-    gc_bigquery_stream_config: ManagedGCBigQueryStreamConfig
+    gc_bigquery_stream_config: GCBigQueryStreamConfig
     "The MongoDB specific configuration linked to this new `App`"
     mongo_push_config: MongoDbPushConfig
     "`App` name"
@@ -4867,7 +4867,7 @@ input GCBigQueryStreamConfig {
     "The 'Data Set' under which a new table will be created."
     data_set_name: String!
     "If this is set to true, a WHERE clause will be required when querying data in order to reduce costs. See BigQuery documentation for more details."
-    require_partition_filter_in_queries: Boolean = false
+    require_partition_filter_in_queries: Boolean = true
     "Service Account JSON for Google Cloud's BigQuery administrative role."
     service_account_json: JSON!
 }
@@ -4907,7 +4907,7 @@ input IngestEndpointCreateInput {
     "The `DataManagerAccount` under which the `IngestEndpoint` should be created"
     data_manager_account_id: ID!
     "The Google Cloud BigQuery Stream specific configuration linked to this new `App`"
-    gc_bigquery_stream_config: ManagedGCBigQueryStreamConfig
+    gc_bigquery_stream_config: GCBigQueryStreamConfig
     "The MongoDB specific configuration linked to this new `App`"
     mongo_push_config: MongoDbPushConfig
     "The name of the new `IngestEndpoint` being created"
@@ -5026,7 +5026,7 @@ input IngestEndpointUpdateInput {
     "The AWS specific configuration linked to this new `App`"
     aws_storage_config: AWSStorageConfig
     "The Google Cloud BigQuery Stream specific configuration linked to this new `App`"
-    gc_bigquery_stream_config: ManagedGCBigQueryStreamConfig
+    gc_bigquery_stream_config: GCBigQueryStreamConfig
     "`IngestEndpoint` ID to update data against"
     ingest_endpoint_id: ID!
     "The MongoDB specific configuration linked to this new `App`"
@@ -5068,16 +5068,6 @@ input LoginInput {
     email: String!
     "`User`'s Password"
     password: String!
-}
-
-"BigQuery stream configuration for managed endpoints."
-input ManagedGCBigQueryStreamConfig {
-    "The location of the data set, if it doesn't exist, we'll try and create it using the location specified"
-    data_set_location: String = "US"
-    "The 'Data Set' under which a new table will be created."
-    data_set_name: String!
-    "Service Account JSON for Google Cloud's BigQuery administrative role."
-    service_account_json: JSON!
 }
 
 input MeUpdateInput {

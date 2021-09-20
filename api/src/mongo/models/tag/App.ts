@@ -145,19 +145,19 @@ export default class App extends Model {
         this._domain = value;
     }
 
-    get analytics_enabled(): boolean {
+    get analyticsEnabled(): boolean {
         return this._analytics_enabled;
     }
 
-    set analytics_enabled(value: boolean) {
+    set analyticsEnabled(value: boolean) {
         this._analytics_enabled = value;
     }
 
-    get error_tracking_enabled(): boolean {
+    get errorTrackingEnabled(): boolean {
         return this._error_tracking_enabled;
     }
 
-    set error_tracking_enabled(value: boolean) {
+    set errorTrackingEnabled(value: boolean) {
         this._error_tracking_enabled = value;
     }
 

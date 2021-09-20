@@ -16,7 +16,8 @@ import {
     initialStorageProviderFields,
     storageProviderCustomValueSetter,
 } from '../../utils/StorageProviderUtils';
-import { StorageProvider } from '../../gql/generated/globalTypes';
+import { Mode, StorageProvider } from '../../gql/generated/globalTypes';
+import { useConfigState } from '../../context/AppContext';
 
 export type IngestEndpointFormProps = FormProps<IngestEndpointValues> & {
     isCreate: boolean;
@@ -24,6 +25,8 @@ export type IngestEndpointFormProps = FormProps<IngestEndpointValues> & {
 
 const IngestEndpointCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
     const dataManagerId = props.contextId;
+
+    const { mode } = useConfigState();
 
     const customValueSetter = (
         valueKey: string,
@@ -68,15 +71,27 @@ const IngestEndpointCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
             storageProvider: StorageProvider.MONGODB,
         }),
         saveQuery: useMutation<CreateIngestEndpointResult>(CreateIngestEndpointQuery),
-        mapSaveData: (formValues: IngestEndpointValues) => ({
-            ingestEndpointCreateInput: {
-                data_manager_account_id: dataManagerId,
-                name: formValues.name,
-                analytics_enabled: formValues.analyticsEnabled,
-                storage_provider: formValues.storageProvider as StorageProvider,
-                ...buildStorageProviderSaveProperties(formValues, true),
-            },
-        }),
+        mapSaveData: (formValues: IngestEndpointValues) => {
+            if (mode === Mode.COMMERCIAL) {
+                return {
+                    ingestEndpointCreateInput: {
+                        data_manager_account_id: dataManagerId,
+                        name: formValues.name,
+                        analytics_enabled: true,
+                    },
+                };
+            }
+
+            return {
+                ingestEndpointCreateInput: {
+                    data_manager_account_id: dataManagerId,
+                    name: formValues.name,
+                    analytics_enabled: formValues.analyticsEnabled,
+                    storage_provider: formValues.storageProvider as StorageProvider,
+                    ...buildStorageProviderSaveProperties(formValues, true),
+                },
+            };
+        },
         buildFormProps: (
             formValidationValues: FormValidationResult<IngestEndpointValues>,
             gqlError?: ApolloError,

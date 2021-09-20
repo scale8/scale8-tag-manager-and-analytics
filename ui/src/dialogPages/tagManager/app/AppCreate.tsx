@@ -3,7 +3,7 @@ import AppForm from '../../../components/organisms/Forms/AppForm';
 import { FormProps, FormValidationResult } from '../../../hooks/form/useFormValidation';
 import { ApolloError, useMutation } from '@apollo/client';
 import CreateAppQuery from '../../../gql/mutations/CreateAppQuery';
-import { AppType, StorageProvider } from '../../../gql/generated/globalTypes';
+import { AppType, Mode, StorageProvider } from '../../../gql/generated/globalTypes';
 import domainValidator from '../../../utils/validators/domainValidator';
 import nameValidator from '../../../utils/validators/nameValidator';
 import { CreateApp } from '../../../gql/generated/CreateApp';
@@ -17,6 +17,7 @@ import {
     StorageProviderFields,
     storageProviderValidators,
 } from '../../../utils/StorageProviderUtils';
+import { useConfigState } from '../../../context/AppContext';
 
 export type AppValues = StorageProviderFields & {
     name: string;
@@ -33,6 +34,8 @@ export type AppFormProps = FormProps<AppValues> & {
 
 const AppCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
     const accountId = props.contextId;
+
+    const { mode } = useConfigState();
 
     const customValueSetter = (
         valueKey: string,
@@ -76,18 +79,33 @@ const AppCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
             type: AppType.WEB,
         }),
         saveQuery: useMutation(CreateAppQuery),
-        mapSaveData: (appValues: AppValues) => ({
-            appCreateInput: {
-                tag_manager_account_id: accountId,
-                name: appValues.name,
-                domain: appValues.domain,
-                type: appValues.type,
-                analytics_enabled: appValues.analyticsEnabled,
-                error_tracking_enabled: appValues.errorTrackingEnabled,
-                storage_provider: appValues.storageProvider as StorageProvider,
-                ...buildStorageProviderSaveProperties(appValues, true),
-            },
-        }),
+        mapSaveData: (appValues: AppValues) => {
+            if (mode === Mode.COMMERCIAL) {
+                return {
+                    appCreateInput: {
+                        tag_manager_account_id: accountId,
+                        name: appValues.name,
+                        domain: appValues.domain,
+                        type: appValues.type,
+                        analytics_enabled: true,
+                        error_tracking_enabled: true,
+                    },
+                };
+            }
+
+            return {
+                appCreateInput: {
+                    tag_manager_account_id: accountId,
+                    name: appValues.name,
+                    domain: appValues.domain,
+                    type: appValues.type,
+                    analytics_enabled: appValues.analyticsEnabled,
+                    error_tracking_enabled: appValues.errorTrackingEnabled,
+                    storage_provider: appValues.storageProvider as StorageProvider,
+                    ...buildStorageProviderSaveProperties(appValues, true),
+                },
+            };
+        },
         buildFormProps: (
             formValidationValues: FormValidationResult<AppValues>,
             gqlError?: ApolloError,

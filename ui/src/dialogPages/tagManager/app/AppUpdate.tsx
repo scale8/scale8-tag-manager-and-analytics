@@ -17,8 +17,12 @@ import {
     initialStorageProviderFields,
     storageProviderValidators,
 } from '../../../utils/StorageProviderUtils';
+import { useConfigState } from '../../../context/AppContext';
+import { Mode } from '../../../gql/generated/globalTypes';
 
 const AppUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
+    const { mode } = useConfigState();
+
     const customValueSetter = (
         valueKey: string,
         value: any,
@@ -65,16 +69,30 @@ const AppUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
             errorTrackingEnabled: formLoadedData.getApp.error_tracking_enabled,
         }),
         saveQuery: useMutation(UpdateAppQuery),
-        mapSaveData: (appValues: AppValues) => ({
-            appUpdateInput: {
-                app_id: props.id,
-                name: appValues.name,
-                domain: appValues.domain,
-                analytics_enabled: appValues.analyticsEnabled,
-                error_tracking_enabled: appValues.errorTrackingEnabled,
-                ...buildStorageProviderSaveProperties(appValues, false),
-            },
-        }),
+        mapSaveData: (appValues: AppValues) => {
+            if (mode === Mode.COMMERCIAL) {
+                return {
+                    appUpdateInput: {
+                        app_id: props.id,
+                        name: appValues.name,
+                        domain: appValues.domain,
+                        analytics_enabled: true,
+                        error_tracking_enabled: true,
+                    },
+                };
+            }
+
+            return {
+                appUpdateInput: {
+                    app_id: props.id,
+                    name: appValues.name,
+                    domain: appValues.domain,
+                    analytics_enabled: appValues.analyticsEnabled,
+                    error_tracking_enabled: appValues.errorTrackingEnabled,
+                    ...buildStorageProviderSaveProperties(appValues, false),
+                },
+            };
+        },
         buildFormProps: (
             formLoadedData: UpdateAppGetData,
             formValidationValues: FormValidationResult<AppValues>,

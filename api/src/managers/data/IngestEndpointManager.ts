@@ -14,6 +14,8 @@ import { fetchOrg } from '../../utils/OrgUtils';
 import Org from '../../mongo/models/Org';
 import {
     createUsageEndpointEnvironment,
+    getCommercialStorageProvider,
+    getCommercialStorageProviderConfig,
     getProviderConfig,
     getUpdateProviderConfig,
     updateIngestEndpointEnvironment,
@@ -141,7 +143,7 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
             """
             The Google Cloud BigQuery Stream specific configuration linked to this new \`App\`
             """
-            gc_bigquery_stream_config: ManagedGCBigQueryStreamConfig
+            gc_bigquery_stream_config: GCBigQueryStreamConfig
             """
             The MongoDB specific configuration linked to this new \`App\`
             """
@@ -185,7 +187,7 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
             """
             The Google Cloud BigQuery Stream specific configuration linked to this new \`App\`
             """
-            gc_bigquery_stream_config: ManagedGCBigQueryStreamConfig
+            gc_bigquery_stream_config: GCBigQueryStreamConfig
             """
             The MongoDB specific configuration linked to this new \`App\`
             """
@@ -341,7 +343,22 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
             };
 
             const data = args.ingestEndpointCreateInput;
-            const providerConfig = await getProviderConfig(data);
+
+            const getStorageProviderDetails = async (): Promise<
+                [StorageProvider, StorageProviderConfig]
+            > => {
+                if (this.config.isCommercial()) {
+                    return [
+                        getCommercialStorageProvider(),
+                        await getCommercialStorageProviderConfig(),
+                    ];
+                }
+
+                return [data.storage_provider, await getProviderConfig(data)];
+            };
+
+            const [storageProvider, providerConfig] = await getStorageProviderDetails();
+
             const dataManagerAccount = await this.repoFactory(DataManagerAccount).findByIdThrows(
                 new ObjectId(data.data_manager_account_id),
                 userMessages.accountFailed,
@@ -362,7 +379,7 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                             me,
                             dataManagerAccount,
                             data.name,
-                            data.storage_provider,
+                            storageProvider,
                             providerConfig,
                             data.analytics_enabled,
                         )

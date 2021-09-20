@@ -18,8 +18,12 @@ import {
     buildStorageProviderSaveProperties,
     initialStorageProviderFields,
 } from '../../utils/StorageProviderUtils';
+import { useConfigState } from '../../context/AppContext';
+import { Mode } from '../../gql/generated/globalTypes';
 
 const IngestEndpointUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
+    const { mode } = useConfigState();
+
     const customValueSetter = (
         valueKey: string,
         value: any,
@@ -63,14 +67,25 @@ const IngestEndpointUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
             analyticsEnabled: formLoadedData.getIngestEndpoint.analytics_enabled,
         }),
         saveQuery: useMutation(UpdateIngestEndpointQuery),
-        mapSaveData: (formValues: IngestEndpointValues) => ({
-            ingestEndpointUpdateInput: {
-                ingest_endpoint_id: props.id,
-                name: formValues.name,
-                analytics_enabled: formValues.analyticsEnabled,
-                ...buildStorageProviderSaveProperties(formValues, false),
-            },
-        }),
+        mapSaveData: (formValues: IngestEndpointValues) => {
+            if (mode === Mode.COMMERCIAL) {
+                return {
+                    ingestEndpointUpdateInput: {
+                        ingest_endpoint_id: props.id,
+                        name: formValues.name,
+                        analytics_enabled: true,
+                    },
+                };
+            }
+            return {
+                ingestEndpointUpdateInput: {
+                    ingest_endpoint_id: props.id,
+                    name: formValues.name,
+                    analytics_enabled: formValues.analyticsEnabled,
+                    ...buildStorageProviderSaveProperties(formValues, false),
+                },
+            };
+        },
         buildFormProps: (
             formLoadedData: UpdateIngestEndpointGetData,
             formValidationValues: FormValidationResult<IngestEndpointValues>,

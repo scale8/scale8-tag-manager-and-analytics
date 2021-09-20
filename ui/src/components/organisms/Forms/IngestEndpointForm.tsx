@@ -4,8 +4,12 @@ import DrawerFormLayout from '../../molecules/DrawerFormLayout';
 import { IngestEndpointFormProps } from '../../../dialogPages/dataManager/IngestEndpointCreate';
 import StorageProviderSelector from '../../molecules/StorageProviderSelector';
 import CheckBoxInput from '../../atoms/InputTypes/CheckBoxInput';
+import { Mode } from '../../../gql/generated/globalTypes';
+import { useConfigState } from '../../../context/AppContext';
 
 const IngestEndpointForm: FC<IngestEndpointFormProps> = (props: IngestEndpointFormProps) => {
+    const { mode } = useConfigState();
+
     return (
         <DrawerFormLayout {...props}>
             <ControlledTextInput
@@ -16,29 +20,33 @@ const IngestEndpointForm: FC<IngestEndpointFormProps> = (props: IngestEndpointFo
                 required
                 autoFocus
             />
-            <CheckBoxInput
-                name="analyticsEnabled"
-                value={props.values.analyticsEnabled}
-                setValue={(v) => {
-                    props.handleChange('analyticsEnabled', v);
-                }}
-                label="Enable simple analytics dashboard when using Tag Manager. We recommend this option is left enabled."
-                className="DrawerFormField"
-                style={{ marginLeft: '-11px' }}
-                color="primary"
-            />
-            {props.values.analyticsEnabled && (
+            {mode !== Mode.COMMERCIAL && (
                 <>
-                    {props.isCreate && (
-                        <small className="DrawerFormField">
-                            Your analytics and error data will be sent to your chosen storage
-                            provider. MongoDB is a great solution for very low traffic websites and
-                            doesn't require any configuration unless you wish to specify your own
-                            MongoDB servers. We strongly recommend using BigQuery or Clickhouse for
-                            larger websites.
-                        </small>
+                    <CheckBoxInput
+                        name="analyticsEnabled"
+                        value={props.values.analyticsEnabled}
+                        setValue={(v) => {
+                            props.handleChange('analyticsEnabled', v);
+                        }}
+                        label="Enable simple analytics dashboard when using Tag Manager. We recommend this option is left enabled."
+                        className="DrawerFormField"
+                        style={{ marginLeft: '-11px' }}
+                        color="primary"
+                    />
+                    {props.values.analyticsEnabled && (
+                        <>
+                            {props.isCreate && (
+                                <small className="DrawerFormField">
+                                    Your analytics and error data will be sent to your chosen
+                                    storage provider. MongoDB is a great solution for very low
+                                    traffic websites and doesn't require any configuration unless
+                                    you wish to specify your own MongoDB servers. We strongly
+                                    recommend using BigQuery or Clickhouse for larger websites.
+                                </small>
+                            )}
+                            <StorageProviderSelector {...props} warnGraphDisabled />
+                        </>
                     )}
-                    <StorageProviderSelector {...props} warnGraphDisabled />
                 </>
             )}
         </DrawerFormLayout>

@@ -535,25 +535,7 @@ export default class TypeDefRegister {
                 """
                 If this is set to true, a WHERE clause will be required when querying data in order to reduce costs. See BigQuery documentation for more details.
                 """
-                require_partition_filter_in_queries: Boolean = false
-            }
-
-            """
-            BigQuery stream configuration for managed endpoints.
-            """
-            input ManagedGCBigQueryStreamConfig {
-                """
-                Service Account JSON for Google Cloud's BigQuery administrative role.
-                """
-                service_account_json: JSON!
-                """
-                The 'Data Set' under which a new table will be created.
-                """
-                data_set_name: String!
-                """
-                The location of the data set, if it doesn't exist, we'll try and create it using the location specified
-                """
-                data_set_location: String = "US"
+                require_partition_filter_in_queries: Boolean = true
             }
 
             """

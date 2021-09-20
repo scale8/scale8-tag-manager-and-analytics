@@ -30,6 +30,7 @@ export type StorageProviderFields = {
     pathPrefix?: string;
     serviceAccountJSON?: string;
     dataSetName?: string;
+    dataSetLocation?: string;
     connectionString?: string;
     databaseName?: string;
     useApiMongoServer?: boolean;
@@ -50,6 +51,7 @@ export const initialStorageProviderFields = {
     pathPrefix: '',
     serviceAccountJSON: '',
     dataSetName: '',
+    dataSetLocation: 'US',
     connectionString: '',
     databaseName: '',
     useApiMongoServer: true,
@@ -132,6 +134,7 @@ export const buildStorageProviderSaveProperties = (
     const gc_bigquery_stream_config: GCBigQueryStreamConfig = {
         service_account_json: parseServiceAccountJson(),
         data_set_name: values.dataSetName ?? '',
+        data_set_location: values.dataSetLocation ?? '',
         require_partition_filter_in_queries: hasPartitionFilterChoice
             ? !!values.requirePartitionFilterInQueries
             : true,

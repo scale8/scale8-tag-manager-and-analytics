@@ -1,6 +1,9 @@
 import { injectable } from 'inversify';
 import App from '../../../mongo/models/tag/App';
 import IngestEndpoint from '../../../mongo/models/data/IngestEndpoint';
+import { ObjectID } from 'mongodb';
+import GenericError from '../../../errors/GenericError';
+import { LogPriority } from '../../../enums/LogPriority';
 
 export interface BaseQueryOptions {
     time_slice: string;
@@ -53,6 +56,19 @@ export default abstract class BaseDatabase {
 
     protected getRangeToAsDate(options: BaseQueryOptions): Date {
         return new Date(options.filter_options.to);
+    }
+
+    protected getEntityUsageIngestEndpointEnvironmentId(entity: App | IngestEndpoint): ObjectID {
+        if (entity.usageIngestEndpointEnvironmentId === undefined) {
+            throw new GenericError(
+                `Unable to find usage endpoint for ${
+                    entity.constructor.name
+                }: ${entity.id.toString()}`,
+                LogPriority.ERROR,
+            );
+        } else {
+            return entity.usageIngestEndpointEnvironmentId;
+        }
     }
 
     protected getResultWithRange(

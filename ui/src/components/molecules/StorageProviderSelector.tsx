@@ -30,6 +30,17 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
         text: getStorageProviderLabel(key),
     }));
 
+    const dataSetLocationValues = [
+        {
+            key: 'US',
+            text: 'US',
+        },
+        {
+            key: 'EU',
+            text: 'EU',
+        },
+    ];
+
     return (
         <>
             {props.isCreate ? (
@@ -122,6 +133,14 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
                             label="Data Set Name"
                             formProps={props}
                             className="DrawerFormField"
+                            required
+                        />
+                        <ControlledSelect
+                            className="DrawerFormField"
+                            label="Data Set Location"
+                            name="dataSetLocation"
+                            values={dataSetLocationValues}
+                            formProps={props}
                             required
                         />
                         {props.includeBigQueryPartitionFilter && (

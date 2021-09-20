@@ -158,6 +158,8 @@ export const buildRevisionConfig = async (
             usageIngestEnvId: await getAppUsageIngestEnvironmentId(app),
             orgId: revision.orgId.toString(),
             appId: revision.appId.toString(),
+            isAnalyticsEnabled: app.analyticsEnabled,
+            isErrorTrackingEnabled: app.errorTrackingEnabled,
             envId: environment === undefined ? 'PREVIEW' : environment.id.toString(),
             envVars:
                 environment === undefined

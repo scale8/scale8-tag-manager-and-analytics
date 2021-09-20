@@ -38,7 +38,7 @@ export default class IngestEndpoint extends Model {
         defaultValue: () => true,
         exposeToGQLAs: 'analytics_enabled',
     })
-    private _analytics_enabled: boolean;
+    private _analyticsEnabled: boolean;
 
     @Field<string>({
         required: true,
@@ -55,7 +55,7 @@ export default class IngestEndpoint extends Model {
     ) {
         super();
         this._name = name;
-        this._analytics_enabled = analyticsEnabled;
+        this._analyticsEnabled = analyticsEnabled;
         if (dataManagerAccount !== undefined) {
             this._org_id = dataManagerAccount.orgId;
             this._data_manager_account_id = dataManagerAccount.id;
@@ -87,12 +87,12 @@ export default class IngestEndpoint extends Model {
         return this._data_manager_account_id;
     }
 
-    get analytics_enabled(): boolean {
-        return this._analytics_enabled;
+    get analyticsEnabled(): boolean {
+        return this._analyticsEnabled;
     }
 
-    set analytics_enabled(value: boolean) {
-        this._analytics_enabled = value;
+    set analyticsEnabled(value: boolean) {
+        this._analyticsEnabled = value;
     }
 
     get storageProvider(): StorageProvider {

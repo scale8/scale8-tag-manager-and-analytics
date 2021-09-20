@@ -16,6 +16,8 @@ import userMessages from '../../errors/UserMessages';
 import { createApp } from '../../utils/AppUtils';
 import BaseDatabase from '../../backends/databases/abstractions/BaseDatabase';
 import {
+    getCommercialStorageProvider,
+    getCommercialStorageProviderConfig,
     getProviderConfig,
     getUpdateProviderConfig,
     updateIngestEndpointEnvironment,
@@ -24,6 +26,7 @@ import GenericError from '../../errors/GenericError';
 import { LogPriority } from '../../enums/LogPriority';
 import IngestEndpointEnvironment from '../../mongo/models/data/IngestEndpointEnvironment';
 import { StorageProvider } from '../../enums/StorageProvider';
+import { StorageProviderConfig } from '../../mongo/types/Types';
 
 @injectable()
 export default class AppManager extends Manager<App> {
@@ -269,7 +272,7 @@ export default class AppManager extends Manager<App> {
             """
             The Google Cloud BigQuery Stream specific configuration linked to this new \`App\`
             """
-            gc_bigquery_stream_config: ManagedGCBigQueryStreamConfig
+            gc_bigquery_stream_config: GCBigQueryStreamConfig
             """
             The MongoDB specific configuration linked to this new \`App\`
             """
@@ -318,7 +321,7 @@ export default class AppManager extends Manager<App> {
             """
             The Google Cloud BigQuery Stream specific configuration linked to this new \`App\`
             """
-            gc_bigquery_stream_config: ManagedGCBigQueryStreamConfig
+            gc_bigquery_stream_config: GCBigQueryStreamConfig
             """
             The MongoDB specific configuration linked to this new \`App\`
             """
@@ -450,7 +453,22 @@ export default class AppManager extends Manager<App> {
         },
         createApp: async (parent: any, args: any, ctx: CTX) => {
             const data = args.appCreateInput;
-            const providerConfig = await getProviderConfig(data);
+
+            const getStorageProviderDetails = async (): Promise<
+                [StorageProvider, StorageProviderConfig]
+            > => {
+                if (this.config.isCommercial()) {
+                    return [
+                        getCommercialStorageProvider(),
+                        await getCommercialStorageProviderConfig(),
+                    ];
+                }
+
+                return [data.storage_provider, await getProviderConfig(data)];
+            };
+
+            const [storageProvider, providerConfig] = await getStorageProviderDetails();
+
             const tagManagerAccount = await this.repoFactory(TagManagerAccount).findByIdThrows(
                 new ObjectId(data.tag_manager_account_id),
                 userMessages.accountFailed,
@@ -470,7 +488,7 @@ export default class AppManager extends Manager<App> {
                         data.name,
                         data.domain,
                         data.type,
-                        data.storage_provider,
+                        storageProvider,
                         providerConfig,
                         data.analytics_enabled,
                         data.error_tracking_enabled,

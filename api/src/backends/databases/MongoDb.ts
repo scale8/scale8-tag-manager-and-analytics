@@ -10,11 +10,17 @@ import IngestEndpoint from '../../mongo/models/data/IngestEndpoint';
 import Shell from '../../mongo/database/Shell';
 import GenericError from '../../errors/GenericError';
 import { LogPriority } from '../../enums/LogPriority';
-import { Collection } from 'mongodb';
+import { Collection, MongoClient } from 'mongodb';
+import { getStorageProviderConfig } from '../../utils/IngestEndpointEnvironmentUtils';
+import { MongoDbPushConfig } from '../../Types';
+import BaseConfig from '../configuration/abstractions/BaseConfig';
+import GQLError from '../../errors/GQLError';
+import userMessages from '../../errors/UserMessages';
 
 @injectable()
 export default class MongoDb extends BaseDatabase {
     @inject(TYPES.Shell) protected readonly shell!: Shell;
+    @inject(TYPES.BackendConfig) private readonly config!: BaseConfig;
 
     protected readonly MOBILE_TEST: [string, RegExp][] = [
         ['browser_name', /mobile/i],
@@ -41,19 +47,40 @@ export default class MongoDb extends BaseDatabase {
         }));
     }
 
-    protected getCollection(entity: App | IngestEndpoint): Promise<Collection> {
-        if (entity.usageIngestEndpointEnvironmentId === undefined) {
-            throw new GenericError(
-                `Unable to find usage endpoint for ${
-                    entity.constructor.name
-                }: ${entity.id.toString()}`,
-                LogPriority.ERROR,
-            );
-        } else {
-            return this.shell.getCollection(
-                `s8_${entity.usageIngestEndpointEnvironmentId.toString()}`,
-            );
-        }
+    protected async getCollection(entity: App | IngestEndpoint): Promise<Collection> {
+        const entityUsageIngestEndpointEnvironmentId =
+            this.getEntityUsageIngestEndpointEnvironmentId(entity);
+
+        const storageProviderConfig = (await getStorageProviderConfig(
+            entityUsageIngestEndpointEnvironmentId,
+        )) as MongoDbPushConfig;
+
+        const connectionString = storageProviderConfig.use_api_mongo_server
+            ? await this.config.getDatabaseUrl()
+            : storageProviderConfig.connection_string;
+
+        const databaseName = storageProviderConfig.use_api_mongo_server
+            ? await this.config.getDefaultDatabase()
+            : storageProviderConfig.database_name;
+
+        const getMongoConnection = async () => {
+            try {
+                const client = new MongoClient(connectionString, {
+                    useNewUrlParser: true,
+                });
+                return await client.connect();
+            } catch (e) {
+                throw new GQLError(
+                    userMessages.mongoConnectionStringVerificationFailure(connectionString),
+                    true,
+                );
+            }
+        };
+
+        const connection = await getMongoConnection();
+
+        const db = connection.db(databaseName);
+        return db.collection(`s8_${entityUsageIngestEndpointEnvironmentId.toString()}`);
     }
 
     private async runAggregation(

@@ -6,8 +6,11 @@ import Loader from '../Loader';
 import { AppFormProps } from '../../../dialogPages/tagManager/app/AppCreate';
 import StorageProviderSelector from '../../molecules/StorageProviderSelector';
 import CheckBoxInput from '../../atoms/InputTypes/CheckBoxInput';
+import { Mode } from '../../../gql/generated/globalTypes';
+import { useConfigState } from '../../../context/AppContext';
 
 const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
+    const { mode } = useConfigState();
     const theme = useTheme();
 
     const [useDomainName, setUseDomainName] = useState(
@@ -75,41 +78,48 @@ const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
                             required
                         />
                     )}
-                    <CheckBoxInput
-                        name="analyticsEnabled"
-                        value={props.values.analyticsEnabled}
-                        setValue={(v) => {
-                            props.handleChange('analyticsEnabled', v);
-                        }}
-                        label="Enable simple analytics dashboard when using Tag Manager. We recommend this option is left enabled."
-                        className="DrawerFormField"
-                        style={{ marginLeft: '-11px' }}
-                        color="primary"
-                    />
-                    <CheckBoxInput
-                        name="errorTrackingEnabled"
-                        value={props.values.errorTrackingEnabled}
-                        setValue={(v) => {
-                            props.handleChange('errorTrackingEnabled', v);
-                        }}
-                        label="Enable basic website and mobile website application errors directly in the dashboard. If you are using another service you may wish to disable this option."
-                        className="DrawerFormField"
-                        style={{ marginLeft: '-11px' }}
-                        color="primary"
-                    />
 
-                    {(props.values.analyticsEnabled || props.values.errorTrackingEnabled) && (
+                    {mode !== Mode.COMMERCIAL && (
                         <>
-                            {props.isCreate && (
-                                <small className="DrawerFormField">
-                                    Your analytics and error data will be sent to your chosen
-                                    storage provider. MongoDB is a great solution for very low
-                                    traffic websites and doesn't require any configuration unless
-                                    you wish to specify your own MongoDB servers. We strongly
-                                    recommend using BigQuery or Clickhouse for larger websites.
-                                </small>
+                            <CheckBoxInput
+                                name="analyticsEnabled"
+                                value={props.values.analyticsEnabled}
+                                setValue={(v) => {
+                                    props.handleChange('analyticsEnabled', v);
+                                }}
+                                label="Enable simple analytics dashboard when using Tag Manager. We recommend this option is left enabled."
+                                className="DrawerFormField"
+                                style={{ marginLeft: '-11px' }}
+                                color="primary"
+                            />
+                            <CheckBoxInput
+                                name="errorTrackingEnabled"
+                                value={props.values.errorTrackingEnabled}
+                                setValue={(v) => {
+                                    props.handleChange('errorTrackingEnabled', v);
+                                }}
+                                label="Enable basic website and mobile website application errors directly in the dashboard. If you are using another service you may wish to disable this option."
+                                className="DrawerFormField"
+                                style={{ marginLeft: '-11px' }}
+                                color="primary"
+                            />
+
+                            {(props.values.analyticsEnabled ||
+                                props.values.errorTrackingEnabled) && (
+                                <>
+                                    {props.isCreate && (
+                                        <small className="DrawerFormField">
+                                            Your analytics and error data will be sent to your
+                                            chosen storage provider. MongoDB is a great solution for
+                                            very low traffic websites and doesn't require any
+                                            configuration unless you wish to specify your own
+                                            MongoDB servers. We strongly recommend using BigQuery or
+                                            Clickhouse for larger websites.
+                                        </small>
+                                    )}
+                                    <StorageProviderSelector {...props} warnGraphDisabled />
+                                </>
                             )}
-                            <StorageProviderSelector {...props} warnGraphDisabled />
                         </>
                     )}
                 </DrawerFormLayout>

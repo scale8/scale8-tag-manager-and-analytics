@@ -27,6 +27,7 @@ import { createCname } from './EnvironmentUtils';
 import { BigQuery } from '@google-cloud/bigquery';
 import Hash from '../core/Hash';
 import S3Service from '../aws/S3Service';
+import { AwsConfig, GCBigQueryStreamConfig, MongoDbPushConfig } from '../Types';
 
 export const getIngestEndpointCNAME = (ingestEndpointEnvironmentId: ObjectID | string): string => {
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
@@ -79,14 +80,14 @@ const getIngestUsageIngestEnvironmentId = async (
 };
 
 export const getStorageProviderConfig = async (
-    ingestEndpointEnvironment: IngestEndpointEnvironment,
-): Promise<Record<string, unknown>> => {
+    ingestEndpointEnvironmentId: ObjectID,
+): Promise<GCBigQueryStreamConfig | AwsConfig | MongoDbPushConfig | Record<string, never>> => {
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
 
     try {
         const obj = await getStorageBackend().getAsString(
             await config.getConfigsBucket(),
-            `ingest-endpoint/storage-provider-config-${ingestEndpointEnvironment.id}.json`,
+            `ingest-endpoint/storage-provider-config-${ingestEndpointEnvironmentId}.json`,
         );
         return JSON.parse((obj as any).toString('utf-8'));
     } catch (e) {
@@ -113,7 +114,7 @@ export const buildIngestEndpointConfig = async (
         userMessages.revisionFailed,
     );
 
-    const storageProviderConfig = await getStorageProviderConfig(ingestEndpointEnvironment);
+    const storageProviderConfig = await getStorageProviderConfig(ingestEndpointEnvironment.id);
 
     const config: { [k: string]: any } = {
         built: new Date().toUTCString(),
@@ -121,6 +122,7 @@ export const buildIngestEndpointConfig = async (
         usage_ingest_env_id: (await getIngestUsageIngestEnvironmentId(ingestEndpoint)) || '',
         org_id: ingestEndpointRevision.orgId.toString(),
         data_manager_account_id: ingestEndpointRevision.dataManagerAccountId.toString(),
+        is_analytics_enabled: ingestEndpoint.analyticsEnabled,
         ingest_endpoint_id: ingestEndpointRevision.ingestEndpointId.toString(),
         ingest_endpoint_environment_id: ingestEndpointEnvironment.id.toString(),
         ingest_endpoint_revision_id: ingestEndpointRevision.id.toString(),
@@ -296,7 +298,7 @@ export const createIngestEndpointEnvironment = async (
     return ingestEndpointEnvironment;
 };
 
-const getAwsS3ProviderConfig = async (awsStorageConfig: any) => {
+const getAwsS3ProviderConfig = async (awsStorageConfig: AwsConfig) => {
     const s3Service = container.get<S3Service>(TYPES.S3Service);
     //we need to test AWS setup is correct...
     const s3 = s3Service.getS3Client(
@@ -316,7 +318,7 @@ const getAwsS3ProviderConfig = async (awsStorageConfig: any) => {
     };
 };
 
-const getBigQueryProviderConfig = async (bigqueryStreamConfig: any) => {
+const getBigQueryProviderConfig = async (bigqueryStreamConfig: GCBigQueryStreamConfig) => {
     if (typeof bigqueryStreamConfig.service_account_json !== 'object') {
         throw new GQLError(userMessages.invalidServiceAccount, true);
     }
@@ -360,7 +362,7 @@ const getBigQueryProviderConfig = async (bigqueryStreamConfig: any) => {
     };
 };
 
-const getMongoDbProviderConfig = async (mongoPushConfig: any) => {
+const getMongoDbProviderConfig = async (mongoPushConfig: MongoDbPushConfig) => {
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
 
     const connectionString = mongoPushConfig.use_api_mongo_server
