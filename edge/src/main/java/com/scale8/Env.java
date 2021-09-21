@@ -32,6 +32,8 @@ public class Env {
   public final String MONGO_CONNECT_STRING =
       getOrElse("MONGO_CONNECT_STRING", "mongodb://127.0.0.1:27017");
 
+  public final String DEFAULT_DATABASE = getOrElse("DEFAULT_DATABASE", "s8");
+
   public final String ASSETS_BUCKET = getOrElse("ASSET_BUCKET", "scale8_com_" + ENV + "_assets");
 
   public final String CONFIG_BUCKET = getOrElse("CONFIGS_BUCKET", "scale8_com_" + ENV + "_configs");

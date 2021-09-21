@@ -71,9 +71,11 @@ public class PushToMongoDb extends StorageProvider {
 
   private MongoCollection<Document> getCollection(IngestSettings ingestSettings)
       throws NoSuchAlgorithmException {
+    MongoClient instance = getMongoDbInstance(ingestSettings);
     MongoDatabase database =
-        getMongoDbInstance(ingestSettings)
-            .getDatabase(ingestSettings.getMongoDbConfig().getDatabaseName());
+        ingestSettings.getMongoDbConfig().useApiMongoServer()
+            ? instance.getDatabase(env.DEFAULT_DATABASE)
+            : instance.getDatabase(ingestSettings.getMongoDbConfig().getDatabaseName());
     return database.getCollection("s8_" + ingestSettings.getIngestEndpointEnvironmentId());
   }
 
