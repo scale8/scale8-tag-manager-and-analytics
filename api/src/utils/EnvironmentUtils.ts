@@ -161,7 +161,7 @@ export const buildRevisionConfig = async (
             appId: revision.appId.toString(),
             isAnalyticsEnabled: app.analyticsEnabled,
             isErrorTrackingEnabled: app.errorTrackingEnabled,
-            mode: config.getMode(),
+            isCommercial: config.isCommercial(),
             envId: environment === undefined ? 'PREVIEW' : environment.id.toString(),
             envVars:
                 environment === undefined
