@@ -47,6 +47,12 @@ export default class IngestEndpoint extends Model {
     })
     private readonly _storage_provider!: StorageProvider;
 
+    @Field<string>({
+        required: true,
+        defaultValue: () => '',
+    })
+    private _storageProviderConfigHash: string | undefined;
+
     constructor(
         name: string,
         dataManagerAccount: DataManagerAccount,
@@ -97,5 +103,13 @@ export default class IngestEndpoint extends Model {
 
     get storageProvider(): StorageProvider {
         return this._storage_provider;
+    }
+
+    get storageProviderConfigHash(): string {
+        return this._storageProviderConfigHash ?? '';
+    }
+
+    set storageProviderConfigHash(value: string) {
+        this._storageProviderConfigHash = value;
     }
 }

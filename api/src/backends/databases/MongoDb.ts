@@ -22,6 +22,8 @@ export default class MongoDb extends BaseDatabase {
     @inject(TYPES.Shell) protected readonly shell!: Shell;
     @inject(TYPES.BackendConfig) private readonly config!: BaseConfig;
 
+    private mongoConnections: Map<string, MongoClient> = new Map<string, MongoClient>();
+
     protected readonly MOBILE_TEST: [string, RegExp][] = [
         ['browser_name', /mobile/i],
         ['device_name', /iphone/i],
@@ -50,6 +52,8 @@ export default class MongoDb extends BaseDatabase {
     protected async getCollection(entity: App | IngestEndpoint): Promise<Collection> {
         const entityUsageIngestEndpointEnvironmentId =
             this.getEntityUsageIngestEndpointEnvironmentId(entity);
+        const mongoConnectionKey =
+            entityUsageIngestEndpointEnvironmentId.toString() + entity.storageProviderConfigHash;
 
         const storageProviderConfig = (await getStorageProviderConfig(
             entityUsageIngestEndpointEnvironmentId,
@@ -64,17 +68,20 @@ export default class MongoDb extends BaseDatabase {
             : storageProviderConfig.database_name;
 
         const getMongoConnection = async () => {
-            try {
-                const client = new MongoClient(connectionString, {
-                    useNewUrlParser: true,
-                });
-                return await client.connect();
-            } catch (e) {
-                throw new GQLError(
-                    userMessages.mongoConnectionStringVerificationFailure(connectionString),
-                    true,
-                );
+            if (!this.mongoConnections.has(mongoConnectionKey)) {
+                try {
+                    const client = new MongoClient(connectionString, {
+                        useNewUrlParser: true,
+                    });
+                    this.mongoConnections.set(mongoConnectionKey, await client.connect());
+                } catch (e) {
+                    throw new GQLError(
+                        userMessages.mongoConnectionStringVerificationFailure(connectionString),
+                        true,
+                    );
+                }
             }
+            return this.mongoConnections.get(mongoConnectionKey) as MongoClient;
         };
 
         const connection = await getMongoConnection();

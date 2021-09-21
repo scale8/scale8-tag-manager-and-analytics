@@ -29,6 +29,7 @@ import { SortDirection } from '../enums/SortDirection';
 import { TagType } from '../enums/TagType';
 import { StorageProvider } from '../enums/StorageProvider';
 import { StorageProviderConfig } from '../mongo/types/Types';
+import Hash from '../core/Hash';
 
 const createAppUsageEndpointEnvironment = async (
     org: Org,
@@ -250,6 +251,7 @@ export const createApp = async (
         providerConfig,
     );
     app.usageIngestEndpointEnvironmentId = usageEndpointEnvironment.id;
+    app.storageProviderConfigHash = Hash.hashString(JSON.stringify(providerConfig), 'c0nF1g');
     app = await repoFactory(App).save(app, actor, OperationOwner.USER);
 
     //create first revision...

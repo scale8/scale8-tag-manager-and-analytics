@@ -27,6 +27,7 @@ import { LogPriority } from '../../enums/LogPriority';
 import IngestEndpointEnvironment from '../../mongo/models/data/IngestEndpointEnvironment';
 import { StorageProvider } from '../../enums/StorageProvider';
 import { StorageProviderConfig } from '../../mongo/types/Types';
+import Hash from '../../core/Hash';
 
 @injectable()
 export default class AppManager extends Manager<App> {
@@ -408,8 +409,6 @@ export default class AppManager extends Manager<App> {
                     IngestEndpointEnvironment,
                 ).findByIdThrows(app.usageIngestEndpointEnvironmentId, userMessages.usageFailed);
 
-                console.log(data);
-
                 const providerConfig = await getUpdateProviderConfig(
                     data,
                     trackingIngestEndpointEnvironment,
@@ -427,6 +426,12 @@ export default class AppManager extends Manager<App> {
                     'analytics_enabled',
                     'error_tracking_enabled',
                 ]); //only is a safety check against this function
+
+                app.storageProviderConfigHash = Hash.hashString(
+                    JSON.stringify(providerConfig),
+                    'c0nF1g',
+                );
+
                 await this.repoFactory(App).save(app, me);
                 return true;
             });

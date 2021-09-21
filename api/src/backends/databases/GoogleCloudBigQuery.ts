@@ -26,7 +26,8 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
     protected async getBigQuery(entity: App | IngestEndpoint) {
         const entityUsageIngestEndpointEnvironmentId =
             this.getEntityUsageIngestEndpointEnvironmentId(entity);
-        const bigQueryInstanceKey = entityUsageIngestEndpointEnvironmentId.toString();
+        const bigQueryInstanceKey =
+            entityUsageIngestEndpointEnvironmentId.toString() + entity.storageProviderConfigHash;
         if (!this.bigQueryInstances.has(bigQueryInstanceKey)) {
             if (this.config.isCommercial()) {
                 this.bigQueryInstances.set(

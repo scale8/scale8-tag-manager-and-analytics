@@ -77,6 +77,12 @@ export default class App extends Model {
     })
     private _domain: string;
 
+    @Field<string>({
+        required: true,
+        defaultValue: () => '',
+    })
+    private _storageProviderConfigHash: string | undefined;
+
     constructor(
         name: string,
         tagManagerAccount: TagManagerAccount,
@@ -163,5 +169,13 @@ export default class App extends Model {
 
     get storageProvider(): StorageProvider {
         return this._storage_provider;
+    }
+
+    get storageProviderConfigHash(): string {
+        return this._storageProviderConfigHash ?? '';
+    }
+
+    set storageProviderConfigHash(value: string) {
+        this._storageProviderConfigHash = value;
     }
 }
