@@ -2,6 +2,7 @@ import { ValidationType } from '../../common/enums/ValidationType';
 import { InputType } from '../../common/enums/InputType';
 import { TypeIcon } from '../../common/enums/TypeIcon';
 import { AwsRegion } from './enums/AwsRegion';
+import { JWTInput } from 'google-auth-library/build/src/auth/credentials';
 
 export interface PlatformEventConfig {
     persistence_id: string;
@@ -56,7 +57,7 @@ export interface AwsConfig {
     bucket_name: string;
 }
 export interface GCBigQueryStreamConfig {
-    service_account_json: any;
+    service_account_json: JWTInput;
     data_set_name: string;
     data_set_location: 'EU' | 'US';
     require_partition_filter_in_queries: boolean;

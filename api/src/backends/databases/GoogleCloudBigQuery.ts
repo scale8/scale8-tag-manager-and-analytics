@@ -15,6 +15,9 @@ import BaseConfig from '../configuration/abstractions/BaseConfig';
 import BaseLogger from '../logging/abstractions/BaseLogger';
 import { getStorageProviderConfig } from '../../utils/IngestEndpointEnvironmentUtils';
 import { GCBigQueryStreamConfig } from '../../Types';
+import { JWTInput } from 'google-auth-library/build/src/auth/credentials';
+import path from 'path';
+import fs from 'fs';
 
 @injectable()
 export default class GoogleCloudBigQuery extends BaseDatabase {
@@ -26,34 +29,55 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
     protected async getBigQuery(entity: App | IngestEndpoint) {
         const entityUsageIngestEndpointEnvironmentId =
             this.getEntityUsageIngestEndpointEnvironmentId(entity);
+
         const bigQueryInstanceKey =
             entityUsageIngestEndpointEnvironmentId.toString() + entity.storageProviderConfigHash;
-        if (!this.bigQueryInstances.has(bigQueryInstanceKey)) {
-            if (this.config.isCommercial()) {
-                this.bigQueryInstances.set(
-                    bigQueryInstanceKey,
-                    new BigQuery({
-                        keyFilename: await this.config.getGCKeyFile(),
-                        projectId: await this.config.getGCProjectId(),
-                    }),
-                );
-            } else {
-                const storageProviderConfig = (await getStorageProviderConfig(
-                    entityUsageIngestEndpointEnvironmentId,
-                )) as GCBigQueryStreamConfig;
-                this.bigQueryInstances.set(
-                    bigQueryInstanceKey,
-                    new BigQuery({
-                        projectId: storageProviderConfig.service_account_json.project_id,
-                        credentials: {
-                            client_email: storageProviderConfig.service_account_json.client_email,
-                            private_key: storageProviderConfig.service_account_json.private_key,
-                        },
-                    }),
-                );
-            }
+
+        const cachedInstance = this.bigQueryInstances.get(bigQueryInstanceKey);
+        if (cachedInstance !== undefined) {
+            return cachedInstance;
         }
-        return this.bigQueryInstances.get(bigQueryInstanceKey) as BigQuery;
+
+        const getBigQueryServiceAccountJson = async (): Promise<JWTInput> => {
+            if (this.config.isCommercial()) {
+                return JSON.parse(
+                    fs.readFileSync(
+                        path.resolve(process.cwd(), await this.config.getGCKeyFile()),
+                        'utf8',
+                    ),
+                ) as JWTInput;
+            }
+
+            const storageProviderConfig = (await getStorageProviderConfig(
+                entityUsageIngestEndpointEnvironmentId,
+            )) as GCBigQueryStreamConfig;
+
+            return storageProviderConfig.service_account_json;
+        };
+
+        const getBigQuery = async (): Promise<BigQuery> => {
+            const serviceAccountJson = await getBigQueryServiceAccountJson();
+            if (this.config.isCommercial()) {
+                return new BigQuery({
+                    keyFilename: await this.config.getGCKeyFile(),
+                    projectId: serviceAccountJson.project_id,
+                });
+            } else {
+                return new BigQuery({
+                    projectId: serviceAccountJson.project_id,
+                    credentials: {
+                        client_email: serviceAccountJson.client_email,
+                        private_key: serviceAccountJson.private_key,
+                    },
+                });
+            }
+        };
+
+        const bigQuery = await getBigQuery();
+
+        this.bigQueryInstances.set(bigQueryInstanceKey, bigQuery);
+
+        return bigQuery;
     }
 
     protected readonly MOBILE_TEST =

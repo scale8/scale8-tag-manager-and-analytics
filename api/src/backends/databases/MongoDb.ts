@@ -68,20 +68,24 @@ export default class MongoDb extends BaseDatabase {
             : storageProviderConfig.database_name;
 
         const getMongoConnection = async () => {
-            if (!this.mongoConnections.has(mongoConnectionKey)) {
-                try {
-                    const client = new MongoClient(connectionString, {
-                        useNewUrlParser: true,
-                    });
-                    this.mongoConnections.set(mongoConnectionKey, await client.connect());
-                } catch (e) {
-                    throw new GQLError(
-                        userMessages.mongoConnectionStringVerificationFailure(connectionString),
-                        true,
-                    );
-                }
+            const cachedConnection = this.mongoConnections.get(mongoConnectionKey);
+            if (cachedConnection !== undefined) {
+                return cachedConnection;
             }
-            return this.mongoConnections.get(mongoConnectionKey) as MongoClient;
+
+            try {
+                const client = new MongoClient(connectionString, {
+                    useNewUrlParser: true,
+                });
+                const connection = await client.connect();
+                this.mongoConnections.set(mongoConnectionKey, connection);
+                return connection;
+            } catch (e) {
+                throw new GQLError(
+                    userMessages.mongoConnectionStringVerificationFailure(connectionString),
+                    true,
+                );
+            }
         };
 
         const connection = await getMongoConnection();
