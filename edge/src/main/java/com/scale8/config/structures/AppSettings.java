@@ -5,6 +5,8 @@ import java.util.Map;
 public class AppSettings {
 
   private String built;
+  private Boolean isAnalyticsEnabled;
+  private Boolean isErrorTrackingEnabled;
   private String usageIngestEnvId;
   private String orgId;
   private String appId;
@@ -17,6 +19,14 @@ public class AppSettings {
 
   public String getBuilt() {
     return built;
+  }
+
+  public Boolean getIsAnalyticsEnabled() {
+    return isAnalyticsEnabled;
+  }
+
+  public Boolean getIsErrorTrackingEnabled() {
+    return isErrorTrackingEnabled;
   }
 
   public String getUsageIngestEnvId() {

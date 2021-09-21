@@ -2,8 +2,6 @@ package com.scale8.ingest.storage;
 
 import com.google.gson.JsonObject;
 import com.scale8.config.structures.IngestSettings;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -21,5 +19,5 @@ public abstract class StorageProvider {
     return batch;
   }
 
-  public abstract void push(IngestSettings ingestSettings, ConcurrentLinkedQueue<JsonObject> q) throws IOException;
+  public abstract void push(IngestSettings ingestSettings, ConcurrentLinkedQueue<JsonObject> q) throws Exception;
 }

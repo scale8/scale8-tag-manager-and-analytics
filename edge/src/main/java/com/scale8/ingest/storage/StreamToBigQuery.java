@@ -17,6 +17,7 @@ import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
@@ -26,6 +27,8 @@ import java.util.stream.Stream;
 public class StreamToBigQuery extends StorageProvider {
 
   private static final Logger LOG = LoggerFactory.getLogger(StreamToBigQuery.class);
+
+  private final HashMap<String, BigQuery> bigQueryInstances = new HashMap<>();
 
   final Env env;
 
@@ -61,24 +64,32 @@ public class StreamToBigQuery extends StorageProvider {
     }
   }
 
-  private BigQuery getBigQueryInstance(IngestSettings ingestSettings) throws IOException {
-    return ingestSettings.getIsManaged()
-        ? BigQueryOptions.newBuilder()
-            .setCredentials(
-                ServiceAccountCredentials.fromStream(
-                    new FileInputStream(env.GOOGLE_CREDENTIALS_FILE)))
-            .build()
-            .getService()
-        : BigQueryOptions.newBuilder()
-            .setCredentials(
-                GoogleCredentials.fromStream(
-                    new ByteArrayInputStream(
-                        ingestSettings
-                            .getBigQueryStreamConfig()
-                            .getServiceAccountJson()
-                            .getBytes(StandardCharsets.UTF_8))))
-            .build()
-            .getService();
+  private BigQuery getBigQueryInstance(IngestSettings ingestSettings)
+      throws IOException, NoSuchAlgorithmException {
+    String instanceKey = ingestSettings.getIngestEndpointEnvironmentId() + ingestSettings.asHash();
+    BigQuery instance = this.bigQueryInstances.get(instanceKey);
+    if (instance == null) {
+      instance =
+          ingestSettings.getIsCommercial() && ingestSettings.getIsManaged()
+              ? BigQueryOptions.newBuilder()
+                  .setCredentials(
+                      ServiceAccountCredentials.fromStream(
+                          new FileInputStream(env.GOOGLE_CREDENTIALS_FILE)))
+                  .build()
+                  .getService()
+              : BigQueryOptions.newBuilder()
+                  .setCredentials(
+                      GoogleCredentials.fromStream(
+                          new ByteArrayInputStream(
+                              ingestSettings
+                                  .getBigQueryStreamConfig()
+                                  .getServiceAccountJson()
+                                  .getBytes(StandardCharsets.UTF_8))))
+                  .build()
+                  .getService();
+      this.bigQueryInstances.put(instanceKey, instance);
+    }
+    return instance;
   }
 
   private TableId getTableId(IngestSettings ingestSettings) {

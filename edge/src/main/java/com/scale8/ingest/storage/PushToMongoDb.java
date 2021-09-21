@@ -14,6 +14,7 @@ import com.scale8.extended.types.Tuple;
 import org.bson.BsonDateTime;
 import org.bson.Document;
 import javax.inject.Singleton;
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,6 +32,49 @@ public class PushToMongoDb extends StorageProvider {
 
   PushToMongoDb(Env env) {
     this.env = env;
+  }
+
+  private final HashMap<String, MongoClient> mongoInstances = new HashMap<>();
+
+  private MongoClient getMongoDbInstance(IngestSettings ingestSettings)
+      throws NoSuchAlgorithmException {
+    String instanceKey = ingestSettings.getIngestEndpointEnvironmentId() + ingestSettings.asHash();
+    MongoClient instance = mongoInstances.get(instanceKey);
+    if (instance == null) {
+      instance =
+          ingestSettings.getMongoDbConfig().useApiMongoServer()
+              ? MongoClients.create(env.MONGO_CONNECT_STRING)
+              : MongoClients.create(ingestSettings.getMongoDbConfig().getConnectionString());
+      mongoInstances.put(instanceKey, instance);
+    }
+    return instance;
+  }
+
+  private Document createFromJsonObject(IngestSettings ingestSettings, JsonObject jsonObject) {
+    // we need to apply types as mongodb doesn't handle simple conversions on insert
+    Document document = new Document(applyTypes(jsonObject, ingestSettings.getSchemaAsMap(), null));
+    document.append("___ingest_revision_id", ingestSettings.getIngestEndpointRevisionId());
+    return document;
+  }
+
+  @Override
+  public void push(IngestSettings ingestSettings, ConcurrentLinkedQueue<JsonObject> q)
+      throws NoSuchAlgorithmException {
+    while (!q.isEmpty()) {
+      List<Document> documents =
+          getNextBatch(q).stream()
+              .map(d -> createFromJsonObject(ingestSettings, d))
+              .collect(Collectors.toList());
+      getCollection(ingestSettings).insertMany(documents);
+    }
+  }
+
+  private MongoCollection<Document> getCollection(IngestSettings ingestSettings)
+      throws NoSuchAlgorithmException {
+    MongoDatabase database =
+        getMongoDbInstance(ingestSettings)
+            .getDatabase(ingestSettings.getMongoDbConfig().getDatabaseName());
+    return database.getCollection("s8_" + ingestSettings.getIngestEndpointEnvironmentId());
   }
 
   private Map<String, Object> applyTypes(
@@ -95,36 +139,5 @@ public class PushToMongoDb extends StorageProvider {
               return Stream.empty();
             })
         .collect(new TupleCollector<>());
-  }
-
-  private Document createFromJsonObject(IngestSettings ingestSettings, JsonObject jsonObject) {
-    // we need to apply types as mongodb doesn't handle simple conversions on insert
-    Document document = new Document(applyTypes(jsonObject, ingestSettings.getSchemaAsMap(), null));
-    document.append("___ingest_revision_id", ingestSettings.getIngestEndpointRevisionId());
-    return document;
-  }
-
-  @Override
-  public void push(IngestSettings ingestSettings, ConcurrentLinkedQueue<JsonObject> q) {
-    while (!q.isEmpty()) {
-      List<Document> documents =
-          getNextBatch(q).stream()
-              .map(d -> createFromJsonObject(ingestSettings, d))
-              .collect(Collectors.toList());
-      getCollection(ingestSettings).insertMany(documents);
-    }
-  }
-
-  private MongoCollection<Document> getCollection(IngestSettings ingestSettings) {
-    MongoDatabase database =
-        getMongoDbInstance(ingestSettings)
-            .getDatabase(ingestSettings.getMongoDbConfig().getDatabaseName());
-    return database.getCollection("s8_" + ingestSettings.getIngestEndpointEnvironmentId());
-  }
-
-  private MongoClient getMongoDbInstance(IngestSettings ingestSettings) {
-    return ingestSettings.getIsManaged()
-        ? MongoClients.create(env.MONGO_CONNECT_STRING)
-        : MongoClients.create(ingestSettings.getMongoDbConfig().getConnectionString());
   }
 }

@@ -141,23 +141,26 @@ public class AppEntity {
 
   public String getCoreJs(ExtendedRequest request) throws Exception {
     AppSettings appSettings = getConfig(request);
-    IngestSettings ingestSettings = ingestEntity.getConfigById(appSettings.getUsageIngestEnvId());
 
-    JsonObject trackingPayload =
-        payload.applyDefaultValues(
-            new JsonObject(),
-            ingestSettings.getSchemaAsMap(),
-            new Replacements(request, null, appSettings));
+    if (appSettings.getIsAnalyticsEnabled()) {
+      IngestSettings ingestSettings = ingestEntity.getConfigById(appSettings.getUsageIngestEnvId());
 
-    List<String> issues =
-        payload.validateSchemaAgainstPayload(trackingPayload, ingestSettings.getSchemaAsMap());
+      JsonObject trackingPayload =
+          payload.applyDefaultValues(
+              new JsonObject(),
+              ingestSettings.getSchemaAsMap(),
+              new Replacements(request, null, appSettings));
 
-    if (issues.isEmpty()) {
-      // go ahead and log this...
-      ingestor.add(trackingPayload, ingestSettings);
-    } else {
-      // we don't want to throw, if there is a problem here output to logs as it is our fault.
-      issues.forEach(issue -> LOG.warn("Tracking issue issue: " + issue));
+      List<String> issues =
+          payload.validateSchemaAgainstPayload(trackingPayload, ingestSettings.getSchemaAsMap());
+
+      if (issues.isEmpty()) {
+        // go ahead and log this...
+        ingestor.add(trackingPayload, ingestSettings);
+      } else {
+        // we don't want to throw, if there is a problem here output to logs as it is our fault.
+        issues.forEach(issue -> LOG.warn("Tracking issue issue: " + issue));
+      }
     }
 
     String js =

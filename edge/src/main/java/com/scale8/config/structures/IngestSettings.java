@@ -1,16 +1,23 @@
 package com.scale8.config.structures;
 
+import com.google.gson.Gson;
 import com.scale8.config.structures.schema.TypeSchema;
 import com.scale8.config.structures.storage.BigQueryStreamConfig;
 import com.scale8.config.structures.storage.MongoDbConfig;
 import com.scale8.config.structures.storage.S3Config;
+import org.apache.commons.codec.binary.Hex;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class IngestSettings {
 
   private String built;
+  private Boolean is_analytics_enabled;
+  private Boolean is_commercial;
   private Boolean is_managed;
   private String usage_ingest_env_id;
   private String org_id;
@@ -28,8 +35,16 @@ public class IngestSettings {
     return built;
   }
 
+  public Boolean getIsAnalyticsEnabled() {
+    return is_analytics_enabled;
+  }
+
   public Boolean getIsManaged() {
     return is_managed;
+  }
+
+  public Boolean getIsCommercial() {
+    return is_commercial;
   }
 
   public String getUsageIngestEnvId() {
@@ -68,7 +83,9 @@ public class IngestSettings {
     return mongodb_config;
   }
 
-  public S3Config getS3Config(){ return aws_s3_config; }
+  public S3Config getS3Config() {
+    return aws_s3_config;
+  }
 
   public TypeSchema[] getSchema() {
     return schema;
@@ -79,5 +96,11 @@ public class IngestSettings {
         .collect(
             Collectors.toMap(
                 TypeSchema::getCombined, (v) -> v, (prev, next) -> next, HashMap::new));
+  }
+
+  public String asHash() throws NoSuchAlgorithmException {
+    return Hex.encodeHexString(
+        MessageDigest.getInstance("SHA-256")
+            .digest((new Gson().toJson(this)).getBytes(StandardCharsets.UTF_8)));
   }
 }
