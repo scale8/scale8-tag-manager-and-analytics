@@ -116,6 +116,7 @@ export const buildRevisionConfig = async (
     revision: Revision,
     environment?: Environment,
 ): Promise<{ [k: string]: any }> => {
+    const config = container.get<BaseConfig>(TYPES.BackendConfig);
     const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
 
     const app = await repoFactory(App).findByIdThrows(revision.appId, userMessages.appFailed);
@@ -160,6 +161,7 @@ export const buildRevisionConfig = async (
             appId: revision.appId.toString(),
             isAnalyticsEnabled: app.analyticsEnabled,
             isErrorTrackingEnabled: app.errorTrackingEnabled,
+            mode: config.getMode(),
             envId: environment === undefined ? 'PREVIEW' : environment.id.toString(),
             envVars:
                 environment === undefined

@@ -123,6 +123,7 @@ export const buildIngestEndpointConfig = async (
         org_id: ingestEndpointRevision.orgId.toString(),
         data_manager_account_id: ingestEndpointRevision.dataManagerAccountId.toString(),
         is_analytics_enabled: ingestEndpoint.analyticsEnabled,
+        mode: backendConfig.getMode(),
         ingest_endpoint_id: ingestEndpointRevision.ingestEndpointId.toString(),
         ingest_endpoint_environment_id: ingestEndpointEnvironment.id.toString(),
         ingest_endpoint_revision_id: ingestEndpointRevision.id.toString(),
