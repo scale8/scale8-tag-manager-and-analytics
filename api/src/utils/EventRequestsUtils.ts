@@ -8,6 +8,7 @@ import OrgAuth from '../auth/OrgAuth';
 import CTX from '../gql/ctx/CTX';
 import Revision from '../mongo/models/tag/Revision';
 import Environment from '../mongo/models/tag/Environment';
+import { StorageProvider } from '../enums/StorageProvider';
 
 export const fetchEventRequests = async (
     filterOptionsKey: string,
@@ -20,11 +21,19 @@ export const fetchEventRequests = async (
     to: Date;
 }> => {
     const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
-    const backendDatabase = container.get<BaseDatabase>(TYPES.BackendDatabase);
+    const backendDatabaseFactory: (storage_provider: StorageProvider) => BaseDatabase =
+        container.get(TYPES.BackendDatabaseFactory);
     const orgAuth = container.get<OrgAuth>(TYPES.OrgAuth);
     return await orgAuth.asUserWithViewAccess(ctx, model.orgId, async () => {
         const app = await repoFactory(App).findByIdThrows(model.appId, userMessages.appFailed);
         args.query_options.filter_options[filterOptionsKey] = model.id.toString();
-        return backendDatabase.eventRequests(app, args.query_options);
+        if (app.storageProvider === StorageProvider.AWS_S3) {
+            return {
+                result: [],
+                from: new Date(),
+                to: new Date(),
+            };
+        }
+        return backendDatabaseFactory(app.storageProvider).eventRequests(app, args.query_options);
     });
 };

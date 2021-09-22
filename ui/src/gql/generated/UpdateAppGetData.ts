@@ -3,7 +3,7 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { AppType } from "./globalTypes";
+import { AppType, StorageProvider } from "./globalTypes";
 
 // ====================================================
 // GraphQL query operation: UpdateAppGetData
@@ -27,6 +27,18 @@ export interface UpdateAppGetData_getApp {
    * The `AppType` associated with this App. Please note that currently on WEB is supported. MOBILE_APP will be introduced soon!
    */
   type: AppType;
+  /**
+   * Whether the analytics on the `App` is enabled
+   */
+  analytics_enabled: boolean;
+  /**
+   * Whether the error tracking on the `App` is enabled
+   */
+  error_tracking_enabled: boolean;
+  /**
+   * The storage provider used by the `App` to track data
+   */
+  storage_provider: StorageProvider;
 }
 
 export interface UpdateAppGetData {

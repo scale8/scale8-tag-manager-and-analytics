@@ -2,6 +2,7 @@ import Model from '../../abstractions/Model';
 import Field from '../../decorators/Field';
 import { ObjectID } from 'mongodb';
 import DataManagerAccount from './DataManagerAccount';
+import { StorageProvider } from '../../../enums/StorageProvider';
 
 export default class IngestEndpoint extends Model {
     public getOrgEntityId(): ObjectID {
@@ -32,13 +33,40 @@ export default class IngestEndpoint extends Model {
     })
     private _usage_ingest_endpoint_environment_id?: ObjectID;
 
-    constructor(name: string, dataManagerAccount: DataManagerAccount) {
+    @Field<boolean>({
+        required: true,
+        defaultValue: () => true,
+        exposeToGQLAs: 'analytics_enabled',
+    })
+    private _analytics_enabled: boolean;
+
+    @Field<string>({
+        required: true,
+        defaultValue: () => StorageProvider.MONGODB,
+        exposeToGQLAs: 'storage_provider',
+    })
+    private readonly _storage_provider!: StorageProvider;
+
+    @Field<string>({
+        required: true,
+        defaultValue: () => '',
+    })
+    private _storage_provider_config_hash: string | undefined;
+
+    constructor(
+        name: string,
+        dataManagerAccount: DataManagerAccount,
+        analyticsEnabled = true,
+        storageProvider: StorageProvider,
+    ) {
         super();
         this._name = name;
+        this._analytics_enabled = analyticsEnabled;
         if (dataManagerAccount !== undefined) {
             this._org_id = dataManagerAccount.orgId;
             this._data_manager_account_id = dataManagerAccount.id;
         }
+        this._storage_provider = storageProvider;
     }
 
     get orgId(): ObjectID {
@@ -63,5 +91,25 @@ export default class IngestEndpoint extends Model {
 
     get dataManagerAccountId(): ObjectID {
         return this._data_manager_account_id;
+    }
+
+    get analyticsEnabled(): boolean {
+        return this._analytics_enabled;
+    }
+
+    set analyticsEnabled(value: boolean) {
+        this._analytics_enabled = value;
+    }
+
+    get storageProvider(): StorageProvider {
+        return this._storage_provider;
+    }
+
+    get storageProviderConfigHash(): string {
+        return this._storage_provider_config_hash ?? '';
+    }
+
+    set storageProviderConfigHash(value: string) {
+        this._storage_provider_config_hash = value;
     }
 }

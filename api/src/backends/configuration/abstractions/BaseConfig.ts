@@ -33,6 +33,10 @@ export default abstract class BaseConfig {
         }
     }
 
+    public getStorageBackend(): string {
+        return BaseConfig.getFromEnvVarOrElse('STORAGE_BACKEND', 'mongodb');
+    }
+
     public getMode(): Mode {
         const mode = BaseConfig.getFromEnvVarOrElse('SERVER_MODE', Mode.SELF_HOSTED);
         return mode === Mode.COMMERCIAL ? Mode.COMMERCIAL : Mode.SELF_HOSTED;
@@ -126,10 +130,6 @@ export default abstract class BaseConfig {
 
     public async getGCKeyFile(): Promise<string> {
         return await this.getConfigEntryThrows('GC_KEY_FILE');
-    }
-
-    public async getGCProjectId(): Promise<string> {
-        return await this.getConfigEntryThrows('GC_PROJECT_ID');
     }
 
     public async getAssetBucket(): Promise<string> {

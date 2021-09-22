@@ -16,6 +16,7 @@ import { SectionKey } from '../../SectionsDetails';
 import { useLoggedInState } from '../../../context/AppContext';
 import { useRouter } from 'next/router';
 import { ChildrenAndIdProps } from '../../../types/props/ChildrenAndIdProps';
+import { analyticsEnabled } from '../../../utils/AnalyticsUtils';
 
 const GlobalActionSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
     const router = useRouter();
@@ -34,6 +35,11 @@ const GlobalActionSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) 
         queryResult: useQuery<NavGlobalAction>(NavGlobalActionQuery, {
             variables: { id },
         }),
+        initContext: (data) => {
+            templateInteractions.setSectionHasAnalytics(
+                analyticsEnabled(data.getActionGroupDistribution.revision.app),
+            );
+        },
         buildButtonsProps: (data) => [
             buildOrgButtonProps(
                 router,

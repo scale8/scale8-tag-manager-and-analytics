@@ -116,6 +116,7 @@ export const buildRevisionConfig = async (
     revision: Revision,
     environment?: Environment,
 ): Promise<{ [k: string]: any }> => {
+    const config = container.get<BaseConfig>(TYPES.BackendConfig);
     const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
 
     const app = await repoFactory(App).findByIdThrows(revision.appId, userMessages.appFailed);
@@ -158,6 +159,9 @@ export const buildRevisionConfig = async (
             usageIngestEnvId: await getAppUsageIngestEnvironmentId(app),
             orgId: revision.orgId.toString(),
             appId: revision.appId.toString(),
+            isAnalyticsEnabled: app.analyticsEnabled,
+            isErrorTrackingEnabled: app.errorTrackingEnabled,
+            isCommercial: config.isCommercial(),
             envId: environment === undefined ? 'PREVIEW' : environment.id.toString(),
             envVars:
                 environment === undefined
@@ -299,7 +303,6 @@ export const createEnvironment = async (
     customDomainCert?: string,
     customDomainKey?: string,
     environmentVariables: EnvironmentVariable[] = [],
-    fixedEnvironmentId?: ObjectID,
     comments?: string,
 ): Promise<Environment> => {
     const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
@@ -336,13 +339,9 @@ export const createEnvironment = async (
         environmentVariables,
         await getCustomDomain(),
     );
-    if (fixedEnvironmentId !== undefined) {
-        environment['_id'] = fixedEnvironmentId;
-    }
     environment = await repoFactory(Environment).save(environment, actor, OperationOwner.USER, {
         gqlMethod: GQLMethod.CREATE,
         userComments: comments,
-        forceCreate: fixedEnvironmentId !== undefined,
     });
     await createCname(environment);
     await buildConfig(environment);

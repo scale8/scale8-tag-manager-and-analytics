@@ -6,6 +6,7 @@ const UpdateIngestEndpointEnvironmentGetQuery = gql`
             id
             name
             custom_domain
+            storage_provider
             ingest_endpoint_revision {
                 id
             }

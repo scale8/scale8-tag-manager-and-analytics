@@ -14,16 +14,28 @@ import { selectCompare } from '../../../utils/SelectUtils';
 const ControlledSelect = <T extends { [key: string]: any }>(
     props: ControlledSelectProps<T>,
 ): ReactElement => {
-    const { name, formProps, label, values, requiredOnValidation, ...formControlProps } = props;
+    const {
+        name,
+        formProps,
+        label,
+        values,
+        requiredOnValidation,
+        resetErrorsOnKeys,
+        ...formControlProps
+    } = props;
 
     const inputLabel =
         requiredOnValidation !== undefined && requiredOnValidation ? `${label} *` : label;
 
     const [requiredError, setRequiredError] = useState(false);
 
+    const extraValues = resetErrorsOnKeys
+        ? resetErrorsOnKeys.map((_) => ({ valueKey: _, value: '' }))
+        : undefined;
+
     const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
         setRequiredError(false);
-        formProps.handleChange(name, event.target.value);
+        formProps.handleChange(name, event.target.value, extraValues);
     };
 
     const subSelectItems = (

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import { FormValidationResult } from '../../../hooks/form/useFormValidation';
 import { ApolloError, useMutation, useQuery } from '@apollo/client';
 import UpdateAppGetQuery from '../../../gql/queries/UpdateAppGetQuery';
@@ -12,8 +12,44 @@ import { UpdateApp } from '../../../gql/generated/UpdateApp';
 import { DialogPageProps } from '../../../types/DialogTypes';
 import { DialogPreloadForm, DialogPreloadFormProps } from '../../abstractions/DialogPreloadForm';
 import { buildStandardFormInfo } from '../../../utils/InfoLabelsUtils';
+import {
+    buildStorageProviderSaveProperties,
+    initialStorageProviderFields,
+    storageProviderValidators,
+} from '../../../utils/StorageProviderUtils';
+import { useConfigState } from '../../../context/AppContext';
+import { Mode } from '../../../gql/generated/globalTypes';
 
 const AppUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
+    const { mode } = useConfigState();
+
+    const customValueSetter = (
+        valueKey: string,
+        value: any,
+        values: AppValues,
+        setValues: Dispatch<SetStateAction<AppValues>>,
+    ) => {
+        if (valueKey === 'analyticsEnabled' || valueKey === 'errorTrackingEnabled') {
+            if (!values.analyticsEnabled && !values.errorTrackingEnabled) {
+                setValues({
+                    ...values,
+                    editStorageProviderSettings: false,
+                    [valueKey]: value,
+                });
+            } else {
+                setValues({
+                    ...values,
+                    [valueKey]: value,
+                });
+            }
+        } else {
+            setValues({
+                ...values,
+                [valueKey]: value,
+            });
+        }
+    };
+
     const appUpdaterProps: DialogPreloadFormProps<
         UpdateAppGetData,
         AppValues,
@@ -24,18 +60,39 @@ const AppUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
             variables: { id: props.id },
         }),
         buildInitialStatePreload: (formLoadedData: UpdateAppGetData) => ({
+            ...initialStorageProviderFields,
+            storageProvider: formLoadedData.getApp.storage_provider,
             name: formLoadedData.getApp.name,
             domain: formLoadedData.getApp.domain,
             type: formLoadedData.getApp.type,
+            analyticsEnabled: formLoadedData.getApp.analytics_enabled,
+            errorTrackingEnabled: formLoadedData.getApp.error_tracking_enabled,
         }),
         saveQuery: useMutation(UpdateAppQuery),
-        mapSaveData: (appValues: AppValues) => ({
-            appUpdateInput: {
-                app_id: props.id,
-                name: appValues.name,
-                domain: appValues.domain,
-            },
-        }),
+        mapSaveData: (appValues: AppValues) => {
+            if (mode === Mode.COMMERCIAL) {
+                return {
+                    appUpdateInput: {
+                        app_id: props.id,
+                        name: appValues.name,
+                        domain: appValues.domain,
+                        analytics_enabled: true,
+                        error_tracking_enabled: true,
+                    },
+                };
+            }
+
+            return {
+                appUpdateInput: {
+                    app_id: props.id,
+                    name: appValues.name,
+                    domain: appValues.domain,
+                    analytics_enabled: appValues.analyticsEnabled,
+                    error_tracking_enabled: appValues.errorTrackingEnabled,
+                    ...buildStorageProviderSaveProperties(appValues, false),
+                },
+            };
+        },
         buildFormProps: (
             formLoadedData: UpdateAppGetData,
             formValidationValues: FormValidationResult<AppValues>,
@@ -63,7 +120,9 @@ const AppUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
                 validator: domainValidator,
                 error: () => 'Invalid domain',
             },
+            ...storageProviderValidators,
         ],
+        customValueSetter,
         ...props,
     };
 

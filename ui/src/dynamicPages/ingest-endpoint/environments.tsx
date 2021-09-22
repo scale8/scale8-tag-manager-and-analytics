@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useQuery } from '@apollo/client';
 import PageIngestEndpointEnvironmentQuery from '../../gql/queries/PageIngestEndpointEnvironmentQuery';
 import { IngestEndpointEnvironmentPageData } from '../../gql/generated/IngestEndpointEnvironmentPageData';
-import { Mode, StorageProvider } from '../../gql/generated/globalTypes';
+import { Mode } from '../../gql/generated/globalTypes';
 import { buildStandardMainInfo, buildTableColumns } from '../../utils/InfoLabelsUtils';
 import {
     buildAddAction,
@@ -20,6 +20,7 @@ import { extractPermissionsFromOrgUser } from '../../context/OrgUserReducer';
 import { DynamicPageProps } from '../../pageLoader/DynamicPageLoader';
 import { useConfigState, useLoggedInState } from '../../context/AppContext';
 import { TablePage, TablePageProps } from '../../abstractions/TablePage';
+import { getStorageProviderLabel } from '../../utils/StorageProviderUtils';
 
 export type IngestEndpointEnvironmentTableRow = TableRowBase & {
     name: string;
@@ -108,11 +109,9 @@ const IngestEndpointEnvironmentsPage: FC<DynamicPageProps> = (props: DynamicPage
                             ? ingestEndpointEnvironment.install_domain
                             : '-',
                         configHint: ingestEndpointEnvironment.config_hint,
-                        storageProvider:
-                            ingestEndpointEnvironment.storage_provider ===
-                            StorageProvider.GC_BIGQUERY_STREAM
-                                ? 'Google Cloud BigQuery Stream'
-                                : ingestEndpointEnvironment.storage_provider.replace(/_/g, ' '),
+                        storageProvider: getStorageProviderLabel(
+                            ingestEndpointEnvironment.storage_provider,
+                        ),
                     };
                 },
             ),

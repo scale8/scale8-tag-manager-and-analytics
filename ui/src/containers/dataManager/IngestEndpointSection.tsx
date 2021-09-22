@@ -16,12 +16,14 @@ import { useLoggedInState } from '../../context/AppContext';
 import { useRouter } from 'next/router';
 import { ChildrenAndIdProps } from '../../types/props/ChildrenAndIdProps';
 import { toIngestEndpoint } from '../../utils/NavigationPaths';
+import { analyticsEnabled } from '../../utils/AnalyticsUtils';
+import { SideMenuButtonProps } from '../../components/molecules/SideMenuButton';
 
 const IngestEndpointSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
     const router = useRouter();
     const { id, children } = props;
 
-    const { orgUserState } = useLoggedInState();
+    const { orgUserState, templateInteractions } = useLoggedInState();
 
     const sectionProps: SectionProps<NavIngestEndpoint> = {
         children,
@@ -29,6 +31,9 @@ const IngestEndpointSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps
         queryResult: useQuery<NavIngestEndpoint>(NavIngestEndpointQuery, {
             variables: { id },
         }),
+        initContext: (data) => {
+            templateInteractions.setSectionHasAnalytics(analyticsEnabled(data.getIngestEndpoint));
+        },
         buildButtonsProps: (data) => [
             buildOrgButtonProps(
                 router,
@@ -49,12 +54,16 @@ const IngestEndpointSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps
                 true,
             ),
         ],
-        buildMenuItemsProps: () => [
-            {
-                icon: <IngestAnalyticsIcon />,
-                label: 'Analytics',
-                link: toIngestEndpoint({ id }, 'analytics'),
-            },
+        buildMenuItemsProps: (_, data) => [
+            ...((analyticsEnabled(data.getIngestEndpoint)
+                ? [
+                      {
+                          icon: <IngestAnalyticsIcon />,
+                          label: 'Analytics',
+                          link: toIngestEndpoint({ id }, 'analytics'),
+                      },
+                  ]
+                : []) as SideMenuButtonProps[]),
             {
                 icon: <RevisionIcon />,
                 label: 'Revisions',

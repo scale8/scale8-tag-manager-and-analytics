@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import IngestEndpointForm from '../../components/organisms/Forms/IngestEndpointForm';
 import { ApolloError, useMutation, useQuery } from '@apollo/client';
 import { UpdateIngestEndpointGetData } from '../../gql/generated/UpdateIngestEndpointGetData';
@@ -14,8 +14,43 @@ import {
     IngestEndpointValues,
 } from '../../utils/forms/IngestEndpointFormUtils';
 import { DialogPreloadForm, DialogPreloadFormProps } from '../abstractions/DialogPreloadForm';
+import {
+    buildStorageProviderSaveProperties,
+    initialStorageProviderFields,
+} from '../../utils/StorageProviderUtils';
+import { useConfigState } from '../../context/AppContext';
+import { Mode } from '../../gql/generated/globalTypes';
 
 const IngestEndpointUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
+    const { mode } = useConfigState();
+
+    const customValueSetter = (
+        valueKey: string,
+        value: any,
+        values: IngestEndpointValues,
+        setValues: Dispatch<SetStateAction<IngestEndpointValues>>,
+    ) => {
+        if (valueKey === 'analyticsEnabled') {
+            if (!values.analyticsEnabled) {
+                setValues({
+                    ...values,
+                    editStorageProviderSettings: false,
+                    [valueKey]: value,
+                });
+            } else {
+                setValues({
+                    ...values,
+                    [valueKey]: value,
+                });
+            }
+        } else {
+            setValues({
+                ...values,
+                [valueKey]: value,
+            });
+        }
+    };
+
     const ingestEndpointUpdateProps: DialogPreloadFormProps<
         UpdateIngestEndpointGetData,
         IngestEndpointValues,
@@ -26,15 +61,31 @@ const IngestEndpointUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
             variables: { id: props.id },
         }),
         buildInitialStatePreload: (formLoadedData: UpdateIngestEndpointGetData) => ({
+            ...initialStorageProviderFields,
+            storageProvider: formLoadedData.getIngestEndpoint.storage_provider,
             name: formLoadedData.getIngestEndpoint.name,
+            analyticsEnabled: formLoadedData.getIngestEndpoint.analytics_enabled,
         }),
         saveQuery: useMutation(UpdateIngestEndpointQuery),
-        mapSaveData: (formValues: IngestEndpointValues) => ({
-            ingestEndpointUpdateInput: {
-                ingest_endpoint_id: props.id,
-                name: formValues.name,
-            },
-        }),
+        mapSaveData: (formValues: IngestEndpointValues) => {
+            if (mode === Mode.COMMERCIAL) {
+                return {
+                    ingestEndpointUpdateInput: {
+                        ingest_endpoint_id: props.id,
+                        name: formValues.name,
+                        analytics_enabled: true,
+                    },
+                };
+            }
+            return {
+                ingestEndpointUpdateInput: {
+                    ingest_endpoint_id: props.id,
+                    name: formValues.name,
+                    analytics_enabled: formValues.analyticsEnabled,
+                    ...buildStorageProviderSaveProperties(formValues, false),
+                },
+            };
+        },
         buildFormProps: (
             formLoadedData: UpdateIngestEndpointGetData,
             formValidationValues: FormValidationResult<IngestEndpointValues>,
@@ -46,10 +97,12 @@ const IngestEndpointUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
             title: 'Update Ingest Endpoint',
             formInfoProps: buildStandardFormInfo('ingestEndpoints', 'Update'),
             handleDialogClose: props.handleDialogClose,
+            isCreate: false,
         }),
         checkSuccessfullySubmitted: (formMutationData) => formMutationData?.updateIngestEndpoint,
         pageComponent: IngestEndpointForm,
         validators: IngestEndpointValidators,
+        customValueSetter,
         ...props,
     };
 

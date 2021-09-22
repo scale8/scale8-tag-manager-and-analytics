@@ -14,10 +14,13 @@ import { duplicateRevision } from '../../utils/RevisionUtils';
 import { createIngestEndpointDataMapSchemasFromGQLInput } from '../../utils/IngestEndpointDataMapUtils';
 import BaseDatabase from '../../backends/databases/abstractions/BaseDatabase';
 import { withUnManagedAccount } from '../../utils/DataManagerAccountUtils';
+import { StorageProvider } from '../../enums/StorageProvider';
 
 @injectable()
 export default class IngestEndpointRevisionManager extends Manager<IngestEndpointRevision> {
-    @inject(TYPES.BackendDatabase) private backendDatabase!: BaseDatabase;
+    @inject(TYPES.BackendDatabaseFactory) private backendDatabaseFactory!: (
+        storage_provider: StorageProvider,
+    ) => BaseDatabase;
 
     protected gqlSchema = gql`
         """
@@ -333,8 +336,18 @@ export default class IngestEndpointRevisionManager extends Manager<IngestEndpoin
                         revision.ingestEndpointId,
                         userMessages.ingestEndpointFailed,
                     );
+                    if (ingestEndpoint.storageProvider === StorageProvider.AWS_S3) {
+                        return {
+                            result: [],
+                            from: new Date(),
+                            to: new Date(),
+                        };
+                    }
                     args.query_options.filter_options.revision = revision.id.toString();
-                    return this.backendDatabase.requests(ingestEndpoint, args.query_options);
+                    return this.backendDatabaseFactory(ingestEndpoint.storageProvider).requests(
+                        ingestEndpoint,
+                        args.query_options,
+                    );
                 });
             },
             byte_stats: async (parent: any, args: any, ctx: CTX) => {
@@ -347,8 +360,18 @@ export default class IngestEndpointRevisionManager extends Manager<IngestEndpoin
                         revision.ingestEndpointId,
                         userMessages.ingestEndpointFailed,
                     );
+                    if (ingestEndpoint.storageProvider === StorageProvider.AWS_S3) {
+                        return {
+                            result: [],
+                            from: new Date(),
+                            to: new Date(),
+                        };
+                    }
                     args.query_options.filter_options.revision = revision.id.toString();
-                    return this.backendDatabase.bytes(ingestEndpoint, args.query_options);
+                    return this.backendDatabaseFactory(ingestEndpoint.storageProvider).bytes(
+                        ingestEndpoint,
+                        args.query_options,
+                    );
                 });
             },
         },

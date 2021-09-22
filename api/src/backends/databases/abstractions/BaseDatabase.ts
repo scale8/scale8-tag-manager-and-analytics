@@ -1,8 +1,9 @@
 import { injectable } from 'inversify';
 import App from '../../../mongo/models/tag/App';
 import IngestEndpoint from '../../../mongo/models/data/IngestEndpoint';
-import { StorageProvider } from '../../../enums/StorageProvider';
-import { StorageProviderConfig } from '../../../mongo/types/Types';
+import { ObjectID } from 'mongodb';
+import GenericError from '../../../errors/GenericError';
+import { LogPriority } from '../../../enums/LogPriority';
 
 export interface BaseQueryOptions {
     time_slice: string;
@@ -49,18 +50,25 @@ export interface IngestQueryOptions extends BaseQueryOptions {
 
 @injectable()
 export default abstract class BaseDatabase {
-    public abstract configure(): Promise<void>;
-
-    public abstract getStorageProvider(): StorageProvider;
-
-    public abstract getStorageProviderConfig(): Promise<StorageProviderConfig>;
-
     protected getRangeFromAsDate(options: BaseQueryOptions): Date {
         return new Date(options.filter_options.from);
     }
 
     protected getRangeToAsDate(options: BaseQueryOptions): Date {
         return new Date(options.filter_options.to);
+    }
+
+    protected getEntityUsageIngestEndpointEnvironmentId(entity: App | IngestEndpoint): ObjectID {
+        if (entity.usageIngestEndpointEnvironmentId === undefined) {
+            throw new GenericError(
+                `Unable to find usage endpoint for ${
+                    entity.constructor.name
+                }: ${entity.id.toString()}`,
+                LogPriority.ERROR,
+            );
+        } else {
+            return entity.usageIngestEndpointEnvironmentId;
+        }
     }
 
     protected getResultWithRange(

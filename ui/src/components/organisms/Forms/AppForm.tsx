@@ -4,8 +4,13 @@ import DrawerFormLayout from '../../molecules/DrawerFormLayout';
 import { Box, Checkbox, Divider, FormControlLabel, useTheme } from '@material-ui/core';
 import Loader from '../Loader';
 import { AppFormProps } from '../../../dialogPages/tagManager/app/AppCreate';
+import StorageProviderSelector from '../../molecules/StorageProviderSelector';
+import CheckBoxInput from '../../atoms/InputTypes/CheckBoxInput';
+import { Mode } from '../../../gql/generated/globalTypes';
+import { useConfigState } from '../../../context/AppContext';
 
 const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
+    const { mode } = useConfigState();
     const theme = useTheme();
 
     const [useDomainName, setUseDomainName] = useState(
@@ -62,7 +67,7 @@ const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
                                 color="primary"
                             />
                         }
-                        label="Use domain as Application name?"
+                        label="Use domain as Application name"
                     />
                     {!useDomainName && (
                         <ControlledTextInput
@@ -72,6 +77,55 @@ const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
                             className="DrawerFormField"
                             required
                         />
+                    )}
+
+                    {mode !== Mode.COMMERCIAL && (
+                        <>
+                            <CheckBoxInput
+                                name="analyticsEnabled"
+                                value={props.values.analyticsEnabled}
+                                setValue={(v) => {
+                                    props.handleChange('analyticsEnabled', v);
+                                }}
+                                label="Enable Analytics"
+                                className="DrawerFormField"
+                                style={{ marginLeft: '-11px' }}
+                                color="primary"
+                            />
+                            <small className="DrawerFormField" style={{ marginTop: '-24px' }}>
+                                Enable simple analytics dashboard when using Tag Manager. We
+                                recommend this option is left enabled.
+                            </small>
+                            <CheckBoxInput
+                                name="errorTrackingEnabled"
+                                value={props.values.errorTrackingEnabled}
+                                setValue={(v) => {
+                                    props.handleChange('errorTrackingEnabled', v);
+                                }}
+                                label="Enable Error Tracking"
+                                className="DrawerFormField"
+                                style={{ marginLeft: '-11px' }}
+                                color="primary"
+                            />
+                            <small className="DrawerFormField" style={{ marginTop: '-24px' }}>
+                                Enable basic website and mobile website application errors directly
+                                in the dashboard. If you are using another service you may wish to
+                                disable this option.
+                            </small>
+                            {(props.values.analyticsEnabled ||
+                                props.values.errorTrackingEnabled) && (
+                                <StorageProviderSelector
+                                    {...props}
+                                    warnGraphDisabled
+                                    infoText="Your analytics and error data will be sent to your
+                                            chosen storage provider. MongoDB is a great solution for
+                                            very low traffic websites and doesn't require any
+                                            configuration unless you wish to specify your own
+                                            MongoDB servers. We strongly recommend using BigQuery or
+                                            Clickhouse for larger websites."
+                                />
+                            )}
+                        </>
                     )}
                 </DrawerFormLayout>
             )}

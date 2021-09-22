@@ -8,7 +8,7 @@ import Navigate from '../../components/atoms/Next/Navigate';
 const IngestEndpointAuto: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const id = props.params.id ?? '';
     const { templateInteractions } = useLoggedInState();
-    const { sectionHistory } = templateInteractions;
+    const { sectionHistory, sectionHasAnalytics } = templateInteractions;
 
     if (
         sectionHistory.previous !== undefined &&
@@ -17,7 +17,9 @@ const IngestEndpointAuto: FC<DynamicPageProps> = (props: DynamicPageProps) => {
         return <Navigate to={toIngestEndpoint({ id }, 'revisions')} />;
     }
 
-    return <Navigate to={toIngestEndpoint({ id }, 'analytics')} />;
+    return (
+        <Navigate to={toIngestEndpoint({ id }, sectionHasAnalytics ? 'analytics' : 'revisions')} />
+    );
 };
 
 export default IngestEndpointAuto;

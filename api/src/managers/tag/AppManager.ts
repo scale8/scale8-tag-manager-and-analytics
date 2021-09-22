@@ -15,10 +15,25 @@ import DataError from '../../errors/DataError';
 import userMessages from '../../errors/UserMessages';
 import { createApp } from '../../utils/AppUtils';
 import BaseDatabase from '../../backends/databases/abstractions/BaseDatabase';
+import {
+    getCommercialStorageProvider,
+    getCommercialStorageProviderConfig,
+    getProviderConfig,
+    getUpdateProviderConfig,
+    updateIngestEndpointEnvironment,
+} from '../../utils/IngestEndpointEnvironmentUtils';
+import GenericError from '../../errors/GenericError';
+import { LogPriority } from '../../enums/LogPriority';
+import IngestEndpointEnvironment from '../../mongo/models/data/IngestEndpointEnvironment';
+import { StorageProvider } from '../../enums/StorageProvider';
+import { StorageProviderConfig } from '../../mongo/types/Types';
+import Hash from '../../core/Hash';
 
 @injectable()
 export default class AppManager extends Manager<App> {
-    @inject(TYPES.BackendDatabase) private backendDatabase!: BaseDatabase;
+    @inject(TYPES.BackendDatabaseFactory) private backendDatabaseFactory!: (
+        storage_provider: StorageProvider,
+    ) => BaseDatabase;
 
     protected gqlSchema = gql`
         """
@@ -207,6 +222,18 @@ export default class AppManager extends Manager<App> {
             Event Groups
             """
             event_group_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+            """
+            Whether the analytics on the \`App\` is enabled
+            """
+            analytics_enabled: Boolean!
+            """
+            Whether the error tracking on the \`App\` is enabled
+            """
+            error_tracking_enabled: Boolean!
+            """
+            The storage provider used by the \`App\` to track data
+            """
+            storage_provider: StorageProvider!
         }
 
         # noinspection GraphQLMemberRedefinition
@@ -235,6 +262,30 @@ export default class AppManager extends Manager<App> {
             The type of \`App\` to be created
             """
             type: AppType!
+            """
+            The storage provider to be used by the \`App\` to store analytics data
+            """
+            storage_provider: StorageProvider
+            """
+            The AWS specific configuration linked to this new \`App\`
+            """
+            aws_storage_config: AWSStorageConfig
+            """
+            The Google Cloud BigQuery Stream specific configuration linked to this new \`App\`
+            """
+            gc_bigquery_stream_config: GCBigQueryStreamConfig
+            """
+            The MongoDB specific configuration linked to this new \`App\`
+            """
+            mongo_push_config: MongoDbPushConfig
+            """
+            If the analytics on the \`App\` should be enabled
+            """
+            analytics_enabled: Boolean!
+            """
+            If the error tracking on the \`App\` should be enabled
+            """
+            error_tracking_enabled: Boolean!
         }
 
         input AppDeleteInput {
@@ -260,6 +311,30 @@ export default class AppManager extends Manager<App> {
             \`App\`'s domain name
             """
             domain: String
+            """
+            The storage provider to be used by the \`App\` to store analytics data
+            """
+            storage_provider: StorageProvider
+            """
+            The AWS specific configuration linked to this new \`App\`
+            """
+            aws_storage_config: AWSStorageConfig
+            """
+            The Google Cloud BigQuery Stream specific configuration linked to this new \`App\`
+            """
+            gc_bigquery_stream_config: GCBigQueryStreamConfig
+            """
+            The MongoDB specific configuration linked to this new \`App\`
+            """
+            mongo_push_config: MongoDbPushConfig
+            """
+            If the analytics on the \`App\` should be enabled
+            """
+            analytics_enabled: Boolean!
+            """
+            If the error tracking on the \`App\` should be enabled
+            """
+            error_tracking_enabled: Boolean!
         }
 
         input AppInstallPlatformInput {
@@ -323,7 +398,40 @@ export default class AppManager extends Manager<App> {
                 userMessages.appFailed,
             );
             return this.orgAuth.asUserWithEditAccess(ctx, app.orgId, async (me) => {
-                app.bulkGQLSet(data, ['name', 'domain']); //only is a safety check against this function
+                if (app.usageIngestEndpointEnvironmentId === undefined) {
+                    throw new GenericError(
+                        `Failed to get usage Ingest Endpoint for App: ${app.id.toString()}`,
+                        LogPriority.DEBUG,
+                    );
+                }
+
+                const trackingIngestEndpointEnvironment = await this.repoFactory(
+                    IngestEndpointEnvironment,
+                ).findByIdThrows(app.usageIngestEndpointEnvironmentId, userMessages.usageFailed);
+
+                const providerConfig = await getUpdateProviderConfig(
+                    data,
+                    trackingIngestEndpointEnvironment,
+                );
+
+                await updateIngestEndpointEnvironment(
+                    me,
+                    trackingIngestEndpointEnvironment,
+                    providerConfig,
+                );
+
+                app.bulkGQLSet(data, [
+                    'name',
+                    'domain',
+                    'analytics_enabled',
+                    'error_tracking_enabled',
+                ]); //only is a safety check against this function
+
+                app.storageProviderConfigHash = Hash.hashString(
+                    JSON.stringify(providerConfig),
+                    'c0nF1g',
+                );
+
                 await this.repoFactory(App).save(app, me);
                 return true;
             });
@@ -350,6 +458,22 @@ export default class AppManager extends Manager<App> {
         },
         createApp: async (parent: any, args: any, ctx: CTX) => {
             const data = args.appCreateInput;
+
+            const getStorageProviderDetails = async (): Promise<
+                [StorageProvider, StorageProviderConfig]
+            > => {
+                if (this.config.isCommercial()) {
+                    return [
+                        getCommercialStorageProvider(),
+                        await getCommercialStorageProviderConfig(),
+                    ];
+                }
+
+                return [data.storage_provider, await getProviderConfig(data)];
+            };
+
+            const [storageProvider, providerConfig] = await getStorageProviderDetails();
+
             const tagManagerAccount = await this.repoFactory(TagManagerAccount).findByIdThrows(
                 new ObjectId(data.tag_manager_account_id),
                 userMessages.accountFailed,
@@ -363,7 +487,17 @@ export default class AppManager extends Manager<App> {
                     throw new DataError(userMessages.maxApps, true);
                 }
                 return (
-                    await createApp(me, tagManagerAccount, data.name, data.domain, data.type)
+                    await createApp(
+                        me,
+                        tagManagerAccount,
+                        data.name,
+                        data.domain,
+                        data.type,
+                        storageProvider,
+                        providerConfig,
+                        data.analytics_enabled,
+                        data.error_tracking_enabled,
+                    )
                 ).toGQLType();
             });
         },
@@ -422,7 +556,10 @@ export default class AppManager extends Manager<App> {
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
-                    this.backendDatabase.eventGroups(app, args.query_options),
+                    this.backendDatabaseFactory(app.storageProvider).eventGroups(
+                        app,
+                        args.query_options,
+                    ),
                 );
             },
             event_stats: async (parent: any, args: any, ctx: CTX) => {
@@ -431,7 +568,10 @@ export default class AppManager extends Manager<App> {
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
-                    this.backendDatabase.events(app, args.query_options),
+                    this.backendDatabaseFactory(app.storageProvider).events(
+                        app,
+                        args.query_options,
+                    ),
                 );
             },
             device_stats: async (parent: any, args: any, ctx: CTX) => {
@@ -440,7 +580,10 @@ export default class AppManager extends Manager<App> {
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
-                    this.backendDatabase.devices(app, args.query_options),
+                    this.backendDatabaseFactory(app.storageProvider).devices(
+                        app,
+                        args.query_options,
+                    ),
                 );
             },
             browser_stats: async (parent: any, args: any, ctx: CTX) => {
@@ -449,7 +592,10 @@ export default class AppManager extends Manager<App> {
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
-                    this.backendDatabase.browsers(app, args.query_options),
+                    this.backendDatabaseFactory(app.storageProvider).browsers(
+                        app,
+                        args.query_options,
+                    ),
                 );
             },
             operating_system_stats: async (parent: any, args: any, ctx: CTX) => {
@@ -458,7 +604,10 @@ export default class AppManager extends Manager<App> {
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
-                    this.backendDatabase.operatingSystems(app, args.query_options),
+                    this.backendDatabaseFactory(app.storageProvider).operatingSystems(
+                        app,
+                        args.query_options,
+                    ),
                 );
             },
             country_stats: async (parent: any, args: any, ctx: CTX) => {
@@ -467,7 +616,10 @@ export default class AppManager extends Manager<App> {
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
-                    this.backendDatabase.countries(app, args.query_options),
+                    this.backendDatabaseFactory(app.storageProvider).countries(
+                        app,
+                        args.query_options,
+                    ),
                 );
             },
             page_stats: async (parent: any, args: any, ctx: CTX) => {
@@ -476,7 +628,7 @@ export default class AppManager extends Manager<App> {
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
-                    this.backendDatabase.pages(app, args.query_options),
+                    this.backendDatabaseFactory(app.storageProvider).pages(app, args.query_options),
                 );
             },
             entry_page_stats: async (parent: any, args: any, ctx: CTX) => {
@@ -485,7 +637,11 @@ export default class AppManager extends Manager<App> {
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
-                    this.backendDatabase.pages(app, args.query_options, 'ENTRY'),
+                    this.backendDatabaseFactory(app.storageProvider).pages(
+                        app,
+                        args.query_options,
+                        'ENTRY',
+                    ),
                 );
             },
             exit_page_stats: async (parent: any, args: any, ctx: CTX) => {
@@ -494,7 +650,11 @@ export default class AppManager extends Manager<App> {
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
-                    this.backendDatabase.pages(app, args.query_options, 'EXIT'),
+                    this.backendDatabaseFactory(app.storageProvider).pages(
+                        app,
+                        args.query_options,
+                        'EXIT',
+                    ),
                 );
             },
             utm_medium_stats: async (parent: any, args: any, ctx: CTX) => {
@@ -503,7 +663,11 @@ export default class AppManager extends Manager<App> {
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
-                    this.backendDatabase.utms(app, args.query_options, 'MEDIUM'),
+                    this.backendDatabaseFactory(app.storageProvider).utms(
+                        app,
+                        args.query_options,
+                        'MEDIUM',
+                    ),
                 );
             },
             utm_source_stats: async (parent: any, args: any, ctx: CTX) => {
@@ -512,7 +676,11 @@ export default class AppManager extends Manager<App> {
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
-                    this.backendDatabase.utms(app, args.query_options, 'SOURCE'),
+                    this.backendDatabaseFactory(app.storageProvider).utms(
+                        app,
+                        args.query_options,
+                        'SOURCE',
+                    ),
                 );
             },
             utm_campaign_stats: async (parent: any, args: any, ctx: CTX) => {
@@ -521,7 +689,11 @@ export default class AppManager extends Manager<App> {
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
-                    this.backendDatabase.utms(app, args.query_options, 'CAMPAIGN'),
+                    this.backendDatabaseFactory(app.storageProvider).utms(
+                        app,
+                        args.query_options,
+                        'CAMPAIGN',
+                    ),
                 );
             },
             referrer_stats: async (parent: any, args: any, ctx: CTX) => {
@@ -530,7 +702,10 @@ export default class AppManager extends Manager<App> {
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
-                    this.backendDatabase.referrers(app, args.query_options),
+                    this.backendDatabaseFactory(app.storageProvider).referrers(
+                        app,
+                        args.query_options,
+                    ),
                 );
             },
             referrer_tld_stats: async (parent: any, args: any, ctx: CTX) => {
@@ -539,7 +714,10 @@ export default class AppManager extends Manager<App> {
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
-                    this.backendDatabase.referrerTlds(app, args.query_options),
+                    this.backendDatabaseFactory(app.storageProvider).referrerTlds(
+                        app,
+                        args.query_options,
+                    ),
                 );
             },
             event_request_stats: async (parent: any, args: any, ctx: CTX) => {
@@ -547,8 +725,18 @@ export default class AppManager extends Manager<App> {
                     new ObjectID(parent.id),
                     userMessages.appFailed,
                 );
+                if (app.storageProvider === StorageProvider.AWS_S3) {
+                    return {
+                        result: [],
+                        from: new Date(),
+                        to: new Date(),
+                    };
+                }
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
-                    this.backendDatabase.eventRequests(app, args.query_options),
+                    this.backendDatabaseFactory(app.storageProvider).eventRequests(
+                        app,
+                        args.query_options,
+                    ),
                 );
             },
             average_session_duration_stats: async (parent: any, args: any, ctx: CTX) => {
@@ -557,7 +745,10 @@ export default class AppManager extends Manager<App> {
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
-                    this.backendDatabase.averageSessionDuration(app, args.query_options),
+                    this.backendDatabaseFactory(app.storageProvider).averageSessionDuration(
+                        app,
+                        args.query_options,
+                    ),
                 );
             },
             bounce_ratio_stats: async (parent: any, args: any, ctx: CTX) => {
@@ -566,7 +757,10 @@ export default class AppManager extends Manager<App> {
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
-                    this.backendDatabase.bounceRatio(app, args.query_options),
+                    this.backendDatabaseFactory(app.storageProvider).bounceRatio(
+                        app,
+                        args.query_options,
+                    ),
                 );
             },
             tag_manager_account: async (parent: any, args: any, ctx: CTX) => {

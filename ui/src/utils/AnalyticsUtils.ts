@@ -1,7 +1,7 @@
 import { SummaryDetailProps } from '../components/atoms/SummaryDetail';
 import { abbreviateNumber, displayTime, kebabToTitleCase } from './TextUtils';
 import { calculateDeltaPercentage, roundNumber } from './MathUtils';
-import { AppQueryOptions } from '../gql/generated/globalTypes';
+import { AppQueryOptions, StorageProvider } from '../gql/generated/globalTypes';
 
 export type GroupingCount = {
     key: string;
@@ -71,4 +71,11 @@ export const calculateEventsPerUser = (eventCount: number, userCount: number): n
     }
 
     return eventCount / userCount;
+};
+
+export const analyticsEnabled = (entity: {
+    analytics_enabled: boolean;
+    storage_provider: StorageProvider;
+}) => {
+    return entity.analytics_enabled && entity.storage_provider !== StorageProvider.AWS_S3;
 };

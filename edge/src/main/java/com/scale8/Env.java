@@ -30,7 +30,9 @@ public class Env {
   public final String GOOGLE_CREDENTIALS_FILE = getOrElse("GOOGLE_CREDENTIALS_FILE", "");
 
   public final String MONGO_CONNECT_STRING =
-      getOrElse("MONGO_CONNECT_STRING", "mongodb://s8-admin:s8-admin@127.0.0.1:27017");
+      getOrElse("MONGO_CONNECT_STRING", "mongodb://127.0.0.1:27017");
+
+  public final String DEFAULT_DATABASE = getOrElse("DEFAULT_DATABASE", "s8");
 
   public final String ASSETS_BUCKET = getOrElse("ASSET_BUCKET", "scale8_com_" + ENV + "_assets");
 

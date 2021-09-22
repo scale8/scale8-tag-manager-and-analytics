@@ -119,4 +119,8 @@ export default class IngestEndpointEnvironment extends Model {
     set ingestEndpointRevisionId(value: ObjectID) {
         this._ingest_endpoint_revision_id = value;
     }
+
+    set configHint(value: string) {
+        this._config_hint = value;
+    }
 }

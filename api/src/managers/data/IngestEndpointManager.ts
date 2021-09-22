@@ -12,15 +12,29 @@ import userMessages from '../../errors/UserMessages';
 import User from '../../mongo/models/User';
 import { fetchOrg } from '../../utils/OrgUtils';
 import Org from '../../mongo/models/Org';
-import { createUsageEndpointEnvironment } from '../../utils/IngestEndpointEnvironmentUtils';
+import {
+    createUsageEndpointEnvironment,
+    getCommercialStorageProvider,
+    getCommercialStorageProviderConfig,
+    getProviderConfig,
+    getUpdateProviderConfig,
+    updateIngestEndpointEnvironment,
+} from '../../utils/IngestEndpointEnvironmentUtils';
 import { VarType } from '../../enums/VarType';
 import TYPES from '../../container/IOC.types';
 import BaseDatabase from '../../backends/databases/abstractions/BaseDatabase';
 import { withUnManagedAccount } from '../../utils/DataManagerAccountUtils';
+import { StorageProvider } from '../../enums/StorageProvider';
+import { StorageProviderConfig } from '../../mongo/types/Types';
+import GenericError from '../../errors/GenericError';
+import { LogPriority } from '../../enums/LogPriority';
+import Hash from '../../core/Hash';
 
 @injectable()
 export default class IngestEndpointManager extends Manager<IngestEndpoint> {
-    @inject(TYPES.BackendDatabase) private backendDatabase!: BaseDatabase;
+    @inject(TYPES.BackendDatabaseFactory) private backendDatabaseFactory!: (
+        storage_provider: StorageProvider,
+    ) => BaseDatabase;
 
     protected gqlSchema = gql`
         """
@@ -89,6 +103,14 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
             Byte stats
             """
             byte_stats(query_options: IngestQueryOptions!): GroupingCountsResponse!
+            """
+            Whether the analytics on the \`IngestEndpoint\` is enabled
+            """
+            analytics_enabled: Boolean!
+            """
+            The storage provider used by the \`IngestEndpoint\` to track data
+            """
+            storage_provider: StorageProvider!
         }
 
         # noinspection GraphQLMemberRedefinition
@@ -111,6 +133,26 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
             The name of the new \`IngestEndpoint\` being created
             """
             name: String!
+            """
+            The storage provider to be used by the \`App\` to store analytics data
+            """
+            storage_provider: StorageProvider
+            """
+            The AWS specific configuration linked to this new \`App\`
+            """
+            aws_storage_config: AWSStorageConfig
+            """
+            The Google Cloud BigQuery Stream specific configuration linked to this new \`App\`
+            """
+            gc_bigquery_stream_config: GCBigQueryStreamConfig
+            """
+            The MongoDB specific configuration linked to this new \`App\`
+            """
+            mongo_push_config: MongoDbPushConfig
+            """
+            If the analytics on the \`IngestEndpoint\` should be enabled
+            """
+            analytics_enabled: Boolean!
         }
 
         """
@@ -135,6 +177,26 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
             \`IngestEndpoint\` name
             """
             name: String
+            """
+            The storage provider to be used by the \`App\` to store analytics data
+            """
+            storage_provider: StorageProvider
+            """
+            The AWS specific configuration linked to this new \`App\`
+            """
+            aws_storage_config: AWSStorageConfig
+            """
+            The Google Cloud BigQuery Stream specific configuration linked to this new \`App\`
+            """
+            gc_bigquery_stream_config: GCBigQueryStreamConfig
+            """
+            The MongoDB specific configuration linked to this new \`App\`
+            """
+            mongo_push_config: MongoDbPushConfig
+            """
+            If the analytics on the \`IngestEndpoint\` should be enabled
+            """
+            analytics_enabled: Boolean!
         }
 
         # noinspection GraphQLMemberRedefinition
@@ -177,8 +239,38 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
         updateIngestEndpoint: async (parent: any, args: any, ctx: CTX) => {
             const data = args.ingestEndpointUpdateInput;
             const ingestEndpoint = await this.findAndCheckIngestEndpoint(data);
+
             return this.orgAuth.asUserWithEditAccess(ctx, ingestEndpoint.orgId, async (me) => {
-                ingestEndpoint.bulkGQLSet(data, ['name']); //only is a safety check against this function
+                if (ingestEndpoint.usageIngestEndpointEnvironmentId === undefined) {
+                    throw new GenericError(
+                        `Failed to get usage Ingest Endpoint for Ingest Endpoint: ${ingestEndpoint.id.toString()}`,
+                        LogPriority.DEBUG,
+                    );
+                }
+
+                const trackingIngestEndpointEnvironment = await this.repoFactory(
+                    IngestEndpointEnvironment,
+                ).findByIdThrows(
+                    ingestEndpoint.usageIngestEndpointEnvironmentId,
+                    userMessages.usageFailed,
+                );
+
+                const providerConfig = await getUpdateProviderConfig(
+                    data,
+                    trackingIngestEndpointEnvironment,
+                );
+
+                await updateIngestEndpointEnvironment(
+                    me,
+                    trackingIngestEndpointEnvironment,
+                    providerConfig,
+                );
+
+                ingestEndpoint.bulkGQLSet(data, ['name', 'analytics_enabled']); //only is a safety check against this function
+                ingestEndpoint.storageProviderConfigHash = Hash.hashString(
+                    JSON.stringify(providerConfig),
+                    'c0nF1g',
+                );
                 await this.repoFactory(IngestEndpoint).save(ingestEndpoint, me);
                 return true;
             });
@@ -188,42 +280,54 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                 org: Org,
                 trackingEntity: IngestEndpoint,
                 actor: User,
+                provider: StorageProvider,
+                providerConfig: StorageProviderConfig,
             ): Promise<IngestEndpointEnvironment> => {
-                return createUsageEndpointEnvironment(org, trackingEntity, actor, [
-                    {
-                        varType: VarType.DATETIME,
-                        key: 'dt',
-                        defaultValue: '%S8_DATE_TIME_UTC%',
-                    },
-                    {
-                        varType: VarType.STRING,
-                        key: 'env_id',
-                        defaultValue: '%S8_INGEST_ENV_ID%',
-                    },
-                    {
-                        varType: VarType.STRING,
-                        key: 'revision_id',
-                        defaultValue: '%S8_INGEST_REVISION_ID%',
-                    },
-                    {
-                        varType: VarType.INT,
-                        key: 'requests',
-                        defaultValue: 1,
-                    },
-                    {
-                        varType: VarType.INT,
-                        key: 'bytes',
-                    },
-                ]);
+                return createUsageEndpointEnvironment(
+                    org,
+                    trackingEntity,
+                    actor,
+                    provider,
+                    providerConfig,
+                    [
+                        {
+                            varType: VarType.DATETIME,
+                            key: 'dt',
+                            defaultValue: '%S8_DATE_TIME_UTC%',
+                        },
+                        {
+                            varType: VarType.STRING,
+                            key: 'env_id',
+                            defaultValue: '%S8_INGEST_ENV_ID%',
+                        },
+                        {
+                            varType: VarType.STRING,
+                            key: 'revision_id',
+                            defaultValue: '%S8_INGEST_REVISION_ID%',
+                        },
+                        {
+                            varType: VarType.INT,
+                            key: 'requests',
+                            defaultValue: 1,
+                        },
+                        {
+                            varType: VarType.INT,
+                            key: 'bytes',
+                        },
+                    ],
+                );
             };
 
             const createIngestEndpoint = async (
                 actor: User,
                 dataManagerAccount: DataManagerAccount,
                 name: string,
+                provider: StorageProvider,
+                providerConfig: StorageProviderConfig,
+                analyticsEnabled: boolean,
             ): Promise<IngestEndpoint> => {
                 let ingestEndpoint = await this.repoFactory(IngestEndpoint).save(
-                    new IngestEndpoint(name, dataManagerAccount),
+                    new IngestEndpoint(name, dataManagerAccount, analyticsEnabled, provider),
                     actor,
                 );
                 //we need to create an ingest endpoint environment to track usage...
@@ -231,8 +335,14 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                     await fetchOrg(dataManagerAccount.orgId),
                     ingestEndpoint,
                     actor,
+                    provider,
+                    providerConfig,
                 );
                 ingestEndpoint.usageIngestEndpointEnvironmentId = usageEndpointEnvironment.id;
+                ingestEndpoint.storageProviderConfigHash = Hash.hashString(
+                    JSON.stringify(providerConfig),
+                    'c0nF1g',
+                );
                 ingestEndpoint = await this.repoFactory(IngestEndpoint).save(ingestEndpoint, actor);
                 await this.repoFactory(IngestEndpointRevision).save(
                     new IngestEndpointRevision('Revision 1', ingestEndpoint),
@@ -242,6 +352,22 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
             };
 
             const data = args.ingestEndpointCreateInput;
+
+            const getStorageProviderDetails = async (): Promise<
+                [StorageProvider, StorageProviderConfig]
+            > => {
+                if (this.config.isCommercial()) {
+                    return [
+                        getCommercialStorageProvider(),
+                        await getCommercialStorageProviderConfig(),
+                    ];
+                }
+
+                return [data.storage_provider, await getProviderConfig(data)];
+            };
+
+            const [storageProvider, providerConfig] = await getStorageProviderDetails();
+
             const dataManagerAccount = await this.repoFactory(DataManagerAccount).findByIdThrows(
                 new ObjectId(data.data_manager_account_id),
                 userMessages.accountFailed,
@@ -258,7 +384,14 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                         throw new DataError(userMessages.maxEndpoints, true);
                     }
                     return (
-                        await createIngestEndpoint(me, dataManagerAccount, data.name)
+                        await createIngestEndpoint(
+                            me,
+                            dataManagerAccount,
+                            data.name,
+                            storageProvider,
+                            providerConfig,
+                            data.analytics_enabled,
+                        )
                     ).toGQLType();
                 },
             );
@@ -340,10 +473,21 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                     new ObjectID(parent.id),
                     userMessages.ingestEndpointFailed,
                 );
+                if (ingestEndpoint.storageProvider === StorageProvider.AWS_S3) {
+                    return {
+                        result: [],
+                        from: new Date(),
+                        to: new Date(),
+                    };
+                }
                 return await this.orgAuth.asUserWithViewAccess(
                     ctx,
                     ingestEndpoint.orgId,
-                    async () => this.backendDatabase.requests(ingestEndpoint, args.query_options),
+                    async () =>
+                        this.backendDatabaseFactory(ingestEndpoint.storageProvider).requests(
+                            ingestEndpoint,
+                            args.query_options,
+                        ),
                 );
             },
             byte_stats: async (parent: any, args: any, ctx: CTX) => {
@@ -351,10 +495,21 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                     new ObjectID(parent.id),
                     userMessages.ingestEndpointFailed,
                 );
+                if (ingestEndpoint.storageProvider === StorageProvider.AWS_S3) {
+                    return {
+                        result: [],
+                        from: new Date(),
+                        to: new Date(),
+                    };
+                }
                 return await this.orgAuth.asUserWithViewAccess(
                     ctx,
                     ingestEndpoint.orgId,
-                    async () => this.backendDatabase.bytes(ingestEndpoint, args.query_options),
+                    async () =>
+                        this.backendDatabaseFactory(ingestEndpoint.storageProvider).bytes(
+                            ingestEndpoint,
+                            args.query_options,
+                        ),
                 );
             },
         },

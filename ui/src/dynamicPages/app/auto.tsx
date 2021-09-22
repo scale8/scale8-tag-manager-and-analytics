@@ -8,7 +8,7 @@ import { toApp } from '../../utils/NavigationPaths';
 const AppAuto: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const id = props.params.id ?? '';
     const { templateInteractions } = useLoggedInState();
-    const { sectionHistory } = templateInteractions;
+    const { sectionHistory, sectionHasAnalytics } = templateInteractions;
 
     if (
         sectionHistory.previous !== undefined &&
@@ -17,7 +17,7 @@ const AppAuto: FC<DynamicPageProps> = (props: DynamicPageProps) => {
         return <Navigate to={toApp({ id }, 'revisions')} />;
     }
 
-    return <Navigate to={toApp({ id }, 'analytics')} />;
+    return <Navigate to={toApp({ id }, sectionHasAnalytics ? 'analytics' : 'revisions')} />;
 };
 
 export default AppAuto;

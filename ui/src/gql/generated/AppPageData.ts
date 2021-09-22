@@ -50,6 +50,14 @@ export interface AppPageData_getTagManagerAccount_apps {
    */
   domain: string;
   /**
+   * Whether the analytics on the `App` is enabled
+   */
+  analytics_enabled: boolean;
+  /**
+   * Whether the error tracking on the `App` is enabled
+   */
+  error_tracking_enabled: boolean;
+  /**
    * Revisions linked to the `App`. All `App` entities such as `Tag`, `RuleGroup`, `Rule` etc. sit under a revisioning system.
    */
   revisions: AppPageData_getTagManagerAccount_apps_revisions[];

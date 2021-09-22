@@ -108,6 +108,7 @@ export type ControlledSelectProps<Values extends { [key: string]: any }> = FormC
     name: string;
     label: string;
     values: SelectValueWithSub[];
+    resetErrorsOnKeys?: string[];
     formProps: FormProps<Values>;
     allowEmpty?: boolean;
     requiredOnValidation?: boolean;

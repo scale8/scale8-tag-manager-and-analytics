@@ -20,12 +20,10 @@ import {
     getCNAME,
     isEnvironmentVariableNameValid,
 } from '../../utils/EnvironmentUtils';
-import BaseDatabase from '../../backends/databases/abstractions/BaseDatabase';
 import { fetchEventRequests } from '../../utils/EventRequestsUtils';
 
 @injectable()
 export default class EnvironmentManager extends Manager<Environment> {
-    @inject(TYPES.BackendDatabase) private backendDatabase!: BaseDatabase;
     @inject(TYPES.Route53Service) private route53Service!: Route53Service;
 
     protected gqlSchema = gql`
@@ -402,7 +400,6 @@ export default class EnvironmentManager extends Manager<Environment> {
                     this.config.isCommercial() ? data.cert_pem : undefined,
                     this.config.isCommercial() ? data.key_pem : undefined,
                     environmentVariables,
-                    undefined,
                     data.comments,
                 );
                 return environment.toGQLType();

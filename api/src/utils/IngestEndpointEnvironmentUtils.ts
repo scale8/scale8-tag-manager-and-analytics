@@ -1,5 +1,5 @@
 import IngestEndpointEnvironment from '../mongo/models/data/IngestEndpointEnvironment';
-import { ObjectID } from 'mongodb';
+import { MongoClient, ObjectID } from 'mongodb';
 import User from '../mongo/models/User';
 import IngestEndpoint from '../mongo/models/data/IngestEndpoint';
 import IngestEndpointRevision from '../mongo/models/data/IngestEndpointRevision';
@@ -23,13 +23,33 @@ import DataManagerAccountRepo from '../mongo/repos/data/DataManagerAccountRepo';
 import { StorageProvider } from '../enums/StorageProvider';
 import BaseStorage from '../backends/storage/abstractions/BaseStorage';
 import BaseConfig from '../backends/configuration/abstractions/BaseConfig';
-import BaseDatabase from '../backends/databases/abstractions/BaseDatabase';
 import { createCname } from './EnvironmentUtils';
+import { BigQuery } from '@google-cloud/bigquery';
+import Hash from '../core/Hash';
+import S3Service from '../aws/S3Service';
+import { AwsConfig, GCBigQueryStreamConfig, MongoDbPushConfig } from '../Types';
 
 export const getIngestEndpointCNAME = (ingestEndpointEnvironmentId: ObjectID | string): string => {
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
 
     return `${config.getEnvironmentIdPrefix()}${ingestEndpointEnvironmentId.toString()}.scale8.com`;
+};
+
+export const getCommercialStorageProviderConfig = async (): Promise<StorageProviderConfig> => {
+    const config = container.get<BaseConfig>(TYPES.BackendConfig);
+
+    return {
+        config: {
+            service_account_json: '',
+            data_set_name: await config.getAnalyticsDataSetName(),
+            require_partition_filter_in_queries: true,
+        },
+        hint: `S8 Managed Ingest Endpoint`,
+    };
+};
+
+export const getCommercialStorageProvider = (): StorageProvider => {
+    return StorageProvider.GC_BIGQUERY_STREAM;
 };
 
 const getStorageBackend = (): BaseStorage => container.get<BaseStorage>(TYPES.BackendStorage);
@@ -60,14 +80,14 @@ const getIngestUsageIngestEnvironmentId = async (
 };
 
 export const getStorageProviderConfig = async (
-    ingestEndpointEnvironment: IngestEndpointEnvironment,
-): Promise<Record<string, unknown>> => {
+    ingestEndpointEnvironmentId: ObjectID,
+): Promise<GCBigQueryStreamConfig | AwsConfig | MongoDbPushConfig | Record<string, never>> => {
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
 
     try {
         const obj = await getStorageBackend().getAsString(
             await config.getConfigsBucket(),
-            `ingest-endpoint/storage-provider-config-${ingestEndpointEnvironment.id}.json`,
+            `ingest-endpoint/storage-provider-config-${ingestEndpointEnvironmentId}.json`,
         );
         return JSON.parse((obj as any).toString('utf-8'));
     } catch (e) {
@@ -94,7 +114,7 @@ export const buildIngestEndpointConfig = async (
         userMessages.revisionFailed,
     );
 
-    const storageProviderConfig = await getStorageProviderConfig(ingestEndpointEnvironment);
+    const storageProviderConfig = await getStorageProviderConfig(ingestEndpointEnvironment.id);
 
     const config: { [k: string]: any } = {
         built: new Date().toUTCString(),
@@ -102,6 +122,8 @@ export const buildIngestEndpointConfig = async (
         usage_ingest_env_id: (await getIngestUsageIngestEnvironmentId(ingestEndpoint)) || '',
         org_id: ingestEndpointRevision.orgId.toString(),
         data_manager_account_id: ingestEndpointRevision.dataManagerAccountId.toString(),
+        is_analytics_enabled: ingestEndpoint.analyticsEnabled,
+        is_commercial: backendConfig.isCommercial(),
         ingest_endpoint_id: ingestEndpointRevision.ingestEndpointId.toString(),
         ingest_endpoint_environment_id: ingestEndpointEnvironment.id.toString(),
         ingest_endpoint_revision_id: ingestEndpointRevision.id.toString(),
@@ -132,6 +154,78 @@ export const buildIngestEndpointConfig = async (
     }
 
     return config;
+};
+
+export const updateIngestEndpointEnvironment = async (
+    actor: User,
+    ingestEndpointEnvironment: IngestEndpointEnvironment,
+    providerConfig?: StorageProviderConfig,
+    newName?: string,
+    ingestEndpointRevisionId?: string,
+    customDomainCert?: string,
+    customDomainKey?: string,
+): Promise<IngestEndpointEnvironment> => {
+    const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
+    const config = container.get<BaseConfig>(TYPES.BackendConfig);
+
+    if (config.isCommercial() && customDomainCert !== undefined && customDomainKey !== undefined) {
+        //trying to install a new certificate...
+        if (ingestEndpointEnvironment.customDomain === undefined) {
+            throw new GQLError(userMessages.noCustomDomain, true);
+        } else {
+            await uploadCertificate(
+                ingestEndpointEnvironment.customDomain,
+                customDomainCert,
+                customDomainKey,
+            );
+        }
+    }
+
+    if (newName !== undefined) {
+        ingestEndpointEnvironment.name = newName;
+    }
+
+    //we are trying to attach a new revision to this environment
+    const findRevision = async () => {
+        if (ingestEndpointRevisionId !== undefined) {
+            return await repoFactory(IngestEndpointRevision).findOneThrows(
+                {
+                    _id: new ObjectID(ingestEndpointRevisionId),
+                    _ingest_endpoint_id: ingestEndpointEnvironment.ingestEndpointId,
+                },
+                userMessages.revisionFailed,
+            );
+        }
+        return null;
+    };
+
+    const revision = await findRevision();
+
+    //we need to check this revision is ok to attach...
+    if (revision !== null) {
+        if (revision.isFinal) {
+            ingestEndpointEnvironment.ingestEndpointRevisionId = revision.id;
+        } else {
+            throw new GQLError(userMessages.revisionNotFinalAttaching, true);
+        }
+    }
+
+    if (providerConfig !== undefined) {
+        ingestEndpointEnvironment.configHint = providerConfig.hint;
+
+        await getStorageBackend().setAsString(
+            await config.getConfigsBucket(),
+            `ingest-endpoint/storage-provider-config-${ingestEndpointEnvironment.id}.json`,
+            JSON.stringify(providerConfig.config),
+            { contentType: 'application/json' },
+        );
+    }
+
+    await repoFactory(IngestEndpointEnvironment).save(ingestEndpointEnvironment, actor);
+    //now build the config...
+    await buildIngestEndpointConfig(ingestEndpointEnvironment);
+
+    return ingestEndpointEnvironment;
 };
 
 export const createIngestEndpointEnvironment = async (
@@ -199,19 +293,173 @@ export const createIngestEndpointEnvironment = async (
         JSON.stringify(providerConfig.config),
         { contentType: 'application/json' },
     );
+
     await createCname(ingestEndpointEnvironment);
     await buildIngestEndpointConfig(ingestEndpointEnvironment);
     return ingestEndpointEnvironment;
+};
+
+const getAwsS3ProviderConfig = async (awsStorageConfig: AwsConfig) => {
+    const s3Service = container.get<S3Service>(TYPES.S3Service);
+    //we need to test AWS setup is correct...
+    const s3 = s3Service.getS3Client(
+        awsStorageConfig.access_key_id,
+        awsStorageConfig.secret_access_key,
+        awsStorageConfig.region,
+    );
+    if (!(await s3Service.bucketExists(s3, awsStorageConfig.bucket_name))) {
+        throw new GQLError(userMessages.awsNoBucket(awsStorageConfig.bucket_name), true);
+    }
+    if (!(await s3Service.isWriteable(s3, awsStorageConfig.bucket_name))) {
+        throw new GQLError(userMessages.awsBucketCantWrite(awsStorageConfig.bucket_name), true);
+    }
+    return {
+        config: awsStorageConfig,
+        hint: `Using AWS Access Key: ${awsStorageConfig.access_key_id}`,
+    };
+};
+
+const getBigQueryProviderConfig = async (bigqueryStreamConfig: GCBigQueryStreamConfig) => {
+    if (typeof bigqueryStreamConfig.service_account_json !== 'object') {
+        throw new GQLError(userMessages.invalidServiceAccount, true);
+    }
+
+    const bq = new BigQuery({
+        projectId: bigqueryStreamConfig.service_account_json.project_id,
+        credentials: {
+            client_email: bigqueryStreamConfig.service_account_json.client_email,
+            private_key: bigqueryStreamConfig.service_account_json.private_key,
+        },
+    });
+
+    const dataset = bigqueryStreamConfig.data_set_name;
+    const datasetLocation = bigqueryStreamConfig.data_set_location;
+
+    try {
+        //check dataset exists. if not attempt to create it...
+        const [exists] = await bq.dataset(dataset).exists();
+        if (!exists) {
+            try {
+                await bq.createDataset(dataset, {
+                    location: datasetLocation,
+                });
+            } catch (e) {
+                // is rethrown if of type GQLError
+                // noinspection ExceptionCaughtLocallyJS
+                throw new GQLError(userMessages.datasetFailure(dataset), true);
+            }
+        }
+    } catch (e) {
+        if (e instanceof GQLError) {
+            throw e;
+        } else {
+            throw new GQLError(userMessages.datasetVerificationFailure(dataset), true);
+        }
+    }
+
+    return {
+        config: bigqueryStreamConfig,
+        hint: `Using GC Service Account: ${bigqueryStreamConfig.service_account_json.client_email}`,
+    };
+};
+
+const getMongoDbProviderConfig = async (mongoPushConfig: MongoDbPushConfig) => {
+    const config = container.get<BaseConfig>(TYPES.BackendConfig);
+
+    const connectionString = mongoPushConfig.use_api_mongo_server
+        ? await config.getDatabaseUrl()
+        : mongoPushConfig.connection_string;
+
+    const databaseName = mongoPushConfig.use_api_mongo_server
+        ? await config.getDefaultDatabase()
+        : mongoPushConfig.database_name;
+
+    const getMongoConnection = async () => {
+        try {
+            const client = new MongoClient(connectionString, {
+                useNewUrlParser: true,
+            });
+            return await client.connect();
+        } catch (e) {
+            throw new GQLError(
+                userMessages.mongoConnectionStringVerificationFailure(connectionString),
+                true,
+            );
+        }
+    };
+
+    const connection = await getMongoConnection();
+
+    try {
+        const database = connection.db(databaseName);
+
+        await database
+            .collection(`s8_${Hash.shortRandomHash()}_verification`)
+            .insertOne({ s8: true });
+    } catch (e) {
+        throw new GQLError(userMessages.mongoDatabaseVerificationFailure(databaseName), true);
+    } finally {
+        connection.close(true).then();
+    }
+    return {
+        config: mongoPushConfig,
+        hint: mongoPushConfig.use_api_mongo_server
+            ? 'Sharing API MongoDB database'
+            : `Using MongoDB database: ${mongoPushConfig.database_name}`,
+    };
+};
+
+export const getProviderConfig = async (data: any): Promise<StorageProviderConfig> => {
+    if (data.storage_provider === StorageProvider.AWS_S3 && data.aws_storage_config !== undefined) {
+        return await getAwsS3ProviderConfig(data.aws_storage_config);
+    } else if (
+        data.storage_provider === StorageProvider.GC_BIGQUERY_STREAM &&
+        data.gc_bigquery_stream_config !== undefined
+    ) {
+        return await getBigQueryProviderConfig(data.gc_bigquery_stream_config);
+    } else if (
+        data.storage_provider === StorageProvider.MONGODB &&
+        data.mongo_push_config !== undefined
+    ) {
+        return await getMongoDbProviderConfig(data.mongo_push_config);
+    } else {
+        throw new GQLError(userMessages.noStorageProvider, true);
+    }
+};
+
+export const getUpdateProviderConfig = async (
+    data: any,
+    ingestEndpointEnvironment: IngestEndpointEnvironment,
+): Promise<StorageProviderConfig | undefined> => {
+    if (
+        ingestEndpointEnvironment.storageProvider === StorageProvider.AWS_S3 &&
+        data.aws_storage_config !== undefined
+    ) {
+        return await getAwsS3ProviderConfig(data.aws_storage_config);
+    } else if (
+        ingestEndpointEnvironment.storageProvider === StorageProvider.GC_BIGQUERY_STREAM &&
+        data.gc_bigquery_stream_config !== undefined
+    ) {
+        return await getBigQueryProviderConfig(data.gc_bigquery_stream_config);
+    } else if (
+        ingestEndpointEnvironment.storageProvider === StorageProvider.MONGODB &&
+        data.mongo_push_config !== undefined
+    ) {
+        return await getMongoDbProviderConfig(data.mongo_push_config);
+    } else {
+        return undefined;
+    }
 };
 
 export const createUsageEndpointEnvironment = async (
     org: Org,
     trackingEntity: App | IngestEndpoint,
     actor: User,
+    provider: StorageProvider,
+    providerConfig: StorageProviderConfig,
     schema: IngestEndpointDataMapSchema[],
 ): Promise<IngestEndpointEnvironment> => {
     const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
-    const baseDatabase = container.get<BaseDatabase>(TYPES.BackendDatabase);
 
     const dataManagerAccount = await repoFactory<DataManagerAccountRepo>(
         DataManagerAccount,
@@ -222,6 +470,8 @@ export const createUsageEndpointEnvironment = async (
         new IngestEndpoint(
             `S8 - Track Usage (${trackingEntity.id.toString()})`,
             dataManagerAccount,
+            false,
+            provider,
         ),
         actor,
     );
@@ -242,8 +492,8 @@ export const createUsageEndpointEnvironment = async (
         actor,
         ingestEndpoint,
         'production',
-        baseDatabase.getStorageProvider(),
-        await baseDatabase.getStorageProviderConfig(),
+        provider,
+        providerConfig,
         ingestEndpointRevision,
     );
     //create the new env...

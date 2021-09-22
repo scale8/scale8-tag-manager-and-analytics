@@ -1,5 +1,5 @@
 import Manager from '../../abstractions/Manager';
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import Revision from '../../mongo/models/tag/Revision';
 import { ObjectId, ObjectID } from 'mongodb';
 import { gql } from 'apollo-server-express';
@@ -8,7 +8,6 @@ import Tag from '../../mongo/models/tag/Tag';
 import GQLError from '../../errors/GQLError';
 import AppPlatformRevision from '../../mongo/models/tag/AppPlatformRevision';
 import App from '../../mongo/models/tag/App';
-import TYPES from '../../container/IOC.types';
 import Trigger from '../../mongo/models/tag/Trigger';
 import ActionGroupDistribution from '../../mongo/models/tag/ActionGroupDistribution';
 import OperationOwner from '../../enums/OperationOwner';
@@ -22,13 +21,10 @@ import PlatformRevision from '../../mongo/models/tag/PlatformRevision';
 import { dataMapsImplementPlatformDataMaps } from '../../utils/DataMapsUtils';
 import DataMap from '../../mongo/models/tag/DataMap';
 import PlatformDataMap from '../../mongo/models/tag/PlatformDataMap';
-import BaseDatabase from '../../backends/databases/abstractions/BaseDatabase';
 import { fetchEventRequests } from '../../utils/EventRequestsUtils';
 
 @injectable()
 export default class RevisionManager extends Manager<Revision> {
-    @inject(TYPES.BackendDatabase) private backendDatabase!: BaseDatabase;
-
     protected gqlSchema = gql`
         """
         @type

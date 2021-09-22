@@ -140,7 +140,7 @@ public class Ingestor {
 
     for (Future<Either<Boolean, Exception>> runningJob : runningJobs) {
       if (runningJob.get().isRight()) {
-        LOG.error(runningJob.get().getRight().getMessage());
+        LOG.error(runningJob.get().getRight().getMessage(), runningJob.get().getRight());
       }
     }
   }

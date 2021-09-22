@@ -43,6 +43,8 @@ export type LoggedInTemplateInteractions = {
     setRefreshCurrentSection: Dispatch<SetStateAction<boolean>>;
     sectionHistory: SectionHistory;
     dispatchSectionAction: Dispatch<SectionHistoryAction>;
+    sectionHasAnalytics: boolean;
+    setSectionHasAnalytics: Dispatch<SetStateAction<boolean>>;
 };
 
 export type LoggedInUserState = {
@@ -85,6 +87,8 @@ export const initialTemplateInteractions = {
         previous: undefined,
     },
     dispatchSectionAction: idleFunction,
+    sectionHasAnalytics: false,
+    setSectionHasAnalytics: idleFunction,
 };
 
 export const loggedInInitialState = {

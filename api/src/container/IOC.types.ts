@@ -2,10 +2,19 @@
 const TYPES = {
     //pluggable
     BackendStorage: Symbol.for("<BackendStorage>"),
-    BackendDatabase: Symbol.for("<BackendDatabase>"),
+    BackendDatabaseFactory: Symbol.for("<Factory<BackendDatabase>>"),
     BackendLogger: Symbol.for("<BackendLogger>"),
     BackendEmail: Symbol.for("<BackendEmail>"),
     BackendConfig: Symbol.for("<BackendConfig>"),
+
+    // specific storage classes
+    AmazonS3Storage: Symbol.for("<AmazonS3Storage>"),
+    GoogleCloudStorage: Symbol.for("<GoogleCloudStorage>"),
+    MongoDBStorage: Symbol.for("<MongoDBStorage>"),
+
+    // specific database classes
+    GoogleCloudBigQuery: Symbol.for("<GoogleCloudBigQuery>"),
+    MongoDb: Symbol.for("<MongoDb>"),
 
     //services / providers etc.
     Shell: Symbol.for("<Shell>"),

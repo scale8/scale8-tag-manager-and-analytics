@@ -491,6 +491,12 @@ export interface AppCreateInput {
   name: string;
   domain: string;
   type: AppType;
+  storage_provider?: StorageProvider | null;
+  aws_storage_config?: AWSStorageConfig | null;
+  gc_bigquery_stream_config?: ManagedGCBigQueryStreamConfig | null;
+  mongo_push_config?: MongoDbPushConfig | null;
+  analytics_enabled: boolean;
+  error_tracking_enabled: boolean;
 }
 
 export interface AppDeleteInput {
@@ -551,6 +557,12 @@ export interface AppUpdateInput {
   app_id: string;
   name?: string | null;
   domain?: string | null;
+  storage_provider?: StorageProvider | null;
+  aws_storage_config?: AWSStorageConfig | null;
+  gc_bigquery_stream_config?: ManagedGCBigQueryStreamConfig | null;
+  mongo_push_config?: MongoDbPushConfig | null;
+  analytics_enabled: boolean;
+  error_tracking_enabled: boolean;
 }
 
 export interface BillingPortalInput {
@@ -764,6 +776,11 @@ export interface IngestEndpointAddIngestEndpointDataMapsInput {
 export interface IngestEndpointCreateInput {
   data_manager_account_id: string;
   name: string;
+  storage_provider?: StorageProvider | null;
+  aws_storage_config?: AWSStorageConfig | null;
+  gc_bigquery_stream_config?: ManagedGCBigQueryStreamConfig | null;
+  mongo_push_config?: MongoDbPushConfig | null;
+  analytics_enabled: boolean;
 }
 
 export interface IngestEndpointDataMapInput {
@@ -829,6 +846,9 @@ export interface IngestEndpointEnvironmentUpdateInput {
   name?: string | null;
   cert_pem?: string | null;
   key_pem?: string | null;
+  aws_storage_config?: AWSStorageConfig | null;
+  gc_bigquery_stream_config?: GCBigQueryStreamConfig | null;
+  mongo_push_config?: MongoDbPushConfig | null;
 }
 
 /**
@@ -845,6 +865,11 @@ export interface IngestEndpointRevisionUpdateInput {
 export interface IngestEndpointUpdateInput {
   ingest_endpoint_id: string;
   name?: string | null;
+  storage_provider?: StorageProvider | null;
+  aws_storage_config?: AWSStorageConfig | null;
+  gc_bigquery_stream_config?: ManagedGCBigQueryStreamConfig | null;
+  mongo_push_config?: MongoDbPushConfig | null;
+  analytics_enabled: boolean;
 }
 
 /**
@@ -877,6 +902,15 @@ export interface LoginInput {
   password: string;
 }
 
+/**
+ * BigQuery stream configuration for managed endpoints.
+ */
+export interface ManagedGCBigQueryStreamConfig {
+  service_account_json: S8JSON;
+  data_set_name: string;
+  data_set_location?: string | null;
+}
+
 export interface MeUpdateInput {
   first_name?: string | null;
   last_name?: string | null;
@@ -888,8 +922,9 @@ export interface MeUpdateInput {
  * In order to use MongoDB as your storage engine, you just need to provide connection string and database name.
  */
 export interface MongoDbPushConfig {
-  connection_string: string;
-  database_name: string;
+  use_api_mongo_server: boolean;
+  connection_string?: string | null;
+  database_name?: string | null;
 }
 
 export interface OrgAcceptInviteInput {

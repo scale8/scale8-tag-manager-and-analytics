@@ -62,6 +62,10 @@ export interface IngestEndpointPageData_getDataManagerAccount_ingest_endpoints {
    */
   name: string;
   /**
+   * Whether the analytics on the `IngestEndpoint` is enabled
+   */
+  analytics_enabled: boolean;
+  /**
    * The `IngestEndpointRevision`s connected to the `IngestEndpoint`
    */
   ingest_endpoint_revisions: IngestEndpointPageData_getDataManagerAccount_ingest_endpoints_ingest_endpoint_revisions[];

@@ -10,6 +10,8 @@ const NavIngestEndpointRevisionQuery = gql`
             ingest_endpoint {
                 id
                 name
+                analytics_enabled
+                storage_provider
                 ingest_endpoint_revisions {
                     id
                     name

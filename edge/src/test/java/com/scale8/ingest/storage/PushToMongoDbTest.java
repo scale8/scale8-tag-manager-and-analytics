@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +52,7 @@ class PushToMongoDbTest {
     }
 
     @Test
-    void testPush() {
+    void testPush() throws NoSuchAlgorithmException {
         JsonObject payload = new JsonObject();
         payload.addProperty("a", "test1");
         HashMap<String, TypeSchema> typeSchemaMap = new HashMap<>();

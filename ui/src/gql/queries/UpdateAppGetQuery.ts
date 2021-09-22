@@ -7,6 +7,9 @@ const UpdateAppGetQuery = gql`
             name
             domain
             type
+            analytics_enabled
+            error_tracking_enabled
+            storage_provider
         }
     }
 `;

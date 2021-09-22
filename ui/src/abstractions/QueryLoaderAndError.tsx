@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode, useState } from 'react';
+import { ReactElement, ReactNode, useEffect, useState } from 'react';
 import { QueryResult } from '@apollo/client/react/types/types';
 import { ApolloError } from '@apollo/client';
 import AfterLoadComponent from './AfterLoadComponent';
@@ -19,10 +19,16 @@ const queryLoaderAndError = <T extends any>(
     customError?: (error: ApolloError) => ReactNode,
     refreshAt?: UTCTimestamp,
 ): ReactElement => {
-    const { templateInteractions } = useLoggedInState();
+    const { templateInteractions, teleport } = useLoggedInState();
     const { refreshCurrentPage, setRefreshCurrentPage } = templateInteractions;
 
     const [refreshedAt, setRefreshedAt] = useState<UTCTimestamp | undefined>(undefined);
+
+    useEffect(() => {
+        if (isPage) {
+            teleport('dialogErrorClose', <></>);
+        }
+    }, [isPage]);
 
     // Function to refresh the query result values
     const valuesRefresh = (mustResetCache: boolean) => {

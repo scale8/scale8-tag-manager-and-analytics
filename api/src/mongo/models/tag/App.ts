@@ -5,6 +5,7 @@ import AppPlatform from './AppPlatform';
 import AppPlatformRepo from '../../repos/tag/AppPlatformRepo';
 import TagManagerAccount from './TagManagerAccount';
 import { AppType } from '../../../enums/AppType';
+import { StorageProvider } from '../../../enums/StorageProvider';
 
 export default class App extends Model {
     public getOrgEntityId(): ObjectID {
@@ -34,6 +35,20 @@ export default class App extends Model {
     })
     private _usage_ingest_endpoint_environment_id?: ObjectID;
 
+    @Field<boolean>({
+        required: true,
+        defaultValue: () => true,
+        exposeToGQLAs: 'analytics_enabled',
+    })
+    private _analytics_enabled: boolean;
+
+    @Field<boolean>({
+        required: true,
+        defaultValue: () => true,
+        exposeToGQLAs: 'error_tracking_enabled',
+    })
+    private _error_tracking_enabled: boolean;
+
     @Field<AppPlatform[]>({
         repository: AppPlatformRepo,
         required: true,
@@ -46,6 +61,13 @@ export default class App extends Model {
     })
     private readonly _type: AppType;
 
+    @Field<string>({
+        required: true,
+        defaultValue: () => StorageProvider.MONGODB,
+        exposeToGQLAs: 'storage_provider',
+    })
+    private readonly _storage_provider!: StorageProvider;
+
     /**
      * _domain - All apps, web, mobile web, desktop apps and mobile apps need this. (Ads.txt!)
      */
@@ -55,12 +77,21 @@ export default class App extends Model {
     })
     private _domain: string;
 
+    @Field<string>({
+        required: true,
+        defaultValue: () => '',
+    })
+    private _storage_provider_config_hash: string | undefined;
+
     constructor(
         name: string,
         tagManagerAccount: TagManagerAccount,
         domain: string,
+        storageProvider: StorageProvider,
         type: AppType = AppType.WEB,
         appPlatforms: AppPlatform[] = [],
+        analyticsEnabled = true,
+        errorTrackingEnabled = true,
     ) {
         super();
         if (tagManagerAccount !== undefined) {
@@ -71,6 +102,9 @@ export default class App extends Model {
         this._name = name;
         this._type = type;
         this._domain = domain;
+        this._analytics_enabled = analyticsEnabled;
+        this._error_tracking_enabled = errorTrackingEnabled;
+        this._storage_provider = storageProvider;
     }
 
     get orgId(): ObjectID {
@@ -115,5 +149,33 @@ export default class App extends Model {
 
     set domain(value: string) {
         this._domain = value;
+    }
+
+    get analyticsEnabled(): boolean {
+        return this._analytics_enabled;
+    }
+
+    set analyticsEnabled(value: boolean) {
+        this._analytics_enabled = value;
+    }
+
+    get errorTrackingEnabled(): boolean {
+        return this._error_tracking_enabled;
+    }
+
+    set errorTrackingEnabled(value: boolean) {
+        this._error_tracking_enabled = value;
+    }
+
+    get storageProvider(): StorageProvider {
+        return this._storage_provider;
+    }
+
+    get storageProviderConfigHash(): string {
+        return this._storage_provider_config_hash ?? '';
+    }
+
+    set storageProviderConfigHash(value: string) {
+        this._storage_provider_config_hash = value;
     }
 }

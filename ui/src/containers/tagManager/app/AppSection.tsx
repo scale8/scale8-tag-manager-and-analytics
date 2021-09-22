@@ -17,13 +17,15 @@ import { useLoggedInState } from '../../../context/AppContext';
 import { useRouter } from 'next/router';
 import { ChildrenAndIdProps } from '../../../types/props/ChildrenAndIdProps';
 import { toApp } from '../../../utils/NavigationPaths';
+import { analyticsEnabled } from '../../../utils/AnalyticsUtils';
+import { SideMenuButtonProps } from '../../../components/molecules/SideMenuButton';
 
 const AppSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
     const router = useRouter();
 
     const { id, children } = props;
 
-    const { orgUserState } = useLoggedInState();
+    const { orgUserState, templateInteractions } = useLoggedInState();
 
     const sectionProps: SectionProps<NavApp> = {
         children,
@@ -31,6 +33,9 @@ const AppSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
         queryResult: useQuery<NavApp>(NavAppQuery, {
             variables: { id },
         }),
+        initContext: (data) => {
+            templateInteractions.setSectionHasAnalytics(analyticsEnabled(data.getApp));
+        },
         buildButtonsProps: (data) => [
             buildOrgButtonProps(
                 router,
@@ -51,12 +56,16 @@ const AppSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
                 true,
             ),
         ],
-        buildMenuItemsProps: () => [
-            {
-                icon: <AppAnalyticsIcon />,
-                label: 'Analytics',
-                link: toApp({ id }, 'analytics'),
-            },
+        buildMenuItemsProps: (_, data) => [
+            ...((analyticsEnabled(data.getApp)
+                ? [
+                      {
+                          icon: <AppAnalyticsIcon />,
+                          label: 'Analytics',
+                          link: toApp({ id }, 'analytics'),
+                      },
+                  ]
+                : []) as SideMenuButtonProps[]),
             {
                 icon: <RevisionIcon />,
                 label: 'Revisions',

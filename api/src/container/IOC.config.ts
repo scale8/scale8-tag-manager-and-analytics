@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { Container } from 'inversify';
+import { Container, interfaces } from 'inversify';
 import TYPES from './IOC.types';
 import UserManager from '../managers/UserManager';
 import ResolverRegister from '../gql/ResolverRegister';
@@ -147,16 +147,67 @@ import BaseEmail from '../backends/email/abstractions/BaseEmail';
 import ConsoleLogger from '../backends/logging/ConsoleLogger';
 import BaseConfig from '../backends/configuration/abstractions/BaseConfig';
 import EnvironmentConfig from '../backends/configuration/EnvironmentConfig';
+import AmazonS3Storage from '../backends/storage/AmazonS3Storage';
+import GoogleCloudStorage from '../backends/storage/GoogleCloudStorage';
+import GoogleCloudBigQuery from '../backends/databases/GoogleCloudBigQuery';
 import MongoDb from '../backends/databases/MongoDb';
+import { StorageProvider } from '../enums/StorageProvider';
+import GenericError from '../errors/GenericError';
+import { LogPriority } from '../enums/LogPriority';
+import Context = interfaces.Context;
+import Factory = interfaces.Factory;
 
 const container = new Container();
 
 //bind first, this is a core dep, with no further dependencies...
 container.bind<Shell>(TYPES.Shell).to(Shell).inSingletonScope();
 
+container.bind<AmazonS3Storage>(TYPES.AmazonS3Storage).to(AmazonS3Storage).inSingletonScope();
+container
+    .bind<GoogleCloudStorage>(TYPES.GoogleCloudStorage)
+    .to(GoogleCloudStorage)
+    .inSingletonScope();
+container.bind<MongoDBStorage>(TYPES.MongoDBStorage).to(MongoDBStorage).inSingletonScope();
+
+container
+    .bind<GoogleCloudBigQuery>(TYPES.GoogleCloudBigQuery)
+    .to(GoogleCloudBigQuery)
+    .inSingletonScope();
+container.bind<MongoDb>(TYPES.MongoDb).to(MongoDb).inSingletonScope();
+
 //pluggable
-container.bind<BaseStorage>(TYPES.BackendStorage).to(MongoDBStorage).inSingletonScope();
-container.bind<BaseDatabase>(TYPES.BackendDatabase).to(MongoDb).inSingletonScope();
+container
+    .bind<BaseStorage>(TYPES.BackendStorage)
+    .toDynamicValue((context: Context) => {
+        const config = context.container.get<BaseConfig>(TYPES.BackendConfig);
+        const storageBackend = config.getStorageBackend();
+        if (storageBackend === 's3') {
+            return context.container.get<AmazonS3Storage>(TYPES.AmazonS3Storage);
+        } else if (storageBackend === 'google') {
+            return context.container.get<GoogleCloudStorage>(TYPES.GoogleCloudStorage);
+        } else {
+            return context.container.get<MongoDBStorage>(TYPES.MongoDBStorage);
+        }
+    })
+    .inSingletonScope();
+
+container
+    .bind<Factory<BaseDatabase>>(TYPES.BackendDatabaseFactory)
+    .toFactory<BaseDatabase>((context) => {
+        return (storage_provider: StorageProvider) => {
+            if (storage_provider === StorageProvider.MONGODB) {
+                return context.container.get<MongoDb>(TYPES.MongoDb);
+            } else if (storage_provider === StorageProvider.GC_BIGQUERY_STREAM) {
+                return context.container.get<GoogleCloudBigQuery>(TYPES.GoogleCloudBigQuery);
+            } else {
+                throw new GenericError(
+                    `The storage provider ${storage_provider} cannot be processed directly for analytics`,
+                    LogPriority.ERROR,
+                );
+            }
+        };
+    });
+
 container.bind<BaseLogger>(TYPES.BackendLogger).to(ConsoleLogger).inSingletonScope();
 container.bind<BaseEmail>(TYPES.BackendEmail).to(Mailer).inSingletonScope();
 container.bind<BaseConfig>(TYPES.BackendConfig).to(EnvironmentConfig).inSingletonScope();

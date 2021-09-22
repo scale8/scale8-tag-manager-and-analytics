@@ -23,6 +23,8 @@ import {
 
 export type AppTableRow = TableRowBase & {
     name: string;
+    analyticsEnabled: boolean;
+    errorTrackingEnabled: boolean;
     type: string;
     domain: string;
     pageViews: number[];
@@ -77,6 +79,8 @@ const AppsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
             { field: 'name' },
             { field: 'id' },
             { title: 'Page views', field: 'pageViews', type: 'graph' },
+            { field: 'analyticsEnabled', type: 'boolean', hidden: true },
+            { field: 'errorTrackingEnabled', type: 'boolean', hidden: true },
             { field: 'type', hidden: true },
             { field: 'domain' },
             { field: 'revisions', hidden: true },
@@ -88,6 +92,8 @@ const AppsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
                 return {
                     ...extractBaseColumns(app),
                     name: app.name,
+                    analyticsEnabled: app.analytics_enabled,
+                    errorTrackingEnabled: app.error_tracking_enabled,
                     type: app.type,
                     domain: app.domain,
                     revisions: app.revisions.length,

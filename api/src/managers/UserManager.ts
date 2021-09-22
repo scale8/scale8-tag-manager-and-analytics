@@ -44,6 +44,10 @@ import { NotificationType } from '../enums/NotificationType';
 import { AppType } from '../enums/AppType';
 import BaseEmail from '../backends/email/abstractions/BaseEmail';
 import { LogPriority } from '../enums/LogPriority';
+import {
+    getCommercialStorageProvider,
+    getCommercialStorageProviderConfig,
+} from '../utils/IngestEndpointEnvironmentUtils';
 
 @injectable()
 export default class UserManager extends Manager<User> {
@@ -753,6 +757,10 @@ export default class UserManager extends Manager<User> {
                         signUpRequest.domain,
                         signUpRequest.domain,
                         AppType.WEB,
+                        getCommercialStorageProvider(),
+                        await getCommercialStorageProviderConfig(),
+                        true,
+                        true,
                     );
                 }
                 return null;

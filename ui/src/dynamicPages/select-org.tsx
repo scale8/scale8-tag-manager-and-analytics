@@ -68,6 +68,7 @@ const SelectOrgPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
                 if (action === 'go-to-tm') {
                     return <Navigate to={toTagManager({ id: tagManager.id })} />;
                 }
+                // go-to-app is only used in commercial so the analytics are always enabled
                 if (action === 'go-to-app' && tagManager.apps.length === 1) {
                     return (
                         <Navigate

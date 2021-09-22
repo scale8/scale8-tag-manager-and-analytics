@@ -12,82 +12,95 @@ import { BigQuery } from '@google-cloud/bigquery';
 import { LogPriority } from '../../enums/LogPriority';
 import TYPES from '../../container/IOC.types';
 import BaseConfig from '../configuration/abstractions/BaseConfig';
-import { StorageProvider } from '../../enums/StorageProvider';
-import { StorageProviderConfig } from '../../mongo/types/Types';
+import BaseLogger from '../logging/abstractions/BaseLogger';
+import { getStorageProviderConfig } from '../../utils/IngestEndpointEnvironmentUtils';
+import { GCBigQueryStreamConfig } from '../../Types';
+import { getBigQueryConfig, getServiceAccountJson } from '../../utils/GoogleCloudUtils';
 
 @injectable()
 export default class GoogleCloudBigQuery extends BaseDatabase {
     @inject(TYPES.BackendConfig) private readonly config!: BaseConfig;
-    private bigQuery: BigQuery | undefined;
+    @inject(TYPES.BackendLogger) private readonly logger!: BaseLogger;
 
-    public getStorageProvider(): StorageProvider {
-        return StorageProvider.GC_BIGQUERY_STREAM;
-    }
+    private bigQueryInstances: Map<string, BigQuery> = new Map<string, BigQuery>();
 
-    public async getStorageProviderConfig(): Promise<StorageProviderConfig> {
-        return {
-            config: {
-                service_account_json: '',
-                data_set_name: await this.config.getAnalyticsDataSetName(),
-                require_partition_filter_in_queries: true,
-            },
-            hint: `S8 Managed Ingest Endpoint`,
-        };
-    }
+    protected async getBigQuery(entity: App | IngestEndpoint) {
+        const entityUsageIngestEndpointEnvironmentId =
+            this.getEntityUsageIngestEndpointEnvironmentId(entity);
 
-    protected async getBigQuery() {
-        if (this.bigQuery === undefined) {
-            this.bigQuery = new BigQuery({
-                keyFilename: await this.config.getGCKeyFile(),
-                projectId: await this.config.getGCProjectId(),
-            });
+        const bigQueryInstanceKey =
+            entityUsageIngestEndpointEnvironmentId.toString() + entity.storageProviderConfigHash;
+
+        const cachedInstance = this.bigQueryInstances.get(bigQueryInstanceKey);
+        if (cachedInstance !== undefined) {
+            return cachedInstance;
         }
-        return this.bigQuery;
+
+        const getBigQuery = async (): Promise<BigQuery> => {
+            const serviceAccountJson = await getServiceAccountJson(
+                entityUsageIngestEndpointEnvironmentId,
+            );
+
+            return new BigQuery({
+                projectId: serviceAccountJson.project_id,
+                credentials: {
+                    client_email: serviceAccountJson.client_email,
+                    private_key: serviceAccountJson.private_key,
+                },
+            });
+        };
+
+        const bigQuery = await getBigQuery();
+
+        this.bigQueryInstances.set(bigQueryInstanceKey, bigQuery);
+
+        return bigQuery;
     }
 
     protected readonly MOBILE_TEST =
         '(INSTR(browser_name, "Mobile") > 0 OR device_name = "iPhone" OR device_name = "iPad" OR os_name = "iOS" OR os_name = "Android")';
 
-    public async configure(): Promise<void> {
-        const createDatasetIfNotExists = async (name: string) => {
-            const bq = await this.getBigQuery();
-            const [exists] = await bq.dataset(name).exists();
-            if (!exists) {
-                await bq.createDataset(name, {
-                    location: 'EU',
-                });
-            }
-        };
-        await createDatasetIfNotExists(await this.config.getDataSetName());
-        await createDatasetIfNotExists(await this.config.getAnalyticsDataSetName());
-    }
+    protected async query(
+        entity: App | IngestEndpoint,
+        query: string,
+        params?: { [p: string]: any },
+    ): Promise<any[]> {
+        const bq = await this.getBigQuery(entity);
 
-    protected async query(query: string, params?: { [p: string]: any }): Promise<any[]> {
-        const bq = await this.getBigQuery();
-        const [job] = await bq.createQueryJob({
-            query: query.trim(),
-            location: 'EU',
-            params: params,
-        });
         try {
+            const [job] = await bq.createQueryJob({
+                query: query.trim(),
+                location: await this.getLocation(entity),
+                params: params,
+            });
             const [rows] = await job.getQueryResults();
             return rows;
         } catch (e) {
+            this.logger.warn(e.message, e).then();
             return [];
         }
     }
 
+    protected async getLocation(entity: App | IngestEndpoint): Promise<string> {
+        const entityUsageIngestEndpointEnvironmentId =
+            this.getEntityUsageIngestEndpointEnvironmentId(entity);
+        return this.config.isCommercial()
+            ? 'EU'
+            : (
+                  (await getStorageProviderConfig(
+                      entityUsageIngestEndpointEnvironmentId,
+                  )) as GCBigQueryStreamConfig
+              ).data_set_location;
+    }
+
     protected async getTable(entity: App | IngestEndpoint): Promise<string> {
-        if (entity.usageIngestEndpointEnvironmentId === undefined) {
-            throw new GenericError(
-                `Unable to find usage endpoint for ${
-                    entity.constructor.name
-                }: ${entity.id.toString()}`,
-                LogPriority.ERROR,
-            );
-        } else {
-            return `\`${await this.config.getGCProjectId()}.${await this.config.getAnalyticsDataSetName()}.s8_${entity.usageIngestEndpointEnvironmentId.toString()}_*\``;
-        }
+        const entityUsageIngestEndpointEnvironmentId =
+            this.getEntityUsageIngestEndpointEnvironmentId(entity);
+        const bigQueryConfig = await getBigQueryConfig(entityUsageIngestEndpointEnvironmentId);
+
+        return `\`${bigQueryConfig.service_account_json.project_id}.${
+            bigQueryConfig.data_set_name
+        }.s8_${entityUsageIngestEndpointEnvironmentId.toString()}_*\``;
     }
 
     protected getRangeFrom(options: BaseQueryOptions): string {
@@ -338,7 +351,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                         )
                     `.trim();
 
-        const rows = await this.query(query, filter.params);
+        const rows = await this.query(app, query, filter.params);
 
         return this.getResultWithRange(
             queryOptions,
@@ -366,7 +379,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                         )
                     `.trim();
 
-        const rows = await this.query(query, filter.params);
+        const rows = await this.query(app, query, filter.params);
         return this.getResultWithRange(
             queryOptions,
             rows.length > 0 ? Math.round(rows[0]['bounce_ratio']) : 0,
@@ -398,7 +411,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                         ${this.getLimit(queryOptions)}
                     `.trim();
 
-        return this.getResultWithRange(queryOptions, await this.query(query, filter.params));
+        return this.getResultWithRange(queryOptions, await this.query(app, query, filter.params));
     }
 
     public async referrers(
@@ -441,7 +454,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
             ${this.getLimit(queryOptions)}
         `;
 
-        return this.getResultWithRange(queryOptions, await this.query(query, filter.params));
+        return this.getResultWithRange(queryOptions, await this.query(app, query, filter.params));
     }
 
     public async referrerTlds(
@@ -484,7 +497,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
             ${this.getLimit(queryOptions)}
         `;
 
-        return this.getResultWithRange(queryOptions, await this.query(query, filter.params));
+        return this.getResultWithRange(queryOptions, await this.query(app, query, filter.params));
     }
 
     public async utms(
@@ -532,7 +545,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                     ${this.getLimit(queryOptions)}
                 `;
 
-        return this.getResultWithRange(queryOptions, await this.query(query, filter.params));
+        return this.getResultWithRange(queryOptions, await this.query(app, query, filter.params));
     }
 
     public async pages(
@@ -599,7 +612,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
 
         return this.getResultWithRange(
             queryOptions,
-            await this.query(await getQuery(), filter.params),
+            await this.query(app, await getQuery(), filter.params),
         );
     }
 
@@ -629,7 +642,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                     ${this.getLimit(queryOptions)}
                 `;
 
-        return this.getResultWithRange(queryOptions, await this.query(query, filter.params));
+        return this.getResultWithRange(queryOptions, await this.query(app, query, filter.params));
     }
 
     public async devices(
@@ -658,7 +671,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                     ${this.getLimit(queryOptions)}
                 `;
 
-        return this.getResultWithRange(queryOptions, await this.query(query, filter.params));
+        return this.getResultWithRange(queryOptions, await this.query(app, query, filter.params));
     }
 
     public async eventGroups(
@@ -687,7 +700,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                     ${this.getLimit(queryOptions)}
                 `;
 
-        return this.getResultWithRange(queryOptions, await this.query(query, filter.params));
+        return this.getResultWithRange(queryOptions, await this.query(app, query, filter.params));
     }
 
     public async events(
@@ -716,7 +729,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                     ${this.getLimit(queryOptions)}
                 `;
 
-        return this.getResultWithRange(queryOptions, await this.query(query, filter.params));
+        return this.getResultWithRange(queryOptions, await this.query(app, query, filter.params));
     }
 
     public async browsers(
@@ -745,7 +758,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                     ${this.getLimit(queryOptions)}
                 `;
 
-        return this.getResultWithRange(queryOptions, await this.query(query, filter.params));
+        return this.getResultWithRange(queryOptions, await this.query(app, query, filter.params));
     }
 
     public async operatingSystems(
@@ -774,7 +787,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                     ${this.getLimit(queryOptions)}
                 `;
 
-        return this.getResultWithRange(queryOptions, await this.query(query, filter.params));
+        return this.getResultWithRange(queryOptions, await this.query(app, query, filter.params));
     }
 
     protected getIngestEndpointFilter(queryOptions: IngestQueryOptions): {
@@ -838,7 +851,10 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                         ${this.getLimit(queryOptions)}
                     `.trim();
 
-        return this.getResultWithRange(queryOptions, await this.query(query, filter.params));
+        return this.getResultWithRange(
+            queryOptions,
+            await this.query(ingestEndpoint, query, filter.params),
+        );
     }
 
     public async requests(
@@ -861,7 +877,10 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                         ${this.getLimit(queryOptions)}
                     `.trim();
 
-        return this.getResultWithRange(queryOptions, await this.query(query, filter.params));
+        return this.getResultWithRange(
+            queryOptions,
+            await this.query(ingestEndpoint, query, filter.params),
+        );
     }
 
     public async bytes(
@@ -884,6 +903,9 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                         ${this.getLimit(queryOptions)}
                     `.trim();
 
-        return this.getResultWithRange(queryOptions, await this.query(query, filter.params));
+        return this.getResultWithRange(
+            queryOptions,
+            await this.query(ingestEndpoint, query, filter.params),
+        );
     }
 }
