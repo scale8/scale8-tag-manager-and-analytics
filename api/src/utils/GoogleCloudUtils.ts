@@ -16,18 +16,27 @@ export const getServiceAccountJsonFromConfig = async (): Promise<JWTInput> => {
     ) as JWTInput;
 };
 
-export const getServiceAccountJson = async (
+export const getBigQueryConfig = async (
     entityUsageIngestEndpointEnvironmentId: ObjectID,
-): Promise<JWTInput> => {
+): Promise<GCBigQueryStreamConfig> => {
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
 
     if (config.isCommercial()) {
-        return await getServiceAccountJsonFromConfig();
+        return {
+            service_account_json: await getServiceAccountJsonFromConfig(),
+            data_set_name: await config.getAnalyticsDataSetName(),
+            data_set_location: 'EU',
+            require_partition_filter_in_queries: true,
+        };
     }
 
-    const storageProviderConfig = (await getStorageProviderConfig(
+    return (await getStorageProviderConfig(
         entityUsageIngestEndpointEnvironmentId,
     )) as GCBigQueryStreamConfig;
+};
 
-    return storageProviderConfig.service_account_json;
+export const getServiceAccountJson = async (
+    entityUsageIngestEndpointEnvironmentId: ObjectID,
+): Promise<JWTInput> => {
+    return (await getBigQueryConfig(entityUsageIngestEndpointEnvironmentId)).service_account_json;
 };

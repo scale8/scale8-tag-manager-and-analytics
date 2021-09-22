@@ -3,6 +3,7 @@ package com.scale8.ingest.storage;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.bigquery.*;
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -81,9 +82,11 @@ public class StreamToBigQuery extends StorageProvider {
                   .setCredentials(
                       GoogleCredentials.fromStream(
                           new ByteArrayInputStream(
-                              ingestSettings
-                                  .getBigQueryStreamConfig()
-                                  .getServiceAccountJson()
+                              new Gson()
+                                  .toJson(
+                                      ingestSettings
+                                          .getBigQueryStreamConfig()
+                                          .getServiceAccountJson())
                                   .getBytes(StandardCharsets.UTF_8))))
                   .build()
                   .getService();

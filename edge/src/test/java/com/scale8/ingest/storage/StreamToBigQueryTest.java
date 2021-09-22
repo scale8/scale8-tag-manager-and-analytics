@@ -39,7 +39,7 @@ class StreamToBigQueryTest {
         when(ingestSettings.getIngestEndpointEnvironmentId()).thenReturn("eid");
         when(ingestSettings.getIngestEndpointRevisionId()).thenReturn("rid");
         when(ingestSettings.getBigQueryStreamConfig()).thenReturn(bigQueryStreamConfig);
-        when(bigQueryStreamConfig.getServiceAccountJson()).thenReturn("{}");
+        when(bigQueryStreamConfig.getServiceAccountJson()).thenReturn(new JsonObject());
         when(bigQueryStreamConfig.getDataSetName()).thenReturn("ds");
 
         BigQueryOptions.Builder builder = mock(BigQueryOptions.Builder.class);

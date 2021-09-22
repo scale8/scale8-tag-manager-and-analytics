@@ -15,7 +15,7 @@ import BaseConfig from '../configuration/abstractions/BaseConfig';
 import BaseLogger from '../logging/abstractions/BaseLogger';
 import { getStorageProviderConfig } from '../../utils/IngestEndpointEnvironmentUtils';
 import { GCBigQueryStreamConfig } from '../../Types';
-import { getServiceAccountJson } from '../../utils/GoogleCloudUtils';
+import { getBigQueryConfig, getServiceAccountJson } from '../../utils/GoogleCloudUtils';
 
 @injectable()
 export default class GoogleCloudBigQuery extends BaseDatabase {
@@ -96,13 +96,11 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
     protected async getTable(entity: App | IngestEndpoint): Promise<string> {
         const entityUsageIngestEndpointEnvironmentId =
             this.getEntityUsageIngestEndpointEnvironmentId(entity);
-        const serviceAccountJson = await getServiceAccountJson(
-            entityUsageIngestEndpointEnvironmentId,
-        );
+        const bigQueryConfig = await getBigQueryConfig(entityUsageIngestEndpointEnvironmentId);
 
-        return `\`${
-            serviceAccountJson.project_id
-        }.${await this.config.getAnalyticsDataSetName()}.s8_${entityUsageIngestEndpointEnvironmentId.toString()}_*\``;
+        return `\`${bigQueryConfig.service_account_json.project_id}.${
+            bigQueryConfig.data_set_name
+        }.s8_${entityUsageIngestEndpointEnvironmentId.toString()}_*\``;
     }
 
     protected getRangeFrom(options: BaseQueryOptions): string {

@@ -34,8 +34,7 @@ const IngestEndpointForm: FC<IngestEndpointFormProps> = (props: IngestEndpointFo
                         color="primary"
                     />
                     <small className="DrawerFormField" style={{ marginTop: '-24px' }}>
-                        Enable analytics dashboard when using Data Manager. We recommend this option
-                        is left enabled.
+                        Enable analytics dashboard when using Data Manager.
                     </small>
                     {props.values.analyticsEnabled && (
                         <StorageProviderSelector

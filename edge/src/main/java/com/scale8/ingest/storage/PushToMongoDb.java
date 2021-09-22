@@ -65,7 +65,6 @@ public class PushToMongoDb extends StorageProvider {
           getNextBatch(q).stream()
               .map(d -> createFromJsonObject(ingestSettings, d))
               .collect(Collectors.toList());
-      documents.forEach(document -> System.out.println(document.toString()));
       getCollection(ingestSettings).insertMany(documents);
     }
   }
@@ -131,12 +130,13 @@ public class PushToMongoDb extends StorageProvider {
                     return Stream.of(
                         new Tuple<String, Object>(typeSchema.getKey(), primitive.getAsString()));
                   } else if (primitive.isNumber()) {
-                    return Stream.of(
-                        new Tuple<String, Object>(
-                            typeSchema.getKey(),
-                            primitive.getAsNumber().doubleValue() % 1 == 0
-                                ? primitive.getAsNumber().longValue()
-                                : primitive.getAsNumber().doubleValue()));
+                    Object value;
+                    if (primitive.getAsDouble() % 1 == 0) {
+                      value = primitive.getAsLong();
+                    } else {
+                      value = primitive.getAsDouble();
+                    }
+                    return Stream.of(new Tuple<>(typeSchema.getKey(), value));
                   } else if (primitive.isBoolean()) {
                     return Stream.of(
                         new Tuple<String, Object>(typeSchema.getKey(), primitive.getAsBoolean()));

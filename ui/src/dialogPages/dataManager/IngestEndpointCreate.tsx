@@ -67,7 +67,7 @@ const IngestEndpointCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
         buildInitialState: () => ({
             ...initialStorageProviderFields,
             name: '',
-            analyticsEnabled: true,
+            analyticsEnabled: false,
             storageProvider: StorageProvider.MONGODB,
         }),
         saveQuery: useMutation<CreateIngestEndpointResult>(CreateIngestEndpointQuery),

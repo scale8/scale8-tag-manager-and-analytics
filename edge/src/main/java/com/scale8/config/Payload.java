@@ -12,6 +12,7 @@ import com.scale8.extended.types.Tuple;
 import javax.inject.Singleton;
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -76,7 +77,8 @@ public class Payload {
           case "%S8_TIME_STAMP_UTC%":
             return new JsonPrimitive(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
           case "%S8_DATE_TIME_UTC%":
-            return new JsonPrimitive(LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
+            return new JsonPrimitive(
+                LocalDateTime.now(ZoneId.of("UTC")).format(DateTimeFormatter.ISO_DATE_TIME));
           case "%S8_USER_HASH%":
             String userHash = request.getUserHash();
             return userHash == null ? JsonNull.INSTANCE : new JsonPrimitive(request.getUserHash());
