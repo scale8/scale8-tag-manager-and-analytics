@@ -132,7 +132,11 @@ public class PushToMongoDb extends StorageProvider {
                         new Tuple<String, Object>(typeSchema.getKey(), primitive.getAsString()));
                   } else if (primitive.isNumber()) {
                     return Stream.of(
-                        new Tuple<String, Object>(typeSchema.getKey(), primitive.getAsNumber()));
+                        new Tuple<String, Object>(
+                            typeSchema.getKey(),
+                            primitive.getAsNumber().doubleValue() % 1 == 0
+                                ? primitive.getAsNumber().longValue()
+                                : primitive.getAsNumber().doubleValue()));
                   } else if (primitive.isBoolean()) {
                     return Stream.of(
                         new Tuple<String, Object>(typeSchema.getKey(), primitive.getAsBoolean()));
