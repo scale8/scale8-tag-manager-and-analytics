@@ -38,7 +38,7 @@ export default class IngestEndpoint extends Model {
         defaultValue: () => true,
         exposeToGQLAs: 'analytics_enabled',
     })
-    private _analyticsEnabled: boolean;
+    private _analytics_enabled: boolean;
 
     @Field<string>({
         required: true,
@@ -51,7 +51,7 @@ export default class IngestEndpoint extends Model {
         required: true,
         defaultValue: () => '',
     })
-    private _storageProviderConfigHash: string | undefined;
+    private _storage_provider_config_hash: string | undefined;
 
     constructor(
         name: string,
@@ -61,7 +61,7 @@ export default class IngestEndpoint extends Model {
     ) {
         super();
         this._name = name;
-        this._analyticsEnabled = analyticsEnabled;
+        this._analytics_enabled = analyticsEnabled;
         if (dataManagerAccount !== undefined) {
             this._org_id = dataManagerAccount.orgId;
             this._data_manager_account_id = dataManagerAccount.id;
@@ -94,11 +94,11 @@ export default class IngestEndpoint extends Model {
     }
 
     get analyticsEnabled(): boolean {
-        return this._analyticsEnabled;
+        return this._analytics_enabled;
     }
 
     set analyticsEnabled(value: boolean) {
-        this._analyticsEnabled = value;
+        this._analytics_enabled = value;
     }
 
     get storageProvider(): StorageProvider {
@@ -106,10 +106,10 @@ export default class IngestEndpoint extends Model {
     }
 
     get storageProviderConfigHash(): string {
-        return this._storageProviderConfigHash ?? '';
+        return this._storage_provider_config_hash ?? '';
     }
 
     set storageProviderConfigHash(value: string) {
-        this._storageProviderConfigHash = value;
+        this._storage_provider_config_hash = value;
     }
 }

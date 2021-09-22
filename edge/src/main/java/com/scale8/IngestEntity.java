@@ -66,14 +66,14 @@ public class IngestEntity {
                 new Replacements(extendedRequest, ingestSettings, null));
 
         List<String> trackingIssues =
-            payload.validateSchemaAgainstPayload(trackingPayload, ingestSettings.getSchemaAsMap());
+            payload.validateSchemaAgainstPayload(trackingPayload, usageIngestSettings.getSchemaAsMap());
 
         if (trackingIssues.isEmpty()) {
           // go ahead and log this...
           ingestor.add(trackingPayload, usageIngestSettings);
         } else {
           // we don't want to throw, if there is a problem here output to logs as it is our fault.
-          trackingIssues.forEach(issue -> LOG.warn("Tracking issue issue: " + issue));
+          trackingIssues.forEach(issue -> LOG.warn("Tracking issue: " + issue));
         }
 
       } catch (Exception e) {

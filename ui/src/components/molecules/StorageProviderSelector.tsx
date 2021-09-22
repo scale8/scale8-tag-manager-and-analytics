@@ -18,6 +18,7 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
         includeBigQueryPartitionFilter?: boolean;
         warnGraphDisabled?: boolean;
         isCreate: boolean;
+        infoText?: string;
     },
 ): ReactElement => {
     const awsRegionValues = Object.keys(AWSRegion).map((key) => ({
@@ -44,15 +45,23 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
     return (
         <>
             {props.isCreate ? (
-                <ControlledSelect
-                    className="DrawerFormField"
-                    label="Storage Provider"
-                    name="storageProvider"
-                    values={storageProviderValues}
-                    formProps={props}
-                    required
-                    resetErrorsOnKeys={Object.keys(initialStorageProviderFields)}
-                />
+                <>
+                    <ControlledSelect
+                        className="DrawerFormField"
+                        label="Storage Provider"
+                        name="storageProvider"
+                        values={storageProviderValues}
+                        formProps={props}
+                        required
+                        resetErrorsOnKeys={Object.keys(initialStorageProviderFields)}
+                    />
+
+                    {props.infoText && (
+                        <Alert severity="info" className="DrawerFormField">
+                            {props.infoText}
+                        </Alert>
+                    )}
+                </>
             ) : (
                 <CheckBoxInput
                     name="editStorageProviderSettings"

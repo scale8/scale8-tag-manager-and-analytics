@@ -28,24 +28,24 @@ const IngestEndpointForm: FC<IngestEndpointFormProps> = (props: IngestEndpointFo
                         setValue={(v) => {
                             props.handleChange('analyticsEnabled', v);
                         }}
-                        label="Enable simple analytics dashboard when using Tag Manager. We recommend this option is left enabled."
+                        label="Enable Analytics"
                         className="DrawerFormField"
                         style={{ marginLeft: '-11px' }}
                         color="primary"
                     />
+                    <small className="DrawerFormField" style={{ marginTop: '-24px' }}>
+                        Enable analytics dashboard when using Data Manager. We recommend this option
+                        is left enabled.
+                    </small>
                     {props.values.analyticsEnabled && (
-                        <>
-                            {props.isCreate && (
-                                <small className="DrawerFormField">
-                                    Your analytics and error data will be sent to your chosen
-                                    storage provider. MongoDB is a great solution for very low
-                                    traffic websites and doesn't require any configuration unless
-                                    you wish to specify your own MongoDB servers. We strongly
-                                    recommend using BigQuery or Clickhouse for larger websites.
-                                </small>
-                            )}
-                            <StorageProviderSelector {...props} warnGraphDisabled />
-                        </>
+                        <StorageProviderSelector
+                            {...props}
+                            warnGraphDisabled
+                            infoText="Your analytics will be sent to your chosen storage provider. MongoDB is a
+                        great solution for very low traffic websites and doesn't require any
+                        configuration unless you wish to specify your own MongoDB servers. We
+                        strongly recommend using BigQuery or Clickhouse for larger websites."
+                        />
                     )}
                 </>
             )}

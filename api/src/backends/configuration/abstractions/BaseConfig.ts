@@ -132,10 +132,6 @@ export default abstract class BaseConfig {
         return await this.getConfigEntryThrows('GC_KEY_FILE');
     }
 
-    public async getGCProjectId(): Promise<string> {
-        return await this.getConfigEntryThrows('GC_PROJECT_ID');
-    }
-
     public async getAssetBucket(): Promise<string> {
         return await this.getConfigEntryOrElse(
             'ASSET_BUCKET',

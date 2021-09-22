@@ -81,7 +81,7 @@ export default class App extends Model {
         required: true,
         defaultValue: () => '',
     })
-    private _storageProviderConfigHash: string | undefined;
+    private _storage_provider_config_hash: string | undefined;
 
     constructor(
         name: string,
@@ -172,10 +172,10 @@ export default class App extends Model {
     }
 
     get storageProviderConfigHash(): string {
-        return this._storageProviderConfigHash ?? '';
+        return this._storage_provider_config_hash ?? '';
     }
 
     set storageProviderConfigHash(value: string) {
-        this._storageProviderConfigHash = value;
+        this._storage_provider_config_hash = value;
     }
 }

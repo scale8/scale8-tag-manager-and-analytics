@@ -65,6 +65,7 @@ public class PushToMongoDb extends StorageProvider {
           getNextBatch(q).stream()
               .map(d -> createFromJsonObject(ingestSettings, d))
               .collect(Collectors.toList());
+      documents.forEach(document -> System.out.println(document.toString()));
       getCollection(ingestSettings).insertMany(documents);
     }
   }

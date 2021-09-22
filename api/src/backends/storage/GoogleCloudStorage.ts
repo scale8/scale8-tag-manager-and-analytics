@@ -3,6 +3,7 @@ import BaseStorage, { StorageOptions } from './abstractions/BaseStorage';
 import { Storage } from '@google-cloud/storage';
 import TYPES from '../../container/IOC.types';
 import BaseConfig from '../configuration/abstractions/BaseConfig';
+import { getServiceAccountJsonFromConfig } from '../../utils/GoogleCloudUtils';
 
 @injectable()
 export default class GoogleCloudStorage extends BaseStorage {
@@ -10,10 +11,15 @@ export default class GoogleCloudStorage extends BaseStorage {
     private storage: Storage | undefined;
 
     protected async getStorage() {
+        const serviceAccountJson = await getServiceAccountJsonFromConfig();
+
         if (this.storage === undefined) {
             this.storage = new Storage({
-                keyFilename: await this.config.getGCKeyFile(),
-                projectId: await this.config.getGCProjectId(),
+                projectId: serviceAccountJson.project_id,
+                credentials: {
+                    client_email: serviceAccountJson.client_email,
+                    private_key: serviceAccountJson.private_key,
+                },
             });
         }
         return this.storage;

@@ -15,9 +15,7 @@ import BaseConfig from '../configuration/abstractions/BaseConfig';
 import BaseLogger from '../logging/abstractions/BaseLogger';
 import { getStorageProviderConfig } from '../../utils/IngestEndpointEnvironmentUtils';
 import { GCBigQueryStreamConfig } from '../../Types';
-import { JWTInput } from 'google-auth-library/build/src/auth/credentials';
-import path from 'path';
-import fs from 'fs';
+import { getServiceAccountJson } from '../../utils/GoogleCloudUtils';
 
 @injectable()
 export default class GoogleCloudBigQuery extends BaseDatabase {
@@ -38,39 +36,18 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
             return cachedInstance;
         }
 
-        const getBigQueryServiceAccountJson = async (): Promise<JWTInput> => {
-            if (this.config.isCommercial()) {
-                return JSON.parse(
-                    fs.readFileSync(
-                        path.resolve(process.cwd(), await this.config.getGCKeyFile()),
-                        'utf8',
-                    ),
-                ) as JWTInput;
-            }
-
-            const storageProviderConfig = (await getStorageProviderConfig(
-                entityUsageIngestEndpointEnvironmentId,
-            )) as GCBigQueryStreamConfig;
-
-            return storageProviderConfig.service_account_json;
-        };
-
         const getBigQuery = async (): Promise<BigQuery> => {
-            const serviceAccountJson = await getBigQueryServiceAccountJson();
-            if (this.config.isCommercial()) {
-                return new BigQuery({
-                    keyFilename: await this.config.getGCKeyFile(),
-                    projectId: serviceAccountJson.project_id,
-                });
-            } else {
-                return new BigQuery({
-                    projectId: serviceAccountJson.project_id,
-                    credentials: {
-                        client_email: serviceAccountJson.client_email,
-                        private_key: serviceAccountJson.private_key,
-                    },
-                });
-            }
+            const serviceAccountJson = await getServiceAccountJson(
+                entityUsageIngestEndpointEnvironmentId,
+            );
+
+            return new BigQuery({
+                projectId: serviceAccountJson.project_id,
+                credentials: {
+                    client_email: serviceAccountJson.client_email,
+                    private_key: serviceAccountJson.private_key,
+                },
+            });
         };
 
         const bigQuery = await getBigQuery();
@@ -119,14 +96,13 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
     protected async getTable(entity: App | IngestEndpoint): Promise<string> {
         const entityUsageIngestEndpointEnvironmentId =
             this.getEntityUsageIngestEndpointEnvironmentId(entity);
-        const projectId = this.config.isCommercial()
-            ? await this.config.getGCProjectId()
-            : (
-                  (await getStorageProviderConfig(
-                      entityUsageIngestEndpointEnvironmentId,
-                  )) as GCBigQueryStreamConfig
-              ).service_account_json.project_id;
-        return `\`${projectId}.${await this.config.getAnalyticsDataSetName()}.s8_${entityUsageIngestEndpointEnvironmentId.toString()}_*\``;
+        const serviceAccountJson = await getServiceAccountJson(
+            entityUsageIngestEndpointEnvironmentId,
+        );
+
+        return `\`${
+            serviceAccountJson.project_id
+        }.${await this.config.getAnalyticsDataSetName()}.s8_${entityUsageIngestEndpointEnvironmentId.toString()}_*\``;
     }
 
     protected getRangeFrom(options: BaseQueryOptions): string {
