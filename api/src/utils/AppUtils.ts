@@ -41,6 +41,11 @@ const createAppUsageEndpointEnvironment = async (
     return createUsageEndpointEnvironment(org, trackingEntity, actor, provider, providerConfig, [
         {
             varType: VarType.STRING,
+            key: 'custom_release_id',
+            optional: true,
+        },
+        {
+            varType: VarType.STRING,
             key: 'uiid',
             defaultValue: '%S8_UIID%',
         },
@@ -48,17 +53,6 @@ const createAppUsageEndpointEnvironment = async (
             varType: VarType.DATETIME,
             key: 'dt',
             defaultValue: '%S8_DATE_TIME_UTC%',
-        },
-        {
-            varType: VarType.STRING,
-            key: 'event_group',
-            optional: true,
-            validations: [
-                {
-                    type: ValidationType.VALID_REGEX,
-                    input_value: '^[a-z]{1,}(-[a-z]+){0,}$',
-                },
-            ],
         },
         {
             varType: VarType.STRING,
@@ -73,7 +67,38 @@ const createAppUsageEndpointEnvironment = async (
         },
         {
             varType: VarType.STRING,
+            key: 'event_group',
+            optional: true,
+            validations: [
+                {
+                    type: ValidationType.VALID_REGEX,
+                    input_value: '^[a-z]{1,}(-[a-z]+){0,}$',
+                },
+            ],
+        },
+        {
+            varType: VarType.STRING,
             key: 'event_json',
+            optional: true,
+        },
+        {
+            varType: VarType.STRING,
+            key: 'error_file',
+            optional: true,
+        },
+        {
+            varType: VarType.STRING,
+            key: 'error_message',
+            optional: true,
+        },
+        {
+            varType: VarType.INT,
+            key: 'error_column',
+            optional: true,
+        },
+        {
+            varType: VarType.INT,
+            key: 'error_row',
             optional: true,
         },
         {

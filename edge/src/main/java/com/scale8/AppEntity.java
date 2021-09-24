@@ -1,6 +1,7 @@
 package com.scale8;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.scale8.backends.storage.StorageInterface;
@@ -9,6 +10,8 @@ import com.scale8.config.Replacements;
 import com.scale8.config.structures.AppSettings;
 import com.scale8.config.structures.IngestSettings;
 import com.scale8.extended.ExtendedRequest;
+import com.scale8.extended.collectors.JsonObjectCollector;
+import com.scale8.extended.types.Tuple;
 import com.scale8.ingest.Ingestor;
 import io.micronaut.cache.annotation.CacheConfig;
 import io.micronaut.cache.annotation.Cacheable;
@@ -22,7 +25,9 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static io.micronaut.http.HttpHeaders.ACCEPT;
 import static io.micronaut.http.MediaType.APPLICATION_JSON;
@@ -139,28 +144,66 @@ public class AppEntity {
     }
   }
 
+  private void track(ExtendedRequest request, JsonObject data) throws Exception {
+    AppSettings appSettings = getConfig(request);
+    IngestSettings ingestSettings = ingestEntity.getConfigById(appSettings.getUsageIngestEnvId());
+
+    JsonObject trackingPayload =
+        payload.applyDefaultValues(
+            data, ingestSettings.getSchemaAsMap(), new Replacements(request, null, appSettings));
+
+    List<String> issues =
+        payload.validateSchemaAgainstPayload(trackingPayload, ingestSettings.getSchemaAsMap());
+
+    if (issues.isEmpty()) {
+      // go ahead and log this...
+      ingestor.add(trackingPayload, ingestSettings);
+    } else {
+      // we don't want to throw, if there is a problem here output to logs as it is our fault.
+      issues.forEach(issue -> LOG.warn("Tracking issue: " + issue));
+    }
+  }
+
+  public void trackEvent(ExtendedRequest request) throws Exception {
+    Map<String, String> params = request.getAllParameters();
+    HashMap<String, JsonPrimitive> dataMap = new HashMap<>();
+    dataMap.put(
+        "event", params.get("event") == null ? null : new JsonPrimitive(params.get("event")));
+    dataMap.put(
+        "event_group",
+        params.get("event_group") == null ? null : new JsonPrimitive(params.get("event_group")));
+    dataMap.put(
+        "error_file",
+        params.get("error_file") == null ? null : new JsonPrimitive(params.get("error_file")));
+    dataMap.put(
+        "error_message",
+        params.get("error_message") == null
+            ? null
+            : new JsonPrimitive(params.get("error_message")));
+    dataMap.put(
+        "error_column",
+        params.get("error_column") == null
+            ? null
+            : new JsonPrimitive(Integer.parseInt(params.get("error_column"))));
+    dataMap.put(
+        "error_row",
+        params.get("error_row") == null
+            ? null
+            : new JsonPrimitive(Integer.parseInt(params.get("error_row"))));
+
+    track(
+        request,
+        dataMap.entrySet().stream()
+            .filter(entry -> entry.getValue() != null)
+            .map(e -> new Tuple<String, JsonElement>(e.getKey(), e.getValue()))
+            .collect(new JsonObjectCollector()));
+  }
+
   public String getCoreJs(ExtendedRequest request) throws Exception {
     AppSettings appSettings = getConfig(request);
 
     if (appSettings.getIsAnalyticsEnabled()) {
-      IngestSettings ingestSettings = ingestEntity.getConfigById(appSettings.getUsageIngestEnvId());
-
-      JsonObject trackingPayload =
-          payload.applyDefaultValues(
-              new JsonObject(),
-              ingestSettings.getSchemaAsMap(),
-              new Replacements(request, null, appSettings));
-
-      List<String> issues =
-          payload.validateSchemaAgainstPayload(trackingPayload, ingestSettings.getSchemaAsMap());
-
-      if (issues.isEmpty()) {
-        // go ahead and log this...
-        ingestor.add(trackingPayload, ingestSettings);
-      } else {
-        // we don't want to throw, if there is a problem here output to logs as it is our fault.
-        issues.forEach(issue -> LOG.warn("Tracking issue issue: " + issue));
-      }
+      track(request, new JsonObject());
     }
 
     String js =

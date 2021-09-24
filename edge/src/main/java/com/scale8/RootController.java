@@ -25,6 +25,7 @@ import static io.micronaut.http.MediaType.APPLICATION_JSON;
 public class RootController {
 
   protected final String APPLICATION_JAVASCRIPT = "application/javascript";
+  protected final String OK_JSON = "{\"o\":\"k\"}";
 
   private static final Logger LOG = LoggerFactory.getLogger(RootController.class);
 
@@ -53,7 +54,7 @@ public class RootController {
         payload.isPresent()
             ? ingestEntity.add(extendedRequest, payload.get())
             : List.of("Failed to find payload");
-    return issues.isEmpty() ? "{\"o\":\"k\"}" : new Gson().toJson(issues);
+    return issues.isEmpty() ? OK_JSON : new Gson().toJson(issues);
   }
 
   @Get(produces = APPLICATION_JSON)
@@ -126,6 +127,25 @@ public class RootController {
   @Get(uri = "/edge/{id}/tm-core.js", produces = APPLICATION_JAVASCRIPT)
   public String tmCore(HttpRequest<String> request, @PathVariable String id) throws Exception {
     return handleTmCore(request, id);
+  }
+
+  private String handleTrackEvent(HttpRequest<String> request, String id, String event)
+      throws Exception {
+    appEntity.trackEvent(createExtendedRequest(request, id, Map.of("event", event)));
+    return OK_JSON;
+  }
+
+  @Get(uri = "/e/{event}", produces = APPLICATION_JAVASCRIPT)
+  public String trackEvent(HttpRequest<String> request, @PathVariable String event)
+      throws Exception {
+    return handleTrackEvent(request, null, event);
+  }
+
+  @Get(uri = "/edge/{id}/e/{event}", produces = APPLICATION_JAVASCRIPT)
+  public String trackEvent(
+      HttpRequest<String> request, @PathVariable String id, @PathVariable String event)
+      throws Exception {
+    return handleTrackEvent(request, id, event);
   }
 
   private String handlePrimaryJsAsset(

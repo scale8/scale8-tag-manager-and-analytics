@@ -217,6 +217,20 @@ export default class MongoDb extends BaseDatabase {
             MongoDb.getFilterObjectFromStringFilterOption(queryOptions, 'browser', 'browser_name');
         const getOS = () =>
             MongoDb.getFilterObjectFromStringFilterOption(queryOptions, 'os', 'os_name');
+        const getCustomReleaseId = () =>
+            MongoDb.getFilterObjectFromStringFilterOption(
+                queryOptions,
+                'custom_release_id',
+                'custom_release_id',
+            );
+        const getErrorFile = () =>
+            MongoDb.getFilterObjectFromStringFilterOption(queryOptions, 'error_file', 'error_file');
+        const getErrorMessage = () =>
+            MongoDb.getFilterObjectFromStringFilterOption(
+                queryOptions,
+                'error_message',
+                'error_message',
+            );
         return [
             getRange(),
             getRevisionFilter(),
@@ -235,6 +249,9 @@ export default class MongoDb extends BaseDatabase {
             getMobile(),
             getBrowser(),
             getOS(),
+            getCustomReleaseId(),
+            getErrorFile(),
+            getErrorMessage(),
         ].reduce((a, c) => {
             return c === undefined ? a : Object.assign(a, c);
         }, {} as { [k: string]: any }) as { [p: string]: any };
@@ -291,6 +308,86 @@ export default class MongoDb extends BaseDatabase {
                     $project: {
                         _id: 0,
                         key: '$_id',
+                        user_count: 1,
+                        event_count: 1,
+                    },
+                },
+                {
+                    $sort: { user_count: -1 },
+                },
+            ],
+            queryOptions.limit,
+        );
+
+        return this.getResultWithRange(queryOptions, rows);
+    }
+
+    public async errors(app: App, queryOptions: AppQueryOptions) {
+        const rows = await this.runAggregation(
+            app,
+            [
+                {
+                    $match: {
+                        ...this.getAppFilter(queryOptions),
+                        error_file: { $exists: true },
+                        error_message: { $exists: true },
+                        error_column: { $exists: true },
+                        error_row: { $exists: true },
+                        page_url: { $exists: true },
+                    },
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        dt: 1,
+                        error_file: 1,
+                        error_message: 1,
+                        error_column: 1,
+                        error_row: 1,
+                        page_url: 1,
+                        user_hash: 1,
+                    },
+                },
+                {
+                    $sort: {
+                        dt: -1,
+                    },
+                },
+                {
+                    $group: {
+                        _id: {
+                            error_file: '$error_file',
+                            error_message: '$error_message',
+                            error_column: '$error_column',
+                            error_row: '$error_row',
+                            page_url: '$page_url',
+                            user_hash: '$user_hash',
+                        },
+                        first_page_url: { $first: '$page_url' },
+                        event_count: { $sum: 1 },
+                    },
+                },
+                {
+                    $group: {
+                        _id: {
+                            error_file: '$_id.error_file',
+                            error_message: '$_id.error_message',
+                            error_column: '$_id.error_column',
+                            error_row: '$_id.error_row',
+                            first_page_url: '$first_page_url',
+                        },
+                        user_count: { $sum: 1 },
+                        event_count: { $sum: '$event_count' },
+                    },
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        error_file: '$_id.error_file',
+                        error_message: '$_id.error_message',
+                        error_column: '$_id.error_column',
+                        error_row: '$_id.error_row',
+                        first_page_url: '$_id.first_page_url',
                         user_count: 1,
                         event_count: 1,
                     },
@@ -522,44 +619,27 @@ export default class MongoDb extends BaseDatabase {
             app,
             [
                 {
-                    $match: { ...this.getAppFilter(queryOptions), referrer_url: { $exists: true } },
+                    $match: { ...this.getAppFilter(queryOptions), referrer_tld: { $exists: true } },
                 },
                 {
                     $project: {
                         _id: 0,
-                        dt: 1,
-                        referrer_url_match: {
-                            $regexFind: { input: '$referrer_url', regex: /https?:\/\/([^/]+)/ },
-                        },
+                        referrer_tld: 1,
                         user_hash: 1,
-                    },
-                },
-                {
-                    $match: { referrer_url_match: { $ne: null } },
-                },
-                {
-                    $project: {
-                        _id: 0,
-                        dt: 1,
-                        tld: { $arrayElemAt: ['$referrer_url_match.captures', 0] },
-                        user_hash: 1,
-                    },
-                },
-                {
-                    $sort: {
-                        dt: -1,
                     },
                 },
                 {
                     $group: {
-                        _id: '$user_hash',
-                        tld: { $first: '$tld' },
+                        _id: {
+                            user_hash: '$user_hash',
+                            referrer_tld: 1,
+                        },
                         event_count: { $sum: 1 },
                     },
                 },
                 {
                     $group: {
-                        _id: '$tld',
+                        _id: '$_id.referrer_tld',
                         user_count: { $sum: 1 },
                         event_count: { $sum: '$event_count' },
                     },
