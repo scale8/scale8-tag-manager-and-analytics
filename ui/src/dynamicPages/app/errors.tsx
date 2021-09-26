@@ -1,24 +1,21 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { DynamicPageProps } from '../../pageLoader/DynamicPageLoader';
 import { AppQueryFilters } from '../../types/props/AppAnalyticsContentProps';
 import { useChartPeriod } from '../../hooks/chart/useChartPeriod';
 import { useAnalyticsTimer } from '../../hooks/timer/useAnalyticsTimer';
-import AppAnalyticsPageContainer from '../../components/molecules/ChartPageContainer/AppAnalyticsPageContainer';
 import Loader from '../../components/organisms/Loader';
-import AppAnalyticsPageContent from '../../components/molecules/ChartPageContent/AppAnalyticsPageContent';
+import AppErrorsPageContainer from '../../components/molecules/ChartPageContainer/AppErrorsPageContainer';
+import AppErrorsPageContent from '../../components/molecules/ChartPageContent/AppErrorsPageContent';
 import { useQueryOptions } from '../../hooks/useQueryOptions';
-import { toApp } from '../../utils/NavigationPaths';
-import { useRouter } from 'next/router';
 
-const AppAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
+const AppErrorsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const id = props.params.id ?? '';
-    const router = useRouter();
     const periodParam = props.params.period;
 
     const chartPeriodProps = useChartPeriod(periodParam);
 
     const [filters, setFilters] = useState<AppQueryFilters>({
-        event: 'page-view',
+        event: 'error',
     });
 
     const setFilter = (key: string, value: string | boolean | undefined) => {
@@ -26,29 +23,6 @@ const AppAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
             ...filters,
             [key]: value,
         });
-    };
-
-    const setEventGroup = (value: string | undefined) => {
-        if (value === undefined) {
-            if (filters.hasOwnProperty('event') && filters.event !== undefined) {
-                setFilters({
-                    ...filters,
-                    event_group: undefined,
-                });
-            } else {
-                setFilters({
-                    ...filters,
-                    event: 'page-view',
-                    event_group: undefined,
-                });
-            }
-        } else {
-            setFilters({
-                ...filters,
-                event: undefined,
-                event_group: value,
-            });
-        }
     };
 
     const { period } = chartPeriodProps;
@@ -62,14 +36,7 @@ const AppAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
         summaryQueryOptionsCurrent,
     } = useQueryOptions(chartPeriodProps, filters);
 
-    useEffect(() => {
-        if (filters.event === 'error') {
-            router.push(toApp({ id }, 'errors')).then();
-        }
-    }, [filters]);
-
     if (
-        filters.event === 'error' ||
         queryOptions === undefined ||
         summaryQueryOptions === undefined ||
         summaryQueryOptionsPrev === undefined ||
@@ -79,11 +46,9 @@ const AppAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     }
 
     return (
-        <AppAnalyticsPageContainer
+        <AppErrorsPageContainer
             chartPeriodProps={chartPeriodProps}
             setFilter={setFilter}
-            setEventGroup={setEventGroup}
-            referrerTLD={filters.referrer_tld ?? undefined}
             appQueryOptions={queryOptions}
             appSummaryQueryOptions={summaryQueryOptions}
             appSummaryQueryOptionsPrev={summaryQueryOptionsPrev}
@@ -92,11 +57,9 @@ const AppAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
             ticks={ticks}
             id={id}
         >
-            <AppAnalyticsPageContent
+            <AppErrorsPageContent
                 chartPeriodProps={chartPeriodProps}
                 setFilter={setFilter}
-                setEventGroup={setEventGroup}
-                referrerTLD={filters.referrer_tld ?? undefined}
                 appQueryOptions={queryOptions}
                 appSummaryQueryOptions={summaryQueryOptions}
                 appSummaryQueryOptionsPrev={summaryQueryOptionsPrev}
@@ -104,8 +67,8 @@ const AppAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
                 refreshAt={refreshAt}
                 id={id}
             />
-        </AppAnalyticsPageContainer>
+        </AppErrorsPageContainer>
     );
 };
 
-export default AppAnalyticsPage;
+export default AppErrorsPage;

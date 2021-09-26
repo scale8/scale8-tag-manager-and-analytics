@@ -19,6 +19,7 @@ import { ChildrenAndIdProps } from '../../../types/props/ChildrenAndIdProps';
 import { toApp } from '../../../utils/NavigationPaths';
 import { analyticsEnabled } from '../../../utils/AnalyticsUtils';
 import { SideMenuButtonProps } from '../../../components/molecules/SideMenuButton';
+import AppErrorsIcon from '../../../components/atoms/Icons/AppErrorsIcon';
 
 const AppSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
     const router = useRouter();
@@ -63,6 +64,16 @@ const AppSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
                           icon: <AppAnalyticsIcon />,
                           label: 'Analytics',
                           link: toApp({ id }, 'analytics'),
+                      },
+                  ]
+                : []) as SideMenuButtonProps[]),
+
+            ...((data.getApp.error_tracking_enabled
+                ? [
+                      {
+                          icon: <AppErrorsIcon />,
+                          label: 'Errors',
+                          link: toApp({ id }, 'errors'),
                       },
                   ]
                 : []) as SideMenuButtonProps[]),

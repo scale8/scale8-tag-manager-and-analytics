@@ -65,6 +65,7 @@ const AppsPage = dynamic(() => import('../dynamicPages/tag-manager/apps'));
 const TagManagerAuto = dynamic(() => import('../dynamicPages/tag-manager/auto'));
 const PlatformsPage = dynamic(() => import('../dynamicPages/tag-manager/platforms'));
 const AppAnalyticsPage = dynamic(() => import('../dynamicPages/app/analytics'));
+const AppErrorsPage = dynamic(() => import('../dynamicPages/app/errors'));
 const AppAuto = dynamic(() => import('../dynamicPages/app/auto'));
 const AppEnvironmentsPage = dynamic(() => import('../dynamicPages/app/environments'));
 const AppPlatformsPage = dynamic(() => import('../dynamicPages/app/platforms'));
@@ -145,6 +146,8 @@ const PageSelect: FC<PageLoaderProps> = (props: PageLoaderProps) => {
 
         case dynamicPages.appAnalytics:
             return <AppAnalyticsPage params={params} />;
+        case dynamicPages.appErrors:
+            return <AppErrorsPage params={params} />;
         case dynamicPages.appRevisions:
             return <AppRevisionsPage params={params} />;
         case dynamicPages.appEnvironments:

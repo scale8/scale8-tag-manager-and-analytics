@@ -138,6 +138,10 @@ export interface NavApp_getApp {
    */
   analytics_enabled: boolean;
   /**
+   * Whether the error tracking on the `App` is enabled
+   */
+  error_tracking_enabled: boolean;
+  /**
    * The storage provider used by the `App` to track data
    */
   storage_provider: StorageProvider;

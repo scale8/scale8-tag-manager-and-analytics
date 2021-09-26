@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import DashboardListSection from '../../components/organisms/DashboardListSection';
 import { useLazyQuery } from '@apollo/client';
-import { AppAnalyticsContentProps } from '../../types/props/AppAnalyticsContentProps';
 import AppDevicesQuery from '../../gql/queries/AppDevicesQuery';
 import { AppDevicesQueryData } from '../../gql/generated/AppDevicesQueryData';
 import AppBrowsersQuery from '../../gql/queries/AppBrowsersQuery';
@@ -9,8 +8,9 @@ import AppOperatingSystemsQuery from '../../gql/queries/AppOperatingSystemsQuery
 import { AppBrowsersQueryData } from '../../gql/generated/AppBrowsersQueryData';
 import { AppOperatingSystemsQueryData } from '../../gql/generated/AppOperatingSystemsQueryData';
 import { getEventLabel } from '../../utils/AnalyticsUtils';
+import { AppErrorContentProps } from '../../types/props/AppErrorContentProps';
 
-const AppAnalyticsDevices: FC<AppAnalyticsContentProps> = (props: AppAnalyticsContentProps) => {
+const AppErrorsDevices: FC<AppErrorContentProps> = (props: AppErrorContentProps) => {
     const { appQueryOptions, id, refreshAt } = props;
 
     const queryOptions = {
@@ -37,7 +37,7 @@ const AppAnalyticsDevices: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCo
                         lazyQuery: useLazyQuery(AppDevicesQuery),
                         lazyQueryVariables: queryOptions,
                         refreshAt,
-                        forErrors: false,
+                        forErrors: true,
                     },
                 },
                 {
@@ -54,7 +54,7 @@ const AppAnalyticsDevices: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCo
                         lazyQuery: useLazyQuery(AppBrowsersQuery),
                         lazyQueryVariables: queryOptions,
                         refreshAt,
-                        forErrors: false,
+                        forErrors: true,
                     },
                 },
                 {
@@ -71,7 +71,7 @@ const AppAnalyticsDevices: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCo
                         lazyQuery: useLazyQuery(AppOperatingSystemsQuery),
                         lazyQueryVariables: queryOptions,
                         refreshAt,
-                        forErrors: false,
+                        forErrors: true,
                     },
                 },
             ]}
@@ -79,4 +79,4 @@ const AppAnalyticsDevices: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCo
     );
 };
 
-export { AppAnalyticsDevices };
+export { AppErrorsDevices };

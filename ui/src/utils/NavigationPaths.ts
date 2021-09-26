@@ -113,6 +113,8 @@ export const toApp = (params: { id: string; period?: 'realtime' }, page?: string
     switch (page) {
         case 'analytics':
             return `${rootPath}/analytics${buildQs(params)}`;
+        case 'errors':
+            return `${rootPath}/errors${buildQs(params)}`;
         case 'revisions':
             return `${rootPath}/revisions${buildQs(params)}`;
         case 'environments':

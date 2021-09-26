@@ -37,6 +37,7 @@ const AppAnalyticsPages: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCont
                         lazyQuery: useLazyQuery(AppPagesQuery),
                         lazyQueryVariables: queryOptions,
                         refreshAt,
+                        forErrors: false,
                     },
                 },
                 {
@@ -53,6 +54,7 @@ const AppAnalyticsPages: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCont
                         lazyQuery: useLazyQuery(AppEntryPagesQuery),
                         lazyQueryVariables: queryOptions,
                         refreshAt,
+                        forErrors: false,
                     },
                 },
                 {
@@ -69,6 +71,7 @@ const AppAnalyticsPages: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCont
                         lazyQuery: useLazyQuery(AppExitPagesQuery),
                         lazyQueryVariables: queryOptions,
                         refreshAt,
+                        forErrors: false,
                     },
                 },
             ]}
