@@ -7,37 +7,37 @@ import { ApolloError } from '@apollo/client/errors';
 import GQLError from '../components/atoms/GqlError';
 import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import { AppErrorContentProps } from '../types/props/AppErrorContentProps';
-import { AppErrorsSummaryQueryData } from '../gql/generated/AppErrorsSummaryQueryData';
-import AppErrorsSummaryQuery from '../gql/queries/AppErrorsSummaryQuery';
+import AppSummaryQuery from '../gql/queries/AppSummaryQuery';
+import { AppSummaryQueryData } from '../gql/generated/AppSummaryQueryData';
 
 const AppErrorsSummary: FC<AppErrorContentProps> = (props: AppErrorContentProps) => {
     const { appSummaryQueryOptions, appSummaryQueryOptionsPrev, id, refreshAt } = props;
 
-    return queryLoaderAndError<AppErrorsSummaryQueryData>(
+    return queryLoaderAndError<AppSummaryQueryData>(
         false,
-        useQuery<AppErrorsSummaryQueryData>(AppErrorsSummaryQuery, {
+        useQuery<AppSummaryQueryData>(AppSummaryQuery, {
             variables: {
                 id,
                 appQueryOptions: appSummaryQueryOptions,
                 appQueryOptionsPrev: appSummaryQueryOptionsPrev,
             },
         }),
-        (queryData: AppErrorsSummaryQueryData) => {
+        (queryData: AppSummaryQueryData) => {
             const errorResult =
-                queryData.getApp.error_stats.result.length === 0
+                queryData.getApp.event_request_stats.result.length === 0
                     ? {
                           event_count: 0,
                           user_count: 0,
                       }
-                    : queryData.getApp.error_stats.result[0];
+                    : queryData.getApp.event_request_stats.result[0];
 
             const prevErrorResult =
-                queryData.getApp.prev_error_stats.result.length === 0
+                queryData.getApp.prev_request_stats.result.length === 0
                     ? {
                           event_count: 0,
                           user_count: 0,
                       }
-                    : queryData.getApp.prev_error_stats.result[0];
+                    : queryData.getApp.prev_request_stats.result[0];
 
             return (
                 <Box display="flex" flexWrap="wrap" width="100%">

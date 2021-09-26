@@ -112,7 +112,7 @@ const AppErrorsList: FC<AppErrorContentProps> = (props: AppErrorContentProps) =>
                                 File
                             </Box>
                             <Box fontWeight="bold" width={100} ml={1}>
-                                Row/Column
+                                Line/Column
                             </Box>
                             <Box fontWeight="bold" width={100} mx={1} textAlign="right">
                                 Users affected
@@ -128,7 +128,7 @@ const AppErrorsList: FC<AppErrorContentProps> = (props: AppErrorContentProps) =>
                         };
 
                         const addPageFilter = () => {
-                            props.setFilter('first_page_url', _.firstPage);
+                            props.setFilter('page', _.firstPage);
                         };
 
                         const addFileFilter = () => {
@@ -189,7 +189,7 @@ const AppErrorsList: FC<AppErrorContentProps> = (props: AppErrorContentProps) =>
                                     </Tooltip>
                                 </Box>
                                 <Box width={100} ml={1} flexShrink={0}>
-                                    <b>R</b> {_.row} <b>C</b> {_.column}
+                                    <b>L</b> {_.row} <b>C</b> {_.column}
                                 </Box>
                                 <Box width={100} mx={1} flexShrink={0} textAlign="right">
                                     {_.user_count}

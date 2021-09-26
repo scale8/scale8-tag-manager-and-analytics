@@ -3,9 +3,9 @@ import Box from '@material-ui/core/Box';
 import { FC } from 'react';
 import { useTheme } from '@material-ui/core';
 
-export const CircularProgressWithLabel: FC<CircularProgressProps & { value: number }> = (
-    props: CircularProgressProps & { value: number },
-) => {
+export const CircularProgressWithLabel: FC<
+    CircularProgressProps & { value: number; forErrors?: boolean }
+> = (props: CircularProgressProps & { value: number; forErrors?: boolean }) => {
     const theme = useTheme();
 
     return (
@@ -28,7 +28,12 @@ export const CircularProgressWithLabel: FC<CircularProgressProps & { value: numb
                     value={100}
                 />
             </Box>
-            <Box display="flex" alignItems="center" justifyContent="center" color="#44cce0">
+            <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                color={props.forErrors ? '#c63d51' : '#44cce0'}
+            >
                 <CircularProgress variant="determinate" color="inherit" {...props} />
             </Box>
             <Box

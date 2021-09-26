@@ -328,12 +328,12 @@ export default class MongoDb extends BaseDatabase {
             [
                 {
                     $match: {
-                        ...this.getAppFilter(queryOptions),
                         error_file: { $exists: true },
                         error_message: { $exists: true },
                         error_column: { $exists: true },
                         error_row: { $exists: true },
                         page_url: { $exists: true },
+                        ...this.getAppFilter(queryOptions),
                     },
                 },
                 {
@@ -560,7 +560,7 @@ export default class MongoDb extends BaseDatabase {
             app,
             [
                 {
-                    $match: { ...this.getAppFilter(queryOptions), referrer_url: { $exists: true } },
+                    $match: { referrer_url: { $exists: true }, ...this.getAppFilter(queryOptions) },
                 },
                 {
                     $project: {
@@ -619,7 +619,7 @@ export default class MongoDb extends BaseDatabase {
             app,
             [
                 {
-                    $match: { ...this.getAppFilter(queryOptions), referrer_tld: { $exists: true } },
+                    $match: { referrer_tld: { $exists: true }, ...this.getAppFilter(queryOptions) },
                 },
                 {
                     $project: {
@@ -701,7 +701,7 @@ export default class MongoDb extends BaseDatabase {
             if (pageFilter === undefined) {
                 return [
                     {
-                        $match: { ...this.getAppFilter(queryOptions), page_url: { $exists: true } },
+                        $match: { page_url: { $exists: true }, ...this.getAppFilter(queryOptions) },
                     },
                     {
                         $project: {
@@ -747,7 +747,7 @@ export default class MongoDb extends BaseDatabase {
             } else {
                 return [
                     {
-                        $match: { ...this.getAppFilter(queryOptions), page_url: { $exists: true } },
+                        $match: { page_url: { $exists: true }, ...this.getAppFilter(queryOptions) },
                     },
                     {
                         $project: {

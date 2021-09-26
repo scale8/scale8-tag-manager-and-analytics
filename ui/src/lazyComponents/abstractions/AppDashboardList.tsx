@@ -130,6 +130,7 @@ const AppDashboardList: FC<DashboardListProps> = (props: DashboardListProps) => 
                                         <CircularProgressWithLabel
                                             size={30}
                                             value={(_.event_count / total) * 100}
+                                            forErrors={props.forErrors}
                                         />
                                     </Box>
                                 </Box>
