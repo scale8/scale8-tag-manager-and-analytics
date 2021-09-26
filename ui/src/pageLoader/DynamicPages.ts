@@ -16,6 +16,7 @@ export const dynamicPages = {
     tmAuto: 'tag-manager/auto',
 
     appAnalytics: 'app/analytics',
+    appErrors: 'app/errors',
     appRevisions: 'app/revisions',
     appEnvironments: 'app/environments',
     appPlatforms: 'app/platforms',
@@ -73,6 +74,7 @@ export const dynamicPagesSections = {
     tagManager: [dynamicPages.tmApps, dynamicPages.tmPlatforms, dynamicPages.tmAuto],
     app: [
         dynamicPages.appAnalytics,
+        dynamicPages.appErrors,
         dynamicPages.appRevisions,
         dynamicPages.appEnvironments,
         dynamicPages.appPlatforms,

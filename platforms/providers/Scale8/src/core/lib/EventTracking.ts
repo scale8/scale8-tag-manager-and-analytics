@@ -22,7 +22,20 @@ export default class EventTracking {
             '/e/' +
             event +
             '?' +
-            this.getParams(eventGroup ? { group: eventGroup } : {});
+            this.getParams(eventGroup ? { event_group: eventGroup } : {});
+        return XHR.create(url);
+    }
+
+    public static async trackError(err: ErrorEvent): Promise<XHRResponse> {
+        const url =
+            Context.getServer() +
+            '/e/error?' +
+            this.getParams({
+                error_file: err.filename,
+                error_message: err.message,
+                error_column: err.colno.toString(),
+                error_row: err.lineno.toString(),
+            });
         return XHR.create(url);
     }
 }

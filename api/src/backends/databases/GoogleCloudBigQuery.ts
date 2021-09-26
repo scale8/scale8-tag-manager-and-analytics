@@ -295,6 +295,27 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                       params: { os: queryOptions.filter_options.os },
                   }
                 : undefined;
+        const getCustomReleaseId = () =>
+            typeof queryOptions.filter_options.custom_release_id === 'string'
+                ? {
+                      where: 'custom_release_id = @custom_release_id',
+                      params: { custom_release_id: queryOptions.filter_options.custom_release_id },
+                  }
+                : undefined;
+        const getErrorFile = () =>
+            typeof queryOptions.filter_options.error_file === 'string'
+                ? {
+                      where: 'error_file = @error_file',
+                      params: { error_file: queryOptions.filter_options.error_file },
+                  }
+                : undefined;
+        const getErrorMessage = () =>
+            typeof queryOptions.filter_options.error_message === 'string'
+                ? {
+                      where: 'error_message = @error_message',
+                      params: { error_message: queryOptions.filter_options.error_message },
+                  }
+                : undefined;
         return [
             getRevisionFilter(),
             getEnvironmentFilter(),
@@ -312,6 +333,9 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
             getMobile(),
             getBrowser(),
             getOS(),
+            getCustomReleaseId(),
+            getErrorFile(),
+            getErrorMessage(),
         ].reduce(
             (a, c) => {
                 if (c === undefined) {
@@ -328,6 +352,55 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                 params: {},
             },
         );
+    }
+
+    public async errors(app: App, queryOptions: AppQueryOptions) {
+        const filter = this.getAppFilter(queryOptions);
+
+        const query = `
+            SELECT
+              error_file,
+              error_message,
+              error_column,
+              error_row,
+              page_url as first_page_url,
+              COUNT(DISTINCT user_hash) AS user_count,
+              SUM(1) AS event_count
+            FROM (
+              SELECT
+                user_hash AS uh,
+                MIN(dt) AS first_dt,
+              FROM
+                ${await this.getTable(app)}
+              WHERE
+                ${filter.where}
+              GROUP BY
+                user_hash ) AS fq
+            JOIN
+              ${await this.getTable(app)} AS ds
+            ON
+              fq.uh = ds.user_hash
+              AND fq.first_dt = ds.dt
+            WHERE
+              ${filter.where}
+              AND page_url IS NOT NULL
+              AND page_url <> ""
+              AND error_file IS NOT NULL
+              AND error_message IS NOT NULL
+              AND error_column IS NOT NULL
+              AND error_row IS NOT NULL
+            GROUP BY
+              error_file,
+              error_message,
+              error_column,
+              error_row,
+              page_url
+            ORDER BY
+              user_count DESC
+            ${this.getLimit(queryOptions)}
+        `;
+
+        return this.getResultWithRange(queryOptions, await this.query(app, query, filter.params));
     }
 
     public async averageSessionDuration(

@@ -1,13 +1,13 @@
 import { FC } from 'react';
 import DashboardListSection from '../../components/organisms/DashboardListSection';
 import { useLazyQuery } from '@apollo/client';
-import { AppAnalyticsContentProps } from '../../types/props/AppAnalyticsContentProps';
 import AppCountriesQuery from '../../gql/queries/AppCountriesQuery';
 import { AppCountriesQueryData } from '../../gql/generated/AppCountriesQueryData';
 import { getCountryCode, getCountryLabel } from '../../utils/CountryUtils';
 import { getEventLabel } from '../../utils/AnalyticsUtils';
+import { AppErrorContentProps } from '../../types/props/AppErrorContentProps';
 
-const AppAnalyticsCountries: FC<AppAnalyticsContentProps> = (props: AppAnalyticsContentProps) => {
+const AppErrorsCountries: FC<AppErrorContentProps> = (props: AppErrorContentProps) => {
     const { appQueryOptions, id, refreshAt } = props;
 
     const queryOptions = {
@@ -38,7 +38,7 @@ const AppAnalyticsCountries: FC<AppAnalyticsContentProps> = (props: AppAnalytics
                         lazyQuery: useLazyQuery(AppCountriesQuery),
                         lazyQueryVariables: queryOptions,
                         refreshAt,
-                        forErrors: false,
+                        forErrors: true,
                     },
                 },
             ]}
@@ -46,4 +46,4 @@ const AppAnalyticsCountries: FC<AppAnalyticsContentProps> = (props: AppAnalytics
     );
 };
 
-export { AppAnalyticsCountries };
+export { AppErrorsCountries };

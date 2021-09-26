@@ -36,6 +36,9 @@ export interface AppQueryOptions extends BaseQueryOptions {
         os?: string;
         event?: string;
         event_group?: string;
+        custom_release_id?: string;
+        error_file?: string;
+        error_message?: string;
     };
 }
 
@@ -193,6 +196,23 @@ export default abstract class BaseDatabase {
         queryOptions: AppQueryOptions,
     ): Promise<{
         result: { key: string; user_count: number; event_count: number }[];
+        from: Date;
+        to: Date;
+    }>;
+
+    public abstract errors(
+        app: App,
+        queryOptions: AppQueryOptions,
+    ): Promise<{
+        result: {
+            error_file: string;
+            error_message: string;
+            error_column: number;
+            error_row: number;
+            first_page_url: string;
+            user_count: number;
+            event_count: number;
+        }[];
         from: Date;
         to: Date;
     }>;

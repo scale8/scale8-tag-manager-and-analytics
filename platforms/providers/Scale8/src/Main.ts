@@ -54,6 +54,9 @@ export class S8 {
             conf.preview,
         );
 
+        //listen for errors...
+        getTopWindow().addEventListener('error', (event) => EventTracking.trackError(event), false);
+
         const pageUpdateListener = () => {
             AppState.refreshData();
             EventTracking.track('page-view').then(() => Logger.debug('Tracked page-view'));

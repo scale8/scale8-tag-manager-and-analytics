@@ -82,6 +82,28 @@ export default class AppManager extends Manager<App> {
             result: [AppGroupingCount!]!
         }
 
+        """
+        @type
+        """
+        type AppGroupingErrors {
+            error_file: String!
+            error_message: String!
+            error_column: String!
+            error_row: String!
+            first_page_url: String!
+            user_count: Int!
+            event_count: Int!
+        }
+
+        """
+        @type
+        """
+        type AppGroupingErrorsResponse {
+            from: DateTime!
+            to: DateTime!
+            result: [AppGroupingErrors!]!
+        }
+
         input AppQueryFilterOptions {
             from: DateTime!
             to: DateTime!
@@ -101,6 +123,9 @@ export default class AppManager extends Manager<App> {
             os: String
             event: String
             event_group: String
+            custom_release_id: String
+            error_file: String
+            error_message: String
         }
 
         input AppQueryOptions {
@@ -222,6 +247,10 @@ export default class AppManager extends Manager<App> {
             Event Groups
             """
             event_group_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+            """
+            Errors
+            """
+            error_stats(query_options: AppQueryOptions!): AppGroupingErrorsResponse!
             """
             Whether the analytics on the \`App\` is enabled
             """
@@ -758,6 +787,18 @@ export default class AppManager extends Manager<App> {
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
                     this.backendDatabaseFactory(app.storageProvider).bounceRatio(
+                        app,
+                        args.query_options,
+                    ),
+                );
+            },
+            error_stats: async (parent: any, args: any, ctx: CTX) => {
+                const app = await this.repoFactory(App).findByIdThrows(
+                    new ObjectID(parent.id),
+                    userMessages.appFailed,
+                );
+                return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
+                    this.backendDatabaseFactory(app.storageProvider).errors(
                         app,
                         args.query_options,
                     ),

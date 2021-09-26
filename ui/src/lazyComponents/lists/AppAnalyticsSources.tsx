@@ -43,6 +43,7 @@ const AppAnalyticsSources: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCo
                                   useSourceIcon: true,
                                   allowFilterOnSingleEntity: true,
                                   refreshAt,
+                                  forErrors: false,
                               }
                             : {
                                   textTitle: `"${referrerTLD}" referrers`,
@@ -56,6 +57,7 @@ const AppAnalyticsSources: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCo
                                   lazyQuery: useLazyQuery(AppReferrersQuery),
                                   lazyQueryVariables: queryOptions,
                                   refreshAt,
+                                  forErrors: false,
                               },
                 },
                 {
@@ -72,6 +74,7 @@ const AppAnalyticsSources: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCo
                         lazyQuery: useLazyQuery(AppUtmMediumQuery),
                         lazyQueryVariables: queryOptions,
                         refreshAt,
+                        forErrors: false,
                     },
                 },
                 {
@@ -88,6 +91,7 @@ const AppAnalyticsSources: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCo
                         lazyQuery: useLazyQuery(AppUtmSourceQuery),
                         lazyQueryVariables: queryOptions,
                         refreshAt,
+                        forErrors: false,
                     },
                 },
                 {
@@ -104,6 +108,7 @@ const AppAnalyticsSources: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCo
                         lazyQuery: useLazyQuery(AppUtmCampaignQuery),
                         lazyQueryVariables: queryOptions,
                         refreshAt,
+                        forErrors: false,
                     },
                 },
             ]}

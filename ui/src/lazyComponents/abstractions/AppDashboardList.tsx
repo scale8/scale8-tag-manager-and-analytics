@@ -14,6 +14,7 @@ export type GroupingCount = {
 };
 
 export type DashboardListProps = {
+    forErrors: boolean;
     textTitle: string;
     lazyQuery: QueryTuple<any, any>;
     eventLabel: string;
@@ -67,10 +68,10 @@ const AppDashboardList: FC<DashboardListProps> = (props: DashboardListProps) => 
                             {props.textTitle}
                         </Box>
                         <Box fontWeight="bold" width={100} mx={1} textAlign="right">
-                            Unique Visitors
+                            {props.forErrors ? 'Users w/errors' : 'Unique Visitors'}
                         </Box>
                         <Box fontWeight="bold" width={140} textAlign="right">
-                            {props.eventLabel} Events
+                            {props.forErrors ? 'Total errors' : `${props.eventLabel} Events`}
                         </Box>
                     </Box>
 
@@ -129,6 +130,7 @@ const AppDashboardList: FC<DashboardListProps> = (props: DashboardListProps) => 
                                         <CircularProgressWithLabel
                                             size={30}
                                             value={(_.event_count / total) * 100}
+                                            forErrors={props.forErrors}
                                         />
                                     </Box>
                                 </Box>

@@ -8,6 +8,7 @@ const NavAppQuery = gql`
             id
             name
             analytics_enabled
+            error_tracking_enabled
             storage_provider
             tag_manager_account {
                 id

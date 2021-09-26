@@ -493,7 +493,7 @@ export interface AppCreateInput {
   type: AppType;
   storage_provider?: StorageProvider | null;
   aws_storage_config?: AWSStorageConfig | null;
-  gc_bigquery_stream_config?: ManagedGCBigQueryStreamConfig | null;
+  gc_bigquery_stream_config?: GCBigQueryStreamConfig | null;
   mongo_push_config?: MongoDbPushConfig | null;
   analytics_enabled: boolean;
   error_tracking_enabled: boolean;
@@ -542,6 +542,9 @@ export interface AppQueryFilterOptions {
   os?: string | null;
   event?: string | null;
   event_group?: string | null;
+  custom_release_id?: string | null;
+  error_file?: string | null;
+  error_message?: string | null;
 }
 
 export interface AppQueryOptions {
@@ -559,7 +562,7 @@ export interface AppUpdateInput {
   domain?: string | null;
   storage_provider?: StorageProvider | null;
   aws_storage_config?: AWSStorageConfig | null;
-  gc_bigquery_stream_config?: ManagedGCBigQueryStreamConfig | null;
+  gc_bigquery_stream_config?: GCBigQueryStreamConfig | null;
   mongo_push_config?: MongoDbPushConfig | null;
   analytics_enabled: boolean;
   error_tracking_enabled: boolean;
@@ -778,7 +781,7 @@ export interface IngestEndpointCreateInput {
   name: string;
   storage_provider?: StorageProvider | null;
   aws_storage_config?: AWSStorageConfig | null;
-  gc_bigquery_stream_config?: ManagedGCBigQueryStreamConfig | null;
+  gc_bigquery_stream_config?: GCBigQueryStreamConfig | null;
   mongo_push_config?: MongoDbPushConfig | null;
   analytics_enabled: boolean;
 }
@@ -867,7 +870,7 @@ export interface IngestEndpointUpdateInput {
   name?: string | null;
   storage_provider?: StorageProvider | null;
   aws_storage_config?: AWSStorageConfig | null;
-  gc_bigquery_stream_config?: ManagedGCBigQueryStreamConfig | null;
+  gc_bigquery_stream_config?: GCBigQueryStreamConfig | null;
   mongo_push_config?: MongoDbPushConfig | null;
   analytics_enabled: boolean;
 }
@@ -900,15 +903,6 @@ export interface Login2FAInput {
 export interface LoginInput {
   email: string;
   password: string;
-}
-
-/**
- * BigQuery stream configuration for managed endpoints.
- */
-export interface ManagedGCBigQueryStreamConfig {
-  service_account_json: S8JSON;
-  data_set_name: string;
-  data_set_location?: string | null;
 }
 
 export interface MeUpdateInput {
