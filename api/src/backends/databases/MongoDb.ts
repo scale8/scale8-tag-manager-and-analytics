@@ -632,7 +632,7 @@ export default class MongoDb extends BaseDatabase {
                     $group: {
                         _id: {
                             user_hash: '$user_hash',
-                            referrer_tld: 1,
+                            referrer_tld: '$referrer_tld',
                         },
                         event_count: { $sum: 1 },
                     },
