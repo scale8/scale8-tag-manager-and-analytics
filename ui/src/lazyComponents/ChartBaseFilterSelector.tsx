@@ -5,6 +5,7 @@ import { useQuery } from '@apollo/client';
 import { FormControl, InputLabel, makeStyles, MenuItem, Select } from '@material-ui/core';
 import PageAppChartBaseFilterQuery from '../gql/queries/PageAppChartBaseFilterQuery';
 import { AppChartBaseData } from '../gql/generated/AppChartBaseData';
+import { AppErrorContentProps } from '../types/props/AppErrorContentProps';
 
 const useStyles = makeStyles((theme) => ({
     selectRoot: {
@@ -19,8 +20,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const ChartBaseFilterSelector: FC<AppAnalyticsContentProps | appErrorContentProps> = (
-    props: AppAnalyticsContentProps | appErrorContentProps,
+const ChartBaseFilterSelector: FC<AppAnalyticsContentProps | AppErrorContentProps> = (
+    props: AppAnalyticsContentProps | AppErrorContentProps,
 ) => {
     const { appQueryOptions, id, setFilter } = props;
 
