@@ -134,7 +134,7 @@ const AppErrorsChart: FC<AppErrorContentProps> = (props: AppErrorContentProps) =
             };
 
             return (
-                <Box height="400px" width="100%" overflow="auto">
+                <Box height="300px" width="100%" overflow="auto">
                     <Bar data={data} options={options} />
                 </Box>
             );

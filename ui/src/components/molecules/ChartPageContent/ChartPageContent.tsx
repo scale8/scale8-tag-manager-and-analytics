@@ -34,20 +34,20 @@ const ChartPageContent: FC<ChartPageContentProps> = (props: ChartPageContentProp
                     </Card>
                 </Grid>
                 <Grid item xs={12}>
-                    <Card className={classes.card} style={{ minHeight: '432px' }} elevation={0}>
+                    <Card className={classes.card} style={{ minHeight: '300px' }} elevation={0}>
                         {props.chartBlock}
                     </Card>
                 </Grid>
-                {props.listsBlock.map((listComponent, index) => (
-                    <Grid item xs={12} sm={12} md={12} lg={6} key={index}>
-                        {listComponent}
-                    </Grid>
-                ))}
                 {props.bigListBlock && (
                     <Grid item xs={12}>
                         {props.bigListBlock}
                     </Grid>
                 )}
+                {props.listsBlock.map((listComponent, index) => (
+                    <Grid item xs={12} sm={12} md={12} lg={6} key={index}>
+                        {listComponent}
+                    </Grid>
+                ))}
             </Grid>
         </Container>
     );

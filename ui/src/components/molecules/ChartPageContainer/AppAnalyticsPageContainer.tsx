@@ -4,6 +4,7 @@ import ChartFilterSelector from '../ChartFilterSelector';
 import ChartEventSelector from '../../../lazyComponents/ChartEventSelector';
 import { AppAnalyticsContentProps } from '../../../types/props/AppAnalyticsContentProps';
 import ChartPageContainer, { ChartPageContainerProps, extractFilters } from './ChartPageContainer';
+import ChartBaseFilterSelector from '../../../lazyComponents/ChartBaseFilterSelector';
 
 export type AppAnalyticsPageContainerProps = AppAnalyticsContentProps & {
     children: ReactNode;
@@ -17,7 +18,12 @@ const AppAnalyticsPageContainer: FC<AppAnalyticsPageContainerProps> = (
     const { chartPeriodProps, appQueryOptions, setFilter } = appDashboardContentProps;
 
     const chartPageContainerProps: ChartPageContainerProps = {
-        leftHeaderBlock: <ChartEventSelector {...appDashboardContentProps} />,
+        leftHeaderBlock: (
+            <>
+                <ChartBaseFilterSelector {...appDashboardContentProps} />
+                <ChartEventSelector {...appDashboardContentProps} />
+            </>
+        ),
         rightHeaderBlock: <ChartPeriodSelector {...chartPeriodProps} ticks={ticks} type="app" />,
         secondaryBlock: (
             <ChartFilterSelector

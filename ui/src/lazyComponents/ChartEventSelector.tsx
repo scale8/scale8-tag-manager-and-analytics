@@ -4,7 +4,7 @@ import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import { useQuery } from '@apollo/client';
 import AppEventsQuery from '../gql/queries/AppEventsQuery';
 import { AppEventsQueryData } from '../gql/generated/AppEventsQueryData';
-import { FormControl, InputLabel, makeStyles, MenuItem, Select, useTheme } from '@material-ui/core';
+import { FormControl, InputLabel, makeStyles, MenuItem, Select } from '@material-ui/core';
 import { kebabToTitleCase } from '../utils/TextUtils';
 
 const useStyles = makeStyles((theme) => ({
@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
     },
     selectContainer: {
         marginRight: theme.spacing(2),
+        marginBottom: theme.spacing(1),
     },
 }));
 
@@ -23,7 +24,6 @@ const ChartEventSelector: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCon
     const { appQueryOptions, id, setFilter, setEventGroup } = props;
 
     const classes = useStyles();
-    const theme = useTheme();
 
     const extractFilters = () => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -130,7 +130,6 @@ const ChartEventSelector: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCon
                         variant="outlined"
                         size="small"
                         className={classes.selectContainer}
-                        style={{ marginBottom: theme.spacing(1) }}
                     >
                         <InputLabel id="event-label">Event Group</InputLabel>
                         <Select
