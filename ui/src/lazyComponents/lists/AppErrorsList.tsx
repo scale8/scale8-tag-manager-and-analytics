@@ -18,6 +18,7 @@ import AppErrorsQuery from '../../gql/queries/AppErrorsQuery';
 import { AppErrorsQueryData } from '../../gql/generated/AppErrorsQueryData';
 import { ChildrenOnlyProps } from '../../types/props/ChildrenOnlyProps';
 import { AnchorLinkIcon } from '../../components/atoms/AnchorLinkIcon';
+import { CircularProgressWithLabel } from '../../components/atoms/CircularProgressWithLabel';
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -96,6 +97,16 @@ const AppErrorsList: FC<AppErrorContentProps> = (props: AppErrorContentProps) =>
         queryOptions,
         (queryData: AppErrorsQueryData) => {
             const list = extractList(queryData);
+
+            const errorResult =
+                queryData.getApp.event_request_stats.result.length === 0
+                    ? {
+                          event_count: 0,
+                          user_count: 0,
+                      }
+                    : queryData.getApp.event_request_stats.result[0];
+
+            const totalErrors = errorResult.event_count;
 
             if (list.length === 0) {
                 return (
@@ -214,7 +225,29 @@ const AppErrorsList: FC<AppErrorContentProps> = (props: AppErrorContentProps) =>
                                                 {_.user_count}
                                             </TableCell>
                                             <TableCell align="right" width={150}>
-                                                <Box>{_.event_count}</Box>
+                                                <Box
+                                                    width={150}
+                                                    display="flex"
+                                                    justifyContent="flex-end"
+                                                    alignItems="center"
+                                                >
+                                                    <Box>{_.event_count}</Box>
+                                                    <Box
+                                                        fontSize="8px"
+                                                        height={35}
+                                                        width={40}
+                                                        pt="3px"
+                                                        pl="10px"
+                                                    >
+                                                        <CircularProgressWithLabel
+                                                            size={30}
+                                                            value={
+                                                                (_.event_count / totalErrors) * 100
+                                                            }
+                                                            forErrors
+                                                        />
+                                                    </Box>
+                                                </Box>
                                             </TableCell>
                                         </TableRow>
                                     );

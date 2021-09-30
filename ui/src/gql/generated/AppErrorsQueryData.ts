@@ -9,6 +9,18 @@ import { AppQueryOptions } from "./globalTypes";
 // GraphQL query operation: AppErrorsQueryData
 // ====================================================
 
+export interface AppErrorsQueryData_getApp_event_request_stats_result {
+  __typename: "AppGroupingCount";
+  key: string;
+  user_count: number;
+  event_count: number;
+}
+
+export interface AppErrorsQueryData_getApp_event_request_stats {
+  __typename: "AppGroupingCountsResponse";
+  result: AppErrorsQueryData_getApp_event_request_stats_result[];
+}
+
 export interface AppErrorsQueryData_getApp_error_stats_result {
   __typename: "AppGroupingErrors";
   error_file: string;
@@ -35,6 +47,10 @@ export interface AppErrorsQueryData_getApp {
    * Name of the Application
    */
   name: string;
+  /**
+   * Event request stats
+   */
+  event_request_stats: AppErrorsQueryData_getApp_event_request_stats;
   /**
    * Errors
    */
