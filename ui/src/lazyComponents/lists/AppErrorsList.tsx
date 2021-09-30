@@ -1,12 +1,24 @@
 import { FC } from 'react';
 import { AppErrorContentProps } from '../../types/props/AppErrorContentProps';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Card, Divider, Tooltip } from '@material-ui/core';
+import {
+    Box,
+    Card,
+    Divider,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    Tooltip,
+} from '@material-ui/core';
 import { lazyQueryLoaderAndError } from '../../abstractions/LazyQueryLoaderAndError';
 import { useLazyQuery } from '@apollo/client';
 import AppErrorsQuery from '../../gql/queries/AppErrorsQuery';
 import { AppErrorsQueryData } from '../../gql/generated/AppErrorsQueryData';
 import { ChildrenOnlyProps } from '../../types/props/ChildrenOnlyProps';
+import { AnchorLinkIcon } from '../../components/atoms/AnchorLinkIcon';
+import { CircularProgressWithLabel } from '../../components/atoms/CircularProgressWithLabel';
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -63,7 +75,7 @@ const AppErrorsList: FC<AppErrorContentProps> = (props: AppErrorContentProps) =>
     const queryOptions = {
         variables: {
             id,
-            appQueryOptions,
+            appQueryOptions: { ...appQueryOptions, limit: 50 },
         },
     };
 
@@ -86,6 +98,16 @@ const AppErrorsList: FC<AppErrorContentProps> = (props: AppErrorContentProps) =>
         (queryData: AppErrorsQueryData) => {
             const list = extractList(queryData);
 
+            const errorResult =
+                queryData.getApp.event_request_stats.result.length === 0
+                    ? {
+                          event_count: 0,
+                          user_count: 0,
+                      }
+                    : queryData.getApp.event_request_stats.result[0];
+
+            const totalErrors = errorResult.event_count;
+
             if (list.length === 0) {
                 return (
                     <AppErrorsListContainer>
@@ -101,111 +123,138 @@ const AppErrorsList: FC<AppErrorContentProps> = (props: AppErrorContentProps) =>
             return (
                 <AppErrorsListContainer>
                     <Box width="100%">
-                        <Box display="flex" alignItems="center" mb={1}>
-                            <Box flexGrow={1} flexBasis={0} fontWeight="bold">
-                                Message
-                            </Box>
-                            <Box fontWeight="bold" flexGrow={1} flexBasis={0} mx={1}>
-                                First page with error
-                            </Box>
-                            <Box fontWeight="bold" flexGrow={1} flexBasis={0}>
-                                File
-                            </Box>
-                            <Box fontWeight="bold" width={100} ml={1}>
-                                Line/Column
-                            </Box>
-                            <Box fontWeight="bold" width={100} mx={1} textAlign="right">
-                                Users affected
-                            </Box>
-                            <Box fontWeight="bold" width={140} textAlign="right">
-                                Total Occurrences
-                            </Box>
-                        </Box>
+                        <Table style={{ width: '100%' }} aria-label="errors">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Message</TableCell>
+                                    <TableCell>First page with error</TableCell>
+                                    <TableCell>File</TableCell>
+                                    <TableCell width={150}>Line/Column</TableCell>
+                                    <TableCell align="right" width={150}>
+                                        Users affected
+                                    </TableCell>
+                                    <TableCell align="right" width={150}>
+                                        Total Occurrences
+                                    </TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {list.map((_, index) => {
+                                    const addMessageFilter = () => {
+                                        props.setFilter('error_message', _.message);
+                                    };
+
+                                    const addPageFilter = () => {
+                                        props.setFilter('page', _.firstPage);
+                                    };
+
+                                    const addFileFilter = () => {
+                                        props.setFilter('error_file', _.file);
+                                    };
+
+                                    return (
+                                        <TableRow key={index}>
+                                            <TableCell>
+                                                <Tooltip title={_.message} placement="bottom-start">
+                                                    <Box
+                                                        style={{ width: 'calc(33vw - 300px)' }}
+                                                        whiteSpace="nowrap"
+                                                        overflow="hidden"
+                                                        textOverflow="ellipsis"
+                                                        className={classes.filterLink}
+                                                        onClick={addMessageFilter}
+                                                    >
+                                                        {_.message}
+                                                    </Box>
+                                                </Tooltip>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Tooltip
+                                                    title={_.firstPage}
+                                                    placement="bottom-start"
+                                                >
+                                                    <Box
+                                                        style={{ width: 'calc(33vw - 300px)' }}
+                                                        display="flex"
+                                                        alignItems="center"
+                                                        justifyContent="left"
+                                                    >
+                                                        <Box marginRight={1}>
+                                                            <AnchorLinkIcon href={_.firstPage} />
+                                                        </Box>
+                                                        <Box
+                                                            whiteSpace="nowrap"
+                                                            overflow="hidden"
+                                                            textOverflow="ellipsis"
+                                                            className={classes.filterLink}
+                                                            onClick={addPageFilter}
+                                                        >
+                                                            {_.firstPage}
+                                                        </Box>
+                                                    </Box>
+                                                </Tooltip>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Tooltip title={_.file} placement="bottom-start">
+                                                    <Box
+                                                        style={{ width: 'calc(33vw - 300px)' }}
+                                                        display="flex"
+                                                        alignItems="center"
+                                                        justifyContent="left"
+                                                    >
+                                                        <Box marginRight={1}>
+                                                            <AnchorLinkIcon href={_.file} />
+                                                        </Box>
+
+                                                        <Box
+                                                            whiteSpace="nowrap"
+                                                            overflow="hidden"
+                                                            textOverflow="ellipsis"
+                                                            className={classes.filterLink}
+                                                            onClick={addFileFilter}
+                                                        >
+                                                            {_.file}
+                                                        </Box>
+                                                    </Box>
+                                                </Tooltip>
+                                            </TableCell>
+                                            <TableCell width={150}>
+                                                <b>L</b> {_.row} <b>C</b> {_.column}
+                                            </TableCell>
+                                            <TableCell align="right" width={150}>
+                                                {_.user_count}
+                                            </TableCell>
+                                            <TableCell align="right" width={150}>
+                                                <Box
+                                                    width={150}
+                                                    display="flex"
+                                                    justifyContent="flex-end"
+                                                    alignItems="center"
+                                                >
+                                                    <Box>{_.event_count}</Box>
+                                                    <Box
+                                                        fontSize="8px"
+                                                        height={35}
+                                                        width={40}
+                                                        pt="3px"
+                                                        pl="10px"
+                                                    >
+                                                        <CircularProgressWithLabel
+                                                            size={30}
+                                                            value={
+                                                                (_.event_count / totalErrors) * 100
+                                                            }
+                                                            forErrors
+                                                        />
+                                                    </Box>
+                                                </Box>
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                            </TableBody>
+                        </Table>
                     </Box>
-                    {list.map((_, index) => {
-                        const addMessageFilter = () => {
-                            props.setFilter('error_message', _.message);
-                        };
-
-                        const addPageFilter = () => {
-                            props.setFilter('page', _.firstPage);
-                        };
-
-                        const addFileFilter = () => {
-                            props.setFilter('error_file', _.file);
-                        };
-
-                        return (
-                            <Box key={index} display="flex" alignItems="center">
-                                <Box flexGrow={1} flexBasis={0} position="relative" height={20}>
-                                    <Tooltip title={_.message} placement="bottom-start">
-                                        <Box
-                                            whiteSpace="nowrap"
-                                            overflow="hidden"
-                                            textOverflow="ellipsis"
-                                            position="absolute"
-                                            width="100%"
-                                            className={classes.filterLink}
-                                            onClick={addMessageFilter}
-                                        >
-                                            {_.message}
-                                        </Box>
-                                    </Tooltip>
-                                </Box>
-                                <Box
-                                    flexGrow={1}
-                                    flexBasis={0}
-                                    mx={1}
-                                    position="relative"
-                                    height={20}
-                                >
-                                    <Tooltip title={_.firstPage} placement="bottom-start">
-                                        <Box
-                                            whiteSpace="nowrap"
-                                            overflow="hidden"
-                                            textOverflow="ellipsis"
-                                            position="absolute"
-                                            width="100%"
-                                            className={classes.filterLink}
-                                            onClick={addPageFilter}
-                                        >
-                                            {_.firstPage}
-                                        </Box>
-                                    </Tooltip>
-                                </Box>
-                                <Box flexGrow={1} flexBasis={0} position="relative" height={20}>
-                                    <Tooltip title={_.file} placement="bottom-start">
-                                        <Box
-                                            whiteSpace="nowrap"
-                                            overflow="hidden"
-                                            textOverflow="ellipsis"
-                                            position="absolute"
-                                            width="100%"
-                                            className={classes.filterLink}
-                                            onClick={addFileFilter}
-                                        >
-                                            {_.file}
-                                        </Box>
-                                    </Tooltip>
-                                </Box>
-                                <Box width={100} ml={1} flexShrink={0}>
-                                    <b>L</b> {_.row} <b>C</b> {_.column}
-                                </Box>
-                                <Box width={100} mx={1} flexShrink={0} textAlign="right">
-                                    {_.user_count}
-                                </Box>
-                                <Box
-                                    width={140}
-                                    display="flex"
-                                    justifyContent="flex-end"
-                                    alignItems="center"
-                                    flexShrink={0}
-                                >
-                                    <Box>{_.event_count}</Box>
-                                </Box>
-                            </Box>
-                        );
-                    })}
                 </AppErrorsListContainer>
             );
         },

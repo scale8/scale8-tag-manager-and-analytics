@@ -5,6 +5,13 @@ const AppErrorsQuery = gql`
         getApp(id: $id) {
             id
             name
+            event_request_stats(query_options: $appQueryOptions) {
+                result {
+                    key
+                    user_count
+                    event_count
+                }
+            }
             error_stats(query_options: $appQueryOptions) {
                 result {
                     error_file

@@ -11,9 +11,11 @@ const FilterChip = withStyles({
         backgroundColor: 'transparent!important',
         borderRadius: '5px',
         padding: '19px 0',
+        maxWidth: 508,
     },
     label: {
         paddingBottom: '2px',
+        display: 'inline-block',
     },
 })(Chip);
 
@@ -40,7 +42,7 @@ const ChartFilterSelector: FC<ChartFilterSelectorProps> = (props: ChartFilterSel
     return (
         <>
             {Object.entries(props.filters).map(([key, value]) => {
-                if (value === undefined) {
+                if (value === undefined || key === 'environment' || key === 'revision') {
                     return null;
                 }
                 return (

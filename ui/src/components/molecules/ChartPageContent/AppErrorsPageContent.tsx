@@ -11,8 +11,8 @@ const AppErrorsPageContent: FC<AppErrorContentProps> = (props: AppErrorContentPr
     const chartPageContentProps: ChartPageContentProps = {
         summaryBlock: <AppErrorsSummary {...props} />,
         chartBlock: <AppErrorsChart {...props} />,
-        listsBlock: [<AppErrorsCountries {...props} />, <AppErrorsDevices {...props} />],
         bigListBlock: <AppErrorsList {...props} />,
+        listsBlock: [<AppErrorsCountries {...props} />, <AppErrorsDevices {...props} />],
     };
 
     return <ChartPageContent {...chartPageContentProps} />;
