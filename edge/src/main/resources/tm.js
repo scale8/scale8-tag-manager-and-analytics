@@ -11,5 +11,6 @@
   }, "").substr(1), e = document.createElement("script");
   e.async = !0;
   e.src = g + "/tm-core.js" + ("" === f ? "" : "?" + f);
+  e.crossOrigin = "";
   a.document.getElementsByTagName("head")[0].appendChild(e);
 })(window, "$getSvr", "s8prev");

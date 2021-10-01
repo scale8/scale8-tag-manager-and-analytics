@@ -5,8 +5,8 @@ const middleware = require('webpack-dev-middleware');
 const fs = require("fs");
 const path = require("path");
 
-const SERVER_PORT = 3123;
-const PUBLIC_PATH = `http://127.0.0.1:${SERVER_PORT}`;
+const SERVER_PORT = 3124;
+const PUBLIC_PATH = `http://127.0.0.1:${SERVER_PORT}/`;
 
 const providerString = process.argv.find((value => value.startsWith('--provider=')));
 
