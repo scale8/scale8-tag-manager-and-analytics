@@ -56,7 +56,7 @@ yarn start:mongodb
 Stop the MongoDB server: -
 
 ```bash
-yarn start:mongodb
+yarn stop:mongodb
 ```
 
 Please note this does not run as a replica set and does not persist the data. We recommend setting a volume if you wish to have the data persist: -

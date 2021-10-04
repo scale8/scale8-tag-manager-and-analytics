@@ -3,10 +3,10 @@ package com.scale8;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.scale8.asset.Loader;
-import com.scale8.backends.storage.StorageInterface;
 import com.scale8.extended.ExtendedRequest;
 import com.scale8.mmdb.Geo;
 import io.micronaut.http.HttpRequest;
+import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
@@ -38,8 +38,6 @@ public class RootController {
   @Inject Env env;
 
   @Inject Geo geo;
-
-  @Inject StorageInterface storage;
 
   private ExtendedRequest createExtendedRequest(
       HttpRequest<String> request, String id, Map<String, String> extraParameters) {
@@ -79,53 +77,60 @@ public class RootController {
     return this.handleIngestRequest(request, id);
   }
 
-  private String handleAnalyticsLoader(HttpRequest<String> request, String id) throws IOException {
+  private HttpResponse<String> handleAnalyticsLoader(HttpRequest<String> request, String id)
+      throws IOException {
     String opts = request.getParameters().get("opts");
-    return loader
-        .getResourceAsString("analytics.js")
-        .replace("$spa", opts != null && opts.contains("spa") ? "!0" : "!1")
-        .replace("$hash", opts != null && opts.contains("hash") ? "!0" : "!1")
-        .replace("$getSvr", createExtendedRequest(request, id, null).getServer());
+    return HttpResponse.ok(
+        loader
+            .getResourceAsString("analytics.js")
+            .replace("$spa", opts != null && opts.contains("spa") ? "!0" : "!1")
+            .replace("$hash", opts != null && opts.contains("hash") ? "!0" : "!1")
+            .replace("$getSvr", createExtendedRequest(request, id, null).getServer()));
   }
 
   @Get(uri = "/analytics.js", produces = APPLICATION_JAVASCRIPT)
-  public String analyticsLoader(HttpRequest<String> request) throws IOException {
+  public HttpResponse<String> analyticsLoader(HttpRequest<String> request) throws IOException {
     return this.handleAnalyticsLoader(request, null);
   }
 
   @Get(uri = "/edge/{id}/analytics.js", produces = APPLICATION_JAVASCRIPT)
-  public String analyticsLoader(HttpRequest<String> request, @PathVariable String id)
+  public HttpResponse<String> analyticsLoader(HttpRequest<String> request, @PathVariable String id)
       throws IOException {
     return this.handleAnalyticsLoader(request, id);
   }
 
-  private String handleTmLoader(HttpRequest<String> request, String id) throws IOException {
-    return loader
-        .getResourceAsString("tm.js")
-        .replace("$getSvr", createExtendedRequest(request, id, null).getServer());
+  private HttpResponse<String> handleTmLoader(HttpRequest<String> request, String id)
+      throws IOException {
+    return HttpResponse.ok(
+        loader
+            .getResourceAsString("tm.js")
+            .replace("$getSvr", createExtendedRequest(request, id, null).getServer()));
   }
 
   @Get(uri = "/tm.js", produces = APPLICATION_JAVASCRIPT)
-  public String tmLoader(HttpRequest<String> request) throws IOException {
+  public HttpResponse<String> tmLoader(HttpRequest<String> request) throws IOException {
     return handleTmLoader(request, null);
   }
 
   @Get(uri = "/edge/{id}/tm.js", produces = APPLICATION_JAVASCRIPT)
-  public String tmLoader(HttpRequest<String> request, @PathVariable String id) throws IOException {
+  public HttpResponse<String> tmLoader(HttpRequest<String> request, @PathVariable String id)
+      throws IOException {
     return handleTmLoader(request, id);
   }
 
-  private String handleTmCore(HttpRequest<String> request, String id) throws Exception {
-    return appEntity.getCoreJs(createExtendedRequest(request, id, null));
+  private HttpResponse<String> handleTmCore(HttpRequest<String> request, String id)
+      throws Exception {
+    return HttpResponse.ok(appEntity.getCoreJs(createExtendedRequest(request, id, null)));
   }
 
   @Get(uri = "/tm-core.js", produces = APPLICATION_JAVASCRIPT)
-  public String tmCore(HttpRequest<String> request) throws Exception {
+  public HttpResponse<String> tmCore(HttpRequest<String> request) throws Exception {
     return handleTmCore(request, null);
   }
 
   @Get(uri = "/edge/{id}/tm-core.js", produces = APPLICATION_JAVASCRIPT)
-  public String tmCore(HttpRequest<String> request, @PathVariable String id) throws Exception {
+  public HttpResponse<String> tmCore(HttpRequest<String> request, @PathVariable String id)
+      throws Exception {
     return handleTmCore(request, id);
   }
 
@@ -148,37 +153,38 @@ public class RootController {
     return handleTrackEvent(request, id, event);
   }
 
-  private String handlePrimaryJsAsset(
+  private HttpResponse<String> handlePrimaryJsAsset(
       HttpRequest<String> request, String id, String platformId, String revisionId)
       throws Exception {
-    return appEntity.getPrimaryJsAsset(
-        createExtendedRequest(
-            request, id, revisionId == null ? null : Map.of("preview", revisionId)),
-        platformId);
+    return HttpResponse.ok(
+        appEntity.getPrimaryJsAsset(
+            createExtendedRequest(
+                request, id, revisionId == null ? null : Map.of("preview", revisionId)),
+            platformId));
   }
 
   @Get(uri = "/d/{platformId}", produces = APPLICATION_JAVASCRIPT)
-  public String primaryJsAsset(HttpRequest<String> request, @PathVariable String platformId)
-      throws Exception {
+  public HttpResponse<String> primaryJsAsset(
+      HttpRequest<String> request, @PathVariable String platformId) throws Exception {
     return handlePrimaryJsAsset(request, null, platformId, null);
   }
 
   @Get(uri = "/edge/{id}/d/{platformId}", produces = APPLICATION_JAVASCRIPT)
-  public String primaryJsAsset(
+  public HttpResponse<String> primaryJsAsset(
       HttpRequest<String> request, @PathVariable String id, @PathVariable String platformId)
       throws Exception {
     return handlePrimaryJsAsset(request, id, platformId, null);
   }
 
   @Get(uri = "/p/{platformId}/{revisionId}", produces = APPLICATION_JAVASCRIPT)
-  public String primaryJsAssetPreview(
+  public HttpResponse<String> primaryJsAssetPreview(
       HttpRequest<String> request, @PathVariable String platformId, @PathVariable String revisionId)
       throws Exception {
     return handlePrimaryJsAsset(request, null, platformId, revisionId);
   }
 
   @Get(uri = "/edge/{id}/p/{platformId}/{revisionId}", produces = APPLICATION_JAVASCRIPT)
-  public String primaryJsAssetPreview(
+  public HttpResponse<String> primaryJsAssetPreview(
       HttpRequest<String> request,
       @PathVariable String platformId,
       @PathVariable String id,
@@ -187,25 +193,26 @@ public class RootController {
     return handlePrimaryJsAsset(request, id, platformId, revisionId);
   }
 
-  private String handleJsAsset(
+  private HttpResponse<String> handleJsAsset(
       HttpRequest<String> request, String id, String platformId, String revisionId, String asset)
       throws Exception {
-    return appEntity.fetchJSAsset(
-        createExtendedRequest(
-            request, id, revisionId == null ? null : Map.of("preview", revisionId)),
-        platformId,
-        asset);
+    return HttpResponse.ok(
+        appEntity.fetchJSAsset(
+            createExtendedRequest(
+                request, id, revisionId == null ? null : Map.of("preview", revisionId)),
+            platformId,
+            asset));
   }
 
   @Get(uri = "/d/{platformId}/{asset}", produces = APPLICATION_JAVASCRIPT)
-  public String jsAsset(
+  public HttpResponse<String> jsAsset(
       HttpRequest<String> request, @PathVariable String platformId, @PathVariable String asset)
       throws Exception {
     return handleJsAsset(request, null, platformId, null, asset);
   }
 
   @Get(uri = "/edge/{id}/d/{platformId}/{asset}", produces = APPLICATION_JAVASCRIPT)
-  public String jsAsset(
+  public HttpResponse<String> jsAsset(
       HttpRequest<String> request,
       @PathVariable String id,
       @PathVariable String platformId,
@@ -215,7 +222,7 @@ public class RootController {
   }
 
   @Get(uri = "/p/{platformId}/{revisionId}/{asset}", produces = APPLICATION_JAVASCRIPT)
-  public String jsAssetPreview(
+  public HttpResponse<String> jsAssetPreview(
       HttpRequest<String> request,
       @PathVariable String platformId,
       @PathVariable String revisionId,
@@ -225,7 +232,7 @@ public class RootController {
   }
 
   @Get(uri = "/edge/{id}/p/{platformId}/{revisionId}/{asset}", produces = APPLICATION_JAVASCRIPT)
-  public String jsAssetPreview(
+  public HttpResponse<String> jsAssetPreview(
       HttpRequest<String> request,
       @PathVariable String id,
       @PathVariable String platformId,

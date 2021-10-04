@@ -38,7 +38,7 @@ public class Env {
 
   public final String CONFIG_BUCKET = getOrElse("CONFIGS_BUCKET", "scale8_com_" + ENV + "_configs");
 
-  public final String PROXY_LOCATION = getOrElse("PROXY_ENDPOINT", "http://127.0.0.1:3123/main.js");
+  public final String PROXY_LOCATION = getOrElse("PROXY_LOCATION", "http://127.0.0.1:3123/main.js");
 
   public final String PROXY_FOR = getOrElse("PROXY_FOR", "");
 
