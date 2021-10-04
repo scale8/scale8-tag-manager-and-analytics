@@ -206,8 +206,11 @@ public class AppEntity {
       track(request, new JsonObject());
     }
 
+    boolean isProxyMode =
+        env.PROXY_FOR.equals(appSettings.getCorePlatformId()) || env.PROXY_FOR.equals("core");
+
     String js =
-        env.PROXY_FOR.equals(appSettings.getCorePlatformId())
+        isProxyMode
             ? doJsProxyRequest(env.PROXY_LOCATION)
             : getPrimaryJsAsset(request, appSettings.getCorePlatformId());
 
