@@ -70,12 +70,13 @@ const AppErrorsListContainer: FC<ChildrenOnlyProps> = (props: ChildrenOnlyProps)
 
 const AppErrorsList: FC<AppErrorContentProps> = (props: AppErrorContentProps) => {
     const classes = useStyles();
-    const { appQueryOptions, id, refreshAt } = props;
+    const { appSummaryQueryOptions, appQueryOptions, id, refreshAt } = props;
 
     const queryOptions = {
         variables: {
             id,
             appQueryOptions: { ...appQueryOptions, limit: 50 },
+            appSummaryQueryOptions,
         },
     };
 

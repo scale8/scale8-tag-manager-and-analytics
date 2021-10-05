@@ -68,4 +68,5 @@ export interface AppErrorsQueryData {
 export interface AppErrorsQueryDataVariables {
   id: string;
   appQueryOptions: AppQueryOptions;
+  appSummaryQueryOptions: AppQueryOptions;
 }
