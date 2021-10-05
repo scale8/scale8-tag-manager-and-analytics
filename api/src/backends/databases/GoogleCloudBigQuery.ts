@@ -179,7 +179,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
         const getEnvironmentFilter = () =>
             typeof queryOptions.filter_options.environment === 'string'
                 ? {
-                      where: 'environment_id = @environment_id',
+                      where: 'env_id = @environment_id',
                       params: { environment_id: queryOptions.filter_options.environment },
                   }
                 : undefined;
