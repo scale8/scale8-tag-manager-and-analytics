@@ -17,7 +17,7 @@
         "dev": "yarn platforms:build && TZ=UTC NODE_ENV=development TS_NODE_FILES=true node-dev --respawn -r ts-node/register ./src/Main.ts",
         "dev:debug": "yarn platforms:build && TZ=UTC NODE_ENV=development TS_NODE_FILES=true node-dev --respawn --inspect=9229 -r ts-node/register ./src/Main.ts",
         "dev:db:connect": "mongo --username=s8-admin --password=s8-admin --host=127.0.0.1 --port=27017",
-        "dev:update-usages": "TZ=UTC NODE_ENV=development TS_NODE_FILES=true node -r ts-node/register ./src/UpdateUsage.ts"
+        "dev:job": "TZ=UTC NODE_ENV=development TS_NODE_FILES=true node -r ts-node/register ./src/JobManager.ts"
     },
     "devDependencies": {
         "@types/body-parser": "^1.19.0",
