@@ -19,6 +19,10 @@ import { AppErrorsQueryData } from '../../gql/generated/AppErrorsQueryData';
 import { ChildrenOnlyProps } from '../../types/props/ChildrenOnlyProps';
 import { AnchorLinkIcon } from '../../components/atoms/AnchorLinkIcon';
 import { CircularProgressWithLabel } from '../../components/atoms/CircularProgressWithLabel';
+import IconButton from '@material-ui/core/IconButton';
+import CodeIcon from '@material-ui/icons/Code';
+import { PageActionProps, pageActions } from '../../actions/PageActions';
+import { useLoggedInState } from '../../context/AppContext';
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -71,6 +75,15 @@ const AppErrorsListContainer: FC<ChildrenOnlyProps> = (props: ChildrenOnlyProps)
 const AppErrorsList: FC<AppErrorContentProps> = (props: AppErrorContentProps) => {
     const classes = useStyles();
     const { appSummaryQueryOptions, appQueryOptions, id, refreshAt } = props;
+    const { templateInteractions } = useLoggedInState();
+    const { dispatchDialogAction } = templateInteractions;
+
+    const pageActionProps: PageActionProps = {
+        dispatchDialogAction,
+        refresh: () => {
+            // no need to refresh
+        },
+    };
 
     const queryOptions = {
         variables: {
@@ -136,6 +149,9 @@ const AppErrorsList: FC<AppErrorContentProps> = (props: AppErrorContentProps) =>
                                     </TableCell>
                                     <TableCell align="right" width={150}>
                                         Total Occurrences
+                                    </TableCell>
+                                    <TableCell align="right" width={60}>
+                                        Actions
                                     </TableCell>
                                 </TableRow>
                             </TableHead>
@@ -248,6 +264,33 @@ const AppErrorsList: FC<AppErrorContentProps> = (props: AppErrorContentProps) =>
                                                             forErrors
                                                         />
                                                     </Box>
+                                                </Box>
+                                            </TableCell>
+                                            <TableCell align="right" width={60}>
+                                                <Box
+                                                    width={60}
+                                                    display="flex"
+                                                    justifyContent="flex-end"
+                                                    alignItems="center"
+                                                >
+                                                    <Tooltip title="View Code">
+                                                        <span>
+                                                            <IconButton
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    pageActions.showErrorSource(
+                                                                        pageActionProps,
+                                                                        _.file,
+                                                                        `${_.row}:${_.column}`,
+                                                                    );
+                                                                }}
+                                                                color="inherit"
+                                                                aria-label="View Code"
+                                                            >
+                                                                <CodeIcon />
+                                                            </IconButton>
+                                                        </span>
+                                                    </Tooltip>
                                                 </Box>
                                             </TableCell>
                                         </TableRow>
