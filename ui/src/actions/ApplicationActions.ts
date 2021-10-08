@@ -3,12 +3,14 @@ import {
     launchHidden,
     openDrawer,
     openDrawerContextOnly,
+    openFullScreenNoRefresh,
     openLightboxNoRefresh,
 } from '../utils/PageActionUtils';
 import { AppCreate } from '../dialogPages/tagManager/app/AppCreate';
 import { AppDelete } from '../dialogPages/tagManager/app/AppDelete';
 import { AppUpdate } from '../dialogPages/tagManager/app/AppUpdate';
 import { AppInstallInstructions } from '../dialogPages/tagManager/app/AppInstallInstructions';
+import { ErrorSource } from '../dialogPages/tagManager/app/ErrorSource';
 
 const applicationActions = {
     createApplication: (
@@ -38,6 +40,9 @@ const applicationActions = {
     },
     installApp: (pageActionProps: PageActionProps, id: string): void => {
         openLightboxNoRefresh(pageActionProps, AppInstallInstructions, id);
+    },
+    showErrorSource: (pageActionProps: PageActionProps, url: string, rowColumn: string): void => {
+        openFullScreenNoRefresh(pageActionProps, ErrorSource, url, rowColumn);
     },
 };
 

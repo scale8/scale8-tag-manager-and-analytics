@@ -8,6 +8,8 @@ export const CircularProgressWithLabel: FC<
 > = (props: CircularProgressProps & { value: number; forErrors?: boolean }) => {
     const theme = useTheme();
 
+    const { forErrors, ...circularProgressProps } = props;
+
     return (
         <Box position="relative" display="inline-flex">
             <Box
@@ -32,9 +34,13 @@ export const CircularProgressWithLabel: FC<
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
-                color={props.forErrors ? '#c63d51' : '#44cce0'}
+                color={forErrors ? '#c63d51' : '#44cce0'}
             >
-                <CircularProgress variant="determinate" color="inherit" {...props} />
+                <CircularProgress
+                    variant="determinate"
+                    color="inherit"
+                    {...circularProgressProps}
+                />
             </Box>
             <Box
                 top={0}

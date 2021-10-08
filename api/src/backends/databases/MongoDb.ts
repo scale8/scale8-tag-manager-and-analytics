@@ -160,7 +160,7 @@ export default class MongoDb extends BaseDatabase {
             MongoDb.getFilterObjectFromStringFilterOption(
                 queryOptions,
                 'environment',
-                'environment_id',
+                'env_id',
             );
         const getEventFilter = () =>
             MongoDb.getFilterObjectFromStringFilterOption(queryOptions, 'event', 'event');

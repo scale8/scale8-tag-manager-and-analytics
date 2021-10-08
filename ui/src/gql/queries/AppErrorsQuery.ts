@@ -1,11 +1,15 @@
 import { gql } from '@apollo/client';
 
 const AppErrorsQuery = gql`
-    query AppErrorsQueryData($id: ID!, $appQueryOptions: AppQueryOptions!) {
+    query AppErrorsQueryData(
+        $id: ID!
+        $appQueryOptions: AppQueryOptions!
+        $appSummaryQueryOptions: AppQueryOptions!
+    ) {
         getApp(id: $id) {
             id
             name
-            event_request_stats(query_options: $appQueryOptions) {
+            event_request_stats(query_options: $appSummaryQueryOptions) {
                 result {
                     key
                     user_count
