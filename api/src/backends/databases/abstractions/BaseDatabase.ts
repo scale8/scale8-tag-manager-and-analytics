@@ -37,6 +37,7 @@ export interface AppQueryOptions extends BaseQueryOptions {
         event?: string;
         event_group?: string;
         custom_release_id?: string;
+        error_id?: string;
         error_file?: string;
         error_message?: string;
     };
@@ -205,11 +206,11 @@ export default abstract class BaseDatabase {
         queryOptions: AppQueryOptions,
     ): Promise<{
         result: {
+            error_id: string;
             error_file: string;
             error_message: string;
             error_column: number;
             error_row: number;
-            first_page_url: string;
             user_count: number;
             event_count: number;
         }[];

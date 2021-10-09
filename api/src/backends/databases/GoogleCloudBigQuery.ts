@@ -302,6 +302,13 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                       params: { custom_release_id: queryOptions.filter_options.custom_release_id },
                   }
                 : undefined;
+        const getErrorId = () =>
+            typeof queryOptions.filter_options.error_id === 'string'
+                ? {
+                      where: 'error_id = @error_id',
+                      params: { error_id: queryOptions.filter_options.error_id },
+                  }
+                : undefined;
         const getErrorFile = () =>
             typeof queryOptions.filter_options.error_file === 'string'
                 ? {
@@ -334,6 +341,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
             getBrowser(),
             getOS(),
             getCustomReleaseId(),
+            getErrorId(),
             getErrorFile(),
             getErrorMessage(),
         ].reduce(
@@ -359,42 +367,28 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
 
         const query = `
             SELECT
+              error_id,
               error_file,
               error_message,
               error_column,
               error_row,
-              page_url as first_page_url,
               COUNT(DISTINCT user_hash) AS user_count,
               SUM(1) AS event_count
-            FROM (
-              SELECT
-                user_hash AS uh,
-                MIN(dt) AS first_dt,
-              FROM
-                ${await this.getTable(app)}
-              WHERE
-                ${filter.where}
-              GROUP BY
-                user_hash ) AS fq
-            JOIN
-              ${await this.getTable(app)} AS ds
-            ON
-              fq.uh = ds.user_hash
-              AND fq.first_dt = ds.dt
+            FROM
+              ${await this.getTable(app)}
             WHERE
               ${filter.where}
-              AND page_url IS NOT NULL
-              AND page_url <> ""
+              AND error_id IS NOT NULL
               AND error_file IS NOT NULL
               AND error_message IS NOT NULL
               AND error_column IS NOT NULL
               AND error_row IS NOT NULL
             GROUP BY
+              error_id,
               error_file,
               error_message,
               error_column,
-              error_row,
-              page_url
+              error_row
             ORDER BY
               user_count DESC
             ${this.getLimit(queryOptions)}

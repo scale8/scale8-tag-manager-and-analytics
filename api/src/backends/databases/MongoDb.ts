@@ -157,11 +157,7 @@ export default class MongoDb extends BaseDatabase {
         const getRevisionFilter = () =>
             MongoDb.getFilterObjectFromStringFilterOption(queryOptions, 'revision', 'revision_id');
         const getEnvironmentFilter = () =>
-            MongoDb.getFilterObjectFromStringFilterOption(
-                queryOptions,
-                'environment',
-                'env_id',
-            );
+            MongoDb.getFilterObjectFromStringFilterOption(queryOptions, 'environment', 'env_id');
         const getEventFilter = () =>
             MongoDb.getFilterObjectFromStringFilterOption(queryOptions, 'event', 'event');
         const getEventGroupFilter = () =>
@@ -223,6 +219,8 @@ export default class MongoDb extends BaseDatabase {
                 'custom_release_id',
                 'custom_release_id',
             );
+        const getErrorId = () =>
+            MongoDb.getFilterObjectFromStringFilterOption(queryOptions, 'error_id', 'error_id');
         const getErrorFile = () =>
             MongoDb.getFilterObjectFromStringFilterOption(queryOptions, 'error_file', 'error_file');
         const getErrorMessage = () =>
@@ -250,6 +248,7 @@ export default class MongoDb extends BaseDatabase {
             getBrowser(),
             getOS(),
             getCustomReleaseId(),
+            getErrorId(),
             getErrorFile(),
             getErrorMessage(),
         ].reduce((a, c) => {
@@ -328,53 +327,46 @@ export default class MongoDb extends BaseDatabase {
             [
                 {
                     $match: {
+                        error_id: { $exists: true },
                         error_file: { $exists: true },
                         error_message: { $exists: true },
                         error_column: { $exists: true },
                         error_row: { $exists: true },
-                        page_url: { $exists: true },
                         ...this.getAppFilter(queryOptions),
                     },
                 },
                 {
                     $project: {
                         _id: 0,
-                        dt: 1,
+                        error_id: 1,
                         error_file: 1,
                         error_message: 1,
                         error_column: 1,
                         error_row: 1,
-                        page_url: 1,
                         user_hash: 1,
-                    },
-                },
-                {
-                    $sort: {
-                        dt: -1,
                     },
                 },
                 {
                     $group: {
                         _id: {
+                            error_id: '$error_id',
                             error_file: '$error_file',
                             error_message: '$error_message',
                             error_column: '$error_column',
                             error_row: '$error_row',
-                            page_url: '$page_url',
                             user_hash: '$user_hash',
                         },
-                        first_page_url: { $first: '$page_url' },
                         event_count: { $sum: 1 },
                     },
                 },
                 {
                     $group: {
                         _id: {
+                            error_id: '$_id.error_id',
                             error_file: '$_id.error_file',
                             error_message: '$_id.error_message',
                             error_column: '$_id.error_column',
                             error_row: '$_id.error_row',
-                            first_page_url: '$first_page_url',
                         },
                         user_count: { $sum: 1 },
                         event_count: { $sum: '$event_count' },
@@ -383,11 +375,11 @@ export default class MongoDb extends BaseDatabase {
                 {
                     $project: {
                         _id: 0,
+                        error_id: '$_id.error_id',
                         error_file: '$_id.error_file',
                         error_message: '$_id.error_message',
                         error_column: '$_id.error_column',
                         error_row: '$_id.error_row',
-                        first_page_url: '$_id.first_page_url',
                         user_count: 1,
                         event_count: 1,
                     },

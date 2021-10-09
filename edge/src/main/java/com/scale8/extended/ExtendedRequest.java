@@ -7,6 +7,7 @@ import com.scale8.Env;
 import com.scale8.extended.collectors.TupleCollector;
 import com.scale8.extended.types.Tuple;
 import com.scale8.mmdb.Geo;
+import com.scale8.util.HashUtil;
 import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.HttpRequest;
 import org.apache.commons.codec.binary.Hex;
@@ -173,11 +174,7 @@ public class ExtendedRequest {
     String date =
         LocalDateTime.now(ZoneId.of("UTC")).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     try {
-      return Hex.encodeHexString(
-          MessageDigest.getInstance("SHA-256")
-              .digest(
-                  (date + getClientAddressAsString() + getUserAgentAsString())
-                      .getBytes(StandardCharsets.UTF_8)));
+      return HashUtil.createHash(date + getClientAddressAsString() + getUserAgentAsString());
     } catch (NoSuchAlgorithmException noSuchAlgorithmException) {
       noSuchAlgorithmException.printStackTrace();
       return null;
@@ -185,12 +182,7 @@ public class ExtendedRequest {
   }
 
   public int getUserDistributionValue() throws NoSuchAlgorithmException {
-    String hash =
-        Hex.encodeHexString(
-            MessageDigest.getInstance("SHA-256")
-                .digest(
-                    (getClientAddressAsString() + getUserAgentAsString())
-                        .getBytes(StandardCharsets.UTF_8)));
+    String hash = HashUtil.createHash(getClientAddressAsString() + getUserAgentAsString());
     String hashDigits = hash.replaceAll("\\D+", "");
     return Integer.parseInt(
         hashDigits.length() >= 3 ? hashDigits.substring(hashDigits.length() - 3) : hashDigits);
