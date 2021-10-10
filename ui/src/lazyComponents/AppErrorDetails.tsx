@@ -9,6 +9,7 @@ import { ChildrenOnlyProps } from '../types/props/ChildrenOnlyProps';
 import LazyShiki from '../components/atoms/LibraryLoaders/LazyShiki';
 import { makeStyles } from '@material-ui/core/styles';
 import { getApiUrl } from '../utils/ConfigUtils';
+import { unMinifyCodeWithErrorCoordinatesMapping } from '../utils/CodeUtils';
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -47,10 +48,21 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const CodeBox: FC<{ fileUrl: string; row: number; col: number }> = ({ fileUrl, row, col }) => {
+const DetailBlock: FC<ChildrenOnlyProps> = (props: ChildrenOnlyProps) => {
+    const classes = useStyles();
+    return <div className={classes.detailBlock}>{props.children}</div>;
+};
+
+const CodeBox: FC<{ fileUrl: string; errorRow: number; errorCol: number }> = ({
+    fileUrl,
+    errorRow,
+    errorCol,
+}) => {
     const classes = useStyles();
 
     const [code, setCode] = useState<string | null>(null);
+    const [row, setRow] = useState(0);
+    const [col, setCol] = useState(0);
     useEffect(() => {
         (async () => {
             try {
@@ -62,34 +74,53 @@ const CodeBox: FC<{ fileUrl: string; row: number; col: number }> = ({ fileUrl, r
                     },
                 );
                 const data = await response.json();
-                setCode(data.contents);
+                const [unminifiedCode, unminifiedRow, unminifiedCol] =
+                    unMinifyCodeWithErrorCoordinatesMapping(data.contents, errorRow, errorCol);
+
+                setCode(unminifiedCode);
+                setRow(unminifiedRow);
+                setCol(unminifiedCol);
             } catch (e) {
-                console.error(e);
+                console.log(e);
             }
         })();
     }, [fileUrl]);
 
     return (
-        <Box zIndex={1} height={250}>
-            <Paper
-                elevation={5}
-                style={{
-                    height: 250,
-                    backgroundColor: '#2e3440',
-                    zIndex: 2,
-                    borderRadius: 0,
-                }}
-            >
-                <Box color="white" pl={1} pt={1} height={30} overflow="hidden">
-                    Loading...<span className={classes.blinkingDot}>.</span>
-                </Box>
-                {code !== null && (
-                    <Box marginTop="-30px" height="100%">
-                        <LazyShiki language="js" code={code} errorPosition={{ row, col }} />
-                    </Box>
+        <>
+            <DetailBlock>
+                {code === null || (errorRow === row && errorCol === col) ? (
+                    <b>
+                        Code (Error at Line: {errorRow} Column: {errorCol}):
+                    </b>
+                ) : (
+                    <b>
+                        Code (Error at Line: {errorRow} Column: {errorCol}, un-minified at Line:{' '}
+                        {row} Column: {col}):
+                    </b>
                 )}
-            </Paper>
-        </Box>
+            </DetailBlock>
+            <Box zIndex={1} height={250}>
+                <Paper
+                    elevation={5}
+                    style={{
+                        height: 250,
+                        backgroundColor: '#2e3440',
+                        zIndex: 2,
+                        borderRadius: 0,
+                    }}
+                >
+                    <Box color="white" pl={1} pt={1} height={30} overflow="hidden">
+                        Loading...<span className={classes.blinkingDot}>.</span>
+                    </Box>
+                    {code !== null && (
+                        <Box marginTop="-30px" height="100%">
+                            <LazyShiki language="js" code={code} errorPosition={{ row, col }} />
+                        </Box>
+                    )}
+                </Paper>
+            </Box>
+        </>
     );
 };
 
@@ -115,11 +146,6 @@ const AppErrorDetailsContainer: FC<ChildrenOnlyProps> = (props: ChildrenOnlyProp
             </Box>
         </Card>
     );
-};
-
-const DetailBlock: FC<ChildrenOnlyProps> = (props: ChildrenOnlyProps) => {
-    const classes = useStyles();
-    return <div className={classes.detailBlock}>{props.children}</div>;
 };
 
 const AppErrorDetails: FC<AppErrorContentProps> = (props: AppErrorContentProps) => {
@@ -173,15 +199,10 @@ const AppErrorDetails: FC<AppErrorContentProps> = (props: AppErrorContentProps) 
                         <DetailBlock>
                             <b>File:</b> "<i>{list[0].file}</i>"
                         </DetailBlock>
-                        <DetailBlock>
-                            <b>
-                                Code (Error at Line: {list[0].row} Column: {list[0].column}):
-                            </b>
-                        </DetailBlock>
                         <CodeBox
                             fileUrl={list[0].file}
-                            row={parseInt(list[0].row)}
-                            col={parseInt(list[0].column)}
+                            errorRow={parseInt(list[0].row)}
+                            errorCol={parseInt(list[0].column)}
                         />
                     </Box>
                 </AppErrorDetailsContainer>
