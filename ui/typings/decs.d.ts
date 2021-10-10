@@ -1,1 +1,1 @@
-declare module 'unminify';
+declare module 'js-sourcemap';
