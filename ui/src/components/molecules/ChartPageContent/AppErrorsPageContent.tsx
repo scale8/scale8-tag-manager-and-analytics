@@ -6,12 +6,14 @@ import { AppErrorsCountries } from '../../../lazyComponents/lists/AppErrorsCount
 import { AppErrorsDevices } from '../../../lazyComponents/lists/AppErrorsDevices';
 import { AppErrorContentProps } from '../../../types/props/AppErrorContentProps';
 import { AppErrorsList } from '../../../lazyComponents/lists/AppErrorsList';
+import { AppErrorDetails } from '../../../lazyComponents/AppErrorDetails';
 
 const AppErrorsPageContent: FC<AppErrorContentProps> = (props: AppErrorContentProps) => {
+    const errorFilterOn = props.appQueryOptions.filter_options.error_id !== undefined;
     const chartPageContentProps: ChartPageContentProps = {
         summaryBlock: <AppErrorsSummary {...props} />,
         chartBlock: <AppErrorsChart {...props} />,
-        bigListBlock: <AppErrorsList {...props} />,
+        bigListBlock: errorFilterOn ? <AppErrorDetails {...props} /> : <AppErrorsList {...props} />,
         listsBlock: [<AppErrorsCountries {...props} />, <AppErrorsDevices {...props} />],
     };
 

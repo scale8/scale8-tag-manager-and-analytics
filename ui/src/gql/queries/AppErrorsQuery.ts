@@ -18,11 +18,11 @@ const AppErrorsQuery = gql`
             }
             error_stats(query_options: $appQueryOptions) {
                 result {
+                    error_id
                     error_file
                     error_message
                     error_column
                     error_row
-                    first_page_url
                     user_count
                     event_count
                 }

@@ -19,10 +19,6 @@ import { AppErrorsQueryData } from '../../gql/generated/AppErrorsQueryData';
 import { ChildrenOnlyProps } from '../../types/props/ChildrenOnlyProps';
 import { AnchorLinkIcon } from '../../components/atoms/AnchorLinkIcon';
 import { CircularProgressWithLabel } from '../../components/atoms/CircularProgressWithLabel';
-import IconButton from '@material-ui/core/IconButton';
-import CodeIcon from '@material-ui/icons/Code';
-import { PageActionProps, pageActions } from '../../actions/PageActions';
-import { useLoggedInState } from '../../context/AppContext';
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -75,15 +71,6 @@ const AppErrorsListContainer: FC<ChildrenOnlyProps> = (props: ChildrenOnlyProps)
 const AppErrorsList: FC<AppErrorContentProps> = (props: AppErrorContentProps) => {
     const classes = useStyles();
     const { appSummaryQueryOptions, appQueryOptions, id, refreshAt } = props;
-    const { templateInteractions } = useLoggedInState();
-    const { dispatchDialogAction } = templateInteractions;
-
-    const pageActionProps: PageActionProps = {
-        dispatchDialogAction,
-        refresh: () => {
-            // no need to refresh
-        },
-    };
 
     const queryOptions = {
         variables: {
@@ -95,8 +82,8 @@ const AppErrorsList: FC<AppErrorContentProps> = (props: AppErrorContentProps) =>
 
     const extractList = (queryData: AppErrorsQueryData) => {
         return queryData.getApp.error_stats.result.map((_) => ({
+            errorId: _.error_id,
             message: _.error_message,
-            firstPage: _.first_page_url,
             file: _.error_file,
             row: _.error_row,
             column: _.error_column,
@@ -141,32 +128,18 @@ const AppErrorsList: FC<AppErrorContentProps> = (props: AppErrorContentProps) =>
                             <TableHead>
                                 <TableRow>
                                     <TableCell>Message</TableCell>
-                                    <TableCell>First page with error</TableCell>
                                     <TableCell>File</TableCell>
-                                    <TableCell width={150}>Line/Column</TableCell>
-                                    <TableCell align="right" width={150}>
-                                        Users affected
-                                    </TableCell>
-                                    <TableCell align="right" width={150}>
+                                    <TableCell>Line/Column</TableCell>
+                                    <TableCell align="right">Users affected</TableCell>
+                                    <TableCell align="right" width={130}>
                                         Total Occurrences
-                                    </TableCell>
-                                    <TableCell align="right" width={60}>
-                                        Actions
                                     </TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {list.map((_, index) => {
-                                    const addMessageFilter = () => {
-                                        props.setFilter('error_message', _.message);
-                                    };
-
-                                    const addPageFilter = () => {
-                                        props.setFilter('page', _.firstPage);
-                                    };
-
-                                    const addFileFilter = () => {
-                                        props.setFilter('error_file', _.file);
+                                    const addErrorFilter = () => {
+                                        props.setFilter('error_id', _.errorId);
                                     };
 
                                     return (
@@ -174,47 +147,21 @@ const AppErrorsList: FC<AppErrorContentProps> = (props: AppErrorContentProps) =>
                                             <TableCell>
                                                 <Tooltip title={_.message} placement="bottom-start">
                                                     <Box
-                                                        style={{ width: 'calc(33vw - 300px)' }}
+                                                        style={{ width: 'calc(50vw - 400px)' }}
                                                         whiteSpace="nowrap"
                                                         overflow="hidden"
                                                         textOverflow="ellipsis"
                                                         className={classes.filterLink}
-                                                        onClick={addMessageFilter}
+                                                        onClick={addErrorFilter}
                                                     >
                                                         {_.message}
                                                     </Box>
                                                 </Tooltip>
                                             </TableCell>
                                             <TableCell>
-                                                <Tooltip
-                                                    title={_.firstPage}
-                                                    placement="bottom-start"
-                                                >
-                                                    <Box
-                                                        style={{ width: 'calc(33vw - 300px)' }}
-                                                        display="flex"
-                                                        alignItems="center"
-                                                        justifyContent="left"
-                                                    >
-                                                        <Box marginRight={1}>
-                                                            <AnchorLinkIcon href={_.firstPage} />
-                                                        </Box>
-                                                        <Box
-                                                            whiteSpace="nowrap"
-                                                            overflow="hidden"
-                                                            textOverflow="ellipsis"
-                                                            className={classes.filterLink}
-                                                            onClick={addPageFilter}
-                                                        >
-                                                            {_.firstPage}
-                                                        </Box>
-                                                    </Box>
-                                                </Tooltip>
-                                            </TableCell>
-                                            <TableCell>
                                                 <Tooltip title={_.file} placement="bottom-start">
                                                     <Box
-                                                        style={{ width: 'calc(33vw - 300px)' }}
+                                                        style={{ width: 'calc(50vw - 400px)' }}
                                                         display="flex"
                                                         alignItems="center"
                                                         justifyContent="left"
@@ -222,28 +169,30 @@ const AppErrorsList: FC<AppErrorContentProps> = (props: AppErrorContentProps) =>
                                                         <Box marginRight={1}>
                                                             <AnchorLinkIcon href={_.file} />
                                                         </Box>
-
                                                         <Box
                                                             whiteSpace="nowrap"
                                                             overflow="hidden"
                                                             textOverflow="ellipsis"
                                                             className={classes.filterLink}
-                                                            onClick={addFileFilter}
+                                                            onClick={addErrorFilter}
                                                         >
                                                             {_.file}
                                                         </Box>
                                                     </Box>
                                                 </Tooltip>
                                             </TableCell>
-                                            <TableCell width={150}>
-                                                <b>L</b> {_.row} <b>C</b> {_.column}
+                                            <TableCell>
+                                                <div
+                                                    className={classes.filterLink}
+                                                    onClick={addErrorFilter}
+                                                >
+                                                    <b>L</b> {_.row} <b>C</b> {_.column}
+                                                </div>
                                             </TableCell>
-                                            <TableCell align="right" width={150}>
-                                                {_.user_count}
-                                            </TableCell>
-                                            <TableCell align="right" width={150}>
+                                            <TableCell align="right">{_.user_count}</TableCell>
+                                            <TableCell align="right" width={130}>
                                                 <Box
-                                                    width={150}
+                                                    width={130}
                                                     display="flex"
                                                     justifyContent="flex-end"
                                                     alignItems="center"
@@ -264,33 +213,6 @@ const AppErrorsList: FC<AppErrorContentProps> = (props: AppErrorContentProps) =>
                                                             forErrors
                                                         />
                                                     </Box>
-                                                </Box>
-                                            </TableCell>
-                                            <TableCell align="right" width={60}>
-                                                <Box
-                                                    width={60}
-                                                    display="flex"
-                                                    justifyContent="flex-end"
-                                                    alignItems="center"
-                                                >
-                                                    <Tooltip title="View Code">
-                                                        <span>
-                                                            <IconButton
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation();
-                                                                    pageActions.showErrorSource(
-                                                                        pageActionProps,
-                                                                        _.file,
-                                                                        `${_.row}:${_.column}`,
-                                                                    );
-                                                                }}
-                                                                color="inherit"
-                                                                aria-label="View Code"
-                                                            >
-                                                                <CodeIcon />
-                                                            </IconButton>
-                                                        </span>
-                                                    </Tooltip>
                                                 </Box>
                                             </TableCell>
                                         </TableRow>

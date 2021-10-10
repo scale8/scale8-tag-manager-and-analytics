@@ -9,6 +9,12 @@ import got from 'got';
 export default class FetchRemoteFileAsText extends Handler {
     public getHandler() {
         return async (req: express.Request, res: express.Response) => {
+            res.header('Access-Control-Allow-Origin', '*');
+            res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+            res.header(
+                'Access-Control-Allow-Headers',
+                'Content-Type, Authorization, Content-Length, X-Requested-With, X-S8-AccountId, X-S8-ImageType, uid, token',
+            );
             const url = typeof req.query.url === 'string' ? req.query.url : '';
             if (url.match(/^http/) === null) {
                 throw new GenericError(

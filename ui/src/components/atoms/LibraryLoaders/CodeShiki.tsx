@@ -1,5 +1,6 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import * as shiki from 'shiki';
+import { FontStyle, IThemedToken } from 'shiki';
 import themeNord from 'shiki/themes/nord.json';
 import langJS from 'shiki/languages/javascript.tmLanguage.json';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -7,28 +8,31 @@ import langJS from 'shiki/languages/javascript.tmLanguage.json';
 import onigasm from 'arraybuffer-loader!shiki/dist/onigasm.wasm';
 import { ShikiProps } from './LazyShiki';
 import { makeStyles } from '@material-ui/core/styles';
-import { FontStyle, IThemedToken } from 'shiki';
 
 const useStyles = makeStyles({
     shiki: {
+        position: 'relative',
+        display: 'block',
+        height: '100%',
+        overflowY: 'auto',
+        backgroundColor: '#2e3440ff',
+        '&::-webkit-scrollbar': {
+            width: '8px',
+            height: '8px',
+        },
+        '&::-webkit-scrollbar-track': {
+            backgroundColor: '#f1f1f1',
+        },
+        '&::-webkit-scrollbar-thumb': {
+            backgroundColor: '#888',
+        },
+        '&::-webkit-scrollbar-thumb:hover': {
+            backgroundColor: '#555',
+        },
         fontSize: 15,
         '& .shiki': {
             padding: '.5rem',
-            // overflowX: 'scroll',
-            // overflowY: 'auto',
-            // '&::-webkit-scrollbar': {
-            //     width: '8px',
-            //     height: '8px',
-            // },
-            // '&::-webkit-scrollbar-track': {
-            //     backgroundColor: '#f1f1f1',
-            // },
-            // '&::-webkit-scrollbar-thumb': {
-            //     backgroundColor: '#888',
-            // },
-            // '&::-webkit-scrollbar-thumb:hover': {
-            //     backgroundColor: '#555',
-            // },
+            margin: 0,
         },
         '& code': {
             '& .line': {
@@ -52,10 +56,19 @@ const useStyles = makeStyles({
     },
 });
 
-const CodeShiki: FC<ShikiProps> = ({ code, language, errorPosition }) => {
+const CodeShiki: FC<ShikiProps> = ({ code, language, errorPosition, setLoaded }) => {
     const [tokens, setTokens] = useState<IThemedToken[][]>([]);
 
+    const shikiRef = useRef<HTMLDivElement>(null);
+    const errorRef = useRef<HTMLElement>(null);
+
     const classes = useStyles();
+
+    useEffect(() => {
+        if (errorRef.current && shikiRef.current) {
+            shikiRef.current.scrollTop = errorRef.current.offsetTop - 5;
+        }
+    });
 
     useEffect(() => {
         (async () => {
@@ -73,6 +86,9 @@ const CodeShiki: FC<ShikiProps> = ({ code, language, errorPosition }) => {
                     ],
                 });
                 setTokens(highlighter.codeToThemedTokens(code, language));
+                if (setLoaded !== undefined) {
+                    setLoaded();
+                }
             } catch (e) {
                 console.log(e);
             }
@@ -80,8 +96,8 @@ const CodeShiki: FC<ShikiProps> = ({ code, language, errorPosition }) => {
     }, [code, language]);
 
     return (
-        <div className={classes.shiki}>
-            <pre className="shiki" style={{ backgroundColor: '#2e3440ff' }}>
+        <div className={classes.shiki} ref={shikiRef}>
+            <pre className="shiki">
                 <code>
                     {tokens.map((l: IThemedToken[], index) => {
                         const rowHasError = errorPosition?.row === index + 1;
@@ -122,16 +138,18 @@ const CodeShiki: FC<ShikiProps> = ({ code, language, errorPosition }) => {
                                                         : {}),
                                                 }}
                                             >
-                                                {/*//  + "***S8---***" +*/}
-                                                {/*line.charAt(targetChar-1) + "***---S8***" +*/}
-                                                {/*line.slice(targetChar);*/}
                                                 {tokenHasError ? (
                                                     <>
                                                         {token.content.slice(
                                                             0,
                                                             relativeCharPosition - 1,
                                                         )}
-                                                        <span style={{ background: '#FF000060' }}>
+                                                        <span
+                                                            ref={errorRef}
+                                                            style={{
+                                                                background: '#FF000060',
+                                                            }}
+                                                        >
                                                             {token.content.charAt(
                                                                 relativeCharPosition - 1,
                                                             )}

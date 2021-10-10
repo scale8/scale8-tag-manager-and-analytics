@@ -543,6 +543,7 @@ export interface AppQueryFilterOptions {
   event?: string | null;
   event_group?: string | null;
   custom_release_id?: string | null;
+  error_id?: string | null;
   error_file?: string | null;
   error_message?: string | null;
 }
