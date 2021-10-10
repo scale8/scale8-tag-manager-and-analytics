@@ -186,7 +186,7 @@ The entire UI is powered by [GraphQL](https://graphql.org/) using Apollo and the
 ## Roadmap - 2021 Q4 / 2022 Q1.
 
 - [X] **Open-source project**: Provide a fully open-sourced version of the platform.
-- [ ] **Error tracking**: Introduce error tracking for web applications directly into your existing analytics. If the Tag Manager is on the page, and an error is detected, we'll automatically log it for you.
+- [X] **Error tracking**: Introduce error tracking for web applications directly into your existing analytics. If the Tag Manager is on the page, and an error is detected, we'll automatically log it for you.
 - [ ] **Analytics backends**: New backends to support Clickhouse and Redshift.
 - [ ] **Prebid & Google Ads (DFP) Support**: We know that some publishers will need to run ads. Our goal here is to enable full support for [Prebid](https://prebid.org/) and Google Ads, providing a simple setup of tags for publishers.
 - [ ] **Shopify**: A new custom platform, built by us to support anyone using the Shopify platform.
