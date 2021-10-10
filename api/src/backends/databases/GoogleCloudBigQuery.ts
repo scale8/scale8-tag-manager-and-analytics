@@ -372,6 +372,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
               error_message,
               error_column,
               error_row,
+              IF(error_trace IS NULL, 'Undefined', error_trace) as error_trace,
               COUNT(DISTINCT user_hash) AS user_count,
               SUM(1) AS event_count
             FROM
@@ -388,7 +389,8 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
               error_file,
               error_message,
               error_column,
-              error_row
+              error_row,
+              error_trace
             ORDER BY
               user_count DESC
             ${this.getLimit(queryOptions)}

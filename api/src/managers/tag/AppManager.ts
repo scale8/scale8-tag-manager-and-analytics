@@ -91,6 +91,7 @@ export default class AppManager extends Manager<App> {
             error_message: String!
             error_column: String!
             error_row: String!
+            error_trace: String!
             user_count: Int!
             event_count: Int!
         }

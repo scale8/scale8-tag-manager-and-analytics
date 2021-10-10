@@ -211,6 +211,7 @@ export default abstract class BaseDatabase {
             error_message: string;
             error_column: number;
             error_row: number;
+            error_trace: string;
             user_count: number;
             event_count: number;
         }[];

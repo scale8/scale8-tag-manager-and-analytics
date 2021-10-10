@@ -192,7 +192,8 @@ public class AppEntity {
           "error_id",
           new JsonPrimitive(
               HashUtil.createHash(
-                  errorMessage + "|f" + errorFile + "|c" + errorColumn + "|r" + errorRow)));
+                      errorMessage + "|f" + errorFile + "|c" + errorColumn + "|r" + errorRow)
+                  .substring(0, 12)));
     }
 
     track(
