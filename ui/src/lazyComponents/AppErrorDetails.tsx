@@ -31,9 +31,25 @@ const useStyles = makeStyles((theme) => ({
         whiteSpace: 'break-spaces',
         wordBreak: 'break-all',
     },
+    '@keyframes blink': {
+        '0%': {
+            opacity: 0,
+        },
+        '50%': {
+            opacity: 1,
+        },
+        '100%': {
+            opacity: 0,
+        },
+    },
+    blinkingDot: {
+        animation: `$blink 2s infinite`,
+    },
 }));
 
 const CodeBox: FC<{ fileUrl: string; row: number; col: number }> = ({ fileUrl, row, col }) => {
+    const classes = useStyles();
+
     const [code, setCode] = useState<string | null>(null);
     useEffect(() => {
         (async () => {
@@ -64,11 +80,11 @@ const CodeBox: FC<{ fileUrl: string; row: number; col: number }> = ({ fileUrl, r
                     borderRadius: 0,
                 }}
             >
-                <Box color="white" pl={1} pt={1}>
-                    Loading...
+                <Box color="white" pl={1} pt={1} height={30} overflow="hidden">
+                    Loading...<span className={classes.blinkingDot}>.</span>
                 </Box>
                 {code !== null && (
-                    <Box marginTop="-28px">
+                    <Box marginTop="-30px" height="100%">
                         <LazyShiki language="js" code={code} errorPosition={{ row, col }} />
                     </Box>
                 )}
