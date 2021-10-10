@@ -217,10 +217,6 @@ container.bind<Routing>(TYPES.Routing).to(Routing).inSingletonScope();
 container.bind<S3Service>(TYPES.S3Service).to(S3Service).inSingletonScope();
 container.bind<Route53Service>(TYPES.Route53Service).to(Route53Service).inSingletonScope();
 container.bind<StripeService>(TYPES.StripeService).to(StripeService).inSingletonScope();
-container.bind<StripeWebhook>(TYPES.StripeWebhook).to(StripeWebhook).inSingletonScope();
-container.bind<GitHubAuth>(TYPES.GitHubAuth).to(GitHubAuth).inSingletonScope();
-container.bind<RevisionPreview>(TYPES.RevisionPreview).to(RevisionPreview).inSingletonScope();
-container.bind<Ping>(TYPES.Ping).to(Ping).inSingletonScope();
 container.bind<ConsoleLogger>(TYPES.ConsoleLogger).to(ConsoleLogger).inSingletonScope();
 container.bind<EnvironmentConfig>(TYPES.EnvironmentConfig).to(EnvironmentConfig).inSingletonScope();
 

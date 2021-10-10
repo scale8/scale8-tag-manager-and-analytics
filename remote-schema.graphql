@@ -1,3 +1,4 @@
+
 # This file was generated based on ".graphqlconfig". Do not edit manually.
 
 schema {
@@ -109,6 +110,8 @@ type App {
     entry_page_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
     "Environments connected to the `App`. Environments are used to create a fixed deployment of a Revision"
     environments: [Environment!]!
+    "Errors"
+    error_stats(query_options: AppQueryOptions!): AppGroupingErrorsResponse!
     "Whether the error tracking on the `App` is enabled"
     error_tracking_enabled: Boolean!
     "Event Groups"
@@ -160,6 +163,25 @@ type AppGroupingCount {
 type AppGroupingCountsResponse {
     from: DateTime!
     result: [AppGroupingCount!]!
+    to: DateTime!
+}
+
+"@type"
+type AppGroupingErrors {
+    error_column: String!
+    error_file: String!
+    error_id: String!
+    error_message: String!
+    error_row: String!
+    error_trace: String!
+    event_count: Int!
+    user_count: Int!
+}
+
+"@type"
+type AppGroupingErrorsResponse {
+    from: DateTime!
+    result: [AppGroupingErrors!]!
     to: DateTime!
 }
 
@@ -4564,7 +4586,11 @@ input AppPlatformRevisionUnlinkInput {
 input AppQueryFilterOptions {
     browser: String
     country: String
+    custom_release_id: String
     environment: ID
+    error_file: String
+    error_id: ID
+    error_message: String
     event: String
     event_group: String
     from: DateTime!

@@ -13,6 +13,7 @@ import com.scale8.extended.ExtendedRequest;
 import com.scale8.extended.collectors.JsonObjectCollector;
 import com.scale8.extended.types.Tuple;
 import com.scale8.ingest.Ingestor;
+import com.scale8.util.HashUtil;
 import io.micronaut.cache.annotation.CacheConfig;
 import io.micronaut.cache.annotation.Cacheable;
 import org.slf4j.Logger;
@@ -172,24 +173,28 @@ public class AppEntity {
     dataMap.put(
         "event_group",
         params.get("event_group") == null ? null : new JsonPrimitive(params.get("event_group")));
-    dataMap.put(
-        "error_file",
-        params.get("error_file") == null ? null : new JsonPrimitive(params.get("error_file")));
-    dataMap.put(
-        "error_message",
-        params.get("error_message") == null
-            ? null
-            : new JsonPrimitive(params.get("error_message")));
-    dataMap.put(
-        "error_column",
-        params.get("error_column") == null
-            ? null
-            : new JsonPrimitive(Integer.parseInt(params.get("error_column"))));
-    dataMap.put(
-        "error_row",
-        params.get("error_row") == null
-            ? null
-            : new JsonPrimitive(Integer.parseInt(params.get("error_row"))));
+
+    String errorMessage = params.get("error_message");
+    if (errorMessage != null) {
+      int errorColumn =
+          params.get("error_column") == null ? 0 : Integer.parseInt(params.get("error_column"));
+      int errorRow =
+          params.get("error_row") == null ? 0 : Integer.parseInt(params.get("error_row"));
+      String errorFile = params.get("error_file") == null ? "undefined" : params.get("error_file");
+      dataMap.put("error_file", new JsonPrimitive(errorFile));
+      dataMap.put(
+          "error_trace",
+          params.get("error_trace") == null ? null : new JsonPrimitive(params.get("error_trace")));
+      dataMap.put("error_message", new JsonPrimitive(errorMessage));
+      dataMap.put("error_column", new JsonPrimitive(errorColumn));
+      dataMap.put("error_row", new JsonPrimitive(errorRow));
+      dataMap.put(
+          "error_id",
+          new JsonPrimitive(
+              HashUtil.createHash(
+                      errorMessage + "|f" + errorFile + "|c" + errorColumn + "|r" + errorRow)
+                  .substring(0, 12)));
+    }
 
     track(
         request,

@@ -27,15 +27,17 @@ export default class EventTracking {
     }
 
     public static async trackError(err: ErrorEvent): Promise<XHRResponse> {
-        const url =
-            Context.getServer() +
-            '/e/error?' +
-            this.getParams({
-                error_file: err.filename,
-                error_message: err.message,
-                error_column: err.colno.toString(),
-                error_row: err.lineno.toString(),
-            });
+        const stackTrace = typeof err.error === 'object' ? (err.error as Error).stack : undefined;
+        const payload: { [k: string]: string } = {
+            error_file: err.filename,
+            error_message: err.message,
+            error_column: err.colno.toString(),
+            error_row: err.lineno.toString(),
+        };
+        if (stackTrace !== undefined) {
+            payload['error_trace'] = stackTrace;
+        }
+        const url = Context.getServer() + '/e/error?' + this.getParams(payload);
         return XHR.create(url);
     }
 }

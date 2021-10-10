@@ -86,11 +86,12 @@ export default class AppManager extends Manager<App> {
         @type
         """
         type AppGroupingErrors {
+            error_id: String!
             error_file: String!
             error_message: String!
             error_column: String!
             error_row: String!
-            first_page_url: String!
+            error_trace: String!
             user_count: Int!
             event_count: Int!
         }
@@ -124,6 +125,7 @@ export default class AppManager extends Manager<App> {
             event: String
             event_group: String
             custom_release_id: String
+            error_id: ID
             error_file: String
             error_message: String
         }

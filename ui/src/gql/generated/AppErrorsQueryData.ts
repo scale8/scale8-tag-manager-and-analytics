@@ -23,13 +23,14 @@ export interface AppErrorsQueryData_getApp_event_request_stats {
 
 export interface AppErrorsQueryData_getApp_error_stats_result {
   __typename: "AppGroupingErrors";
+  error_id: string;
   error_file: string;
   error_message: string;
   error_column: string;
   error_row: string;
-  first_page_url: string;
   user_count: number;
   event_count: number;
+  error_trace: string;
 }
 
 export interface AppErrorsQueryData_getApp_error_stats {

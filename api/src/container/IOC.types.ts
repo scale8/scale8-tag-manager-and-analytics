@@ -23,12 +23,8 @@ const TYPES = {
     S3Service: Symbol.for("<S3Service>"),
     Route53Service: Symbol.for("<Route53Service>"),
     Routing: Symbol.for("<Routing>"),
-    StripeWebhook: Symbol.for("<StripeWebhook>"),
-    GitHubAuth: Symbol.for("<GitHubAuth>"),
-    RevisionPreview: Symbol.for("<RevisionPreview>"),
     Contact: Symbol.for("<Contact>"),
     SignUp: Symbol.for("<SignUp>"),
-    Ping: Symbol.for("<Ping>"),
     //auth
     UserAuth: Symbol.for("<UserAuth>"),
     OrgAuth: Symbol.for("<OrgAuth>"),

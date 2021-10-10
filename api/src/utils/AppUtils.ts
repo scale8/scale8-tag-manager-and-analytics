@@ -83,6 +83,11 @@ const createAppUsageEndpointEnvironment = async (
         },
         {
             varType: VarType.STRING,
+            key: 'error_id',
+            optional: true,
+        },
+        {
+            varType: VarType.STRING,
             key: 'error_file',
             optional: true,
         },
@@ -99,6 +104,11 @@ const createAppUsageEndpointEnvironment = async (
         {
             varType: VarType.INT,
             key: 'error_row',
+            optional: true,
+        },
+        {
+            varType: VarType.STRING,
+            key: 'error_trace',
             optional: true,
         },
         {

@@ -1,11 +1,12 @@
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import express from 'express';
 import GitHubAuth from './handlers/GitHubAuth';
 import GitHubRedirect from './handlers/GitHubRedirect';
-import TYPES from '../container/IOC.types';
 import RevisionPreview from './handlers/RevisionPreview';
 import Ping from './handlers/Ping';
 import StripeWebhook from './handlers/StripeWebhook';
+import container from '../container/IOC.config';
+import FetchRemoteFileAsText from './handlers/FetchRemoteFileAsText';
 
 type WrappedHandler = (
     req: express.Request,
@@ -20,11 +21,6 @@ type Route = {
 
 @injectable()
 export default class Routing {
-    @inject(TYPES.StripeWebhook) private readonly stripeWebhook!: StripeWebhook;
-    @inject(TYPES.GitHubAuth) private readonly gitHubAuth!: GitHubAuth;
-    @inject(TYPES.RevisionPreview) private readonly revisionPreview!: RevisionPreview;
-    @inject(TYPES.Ping) private ping!: Ping;
-
     private wrapHandler(
         handler: (req: express.Request, res: express.Response) => Promise<void>,
     ): WrappedHandler {
@@ -37,11 +33,11 @@ export default class Routing {
         return [
             {
                 path: '/ping',
-                handling: this.wrapHandler(this.ping.getHandler()),
+                handling: this.wrapHandler(container.resolve(Ping).getHandler()),
             },
             {
                 path: '/preview-revision/:revisionId',
-                handling: this.wrapHandler(this.revisionPreview.getHandler()),
+                handling: this.wrapHandler(container.resolve(RevisionPreview).getHandler()),
             },
             {
                 path: '/auth/github',
@@ -49,7 +45,11 @@ export default class Routing {
             },
             {
                 path: '/auth/rtn/github',
-                handling: this.wrapHandler(this.gitHubAuth.getHandler()),
+                handling: this.wrapHandler(container.resolve(GitHubAuth).getHandler()),
+            },
+            {
+                path: '/api/fetch-as-text',
+                handling: this.wrapHandler(container.resolve(FetchRemoteFileAsText).getHandler()),
             },
         ];
     }
@@ -58,7 +58,7 @@ export default class Routing {
         return [
             {
                 path: '/stripe/webhook/v1',
-                handling: this.wrapHandler(this.stripeWebhook.getHandler()),
+                handling: this.wrapHandler(container.resolve(StripeWebhook).getHandler()),
             },
         ];
     }
