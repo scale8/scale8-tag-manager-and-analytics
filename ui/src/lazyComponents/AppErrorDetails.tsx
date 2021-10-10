@@ -10,6 +10,8 @@ import LazyShiki from '../components/atoms/LibraryLoaders/LazyShiki';
 import { makeStyles } from '@material-ui/core/styles';
 import { getApiUrl } from '../utils/ConfigUtils';
 import { unMinifyCodeWithErrorCoordinatesMapping } from '../utils/CodeUtils';
+import { AnchorLinkIcon } from '../components/atoms/AnchorLinkIcon';
+import Alert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -27,10 +29,34 @@ const useStyles = makeStyles((theme) => ({
             textDecoration: 'underline',
         },
     },
-    detailBlock: {
-        paddingBottom: theme.spacing(2),
+    detailTitle: {
+        marginBottom: theme.spacing(1),
         whiteSpace: 'break-spaces',
         wordBreak: 'break-all',
+    },
+    detailBlock: {
+        flex: 1,
+        padding: theme.spacing(2),
+        marginBottom: theme.spacing(2),
+        whiteSpace: 'break-spaces',
+        wordBreak: 'break-all',
+        border: '1px solid rgba(0, 0, 0, 0.12)',
+        borderRadius: '4px',
+        '&:first-child': {
+            marginRight: theme.spacing(1),
+        },
+        '&:last-child': {
+            marginLeft: theme.spacing(1),
+        },
+    },
+    detailBlockTitle: {
+        color: 'rgba(0, 0, 0, 0.54)',
+        fontSize: '14px',
+        position: 'absolute',
+        marginLeft: '-2px',
+        marginTop: '-27px',
+        padding: '0px 3px',
+        backgroundColor: '#ffffff',
     },
     '@keyframes blink': {
         '0%': {
@@ -46,11 +72,74 @@ const useStyles = makeStyles((theme) => ({
     blinkingDot: {
         animation: `$blink 2s infinite`,
     },
+
+    stackPre: {
+        position: 'relative',
+        display: 'block',
+        height: '100%',
+        overflowY: 'auto',
+        backgroundColor: '#2e3440ff',
+        margin: 0,
+        color: 'rgb(216, 222, 233)',
+        padding: theme.spacing(1),
+        '&::-webkit-scrollbar': {
+            width: '8px',
+            height: '8px',
+        },
+        '&::-webkit-scrollbar-track': {
+            backgroundColor: '#f1f1f1',
+        },
+        '&::-webkit-scrollbar-thumb': {
+            backgroundColor: '#888',
+        },
+        '&::-webkit-scrollbar-thumb:hover': {
+            backgroundColor: '#555',
+        },
+        fontSize: 15,
+        whiteSpace: 'break-spaces',
+        wordBreak: 'break-all',
+    },
 }));
 
-const DetailBlock: FC<ChildrenOnlyProps> = (props: ChildrenOnlyProps) => {
+const DetailTitle: FC<ChildrenOnlyProps> = (props: ChildrenOnlyProps) => {
     const classes = useStyles();
-    return <div className={classes.detailBlock}>{props.children}</div>;
+    return <div className={classes.detailTitle}>{props.children}</div>;
+};
+
+const DetailBlock: FC<ChildrenOnlyProps & { title: string }> = ({ children, title }) => {
+    const classes = useStyles();
+    return (
+        <div className={classes.detailBlock}>
+            <Box position="relative">
+                <div className={classes.detailBlockTitle}>{title}</div>
+            </Box>
+            {children}
+        </div>
+    );
+};
+
+const TraceBox: FC<{ trace: string }> = ({ trace }) => {
+    const classes = useStyles();
+    return (
+        <>
+            <DetailTitle>
+                <b>Stack trace:</b>
+            </DetailTitle>
+            <Box zIndex={1} height={250}>
+                <Paper
+                    elevation={5}
+                    style={{
+                        height: 250,
+                        backgroundColor: '#2e3440',
+                        zIndex: 2,
+                        borderRadius: 0,
+                    }}
+                >
+                    <pre className={classes.stackPre}>{trace}</pre>
+                </Paper>
+            </Box>
+        </>
+    );
 };
 
 const CodeBox: FC<{ fileUrl: string; errorRow: number; errorCol: number }> = ({
@@ -88,7 +177,7 @@ const CodeBox: FC<{ fileUrl: string; errorRow: number; errorCol: number }> = ({
 
     return (
         <>
-            <DetailBlock>
+            <DetailTitle>
                 {code === null || (errorRow === row && errorCol === col) ? (
                     <b>
                         Code (Error at Line: {errorRow} Column: {errorCol}):
@@ -99,7 +188,7 @@ const CodeBox: FC<{ fileUrl: string; errorRow: number; errorCol: number }> = ({
                         {row} Column: {col}):
                     </b>
                 )}
-            </DetailBlock>
+            </DetailTitle>
             <Box zIndex={1} height={250}>
                 <Paper
                     elevation={5}
@@ -141,7 +230,7 @@ const AppErrorDetailsContainer: FC<ChildrenOnlyProps> = (props: ChildrenOnlyProp
             </Box>
             <Divider />
 
-            <Box p={3} pb={1} height={400} overflow="auto">
+            <Box p={3} pb={1}>
                 {props.children}
             </Box>
         </Card>
@@ -168,6 +257,7 @@ const AppErrorDetails: FC<AppErrorContentProps> = (props: AppErrorContentProps) 
             column: _.error_column,
             event_count: _.event_count,
             user_count: _.user_count,
+            error_trace: _.error_trace,
         }));
     };
 
@@ -193,17 +283,36 @@ const AppErrorDetails: FC<AppErrorContentProps> = (props: AppErrorContentProps) 
             return (
                 <AppErrorDetailsContainer>
                     <Box width="100%">
-                        <DetailBlock>
-                            <b>Message:</b> "<i>{list[0].message}</i>"
-                        </DetailBlock>
-                        <DetailBlock>
-                            <b>File:</b> "<i>{list[0].file}</i>"
-                        </DetailBlock>
+                        <Box display="flex">
+                            <DetailBlock title="Message">
+                                <Box display="flex" alignItems="center">
+                                    <Box marginTop="2px">{list[0].message}</Box>
+                                </Box>
+                            </DetailBlock>
+                            <DetailBlock title="File">
+                                <Box display="flex" alignItems="center">
+                                    <Box marginRight={1} marginTop="4px">
+                                        <AnchorLinkIcon href={list[0].file} />
+                                    </Box>
+                                    <Box marginTop="2px">{list[0].file}</Box>
+                                </Box>
+                            </DetailBlock>
+                        </Box>
+
+                        {list[0].error_trace === 'Undefined' ? (
+                            <Alert severity="warning">
+                                Stack trace is not available for this error
+                            </Alert>
+                        ) : (
+                            <TraceBox trace={list[0].error_trace} />
+                        )}
+                        <Box mt={2} />
                         <CodeBox
                             fileUrl={list[0].file}
                             errorRow={parseInt(list[0].row)}
                             errorCol={parseInt(list[0].column)}
                         />
+                        <Box mt={2} />
                     </Box>
                 </AppErrorDetailsContainer>
             );

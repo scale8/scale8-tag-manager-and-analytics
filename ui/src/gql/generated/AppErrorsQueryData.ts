@@ -30,6 +30,7 @@ export interface AppErrorsQueryData_getApp_error_stats_result {
   error_row: string;
   user_count: number;
   event_count: number;
+  error_trace: string;
 }
 
 export interface AppErrorsQueryData_getApp_error_stats {

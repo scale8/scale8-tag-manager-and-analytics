@@ -25,6 +25,7 @@ const AppErrorsQuery = gql`
                     error_row
                     user_count
                     event_count
+                    error_trace
                 }
             }
         }
