@@ -8,6 +8,7 @@ import { AppErrorsQueryData } from '../gql/generated/AppErrorsQueryData';
 import { ChildrenOnlyProps } from '../types/props/ChildrenOnlyProps';
 import LazyShiki from '../components/atoms/LibraryLoaders/LazyShiki';
 import { makeStyles } from '@material-ui/core/styles';
+import { getApiUrl } from '../utils/ConfigUtils';
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -38,7 +39,7 @@ const CodeBox: FC<{ fileUrl: string; row: number; col: number }> = ({ fileUrl, r
         (async () => {
             try {
                 const response = await fetch(
-                    `http://localhost:8082/api/fetch-as-text?url=${encodeURIComponent(fileUrl)}`,
+                    `${getApiUrl()}/api/fetch-as-text?url=${encodeURIComponent(fileUrl)}`,
                     {
                         method: 'GET',
                         redirect: 'follow',
