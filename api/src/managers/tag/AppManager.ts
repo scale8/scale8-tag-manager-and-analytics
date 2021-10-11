@@ -139,6 +139,7 @@ export default class AppManager extends Manager<App> {
             referrer_tld: String
             page: String
             mobile: Boolean
+            device_name: String
             browser: String
             browser_version: String
             os: String
