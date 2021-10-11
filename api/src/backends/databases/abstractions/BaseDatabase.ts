@@ -32,8 +32,11 @@ export interface AppQueryOptions extends BaseQueryOptions {
         referrer_tld?: string;
         page?: string;
         mobile?: boolean;
+        device_name?: string;
         browser?: string;
+        browser_version?: string;
         os?: string;
+        os_version?: string;
         event?: string;
         event_group?: string;
         custom_release_id?: string;
@@ -165,6 +168,15 @@ export default abstract class BaseDatabase {
         to: Date;
     }>;
 
+    public abstract deviceCategories(
+        app: App,
+        queryOptions: AppQueryOptions,
+    ): Promise<{
+        result: { key: string; user_count: number; event_count: number }[];
+        from: Date;
+        to: Date;
+    }>;
+
     public abstract eventGroups(
         app: App,
         queryOptions: AppQueryOptions,
@@ -187,7 +199,7 @@ export default abstract class BaseDatabase {
         app: App,
         queryOptions: AppQueryOptions,
     ): Promise<{
-        result: { key: string; user_count: number; event_count: number }[];
+        result: { name: string; version: string; user_count: number; event_count: number }[];
         from: Date;
         to: Date;
     }>;
@@ -196,7 +208,7 @@ export default abstract class BaseDatabase {
         app: App,
         queryOptions: AppQueryOptions,
     ): Promise<{
-        result: { key: string; user_count: number; event_count: number }[];
+        result: { name: string; version: string; user_count: number; event_count: number }[];
         from: Date;
         to: Date;
     }>;

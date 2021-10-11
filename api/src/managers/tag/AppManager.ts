@@ -67,6 +67,25 @@ export default class AppManager extends Manager<App> {
         """
         @type
         """
+        type AppGroupingNameVersionCount {
+            name: String!
+            version: String!
+            user_count: Int!
+            event_count: Int!
+        }
+
+        """
+        @type
+        """
+        type AppGroupingNameVersionCountsResponse {
+            from: DateTime!
+            to: DateTime!
+            result: [AppGroupingNameVersionCount!]!
+        }
+
+        """
+        @type
+        """
         type AppGroupingCount {
             key: String!
             user_count: Int!
@@ -121,7 +140,9 @@ export default class AppManager extends Manager<App> {
             page: String
             mobile: Boolean
             browser: String
+            browser_version: String
             os: String
+            os_version: String
             event: String
             event_group: String
             custom_release_id: String
@@ -234,13 +255,19 @@ export default class AppManager extends Manager<App> {
             """
             device_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
             """
+            Device Categories
+            """
+            device_category_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+            """
             Browsers
             """
-            browser_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+            browser_stats(query_options: AppQueryOptions!): AppGroupingNameVersionCountsResponse!
             """
             Operating Systems
             """
-            operating_system_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+            operating_system_stats(
+                query_options: AppQueryOptions!
+            ): AppGroupingNameVersionCountsResponse!
             """
             Events
             """
@@ -612,6 +639,18 @@ export default class AppManager extends Manager<App> {
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
                     this.backendDatabaseFactory(app.storageProvider).devices(
+                        app,
+                        args.query_options,
+                    ),
+                );
+            },
+            device_category_stats: async (parent: any, args: any, ctx: CTX) => {
+                const app = await this.repoFactory(App).findByIdThrows(
+                    new ObjectID(parent.id),
+                    userMessages.appFailed,
+                );
+                return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
+                    this.backendDatabaseFactory(app.storageProvider).deviceCategories(
                         app,
                         args.query_options,
                     ),

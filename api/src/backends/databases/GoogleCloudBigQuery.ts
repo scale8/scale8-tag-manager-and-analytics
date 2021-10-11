@@ -281,6 +281,13 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                 return undefined;
             }
         };
+        const getDevice = () =>
+            typeof queryOptions.filter_options.device_name === 'string'
+                ? {
+                      where: 'device_name = @device_name',
+                      params: { device_name: queryOptions.filter_options.device_name },
+                  }
+                : undefined;
         const getBrowser = () =>
             typeof queryOptions.filter_options.browser === 'string'
                 ? {
@@ -288,11 +295,25 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                       params: { browser: queryOptions.filter_options.browser },
                   }
                 : undefined;
+        const getBrowserVersion = () =>
+            typeof queryOptions.filter_options.browser_version === 'string'
+                ? {
+                      where: 'browser_version = @browser_version',
+                      params: { browser_version: queryOptions.filter_options.browser_version },
+                  }
+                : undefined;
         const getOS = () =>
             typeof queryOptions.filter_options.os === 'string'
                 ? {
                       where: 'os_name = @os',
                       params: { os: queryOptions.filter_options.os },
+                  }
+                : undefined;
+        const getOSVersion = () =>
+            typeof queryOptions.filter_options.os_version === 'string'
+                ? {
+                      where: 'os_version = @os_version',
+                      params: { os_version: queryOptions.filter_options.os_version },
                   }
                 : undefined;
         const getCustomReleaseId = () =>
@@ -338,8 +359,11 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
             getReferrer(),
             getReferrerTld(),
             getMobile(),
+            getDevice(),
             getBrowser(),
+            getBrowserVersion(),
             getOS(),
+            getOSVersion(),
             getCustomReleaseId(),
             getErrorId(),
             getErrorFile(),
@@ -726,6 +750,35 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
 
         const query = `
                     SELECT
+                      device_name AS key,
+                      COUNT(DISTINCT user_hash) AS user_count,
+                      SUM(1) AS event_count,
+                    FROM
+                      ${await this.getTable(app)}
+                    WHERE
+                      ${filter.where}
+                    GROUP BY
+                      key
+                    ORDER BY
+                      user_count DESC
+                    ${this.getLimit(queryOptions)}
+                `;
+
+        return this.getResultWithRange(queryOptions, await this.query(app, query, filter.params));
+    }
+
+    public async deviceCategories(
+        app: App,
+        queryOptions: AppQueryOptions,
+    ): Promise<{
+        result: { key: string; user_count: number; event_count: number }[];
+        from: Date;
+        to: Date;
+    }> {
+        const filter = this.getAppFilter(queryOptions);
+
+        const query = `
+                    SELECT
                       IF(${this.MOBILE_TEST}, 'Mobile', 'Desktop') AS key,
                       COUNT(DISTINCT user_hash) AS user_count,
                       SUM(1) AS event_count,
@@ -805,7 +858,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
         app: App,
         queryOptions: AppQueryOptions,
     ): Promise<{
-        result: { key: string; user_count: number; event_count: number }[];
+        result: { name: string; version: string; user_count: number; event_count: number }[];
         from: Date;
         to: Date;
     }> {
@@ -813,7 +866,8 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
 
         const query = `
                     SELECT
-                      browser_name as key,
+                      browser_name as name,
+                      browser_version as version,
                       COUNT(DISTINCT user_hash) AS user_count,
                       SUM(1) AS event_count,
                     FROM
@@ -821,7 +875,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                     WHERE
                       ${filter.where}
                     GROUP BY
-                      key
+                      name, version
                     ORDER BY
                       user_count DESC
                     ${this.getLimit(queryOptions)}
@@ -834,7 +888,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
         app: App,
         queryOptions: AppQueryOptions,
     ): Promise<{
-        result: { key: string; user_count: number; event_count: number }[];
+        result: { name: string; version: string; user_count: number; event_count: number }[];
         from: Date;
         to: Date;
     }> {
@@ -842,7 +896,8 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
 
         const query = `
                     SELECT
-                      os_name as key,
+                      os_name as name,
+                      os_version as version,
                       COUNT(DISTINCT user_hash) AS user_count,
                       SUM(1) AS event_count,
                     FROM

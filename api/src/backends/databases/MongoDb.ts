@@ -209,10 +209,24 @@ export default class MongoDb extends BaseDatabase {
                 return undefined;
             }
         };
+        const getDevice = () =>
+            MongoDb.getFilterObjectFromStringFilterOption(
+                queryOptions,
+                'device_name',
+                'device_name',
+            );
         const getBrowser = () =>
             MongoDb.getFilterObjectFromStringFilterOption(queryOptions, 'browser', 'browser_name');
+        const getBrowserVersion = () =>
+            MongoDb.getFilterObjectFromStringFilterOption(
+                queryOptions,
+                'browser_version',
+                'browser_version',
+            );
         const getOS = () =>
             MongoDb.getFilterObjectFromStringFilterOption(queryOptions, 'os', 'os_name');
+        const getOSVersion = () =>
+            MongoDb.getFilterObjectFromStringFilterOption(queryOptions, 'os_version', 'os_version');
         const getCustomReleaseId = () =>
             MongoDb.getFilterObjectFromStringFilterOption(
                 queryOptions,
@@ -245,8 +259,11 @@ export default class MongoDb extends BaseDatabase {
             getReferrer(),
             getReferrerTld(),
             getMobile(),
+            getDevice(),
             getBrowser(),
+            getBrowserVersion(),
             getOS(),
+            getOSVersion(),
             getCustomReleaseId(),
             getErrorId(),
             getErrorFile(),
@@ -307,6 +324,79 @@ export default class MongoDb extends BaseDatabase {
                     $project: {
                         _id: 0,
                         key: '$_id',
+                        user_count: 1,
+                        event_count: 1,
+                    },
+                },
+                {
+                    $sort: { user_count: -1 },
+                },
+            ],
+            queryOptions.limit,
+        );
+
+        return this.getResultWithRange(queryOptions, rows);
+    }
+
+    public async appNameVersionAggregation(
+        app: App,
+        queryOptions: AppQueryOptions,
+        nameKey: string,
+        versionKey: string,
+        checkExists = false,
+    ): Promise<{
+        result: { name: string; version: string; user_count: number; event_count: number }[];
+        from: Date;
+        to: Date;
+    }> {
+        const getMatch = () => {
+            const match = this.getAppFilter(queryOptions);
+            if (checkExists) {
+                match[nameKey] = { $exists: true };
+                match[versionKey] = { $exists: true };
+            }
+            return match;
+        };
+
+        const rows = await this.runAggregation(
+            app,
+            [
+                {
+                    $match: getMatch(),
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        name: '$' + nameKey,
+                        version: '$' + versionKey,
+                        user_hash: 1,
+                    },
+                },
+                {
+                    $group: {
+                        _id: {
+                            name: '$name',
+                            version: '$version',
+                            user_hash: '$user_hash',
+                        },
+                        event_count: { $sum: 1 },
+                    },
+                },
+                {
+                    $group: {
+                        _id: {
+                            name: '$_id.name',
+                            version: '$_id.version',
+                        },
+                        user_count: { $sum: 1 },
+                        event_count: { $sum: '$event_count' },
+                    },
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        name: '$_id.name',
+                        version: '$_id.version',
                         user_count: 1,
                         event_count: 1,
                     },
@@ -814,6 +904,17 @@ export default class MongoDb extends BaseDatabase {
         from: Date;
         to: Date;
     }> {
+        return this.simpleAppAggregation(app, queryOptions, 'device_name', true);
+    }
+
+    public async deviceCategories(
+        app: App,
+        queryOptions: AppQueryOptions,
+    ): Promise<{
+        result: { key: string; user_count: number; event_count: number }[];
+        from: Date;
+        to: Date;
+    }> {
         const rows = await this.runAggregation(
             app,
             [
@@ -893,22 +994,28 @@ export default class MongoDb extends BaseDatabase {
         app: App,
         queryOptions: AppQueryOptions,
     ): Promise<{
-        result: { key: string; user_count: number; event_count: number }[];
+        result: { name: string; version: string; user_count: number; event_count: number }[];
         from: Date;
         to: Date;
     }> {
-        return this.simpleAppAggregation(app, queryOptions, 'browser_name');
+        return this.appNameVersionAggregation(
+            app,
+            queryOptions,
+            'browser_name',
+            'browser_version',
+            true,
+        );
     }
 
     public async operatingSystems(
         app: App,
         queryOptions: AppQueryOptions,
     ): Promise<{
-        result: { key: string; user_count: number; event_count: number }[];
+        result: { name: string; version: string; user_count: number; event_count: number }[];
         from: Date;
         to: Date;
     }> {
-        return this.simpleAppAggregation(app, queryOptions, 'os_name');
+        return this.appNameVersionAggregation(app, queryOptions, 'os_name', 'os_version', true);
     }
 
     protected getIngestEndpointFilter(queryOptions: AppQueryOptions): { [p: string]: any } {
