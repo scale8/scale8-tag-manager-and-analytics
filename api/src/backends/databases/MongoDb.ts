@@ -904,7 +904,7 @@ export default class MongoDb extends BaseDatabase {
         from: Date;
         to: Date;
     }> {
-        return this.simpleAppAggregation(app, queryOptions, 'device_name', true);
+        return this.simpleAppAggregation(app, queryOptions, 'device_name');
     }
 
     public async deviceCategories(
@@ -998,13 +998,7 @@ export default class MongoDb extends BaseDatabase {
         from: Date;
         to: Date;
     }> {
-        return this.appNameVersionAggregation(
-            app,
-            queryOptions,
-            'browser_name',
-            'browser_version',
-            true,
-        );
+        return this.appNameVersionAggregation(app, queryOptions, 'browser_name', 'browser_version');
     }
 
     public async operatingSystems(
@@ -1015,7 +1009,7 @@ export default class MongoDb extends BaseDatabase {
         from: Date;
         to: Date;
     }> {
-        return this.appNameVersionAggregation(app, queryOptions, 'os_name', 'os_version', true);
+        return this.appNameVersionAggregation(app, queryOptions, 'os_name', 'os_version');
     }
 
     protected getIngestEndpointFilter(queryOptions: AppQueryOptions): { [p: string]: any } {
