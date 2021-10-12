@@ -6,8 +6,10 @@ import { AppCountriesQueryData } from '../../gql/generated/AppCountriesQueryData
 import { getCountryCode, getCountryLabel } from '../../utils/CountryUtils';
 import { getEventLabel } from '../../utils/AnalyticsUtils';
 import { AppErrorContentProps } from '../../types/props/AppErrorContentProps';
+import { AppPagesQueryData } from '../../gql/generated/AppPagesQueryData';
+import AppPagesQuery from '../../gql/queries/AppPagesQuery';
 
-const AppErrorsCountries: FC<AppErrorContentProps> = (props: AppErrorContentProps) => {
+const AppErrorsExtraLists: FC<AppErrorContentProps> = (props: AppErrorContentProps) => {
     const { appQueryOptions, id, refreshAt } = props;
 
     const queryOptions = {
@@ -20,6 +22,23 @@ const AppErrorsCountries: FC<AppErrorContentProps> = (props: AppErrorContentProp
     return (
         <DashboardListSection
             tabs={[
+                {
+                    title: 'Pages',
+                    listProps: {
+                        textTitle: 'Page',
+                        eventLabel: getEventLabel(appQueryOptions),
+                        extractList: (queryData: AppPagesQueryData) => {
+                            return queryData.getApp.page_stats.result;
+                        },
+                        addFilter: (value) => {
+                            props.setFilter('page', value);
+                        },
+                        lazyQuery: useLazyQuery(AppPagesQuery),
+                        lazyQueryVariables: queryOptions,
+                        refreshAt,
+                        forErrors: true,
+                    },
+                },
                 {
                     title: 'Countries',
                     listProps: {
@@ -46,4 +65,4 @@ const AppErrorsCountries: FC<AppErrorContentProps> = (props: AppErrorContentProp
     );
 };
 
-export { AppErrorsCountries };
+export { AppErrorsExtraLists };

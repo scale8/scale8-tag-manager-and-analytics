@@ -7,7 +7,8 @@ const AppBrowsersQuery = gql`
             name
             browser_stats(query_options: $appQueryOptions) {
                 result {
-                    key
+                    name
+                    version
                     user_count
                     event_count
                 }

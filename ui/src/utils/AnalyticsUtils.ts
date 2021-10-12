@@ -14,6 +14,13 @@ export type AppGroupingCount = {
     event_count: number;
 };
 
+export type AppGroupingNameVersionCount = {
+    name: string;
+    version: string;
+    user_count: number;
+    event_count: number;
+};
+
 export const buildSummaryDetailPropsFromValue = (
     title: string,
     value: number,

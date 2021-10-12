@@ -1,4 +1,3 @@
-
 # This file was generated based on ".graphqlconfig". Do not edit manually.
 
 schema {
@@ -97,11 +96,13 @@ type App {
     "Bounce ratio"
     bounce_ratio_stats(query_options: AppQueryOptions!): FloatResponse!
     "Browsers"
-    browser_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+    browser_stats(query_options: AppQueryOptions!): AppGroupingNameVersionCountsResponse!
     "Countries"
     country_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
     "Date the `App` was created"
     created_at: DateTime!
+    "Device Categories"
+    device_category_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
     "Devices"
     device_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
     "The domain name of the `App`"
@@ -127,7 +128,7 @@ type App {
     "Name of the Application"
     name: String!
     "Operating Systems"
-    operating_system_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+    operating_system_stats(query_options: AppQueryOptions!): AppGroupingNameVersionCountsResponse!
     "Pages"
     page_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
     "Referrers"
@@ -182,6 +183,21 @@ type AppGroupingErrors {
 type AppGroupingErrorsResponse {
     from: DateTime!
     result: [AppGroupingErrors!]!
+    to: DateTime!
+}
+
+"@type"
+type AppGroupingNameVersionCount {
+    event_count: Int!
+    name: String!
+    user_count: Int!
+    version: String!
+}
+
+"@type"
+type AppGroupingNameVersionCountsResponse {
+    from: DateTime!
+    result: [AppGroupingNameVersionCount!]!
     to: DateTime!
 }
 
@@ -4585,8 +4601,10 @@ input AppPlatformRevisionUnlinkInput {
 
 input AppQueryFilterOptions {
     browser: String
+    browser_version: String
     country: String
     custom_release_id: String
+    device_name: String
     environment: ID
     error_file: String
     error_id: ID
@@ -4596,6 +4614,7 @@ input AppQueryFilterOptions {
     from: DateTime!
     mobile: Boolean
     os: String
+    os_version: String
     page: String
     referrer: String
     referrer_tld: String

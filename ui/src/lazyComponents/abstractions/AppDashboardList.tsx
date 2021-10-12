@@ -5,7 +5,7 @@ import { CircularProgressWithLabel } from '../../components/atoms/CircularProgre
 import { makeStyles } from '@material-ui/core/styles';
 import { OperationVariables } from '@apollo/client/core';
 import { lazyQueryLoaderAndError } from '../../abstractions/LazyQueryLoaderAndError';
-import { AppGroupingCount } from '../../utils/AnalyticsUtils';
+import { AppGroupingCount, AppGroupingNameVersionCount } from '../../utils/AnalyticsUtils';
 import { UTCTimestamp } from '../../utils/DateTimeUtils';
 
 export type GroupingCount = {
@@ -19,10 +19,10 @@ export type DashboardListProps = {
     lazyQuery: QueryTuple<any, any>;
     eventLabel: string;
     lazyQueryVariables: OperationVariables;
-    extractList: (queryData: any) => AppGroupingCount[];
+    extractList: (queryData: any) => (AppGroupingCount | AppGroupingNameVersionCount)[];
     addFilter?: (value: string) => void;
+    addVersionFilter?: (name: string, version: string) => void;
     useSourceIcon?: boolean;
-    allowFilterOnSingleEntity?: boolean;
     refreshAt: UTCTimestamp | undefined;
 };
 
@@ -76,23 +76,36 @@ const AppDashboardList: FC<DashboardListProps> = (props: DashboardListProps) => 
                     </Box>
 
                     {list.map((_) => {
-                        const hasFilterLink =
-                            props.addFilter !== undefined &&
-                            (!!props.allowFilterOnSingleEntity || list.length > 1);
+                        const hasVersion = _.hasOwnProperty('version');
+
+                        const name = hasVersion
+                            ? (_ as AppGroupingNameVersionCount).name
+                            : (_ as AppGroupingCount).key;
+                        const version = hasVersion
+                            ? (_ as AppGroupingNameVersionCount).version
+                            : '';
+
+                        const key = hasVersion ? name : `${name}-${version}`;
 
                         const addFilter = () => {
                             if (props.addFilter !== undefined) {
-                                props.addFilter(_.key);
+                                props.addFilter(name);
+                            }
+                        };
+
+                        const addVersionFilter = () => {
+                            if (props.addVersionFilter !== undefined) {
+                                props.addVersionFilter(name, version);
                             }
                         };
 
                         return (
-                            <Box key={_.key} display="flex" alignItems="center">
+                            <Box key={key} display="flex" alignItems="center">
                                 {!!props.useSourceIcon && (
                                     <img
-                                        src={`https://icons.duckduckgo.com/ip3/${_.key}.ico`}
+                                        src={`https://icons.duckduckgo.com/ip3/${name}.ico`}
                                         referrerPolicy="no-referrer"
-                                        alt={_.key}
+                                        alt={name}
                                         style={{
                                             marginTop: '2px',
                                             width: '16px',
@@ -109,10 +122,42 @@ const AppDashboardList: FC<DashboardListProps> = (props: DashboardListProps) => 
                                         textOverflow="ellipsis"
                                         position="absolute"
                                         width="100%"
-                                        className={hasFilterLink ? classes.filterLink : undefined}
-                                        onClick={hasFilterLink ? addFilter : undefined}
                                     >
-                                        {_.key}
+                                        <span
+                                            className={
+                                                props.addFilter !== undefined
+                                                    ? classes.filterLink
+                                                    : undefined
+                                            }
+                                            onClick={
+                                                props.addFilter !== undefined
+                                                    ? addFilter
+                                                    : undefined
+                                            }
+                                        >
+                                            {name}
+                                        </span>
+                                        {hasVersion && (
+                                            <>
+                                                {' '}
+                                                (
+                                                <span
+                                                    className={
+                                                        props.addVersionFilter !== undefined
+                                                            ? classes.filterLink
+                                                            : undefined
+                                                    }
+                                                    onClick={
+                                                        props.addVersionFilter !== undefined
+                                                            ? addVersionFilter
+                                                            : undefined
+                                                    }
+                                                >
+                                                    {version}
+                                                </span>
+                                                )
+                                            </>
+                                        )}
                                     </Box>
                                 </Box>
                                 <Box width={100} mx={1} flexShrink={0} textAlign="right">

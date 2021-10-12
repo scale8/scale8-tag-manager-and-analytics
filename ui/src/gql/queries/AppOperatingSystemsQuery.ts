@@ -7,7 +7,8 @@ const AppOperatingSystemsQuery = gql`
             name
             operating_system_stats(query_options: $appQueryOptions) {
                 result {
-                    key
+                    name
+                    version
                     user_count
                     event_count
                 }

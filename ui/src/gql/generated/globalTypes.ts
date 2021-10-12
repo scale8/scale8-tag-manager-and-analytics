@@ -538,8 +538,11 @@ export interface AppQueryFilterOptions {
   referrer_tld?: string | null;
   page?: string | null;
   mobile?: boolean | null;
+  device_name?: string | null;
   browser?: string | null;
+  browser_version?: string | null;
   os?: string | null;
+  os_version?: string | null;
   event?: string | null;
   event_group?: string | null;
   custom_release_id?: string | null;

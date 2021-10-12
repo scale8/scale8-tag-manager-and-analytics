@@ -10,14 +10,15 @@ import { AppQueryOptions } from "./globalTypes";
 // ====================================================
 
 export interface AppOperatingSystemsQueryData_getApp_operating_system_stats_result {
-  __typename: "AppGroupingCount";
-  key: string;
+  __typename: "AppGroupingNameVersionCount";
+  name: string;
+  version: string;
   user_count: number;
   event_count: number;
 }
 
 export interface AppOperatingSystemsQueryData_getApp_operating_system_stats {
-  __typename: "AppGroupingCountsResponse";
+  __typename: "AppGroupingNameVersionCountsResponse";
   result: AppOperatingSystemsQueryData_getApp_operating_system_stats_result[];
 }
 

@@ -41,7 +41,6 @@ const AppAnalyticsSources: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCo
                                   lazyQuery: useLazyQuery(AppReferrersQuery),
                                   lazyQueryVariables: queryOptions,
                                   useSourceIcon: true,
-                                  allowFilterOnSingleEntity: true,
                                   refreshAt,
                                   forErrors: false,
                               }

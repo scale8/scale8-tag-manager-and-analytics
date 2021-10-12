@@ -82,6 +82,8 @@ const AppAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
         <AppAnalyticsPageContainer
             chartPeriodProps={chartPeriodProps}
             setFilter={setFilter}
+            filters={filters}
+            setFilters={setFilters}
             setEventGroup={setEventGroup}
             referrerTLD={filters.referrer_tld ?? undefined}
             appQueryOptions={queryOptions}
@@ -95,6 +97,8 @@ const AppAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
             <AppAnalyticsPageContent
                 chartPeriodProps={chartPeriodProps}
                 setFilter={setFilter}
+                filters={filters}
+                setFilters={setFilters}
                 setEventGroup={setEventGroup}
                 referrerTLD={filters.referrer_tld ?? undefined}
                 appQueryOptions={queryOptions}

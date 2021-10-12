@@ -6,8 +6,8 @@ import { AppAnalyticsChart } from '../../../lazyComponents/AppAnalyticsChart';
 import { AppAnalyticsSources } from '../../../lazyComponents/lists/AppAnalyticsSources';
 import { AppAnalyticsPages } from '../../../lazyComponents/lists/AppAnalyticsPages';
 import { AppAnalyticsCountries } from '../../../lazyComponents/lists/AppAnalyticsCountries';
-import { AppAnalyticsDevices } from '../../../lazyComponents/lists/AppAnalyticsDevices';
 import ChartPageContent, { ChartPageContentProps } from './ChartPageContent';
+import { AppDevicesLists } from '../../../lazyComponents/lists/AppDevicesLists';
 
 const AppAnalyticsPageContent: FC<AppAnalyticsContentProps> = (props: AppAnalyticsContentProps) => {
     const { chartPeriodProps } = props;
@@ -24,7 +24,7 @@ const AppAnalyticsPageContent: FC<AppAnalyticsContentProps> = (props: AppAnalyti
             <AppAnalyticsSources {...props} />,
             <AppAnalyticsPages {...props} />,
             <AppAnalyticsCountries {...props} />,
-            <AppAnalyticsDevices {...props} />,
+            <AppDevicesLists {...props} forErrors={false} />,
         ],
     };
 
