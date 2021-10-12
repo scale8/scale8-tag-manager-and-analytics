@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Clean up...
-rm -rf ../ui/build
+rm -rf ../ui/build ../ui/out
 
 yarn --cwd ../ui export
 
