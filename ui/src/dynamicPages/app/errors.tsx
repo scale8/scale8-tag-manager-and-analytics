@@ -2,15 +2,17 @@ import { FC, useState } from 'react';
 import { DynamicPageProps } from '../../pageLoader/DynamicPageLoader';
 import { AppQueryFilters } from '../../types/props/AppAnalyticsContentProps';
 import { useChartPeriod } from '../../hooks/chart/useChartPeriod';
-import { useAnalyticsTimer } from '../../hooks/timer/useAnalyticsTimer';
 import Loader from '../../components/organisms/Loader';
 import AppErrorsPageContainer from '../../components/molecules/ChartPageContainer/AppErrorsPageContainer';
 import AppErrorsPageContent from '../../components/molecules/ChartPageContent/AppErrorsPageContent';
 import { useQueryOptions } from '../../hooks/useQueryOptions';
+import { UTCTimestamp } from '../../utils/DateTimeUtils';
 
 const AppErrorsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const id = props.params.id ?? '';
     const periodParam = props.params.period;
+
+    const [refreshAt, setRefreshAt] = useState<UTCTimestamp | undefined>(undefined);
 
     const chartPeriodProps = useChartPeriod(periodParam);
 
@@ -24,10 +26,6 @@ const AppErrorsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
             [key]: value,
         });
     };
-
-    const { period } = chartPeriodProps;
-
-    const { refreshAt, ticks } = useAnalyticsTimer(period);
 
     const {
         queryOptions,
@@ -50,20 +48,24 @@ const AppErrorsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
             chartPeriodProps={chartPeriodProps}
             setFilter={setFilter}
             filters={filters}
-            setFilters={setFilters}
+            setFilters={() => {
+                /**/
+            }}
             appQueryOptions={queryOptions}
             appSummaryQueryOptions={summaryQueryOptions}
             appSummaryQueryOptionsPrev={summaryQueryOptionsPrev}
             appSummaryQueryOptionsCurrent={summaryQueryOptionsCurrent}
             refreshAt={refreshAt}
-            ticks={ticks}
+            setRefreshAt={setRefreshAt}
             id={id}
         >
             <AppErrorsPageContent
                 chartPeriodProps={chartPeriodProps}
                 setFilter={setFilter}
                 filters={filters}
-                setFilters={setFilters}
+                setFilters={() => {
+                    /**/
+                }}
                 appQueryOptions={queryOptions}
                 appSummaryQueryOptions={summaryQueryOptions}
                 appSummaryQueryOptionsPrev={summaryQueryOptionsPrev}

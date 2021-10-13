@@ -1,21 +1,26 @@
-import { FC, ReactNode } from 'react';
+import { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import ChartPeriodSelector from '../ChartPeriodSelector';
 import ChartFilterSelector from '../ChartFilterSelector';
 import ChartEventSelector from '../../../lazyComponents/ChartEventSelector';
 import { AppAnalyticsContentProps } from '../../../types/props/AppAnalyticsContentProps';
 import ChartPageContainer, { ChartPageContainerProps, extractFilters } from './ChartPageContainer';
 import ChartBaseFilterSelector from '../../../lazyComponents/ChartBaseFilterSelector';
+import { useAnalyticsTimer } from '../../../hooks/timer/useAnalyticsTimer';
+import { UTCTimestamp } from '../../../utils/DateTimeUtils';
 
 export type AppAnalyticsPageContainerProps = AppAnalyticsContentProps & {
     children: ReactNode;
-    ticks: number;
+    setRefreshAt: Dispatch<SetStateAction<UTCTimestamp | undefined>>;
 };
 
 const AppAnalyticsPageContainer: FC<AppAnalyticsPageContainerProps> = (
     props: AppAnalyticsPageContainerProps,
 ) => {
-    const { children, ticks, ...appDashboardContentProps } = props;
+    const { children, setRefreshAt, ...appDashboardContentProps } = props;
     const { chartPeriodProps, appQueryOptions, setFilter } = appDashboardContentProps;
+    const { period } = chartPeriodProps;
+    const { refreshAt, ticks } = useAnalyticsTimer(period);
+    setRefreshAt(refreshAt);
 
     const chartPageContainerProps: ChartPageContainerProps = {
         leftHeaderBlock: (

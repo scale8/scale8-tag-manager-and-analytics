@@ -2,18 +2,20 @@ import { FC, useEffect, useState } from 'react';
 import { DynamicPageProps } from '../../pageLoader/DynamicPageLoader';
 import { AppQueryFilters } from '../../types/props/AppAnalyticsContentProps';
 import { useChartPeriod } from '../../hooks/chart/useChartPeriod';
-import { useAnalyticsTimer } from '../../hooks/timer/useAnalyticsTimer';
 import AppAnalyticsPageContainer from '../../components/molecules/ChartPageContainer/AppAnalyticsPageContainer';
 import Loader from '../../components/organisms/Loader';
 import AppAnalyticsPageContent from '../../components/molecules/ChartPageContent/AppAnalyticsPageContent';
 import { useQueryOptions } from '../../hooks/useQueryOptions';
 import { toApp } from '../../utils/NavigationPaths';
 import { useRouter } from 'next/router';
+import { UTCTimestamp } from '../../utils/DateTimeUtils';
 
 const AppAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const id = props.params.id ?? '';
     const router = useRouter();
     const periodParam = props.params.period;
+
+    const [refreshAt, setRefreshAt] = useState<UTCTimestamp | undefined>(undefined);
 
     const chartPeriodProps = useChartPeriod(periodParam);
 
@@ -51,10 +53,6 @@ const AppAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
         }
     };
 
-    const { period } = chartPeriodProps;
-
-    const { refreshAt, ticks } = useAnalyticsTimer(period);
-
     const {
         queryOptions,
         summaryQueryOptions,
@@ -91,7 +89,7 @@ const AppAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
             appSummaryQueryOptionsPrev={summaryQueryOptionsPrev}
             appSummaryQueryOptionsCurrent={summaryQueryOptionsCurrent}
             refreshAt={refreshAt}
-            ticks={ticks}
+            setRefreshAt={setRefreshAt}
             id={id}
         >
             <AppAnalyticsPageContent
