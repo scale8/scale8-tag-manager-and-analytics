@@ -48,9 +48,7 @@ const AppErrorsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
             chartPeriodProps={chartPeriodProps}
             setFilter={setFilter}
             filters={filters}
-            setFilters={() => {
-                /**/
-            }}
+            setFilters={setFilters}
             appQueryOptions={queryOptions}
             appSummaryQueryOptions={summaryQueryOptions}
             appSummaryQueryOptionsPrev={summaryQueryOptionsPrev}
@@ -63,9 +61,7 @@ const AppErrorsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
                 chartPeriodProps={chartPeriodProps}
                 setFilter={setFilter}
                 filters={filters}
-                setFilters={() => {
-                    /**/
-                }}
+                setFilters={setFilters}
                 appQueryOptions={queryOptions}
                 appSummaryQueryOptions={summaryQueryOptions}
                 appSummaryQueryOptionsPrev={summaryQueryOptionsPrev}
