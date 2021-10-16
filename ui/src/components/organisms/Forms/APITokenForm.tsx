@@ -1,8 +1,8 @@
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { FC } from 'react';
-import { Box, DialogContent } from '@material-ui/core';
+import { Box, DialogContent } from '@mui/material';
 import CopyBlock from '../../atoms/CopyBlock';
-import Alert from '@material-ui/lab/Alert';
+import Alert from '@mui/material/Alert';
 import DialogActionsWithCancel from '../../molecules/DialogActionsWithCancel';
 import { APITokenFormProps } from '../../../dialogPages/global/APIToken';
 

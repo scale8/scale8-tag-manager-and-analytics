@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { SvgIconProps } from '@material-ui/core';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import { SvgIconProps } from '@mui/material';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 const PushActionIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { createStyles } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { DiffMap } from '../../../types/DiffTypes';
 import ItemLabel from './ItemLabel';
 

@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { SvgIconProps } from '@material-ui/core';
-import SelectAllIcon from '@material-ui/icons/SelectAll';
+import { SvgIconProps } from '@mui/material';
+import SelectAllIcon from '@mui/icons-material/SelectAll';
 
 const SelectorIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

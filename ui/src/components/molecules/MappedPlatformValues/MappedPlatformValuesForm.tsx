@@ -2,10 +2,10 @@ import {
     MappedPlatformElement,
     MappedPlatformValues,
 } from '../../../types/MappedPlatformValuesTypes';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import { MappedPlatformElementTypeSelect } from './MappedPlatformElementTypeSelect';
 import { FormWithMappedPlatformValuesResult } from '../../../hooks/form/useFormWithMappedPlatformValues';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { AppPlatformRevision } from '../../../types/TagRulesTypes';
 import { IngestEndpointForEnvironmentSelection } from '../../../types/IngestEndpointsTypes';
 import { FC, Fragment } from 'react';

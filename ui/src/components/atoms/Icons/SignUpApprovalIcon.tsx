@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
-import { SvgIconProps } from '@material-ui/core';
+import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
+import { SvgIconProps } from '@mui/material';
 
 const SignUpApprovalIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

@@ -12,8 +12,8 @@ import {
     RowData,
 } from '../components/molecules/S8Table/S8TableTypes';
 import { useTableStateManager } from '../hooks/table/useTableStateManager';
-import { Alert } from '@material-ui/lab';
-import { Box } from '@material-ui/core';
+import { Alert } from '@mui/material';
+import { Box } from '@mui/material';
 import { InfoProps } from '../components/molecules/InfoButton';
 import { PageActionProps } from '../actions/PageActions';
 import { queryLoaderAndError } from './QueryLoaderAndError';

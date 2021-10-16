@@ -8,10 +8,11 @@ import {
     Step,
     StepLabel,
     Stepper,
-} from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+} from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { DataMapsPayload, DataMapsPayloadBuilder } from './DataMapsPayloadBuilder';
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from '@mui/icons-material/Close';
 import { DataMapsPayloadValues } from '../../types/DataMapsTypes';
 import { IngestEndpointDataMap } from '../../types/IngestEndpointsTypes';
 

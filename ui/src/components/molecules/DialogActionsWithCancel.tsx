@@ -1,7 +1,8 @@
 import { FC } from 'react';
-import { Button, DialogActions, lighten } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { grey } from '@material-ui/core/colors';
+import { Button, DialogActions, lighten } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
+import { grey } from '@mui/material/colors';
 
 const useStyles = makeStyles((theme) =>
     createStyles({

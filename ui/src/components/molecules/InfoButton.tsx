@@ -1,8 +1,9 @@
 import { FC, MouseEvent, useState } from 'react';
-import { createStyles, IconButton, Popover, Theme } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { IconButton, Popover, Theme } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import Markdown from 'markdown-to-jsx';
-import HelpIcon from '@material-ui/icons/Help';
+import HelpIcon from '@mui/icons-material/Help';
 import { getInfo } from '../../info/getInfo';
 import { navigationColorFromSectionLocator } from '../../containers/SectionsDetails';
 import { standardMarkdownOptions } from '../../utils/MarkdownUtils';

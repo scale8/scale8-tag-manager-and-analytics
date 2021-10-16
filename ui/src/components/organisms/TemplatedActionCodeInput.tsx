@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react';
-import { Box } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Box } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { TemplatedActionFormProps } from '../../types/props/forms/TemplatedActionFormProps';
 import clsx from 'clsx';
 import { actionPermissionsFromCode } from '../../utils/ActionPermissionsUtils';

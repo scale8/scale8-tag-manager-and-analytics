@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { SvgIconProps } from '@material-ui/core';
-import PublicIcon from '@material-ui/icons/Public';
+import { SvgIconProps } from '@mui/material';
+import PublicIcon from '@mui/icons-material/Public';
 
 const GeoIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

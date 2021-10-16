@@ -2,7 +2,6 @@ import { FC } from 'react';
 import {
     Box,
     Button,
-    createStyles,
     IconButton,
     Table,
     TableBody,
@@ -12,9 +11,10 @@ import {
     TableRow,
     Theme,
     Tooltip,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+} from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Sparklines, SparklinesLine } from 'react-sparklines';
 import { useRouter } from 'next/router';
 import { toApp, toTagManager } from '../../../utils/NavigationPaths';
@@ -102,6 +102,7 @@ const AccountSectionAppTable: FC<AccountSectionAppTableProps> = (
                                             router.push(toApp({ id: app.id })).then();
                                         }}
                                         aria-label="Select Application"
+                                        size="large"
                                     >
                                         <ArrowForwardIcon fontSize="inherit" />
                                     </IconButton>

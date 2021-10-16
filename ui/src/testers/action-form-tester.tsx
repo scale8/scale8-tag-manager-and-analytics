@@ -2,7 +2,7 @@
 
 import { FC } from 'react';
 import ActionForm from '../components/organisms/Forms/ActionForm';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import { useFormWithMappedPlatformValues } from '../hooks/form/useFormWithMappedPlatformValues';
 import nameValidator from '../utils/validators/nameValidator';
 import { PlatformDataMap } from '../types/DataMapsTypes';

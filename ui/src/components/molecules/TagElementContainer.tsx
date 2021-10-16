@@ -1,6 +1,6 @@
 import { FC, ReactNode } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Card, CardContent, CardHeader } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
+import { Card, CardContent, CardHeader } from '@mui/material';
 import clsx from 'clsx';
 import { SectionAction, SectionActionsSpeedDial } from './SectionActionsSpeedDial';
 import AppliedIcon from '../atoms/Icons/AppliedIcon';

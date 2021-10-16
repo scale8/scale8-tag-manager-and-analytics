@@ -1,9 +1,9 @@
 import { FC } from 'react';
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
-import { SvgIconProps, Tooltip, useTheme } from '@material-ui/core';
-import WarningIcon from '@material-ui/icons/Warning';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
+import { SvgIconProps, Tooltip, useTheme } from '@mui/material';
+import WarningIcon from '@mui/icons-material/Warning';
 
 type AppliedIconProps = {
     iconProps?: SvgIconProps;

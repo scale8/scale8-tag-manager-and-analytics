@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import WebIcon from '@material-ui/icons/Web';
-import { SvgIconProps } from '@material-ui/core';
+import WebIcon from '@mui/icons-material/Web';
+import { SvgIconProps } from '@mui/material';
 
 const AppIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

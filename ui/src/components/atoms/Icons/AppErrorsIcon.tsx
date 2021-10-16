@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import ErrorIcon from '@material-ui/icons/Error';
-import { SvgIconProps } from '@material-ui/core';
+import ErrorIcon from '@mui/icons-material/Error';
+import { SvgIconProps } from '@mui/material';
 
 const AppErrorsIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

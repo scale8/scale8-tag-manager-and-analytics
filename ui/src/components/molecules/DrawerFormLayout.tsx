@@ -1,6 +1,6 @@
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { FC, ReactNode } from 'react';
-import { Box, Button } from '@material-ui/core';
+import { Box, Button } from '@mui/material';
 import FormGqlError from '../atoms/FormGqlError';
 import { InfoButton } from './InfoButton';
 import { MainDrawerTitle } from './MainDrawerTitle';

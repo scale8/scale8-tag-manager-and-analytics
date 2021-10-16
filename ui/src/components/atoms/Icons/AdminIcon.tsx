@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import BuildIcon from '@material-ui/icons/Build';
-import { SvgIconProps } from '@material-ui/core';
+import BuildIcon from '@mui/icons-material/Build';
+import { SvgIconProps } from '@mui/material';
 
 const AdminIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

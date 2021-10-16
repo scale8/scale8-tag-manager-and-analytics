@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { SvgIconProps } from '@material-ui/core';
-import StopIcon from '@material-ui/icons/Stop';
+import { SvgIconProps } from '@mui/material';
+import StopIcon from '@mui/icons-material/Stop';
 
 const ObjectIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

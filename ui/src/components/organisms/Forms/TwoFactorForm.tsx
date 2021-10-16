@@ -1,6 +1,6 @@
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { FC } from 'react';
-import { Box, DialogContent, FormControlLabel, Switch } from '@material-ui/core';
+import { Box, DialogContent, FormControlLabel, Switch } from '@mui/material';
 import DialogActionsWithCancel from '../../molecules/DialogActionsWithCancel';
 import { TwoFactorFormProps } from '../../../dialogPages/global/TwoFactor';
 

@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { DialogPageProps } from '../../types/DialogTypes';
-import { Box, Button, DialogContent, lighten } from '@material-ui/core';
+import { Box, Button, DialogContent, lighten } from '@mui/material';
 import DialogActionsWithCancel from '../../components/molecules/DialogActionsWithCancel';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { useMutation } from '@apollo/client';
 import Loader from '../../components/organisms/Loader';
 import { DeleteAccount } from '../../gql/generated/DeleteAccount';

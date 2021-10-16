@@ -1,16 +1,23 @@
 import { FC, useContext } from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { Box, ThemeProvider } from '@material-ui/core';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import { Theme } from '@mui/material/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
+import { Box, ThemeProvider, StyledEngineProvider } from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline';
 import { PreviewFrameToolbar } from '../organisms/PreviewFrame/PreviewFrameToolbar';
 import { PreviewFrameTagList } from '../organisms/PreviewFrame/PreviewFrameTagList';
 import { PreviewFrameMain } from '../organisms/PreviewFrame/PreviewFrameMain';
 import GqlError from '../atoms/GqlError';
 import { isAuthenticationError } from '../../utils/ErrorsUtils';
-import Alert from '@material-ui/lab/Alert';
+import Alert from '@mui/material/Alert';
 import { ApolloError } from '@apollo/client/errors';
 import { previewFrameContext } from '../../context/PreviewFrameContext';
 import Link from '../atoms/Next/Link';
+
+declare module '@mui/styles/defaultTheme' {
+    // eslint-disable-next-line @typescript-eslint/no-empty-interface
+    interface DefaultTheme extends Theme {}
+}
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -100,13 +107,15 @@ const PreviewLayout: FC = () => {
     const classes = useStyles();
 
     return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <div className={classes.root}>
-                <PreviewFrameToolbar />
-                <PreviewMainBody />
-            </div>
-        </ThemeProvider>
+        <StyledEngineProvider injectFirst>
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <div className={classes.root}>
+                    <PreviewFrameToolbar />
+                    <PreviewMainBody />
+                </div>
+            </ThemeProvider>
+        </StyledEngineProvider>
     );
 };
 

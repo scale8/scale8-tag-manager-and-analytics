@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { SelectValueWithSub } from '../hooks/form/useFormValidation';
-import { SvgIconProps } from '@material-ui/core';
+import { SvgIconProps } from '@mui/material';
 import { InputType, VarType } from '../gql/generated/globalTypes';
 import BooleanIcon from '../components/atoms/Icons/DataMapTypes/BooleanIcon';
 import CssIcon from '../components/atoms/Icons/DataMapTypes/CssIcon';

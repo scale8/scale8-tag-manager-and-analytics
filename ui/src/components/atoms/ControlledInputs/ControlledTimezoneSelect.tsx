@@ -1,7 +1,7 @@
 import { ReactElement, useState } from 'react';
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import makeStyles from '@mui/styles/makeStyles';
 import { ControlledInputProps } from '../../../hooks/form/useFormValidation';
 import { autocompleteOff } from '../../../utils/BrowserUtils';
 import { getTimezoneLabel } from '../../../utils/TimezoneUtils';
@@ -33,7 +33,7 @@ const ControlledTimezoneSelect = <T extends { [key: string]: any }>(
     return (
         <Autocomplete
             value={timeZoneLabel}
-            getOptionSelected={(option, value) => getTimezoneLabel(option) === value}
+            isOptionEqualToValue={(option, value) => getTimezoneLabel(option) === value}
             onInvalid={(event) => {
                 event.preventDefault();
                 setRequiredError(true);
@@ -51,7 +51,7 @@ const ControlledTimezoneSelect = <T extends { [key: string]: any }>(
             }}
             autoHighlight
             getOptionLabel={(option) => option}
-            renderOption={(option) => getTimezoneLabel(option)}
+            renderOption={(props, option) => getTimezoneLabel(option)}
             renderInput={(params) => (
                 <TextField
                     {...textFieldProps}

@@ -1,5 +1,12 @@
-import { ChangeEvent, ReactElement, useState } from 'react';
-import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@material-ui/core';
+import { ReactElement, useState } from 'react';
+import {
+    FormControl,
+    FormHelperText,
+    InputLabel,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+} from '@mui/material';
 import {
     ControlledFilteredSelectProps,
     SelectValueWithSub,
@@ -26,13 +33,13 @@ const ControlledFilteredSelects = <T extends { [key: string]: any }>(
     const [requiredError, setRequiredError] = useState(false);
     const [requiredFilterError, setRequiredFilterError] = useState(false);
 
-    const handleFilterChange = (event: ChangeEvent<{ value: unknown }>) => {
+    const handleFilterChange = (event: SelectChangeEvent) => {
         setRequiredFilterError(false);
         setFilterValue(event.target.value as string);
         formProps.handleChange(name, '');
     };
 
-    const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
+    const handleChange = (event: SelectChangeEvent) => {
         setRequiredError(false);
         formProps.handleChange(name, event.target.value);
     };

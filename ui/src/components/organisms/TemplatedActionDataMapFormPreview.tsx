@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { PlatformDataMapInput } from '../../types/DataMapsTypes';
 import { MappedPlatformValuesDisplay } from '../molecules/MappedPlatformValues/MappedPlatformValuesDisplay';
 import { buildPlatformDataMapPlatformElements } from '../../utils/PlatformDataMapsUtils';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 
 export type TemplatedActionDataMapFormPreviewProps = {
     platformDataMaps: PlatformDataMapInput[];

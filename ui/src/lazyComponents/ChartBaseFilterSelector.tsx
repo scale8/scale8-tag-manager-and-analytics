@@ -1,8 +1,9 @@
-import { ChangeEvent, FC } from 'react';
+import { FC } from 'react';
 import { AppAnalyticsContentProps } from '../types/props/AppAnalyticsContentProps';
 import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import { useQuery } from '@apollo/client';
-import { FormControl, InputLabel, makeStyles, MenuItem, Select } from '@material-ui/core';
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import PageAppChartBaseFilterQuery from '../gql/queries/PageAppChartBaseFilterQuery';
 import { AppChartBaseData } from '../gql/generated/AppChartBaseData';
 import { AppErrorContentProps } from '../types/props/AppErrorContentProps';
@@ -37,7 +38,7 @@ const ChartBaseFilterSelector: FC<AppAnalyticsContentProps | AppErrorContentProp
 
             const currentEnvironmentKey = appQueryOptions.filter_options.environment ?? ' ';
 
-            const handleEnvironmentChange = (e: ChangeEvent<{ value: unknown }>) => {
+            const handleEnvironmentChange = (e: SelectChangeEvent) => {
                 if (e.target.value === ' ') {
                     setFilter('environment', undefined);
                 } else {
@@ -49,7 +50,7 @@ const ChartBaseFilterSelector: FC<AppAnalyticsContentProps | AppErrorContentProp
 
             const currentRevisionKey = appQueryOptions.filter_options.revision ?? ' ';
 
-            const handleRevisionChange = (e: ChangeEvent<{ value: unknown }>) => {
+            const handleRevisionChange = (e: SelectChangeEvent) => {
                 if (e.target.value === ' ') {
                     setFilter('revision', undefined);
                 } else {

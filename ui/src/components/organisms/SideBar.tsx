@@ -1,9 +1,9 @@
 import { FC } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { UserSelector } from '../molecules/UserSelector';
-import { Badge, Box, IconButton, Tooltip } from '@material-ui/core';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
+import { Badge, Box, IconButton, Tooltip } from '@mui/material';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 import clsx from 'clsx';
 import OrgIcon from '../atoms/Icons/OrgIcon';
 import { logoFromSectionLocator, SectionKey } from '../../containers/SectionsDetails';
@@ -113,6 +113,7 @@ const SideBar: FC<SideBarProps> = (props: SideBarProps) => {
                                     router.push(toAdmin).then();
                                 }
                             }}
+                            size="large"
                         >
                             <SettingsApplicationsIcon />
                         </IconButton>
@@ -127,6 +128,7 @@ const SideBar: FC<SideBarProps> = (props: SideBarProps) => {
                             onClick={() => {
                                 router.push(toOrgList).then();
                             }}
+                            size="large"
                         >
                             <OrgIcon />
                         </IconButton>
@@ -136,7 +138,11 @@ const SideBar: FC<SideBarProps> = (props: SideBarProps) => {
             <div className={classes.iconButton}>
                 <Tooltip title="Notifications" placement="right">
                     <Box>
-                        <IconButton color="inherit" onClick={props.handleNotificationClick}>
+                        <IconButton
+                            color="inherit"
+                            onClick={props.handleNotificationClick}
+                            size="large"
+                        >
                             <Badge badgeContent={props.unreadNotifications} color="secondary">
                                 <NotificationsIcon />
                             </Badge>

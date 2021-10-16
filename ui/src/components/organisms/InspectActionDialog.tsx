@@ -1,7 +1,8 @@
 import { FC } from 'react';
-import { Box, Button, DialogActions, DialogContent, DialogContentText } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { grey } from '@material-ui/core/colors';
+import { Box, Button, DialogActions, DialogContent, DialogContentText } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
+import { grey } from '@mui/material/colors';
 import { MappedPlatformValuesDisplay } from '../molecules/MappedPlatformValues/MappedPlatformValuesDisplay';
 import { MappedPlatformValues } from '../../types/MappedPlatformValuesTypes';
 import { AppPlatformRevision } from '../../types/TagRulesTypes';

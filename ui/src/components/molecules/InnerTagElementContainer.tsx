@@ -1,12 +1,12 @@
 import { FC, ReactNode } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import {
     Divider,
     ListItem,
     ListItemIcon,
     ListItemSecondaryAction,
     ListItemText,
-} from '@material-ui/core';
+} from '@mui/material';
 import { SectionAction, SectionActionsSpeedDial } from './SectionActionsSpeedDial';
 import AppliedIcon from '../atoms/Icons/AppliedIcon';
 import Link from '../atoms/Next/Link';

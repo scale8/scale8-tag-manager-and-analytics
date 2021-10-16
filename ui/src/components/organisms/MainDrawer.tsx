@@ -1,6 +1,6 @@
 import { FC, ReactNode } from 'react';
-import { Box, Drawer } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Box, Drawer } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { DialogBaseProps } from '../../types/DialogTypes';
 
 const useStyles = makeStyles(() => ({

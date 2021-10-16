@@ -1,7 +1,7 @@
 // noinspection JSUnusedGlobalSymbols
 
 import { FC } from 'react';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import Diff from '../components/molecules/Diff/Diff';
 import { addHasChangesToDiffMap } from '../utils/DiffUtils';
 import Head from 'next/head';

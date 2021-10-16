@@ -13,7 +13,7 @@ import EnvironmentVariablesInput from '../../../components/atoms/EnvironmentVari
 import AddEnvironmentVariableQuery from '../../../gql/mutations/AddEnvironmentVariableQuery';
 import DeleteEnvironmentVariableQuery from '../../../gql/mutations/DeleteEnvironmentVariableQuery';
 import { DialogPageProps } from '../../../types/DialogTypes';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import { MainDrawerTitle } from '../../../components/molecules/MainDrawerTitle';
 import { InfoButton } from '../../../components/molecules/InfoButton';
 import { buildStandardFormInfo } from '../../../utils/InfoLabelsUtils';

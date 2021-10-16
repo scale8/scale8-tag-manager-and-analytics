@@ -1,9 +1,17 @@
-import { ChangeEvent, ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { QueryResult } from '@apollo/client/react/types/types';
-import { Box, DialogContent, Divider, InputBase, MenuItem, Select } from '@material-ui/core';
+import {
+    Box,
+    DialogContent,
+    Divider,
+    InputBase,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+} from '@mui/material';
 import { Line } from 'react-chartjs-2';
-import RefreshIcon from '@material-ui/icons/Refresh';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { InfoButton, InfoProps } from '../components/molecules/InfoButton';
 import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import InfoDialogTitle from '../components/molecules/InfoDialogTitle';
@@ -143,7 +151,7 @@ const Usage = <UsageData extends Record<string, any>>(
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={aggregateMinutes}
-                            onChange={(event: ChangeEvent<{ value: unknown }>) => {
+                            onChange={(event: SelectChangeEvent<number>) => {
                                 setAggregateMinutes(event.target.value as number);
                             }}
                         >

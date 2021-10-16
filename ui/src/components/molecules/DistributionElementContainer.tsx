@@ -1,5 +1,5 @@
 import { ChangeEvent, FC, ReactNode } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import {
     Checkbox,
     Divider,
@@ -10,7 +10,7 @@ import {
     ListItemSecondaryAction,
     ListItemText,
     Slider,
-} from '@material-ui/core';
+} from '@mui/material';
 import { SectionAction, SectionActionsSpeedDial } from './SectionActionsSpeedDial';
 
 const useStyles = makeStyles((theme) => ({

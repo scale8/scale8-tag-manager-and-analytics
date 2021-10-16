@@ -2,8 +2,9 @@ import { FC, Fragment } from 'react';
 import DrawerFormLayout from '../../molecules/DrawerFormLayout';
 import { FormBaseProps } from '../../../types/props/forms/CommonFormProps';
 import { FormValidationResult } from '../../../hooks/form/useFormValidation';
-import { DialogContentText, List, ListItem, ListItemText } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { DialogContentText, List, ListItem, ListItemText } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { AppPlatformRevisionValues } from '../../../dialogPages/tagManager/app/LinkPlatformRevision';
 
 const useStyles = makeStyles((theme) =>

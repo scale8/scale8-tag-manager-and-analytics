@@ -1,9 +1,9 @@
 import { FC, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import TextInput, { TextInputProps } from './TextInput';
 import SelectInput from './SelectInput';
-import { InputAdornment } from '@material-ui/core';
-import { InputProps as StandardInputProps } from '@material-ui/core/Input/Input';
+import { InputAdornment } from '@mui/material';
+import { InputProps as StandardInputProps } from '@mui/material/Input/Input';
 
 const useStyles = makeStyles((theme) => ({
     root: {

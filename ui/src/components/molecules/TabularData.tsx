@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import JSONTree from 'react-json-tree';
 
 export type TabularDataSource = [string, string | Record<string, any>][];
@@ -44,8 +44,8 @@ const TabularData: FC<TabularDataProps> = (props: TabularDataProps) => {
                 </Box>
             )}
             <Box
-                borderTop={noBorder ? null : tabularDataBorder}
-                borderBottom={noBorder ? null : tabularDataBorder}
+                borderTop={noBorder ? undefined : tabularDataBorder}
+                borderBottom={noBorder ? undefined : tabularDataBorder}
             >
                 {source.map((_, k) => {
                     const [key, value] = _;
@@ -55,7 +55,7 @@ const TabularData: FC<TabularDataProps> = (props: TabularDataProps) => {
                             key={k}
                             width="100%"
                             display="flex"
-                            borderBottom={source.length - 1 === k ? null : tabularDataBorder}
+                            borderBottom={source.length - 1 === k ? undefined : tabularDataBorder}
                         >
                             <Box width={150} p={1} display="flex" alignItems="center">
                                 <b>{key}</b>

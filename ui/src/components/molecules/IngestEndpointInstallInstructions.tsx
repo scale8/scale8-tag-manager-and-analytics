@@ -1,10 +1,10 @@
-import { ChangeEvent, FC, MouseEvent, useState } from 'react';
-import { Box, FormControl, InputLabel, Select } from '@material-ui/core';
+import { FC, MouseEvent, useState } from 'react';
+import { Box, FormControl, InputLabel, Select, SelectChangeEvent } from '@mui/material';
 import CopyBlock from '../atoms/CopyBlock';
 import { DataMapsPayload } from '../organisms/DataMapsPayloadBuilder';
-import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
-import Alert from '@material-ui/lab/Alert';
-import { makeStyles } from '@material-ui/core/styles';
+import { ToggleButton, ToggleButtonGroup } from '@mui/material';
+import Alert from '@mui/material/Alert';
+import makeStyles from '@mui/styles/makeStyles';
 import {
     IngestEndpointInstallInstructionCode,
     IngestEndpointInstallSnippet,
@@ -65,7 +65,7 @@ const IngestEndpointInstallInstructions: FC<IngestEndpointInstallInstructionsDia
         }
     };
 
-    const handleSnippetChange = (event: ChangeEvent<{ value: unknown }>) => {
+    const handleSnippetChange = (event: SelectChangeEvent) => {
         setSnippetId(event.target.value as string);
     };
 

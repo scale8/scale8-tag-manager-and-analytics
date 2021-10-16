@@ -11,9 +11,10 @@ import { GithubPreparationValues } from '../../gql/generated/GithubPreparationVa
 import nameValidator from '../../utils/validators/nameValidator';
 import { DialogPageProps } from '../../types/DialogTypes';
 import { queryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
-import { Box, Button, DialogActions, DialogContent, lighten } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { grey } from '@material-ui/core/colors';
+import { Box, Button, DialogActions, DialogContent, lighten } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
+import { grey } from '@mui/material/colors';
 import FormGqlError from '../../components/atoms/FormGqlError';
 import GithubAccountRemoveQuery from '../../gql/mutations/GithubAccountRemoveQuery';
 import { GithubAccountRemoveValues } from '../../gql/generated/GithubAccountRemoveValues';

@@ -1,7 +1,7 @@
 import { FC, MouseEventHandler } from 'react';
-import { Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
+import { Button } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import AddIcon from '@mui/icons-material/Add';
 
 const useStyles = makeStyles(() => ({
     addButtonContainer: {
@@ -23,7 +23,6 @@ const RulesAddButton: FC<RulesButtonProps> = (props: RulesButtonProps) => {
             <Button
                 size="small"
                 variant="outlined"
-                color="default"
                 onClick={props.onClick}
                 startIcon={<AddIcon />}
                 disabled={props.disabled}

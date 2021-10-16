@@ -10,8 +10,8 @@ import {
     appGroupingCountToSparkData,
     groupingCountToSparkData,
 } from '../../../utils/SparkDataUtils';
-import { Box } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert';
+import { Box } from '@mui/material';
+import Alert from '@mui/material/Alert';
 import { useLoggedInState } from '../../../context/AppContext';
 import { OrgDashboardProps } from '../../../types/props/OrgDashboardProps';
 import { AccountSectionAppTable } from '../../../components/molecules/Tables/AccountSectionAppTable';

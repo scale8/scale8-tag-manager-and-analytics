@@ -7,10 +7,10 @@ import {
     ListItem,
     ListItemSecondaryAction,
     ListItemText,
-} from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import { makeStyles } from '@material-ui/core/styles';
-import Tooltip from '@material-ui/core/Tooltip';
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import makeStyles from '@mui/styles/makeStyles';
+import Tooltip from '@mui/material/Tooltip';
 import DialogActionsWithCancel from '../molecules/DialogActionsWithCancel';
 import { NotificationType } from '../../gql/generated/globalTypes';
 import { NotificationsListProps } from '../../dialogPages/global/NotificationsNotifications';
@@ -54,6 +54,7 @@ const NotificationsList: FC<NotificationsListProps> = (props: NotificationsListP
                                                 onClick={() => {
                                                     props.dismissNotificationAction(notification);
                                                 }}
+                                                size="large"
                                             >
                                                 <CloseIcon />
                                             </IconButton>

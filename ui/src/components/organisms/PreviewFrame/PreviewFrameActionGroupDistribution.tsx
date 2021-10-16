@@ -2,7 +2,7 @@ import { FC, useContext } from 'react';
 import { PreviewFrameData_getRevision_tags_rule_groups_rules_action_groups_distributions } from '../../../gql/generated/PreviewFrameData';
 import { InnerTagElementContainer } from '../../molecules/InnerTagElementContainer';
 import { ActionGroupDistributionType } from '../../../gql/generated/globalTypes';
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import TagElementReadOnlyList from '../../molecules/TagElementReadOnlyList';
 import { extractCurrentElementLog } from '../../../utils/PreviewUtils';
 import { PreviewFrameActionGroup } from './PreviewFrameActionGroup';

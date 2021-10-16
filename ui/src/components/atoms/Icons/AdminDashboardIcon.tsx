@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import { SvgIconProps } from '@material-ui/core';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import { SvgIconProps } from '@mui/material';
 
 const AdminDashboardIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

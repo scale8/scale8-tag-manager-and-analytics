@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import DnsIcon from '@material-ui/icons/Dns';
-import { SvgIconProps } from '@material-ui/core';
+import DnsIcon from '@mui/icons-material/Dns';
+import { SvgIconProps } from '@mui/material';
 
 const EnvironmentDataContainerIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

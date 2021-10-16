@@ -1,5 +1,5 @@
 import { ChangeEvent, FC } from 'react';
-import { Checkbox, FormControlLabel, FormControlLabelProps } from '@material-ui/core';
+import { Checkbox, FormControlLabel, FormControlLabelProps } from '@mui/material';
 
 export type BooleanInputProps = Omit<FormControlLabelProps, 'children' | 'control'> & {
     name: string;

@@ -1,6 +1,6 @@
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { FC } from 'react';
-import { Box, Button, Card, Grid, Typography, useTheme } from '@material-ui/core';
+import { Box, Button, Card, Grid, Typography, useTheme } from '@mui/material';
 import { PageActionProps, pageActions } from '../../../actions/PageActions';
 import { AccountProduct } from '../../../gql/generated/globalTypes';
 import { useConfigState, useLoggedInState } from '../../../context/AppContext';

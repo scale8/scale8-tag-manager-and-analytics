@@ -1,7 +1,8 @@
 import { FC, ReactNode } from 'react';
-import { DialogTitle, IconButton, Typography } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import CloseIcon from '@material-ui/icons/Close';
+import { DialogTitle, IconButton, Typography } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
+import CloseIcon from '@mui/icons-material/Close';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -47,6 +48,7 @@ const InfoDialogTitle: FC<InfoDialogTitleProps> = (props: InfoDialogTitleProps) 
                 onClick={() => props.handleDialogClose(true)}
                 className={classes.closeButton}
                 aria-label="close"
+                size="large"
             >
                 <CloseIcon />
             </IconButton>

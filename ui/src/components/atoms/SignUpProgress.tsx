@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { SignUpContainerProps } from '../molecules/SignUpContainer';
-import { makeStyles } from '@material-ui/core/styles';
-import { Step, StepLabel, Stepper } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
+import { Step, StepLabel, Stepper } from '@mui/material';
 
 const useTagManagerStyles = makeStyles((theme) => ({
     active: {

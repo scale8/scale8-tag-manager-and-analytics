@@ -1,8 +1,8 @@
 import { FC, ReactElement, useState } from 'react';
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { makeStyles } from '@material-ui/core/styles';
-import { TextFieldProps } from '@material-ui/core/TextField/TextField';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import makeStyles from '@mui/styles/makeStyles';
+import { TextFieldProps } from '@mui/material/TextField/TextField';
 import { autocompleteOff } from '../../../utils/BrowserUtils';
 import { countryCodes, countryToFlag, getCountryLabel } from '../../../utils/CountryUtils';
 
@@ -33,7 +33,7 @@ const CountrySelect: FC<CountrySelectProps> = (props: CountrySelectProps): React
     return (
         <Autocomplete
             value={value === '' ? null : getCountryLabel(value)}
-            getOptionSelected={(option, value) => getCountryLabel(option) === value}
+            isOptionEqualToValue={(option, value) => getCountryLabel(option) === value}
             onInvalid={(event) => {
                 event.preventDefault();
                 setRequiredError(true);
@@ -50,7 +50,7 @@ const CountrySelect: FC<CountrySelectProps> = (props: CountrySelectProps): React
             }}
             autoHighlight
             getOptionLabel={(option) => option}
-            renderOption={(option) => (
+            renderOption={(props, option) => (
                 <>
                     <span>{countryToFlag(option)}</span>
                     {getCountryLabel(option)} ({option})

@@ -1,8 +1,8 @@
 import { ReactElement } from 'react';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
 
-import TableCell from '@material-ui/core/TableCell';
+import TableCell from '@mui/material/TableCell';
 import { RowAction, RowData } from './S8TableTypes';
 
 interface S8TableRowActionsCellProps<T extends RowData> {
@@ -49,6 +49,7 @@ const S8TableRowActionsCell = <T extends RowData>(
                                     (action.disabled && action.disabled(row)) ||
                                     (actionsLocked && !action.unLockable)
                                 }
+                                size="large"
                             >
                                 <action.icon />
                             </IconButton>

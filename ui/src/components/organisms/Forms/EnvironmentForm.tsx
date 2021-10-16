@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { Box, Checkbox, FormControlLabel, useTheme } from '@material-ui/core';
+import { Box, Checkbox, FormControlLabel, useTheme } from '@mui/material';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import ControlledSelect from '../../atoms/ControlledInputs/ControlledSelect';
 import EnvironmentVariablesInput from '../../atoms/EnvironmentVariablesInput';

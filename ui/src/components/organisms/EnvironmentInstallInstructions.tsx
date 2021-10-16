@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import SelectInput from '../atoms/InputTypes/SelectInput';
 import CheckBoxInput from '../atoms/InputTypes/CheckBoxInput';
 import CopyBlock from '../atoms/CopyBlock';

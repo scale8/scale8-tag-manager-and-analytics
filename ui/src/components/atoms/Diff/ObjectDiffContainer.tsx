@@ -1,8 +1,9 @@
 import { FC, ReactNode, useState } from 'react';
 import clsx from 'clsx';
-import { Collapse, createStyles, lighten, Theme } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { Collapse, lighten, Theme } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { DiffMap } from '../../../types/DiffTypes';
 import ItemLabel from './ItemLabel';
 

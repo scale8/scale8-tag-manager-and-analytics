@@ -1,9 +1,9 @@
 import { FC, useContext } from 'react';
-import { Box, CircularProgress, useTheme } from '@material-ui/core';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import WarningIcon from '@material-ui/icons/Warning';
+import { Box, CircularProgress, useTheme } from '@mui/material';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import WarningIcon from '@mui/icons-material/Warning';
 import { Action, Condition, RuleEvent } from '../../../types/TagRulesTypes';
 import {
     buildFullActionName,

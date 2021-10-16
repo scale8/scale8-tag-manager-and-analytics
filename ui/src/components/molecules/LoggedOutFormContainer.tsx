@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren } from 'react';
-import { Box, Card } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Box, Card } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles((theme) => ({
     contentBox: {

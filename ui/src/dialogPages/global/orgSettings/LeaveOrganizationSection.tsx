@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Box, Button, useTheme } from '@material-ui/core';
+import { Box, Button, useTheme } from '@mui/material';
 import { PageActionProps, pageActions } from '../../../actions/PageActions';
 import { useLoggedInState } from '../../../context/AppContext';
 import { useRouter } from 'next/router';

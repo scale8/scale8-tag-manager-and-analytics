@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import LoggedOutNavigationContainer from '../../atoms/LoggedOutNavigationContainer';
 import { ChildrenOnlyProps } from '../../../types/props/ChildrenOnlyProps';
 

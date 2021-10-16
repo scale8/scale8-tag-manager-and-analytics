@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { Checkbox, FormControlLabel, useTheme } from '@material-ui/core';
+import { Checkbox, FormControlLabel, useTheme } from '@mui/material';
 import { MappedPlatformValuesForm } from '../../molecules/MappedPlatformValues/MappedPlatformValuesForm';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import ControlledFilteredSelects from '../../atoms/ControlledInputs/ControlledFilteredSelects';

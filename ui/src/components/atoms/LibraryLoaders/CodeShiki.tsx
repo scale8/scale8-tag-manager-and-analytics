@@ -7,7 +7,7 @@ import langJS from 'shiki/languages/javascript.tmLanguage.json';
 // @ts-ignore
 import onigasm from 'arraybuffer-loader!shiki/dist/onigasm.wasm';
 import { ShikiProps } from './LazyShiki';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles({
     shiki: {

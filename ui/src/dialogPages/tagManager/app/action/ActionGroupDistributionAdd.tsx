@@ -4,11 +4,11 @@ import { ActionGroupDistributionCreate } from './ActionGroupDistributionCreate';
 import { ActionGroupDistributionLink } from './ActionGroupDistributionLink';
 import { InfoButton } from '../../../../components/molecules/InfoButton';
 import { buildStandardFormInfo } from '../../../../utils/InfoLabelsUtils';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import AppBar from '@mui/material/AppBar';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 import TabsTabPanel from '../../../../components/molecules/TabsTabPanel';
-import { Divider } from '@material-ui/core';
+import { Divider } from '@mui/material';
 import { MainDrawerTitle } from '../../../../components/molecules/MainDrawerTitle';
 
 const ActionGroupDistributionAdd: FC<DialogPageProps> = (props: DialogPageProps) => {

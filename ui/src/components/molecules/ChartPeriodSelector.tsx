@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, ReactNode, useEffect, useRef, useState } from 'react';
+import { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import {
     Box,
     CircularProgress,
@@ -6,12 +6,13 @@ import {
     FormControl,
     IconButton,
     InputLabel,
-    makeStyles,
     MenuItem,
     Popover,
     Select,
+    SelectChangeEvent,
     useTheme,
-} from '@material-ui/core';
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { DateRangePicker } from 'materialui-daterange-picker';
 import { ChartPeriodProps, ChartPeriodType } from '../../hooks/chart/useChartPeriod';
 import {
@@ -29,7 +30,7 @@ import {
     subMonthsUTC,
     UTCTimestamp,
 } from '../../utils/DateTimeUtils';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 const useStyles = makeStyles(() => ({
     selectRoot: {
@@ -56,7 +57,12 @@ const ArrowBlock: FC<{
     const classes = useStyles();
     return (
         <>
-            <IconButton className={classes.arrowButton} onClick={onPrevClick} disableRipple>
+            <IconButton
+                className={classes.arrowButton}
+                onClick={onPrevClick}
+                disableRipple
+                size="large"
+            >
                 <ArrowBackIosIcon />
             </IconButton>
             <IconButton
@@ -64,6 +70,7 @@ const ArrowBlock: FC<{
                 onClick={onNextClick}
                 disabled={nextDisabled}
                 disableRipple
+                size="large"
             >
                 <ArrowBackIosIcon className={classes.arrowIconForward} />
             </IconButton>
@@ -134,7 +141,7 @@ const ChartPeriodSelector: FC<ChartPeriodSelectorProps> = (props: ChartPeriodSel
         },
     ];
 
-    const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
+    const handleChange = (event: SelectChangeEvent) => {
         const value = event.target.value as string;
         const m = selectValuePeriod.find((_) => value === _.v);
         if (m === undefined) {

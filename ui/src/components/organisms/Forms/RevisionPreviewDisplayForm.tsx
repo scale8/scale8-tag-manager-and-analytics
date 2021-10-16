@@ -1,6 +1,7 @@
 import { FC, FormEvent } from 'react';
-import { Box, DialogContent, DialogContentText } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Box, DialogContent, DialogContentText } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import qrcode from 'qrcode.react';
 import DialogActionsWithCancel from '../../molecules/DialogActionsWithCancel';
 

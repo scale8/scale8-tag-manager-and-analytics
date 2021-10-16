@@ -8,11 +8,11 @@ import {
     ListItem,
     ListItemSecondaryAction,
     ListItemText,
-} from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import { makeStyles } from '@material-ui/core/styles';
-import Tooltip from '@material-ui/core/Tooltip';
-import CheckIcon from '@material-ui/icons/Check';
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import makeStyles from '@mui/styles/makeStyles';
+import Tooltip from '@mui/material/Tooltip';
+import CheckIcon from '@mui/icons-material/Check';
 import DialogActionsWithCancel from '../molecules/DialogActionsWithCancel';
 import { InvitesListProps } from '../../dialogPages/global/NotificationsInvites';
 
@@ -51,6 +51,7 @@ const InvitesList: FC<InvitesListProps> = (props: InvitesListProps) => {
                                                 onClick={() => {
                                                     props.acceptInviteAction(invite);
                                                 }}
+                                                size="large"
                                             >
                                                 <CheckIcon />
                                             </IconButton>
@@ -62,6 +63,7 @@ const InvitesList: FC<InvitesListProps> = (props: InvitesListProps) => {
                                                 onClick={() => {
                                                     props.declineInviteAction(invite);
                                                 }}
+                                                size="large"
                                             >
                                                 <CloseIcon />
                                             </IconButton>

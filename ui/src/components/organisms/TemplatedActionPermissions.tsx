@@ -1,8 +1,9 @@
 import { Dispatch, FC, ReactNode, SetStateAction } from 'react';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { TemplatedActionFormProps } from '../../types/props/forms/TemplatedActionFormProps';
-import { Alert } from '@material-ui/lab';
-import { Box, Collapse } from '@material-ui/core';
+import { Alert } from '@mui/material';
+import { Box, Collapse } from '@mui/material';
 import { PlatformActionPermissionInput } from '../../types/ActionPermissionsTypes';
 import { PlatformActionPermissionRequest } from '../../gql/generated/globalTypes';
 import GlobalVariableActionPermission from '../molecules/ActionPermissions/GlobalVariableActionPermission';

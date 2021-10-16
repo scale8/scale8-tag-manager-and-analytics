@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useQuery } from '@apollo/client';
-import { Box, CircularProgress } from '@material-ui/core';
+import { Box, CircularProgress } from '@mui/material';
 import SummaryDetail from '../components/atoms/SummaryDetail';
 import { buildSummaryDetailPropsFromValue, calculateEventsPerUser } from '../utils/AnalyticsUtils';
 import { ApolloError } from '@apollo/client/errors';

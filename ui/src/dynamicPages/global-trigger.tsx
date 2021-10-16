@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { Alert } from '@material-ui/lab';
-import { Box } from '@material-ui/core';
+import { Alert } from '@mui/material';
+import { Box } from '@mui/material';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { DynamicPageProps } from '../pageLoader/DynamicPageLoader';

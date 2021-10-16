@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import SettingsIcon from '@material-ui/icons/Settings';
-import { SvgIconProps } from '@material-ui/core';
+import SettingsIcon from '@mui/icons-material/Settings';
+import { SvgIconProps } from '@mui/material';
 
 const SettingIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import ValidationRulesInput from '../atoms/ValidationRulesInput';
 import { PlatformDataMapValidation } from '../../types/DataMapsTypes';
 import { ValidationType, VarType } from '../../gql/generated/globalTypes';

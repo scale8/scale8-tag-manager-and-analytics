@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import LeaveOrganizationSection from '../../dialogPages/global/orgSettings/LeaveOrganizationSection';
 import { useConfigState, useLoggedInState } from '../../context/AppContext';
 import PageTitle from '../../components/molecules/PageTitle';

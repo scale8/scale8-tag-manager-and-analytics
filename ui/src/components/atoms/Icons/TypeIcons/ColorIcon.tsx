@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { SvgIconProps } from '@material-ui/core';
-import PaletteIcon from '@material-ui/icons/Palette';
+import { SvgIconProps } from '@mui/material';
+import PaletteIcon from '@mui/icons-material/Palette';
 
 const ColorIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

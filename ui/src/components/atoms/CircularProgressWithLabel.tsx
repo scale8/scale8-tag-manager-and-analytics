@@ -1,7 +1,7 @@
-import CircularProgress, { CircularProgressProps } from '@material-ui/core/CircularProgress';
-import Box from '@material-ui/core/Box';
+import CircularProgress, { CircularProgressProps } from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 import { FC } from 'react';
-import { useTheme } from '@material-ui/core';
+import { useTheme } from '@mui/material';
 
 export const CircularProgressWithLabel: FC<
     CircularProgressProps & { value: number; forErrors?: boolean }

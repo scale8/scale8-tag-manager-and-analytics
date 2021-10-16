@@ -1,10 +1,12 @@
 import { ChangeEvent, FC, useEffect, useState } from 'react';
-import { Badge, Box, Button, createStyles, Divider, lighten } from '@material-ui/core';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import { Badge, Box, Button, Divider, lighten } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import AppBar from '@mui/material/AppBar';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 import TabsTabPanel from '../../molecules/TabsTabPanel';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import withStyles from '@mui/styles/withStyles';
 import { MainDrawerTitle } from '../../molecules/MainDrawerTitle';
 import { InfoButton } from '../../molecules/InfoButton';
 import { TemplatedActionFormProps } from '../../../types/props/forms/TemplatedActionFormProps';

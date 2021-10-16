@@ -1,9 +1,10 @@
 import { FC } from 'react';
 import { AppRevisionDeployFormProps } from '../../../utils/forms/AppRevisionDeployDialogFormUtils';
 import ControlledSelect from '../../atoms/ControlledInputs/ControlledSelect';
-import { DialogContent } from '@material-ui/core';
+import { DialogContent } from '@mui/material';
 import DialogActionsWithCancel from '../../molecules/DialogActionsWithCancel';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles((theme) =>
     createStyles({

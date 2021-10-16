@@ -7,10 +7,10 @@ import {
     ListItemIcon,
     ListItemText,
     useTheme,
-} from '@material-ui/core';
+} from '@mui/material';
 import AppliedIcon from '../atoms/Icons/AppliedIcon';
-import WarningIcon from '@material-ui/icons/Warning';
-import InfoIcon from '@material-ui/icons/Info';
+import WarningIcon from '@mui/icons-material/Warning';
+import InfoIcon from '@mui/icons-material/Info';
 import { TagElementListItem } from '../../utils/ElementListUtils';
 import { PreviewElementDetails, PreviewElementType } from '../../types/PreviewFrameTypes';
 

@@ -1,6 +1,6 @@
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { FC, ReactNode } from 'react';
-import { Card, Container, Grid } from '@material-ui/core';
+import { Card, Container, Grid } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
     cardGrid: {

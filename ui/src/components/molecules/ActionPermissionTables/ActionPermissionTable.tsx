@@ -1,4 +1,5 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import {
     Box,
@@ -11,16 +12,16 @@ import {
     TableHead,
     TableRow,
     TextField,
-} from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import CheckIcon from '@material-ui/icons/Check';
-import EditIcon from '@material-ui/icons/Edit';
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import CheckIcon from '@mui/icons-material/Check';
+import EditIcon from '@mui/icons-material/Edit';
 import { UpdateActionPermissionProps } from '../ActionPermissions/ActionPermissionSection';
 import { ApolloError } from '@apollo/client/errors';
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from '@mui/icons-material/Add';
 import { VariableReadWriteExecuteScopeInput } from '../../../types/ActionPermissionsTypes';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { useLoggedInState } from '../../../context/AppContext';
 
 const useStyles = makeStyles((theme) =>
@@ -472,7 +473,6 @@ const ActionPermissionTable: FC<ActionPermissionTableProps> = (
                 <Button
                     size="small"
                     variant="outlined"
-                    color="default"
                     onClick={() => {
                         setEditIndex(-1);
                     }}

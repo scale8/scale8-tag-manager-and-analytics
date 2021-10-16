@@ -1,7 +1,8 @@
 import { FC, MouseEvent, SyntheticEvent, useState } from 'react';
-import { Box, Paper, Snackbar } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Box, Paper, Snackbar } from '@mui/material';
+import { Alert } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { CopyBlockProps } from '../../types/props/CopyBlockProps';
 import LazyHighlight from './LibraryLoaders/LazyHighlight';
 

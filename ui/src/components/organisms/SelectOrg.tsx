@@ -9,7 +9,7 @@ import {
     MenuList,
     Paper,
     Typography,
-} from '@material-ui/core';
+} from '@mui/material';
 import { SelectOrgProps } from '../../dynamicPages/select-org';
 
 const SelectOrg: FC<SelectOrgProps> = (props: SelectOrgProps) => {

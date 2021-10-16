@@ -9,15 +9,15 @@ import {
     ListItemIcon,
     ListItemSecondaryAction,
     ListItemText,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
-import DeleteIcon from '@material-ui/icons/Delete';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import EditIcon from '@material-ui/icons/Edit';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-import HistoryIcon from '@material-ui/icons/History';
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import EditIcon from '@mui/icons-material/Edit';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import HistoryIcon from '@mui/icons-material/History';
 import { TagElementListItem } from '../../utils/ElementListUtils';
 
 const useStyles = makeStyles(() => ({
@@ -85,6 +85,7 @@ const TagElementList: FC<TagElementListProps> = (props: TagElementListProps) => 
                                                             item.text,
                                                         );
                                                 }}
+                                                size="large"
                                             >
                                                 <VisibilityIcon />
                                             </IconButton>
@@ -97,6 +98,7 @@ const TagElementList: FC<TagElementListProps> = (props: TagElementListProps) => 
                                                 if (props.historyButtonClick !== undefined)
                                                     props.historyButtonClick(item.id, item.text);
                                             }}
+                                            size="large"
                                         >
                                             <HistoryIcon />
                                         </IconButton>
@@ -110,6 +112,7 @@ const TagElementList: FC<TagElementListProps> = (props: TagElementListProps) => 
                                                     if (props.editButtonClick !== undefined)
                                                         props.editButtonClick(item.id, item.text);
                                                 }}
+                                                size="large"
                                             >
                                                 <EditIcon />
                                             </IconButton>
@@ -121,6 +124,7 @@ const TagElementList: FC<TagElementListProps> = (props: TagElementListProps) => 
                                             onClick={() => {
                                                 props.deleteButtonClick(item.id, item.text);
                                             }}
+                                            size="large"
                                         >
                                             <DeleteIcon />
                                         </IconButton>
@@ -134,6 +138,7 @@ const TagElementList: FC<TagElementListProps> = (props: TagElementListProps) => 
                                                     props.moveUpClick(item.id, item.text);
                                             }}
                                             disabled={index === 0}
+                                            size="large"
                                         >
                                             <ArrowUpwardIcon />
                                         </IconButton>
@@ -147,6 +152,7 @@ const TagElementList: FC<TagElementListProps> = (props: TagElementListProps) => 
                                                     props.moveDownClick(item.id, item.text);
                                             }}
                                             disabled={index === props.items.length - 1}
+                                            size="large"
                                         >
                                             <ArrowDownwardIcon />
                                         </IconButton>
@@ -163,7 +169,6 @@ const TagElementList: FC<TagElementListProps> = (props: TagElementListProps) => 
                     size="small"
                     className={classes.addButton}
                     variant="outlined"
-                    color="default"
                     startIcon={<AddIcon />}
                     onClick={props.addButtonClick}
                     disabled={props.disabled}

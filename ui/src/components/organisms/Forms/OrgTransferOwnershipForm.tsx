@@ -1,11 +1,12 @@
 import { FC } from 'react';
 import ControlledSelect from '../../atoms/ControlledInputs/ControlledSelect';
-import { Box, DialogContent } from '@material-ui/core';
+import { Box, DialogContent } from '@mui/material';
 import DialogActionsWithCancel from '../../molecules/DialogActionsWithCancel';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { OrgTransferOwnershipFormProps } from '../../../types/props/forms/OrgTransferOwnershipFormProps';
 import FormGqlError from '../../atoms/FormGqlError';
-import { Alert } from '@material-ui/lab';
+import { Alert } from '@mui/material';
 
 const useStyles = makeStyles((theme) =>
     createStyles({

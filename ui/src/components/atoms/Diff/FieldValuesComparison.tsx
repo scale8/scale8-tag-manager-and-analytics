@@ -1,7 +1,8 @@
 import { FC } from 'react';
 import clsx from 'clsx';
-import { createStyles, lighten, Theme } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { lighten, Theme } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { DiffMap, FieldDiff } from '../../../types/DiffTypes';
 import ScalarFieldDisplay from './ScalarFieldDisplay';
 import ArrayFieldDisplay from './ArrayFieldDisplay';

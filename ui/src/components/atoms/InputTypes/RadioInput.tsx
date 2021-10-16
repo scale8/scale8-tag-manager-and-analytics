@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useState } from 'react';
+import { FC, useState } from 'react';
 import {
     Box,
     FormControl,
@@ -7,7 +7,8 @@ import {
     FormHelperText,
     Radio,
     RadioGroup,
-} from '@material-ui/core';
+    SelectChangeEvent,
+} from '@mui/material';
 import { SelectValueWithSub } from '../../../hooks/form/useFormValidation';
 
 export type SelectInputProps = Omit<FormControlProps, 'children'> & {
@@ -39,7 +40,7 @@ const RadioInput: FC<SelectInputProps> = (props: SelectInputProps) => {
 
     const [requiredError, setRequiredError] = useState(false);
 
-    const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
+    const handleChange = (event: SelectChangeEvent) => {
         setRequiredError(false);
         setValue(event.target.value as string);
     };

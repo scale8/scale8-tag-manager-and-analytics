@@ -1,6 +1,7 @@
 import { FC } from 'react';
-import { DialogContent, DialogContentText } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { DialogContent, DialogContentText } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { InfoButton, InfoProps } from '../molecules/InfoButton';
 import InfoDialogTitle from '../molecules/InfoDialogTitle';
 import EnvironmentInstallInstructions from './EnvironmentInstallInstructions';

@@ -1,8 +1,8 @@
 import { FC, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@material-ui/lab';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import CloseIcon from '@material-ui/icons/Close';
+import makeStyles from '@mui/styles/makeStyles';
+import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import CloseIcon from '@mui/icons-material/Close';
 
 const useStyles = makeStyles((theme) => ({
     speedDial: {

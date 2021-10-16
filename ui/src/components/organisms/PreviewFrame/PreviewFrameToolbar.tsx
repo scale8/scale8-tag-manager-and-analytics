@@ -1,15 +1,15 @@
 import { FC, useContext } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, Button, CircularProgress, IconButton, Typography, useTheme } from '@material-ui/core';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
+import makeStyles from '@mui/styles/makeStyles';
+import { Box, Button, CircularProgress, IconButton, Typography, useTheme } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
 import PreviewSelectIcon from '../../atoms/Icons/PreviewSelectIcon';
 import PreviewHighlightIcon from '../../atoms/Icons/PreviewHighlightIcon';
 import clsx from 'clsx';
 import TmLogo from '../../atoms/TmLogo';
 import PreviewCloseIcon from '../../atoms/Icons/PreviewCloseIcon';
-import StorageIcon from '@material-ui/icons/Storage';
-import WarningIcon from '@material-ui/icons/Warning';
+import StorageIcon from '@mui/icons-material/Storage';
+import WarningIcon from '@mui/icons-material/Warning';
 import { previewFrameContext } from '../../../context/PreviewFrameContext';
 
 const useStyles = makeStyles((theme) => ({

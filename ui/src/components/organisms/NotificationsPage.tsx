@@ -1,11 +1,12 @@
 import { ChangeEvent, FC, useState } from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import { Badge, Box, createStyles, Divider } from '@material-ui/core';
-import Tab from '@material-ui/core/Tab';
+import AppBar from '@mui/material/AppBar';
+import Tabs from '@mui/material/Tabs';
+import { Badge, Box, Divider } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import Tab from '@mui/material/Tab';
 import { DialogPageProps } from '../../types/DialogTypes';
 import TabsTabPanel from '../molecules/TabsTabPanel';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 import { useLoggedInState } from '../../context/AppContext';
 import { NotificationsInvites } from '../../dialogPages/global/NotificationsInvites';
 import { NotificationsNotifications } from '../../dialogPages/global/NotificationsNotifications';

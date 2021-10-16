@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import DrawerFormLayout from '../../molecules/DrawerFormLayout';
-import { Box, Checkbox, Divider, FormControlLabel, useTheme } from '@material-ui/core';
+import { Box, Checkbox, Divider, FormControlLabel, useTheme } from '@mui/material';
 import Loader from '../Loader';
 import { AppFormProps } from '../../../dialogPages/tagManager/app/AppCreate';
 import StorageProviderSelector from '../../molecules/StorageProviderSelector';

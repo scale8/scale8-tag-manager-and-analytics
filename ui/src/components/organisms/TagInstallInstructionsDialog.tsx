@@ -1,10 +1,11 @@
 import { FC } from 'react';
-import { Box, DialogContent, DialogContentText } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Box, DialogContent, DialogContentText } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import CopyBlock from '../atoms/CopyBlock';
 import { buildTagInstallMarkup } from '../../utils/TextUtils';
 import DialogActionsWithCancel from '../molecules/DialogActionsWithCancel';
-import Alert from '@material-ui/lab/Alert';
+import Alert from '@mui/material/Alert';
 
 const useStyles = makeStyles(() =>
     createStyles({

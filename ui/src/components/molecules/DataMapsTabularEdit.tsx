@@ -1,10 +1,11 @@
 import { FC } from 'react';
-import { Box, Checkbox, IconButton } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Box, Checkbox, IconButton } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { VarType } from '../../gql/generated/globalTypes';
 import clsx from 'clsx';
-import AddIcon from '@material-ui/icons/Add';
-import CloseIcon from '@material-ui/icons/Close';
+import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@mui/icons-material/Close';
 import { DataMapsPayloadValues } from '../../types/DataMapsTypes';
 import { AppPlatformRevision } from '../../types/TagRulesTypes';
 import { DataMapsValueEdit } from './DataMapsValueEdit';

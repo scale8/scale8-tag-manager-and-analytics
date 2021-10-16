@@ -1,8 +1,8 @@
 import { FC } from 'react';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import { QueryTuple } from '@apollo/client/react/types/types';
 import { CircularProgressWithLabel } from '../../components/atoms/CircularProgressWithLabel';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { OperationVariables } from '@apollo/client/core';
 import { lazyQueryLoaderAndError } from '../../abstractions/LazyQueryLoaderAndError';
 import { AppGroupingCount } from '../../utils/AnalyticsUtils';

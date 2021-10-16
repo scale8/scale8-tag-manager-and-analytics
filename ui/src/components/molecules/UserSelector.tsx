@@ -2,16 +2,16 @@ import { FC, MouseEvent, useState } from 'react';
 import {
     Avatar,
     Box,
-    createStyles,
     ListItemIcon,
     Menu,
     MenuItem,
     Theme,
     Typography,
     useTheme,
-} from '@material-ui/core';
+} from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
 import AvatarButton from '../atoms/AvatarButton';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import LogoutIcon from '../atoms/Icons/LogoutIcon';
 import ProfileIcon from '../atoms/Icons/ProfileIcon';
 import { UserSelectorProps } from '../../containers/global/LoggedInSection';

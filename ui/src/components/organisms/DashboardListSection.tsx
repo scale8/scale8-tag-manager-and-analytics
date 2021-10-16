@@ -1,8 +1,8 @@
 import { ChangeEvent, FC, useState } from 'react';
-import { Box, Card, Divider } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import { Box, Card, Divider } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 import TabsTabPanel from '../molecules/TabsTabPanel';
 import {
     AppDashboardList,

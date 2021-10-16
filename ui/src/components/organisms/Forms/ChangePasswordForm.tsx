@@ -1,6 +1,6 @@
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { FC } from 'react';
-import { Box, DialogContent } from '@material-ui/core';
+import { Box, DialogContent } from '@mui/material';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import FormGqlError from '../../atoms/FormGqlError';
 import DialogActionsWithCancel from '../../molecules/DialogActionsWithCancel';

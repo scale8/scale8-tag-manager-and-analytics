@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { FC, ReactNode } from 'react';
 import PageTitle, { PageTitleProps } from '../molecules/PageTitle';
 

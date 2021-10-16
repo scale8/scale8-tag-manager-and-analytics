@@ -1,9 +1,9 @@
 import { ChangeEventHandler, Dispatch, FC, SetStateAction, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Avatar, Box, CircularProgress, IconButton } from '@material-ui/core';
-import { grey } from '@material-ui/core/colors';
+import makeStyles from '@mui/styles/makeStyles';
+import { Avatar, Box, CircularProgress, IconButton } from '@mui/material';
+import { grey } from '@mui/material/colors';
 import clsx from 'clsx';
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from '@mui/icons-material/Close';
 
 export type ImageUploadProps = {
     initialUrl?: string;

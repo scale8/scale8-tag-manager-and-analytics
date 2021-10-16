@@ -1,12 +1,12 @@
-import { Box, Button, InputAdornment, Popover, TextField } from '@material-ui/core';
+import { Box, Button, InputAdornment, Popover, TextField } from '@mui/material';
 import { ChangeEvent, FC, MouseEvent, useState } from 'react';
-import { TextFieldProps } from '@material-ui/core/TextField/TextField';
+import { TextFieldProps } from '@mui/material/TextField/TextField';
 import { autocompleteOff } from '../../../utils/BrowserUtils';
 import { AppPlatformRevision } from '../../../types/TagRulesTypes';
 import { PlatformValueEdit } from '../PlatformValueEdit';
 import { buildDataContainersFilteredPlatforms } from '../../../utils/DataContainersUtils';
 import { DataContainersFilteredPlatform } from '../../molecules/DataMapsValueEdit';
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from '@mui/icons-material/Add';
 import AdornmentButton from '../AdornamentButton';
 import { VarType } from '../../../gql/generated/globalTypes';
 
@@ -110,7 +110,6 @@ const TextInputWithMacros: FC<TextInputWithMacrosProps> = (props: TextInputWithM
                     <Box textAlign="center">
                         <Button
                             size="small"
-                            color="default"
                             variant="outlined"
                             onClick={() => {
                                 setValue(`${value}${dataContainerValue}`);

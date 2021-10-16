@@ -1,7 +1,7 @@
 import { MouseEventHandler } from 'react';
 import { FC } from 'react';
-import { Box, Button, Divider } from '@material-ui/core';
-import GitHubIcon from '@material-ui/icons/GitHub';
+import { Box, Button, Divider } from '@mui/material';
+import GitHubIcon from '@mui/icons-material/GitHub';
 
 type LoginSsoProps = {
     handleGithubButtonClick: MouseEventHandler;

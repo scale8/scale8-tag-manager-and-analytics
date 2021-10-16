@@ -1,7 +1,7 @@
 import { FC, FocusEventHandler } from 'react';
 import { InputType } from '../../../gql/generated/globalTypes';
 import TextInput from './TextInput';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import TextAreaInput from './TextAreaInput';
 import DateStringInput from './DateStringInput';
 import DateStampInput from './DateStampInput';

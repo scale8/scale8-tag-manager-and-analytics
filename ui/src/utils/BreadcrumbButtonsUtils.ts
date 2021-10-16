@@ -19,7 +19,7 @@ import {
 } from './NavigationPaths';
 import OrgIcon from '../components/atoms/Icons/OrgIcon';
 import { FC } from 'react';
-import { SvgIconProps } from '@material-ui/core';
+import { SvgIconProps } from '@mui/material';
 import PlatformIcon from '../components/atoms/Icons/PlatformIcon';
 import RevisionIcon from '../components/atoms/Icons/RevisionIcon';
 import IngestEndpointIcon from '../components/atoms/Icons/IngestEndpointIcon';
@@ -46,16 +46,6 @@ export type BreadcrumbButtonProps = {
     list: BreadcrumbAction[];
     jump: BreadcrumbAction;
     isCurrentPage: boolean;
-};
-
-export const breadcrumbContainerProps = {
-    flexShrink: 0,
-    className: 'breadcrumb',
-    color: 'white',
-    fontSize: '1.5rem',
-    flexWrap: 'nowrap',
-    whiteSpace: 'nowrap',
-    overflow: 'auto',
 };
 
 export const buildJumpToAction = (navigateToThere: () => void, name: string): BreadcrumbAction => ({

@@ -1,8 +1,8 @@
 import { FC, MouseEvent, SyntheticEvent } from 'react';
 import SideBar from '../../organisms/SideBar';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, createStyles, Snackbar } from '@material-ui/core';
-import grey from '@material-ui/core/colors/grey';
+import makeStyles from '@mui/styles/makeStyles';
+import { Box, Snackbar } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
 import CancelConfirmDialog from '../../organisms/CancelConfirmDialog';
 import { MainDrawer } from '../../organisms/MainDrawer';
 import { DialogBaseProps, DialogPageProps } from '../../../types/DialogTypes';
@@ -12,6 +12,7 @@ import PageDialog from '../../organisms/PageDialog';
 import { navigationColorFromSectionLocator } from '../../../containers/SectionsDetails';
 import { useLoggedInState } from '../../../context/AppContext';
 import { LoggedInProps } from '../../../containers/global/LoggedInSection';
+import { grey } from '@mui/material/colors';
 
 const useStyles = makeStyles((theme) =>
     createStyles({

@@ -7,7 +7,7 @@ import {
     getPlatformDataMapVarType,
     getSelectValuesForPlatformDataMapType,
 } from '../../../utils/PlatformDataMapTypeUtils';
-import { Box, FormControlLabel, Radio, RadioGroup, useTheme } from '@material-ui/core';
+import { Box, FormControlLabel, Radio, RadioGroup, useTheme } from '@mui/material';
 import { DataMapDefaultValueFormSection } from '../../molecules/DataMapDefaultValueFormSection';
 import ArrayInput from '../../atoms/InputTypes/ArrayInput';
 import ControlledTextAreaInput from '../../atoms/ControlledInputs/ControlledTextAreaInput';

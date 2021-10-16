@@ -1,10 +1,7 @@
 import { FC, Fragment } from 'react';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import BreadcrumbButton from '../molecules/BreadcrumbButton';
-import {
-    BreadcrumbButtonProps,
-    breadcrumbContainerProps,
-} from '../../utils/BreadcrumbButtonsUtils';
+import { BreadcrumbButtonProps } from '../../utils/BreadcrumbButtonsUtils';
 import BreadcrumbActions from '../molecules/BreadcrumbActions';
 import { ValuesRefreshFunction } from '../../types/GqlTypes';
 import { RowAction } from '../molecules/S8Table/S8TableTypes';
@@ -53,7 +50,16 @@ const Breadcrumb: FC<BreadcrumbProps> = (props: BreadcrumbProps) => {
                     </Box>
                 </Box>
             )}
-            <Box display="flex" {...breadcrumbContainerProps}>
+            <Box
+                display="flex"
+                flexShrink={0}
+                className="breadcrumb"
+                color="white"
+                fontSize="1.5rem"
+                flexWrap="nowrap"
+                whiteSpace="nowrap"
+                overflow="auto"
+            >
                 <Box flexGrow={1}>
                     {buttonsProps.map((buttonProps, key) => (
                         <Fragment key={key}>

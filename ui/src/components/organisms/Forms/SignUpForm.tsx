@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { FC, useEffect, useState } from 'react';
 import {
     Box,
@@ -9,7 +9,7 @@ import {
     FormGroup,
     FormHelperText,
     useTheme,
-} from '@material-ui/core';
+} from '@mui/material';
 import FormError from '../../atoms/FormError';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import SignUpContainer from '../../molecules/SignUpContainer';

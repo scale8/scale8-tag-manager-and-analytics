@@ -7,8 +7,8 @@ import {
     IngestEndpointForEnvironmentSelection,
 } from '../../types/IngestEndpointsTypes';
 import { AppPlatformRevision } from '../../types/TagRulesTypes';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, useTheme } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
+import { Box, useTheme } from '@mui/material';
 import { SelectValueWithSub } from '../../hooks/form/useFormValidation';
 
 const useStyles = makeStyles((theme) => ({

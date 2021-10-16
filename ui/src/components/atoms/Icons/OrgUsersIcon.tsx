@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
-import { SvgIconProps } from '@material-ui/core';
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+import { SvgIconProps } from '@mui/material';
 
 const OrgUsersIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

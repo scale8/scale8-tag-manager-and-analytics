@@ -1,5 +1,5 @@
 import { MouseEvent, ReactElement } from 'react';
-import { SvgIconComponent } from '@material-ui/icons';
+import { SvgIconComponent } from '@mui/icons-material';
 import { TableStateManager } from '../../../hooks/table/useTableStateManager';
 import { InfoProps } from '../InfoButton';
 

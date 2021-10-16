@@ -9,7 +9,7 @@ import { useFormValidation } from '../hooks/form/useFormValidation';
 import emailValidator from '../utils/validators/emailValidator';
 import Loader from '../components/organisms/Loader';
 import LoggedOutFormContainer from '../components/molecules/LoggedOutFormContainer';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import RequestPasswordResetForm from '../components/organisms/Forms/RequestPasswordResetForm';
 import FormTitle from '../components/molecules/FormTitle';
 import Link from '../components/atoms/Next/Link';

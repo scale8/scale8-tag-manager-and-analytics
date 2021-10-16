@@ -1,8 +1,8 @@
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { ChangeEvent, ReactElement, useState } from 'react';
-import { Box, Divider, Grid, IconButton, TextField } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import AddIcon from '@material-ui/icons/Add';
+import { Box, Divider, Grid, IconButton, TextField } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import AddIcon from '@mui/icons-material/Add';
 import { EnvironmentVariablesInputProps } from '../../types/props/EnvironmentVariablesInputProps';
 
 const useStyles = makeStyles((theme) => ({
@@ -25,9 +25,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const EnvironmentVariablesInput = <T extends { [key: string]: any }>(
-    props: EnvironmentVariablesInputProps,
-): ReactElement => {
+const EnvironmentVariablesInput = (props: EnvironmentVariablesInputProps): ReactElement => {
     const classes = useStyles();
     const { values, label } = props;
     const [currentKey, setCurrentKey] = useState('');

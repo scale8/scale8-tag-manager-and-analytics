@@ -1,9 +1,9 @@
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { FC, useEffect } from 'react';
-import { IconButton } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import AddIcon from '@material-ui/icons/Add';
-import { TextFieldProps } from '@material-ui/core/TextField/TextField';
+import { IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import AddIcon from '@mui/icons-material/Add';
+import { TextFieldProps } from '@mui/material/TextField/TextField';
 import IntegerInput from './IntegerInput';
 import FloatInput from './FloatInput';
 import TextInput from './TextInput';

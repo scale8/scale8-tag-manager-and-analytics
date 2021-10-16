@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Grid, Link } from '@material-ui/core';
+import { Grid, Link } from '@mui/material';
 import { useConfigState } from '../../context/AppContext';
 import { toRequestPasswordReset, toSignUp } from '../../utils/NavigationPaths';
 

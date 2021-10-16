@@ -1,6 +1,6 @@
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { FC } from 'react';
-import { Box, Button } from '@material-ui/core';
+import { Box, Button } from '@mui/material';
 import FormError from '../../atoms/FormError';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import LoggedOutFormContainer from '../../molecules/LoggedOutFormContainer';

@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { ApolloError } from '@apollo/client';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import FormError from './FormError';
 import { isAuthenticationError } from '../../utils/ErrorsUtils';
 import Navigate from './Next/Navigate';

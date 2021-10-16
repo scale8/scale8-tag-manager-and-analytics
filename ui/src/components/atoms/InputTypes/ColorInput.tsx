@@ -1,7 +1,7 @@
 import { FC, MouseEvent, useState } from 'react';
-import { TextFieldProps } from '@material-ui/core/TextField/TextField';
-import { Box, IconButton, InputAdornment, Popover, TextField } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
+import { TextFieldProps } from '@mui/material/TextField/TextField';
+import { Box, IconButton, InputAdornment, Popover, TextField } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import { autocompleteOff } from '../../../utils/BrowserUtils';
 import LazyColorPicker from '../LibraryLoaders/LazyColorPicker';
 

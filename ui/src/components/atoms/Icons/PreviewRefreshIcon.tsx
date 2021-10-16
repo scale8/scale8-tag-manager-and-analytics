@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import SyncIcon from '@material-ui/icons/Sync';
-import { SvgIconProps } from '@material-ui/core';
+import SyncIcon from '@mui/icons-material/Sync';
+import { SvgIconProps } from '@mui/material';
 
 const PreviewRefreshIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

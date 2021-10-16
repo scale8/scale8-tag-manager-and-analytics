@@ -1,13 +1,14 @@
 import { ChangeEvent, MouseEvent, ReactElement } from 'react';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
-import Checkbox from '@material-ui/core/Checkbox';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
+import Checkbox from '@mui/material/Checkbox';
+import TableSortLabel from '@mui/material/TableSortLabel';
 import { BulkAction, Column, CoupleAction, Order, RowAction, RowData } from './S8TableTypes';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { InfoButton } from '../InfoButton';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import { getInfo } from '../../../info/getInfo';
 
 interface S8TableHeadProps<T extends RowData> {

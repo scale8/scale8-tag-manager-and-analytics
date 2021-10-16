@@ -1,14 +1,15 @@
 import { FC, useEffect, useState } from 'react';
-import { Box, Checkbox, FormControlLabel } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Box, Checkbox, FormControlLabel } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import SelectInput from './InputTypes/SelectInput';
 import {
     DataContainersElementsFilteredContainer,
     DataContainersFilteredPlatform,
 } from '../molecules/DataMapsValueEdit';
 import TextInput from './InputTypes/TextInput';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { SelectValueWithSub } from '../../hooks/form/useFormValidation';
 import { splitOnce } from '../../utils/TextUtils';
 

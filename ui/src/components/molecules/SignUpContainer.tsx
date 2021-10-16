@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import TmLogo from '../atoms/TmLogo';
 import DmLogo from '../atoms/DmLogo';
 import LoggedOutFormContainer from './LoggedOutFormContainer';

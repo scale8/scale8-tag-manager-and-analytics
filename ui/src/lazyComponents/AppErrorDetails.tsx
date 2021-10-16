@@ -1,17 +1,17 @@
 import { FC, useEffect, useState } from 'react';
 import { AppErrorContentProps } from '../types/props/AppErrorContentProps';
-import { Box, Card, Divider, Paper } from '@material-ui/core';
+import { Box, Card, Divider, Paper } from '@mui/material';
 import { lazyQueryLoaderAndError } from '../abstractions/LazyQueryLoaderAndError';
 import { useLazyQuery } from '@apollo/client';
 import AppErrorsQuery from '../gql/queries/AppErrorsQuery';
 import { AppErrorsQueryData } from '../gql/generated/AppErrorsQueryData';
 import { ChildrenOnlyProps } from '../types/props/ChildrenOnlyProps';
 import LazyShiki from '../components/atoms/LibraryLoaders/LazyShiki';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { getApiUrl } from '../utils/ConfigUtils';
 import { unMinifyCodeWithErrorCoordinatesMapping } from '../utils/CodeUtils';
 import { AnchorLinkIcon } from '../components/atoms/AnchorLinkIcon';
-import Alert from '@material-ui/lab/Alert';
+import Alert from '@mui/material/Alert';
 
 const useStyles = makeStyles((theme) => ({
     card: {

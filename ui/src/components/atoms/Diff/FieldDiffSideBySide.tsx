@@ -1,6 +1,7 @@
 import { FC } from 'react';
-import { createStyles, Theme } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Theme } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { DiffMap, FieldDiff } from '../../../types/DiffTypes';
 import ObjectDiff from './ObjectDiff';
 import FieldContainer from './FieldContainer';

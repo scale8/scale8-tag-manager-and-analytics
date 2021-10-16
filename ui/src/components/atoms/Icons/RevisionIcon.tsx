@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import AccountTreeIcon from '@material-ui/icons/AccountTree';
-import { SvgIconProps } from '@material-ui/core';
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
+import { SvgIconProps } from '@mui/material';
 
 const RevisionIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

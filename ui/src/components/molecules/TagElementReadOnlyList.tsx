@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Box, Divider, List, ListItem } from '@material-ui/core';
+import { Box, Divider, List, ListItem } from '@mui/material';
 import TagElementReadOnlyListItem from './TagElementReadOnlyListItem';
 import { TagElementListItem } from '../../utils/ElementListUtils';
 import { PreviewElementDetails, PreviewElementType } from '../../types/PreviewFrameTypes';

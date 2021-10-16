@@ -1,6 +1,6 @@
 import { FC, Fragment } from 'react';
-import { Alert } from '@material-ui/lab';
-import { Box } from '@material-ui/core';
+import { Alert } from '@mui/material';
+import { Box } from '@mui/material';
 import { useQuery } from '@apollo/client';
 import { DynamicPageProps } from '../pageLoader/DynamicPageLoader';
 import { useLoggedInState } from '../context/AppContext';

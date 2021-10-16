@@ -1,4 +1,4 @@
-import { TextFieldProps } from '@material-ui/core/TextField/TextField';
+import { TextFieldProps } from '@mui/material/TextField/TextField';
 import { FormProps } from '../../hooks/form/useFormValidation';
 import { ReactElement } from 'react';
 import { VarType } from '../../gql/generated/globalTypes';

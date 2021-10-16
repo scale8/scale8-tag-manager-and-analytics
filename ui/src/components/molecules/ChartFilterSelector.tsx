@@ -1,8 +1,8 @@
 import { FC } from 'react';
-import { Chip } from '@material-ui/core';
+import { Chip } from '@mui/material';
 import { AppQueryFilters } from '../../types/props/AppAnalyticsContentProps';
-import { withStyles } from '@material-ui/core/styles';
-import FilterListIcon from '@material-ui/icons/FilterList';
+import withStyles from '@mui/styles/withStyles';
+import FilterListIcon from '@mui/icons-material/FilterList';
 
 const FilterChip = withStyles({
     root: {

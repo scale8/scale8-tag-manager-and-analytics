@@ -6,7 +6,7 @@ import ControlledTextInput from '../atoms/ControlledInputs/ControlledTextInput';
 import ControlledCodeInput from '../atoms/ControlledInputs/ControlledCodeInput';
 import { FormProps } from '../../hooks/form/useFormValidation';
 import ControlledBooleanSelect from '../atoms/ControlledInputs/ControlledBooleanSelect';
-import { Alert } from '@material-ui/lab';
+import { Alert } from '@mui/material';
 import {
     getStorageProviderLabel,
     initialStorageProviderFields,

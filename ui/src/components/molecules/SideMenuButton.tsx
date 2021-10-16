@@ -1,7 +1,8 @@
 import { FC } from 'react';
 import NextLink from 'next/link';
-import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme) =>

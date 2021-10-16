@@ -1,5 +1,5 @@
 import { ChangeEvent, FC, useEffect, useState } from 'react';
-import { FormControlLabel, Radio, RadioGroup, useTheme } from '@material-ui/core';
+import { FormControlLabel, Radio, RadioGroup, useTheme } from '@mui/material';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import ControlledSelect from '../../atoms/ControlledInputs/ControlledSelect';
 import {

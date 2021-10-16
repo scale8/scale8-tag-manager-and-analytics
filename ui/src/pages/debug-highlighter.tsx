@@ -1,10 +1,17 @@
 import { FC, useEffect, useState } from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { ThemeProvider } from '@material-ui/core';
+import { Theme } from '@mui/material/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
+import { ThemeProvider, StyledEngineProvider } from '@mui/material';
 import clsx from 'clsx';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import CssBaseline from '@mui/material/CssBaseline';
 import { useParams } from '../hooks/useParams';
 import { frameEventFromMessage, messageFromFrameEvent } from '../utils/FrameEventUtils';
+
+declare module '@mui/styles/defaultTheme' {
+    // eslint-disable-next-line @typescript-eslint/no-empty-interface
+    interface DefaultTheme extends Theme {}
+}
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -66,21 +73,23 @@ const DebugHighlighter: FC = () => {
     }, []);
 
     return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <div
-                className={clsx(classes.root, flashing && classes.flashing)}
-                onClick={() =>
-                    parent.postMessage(
-                        messageFromFrameEvent('highlighterClick', {
-                            code,
-                            index: parseInt(index ?? ''),
-                        }),
-                        '*',
-                    )
-                }
-            />
-        </ThemeProvider>
+        <StyledEngineProvider injectFirst>
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <div
+                    className={clsx(classes.root, flashing && classes.flashing)}
+                    onClick={() =>
+                        parent.postMessage(
+                            messageFromFrameEvent('highlighterClick', {
+                                code,
+                                index: parseInt(index ?? ''),
+                            }),
+                            '*',
+                        )
+                    }
+                />
+            </ThemeProvider>
+        </StyledEngineProvider>
     );
 };
 

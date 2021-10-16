@@ -1,9 +1,9 @@
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { FC, useEffect } from 'react';
-import { Box, IconButton } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import AddIcon from '@material-ui/icons/Add';
-import { TextFieldProps } from '@material-ui/core/TextField/TextField';
+import { Box, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import AddIcon from '@mui/icons-material/Add';
+import { TextFieldProps } from '@mui/material/TextField/TextField';
 import clsx from 'clsx';
 import TextInput from './InputTypes/TextInput';
 import { PlatformDataMapValidation } from '../../types/DataMapsTypes';

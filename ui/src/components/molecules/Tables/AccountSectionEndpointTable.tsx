@@ -2,7 +2,6 @@ import { FC } from 'react';
 import {
     Box,
     Button,
-    createStyles,
     IconButton,
     Table,
     TableBody,
@@ -12,10 +11,11 @@ import {
     TableRow,
     Theme,
     Tooltip,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+} from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { Sparklines, SparklinesLine } from 'react-sparklines';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useRouter } from 'next/router';
 import { toDataManager, toIngestEndpoint } from '../../../utils/NavigationPaths';
 
@@ -117,6 +117,7 @@ const AccountSectionEndpointTable: FC<AccountSectionAppTableProps> = (
                                                 .then();
                                         }}
                                         aria-label="Select Application"
+                                        size="large"
                                     >
                                         <ArrowForwardIcon fontSize="inherit" />
                                     </IconButton>

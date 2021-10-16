@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import MyLocationIcon from '@material-ui/icons/MyLocation';
-import { SvgIconProps } from '@material-ui/core';
+import MyLocationIcon from '@mui/icons-material/MyLocation';
+import { SvgIconProps } from '@mui/material';
 
 const PreviewSelectIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

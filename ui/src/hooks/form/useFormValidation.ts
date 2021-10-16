@@ -7,10 +7,10 @@ import {
     useEffect,
     useState,
 } from 'react';
-import { TextFieldProps } from '@material-ui/core/TextField/TextField';
-import { FormControlProps } from '@material-ui/core';
+import { TextFieldProps } from '@mui/material/TextField/TextField';
+import { FormControlProps } from '@mui/material';
 import { DateTimePickerProps } from '@material-ui/pickers';
-import { SwitchProps } from '@material-ui/core/Switch/Switch';
+import { SwitchProps } from '@mui/material/Switch/Switch';
 import {
     ValidateConfiguration,
     validateFormValues,

@@ -1,12 +1,12 @@
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { FC } from 'react';
 import {
     MappedPlatformElementFormProps,
     MappedPlatformValuesForm,
 } from './MappedPlatformValuesForm';
-import { IconButton } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
-import CloseIcon from '@material-ui/icons/Close';
+import { IconButton } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@mui/icons-material/Close';
 import { VarType } from '../../../gql/generated/globalTypes';
 import { buildDataMapLabel } from '../../../utils/DataMapUtils';
 

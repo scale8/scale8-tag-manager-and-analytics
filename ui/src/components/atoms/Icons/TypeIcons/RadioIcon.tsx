@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { SvgIconProps } from '@material-ui/core';
-import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
+import { SvgIconProps } from '@mui/material';
+import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 
 const RadioIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

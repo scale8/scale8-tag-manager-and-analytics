@@ -1,14 +1,8 @@
 import { FC } from 'react';
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    createStyles,
-    IconButton,
-    Tooltip,
-} from '@material-ui/core';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-import { makeStyles } from '@material-ui/core/styles';
+import { Card, CardContent, CardHeader, IconButton, Tooltip } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -48,6 +42,7 @@ const DashboardAccountSection: FC<DashboardAccountSectionProps> = (
                                 className={classes.button}
                                 onClick={action}
                                 aria-label={linkText}
+                                size="large"
                             >
                                 <ArrowForwardIcon fontSize="inherit" />
                             </IconButton>

@@ -1,7 +1,7 @@
 import { FC, MouseEvent, useState } from 'react';
-import { Box, Button, Menu, MenuItem, Typography } from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { makeStyles } from '@material-ui/core/styles';
+import { Box, Button, Menu, MenuItem, Typography } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import makeStyles from '@mui/styles/makeStyles';
 import { BreadcrumbAction, BreadcrumbButtonProps } from '../../utils/BreadcrumbButtonsUtils';
 
 const useStyles = makeStyles(() => ({
@@ -83,7 +83,6 @@ const BreadcrumbButton: FC<BreadcrumbButtonProps> = (props: BreadcrumbButtonProp
                         </Box>
                     </Button>
                     <Menu
-                        getContentAnchorEl={null}
                         anchorOrigin={{
                             vertical: 'bottom',
                             horizontal: 'left',

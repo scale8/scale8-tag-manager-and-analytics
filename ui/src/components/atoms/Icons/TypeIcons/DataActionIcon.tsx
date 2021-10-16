@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { SvgIconProps } from '@material-ui/core';
-import StorageIcon from '@material-ui/icons/Storage';
+import { SvgIconProps } from '@mui/material';
+import StorageIcon from '@mui/icons-material/Storage';
 
 const DataActionIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

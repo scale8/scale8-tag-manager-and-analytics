@@ -1,13 +1,15 @@
 import { Dispatch, MouseEvent, ReactElement, SetStateAction, useState } from 'react';
-import { createStyles, lighten, makeStyles, Theme } from '@material-ui/core/styles';
-import Toolbar from '@material-ui/core/Toolbar';
+import { lighten, Theme } from '@mui/material/styles';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
+import Toolbar from '@mui/material/Toolbar';
 import clsx from 'clsx';
-import Typography from '@material-ui/core/Typography';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import ViewColumnIcon from '@material-ui/icons/ViewColumn';
-import ClearIcon from '@material-ui/icons/Clear';
-import SearchIcon from '@material-ui/icons/Search';
+import Typography from '@mui/material/Typography';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import ViewColumnIcon from '@mui/icons-material/ViewColumn';
+import ClearIcon from '@mui/icons-material/Clear';
+import SearchIcon from '@mui/icons-material/Search';
 import {
     Box,
     Checkbox,
@@ -16,7 +18,7 @@ import {
     InputAdornment,
     Menu,
     MenuItem,
-} from '@material-ui/core';
+} from '@mui/material';
 import { BulkAction, Column, CoupleAction, FreeAction, RowData } from './S8TableTypes';
 import { InfoButton, InfoProps } from '../InfoButton';
 
@@ -124,13 +126,13 @@ const S8TableToolbar = <T extends RowData>(props: S8TableToolbarProps<T>): React
                             onClick={handleClick}
                             color="inherit"
                             aria-label="Select columns"
+                            size="large"
                         >
                             <ViewColumnIcon />
                         </IconButton>
                     </span>
                 </Tooltip>
                 <Menu
-                    getContentAnchorEl={null}
                     anchorOrigin={{
                         vertical: 'bottom',
                         horizontal: 'left',
@@ -189,6 +191,7 @@ const S8TableToolbar = <T extends RowData>(props: S8TableToolbarProps<T>): React
                             <IconButton
                                 aria-label="toggle password visibility"
                                 onClick={() => setFilter('')}
+                                size="large"
                             >
                                 <ClearIcon />
                             </IconButton>
@@ -210,6 +213,7 @@ const S8TableToolbar = <T extends RowData>(props: S8TableToolbarProps<T>): React
                                     disabled={
                                         action.disabled || (actionsLocked && !action.unLockable)
                                     }
+                                    size="large"
                                 >
                                     <action.icon />
                                 </IconButton>
@@ -231,6 +235,7 @@ const S8TableToolbar = <T extends RowData>(props: S8TableToolbarProps<T>): React
                                     }}
                                     color="inherit"
                                     aria-label={action.tooltip}
+                                    size="large"
                                 >
                                     <action.icon />
                                 </IconButton>
@@ -251,6 +256,7 @@ const S8TableToolbar = <T extends RowData>(props: S8TableToolbarProps<T>): React
                                     color="inherit"
                                     aria-label={action.tooltip}
                                     disabled={actionsLocked && !action.unLockable}
+                                    size="large"
                                 >
                                     <action.icon />
                                 </IconButton>

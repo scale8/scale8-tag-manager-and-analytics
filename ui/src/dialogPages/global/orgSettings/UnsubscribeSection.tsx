@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Box, Button, useTheme } from '@material-ui/core';
+import { Box, Button, useTheme } from '@mui/material';
 import DangerBox from '../../../components/molecules/DangerBox';
 import { PageActionProps, pageActions } from '../../../actions/PageActions';
 import { AccountProduct } from '../../../gql/generated/globalTypes';

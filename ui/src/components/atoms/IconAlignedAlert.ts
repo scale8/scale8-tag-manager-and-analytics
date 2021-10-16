@@ -1,5 +1,5 @@
-import { Alert } from '@material-ui/lab';
-import { withStyles } from '@material-ui/core/styles';
+import { Alert } from '@mui/material';
+import withStyles from '@mui/styles/withStyles';
 
 const IconAlignedAlert = withStyles({
     icon: {

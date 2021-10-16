@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { SvgIconProps } from '@material-ui/core';
-import EditIcon from '@material-ui/icons/Edit';
+import { SvgIconProps } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 
 const UpdateActionIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

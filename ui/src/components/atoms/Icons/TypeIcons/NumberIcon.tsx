@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { SvgIconProps } from '@material-ui/core';
-import LooksOneIcon from '@material-ui/icons/LooksOne';
+import { SvgIconProps } from '@mui/material';
+import LooksOneIcon from '@mui/icons-material/LooksOne';
 
 const NumberIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

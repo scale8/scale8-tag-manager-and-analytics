@@ -1,6 +1,7 @@
 import { FC, ReactNode, useEffect } from 'react';
-import { Dialog } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Dialog } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { DialogBaseProps } from '../../types/DialogTypes';
 import { useLoggedInState } from '../../context/AppContext';
 import DialogActionsWithCancel from '../molecules/DialogActionsWithCancel';

@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import { Box, Button, Tooltip } from '@material-ui/core';
-import { useTheme } from '@material-ui/core/styles';
-import { grey } from '@material-ui/core/colors';
+import { Box, Button, Tooltip } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import { grey } from '@mui/material/colors';
 
 type AccountSectionButtonProps = {
     isTag: boolean;

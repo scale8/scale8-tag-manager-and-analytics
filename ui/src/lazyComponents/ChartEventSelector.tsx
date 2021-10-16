@@ -1,10 +1,11 @@
-import { ChangeEvent, FC } from 'react';
+import { FC } from 'react';
 import { AppAnalyticsContentProps } from '../types/props/AppAnalyticsContentProps';
 import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import { useQuery } from '@apollo/client';
 import AppEventsQuery from '../gql/queries/AppEventsQuery';
 import { AppEventsQueryData } from '../gql/generated/AppEventsQueryData';
-import { FormControl, InputLabel, makeStyles, MenuItem, Select } from '@material-ui/core';
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { kebabToTitleCase } from '../utils/TextUtils';
 
 const useStyles = makeStyles((theme) => ({
@@ -87,7 +88,7 @@ const ChartEventSelector: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCon
                 }
             }
 
-            const handleEventChange = (e: ChangeEvent<{ value: unknown }>) => {
+            const handleEventChange = (e: SelectChangeEvent) => {
                 if (e.target.value === ' ') {
                     setFilter('event', undefined);
                 } else {
@@ -109,7 +110,7 @@ const ChartEventSelector: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCon
 
             const currentGroupKey = appQueryOptions.filter_options.event_group ?? ' ';
 
-            const handleEventGroupChange = (e: ChangeEvent<{ value: unknown }>) => {
+            const handleEventGroupChange = (e: SelectChangeEvent) => {
                 if (e.target.value === ' ') {
                     setEventGroup(undefined);
                 } else {

@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useQuery } from '@apollo/client';
-import { Box, Container, Grid } from '@material-ui/core';
+import { Box, Container, Grid } from '@mui/material';
 import DashboardAccountSection from '../../components/organisms/DashboardAccountSection';
 import { queryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
 import { OrgDashboardPageData } from '../../gql/generated/OrgDashboardPageData';

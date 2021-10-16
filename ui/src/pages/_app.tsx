@@ -1,13 +1,18 @@
 import Head from 'next/head';
 import { AppProps } from 'next/app';
-import { ThemeProvider } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider, Theme, StyledEngineProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 import theme from '../theme';
 import { useEffect } from 'react';
 import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { getApiUrl } from '../utils/ConfigUtils';
 import AppWrapper from '../context/AppWrapper';
+
+declare module '@mui/styles/defaultTheme' {
+    // eslint-disable-next-line @typescript-eslint/no-empty-interface
+    interface DefaultTheme extends Theme {}
+}
 
 const httpLink = createHttpLink({
     uri: `${getApiUrl()}/graphql`,
@@ -80,16 +85,18 @@ export default function MyApp(props: AppProps) {
                     content="minimum-scale=1, initial-scale=1, width=device-width"
                 />
             </Head>
-            <ThemeProvider theme={theme}>
-                {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-                <CssBaseline />
+            <StyledEngineProvider injectFirst>
+                <ThemeProvider theme={theme}>
+                    {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+                    <CssBaseline />
 
-                <ApolloProvider client={client}>
-                    <AppWrapper>
-                        <Component {...pageProps} />
-                    </AppWrapper>
-                </ApolloProvider>
-            </ThemeProvider>
+                    <ApolloProvider client={client}>
+                        <AppWrapper>
+                            <Component {...pageProps} />
+                        </AppWrapper>
+                    </ApolloProvider>
+                </ThemeProvider>
+            </StyledEngineProvider>
         </>
     );
 }

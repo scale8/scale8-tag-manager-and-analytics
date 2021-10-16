@@ -1,10 +1,10 @@
 import { ChangeEvent, FC, useContext, useEffect, useRef } from 'react';
-import { Box, CircularProgress, Grid, Typography } from '@material-ui/core';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import AppBar from '@material-ui/core/AppBar';
-import { makeStyles } from '@material-ui/core/styles';
-import Alert from '@material-ui/lab/Alert';
+import { Box, CircularProgress, Grid, Typography } from '@mui/material';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import AppBar from '@mui/material/AppBar';
+import makeStyles from '@mui/styles/makeStyles';
+import Alert from '@mui/material/Alert';
 import { PreviewFrameTagRules } from './PreviewFrameTagRules';
 import { findTagIndex, matchTagCode } from '../../../utils/PreviewUtils';
 import { TagType } from '../../../gql/generated/globalTypes';

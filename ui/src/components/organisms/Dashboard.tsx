@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, Card, Container, Grid, IconButton, Tooltip, Typography } from '@material-ui/core';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import makeStyles from '@mui/styles/makeStyles';
+import { Box, Card, Container, Grid, IconButton, Tooltip, Typography } from '@mui/material';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const useStyles = makeStyles((theme) => ({
     cardGrid: {
@@ -56,7 +56,11 @@ const Dashboard: FC<DashboardProps> = (props: DashboardProps) => {
                                 <div className={classes.cardAction}>
                                     <Box>
                                         <Tooltip title={_.linkText}>
-                                            <IconButton onClick={_.action} aria-label={_.linkText}>
+                                            <IconButton
+                                                onClick={_.action}
+                                                aria-label={_.linkText}
+                                                size="large"
+                                            >
                                                 <ArrowForwardIcon fontSize="inherit" />
                                             </IconButton>
                                         </Tooltip>

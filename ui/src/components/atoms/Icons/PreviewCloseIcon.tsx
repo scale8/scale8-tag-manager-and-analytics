@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import CloseIcon from '@material-ui/icons/Close';
-import { SvgIconProps } from '@material-ui/core';
+import CloseIcon from '@mui/icons-material/Close';
+import { SvgIconProps } from '@mui/material';
 
 const PreviewCloseIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

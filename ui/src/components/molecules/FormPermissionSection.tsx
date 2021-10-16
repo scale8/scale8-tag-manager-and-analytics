@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { Box, FormControl, FormControlLabel, FormGroup } from '@material-ui/core';
+import { Box, FormControl, FormControlLabel, FormGroup } from '@mui/material';
 import ControlledSwitch from '../atoms/ControlledInputs/ControlledSwitch';
 import { FormProps } from '../../hooks/form/useFormValidation';
 

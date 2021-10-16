@@ -1,8 +1,9 @@
 import { FC, ReactNode, useEffect } from 'react';
-import { Button, Dialog, DialogActions } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Button, Dialog, DialogActions } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { DialogBaseProps } from '../../types/DialogTypes';
-import { grey } from '@material-ui/core/colors';
+import { grey } from '@mui/material/colors';
 import { useLoggedInState } from '../../context/AppContext';
 
 const useStyles = makeStyles((theme) =>

@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { SvgIconProps } from '@material-ui/core';
-import WebIcon from '@material-ui/icons/Web';
+import { SvgIconProps } from '@mui/material';
+import WebIcon from '@mui/icons-material/Web';
 
 const PageEventIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

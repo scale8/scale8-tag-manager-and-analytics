@@ -1,12 +1,13 @@
 import { ChangeEvent, FC, useState } from 'react';
-import Tabs from '@material-ui/core/Tabs';
-import { Box } from '@material-ui/core';
-import Tab from '@material-ui/core/Tab';
+import Tabs from '@mui/material/Tabs';
+import { Box } from '@mui/material';
+import Tab from '@mui/material/Tab';
 import { PersonalInfoUpdate } from './PersonalInfoUpdate';
 import { ChangePassword } from './ChangePassword';
 import { GithubAccount } from './GithubAccount';
 import { TwoFactor } from './TwoFactor';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { useTheme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { APIToken } from './APIToken';
 import { DialogPageProps } from '../../types/DialogTypes';
 import TabsTabPanel from '../../components/molecules/TabsTabPanel';
@@ -15,8 +16,7 @@ import { ChangeEmail } from './ChangeEmail';
 import { useConfigState } from '../../context/AppContext';
 
 const useStyles = makeStyles({
-    tabRoot: { minHeight: 35 },
-    wrapper: { alignItems: 'flex-start', whiteSpace: 'nowrap' },
+    tabRoot: { minHeight: 35, alignItems: 'flex-start', whiteSpace: 'nowrap' },
 });
 
 const ManageAccountPage: FC<DialogPageProps> = (props: DialogPageProps) => {
@@ -45,7 +45,6 @@ const ManageAccountPage: FC<DialogPageProps> = (props: DialogPageProps) => {
                 <Tab
                     label="Personal info"
                     classes={{
-                        wrapper: classes.wrapper,
                         root: classes.tabRoot,
                     }}
                     wrapped
@@ -53,7 +52,6 @@ const ManageAccountPage: FC<DialogPageProps> = (props: DialogPageProps) => {
                 <Tab
                     label="Change Password"
                     classes={{
-                        wrapper: classes.wrapper,
                         root: classes.tabRoot,
                     }}
                     wrapped
@@ -61,7 +59,6 @@ const ManageAccountPage: FC<DialogPageProps> = (props: DialogPageProps) => {
                 <Tab
                     label="Change Email"
                     classes={{
-                        wrapper: classes.wrapper,
                         root: classes.tabRoot,
                     }}
                     wrapped
@@ -70,7 +67,6 @@ const ManageAccountPage: FC<DialogPageProps> = (props: DialogPageProps) => {
                     <Tab
                         label="GitHub Account"
                         classes={{
-                            wrapper: classes.wrapper,
                             root: classes.tabRoot,
                         }}
                         wrapped
@@ -80,7 +76,6 @@ const ManageAccountPage: FC<DialogPageProps> = (props: DialogPageProps) => {
                     <Tab
                         label="2-Factor Auth"
                         classes={{
-                            wrapper: classes.wrapper,
                             root: classes.tabRoot,
                         }}
                         wrapped
@@ -89,7 +84,6 @@ const ManageAccountPage: FC<DialogPageProps> = (props: DialogPageProps) => {
                 <Tab
                     label="API Token"
                     classes={{
-                        wrapper: classes.wrapper,
                         root: classes.tabRoot,
                     }}
                     wrapped
@@ -97,7 +91,6 @@ const ManageAccountPage: FC<DialogPageProps> = (props: DialogPageProps) => {
                 <Tab
                     label="Delete Account"
                     classes={{
-                        wrapper: classes.wrapper,
                         root: classes.tabRoot,
                     }}
                     wrapped

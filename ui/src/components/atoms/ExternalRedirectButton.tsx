@@ -1,6 +1,6 @@
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { FC } from 'react';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme) => ({

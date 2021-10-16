@@ -1,9 +1,9 @@
 import { ChangeEvent, FC, useContext } from 'react';
-import { Box, CircularProgress } from '@material-ui/core';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import AppBar from '@material-ui/core/AppBar';
-import { makeStyles } from '@material-ui/core/styles';
+import { Box, CircularProgress } from '@mui/material';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import AppBar from '@mui/material/AppBar';
+import makeStyles from '@mui/styles/makeStyles';
 import { PreviewFrameErrorsList } from './PreviewFrameErrorsList';
 import { PreviewFrameDataLayers } from './PreviewFrameDataLayers';
 import { TabularData } from '../../molecules/TabularData';

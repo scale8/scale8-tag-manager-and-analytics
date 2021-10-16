@@ -1,6 +1,6 @@
-import { useTheme } from '@material-ui/core/styles';
+import { useTheme } from '@mui/material/styles';
 import { FC, useEffect, useState } from 'react';
-import { Checkbox, FormControlLabel } from '@material-ui/core';
+import { Checkbox, FormControlLabel } from '@mui/material';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import ControlledSelect from '../../atoms/ControlledInputs/ControlledSelect';
 import { ConditionType, InputType, VarType } from '../../../gql/generated/globalTypes';

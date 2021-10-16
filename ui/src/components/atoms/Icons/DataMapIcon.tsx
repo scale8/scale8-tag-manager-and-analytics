@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import TableChartIcon from '@material-ui/icons/TableChart';
-import { SvgIconProps } from '@material-ui/core';
+import TableChartIcon from '@mui/icons-material/TableChart';
+import { SvgIconProps } from '@mui/material';
 
 const DataMapIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

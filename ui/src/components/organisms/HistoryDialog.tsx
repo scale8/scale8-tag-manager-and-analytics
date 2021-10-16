@@ -1,25 +1,26 @@
 import { FC, ReactNode } from 'react';
-import { DialogContent, DialogContentText, Paper } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { DialogContent, DialogContentText, Paper } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import { InfoButton, InfoProps } from '../molecules/InfoButton';
 import InfoDialogTitle from '../molecules/InfoDialogTitle';
-import Timeline from '@material-ui/lab/Timeline';
-import TimelineItem from '@material-ui/lab/TimelineItem';
-import TimelineSeparator from '@material-ui/lab/TimelineSeparator';
-import TimelineConnector from '@material-ui/lab/TimelineConnector';
-import TimelineOppositeContent from '@material-ui/lab/TimelineOppositeContent';
-import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
-import Typography from '@material-ui/core/Typography';
+import Timeline from '@mui/lab/Timeline';
+import TimelineItem from '@mui/lab/TimelineItem';
+import TimelineSeparator from '@mui/lab/TimelineSeparator';
+import TimelineConnector from '@mui/lab/TimelineConnector';
+import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
+import Typography from '@mui/material/Typography';
 import {
     EntitiesHistory,
     EntitiesHistory_getHistoryForEntities,
 } from '../../gql/generated/EntitiesHistory';
 import { snakeToTitleCase } from '../../utils/TextUtils';
-import { TimelineContent } from '@material-ui/lab';
-import TimelineDot from '@material-ui/lab/TimelineDot';
+import { TimelineContent } from '@mui/lab';
+import TimelineDot from '@mui/lab/TimelineDot';
 import { timestampDisplay } from '../../utils/DateTimeUtils';
 
 const useStyles = makeStyles((theme) =>
@@ -113,7 +114,7 @@ const HistoryDialog: FC<HistoryDialogProps> = (props: HistoryDialogProps) => {
                 <div className={classes.root}>
                     <DialogContent>
                         <DialogContentText component="div" id="alert-dialog-description">
-                            <Timeline align="alternate">
+                            <Timeline position="alternate">
                                 {props.historyData.getHistoryForEntities.map(
                                     (audit: Audit, index) => (
                                         <TimelineItem key={audit.id}>

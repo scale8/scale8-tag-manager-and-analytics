@@ -1,18 +1,18 @@
 import { FC, Fragment } from 'react';
-import { Box, Button, Tooltip } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Box, Button, Tooltip } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { PlatformDataMapInput } from '../../types/DataMapsTypes';
 import clsx from 'clsx';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 import { getCurrentDataMapInputFromParentsIndexes } from '../../utils/PlatformDataMapsUtils';
 import { getPlatformDataMapIcon } from '../../utils/PlatformDataMapTypeUtils';
 import { snakeToTitleCase } from '../../utils/TextUtils';
-import { Alert } from '@material-ui/lab';
-import EditIcon from '@material-ui/icons/Edit';
-import { grey } from '@material-ui/core/colors';
-import AddIcon from '@material-ui/icons/Add';
-import VisibilityIcon from '@material-ui/icons/Visibility';
+import { Alert } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import { grey } from '@mui/material/colors';
+import AddIcon from '@mui/icons-material/Add';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useLoggedInState } from '../../context/AppContext';
 
 export type TemplatedActionDataMapSectionProps = {
@@ -187,7 +187,6 @@ const TemplatedActionDataMapSection: FC<TemplatedActionDataMapSectionProps> = (
                     <Button
                         size="small"
                         variant="outlined"
-                        color="default"
                         onClick={() => addDataMap(parentsIndexes)}
                         startIcon={<AddIcon />}
                         disabled={secondaryDialogOpen}

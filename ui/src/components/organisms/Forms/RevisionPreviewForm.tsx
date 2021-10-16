@@ -1,6 +1,7 @@
 import { FC } from 'react';
-import { DialogContent, DialogContentText } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { DialogContent, DialogContentText } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
+import makeStyles from '@mui/styles/makeStyles';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import ControlledSelect from '../../atoms/ControlledInputs/ControlledSelect';
 import { FormProps } from '../../../hooks/form/useFormValidation';

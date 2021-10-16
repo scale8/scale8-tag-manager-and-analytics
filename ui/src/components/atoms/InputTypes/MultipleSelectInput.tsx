@@ -1,8 +1,8 @@
 import { FC, useState } from 'react';
-import { TextField } from '@material-ui/core';
-import { Autocomplete } from '@material-ui/lab';
+import { TextField } from '@mui/material';
+import { Autocomplete } from '@mui/material';
 import { autocompleteOff } from '../../../utils/BrowserUtils';
-import { TextFieldProps } from '@material-ui/core/TextField/TextField';
+import { TextFieldProps } from '@mui/material/TextField/TextField';
 
 export type MultipleSelectInputProps = TextFieldProps & {
     name: string;

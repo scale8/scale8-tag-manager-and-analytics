@@ -1,11 +1,11 @@
 import { FC, useContext } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, CircularProgress, ListItemText, useTheme } from '@material-ui/core';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import WarningIcon from '@material-ui/icons/Warning';
-import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
-import { grey } from '@material-ui/core/colors';
+import makeStyles from '@mui/styles/makeStyles';
+import { Box, CircularProgress, ListItemText, useTheme } from '@mui/material';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import WarningIcon from '@mui/icons-material/Warning';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { grey } from '@mui/material/colors';
 import { previewFrameContext } from '../../../context/PreviewFrameContext';
 import { RevisionStatus } from '../../../types/PreviewFrameTypes';
 

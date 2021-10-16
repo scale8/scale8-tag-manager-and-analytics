@@ -1,8 +1,8 @@
 import { ReactElement } from 'react';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
 import { RowAction, RowData } from './S8Table/S8TableTypes';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 
 interface BreadcrumbActionsProps<T extends RowData> {
     row: T;
@@ -41,6 +41,7 @@ const BreadcrumbActions = <T extends RowData>(
                             aria-label={action.tooltip}
                             disableRipple
                             disabled={action.disabled && action.disabled(row)}
+                            size="large"
                         >
                             <action.icon />
                         </IconButton>

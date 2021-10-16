@@ -1,7 +1,8 @@
 import { FC } from 'react';
-import { Box, createStyles, List } from '@material-ui/core';
+import { Box, List } from '@mui/material';
+import createStyles from '@mui/styles/createStyles';
 import { SideMenuButton, SideMenuButtonProps } from '../molecules/SideMenuButton';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { navigationColorFromSectionLocator } from '../../containers/SectionsDetails';
 import { useLoggedInState } from '../../context/AppContext';
 

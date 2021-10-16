@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
+import { Box } from '@mui/material';
 import clsx from 'clsx';
 import { CodeInputProps } from '../../../hooks/form/useFormValidation';
 import LazyCodeEditor from '../LibraryLoaders/LazyCodeEditor';

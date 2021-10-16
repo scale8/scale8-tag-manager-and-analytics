@@ -1,7 +1,7 @@
 // noinspection HtmlRequiredTitleElement,HtmlUnknownTarget,JSUnusedGlobalSymbols
 
 import Document, { Head, Html, Main, NextScript } from 'next/document';
-import { ServerStyleSheets } from '@material-ui/core/styles';
+import ServerStyleSheets from '@mui/styles/ServerStyleSheets';
 import theme from '../theme';
 import { Children } from 'react';
 

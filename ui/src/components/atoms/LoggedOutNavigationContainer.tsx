@@ -1,7 +1,7 @@
 import { FC, ReactNode } from 'react';
 import Logo from './Logo';
-import { Container, Toolbar } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Container, Toolbar } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import Link from './Next/Link';
 
 const useStyles = makeStyles((theme) => ({

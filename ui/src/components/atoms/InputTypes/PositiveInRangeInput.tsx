@@ -1,6 +1,6 @@
-import { TextField } from '@material-ui/core';
+import { TextField } from '@mui/material';
 import { ChangeEvent, FC, useState } from 'react';
-import { TextFieldProps } from '@material-ui/core/TextField/TextField';
+import { TextFieldProps } from '@mui/material/TextField/TextField';
 import { autocompleteOff } from '../../../utils/BrowserUtils';
 
 export type NumberInRangeInputProps = TextFieldProps & {

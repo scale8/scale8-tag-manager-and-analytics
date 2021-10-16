@@ -1,8 +1,8 @@
 import { FC, useState } from 'react';
-import { TextField } from '@material-ui/core';
+import { TextField } from '@mui/material';
 import { SelectIntValue } from '../../../hooks/form/useFormValidation';
-import { Autocomplete } from '@material-ui/lab';
-import { TextFieldProps } from '@material-ui/core/TextField/TextField';
+import { Autocomplete } from '@mui/material';
+import { TextFieldProps } from '@mui/material/TextField/TextField';
 import { autocompleteOff } from '../../../utils/BrowserUtils';
 import SelectInput from './SelectInput';
 
