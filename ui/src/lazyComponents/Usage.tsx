@@ -148,7 +148,6 @@ const Usage = <UsageData extends Record<string, any>>(
                         <Select
                             className={classes.dropdown}
                             input={<InputBase />}
-                            labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={aggregateMinutes}
                             onChange={(event: SelectChangeEvent<number>) => {

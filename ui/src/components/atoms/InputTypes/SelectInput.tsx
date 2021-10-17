@@ -72,7 +72,7 @@ const SelectInput: FC<SelectInputProps> = (props: SelectInputProps) => {
             required={required}
         >
             {label && <InputLabel>{label}</InputLabel>}
-            <Select value={value} onChange={handleChange} name={name}>
+            <Select label={label} value={value} onChange={handleChange} name={name}>
                 {!required && <MenuItem value="">--Not Set--</MenuItem>}
 
                 {[...optionValues].sort().map((v, key) => (

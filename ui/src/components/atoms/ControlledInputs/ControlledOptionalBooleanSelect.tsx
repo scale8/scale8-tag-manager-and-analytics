@@ -18,6 +18,7 @@ const ControlledOptionalBooleanSelect = <T extends { [key: string]: any }>(
         <FormControl {...formControlProps}>
             <InputLabel>{label}</InputLabel>
             <Select
+                label={label}
                 value={
                     formProps.values[name] === '' ? '' : formProps.values[name] ? 'TRUE' : 'FALSE'
                 }

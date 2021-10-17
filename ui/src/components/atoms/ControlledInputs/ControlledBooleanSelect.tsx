@@ -15,6 +15,7 @@ const ControlledBooleanSelect = <T extends { [key: string]: any }>(
         <FormControl {...formControlProps}>
             <InputLabel>{label}</InputLabel>
             <Select
+                label={label}
                 value={formProps.values[name] ? 'TRUE' : 'FALSE'}
                 onChange={handleChange}
                 onBlur={formProps.handleBlur}

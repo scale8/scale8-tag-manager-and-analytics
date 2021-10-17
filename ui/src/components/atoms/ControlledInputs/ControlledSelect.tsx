@@ -72,6 +72,7 @@ const ControlledSelect = <T extends { [key: string]: any }>(
         >
             <InputLabel>{inputLabel}</InputLabel>
             <Select
+                label={inputLabel}
                 value={formProps.values[name]}
                 onChange={handleChange}
                 onBlur={formProps.handleBlur}

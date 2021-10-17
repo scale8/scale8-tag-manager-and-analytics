@@ -71,6 +71,7 @@ const ControlledFilteredSelects = <T extends { [key: string]: any }>(
                 >
                     <InputLabel>{filterLabel}</InputLabel>
                     <Select
+                        label={filterLabel}
                         value={filterValue}
                         disabled={props.disabled}
                         onChange={handleFilterChange}
@@ -100,6 +101,7 @@ const ControlledFilteredSelects = <T extends { [key: string]: any }>(
                     >
                         <InputLabel>{label}</InputLabel>
                         <Select
+                            label={label}
                             value={formProps.values[name]}
                             onChange={handleChange}
                             onBlur={formProps.handleBlur}

@@ -255,19 +255,11 @@ const ChartPeriodSelector: FC<ChartPeriodSelectorProps> = (props: ChartPeriodSel
 
             <Box height={5} width={theme.spacing(2)} />
             <FormControl variant="outlined" size="small">
-                <InputLabel
-                    style={{
-                        backgroundColor: '#ffffff',
-                        paddingLeft: 5,
-                        paddingRight: 5,
-                        marginLeft: -5,
-                    }}
-                    id="period-label"
-                    shrink={true}
-                >
+                <InputLabel id="period-label" shrink={true}>
                     Period
                 </InputLabel>
                 <Select
+                    label="Period"
                     ref={rangeRef}
                     classes={{ root: classes.selectRoot }}
                     value={selectValue}
