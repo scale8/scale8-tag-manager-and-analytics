@@ -1,18 +1,17 @@
 import { FC } from 'react';
 import { useQuery } from '@apollo/client';
-import { Box } from '@mui/material';
-import { Alert } from '@mui/material';
 import { useRouter } from 'next/router';
 import { DynamicPageProps } from '../pageLoader/DynamicPageLoader';
 import { useLoggedInState } from '../context/AppContext';
 import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import { GlobalActionPageData } from '../gql/generated/GlobalActionPageData';
 import PageGlobalActionContentQuery from '../gql/queries/PageGlobalActionContentQuery';
-import { PageActionProps, pageActions } from '../actions/PageActions';
+import { PageActionProps } from '../actions/PageActions';
 import NonTablePageContainer from '../components/molecules/NonTablePageContainer';
 import { ActionGroupDistributionSection } from '../components/organisms/Sections/ActionGroupDistributionSection';
 import { ActionGroupDistribution } from '../types/TagRulesTypes';
 import { buildStandardMainInfo } from '../utils/InfoLabelsUtils';
+import { AlertRevisionFinal } from '../components/atoms/AlertRevisionFinal';
 import { toAppRevision } from '../utils/NavigationPaths';
 
 const GlobalActionPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
@@ -36,38 +35,15 @@ const GlobalActionPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
             };
 
             return (
-                <Box>
+                <div>
                     {data.getActionGroupDistribution.revision.locked && (
-                        <Alert severity="warning">
-                            This revision has been marked as final. No further changes are possible.
-                            Please{' '}
-                            <span
-                                style={{
-                                    color: 'inherit',
-                                    textDecoration: 'underline',
-                                    cursor: 'pointer',
-                                }}
-                                onClick={() => {
-                                    pageActions.duplicateAppRevision(
-                                        pageActionProps,
-                                        data.getActionGroupDistribution.revision.id,
-                                        (
-                                            id: string,
-                                            pageRefresh: () => void,
-                                            handleDialogClose: (checkChanges: boolean) => void,
-                                        ) => {
-                                            handleDialogClose(false);
-                                            router
-                                                .push(toAppRevision({ id }), 'global-actions')
-                                                .then();
-                                        },
-                                    );
-                                }}
-                            >
-                                <b>clone</b>
-                            </span>{' '}
-                            the revision to continue working on it.
-                        </Alert>
+                        <AlertRevisionFinal
+                            pageActionProps={pageActionProps}
+                            revisionId={data.getActionGroupDistribution.revision.id}
+                            navigateBack={() =>
+                                router.push(toAppRevision({ id }), 'global-actions').then()
+                            }
+                        />
                     )}
                     <NonTablePageContainer
                         title="Global Action"
@@ -82,7 +58,7 @@ const GlobalActionPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
                             pageActionProps={pageActionProps}
                         />
                     </NonTablePageContainer>
-                </Box>
+                </div>
             );
         },
         true,

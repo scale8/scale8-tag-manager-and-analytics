@@ -2,7 +2,6 @@
 
 import { FC } from 'react';
 import ActionForm from '../components/organisms/Forms/ActionForm';
-import { Box } from '@mui/material';
 import { useFormWithMappedPlatformValues } from '../hooks/form/useFormWithMappedPlatformValues';
 import nameValidator from '../utils/validators/nameValidator';
 import { PlatformDataMap } from '../types/DataMapsTypes';
@@ -17,6 +16,7 @@ import { mockPlatformActions } from './mock/MockPlatformActions';
 import { mockAppPlatformRevisions } from './mock/MockAppPlatformRevisions';
 import { mockIngestEndpoints } from './mock/MockIngestEndpoints';
 import { buildActionCreateInput } from '../dialogPages/tagManager/app/action/ActionCreate';
+import { SxBox } from '../components/atoms/SxBox';
 
 const formInitialState = {
     name: '',
@@ -114,17 +114,33 @@ const ActionFormTester: FC = () => {
                 <meta name="description" content="Scale8 - Action Form Test." />
             </Head>
 
-            <Box display="flex">
-                <Box flex={1} p={3} borderRight="1px solid black" minHeight="100vh">
+            <SxBox
+                sx={{
+                    display: 'flex',
+                }}
+            >
+                <SxBox
+                    sx={{
+                        flex: 1,
+                        p: 3,
+                        borderRight: '1px solid black',
+                        minHeight: '100vh',
+                    }}
+                >
                     <ActionForm {...formProps} />
-                </Box>
-                <Box flex={1} p={3}>
+                </SxBox>
+                <SxBox
+                    sx={{
+                        flex: 1,
+                        p: 3,
+                    }}
+                >
                     <CopyBlock
                         text={JSON.stringify(formProps.values.mappedPlatformValues ?? [], null, 2)}
                         language="json"
                     />
-                </Box>
-            </Box>
+                </SxBox>
+            </SxBox>
         </>
     );
 };

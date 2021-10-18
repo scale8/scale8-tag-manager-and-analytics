@@ -1,27 +1,10 @@
 import { FC } from 'react';
-import { DialogContent, DialogContentText } from '@mui/material';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
+import { Box, DialogContent, DialogContentText } from '@mui/material';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import FormGqlError from '../../atoms/FormGqlError';
 import { DuplicateFormProps } from '../../../utils/forms/DuplicateDialogFormUtils';
 import DialogActionsWithCancel from '../../molecules/DialogActionsWithCancel';
-
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            padding: theme.spacing(0, 2, 1, 2),
-        },
-        form: {
-            display: 'flex',
-            flexDirection: 'column',
-        },
-        input: {
-            width: '100%',
-            margin: theme.spacing(0, 0, 3),
-        },
-    }),
-);
+import { useTheme } from '@mui/styles';
 
 export type DuplicateDialogProps = DuplicateFormProps & {
     oldName: string;
@@ -30,10 +13,14 @@ export type DuplicateDialogProps = DuplicateFormProps & {
 };
 
 const DuplicateDialogForm: FC<DuplicateDialogProps> = (props: DuplicateDialogProps) => {
-    const classes = useStyles();
+    const theme = useTheme();
 
     return (
-        <form className={classes.form} onSubmit={props.handleSubmit}>
+        <Box
+            component="form"
+            sx={{ display: 'flex', flexDirection: 'column' }}
+            onSubmit={props.handleSubmit}
+        >
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
                     {props.description}
@@ -43,7 +30,10 @@ const DuplicateDialogForm: FC<DuplicateDialogProps> = (props: DuplicateDialogPro
                     name="name"
                     label="New Name"
                     formProps={props}
-                    className={classes.input}
+                    sx={{
+                        width: '100%',
+                        margin: theme.spacing(2, 0, 1),
+                    }}
                     required
                     autoFocus
                 />
@@ -54,7 +44,7 @@ const DuplicateDialogForm: FC<DuplicateDialogProps> = (props: DuplicateDialogPro
                 confirmText={props.submitText}
                 ignoreChanges
             />
-        </form>
+        </Box>
     );
 };
 

@@ -1,33 +1,35 @@
 import { FC } from 'react';
-import makeStyles from '@mui/styles/makeStyles';
 import LoggedOutNavigationContainer from '../../atoms/LoggedOutNavigationContainer';
 import { ChildrenOnlyProps } from '../../../types/props/ChildrenOnlyProps';
-
-const useStyles = makeStyles(() => ({
-    root: {
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '100vh',
-        minWidth: '320px',
-        background: '#f9f9f9',
-        position: 'relative',
-    },
-    section: {
-        flexShrink: 0,
-        width: '100%',
-    },
-}));
+import { Box } from '@mui/material';
 
 const LoggedOutTemplate: FC<ChildrenOnlyProps> = (props: ChildrenOnlyProps) => {
-    const classes = useStyles();
-
     return (
-        <div className={classes.root}>
-            <div className={classes.section}>
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                minHeight: '100vh',
+                minWidth: '320px',
+                background: '#f9f9f9',
+                position: 'relative',
+            }}
+        >
+            <Box
+                sx={{
+                    flexShrink: 0,
+                    width: '100%',
+                }}
+            >
                 <LoggedOutNavigationContainer />
-            </div>
-            <div className={classes.section}>{props.children}</div>
-        </div>
+            </Box>
+            <Box
+                sx={{
+                    flexShrink: 0,
+                    width: '100%',
+                }}
+            >{props.children}</Box>
+        </Box>
     );
 };
 

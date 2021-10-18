@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { AppProps } from 'next/app';
-import { ThemeProvider, Theme, StyledEngineProvider } from '@mui/material/styles';
+import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from '../theme';
 import { useEffect } from 'react';
@@ -8,11 +8,6 @@ import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from '@ap
 import { setContext } from '@apollo/client/link/context';
 import { getApiUrl } from '../utils/ConfigUtils';
 import AppWrapper from '../context/AppWrapper';
-
-declare module '@mui/styles/defaultTheme' {
-    // eslint-disable-next-line @typescript-eslint/no-empty-interface
-    interface DefaultTheme extends Theme {}
-}
 
 const httpLink = createHttpLink({
     uri: `${getApiUrl()}/graphql`,

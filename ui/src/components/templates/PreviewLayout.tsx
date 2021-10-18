@@ -1,7 +1,5 @@
 import { FC, useContext } from 'react';
 import { Theme } from '@mui/material/styles';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
 import { Box, ThemeProvider, StyledEngineProvider } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { PreviewFrameToolbar } from '../organisms/PreviewFrame/PreviewFrameToolbar';
@@ -14,25 +12,11 @@ import { ApolloError } from '@apollo/client/errors';
 import { previewFrameContext } from '../../context/PreviewFrameContext';
 import Link from '../atoms/Next/Link';
 
-declare module '@mui/styles/defaultTheme' {
-    // eslint-disable-next-line @typescript-eslint/no-empty-interface
-    interface DefaultTheme extends Theme {}
-}
-
-const useStyles = makeStyles(() =>
-    createStyles({
-        root: {
-            height: '100%',
-            flexGrow: 1,
-        },
-    }),
-);
-
 const theme = (outerTheme: Theme) => ({
     ...outerTheme,
-    overrides: {
+    components: {
         MuiCssBaseline: {
-            '@global': {
+            styleOverrides: {
                 'html, body, div#root, div#__next': {
                     height: '100%',
                 },
@@ -64,7 +48,7 @@ const PreviewBodyError: FC<{ error: ApolloError }> = (props: { error: ApolloErro
                 <Alert severity="warning">
                     You must be{' '}
                     <Link
-                        style={{ textDecoration: 'underline' }}
+                        sx={{ textDecoration: 'underline' }}
                         href={'/login'}
                         color="inherit"
                         target="_blank"
@@ -104,16 +88,19 @@ const PreviewMainBody: FC = () => {
 };
 
 const PreviewLayout: FC = () => {
-    const classes = useStyles();
-
     return (
         <StyledEngineProvider injectFirst>
             <ThemeProvider theme={theme}>
                 <CssBaseline />
-                <div className={classes.root}>
+                <Box
+                    sx={{
+                        height: '100%',
+                        flexGrow: 1,
+                    }}
+                >
                     <PreviewFrameToolbar />
                     <PreviewMainBody />
-                </div>
+                </Box>
             </ThemeProvider>
         </StyledEngineProvider>
     );

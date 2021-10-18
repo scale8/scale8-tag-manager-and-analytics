@@ -12,12 +12,11 @@ import {
     RowData,
 } from '../components/molecules/S8Table/S8TableTypes';
 import { useTableStateManager } from '../hooks/table/useTableStateManager';
-import { Alert } from '@mui/material';
-import { Box } from '@mui/material';
 import { InfoProps } from '../components/molecules/InfoButton';
 import { PageActionProps } from '../actions/PageActions';
 import { queryLoaderAndError } from './QueryLoaderAndError';
 import { useLoggedInState } from '../context/AppContext';
+import { AlertWarning } from '../components/atoms/AlertWarning';
 
 export type TablePageProps<Row extends RowData, TableData> = {
     title: string;
@@ -122,9 +121,9 @@ const TablePage = <Row extends RowData, TableData>(
             };
 
             return (
-                <Box>
+                <div>
                     {tableLockOnRevision && (
-                        <Alert severity="warning">
+                        <AlertWarning>
                             This revision has been marked as final. No further changes are possible.{' '}
                             {tableRevisionCloneAction && (
                                 <>
@@ -142,10 +141,10 @@ const TablePage = <Row extends RowData, TableData>(
                                     the revision to continue working on it.
                                 </>
                             )}
-                        </Alert>
+                        </AlertWarning>
                     )}
                     <S8Table<Row> {...tableProps} actionsLocked={tableLockOnRevision} />
-                </Box>
+                </div>
             );
         },
     );
