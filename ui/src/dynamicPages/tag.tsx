@@ -1,5 +1,4 @@
 import { FC, Fragment } from 'react';
-import { Alert } from '@mui/material';
 import { Box } from '@mui/material';
 import { useQuery } from '@apollo/client';
 import { DynamicPageProps } from '../pageLoader/DynamicPageLoader';
@@ -16,6 +15,7 @@ import RuleContainerDivider from '../components/atoms/RuleContainerDivider';
 import { RuleGroupPageSection } from '../components/organisms/Sections/RuleGroupPageSection';
 import { RuleGroup } from '../types/TagRulesTypes';
 import RulesAddButton from '../components/atoms/RulesAddButton';
+import { AlertRevisionFinal } from '../components/atoms/AlertRevisionFinal';
 
 const RulesPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const tagId = props.params.id ?? '';
@@ -41,34 +41,22 @@ const RulesPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
             return (
                 <Box>
                     {data.getTag.revision.locked && (
-                        <Alert severity="warning">
-                            This revision has been marked as final. No further changes are possible.
-                            Please{' '}
-                            <span
-                                style={{
-                                    color: 'inherit',
-                                    textDecoration: 'underline',
-                                    cursor: 'pointer',
-                                }}
-                                onClick={() => {
-                                    pageActions.duplicateAppRevision(
-                                        pageActionProps,
-                                        data.getTag.revision.id,
-                                        (
-                                            id: string,
-                                            pageRefresh: () => void,
-                                            handleDialogClose: (checkChanges: boolean) => void,
-                                        ) => {
-                                            handleDialogClose(false);
-                                            router.push(toAppRevision({ id }, 'tags')).then();
-                                        },
-                                    );
-                                }}
-                            >
-                                <b>clone</b>
-                            </span>{' '}
-                            the revision to continue working on it.
-                        </Alert>
+                        <AlertRevisionFinal
+                            onCloneLinkClick={() => {
+                                pageActions.duplicateAppRevision(
+                                    pageActionProps,
+                                    data.getTag.revision.id,
+                                    (
+                                        id: string,
+                                        pageRefresh: () => void,
+                                        handleDialogClose: (checkChanges: boolean) => void,
+                                    ) => {
+                                        handleDialogClose(false);
+                                        router.push(toAppRevision({ id }, 'tags')).then();
+                                    },
+                                );
+                            }}
+                        />
                     )}
                     <NonTablePageContainer title="Rules" {...buildStandardMainInfo('rules')}>
                         {data.getTag.rule_groups.map((ruleGroup, ruleGroupIndex) => (

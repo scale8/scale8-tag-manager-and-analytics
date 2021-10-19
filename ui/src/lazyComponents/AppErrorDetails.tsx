@@ -42,10 +42,10 @@ const useStyles = makeStyles((theme) => ({
         wordBreak: 'break-all',
         border: '1px solid rgba(0, 0, 0, 0.12)',
         borderRadius: '4px',
-        '&:first-child': {
+        '&:first-of-type': {
             marginRight: theme.spacing(1),
         },
-        '&:last-child': {
+        '&:last-of-type': {
             marginLeft: theme.spacing(1),
         },
     },

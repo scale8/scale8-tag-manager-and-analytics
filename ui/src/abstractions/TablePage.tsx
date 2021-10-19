@@ -16,7 +16,7 @@ import { InfoProps } from '../components/molecules/InfoButton';
 import { PageActionProps } from '../actions/PageActions';
 import { queryLoaderAndError } from './QueryLoaderAndError';
 import { useLoggedInState } from '../context/AppContext';
-import { AlertWarning } from '../components/atoms/AlertWarning';
+import { AlertRevisionFinal } from '../components/atoms/AlertRevisionFinal';
 
 export type TablePageProps<Row extends RowData, TableData> = {
     title: string;
@@ -123,25 +123,13 @@ const TablePage = <Row extends RowData, TableData>(
             return (
                 <div>
                     {tableLockOnRevision && (
-                        <AlertWarning>
-                            This revision has been marked as final. No further changes are possible.{' '}
-                            {tableRevisionCloneAction && (
-                                <>
-                                    Please{' '}
-                                    <span
-                                        style={{
-                                            color: 'inherit',
-                                            textDecoration: 'underline',
-                                            cursor: 'pointer',
-                                        }}
-                                        onClick={tableRevisionCloneAction}
-                                    >
-                                        <b>clone</b>
-                                    </span>{' '}
-                                    the revision to continue working on it.
-                                </>
-                            )}
-                        </AlertWarning>
+                        <AlertRevisionFinal
+                            onCloneLinkClick={
+                                tableRevisionCloneAction
+                                    ? () => tableRevisionCloneAction()
+                                    : undefined
+                            }
+                        />
                     )}
                     <S8Table<Row> {...tableProps} actionsLocked={tableLockOnRevision} />
                 </div>

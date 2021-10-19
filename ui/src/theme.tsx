@@ -90,7 +90,7 @@ const theme = createTheme({
         MuiDialogActions: {
             styleOverrides: {
                 spacing: {
-                    '& > :not(:first-child)': {
+                    '& > :not(:first-of-type)': {
                         marginLeft: '16px',
                     },
                 },

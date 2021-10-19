@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
         contentCell: {
             paddingLeft: 0,
             borderBottom: 0,
-            '&:last-child': {
+            '&:last-of-type': {
                 paddingLeft: 0,
                 paddingRight: 0,
             },

@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         padding: theme.spacing(1),
         flexGrow: 1,
-        '& div:last-child': {
+        '& div:last-of-type': {
             marginBottom: 0,
         },
     },

@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) =>
             },
         },
         tableRow: {
-            '&:last-child td, &:last-child th': {
+            '&:last-of-type td, &:last-of-type th': {
                 borderBottom: 0,
             },
         },

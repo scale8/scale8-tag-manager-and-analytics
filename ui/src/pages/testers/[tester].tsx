@@ -7,6 +7,7 @@ import DiffTester from '../../testers/diff-tester';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { getNodeEnv } from '../../utils/ConfigUtils';
 import ErrorHighlightTester from '../../testers/error-highlight-tester';
+import UsageTester from '../../testers/usage-tester';
 
 export const getStaticPaths: GetStaticPaths = async () => {
     if (getNodeEnv() === 'development') {
@@ -16,6 +17,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
                 { params: { tester: 'condition-form-tester' } },
                 { params: { tester: 'diff-tester' } },
                 { params: { tester: 'error-highlight-tester' } },
+                { params: { tester: 'usage-tester' } },
             ],
             fallback: false,
         };
@@ -43,6 +45,8 @@ const Tester: FC = () => {
             return <DiffTester />;
         case 'error-highlight-tester':
             return <ErrorHighlightTester />;
+        case 'usage-tester':
+            return <UsageTester />;
         default:
             return <Navigate to="/404" />;
     }

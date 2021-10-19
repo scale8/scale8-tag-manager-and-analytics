@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) =>
                 padding: theme.spacing(0, 1),
                 borderTop: '1px solid #dddddd',
             },
-            '& th:first-child, & td:first-child': {
+            '& th:first-of-type, & td:first-of-type': {
                 borderRight: '1px solid #dddddd',
             },
             '& td$objectSpacer': {

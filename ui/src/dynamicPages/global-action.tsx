@@ -6,13 +6,14 @@ import { useLoggedInState } from '../context/AppContext';
 import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import { GlobalActionPageData } from '../gql/generated/GlobalActionPageData';
 import PageGlobalActionContentQuery from '../gql/queries/PageGlobalActionContentQuery';
-import { PageActionProps } from '../actions/PageActions';
+import { PageActionProps, pageActions } from '../actions/PageActions';
 import NonTablePageContainer from '../components/molecules/NonTablePageContainer';
 import { ActionGroupDistributionSection } from '../components/organisms/Sections/ActionGroupDistributionSection';
 import { ActionGroupDistribution } from '../types/TagRulesTypes';
 import { buildStandardMainInfo } from '../utils/InfoLabelsUtils';
-import { AlertRevisionFinal } from '../components/atoms/AlertRevisionFinal';
 import { toAppRevision } from '../utils/NavigationPaths';
+import { Box } from '@mui/material';
+import { AlertRevisionFinal } from '../components/atoms/AlertRevisionFinal';
 
 const GlobalActionPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const id = props.params.id ?? '';
@@ -35,14 +36,23 @@ const GlobalActionPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
             };
 
             return (
-                <div>
+                <Box>
                     {data.getActionGroupDistribution.revision.locked && (
                         <AlertRevisionFinal
-                            pageActionProps={pageActionProps}
-                            revisionId={data.getActionGroupDistribution.revision.id}
-                            navigateBack={() =>
-                                router.push(toAppRevision({ id }), 'global-actions').then()
-                            }
+                            onCloneLinkClick={() => {
+                                pageActions.duplicateAppRevision(
+                                    pageActionProps,
+                                    data.getActionGroupDistribution.revision.id,
+                                    (
+                                        id: string,
+                                        pageRefresh: () => void,
+                                        handleDialogClose: (checkChanges: boolean) => void,
+                                    ) => {
+                                        handleDialogClose(false);
+                                        router.push(toAppRevision({ id }, 'global-actions')).then();
+                                    },
+                                );
+                            }}
                         />
                     )}
                     <NonTablePageContainer
@@ -58,7 +68,7 @@ const GlobalActionPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
                             pageActionProps={pageActionProps}
                         />
                     </NonTablePageContainer>
-                </div>
+                </Box>
             );
         },
         true,

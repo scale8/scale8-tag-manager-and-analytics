@@ -1,4 +1,3 @@
-import makeStyles from '@mui/styles/makeStyles';
 import {
     displayDayMonth,
     displayDayMonthTime,
@@ -17,37 +16,6 @@ export type UsageDetails = {
     field1: number;
     field2: number;
 };
-
-export const useStyles = makeStyles(() => ({
-    zoomSelect: {
-        fontWeight: 'bold',
-        marginLeft: '20px',
-        cursor: 'pointer',
-        '&:hover': {
-            color: '#40a9ff',
-            opacity: 1,
-        },
-        '&$selected': {
-            color: '#1890ff',
-            cursor: 'default',
-        },
-        '&:focus': {
-            color: '#40a9ff',
-        },
-    },
-    dropdown: {
-        marginTop: '-4px',
-        '& .MuiSelect-select:focus': {
-            backgroundColor: 'transparent',
-        },
-    },
-    divider: {
-        height: '20px',
-        marginTop: '2px',
-        marginLeft: '13px',
-    },
-    selected: {},
-}));
 
 const zoomToMinutes = (zoom: string): number => {
     switch (zoom) {

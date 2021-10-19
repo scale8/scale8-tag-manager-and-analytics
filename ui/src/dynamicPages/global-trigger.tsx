@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { Alert } from '@mui/material';
 import { Box } from '@mui/material';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
@@ -14,6 +13,7 @@ import { TriggerSection } from '../components/organisms/Sections/TriggerSection'
 import { Trigger } from '../types/TagRulesTypes';
 import { buildStandardMainInfo } from '../utils/InfoLabelsUtils';
 import { toAppRevision } from '../utils/NavigationPaths';
+import { AlertRevisionFinal } from '../components/atoms/AlertRevisionFinal';
 
 const GlobalTriggerPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const triggerId = props.params.id ?? '';
@@ -38,36 +38,24 @@ const GlobalTriggerPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
             return (
                 <Box>
                     {data.getTrigger.revision.locked && (
-                        <Alert severity="warning">
-                            This revision has been marked as final. No further changes are possible.
-                            Please{' '}
-                            <span
-                                style={{
-                                    color: 'inherit',
-                                    textDecoration: 'underline',
-                                    cursor: 'pointer',
-                                }}
-                                onClick={() => {
-                                    pageActions.duplicateAppRevision(
-                                        pageActionProps,
-                                        data.getTrigger.revision.id,
-                                        (
-                                            id: string,
-                                            pageRefresh: () => void,
-                                            handleDialogClose: (checkChanges: boolean) => void,
-                                        ) => {
-                                            handleDialogClose(false);
-                                            router
-                                                .push(toAppRevision({ id }), 'global-triggers')
-                                                .then();
-                                        },
-                                    );
-                                }}
-                            >
-                                <b>clone</b>
-                            </span>{' '}
-                            the revision to continue working on it.
-                        </Alert>
+                        <AlertRevisionFinal
+                            onCloneLinkClick={() => {
+                                pageActions.duplicateAppRevision(
+                                    pageActionProps,
+                                    data.getTrigger.revision.id,
+                                    (
+                                        id: string,
+                                        pageRefresh: () => void,
+                                        handleDialogClose: (checkChanges: boolean) => void,
+                                    ) => {
+                                        handleDialogClose(false);
+                                        router
+                                            .push(toAppRevision({ id }, 'global-triggers'))
+                                            .then();
+                                    },
+                                );
+                            }}
+                        />
                     )}
                     <NonTablePageContainer
                         title="Global Trigger"

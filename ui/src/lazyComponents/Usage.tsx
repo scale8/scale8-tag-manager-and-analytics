@@ -1,5 +1,4 @@
 import { ReactElement, useEffect, useState } from 'react';
-import clsx from 'clsx';
 import { QueryResult } from '@apollo/client/react/types/types';
 import {
     Box,
@@ -19,7 +18,6 @@ import {
     labelsFromRange,
     prepareUsageRange,
     UsageDetails,
-    useStyles,
     zoomDefaultAggregateMinutes,
     zoomMaxAggregateMinutes,
     zoomMinAggregateMinutes,
@@ -39,7 +37,6 @@ export type UsageProps<UsageData> = UsagePageProps & {
 const Usage = <UsageData extends Record<string, any>>(
     props: UsageProps<UsageData>,
 ): ReactElement => {
-    const classes = useStyles();
     const [zoom, setZoom] = useState('1h');
     const [aggregateMinutes, setAggregateMinutes] = useState(1);
     const zoomLevels = ['1h', '2h', '12h', '1d', '3d', '1w', '2w'];
@@ -146,7 +143,12 @@ const Usage = <UsageData extends Record<string, any>>(
                 >
                     <Box display="flex" justifyContent="flex-end" mt={1} mr={5}>
                         <Select
-                            className={classes.dropdown}
+                            sx={{
+                                marginTop: '-4px',
+                                '& .MuiSelect-select:focus': {
+                                    backgroundColor: 'transparent',
+                                },
+                            }}
                             input={<InputBase />}
                             id="demo-simple-select"
                             value={aggregateMinutes}
@@ -169,29 +171,66 @@ const Usage = <UsageData extends Record<string, any>>(
                                     </MenuItem>
                                 ))}
                         </Select>
-                        <Divider className={classes.divider} orientation="vertical" flexItem />
+                        <Divider
+                            sx={{
+                                height: '20px',
+                                marginTop: '2px',
+                                marginLeft: '13px',
+                            }}
+                            orientation="vertical"
+                            flexItem
+                        />
                         {zoomLevels.map((zoomLevel) => (
-                            <span
+                            <Box
+                                component="span"
                                 key={zoomLevel}
-                                className={clsx(
-                                    classes.zoomSelect,
-                                    zoom === zoomLevel && classes.selected,
-                                )}
+                                sx={{
+                                    fontWeight: 'bold',
+                                    marginLeft: '20px',
+                                    cursor: 'pointer',
+                                    '&:hover': {
+                                        color: '#40a9ff',
+                                        opacity: 1,
+                                    },
+                                    '&.selected': {
+                                        color: '#1890ff',
+                                        cursor: 'default',
+                                    },
+                                    '&:focus': {
+                                        color: '#40a9ff',
+                                    },
+                                }}
+                                className={zoom === zoomLevel ? 'selected' : undefined}
                                 onClick={() => setZoom(zoomLevel)}
                             >
                                 {zoomLevel}
-                            </span>
+                            </Box>
                         ))}
                         <Divider
                             style={{
                                 marginLeft: '23px',
                             }}
-                            className={classes.divider}
+                            sx={{
+                                height: '20px',
+                                marginTop: '2px',
+                                marginLeft: '13px',
+                            }}
                             orientation="vertical"
                             flexItem
                         />
                         <RefreshIcon
-                            className={classes.zoomSelect}
+                            sx={{
+                                fontWeight: 'bold',
+                                marginLeft: '20px',
+                                cursor: 'pointer',
+                                '&:hover': {
+                                    color: '#40a9ff',
+                                    opacity: 1,
+                                },
+                                '&:focus': {
+                                    color: '#40a9ff',
+                                },
+                            }}
                             onClick={() => {
                                 (async () => {
                                     await mainQuery.refetch();
