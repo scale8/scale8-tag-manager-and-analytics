@@ -7,6 +7,7 @@ import { OperationVariables } from '@apollo/client/core';
 import { lazyQueryLoaderAndError } from '../../abstractions/LazyQueryLoaderAndError';
 import { AppGroupingCount } from '../../utils/AnalyticsUtils';
 import { UTCTimestamp } from '../../utils/DateTimeUtils';
+import { NoRecordsMessage } from '../../components/atoms/NoRecordsMessage';
 
 export type GroupingCount = {
     key: string;
@@ -52,13 +53,7 @@ const AppDashboardList: FC<DashboardListProps> = (props: DashboardListProps) => 
             }, 0);
 
             if (total === 0) {
-                return (
-                    <Box width="100%">
-                        <Box display="flex" alignItems="center" justifyContent="center">
-                            <Box color="#777777">No records to display</Box>
-                        </Box>
-                    </Box>
-                );
+                return <NoRecordsMessage />;
             }
 
             return (

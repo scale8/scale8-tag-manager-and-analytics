@@ -12,6 +12,7 @@ import { getApiUrl } from '../utils/ConfigUtils';
 import { unMinifyCodeWithErrorCoordinatesMapping } from '../utils/CodeUtils';
 import { AnchorLinkIcon } from '../components/atoms/AnchorLinkIcon';
 import Alert from '@mui/material/Alert';
+import { NoRecordsMessage } from '../components/atoms/NoRecordsMessage';
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -271,11 +272,7 @@ const AppErrorDetails: FC<AppErrorContentProps> = (props: AppErrorContentProps) 
             if (list.length === 0) {
                 return (
                     <AppErrorDetailsContainer>
-                        <Box width="100%">
-                            <Box display="flex" alignItems="center" justifyContent="center">
-                                <Box color="#777777">No records to display</Box>
-                            </Box>
-                        </Box>
+                        <NoRecordsMessage />
                     </AppErrorDetailsContainer>
                 );
             }

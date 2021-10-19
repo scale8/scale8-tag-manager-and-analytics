@@ -11,7 +11,9 @@ type AccountSectionButtonProps = {
     clickAction: () => void;
 };
 
-const AccountSectionButton: FC<AccountSectionButtonProps> = (props: AccountSectionButtonProps) => {
+export const AccountSectionButton: FC<AccountSectionButtonProps> = (
+    props: AccountSectionButtonProps,
+) => {
     const { isTag, isOwner, clickAction, text, tooltip } = props;
     const theme = useTheme();
 
@@ -48,4 +50,3 @@ const AccountSectionButton: FC<AccountSectionButtonProps> = (props: AccountSecti
         </Box>
     );
 };
-export { AccountSectionButton };
