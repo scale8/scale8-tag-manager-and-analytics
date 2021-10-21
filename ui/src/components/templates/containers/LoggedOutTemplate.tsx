@@ -28,7 +28,9 @@ const LoggedOutTemplate: FC<ChildrenOnlyProps> = (props: ChildrenOnlyProps) => {
                     flexShrink: 0,
                     width: '100%',
                 }}
-            >{props.children}</Box>
+            >
+                {props.children}
+            </Box>
         </Box>
     );
 };

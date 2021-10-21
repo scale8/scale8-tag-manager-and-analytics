@@ -1,8 +1,6 @@
 import { FC, MouseEvent, SyntheticEvent } from 'react';
 import SideBar from '../../organisms/SideBar';
-import makeStyles from '@mui/styles/makeStyles';
 import { Box, Snackbar } from '@mui/material';
-import createStyles from '@mui/styles/createStyles';
 import CancelConfirmDialog from '../../organisms/CancelConfirmDialog';
 import { MainDrawer } from '../../organisms/MainDrawer';
 import { DialogBaseProps, DialogPageProps } from '../../../types/DialogTypes';
@@ -14,70 +12,7 @@ import { useLoggedInState } from '../../../context/AppContext';
 import { LoggedInProps } from '../../../containers/global/LoggedInSection';
 import { grey } from '@mui/material/colors';
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            boxSizing: 'border-box',
-            minHeight: '100vh',
-        },
-        main: {
-            marginLeft: '50px',
-            display: 'flex',
-            flexDirection: 'column',
-            boxSizing: 'border-box',
-            flexGrow: 1,
-        },
-        corner: {
-            zIndex: theme.zIndex.appBar + 1,
-            position: 'absolute',
-            width: 0,
-            height: 0,
-            borderStyle: 'solid',
-            borderWidth: '15px 15px 0 0',
-            borderColor: `${theme.palette.primary.main} transparent transparent transparent`,
-        },
-        content: {
-            display: 'flex',
-            flexDirection: 'column',
-            boxSizing: 'border-box',
-            flexGrow: 1,
-        },
-        body: {
-            display: 'flex',
-            boxSizing: 'border-box',
-            flex: 1,
-            width: '100%',
-            position: 'relative',
-        },
-        cornerColor: {
-            zIndex: theme.zIndex.appBar,
-            position: 'absolute',
-            width: 0,
-            height: 0,
-            borderStyle: 'solid',
-            borderWidth: '15px 15px 0 0',
-        },
-        sideMenuContainer: {
-            '& .sideMenu': {
-                width: '190px',
-            },
-        },
-        breadcrumbContainer: {
-            '& .breadcrumb': {
-                padding: theme.spacing(3.5, 2, 1.5, 2),
-            },
-        },
-        innerContainer: {
-            height: '100%',
-            overflowX: 'auto',
-        },
-    }),
-);
-
 const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
-    const classes = useStyles();
-
     const { templateInteractions } = useLoggedInState();
     const {
         ask,
@@ -152,19 +87,63 @@ const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
     };
 
     return (
-        <div className={classes.root}>
+        <Box
+            sx={{
+                display: 'flex',
+                boxSizing: 'border-box',
+                minHeight: '100vh',
+            }}
+        >
             <SideBar {...props.sideBarProps} />
-            <div className={classes.main}>
-                <div className={classes.corner} />
-                <div className={classes.content}>
+            <Box
+                sx={{
+                    marginLeft: '50px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    boxSizing: 'border-box',
+                    flexGrow: 1,
+                }}
+            >
+                <Box
+                    sx={{
+                        zIndex: (theme) => theme.zIndex.appBar + 1,
+                        position: 'absolute',
+                        width: 0,
+                        height: 0,
+                        borderStyle: 'solid',
+                        borderWidth: '15px 15px 0 0',
+                        borderColor: (theme) =>
+                            `${theme.palette.primary.main} transparent transparent transparent`,
+                    }}
+                />
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        boxSizing: 'border-box',
+                        flexGrow: 1,
+                    }}
+                >
                     <Box
                         flexShrink={0}
                         bgcolor={navigationColor}
-                        className={classes.breadcrumbContainer}
+                        sx={{
+                            '& .breadcrumb': {
+                                padding: (theme) => theme.spacing(3.5, 2, 1.5, 2),
+                            },
+                        }}
                     >
                         {props.breadcrumb}
                     </Box>
-                    <div className={classes.body}>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            boxSizing: 'border-box',
+                            flex: 1,
+                            width: '100%',
+                            position: 'relative',
+                        }}
+                    >
                         <Box
                             height="100%"
                             position="absolute"
@@ -176,28 +155,40 @@ const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
                                 flexShrink={0}
                                 bgcolor={grey['50']}
                                 color="grey.800"
-                                className={classes.sideMenuContainer}
+                                sx={{
+                                    '& .sideMenu': {
+                                        width: '190px',
+                                    },
+                                }}
                             >
                                 {props.sideMenu}
                             </Box>
                             <Box
                                 flexShrink={1}
                                 flexGrow={1}
-                                className={classes.innerContainer}
+                                sx={{
+                                    height: '100%',
+                                    overflowX: 'auto',
+                                }}
                                 bgcolor="background.paper"
                             >
-                                <div
-                                    className={classes.cornerColor}
-                                    style={{
+                                <Box
+                                    sx={{
+                                        zIndex: (theme) => theme.zIndex.appBar,
+                                        position: 'absolute',
+                                        width: 0,
+                                        height: 0,
+                                        borderStyle: 'solid',
+                                        borderWidth: '15px 15px 0 0',
                                         borderColor: `${navigationColor} transparent transparent transparent`,
                                     }}
                                 />
                                 {props.children}
                             </Box>
                         </Box>
-                    </div>
-                </div>
-            </div>
+                    </Box>
+                </Box>
+            </Box>
 
             <CancelConfirmDialog {...props.cancelConfirmDialogProps} />
 
@@ -241,7 +232,7 @@ const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
                     )}
                 </div>
             </Snackbar>
-        </div>
+        </Box>
     );
 };
 
