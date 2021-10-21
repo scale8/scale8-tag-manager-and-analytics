@@ -13,7 +13,6 @@ import {
     useTheme,
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
-import { DateRangePicker } from 'materialui-daterange-picker';
 import { ChartPeriodProps, ChartPeriodType } from '../../hooks/chart/useChartPeriod';
 import {
     addDaysUTC,
@@ -31,6 +30,7 @@ import {
     UTCTimestamp,
 } from '../../utils/DateTimeUtils';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { DateRangePicker } from '@scale8/mui-daterange-picker';
 
 const useStyles = makeStyles(() => ({
     selectRoot: {
@@ -255,7 +255,16 @@ const ChartPeriodSelector: FC<ChartPeriodSelectorProps> = (props: ChartPeriodSel
 
             <Box height={5} width={theme.spacing(2)} />
             <FormControl variant="outlined" size="small">
-                <InputLabel id="period-label" shrink={true}>
+                <InputLabel
+                    sx={{
+                        backgroundColor: '#ffffff',
+                        paddingLeft: '5px',
+                        paddingRight: '8px',
+                        marginLeft: '-3px',
+                    }}
+                    id="period-label"
+                    shrink={true}
+                >
                     Period
                 </InputLabel>
                 <Select

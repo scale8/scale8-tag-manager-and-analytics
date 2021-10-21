@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
-import { ControlledDateInputProps } from '../../../hooks/form/useFormValidation';
 import DateStringInput from '../InputTypes/DateStringInput';
+import { ControlledDateInputProps } from '../InputTypes/DateInput';
 
 const ControlledDateStringInput = <T extends { [key: string]: any }>(
     props: ControlledDateInputProps<T>,
@@ -14,7 +14,7 @@ const ControlledDateStringInput = <T extends { [key: string]: any }>(
             setValue={(v) => formProps.handleChange(name, v)}
             validationError={formProps.errors[name]}
             onBlur={formProps.handleBlur}
-            required={!!required}
+            required={required}
             {...formControlProps}
         />
     );

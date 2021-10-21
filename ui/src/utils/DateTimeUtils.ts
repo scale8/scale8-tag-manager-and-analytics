@@ -4,7 +4,6 @@ import {
     addMinutes,
     addMonths,
     differenceInCalendarDays,
-    format,
     getDaysInMonth,
     isSameMinute,
     isToday,
@@ -14,7 +13,6 @@ import {
     subMinutes,
     subMonths,
 } from 'date-fns';
-import DateFnsUtils from '@date-io/date-fns';
 
 const oneMsTo24h = 86400000 - 1;
 
@@ -353,19 +351,19 @@ export const timestampToDataMapString = (timestamp: UTCTimestamp): string => {
     return `${e.year}-${e.month}-${e.date} ${e.hour}:${e.minute}:${e.seconds}.${e.milliseconds}`;
 };
 
-export class dateTimePickerDateUtils extends DateFnsUtils {
-    parse = (value: string, formatString: string): Date =>
-        parse(
-            timestampDisplay(dateToUTCTimestamp(parse(value, formatString, now))),
-            'dd/MM/yyyy, HH:mm:ss',
-            now,
-        );
-
-    format = (value: Date, formatString: string): string =>
-        format(
-            parse(timestampDisplay(dateToUTCTimestamp(value)), 'dd/MM/yyyy, HH:mm:ss', now),
-            formatString,
-        );
-}
+// export class dateTimePickerDateUtils extends DateFnsUtils {
+//     parse = (value: string, formatString: string): Date =>
+//         parse(
+//             timestampDisplay(dateToUTCTimestamp(parse(value, formatString, now))),
+//             'dd/MM/yyyy, HH:mm:ss',
+//             now,
+//         );
+//
+//     format = (value: Date, formatString: string): string =>
+//         format(
+//             parse(timestampDisplay(dateToUTCTimestamp(value)), 'dd/MM/yyyy, HH:mm:ss', now),
+//             formatString,
+//         );
+// }
 
 export { isSameMinute as isSameMinuteTimestamp };

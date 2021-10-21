@@ -5,8 +5,6 @@ import makeStyles from '@mui/styles/makeStyles';
 import TextAreaInput from './TextAreaInput';
 import DateStringInput from './DateStringInput';
 import DateStampInput from './DateStampInput';
-import DateTimeStringInput from './DateTimeStringInput';
-import DateTimeStampInput from './DateTimeStampInput';
 import ColorInput from './ColorInput';
 import IntegerInput from './IntegerInput';
 import FloatInput from './FloatInput';
@@ -161,21 +159,23 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
         );
     } else if (inputType === InputType.DATETIME_STRING) {
         return (
-            <DateTimeStringInput
+            <DateStringInput
                 value={values[0].toString()}
                 setValue={(v) => setValue(v, 0)}
                 className={classes.input}
                 validationError={errors.has(0) ? errors.get(0) : undefined}
+                includeTime
                 {...inputProps}
             />
         );
     } else if (inputType === InputType.DATETIME_STAMP) {
         return (
-            <DateTimeStampInput
+            <DateStampInput
                 value={Number.isInteger(values[0]) ? (values[0] as number) : ''}
                 setValue={(v) => setValue(v, 0)}
                 className={classes.input}
                 validationError={errors.has(0) ? errors.get(0) : undefined}
+                includeTime
                 {...inputProps}
             />
         );

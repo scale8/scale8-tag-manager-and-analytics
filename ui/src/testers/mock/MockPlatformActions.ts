@@ -103,6 +103,7 @@ const mockPlatformActions = {
     defaultCase: [
         mockPlatformAction.dataManagerAction,
         mockPlatformAction.scalarsAction,
+        mockPlatformAction.datesAction,
         {
             id: '5f31490d66dba60c29f65ded',
             name: 'Scalars',
