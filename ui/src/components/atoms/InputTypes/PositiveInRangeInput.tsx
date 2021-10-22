@@ -18,6 +18,7 @@ const PositiveInRangeInput: FC<NumberInRangeInputProps> = (props: NumberInRangeI
 
     return (
         <TextField
+            variant="standard"
             value={value.toString()}
             onInvalid={(event) => {
                 event.preventDefault();

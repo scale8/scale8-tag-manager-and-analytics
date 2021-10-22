@@ -27,6 +27,7 @@ const ColorInput: FC<ColorInputProps> = (props: ColorInputProps) => {
         <>
             <div>
                 <TextField
+                    variant="standard"
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">

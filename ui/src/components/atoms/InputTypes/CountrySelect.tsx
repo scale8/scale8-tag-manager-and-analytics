@@ -58,6 +58,7 @@ const CountrySelect: FC<CountrySelectProps> = (props: CountrySelectProps): React
             )}
             renderInput={(params) => (
                 <TextField
+                    variant="standard"
                     {...params}
                     error={validationError !== undefined || requiredError}
                     helperText={requiredError ? 'Required value' : validationError}

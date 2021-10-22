@@ -10,7 +10,7 @@ const LoggedOutNavigationContainer: FC<{ children?: ReactNode }> = (props: {
         <Container disableGutters>
             <Toolbar
                 sx={{
-                    minHeight: '100px',
+                    minHeight: '100px !important',
                     flexWrap: 'wrap',
                 }}
             >
@@ -24,11 +24,12 @@ const LoggedOutNavigationContainer: FC<{ children?: ReactNode }> = (props: {
                         height: '56px',
                         '& a': {
                             color: 'rgba(0, 0, 0, 0.6)',
+                            textDecoration: 'none !important',
                             marginLeft: '15px',
                             fontWeight: 600,
                             fontSize: '20px',
                             '&:hover': {
-                                textDecoration: 'none',
+                                textDecoration: 'none !important',
                                 color: 'rgba(0, 0, 0, 0.4)',
                             },
                         },

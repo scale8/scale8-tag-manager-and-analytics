@@ -45,6 +45,7 @@ const TextInputWithMacros: FC<TextInputWithMacrosProps> = (props: TextInputWithM
     return (
         <>
             <TextField
+                variant="standard"
                 value={value}
                 onInvalid={(event) => {
                     event.preventDefault();

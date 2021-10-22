@@ -1,7 +1,8 @@
 import { FC } from 'react';
-import { Grid, Link } from '@mui/material';
+import { Grid } from '@mui/material';
 import { useConfigState } from '../../context/AppContext';
 import { toRequestPasswordReset, toSignUp } from '../../utils/NavigationPaths';
+import Link from '../atoms/Next/Link';
 
 const LoginLinks: FC = () => {
     const { useSignup } = useConfigState();

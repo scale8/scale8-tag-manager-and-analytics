@@ -131,6 +131,7 @@ const ActionPermissionTableRow: FC<ActionPermissionTableRowProps> = (
                 <TableCell component="th" scope="row" width={450}>
                     {index === editIndex ? (
                         <TextField
+                            variant="standard"
                             fullWidth
                             value={editEventName}
                             onChange={(
@@ -148,6 +149,7 @@ const ActionPermissionTableRow: FC<ActionPermissionTableRowProps> = (
                 <TableCell component="th" scope="row" width={450}>
                     {index === editIndex ? (
                         <TextField
+                            variant="standard"
                             fullWidth
                             value={editHost}
                             onChange={(
@@ -166,6 +168,7 @@ const ActionPermissionTableRow: FC<ActionPermissionTableRowProps> = (
                     <TableCell component="th" scope="row" width={170}>
                         {index === editIndex ? (
                             <TextField
+                                variant="standard"
                                 value={editVariableName}
                                 onChange={(
                                     event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,

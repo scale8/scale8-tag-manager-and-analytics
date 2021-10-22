@@ -1,11 +1,9 @@
 import makeStyles from '@mui/styles/makeStyles';
 import { FC, ReactNode } from 'react';
-import { Card, Container, Grid } from '@mui/material';
+import { Box, Card, Grid } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
-    cardGrid: {
-        padding: theme.spacing(0, 0, 4, 0),
-    },
+    cardGrid: {},
     card: {
         height: '100%',
         padding: theme.spacing(2),
@@ -26,7 +24,7 @@ const ChartPageContent: FC<ChartPageContentProps> = (props: ChartPageContentProp
     const classes = useStyles();
 
     return (
-        <Container className={classes.cardGrid} maxWidth="xl">
+        <Box sx={{ padding: (theme) => theme.spacing(0, 0, 4, 0) }}>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
                     <Card className={classes.card} elevation={0}>
@@ -49,7 +47,7 @@ const ChartPageContent: FC<ChartPageContentProps> = (props: ChartPageContentProp
                     </Grid>
                 ))}
             </Grid>
-        </Container>
+        </Box>
     );
 };
 

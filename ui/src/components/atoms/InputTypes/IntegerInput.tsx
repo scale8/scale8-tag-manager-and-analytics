@@ -17,6 +17,7 @@ const IntegerInput: FC<IntegerInputProps> = (props: IntegerInputProps) => {
 
     return (
         <TextField
+            variant="standard"
             value={value}
             onInvalid={(event) => {
                 event.preventDefault();

@@ -1,4 +1,3 @@
-import makeStyles from '@mui/styles/makeStyles';
 import { FC } from 'react';
 import { Box, Button } from '@mui/material';
 import FormTitle from '../../molecules/FormTitle';
@@ -6,27 +5,11 @@ import FormError from '../../atoms/FormError';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import LoggedOutFormContainer from '../../molecules/LoggedOutFormContainer';
 import { RequestPasswordResetFormProps } from '../../../types/props/forms/PasswordResetFormProps';
-
-const useStyles = makeStyles((theme) => ({
-    form: {
-        width: '100%', // Fix IE 11 issue.
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-        color: '#ffffff',
-        backgroundColor: theme.palette.commonColor.main,
-        '&:hover': {
-            color: '#ffffff',
-            backgroundColor: theme.palette.commonColor.main,
-        },
-    },
-}));
+import FormFull from '../../atoms/FormFull';
 
 const RequestPasswordResetForm: FC<RequestPasswordResetFormProps> = (
     props: RequestPasswordResetFormProps,
 ) => {
-    const classes = useStyles();
-
     return (
         <LoggedOutFormContainer>
             <Box mb={2}>
@@ -37,7 +20,7 @@ const RequestPasswordResetForm: FC<RequestPasswordResetFormProps> = (
                     <FormError error={props.gqlError.message} />
                 </Box>
             )}
-            <form className={classes.form} onSubmit={props.handleSubmit}>
+            <FormFull handleSubmit={props.handleSubmit}>
                 {!props.fixedEmail && (
                     <>
                         Please provide the email address that you used when you signed up for your
@@ -64,12 +47,12 @@ const RequestPasswordResetForm: FC<RequestPasswordResetFormProps> = (
                     fullWidth
                     variant="contained"
                     color="primary"
-                    className={classes.submit}
+                    className="formFullMainColorSubmit"
                     disabled={props.isSubmitting}
                 >
                     {props.submitText}
                 </Button>
-            </form>
+            </FormFull>
         </LoggedOutFormContainer>
     );
 };

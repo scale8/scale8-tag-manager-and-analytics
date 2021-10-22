@@ -1,33 +1,10 @@
 import { FC, MouseEvent, SyntheticEvent, useState } from 'react';
 import { Box, Paper, Snackbar } from '@mui/material';
 import { Alert } from '@mui/material';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
 import { CopyBlockProps } from '../../types/props/CopyBlockProps';
 import LazyHighlight from './LibraryLoaders/LazyHighlight';
 
-const useStyles = makeStyles(() =>
-    createStyles({
-        copy: {
-            position: 'absolute',
-            right: 0,
-            cursor: 'pointer',
-            color: '#ffffff',
-            '&:hover': {
-                backgroundColor: 'rgba(254, 254, 254, 0.12)',
-            },
-            padding: '6px 5px 2px',
-        },
-        code: {
-            '& pre': {
-                margin: 0,
-            },
-        },
-    }),
-);
-
 const CopyBlock: FC<CopyBlockProps> = (props: CopyBlockProps) => {
-    const classes = useStyles();
     const [open, setOpen] = useState(false);
     const [copied, setCopied] = useState(false);
 
@@ -61,9 +38,25 @@ const CopyBlock: FC<CopyBlockProps> = (props: CopyBlockProps) => {
                 bgcolor="#002b36"
                 border={1}
                 borderColor="#002b36"
-                className={classes.code}
+                sx={{
+                    '& pre': {
+                        margin: 0,
+                    },
+                }}
             >
-                <div onClick={handleClick} className={classes.copy}>
+                <Box
+                    onClick={handleClick}
+                    sx={{
+                        position: 'absolute',
+                        right: 0,
+                        cursor: 'pointer',
+                        color: '#ffffff',
+                        '&:hover': {
+                            backgroundColor: 'rgba(254, 254, 254, 0.12)',
+                        },
+                        padding: '6px 5px 2px',
+                    }}
+                >
                     <svg
                         focusable="false"
                         width="16"
@@ -77,7 +70,7 @@ const CopyBlock: FC<CopyBlockProps> = (props: CopyBlockProps) => {
                         />
                         <path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" fill="currentColor" />
                     </svg>
-                </div>
+                </Box>
                 <LazyHighlight language={props.language} code={props.text} />
                 <Snackbar
                     anchorOrigin={{

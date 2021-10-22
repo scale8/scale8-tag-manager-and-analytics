@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useQuery } from '@apollo/client';
-import { Box, Container, Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import DashboardAccountSection from '../../components/organisms/DashboardAccountSection';
 import { queryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
 import { OrgDashboardPageData } from '../../gql/generated/OrgDashboardPageData';
@@ -70,7 +70,7 @@ const OrgDashboardPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
 
             return (
                 <>
-                    <Container maxWidth="xl">
+                    <Box mx={3}>
                         <Box py={4}>
                             <Grid container spacing={4}>
                                 <Grid item xs={12} sm={12} md={12} lg={6}>
@@ -81,7 +81,7 @@ const OrgDashboardPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
                                 </Grid>
                             </Grid>
                         </Box>
-                    </Container>
+                    </Box>
                 </>
             );
         },

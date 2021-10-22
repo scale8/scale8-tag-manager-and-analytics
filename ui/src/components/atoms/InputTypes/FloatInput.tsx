@@ -19,6 +19,7 @@ const FloatInput: FC<FloatInputProps> = (props: FloatInputProps) => {
 
     return (
         <TextField
+            variant="standard"
             value={
                 value === null ? '' : `${value}${trailingDecimalPoint ? '.' : ''}${trailingZeros}`
             }
