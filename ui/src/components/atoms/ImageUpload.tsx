@@ -1,8 +1,6 @@
 import { ChangeEventHandler, Dispatch, FC, SetStateAction, useState } from 'react';
-import makeStyles from '@mui/styles/makeStyles';
 import { Avatar, Box, CircularProgress, IconButton } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import clsx from 'clsx';
 import CloseIcon from '@mui/icons-material/Close';
 
 export type ImageUploadProps = {
@@ -19,45 +17,14 @@ export type ImageUploadProps = {
     ) => void;
 };
 
-const useStyles = makeStyles((theme) => ({
-    label: {
-        marginTop: theme.spacing(1),
-        fontSize: '0.9em',
-    },
-    input: {
-        display: 'none',
-    },
-    loader: {
-        marginLeft: theme.spacing(1),
-    },
-    square: {
-        margin: theme.spacing(1, 1, 1, 0),
-        width: theme.spacing(7),
-        height: theme.spacing(7),
-    },
-    squareText: {
-        color: theme.palette.getContrastText(grey[600]),
-        backgroundColor: grey[600],
-        fontSize: '12px',
-        textAlign: 'center',
-    },
-    legend: {
-        color: grey[800],
-    },
-    error: {
-        color: theme.palette.error.main,
-    },
-    close: {
-        fontSize: '16px',
-        marginLeft: theme.spacing(1),
-    },
-}));
-
-const ImageUpload: FC<ImageUploadProps> = (props: ImageUploadProps) => {
-    const classes = useStyles();
-    const { label, handleImageUpload, removeImage, initialUrl, setImageLoading, imageLoading } =
-        props;
-
+const ImageUpload: FC<ImageUploadProps> = ({
+    label,
+    handleImageUpload,
+    removeImage,
+    initialUrl,
+    setImageLoading,
+    imageLoading,
+}) => {
     const [url, setUrl] = useState(initialUrl === undefined ? '' : initialUrl);
     const [fetchError, setFetchError] = useState<string | undefined>(undefined);
 
@@ -70,12 +37,15 @@ const ImageUpload: FC<ImageUploadProps> = (props: ImageUploadProps) => {
 
     return (
         <>
-            <label className={classes.label}>{label}</label>
-            <input
+            <Box component="label" sx={{ marginTop: 1, fontSize: '0.9em' }}>
+                {label}
+            </Box>
+            <Box
+                sx={{ display: 'none' }}
+                component="input"
                 accept="image/jpeg,image/png"
                 id="icon-button-file"
                 type="file"
-                className={classes.input}
                 onChange={handleFileInput}
             />
             <label
@@ -86,30 +56,56 @@ const ImageUpload: FC<ImageUploadProps> = (props: ImageUploadProps) => {
             >
                 <Box display="flex" mt={2} alignItems="center">
                     <Avatar
-                        className={clsx(classes.square, url === '' && classes.squareText)}
+                        sx={{
+                            margin: (theme) => theme.spacing(1, 1, 1, 0),
+                            width: (theme) => theme.spacing(7),
+                            height: (theme) => theme.spacing(7),
+                            ...(url === ''
+                                ? {
+                                      color: (theme) => theme.palette.getContrastText(grey[600]),
+                                      backgroundColor: grey[600],
+                                      fontSize: '12px',
+                                      textAlign: 'center',
+                                  }
+                                : {}),
+                        }}
                         src={url === '' ? undefined : url}
                         variant="square"
                     >
                         {url === '' ? 'Select Logo' : ''}
                     </Avatar>
-                    <small className={classes.legend}>(Square JPG or PNG, Max 32Kb)</small>
+                    <Box component="small" sx={{ color: grey[800] }}>
+                        (Square JPG or PNG, Max 32Kb)
+                    </Box>
                     <IconButton
                         aria-label="delete"
                         onClick={() => {
                             removeImage(setUrl);
                         }}
                         size="small"
-                        className={classes.close}
+                        sx={{
+                            fontSize: '16px',
+                            marginLeft: 1,
+                        }}
                     >
                         <CloseIcon fontSize="inherit" />
                     </IconButton>
                     {imageLoading && (
-                        <CircularProgress size={10} className={classes.loader} color="inherit" />
+                        <CircularProgress size={10} sx={{ marginLeft: 1 }} color="inherit" />
                     )}
                 </Box>
             </label>
 
-            {fetchError !== undefined && <small className={classes.error}>{fetchError}</small>}
+            {fetchError !== undefined && (
+                <Box
+                    component="small"
+                    sx={{
+                        color: (theme) => theme.palette.error.main,
+                    }}
+                >
+                    {fetchError}
+                </Box>
+            )}
         </>
     );
 };

@@ -5,18 +5,9 @@ import {
 import { Box } from '@mui/material';
 import { MappedPlatformElementTypeSelect } from './MappedPlatformElementTypeSelect';
 import { FormWithMappedPlatformValuesResult } from '../../../hooks/form/useFormWithMappedPlatformValues';
-import makeStyles from '@mui/styles/makeStyles';
 import { AppPlatformRevision } from '../../../types/TagRulesTypes';
 import { IngestEndpointForEnvironmentSelection } from '../../../types/IngestEndpointsTypes';
 import { FC, Fragment } from 'react';
-
-const useStyles = makeStyles((theme) => ({
-    description: {
-        width: '100%',
-        margin: theme.spacing(0, 0, 3),
-        color: '#666666',
-    },
-}));
 
 export type MappedPlatformValuesFormProps = FormWithMappedPlatformValuesResult<any> & {
     mappedPlatformValues: MappedPlatformValues;
@@ -39,8 +30,6 @@ export type MappedPlatformElementFormProps = FormWithMappedPlatformValuesResult<
 const MappedPlatformValuesForm: FC<MappedPlatformValuesFormProps> = (
     props: MappedPlatformValuesFormProps,
 ) => {
-    const classes = useStyles();
-
     const { mappedPlatformValues, parentLocators, disabled, ...formProps } = props;
 
     return (
@@ -61,9 +50,15 @@ const MappedPlatformValuesForm: FC<MappedPlatformValuesFormProps> = (
                         formProps={formProps}
                         readOnly={!!disabled}
                     />
-                    <div className={classes.description}>
+                    <Box
+                        sx={{
+                            width: '100%',
+                            margin: (theme) => theme.spacing(0, 0, 3),
+                            color: '#666666',
+                        }}
+                    >
                         <small>{mappedPlatformElement.platformDataMap.description}</small>
-                    </div>
+                    </Box>
                 </Fragment>
             ))}
         </>

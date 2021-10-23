@@ -1,37 +1,9 @@
 import { FC, MouseEvent, useState } from 'react';
 import { Box, Button, Menu, MenuItem, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import makeStyles from '@mui/styles/makeStyles';
 import { BreadcrumbAction, BreadcrumbButtonProps } from '../../utils/BreadcrumbButtonsUtils';
 
-const useStyles = makeStyles(() => ({
-    mainButton: {
-        marginTop: '-20px',
-        padding: '0 0 0 5px',
-        color: 'inherit',
-        textTransform: 'none',
-        '&.Mui-disabled': {
-            color: 'inherit',
-        },
-    },
-    dropDownButton: {
-        marginTop: '-20px',
-        padding: '20px 0 0 0',
-        color: 'inherit',
-        textTransform: 'none',
-        minWidth: '24px',
-    },
-    elementText: {
-        fontSize: '0.75rem',
-        lineHeight: '12px',
-        marginTop: '2px',
-        marginLeft: '5px',
-    },
-}));
-
 const BreadcrumbButton: FC<BreadcrumbButtonProps> = (props: BreadcrumbButtonProps) => {
-    const classes = useStyles();
-
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
     const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -51,7 +23,15 @@ const BreadcrumbButton: FC<BreadcrumbButtonProps> = (props: BreadcrumbButtonProp
         <>
             <Button
                 color="inherit"
-                className={classes.mainButton}
+                sx={{
+                    marginTop: '-20px',
+                    padding: '0 0 0 5px',
+                    color: 'inherit',
+                    textTransform: 'none',
+                    '&.Mui-disabled': {
+                        color: 'inherit',
+                    },
+                }}
                 aria-controls="simple-menu"
                 aria-haspopup="true"
                 onClick={() => props.jump.action()}
@@ -60,7 +40,17 @@ const BreadcrumbButton: FC<BreadcrumbButtonProps> = (props: BreadcrumbButtonProp
                 <Box flexDirection="column" textAlign="left">
                     <Box display="flex" alignItems="center" color="white" mr="5px">
                         <props.elementIcon sx={{ fontSize: '1rem' }} />{' '}
-                        <span className={classes.elementText}>{props.elementText}</span>
+                        <Box
+                            component="span"
+                            sx={{
+                                fontSize: '0.75rem',
+                                lineHeight: '12px',
+                                marginTop: '2px',
+                                marginLeft: '5px',
+                            }}
+                        >
+                            {props.elementText}
+                        </Box>
                     </Box>
                     <Box display="inline-flex" alignItems="center">
                         <Box mt="2px" mr="5px" component="span" fontSize="1.125rem">
@@ -73,7 +63,13 @@ const BreadcrumbButton: FC<BreadcrumbButtonProps> = (props: BreadcrumbButtonProp
                 <>
                     <Button
                         color="inherit"
-                        className={classes.dropDownButton}
+                        sx={{
+                            marginTop: '-20px',
+                            padding: '20px 0 0 0',
+                            color: 'inherit',
+                            textTransform: 'none',
+                            minWidth: '24px',
+                        }}
                         aria-controls="simple-menu"
                         aria-haspopup="true"
                         onClick={handleClick}
