@@ -63,7 +63,7 @@ const DataMapsRow: FC<RowProps> = (props: RowProps) => {
                 ))}
 
                 <TableCell
-                    style={{
+                    sx={{
                         width: '0.1%',
                     }}
                 >
@@ -104,7 +104,7 @@ const DataMapsRow: FC<RowProps> = (props: RowProps) => {
             {hasChildren && (
                 <TableRow className={clsx(index % 2 !== 0 && classes.evenRow)}>
                     <TableCell
-                        style={{ paddingBottom: 0, paddingTop: 0 }}
+                        sx={{ paddingBottom: 0, paddingTop: 0 }}
                         colSpan={columns.length + 1}
                     >
                         <Box m={1}>

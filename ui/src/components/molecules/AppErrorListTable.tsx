@@ -60,7 +60,7 @@ export const AppErrorListTable: FC<AppErrorListTableProps> = ({ list, totalError
                             <TableCell>
                                 <Tooltip title={_.file} placement="bottom-start">
                                     <Box
-                                        style={{ width: 'calc(50vw - 400px)' }}
+                                        sx={{ width: 'calc(50vw - 400px)' }}
                                         display="flex"
                                         alignItems="center"
                                         justifyContent="left"

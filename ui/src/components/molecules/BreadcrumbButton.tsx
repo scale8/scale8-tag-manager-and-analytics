@@ -59,7 +59,7 @@ const BreadcrumbButton: FC<BreadcrumbButtonProps> = (props: BreadcrumbButtonProp
             >
                 <Box flexDirection="column" textAlign="left">
                     <Box display="flex" alignItems="center" color="white" mr="5px">
-                        <props.elementIcon style={{ fontSize: '1rem' }} />{' '}
+                        <props.elementIcon sx={{ fontSize: '1rem' }} />{' '}
                         <span className={classes.elementText}>{props.elementText}</span>
                     </Box>
                     <Box display="inline-flex" alignItems="center">

@@ -35,7 +35,7 @@ const BreadcrumbActions = <T extends RowData>(
                                 );
                             }}
                             color="inherit"
-                            style={{
+                            sx={{
                                 background: 'transparent',
                             }}
                             aria-label={action.tooltip}

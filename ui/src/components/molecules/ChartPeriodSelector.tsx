@@ -226,13 +226,13 @@ const ChartPeriodSelector: FC<ChartPeriodSelectorProps> = (props: ChartPeriodSel
                         variant="determinate"
                         value={100}
                         size={30}
-                        style={{ color: '#e5e5e5' }}
+                        sx={{ color: '#e5e5e5' }}
                     />
                     <CircularProgress
                         variant="determinate"
                         value={100 - ticks}
                         size={30}
-                        style={{
+                        sx={{
                             position: 'absolute',
                             left: 0,
                             color: props.type === 'app' ? '#44cce0' : '#ff0084',
