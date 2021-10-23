@@ -7,62 +7,13 @@ import langJS from 'shiki/languages/javascript.tmLanguage.json';
 // @ts-ignore
 import onigasm from 'arraybuffer-loader!shiki/dist/onigasm.wasm';
 import { ShikiProps } from './LazyShiki';
-import makeStyles from '@mui/styles/makeStyles';
-
-const useStyles = makeStyles({
-    shiki: {
-        position: 'relative',
-        display: 'block',
-        height: '100%',
-        overflowY: 'auto',
-        backgroundColor: '#2e3440ff',
-        '&::-webkit-scrollbar': {
-            width: '8px',
-            height: '8px',
-        },
-        '&::-webkit-scrollbar-track': {
-            backgroundColor: '#f1f1f1',
-        },
-        '&::-webkit-scrollbar-thumb': {
-            backgroundColor: '#888',
-        },
-        '&::-webkit-scrollbar-thumb:hover': {
-            backgroundColor: '#555',
-        },
-        fontSize: 15,
-        '& .shiki': {
-            padding: '.5rem',
-            margin: 0,
-        },
-        '& code': {
-            '& .line': {
-                whiteSpace: 'break-spaces',
-                wordBreak: 'break-all',
-            },
-            '& .line-number': {
-                width: '1rem',
-                marginRight: '1.5rem',
-                display: 'inline-block',
-                textAlign: 'right',
-                color: 'rgba(115,138,148,.8)',
-            },
-            '& .error-line .line-number': {
-                color: '#FF0000',
-            },
-            '& .error-line': {
-                background: '#FF000015',
-            },
-        },
-    },
-});
+import { Box } from '@mui/material';
 
 const CodeShiki: FC<ShikiProps> = ({ code, language, errorPosition, setLoaded }) => {
     const [tokens, setTokens] = useState<IThemedToken[][]>([]);
 
     const shikiRef = useRef<HTMLDivElement>(null);
     const errorRef = useRef<HTMLElement>(null);
-
-    const classes = useStyles();
 
     useEffect(() => {
         if (errorRef.current && shikiRef.current) {
@@ -96,7 +47,53 @@ const CodeShiki: FC<ShikiProps> = ({ code, language, errorPosition, setLoaded })
     }, [code, language]);
 
     return (
-        <div className={classes.shiki} ref={shikiRef}>
+        <Box
+            sx={{
+                position: 'relative',
+                display: 'block',
+                height: '100%',
+                overflowY: 'auto',
+                backgroundColor: '#2e3440ff',
+                '&::-webkit-scrollbar': {
+                    width: '8px',
+                    height: '8px',
+                },
+                '&::-webkit-scrollbar-track': {
+                    backgroundColor: '#f1f1f1',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: '#888',
+                },
+                '&::-webkit-scrollbar-thumb:hover': {
+                    backgroundColor: '#555',
+                },
+                fontSize: 15,
+                '& .shiki': {
+                    padding: '.5rem',
+                    margin: 0,
+                },
+                '& code': {
+                    '& .line': {
+                        whiteSpace: 'break-spaces',
+                        wordBreak: 'break-all',
+                    },
+                    '& .line-number': {
+                        width: '1rem',
+                        marginRight: '1.5rem',
+                        display: 'inline-block',
+                        textAlign: 'right',
+                        color: 'rgba(115,138,148,.8)',
+                    },
+                    '& .error-line .line-number': {
+                        color: '#FF0000',
+                    },
+                    '& .error-line': {
+                        background: '#FF000015',
+                    },
+                },
+            }}
+            ref={shikiRef}
+        >
             <pre className="shiki">
                 <code>
                     {tokens.map((l: IThemedToken[], index) => {
@@ -168,7 +165,7 @@ const CodeShiki: FC<ShikiProps> = ({ code, language, errorPosition, setLoaded })
                     })}
                 </code>
             </pre>
-        </div>
+        </Box>
     );
 };
 

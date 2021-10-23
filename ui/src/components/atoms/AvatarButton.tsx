@@ -1,6 +1,5 @@
 import { FC, MouseEventHandler } from 'react';
 import { Avatar, IconButton } from '@mui/material';
-import { useTheme } from '@mui/styles';
 
 type AvatarButtonProps = {
     loading: boolean;
@@ -9,14 +8,12 @@ type AvatarButtonProps = {
 };
 
 const AvatarButton: FC<AvatarButtonProps> = (props: AvatarButtonProps) => {
-    const theme = useTheme();
-
     return (
         <IconButton
             sx={{
                 padding: 0,
-                width: theme.spacing(4.5),
-                height: theme.spacing(4.5),
+                width: (theme) => theme.spacing(4.5),
+                height: (theme) => theme.spacing(4.5),
             }}
             color="inherit"
             aria-controls="simple-menu"
@@ -28,8 +25,8 @@ const AvatarButton: FC<AvatarButtonProps> = (props: AvatarButtonProps) => {
                 <Avatar
                     src={props.imgSrc}
                     sx={{
-                        width: theme.spacing(4.5),
-                        height: theme.spacing(4.5),
+                        width: (theme) => theme.spacing(4.5),
+                        height: (theme) => theme.spacing(4.5),
                     }}
                 />
             )}

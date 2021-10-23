@@ -1,14 +1,7 @@
 import { MouseEventHandler } from 'react';
 import { FC } from 'react';
-import { Button } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
+import { Box, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-
-const useStyles = makeStyles(() => ({
-    addButtonContainer: {
-        width: '100%',
-    },
-}));
 
 type RulesButtonProps = {
     text: string;
@@ -17,10 +10,12 @@ type RulesButtonProps = {
 };
 
 const DataMapsTableAddButton: FC<RulesButtonProps> = (props: RulesButtonProps) => {
-    const classes = useStyles();
-
     return (
-        <div className={classes.addButtonContainer}>
+        <Box
+            sx={{
+                width: '100%',
+            }}
+        >
             <Button
                 size="small"
                 variant="outlined"
@@ -30,7 +25,7 @@ const DataMapsTableAddButton: FC<RulesButtonProps> = (props: RulesButtonProps) =
             >
                 {props.text}
             </Button>
-        </div>
+        </Box>
     );
 };
 export default DataMapsTableAddButton;

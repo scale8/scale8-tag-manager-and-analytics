@@ -1,84 +1,66 @@
 import { FC } from 'react';
-import clsx from 'clsx';
-import { lighten, Theme } from '@mui/material';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
+import { Box, lighten, Theme } from '@mui/material';
 import { DiffMap, FieldDiff } from '../../../types/DiffTypes';
 import ScalarFieldDisplay from './ScalarFieldDisplay';
 import ArrayFieldDisplay from './ArrayFieldDisplay';
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        comparison: {
-            display: 'flex',
-        },
-        removed: {},
-        added: {},
-        left: { borderRight: '1px solid #e1e4e8' },
-        right: {},
-        comparisonSide: {
-            flex: '50%',
-            display: 'flex',
-            flexShrink: 0,
-            '&$removed::before': {
-                display: 'flex',
-                justifyContent: 'center',
-                alignContent: 'center',
-                flexDirection: 'column',
-                textAlign: 'center',
-                width: '35px',
-                flexShrink: 0,
-                content: '"—"',
-                backgroundColor: lighten(theme.palette.error.main, 0.9),
-                color: theme.palette.error.main,
-            },
-            '&$added::before': {
-                display: 'flex',
-                justifyContent: 'center',
-                alignContent: 'center',
-                flexDirection: 'column',
-                textAlign: 'center',
-                width: '35px',
-                flexShrink: 0,
-                content: '"＋"',
-                backgroundColor: lighten(theme.palette.success.main, 0.9),
-                color: theme.palette.success.main,
-                fontWeight: 'bold',
-            },
-        },
-        comparisonSideContent: {
-            flexGrow: 1,
-            padding: theme.spacing(1),
-            wordBreak: 'break-word',
-            '& small': {
-                color: '#666666',
-            },
-        },
-    }),
-);
+import { SxProps } from '@mui/system';
 
 const FieldValuesComparison: FC<{
     fieldDiff: FieldDiff;
     diffMap?: DiffMap;
-}> = (props: { fieldDiff: FieldDiff; diffMap?: DiffMap }) => {
-    const classes = useStyles();
-    const { fieldDiff, diffMap } = props;
-
+}> = ({ fieldDiff, diffMap }) => {
     if (!fieldDiff.hasChanges) {
         return null;
     }
 
+    const comparisonSideContent: SxProps<Theme> = {
+        flexGrow: 1,
+        padding: 1,
+        wordBreak: 'break-word',
+        '& small': {
+            color: '#666666',
+        },
+    };
+
+    const isRemoved =
+        fieldDiff.left.length > 0 &&
+        !fieldDiff.leftIsArray &&
+        !(fieldDiff.right[0] === fieldDiff.left[0] && !fieldDiff.rightIsArray);
+
+    const isAdded =
+        fieldDiff.right.length > 0 &&
+        !fieldDiff.rightIsArray &&
+        !(fieldDiff.right[0] === fieldDiff.left[0] && !fieldDiff.leftIsArray);
+
     return (
-        <div className={classes.comparison}>
-            <div
-                className={clsx(classes.comparisonSide, classes.left, {
-                    [classes.removed]:
-                        fieldDiff.left.length > 0 &&
-                        !fieldDiff.leftIsArray &&
-                        !(fieldDiff.right[0] === fieldDiff.left[0] && !fieldDiff.rightIsArray),
-                })}
+        <Box
+            sx={{
+                display: 'flex',
+            }}
+        >
+            <Box
+                sx={{
+                    flex: '50%',
+                    display: 'flex',
+                    flexShrink: 0,
+                    borderRight: '1px solid #e1e4e8',
+                    '&::before': isRemoved
+                        ? {
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignContent: 'center',
+                              flexDirection: 'column',
+                              textAlign: 'center',
+                              width: '35px',
+                              flexShrink: 0,
+                              content: '"—"',
+                              backgroundColor: (theme) => lighten(theme.palette.error.main, 0.9),
+                              color: (theme) => theme.palette.error.main,
+                          }
+                        : {},
+                }}
             >
-                <div className={classes.comparisonSideContent}>
+                <Box sx={comparisonSideContent}>
                     <ScalarFieldDisplay
                         fieldIsArray={fieldDiff.leftIsArray}
                         fieldLength={fieldDiff.left.length}
@@ -94,17 +76,31 @@ const FieldValuesComparison: FC<{
                         isLeft={true}
                         diffMap={diffMap}
                     />
-                </div>
-            </div>
-            <div
-                className={clsx(classes.comparisonSide, classes.right, {
-                    [classes.added]:
-                        fieldDiff.right.length > 0 &&
-                        !fieldDiff.rightIsArray &&
-                        !(fieldDiff.right[0] === fieldDiff.left[0] && !fieldDiff.leftIsArray),
-                })}
+                </Box>
+            </Box>
+            <Box
+                sx={{
+                    flex: '50%',
+                    display: 'flex',
+                    flexShrink: 0,
+                    '&::before': isAdded
+                        ? {
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignContent: 'center',
+                              flexDirection: 'column',
+                              textAlign: 'center',
+                              width: '35px',
+                              flexShrink: 0,
+                              content: '"＋"',
+                              backgroundColor: (theme) => lighten(theme.palette.success.main, 0.9),
+                              color: (theme) => theme.palette.success.main,
+                              fontWeight: 'bold',
+                          }
+                        : {},
+                }}
             >
-                <div className={classes.comparisonSideContent}>
+                <Box sx={comparisonSideContent}>
                     <ScalarFieldDisplay
                         fieldIsArray={fieldDiff.rightIsArray}
                         fieldLength={fieldDiff.right.length}
@@ -120,9 +116,9 @@ const FieldValuesComparison: FC<{
                         isLeft={false}
                         diffMap={diffMap}
                     />
-                </div>
-            </div>
-        </div>
+                </Box>
+            </Box>
+        </Box>
     );
 };
 

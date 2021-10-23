@@ -1,25 +1,13 @@
 import { ReactElement, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import makeStyles from '@mui/styles/makeStyles';
 import { ControlledInputProps } from '../../../hooks/form/useFormValidation';
 import { autocompleteOff } from '../../../utils/BrowserUtils';
 import { getTimezoneLabel } from '../../../utils/TimezoneUtils';
 
-const useStyles = makeStyles({
-    option: {
-        fontSize: 15,
-        '& > span': {
-            marginRight: 10,
-            fontSize: 18,
-        },
-    },
-});
-
-const ControlledTimezoneSelect = <T extends { [key: string]: any }>(
+export const ControlledTimezoneSelect = <T extends { [key: string]: any }>(
     props: ControlledInputProps<T>,
 ): ReactElement => {
-    const classes = useStyles();
     const { name, formProps, ...textFieldProps } = props;
 
     const [requiredError, setRequiredError] = useState(false);
@@ -32,6 +20,15 @@ const ControlledTimezoneSelect = <T extends { [key: string]: any }>(
 
     return (
         <Autocomplete
+            sx={{
+                '& .MuiAutocomplete-option': {
+                    fontSize: '15px',
+                    '& > span': {
+                        marginRight: '10px',
+                        fontSize: '18px',
+                    },
+                },
+            }}
             value={timeZoneLabel}
             isOptionEqualToValue={(option, value) => getTimezoneLabel(option) === value}
             onInvalid={(event) => {
@@ -46,9 +43,6 @@ const ControlledTimezoneSelect = <T extends { [key: string]: any }>(
             options={[...timezones].sort((a, b) =>
                 getTimezoneLabel(a) > getTimezoneLabel(b) ? 1 : -1,
             )}
-            classes={{
-                option: classes.option,
-            }}
             autoHighlight
             getOptionLabel={(option) => option}
             renderOption={(props, option) => getTimezoneLabel(option)}
@@ -70,5 +64,3 @@ const ControlledTimezoneSelect = <T extends { [key: string]: any }>(
         />
     );
 };
-
-export default ControlledTimezoneSelect;

@@ -1,80 +1,10 @@
 import { FC } from 'react';
 import clsx from 'clsx';
-import { lighten, Theme } from '@mui/material';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
+import { Box, lighten } from '@mui/material';
 import { DiffMap } from '../../../types/DiffTypes';
 import ItemLabel from './ItemLabel';
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        array: {
-            borderTop: '1px solid rgba(0, 0, 0, 0.12)',
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-        },
-        arrayElement: {
-            border: '1px solid rgba(0, 0, 0, 0.12)',
-            borderTop: 0,
-            width: '100%',
-            flexGrow: 0,
-            display: 'flex',
-        },
-        arraySwapped: {
-            '&::before': {
-                display: 'flex',
-                justifyContent: 'center',
-                alignContent: 'center',
-                flexDirection: 'column',
-                textAlign: 'center',
-                width: '35px',
-                flexShrink: 0,
-                content: '"⮃"',
-                backgroundColor: '#eeeeee',
-            },
-        },
-        arrayRemoved: {
-            '&::before': {
-                display: 'flex',
-                justifyContent: 'center',
-                alignContent: 'center',
-                flexDirection: 'column',
-                textAlign: 'center',
-                width: '35px',
-                flexShrink: 0,
-                content: '"—"',
-                backgroundColor: lighten(theme.palette.error.main, 0.9),
-                color: theme.palette.error.main,
-            },
-        },
-        arrayAdded: {
-            '&::before': {
-                display: 'flex',
-                justifyContent: 'center',
-                alignContent: 'center',
-                flexDirection: 'column',
-                textAlign: 'center',
-                width: '35px',
-                flexShrink: 0,
-                content: '"＋"',
-                backgroundColor: lighten(theme.palette.success.main, 0.9),
-                color: theme.palette.success.main,
-                fontWeight: 'bold',
-            },
-        },
-        arrayEmpty: {
-            color: '#cccccc',
-        },
-        arrayContent: {
-            flexGrow: 1,
-            padding: theme.spacing(1),
-            wordBreak: 'break-word',
-        },
-    }),
-);
-
-type ArrayFieldDisplayProps = {
+const ArrayFieldDisplay: FC<{
     fieldName: string;
     thisSide: string[];
     otherSide: string[];
@@ -82,12 +12,7 @@ type ArrayFieldDisplayProps = {
     otherSideIsArray: boolean;
     isLeft: boolean;
     diffMap?: DiffMap;
-};
-
-const ArrayFieldDisplay: FC<ArrayFieldDisplayProps> = (props: ArrayFieldDisplayProps) => {
-    const classes = useStyles();
-    const { thisSide, otherSide, thisSideIsArray, otherSideIsArray, isLeft, diffMap } = props;
-
+}> = ({ thisSide, otherSide, thisSideIsArray, otherSideIsArray, isLeft, diffMap }) => {
     if (!thisSideIsArray) {
         return null;
     }
@@ -132,35 +57,109 @@ const ArrayFieldDisplay: FC<ArrayFieldDisplayProps> = (props: ArrayFieldDisplayP
 
     return (
         <>
-            <div className={classes.array}>
+            <Box
+                sx={{
+                    borderTop: '1px solid rgba(0, 0, 0, 0.12)',
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                }}
+            >
                 {thisSide.length < 1 ? (
-                    <div className={classes.arrayElement}>
-                        <div className={clsx(classes.arrayContent, classes.arrayEmpty)}>Empty</div>
-                    </div>
+                    <Box
+                        sx={{
+                            border: '1px solid rgba(0, 0, 0, 0.12)',
+                            borderTop: 0,
+                            width: '100%',
+                            flexGrow: 0,
+                            display: 'flex',
+                        }}
+                    >
+                        <Box
+                            p={1}
+                            sx={{
+                                flexGrow: 1,
+                                wordBreak: 'break-word',
+                                color: '#cccccc',
+                            }}
+                        >
+                            Empty
+                        </Box>
+                    </Box>
                 ) : (
                     thisSide.map((value, key: number) => (
-                        <div
+                        <Box
                             key={key}
+                            sx={{
+                                border: '1px solid rgba(0, 0, 0, 0.12)',
+                                borderTop: 0,
+                                width: '100%',
+                                flexGrow: 0,
+                                display: 'flex',
+                                '&.arraySwapped::before': {
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignContent: 'center',
+                                    flexDirection: 'column',
+                                    textAlign: 'center',
+                                    width: '35px',
+                                    flexShrink: 0,
+                                    content: '"⮃"',
+                                    backgroundColor: '#eeeeee',
+                                },
+                                '&.arrayRemoved::before': {
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignContent: 'center',
+                                    flexDirection: 'column',
+                                    textAlign: 'center',
+                                    width: '35px',
+                                    flexShrink: 0,
+                                    content: '"—"',
+                                    backgroundColor: (theme) =>
+                                        lighten(theme.palette.error.main, 0.9),
+                                    color: (theme) => theme.palette.error.main,
+                                },
+                                '&.arrayAdded::before': {
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignContent: 'center',
+                                    flexDirection: 'column',
+                                    textAlign: 'center',
+                                    width: '35px',
+                                    flexShrink: 0,
+                                    content: '"＋"',
+                                    backgroundColor: (theme) =>
+                                        lighten(theme.palette.success.main, 0.9),
+                                    color: (theme) => theme.palette.success.main,
+                                    fontWeight: 'bold',
+                                },
+                            }}
                             className={clsx(
-                                classes.arrayElement,
                                 {
-                                    [classes.arrayRemoved]: checkIfRemoved(value, key),
+                                    arrayRemoved: checkIfRemoved(value, key),
                                 },
                                 {
-                                    [classes.arrayAdded]: checkIfAdded(value, key),
+                                    arrayAdded: checkIfAdded(value, key),
                                 },
                                 {
-                                    [classes.arraySwapped]: checkIfSwapped(value, key),
+                                    arraySwapped: checkIfSwapped(value, key),
                                 },
                             )}
                         >
-                            <div className={classes.arrayContent}>
+                            <Box
+                                p={1}
+                                sx={{
+                                    flexGrow: 1,
+                                    wordBreak: 'break-word',
+                                }}
+                            >
                                 <ItemLabel diffMap={diffMap} objKey={value} />
-                            </div>
-                        </div>
+                            </Box>
+                        </Box>
                     ))
                 )}
-            </div>
+            </Box>
         </>
     );
 };
