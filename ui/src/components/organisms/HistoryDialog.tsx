@@ -104,13 +104,7 @@ const HistoryDialog: FC<HistoryDialogProps> = (props: HistoryDialogProps) => {
                 {props.title}
                 {props.formInfoProps !== undefined && <InfoButton {...props.formInfoProps} />}
             </InfoDialogTitle>
-            <DialogContent
-                style={{
-                    margin: 0,
-                    padding: 0,
-                }}
-                dividers
-            >
+            <DialogContent sx={{ margin: 0, padding: 0 }} dividers>
                 <div className={classes.root}>
                     <DialogContent>
                         <DialogContentText component="div" id="alert-dialog-description">

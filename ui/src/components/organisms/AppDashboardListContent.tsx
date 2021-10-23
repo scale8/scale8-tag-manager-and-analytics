@@ -35,11 +35,12 @@ export const AppDashboardListContent: FC<
                 return (
                     <Box key={_.key} display="flex" alignItems="center">
                         {props.useSourceIcon && (
-                            <img
+                            <Box
+                                component="img"
                                 src={`https://icons.duckduckgo.com/ip3/${_.key}.ico`}
                                 referrerPolicy="no-referrer"
                                 alt={_.key}
-                                style={{
+                                sx={{
                                     marginTop: '2px',
                                     width: '16px',
                                     height: '16px',

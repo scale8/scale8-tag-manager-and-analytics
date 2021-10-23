@@ -95,7 +95,7 @@ const DateInput: FC<DateInputProps> = ({
                 {!required && !disabled && (
                     <Box display="inline-box" position="relative">
                         <IconButton
-                            style={{
+                            sx={{
                                 marginLeft: -25,
                                 marginTop: 0,
                                 position: 'absolute',

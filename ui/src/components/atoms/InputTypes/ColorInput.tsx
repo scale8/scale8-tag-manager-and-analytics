@@ -31,8 +31,8 @@ const ColorInput: FC<ColorInputProps> = (props: ColorInputProps) => {
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
-                                <div
-                                    style={{
+                                <Box
+                                    sx={{
                                         height: '22px',
                                         width: '22px',
                                         border: value === '' ? 'none' : '1px solid #555555',
@@ -64,7 +64,7 @@ const ColorInput: FC<ColorInputProps> = (props: ColorInputProps) => {
                 {!required && !disabled && (
                     <Box display="inline-box" position="relative">
                         <IconButton
-                            style={{
+                            sx={{
                                 marginLeft: -25,
                                 marginTop: 0,
                                 position: 'absolute',

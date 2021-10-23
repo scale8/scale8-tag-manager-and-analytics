@@ -44,7 +44,7 @@ const RemoveOrganizationSection: FC<RemoveOrganizationSectionProps> = (
                                 pageActions.deleteOrganization(pageActionProps, data.getOrg.id);
                             });
                         }}
-                        style={{
+                        sx={{
                             color: '#ffffff',
                             backgroundColor: theme.palette.error.main,
                         }}

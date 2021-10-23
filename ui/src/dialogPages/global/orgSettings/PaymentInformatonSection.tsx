@@ -29,7 +29,7 @@ const PaymentInformationSection: FC<OrgSettingsSectionProps> = (props: OrgSettin
                     onClick={() => {
                         pageActions.openBillingPage(pageActionProps, data.getOrg.id);
                     }}
-                    style={{
+                    sx={{
                         color: '#ffffff',
                         backgroundColor: theme.palette.commonColor.main,
                     }}

@@ -1,38 +1,22 @@
-import makeStyles from '@mui/styles/makeStyles';
 import { FC } from 'react';
 import { Box, DialogContent } from '@mui/material';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import FormGqlError from '../../atoms/FormGqlError';
 import DialogActionsWithCancel from '../../molecules/DialogActionsWithCancel';
 import { TwoFactorDisableFormProps } from '../../../dialogPages/global/TwoFactorDisable';
-
-const useStyles = makeStyles((theme) => ({
-    form: {
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    resetPasswordLink: {
-        color: theme.palette.common.black,
-        fontWeight: 'bold',
-    },
-    input: {
-        width: '100%',
-        margin: theme.spacing(0, 0, 3),
-    },
-    dialogContent: {
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '248px',
-    },
-}));
+import FormFlex from '../../atoms/FormFlex';
 
 const TwoFactorDisableForm: FC<TwoFactorDisableFormProps> = (props: TwoFactorDisableFormProps) => {
-    const classes = useStyles();
-
     return (
         <Box display="flex" flexDirection="column">
-            <form className={classes.form} onSubmit={props.handleSubmit}>
-                <DialogContent className={classes.dialogContent}>
+            <FormFlex handleSubmit={props.handleSubmit}>
+                <DialogContent
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        minHeight: '248px',
+                    }}
+                >
                     <small>
                         Enter the 6-digit code from the app to confirm.
                         <br />
@@ -45,7 +29,7 @@ const TwoFactorDisableForm: FC<TwoFactorDisableFormProps> = (props: TwoFactorDis
                             name="code"
                             label="Code"
                             formProps={props}
-                            className={classes.input}
+                            className="DrawerFormField"
                             required
                             fullWidth
                             autoFocus
@@ -57,7 +41,7 @@ const TwoFactorDisableForm: FC<TwoFactorDisableFormProps> = (props: TwoFactorDis
                     handleDialogClose={props.handleDialogClose}
                     confirmText={props.submitText}
                 />
-            </form>
+            </FormFlex>
         </Box>
     );
 };

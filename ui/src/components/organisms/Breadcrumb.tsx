@@ -42,7 +42,7 @@ const Breadcrumb: FC<BreadcrumbProps> = (props: BreadcrumbProps) => {
                                 ''
                                 //toOrg(orgUserState.orgId, MainPages.OrgSettingsPage)
                             }
-                            style={{ color: '#ffffff' }}
+                            sx={{ color: '#ffffff' }}
                         >
                             organization settings
                         </Link>

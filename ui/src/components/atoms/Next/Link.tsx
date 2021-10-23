@@ -69,7 +69,11 @@ function Link(props: LinkProps) {
 
 export default forwardRef<HTMLAnchorElement, LinkProps>((props, ref) => (
     <Link
-        sx={{ textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
+        sx={{
+            textDecoration: 'none',
+            '&:hover': { textDecoration: 'underline' },
+            ...(props.sx ?? {}),
+        }}
         {...props}
         innerRef={ref}
     />

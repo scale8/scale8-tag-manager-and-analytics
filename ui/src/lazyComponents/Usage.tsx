@@ -135,7 +135,7 @@ const Usage = <UsageData extends Record<string, any>>(
                     {formInfoProps !== undefined && <InfoButton {...formInfoProps} />}
                 </InfoDialogTitle>
                 <DialogContent
-                    style={{
+                    sx={{
                         margin: 0,
                         padding: 0,
                     }}
@@ -207,13 +207,10 @@ const Usage = <UsageData extends Record<string, any>>(
                             </Box>
                         ))}
                         <Divider
-                            style={{
-                                marginLeft: '23px',
-                            }}
                             sx={{
                                 height: '20px',
                                 marginTop: '2px',
-                                marginLeft: '13px',
+                                marginLeft: '23px',
                             }}
                             orientation="vertical"
                             flexItem

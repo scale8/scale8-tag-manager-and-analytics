@@ -1,38 +1,22 @@
-import makeStyles from '@mui/styles/makeStyles';
 import { FC } from 'react';
 import { Box, DialogContent, Grid } from '@mui/material';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import FormGqlError from '../../atoms/FormGqlError';
 import DialogActionsWithCancel from '../../molecules/DialogActionsWithCancel';
 import { TwoFactorEnableFormProps } from '../../../dialogPages/global/TwoFactorEnable';
-
-const useStyles = makeStyles((theme) => ({
-    form: {
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    resetPasswordLink: {
-        color: theme.palette.common.black,
-        fontWeight: 'bold',
-    },
-    input: {
-        width: '100%',
-        margin: theme.spacing(0, 0, 3),
-    },
-    dialogContent: {
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '248px',
-    },
-}));
+import FormFlex from '../../atoms/FormFlex';
 
 const TwoFactorEnableForm: FC<TwoFactorEnableFormProps> = (props: TwoFactorEnableFormProps) => {
-    const classes = useStyles();
-
     return (
         <Box display="flex" flexDirection="column">
-            <form className={classes.form} onSubmit={props.handleSubmit}>
-                <DialogContent className={classes.dialogContent}>
+            <FormFlex handleSubmit={props.handleSubmit}>
+                <DialogContent
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        minHeight: '248px',
+                    }}
+                >
                     <Grid container>
                         <Grid item sm>
                             <Box ml={1}>
@@ -49,7 +33,7 @@ const TwoFactorEnableForm: FC<TwoFactorEnableFormProps> = (props: TwoFactorEnabl
                                         name="code"
                                         label="Code"
                                         formProps={props}
-                                        className={classes.input}
+                                        className="DrawerFormField"
                                         required
                                         fullWidth
                                         autoFocus
@@ -85,7 +69,7 @@ const TwoFactorEnableForm: FC<TwoFactorEnableFormProps> = (props: TwoFactorEnabl
                     handleDialogClose={props.handleDialogClose}
                     confirmText={props.submitText}
                 />
-            </form>
+            </FormFlex>
         </Box>
     );
 };

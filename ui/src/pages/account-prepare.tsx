@@ -84,7 +84,7 @@ const AccountPrepareContent: FC<AccountPrepareContentProps> = (
                         Your sign up request was unsuccessful, please{' '}
                         <Link
                             href={toSignUp({ type: type === 'invite' ? 'tag-manager' : type })}
-                            style={{ color: '#1b1b1b' }}
+                            sx={{ color: '#1b1b1b' }}
                         >
                             sign up again
                         </Link>

@@ -1,31 +1,7 @@
 import { FC } from 'react';
-import { Button, DialogActions, lighten } from '@mui/material';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
-import { grey } from '@mui/material/colors';
-
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        dialogActions: {
-            padding: theme.spacing(2),
-            justifyContent: 'center',
-        },
-        cancel: {
-            color: theme.palette.getContrastText(grey[700]),
-            backgroundColor: grey[500],
-            '&:hover': {
-                backgroundColor: grey[700],
-            },
-        },
-        confirm: {
-            color: theme.palette.getContrastText('#0096a6'),
-            backgroundColor: lighten('#0096a6', 0.4),
-            '&:hover': {
-                backgroundColor: '#0096a6',
-            },
-        },
-    }),
-);
+import { DialogActions } from '@mui/material';
+import { DialogConfirmButton } from '../atoms/DialogConfirmButton';
+import { DialogCancelButton } from '../atoms/DialogCancelButton';
 
 type DialogActionsWithCancelProps = {
     confirmText?: string;
@@ -37,20 +13,15 @@ type DialogActionsWithCancelProps = {
 const DialogActionsWithCancel: FC<DialogActionsWithCancelProps> = (
     props: DialogActionsWithCancelProps,
 ) => {
-    const classes = useStyles();
-
     return (
-        <DialogActions className={classes.dialogActions}>
-            <Button
-                onClick={() => props.handleDialogClose(!props.ignoreChanges)}
-                className={classes.cancel}
-            >
+        <DialogActions sx={{ padding: 2, justifyContent: 'center' }}>
+            <DialogCancelButton onClick={() => props.handleDialogClose(!props.ignoreChanges)}>
                 Cancel
-            </Button>
+            </DialogCancelButton>
             {props.confirmText !== undefined && (
-                <Button type="submit" className={classes.confirm} disabled={props.disableSubmit}>
+                <DialogConfirmButton type="submit" disabled={props.disableSubmit}>
                     {props.confirmText}
-                </Button>
+                </DialogConfirmButton>
             )}
         </DialogActions>
     );

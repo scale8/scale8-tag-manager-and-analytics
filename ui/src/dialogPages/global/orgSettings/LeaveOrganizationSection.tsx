@@ -34,7 +34,7 @@ const LeaveOrganizationSection: FC<{ id: string }> = (props: { id: string }) => 
                             pageActions.removeMe(pageActionProps, id);
                         });
                     }}
-                    style={{
+                    sx={{
                         color: '#ffffff',
                         backgroundColor: theme.palette.error.main,
                     }}

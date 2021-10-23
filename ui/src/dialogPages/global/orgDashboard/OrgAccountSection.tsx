@@ -105,7 +105,7 @@ const OrgAccountSection: FC<OrgAccountSectionProps> = (props: OrgAccountSectionP
         <Box width="100%" mb={2}>
             <Alert severity="info">
                 You have <b>{account.trial_expires_in}</b> days left in your free trial.
-                <Link href={toOrg({ id: data.getOrg.id }, 'settings')} style={{ color: '#1b1b1b' }}>
+                <Link href={toOrg({ id: data.getOrg.id }, 'settings')} sx={{ color: '#1b1b1b' }}>
                     Upgrade to a paid plan
                 </Link>
                 .

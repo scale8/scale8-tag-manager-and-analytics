@@ -24,7 +24,7 @@ const NotFoundPage: FC = () => {
                 <Typography variant="h3" component="div">
                     Page not found
                 </Typography>
-                <Link href={'/login'} style={{ color: '#aaaaaa', marginTop: '20px' }}>
+                <Link href={'/login'} sx={{ color: '#aaaaaa', marginTop: '20px' }}>
                     Back to login
                 </Link>
             </Box>

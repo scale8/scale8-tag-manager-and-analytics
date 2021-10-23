@@ -1,40 +1,39 @@
 import { ChangeEvent, FC, useState } from 'react';
 import Tabs from '@mui/material/Tabs';
-import { Box } from '@mui/material';
+import { Box, Theme } from '@mui/material';
 import Tab from '@mui/material/Tab';
 import { PersonalInfoUpdate } from './PersonalInfoUpdate';
 import { ChangePassword } from './ChangePassword';
 import { GithubAccount } from './GithubAccount';
 import { TwoFactor } from './TwoFactor';
-import { useTheme } from '@mui/material/styles';
-import makeStyles from '@mui/styles/makeStyles';
 import { APIToken } from './APIToken';
 import { DialogPageProps } from '../../types/DialogTypes';
 import TabsTabPanel from '../../components/molecules/TabsTabPanel';
 import { AccountDelete } from './AccountDelete';
 import { ChangeEmail } from './ChangeEmail';
 import { useConfigState } from '../../context/AppContext';
-
-const useStyles = makeStyles({
-    tabRoot: { minHeight: 35, alignItems: 'flex-start', whiteSpace: 'nowrap' },
-});
+import { SxProps } from '@mui/system';
 
 const ManageAccountPage: FC<DialogPageProps> = (props: DialogPageProps) => {
     const [value, setValue] = useState(0);
     const { useGithubSSO, useTwoFactorAuth } = useConfigState();
-    const theme = useTheme();
-    const classes = useStyles();
 
     const handleChange = (event: ChangeEvent<unknown>, newValue: number) => {
         setValue(newValue);
     };
 
+    const tabStyle: SxProps<Theme> = {
+        minHeight: 35,
+        alignItems: 'flex-start',
+        whiteSpace: 'nowrap',
+    };
+
     return (
         <Box minWidth={560} maxWidth={560} minHeight={320} display="flex">
             <Tabs
-                style={{
+                sx={{
                     paddingTop: '5px',
-                    borderRight: `1px solid ${theme.palette.divider}`,
+                    borderRight: (theme) => `1px solid ${theme.palette.divider}`,
                 }}
                 value={value}
                 onChange={handleChange}
@@ -42,59 +41,13 @@ const ManageAccountPage: FC<DialogPageProps> = (props: DialogPageProps) => {
                 textColor="primary"
                 orientation="vertical"
             >
-                <Tab
-                    label="Personal info"
-                    classes={{
-                        root: classes.tabRoot,
-                    }}
-                    wrapped
-                />
-                <Tab
-                    label="Change Password"
-                    classes={{
-                        root: classes.tabRoot,
-                    }}
-                    wrapped
-                />
-                <Tab
-                    label="Change Email"
-                    classes={{
-                        root: classes.tabRoot,
-                    }}
-                    wrapped
-                />
-                {useGithubSSO && (
-                    <Tab
-                        label="GitHub Account"
-                        classes={{
-                            root: classes.tabRoot,
-                        }}
-                        wrapped
-                    />
-                )}
-                {useTwoFactorAuth && (
-                    <Tab
-                        label="2-Factor Auth"
-                        classes={{
-                            root: classes.tabRoot,
-                        }}
-                        wrapped
-                    />
-                )}
-                <Tab
-                    label="API Token"
-                    classes={{
-                        root: classes.tabRoot,
-                    }}
-                    wrapped
-                />
-                <Tab
-                    label="Delete Account"
-                    classes={{
-                        root: classes.tabRoot,
-                    }}
-                    wrapped
-                />
+                <Tab label="Personal info" sx={tabStyle} wrapped />
+                <Tab label="Change Password" sx={tabStyle} wrapped />
+                <Tab label="Change Email" sx={tabStyle} wrapped />
+                {useGithubSSO && <Tab label="GitHub Account" sx={tabStyle} wrapped />}
+                {useTwoFactorAuth && <Tab label="2-Factor Auth" sx={tabStyle} wrapped />}
+                <Tab label="API Token" sx={tabStyle} wrapped />
+                <Tab label="Delete Account" sx={tabStyle} wrapped />
             </Tabs>
             <Box minWidth={400} maxWidth={400} minHeight={320}>
                 <TabsTabPanel value={value} index={0}>

@@ -22,7 +22,7 @@ const DisplayNewPassword: FC<RenderDataProps> = (props: RenderDataProps) => {
                     {props.name === '' ? 'Password for new user' : `New Password for ${props.name}`}
                 </InfoDialogTitle>
                 <DialogContent
-                    style={{
+                    sx={{
                         margin: 0,
                         padding: 0,
                     }}

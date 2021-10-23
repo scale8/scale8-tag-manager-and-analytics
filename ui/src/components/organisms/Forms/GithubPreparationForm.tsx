@@ -1,43 +1,28 @@
-import makeStyles from '@mui/styles/makeStyles';
 import { FC } from 'react';
 import { Box, DialogContent } from '@mui/material';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import FormGqlError from '../../atoms/FormGqlError';
 import DialogActionsWithCancel from '../../molecules/DialogActionsWithCancel';
 import { GitHubPreparationFormProps } from '../../../dialogPages/global/GithubAccount';
-
-const useStyles = makeStyles((theme) => ({
-    form: {
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    input: {
-        width: '100%',
-        margin: theme.spacing(0, 0, 3),
-    },
-    submit: {
-        margin: theme.spacing(4, 0, 2),
-    },
-    dialogContent: {
-        minHeight: '248px',
-    },
-}));
+import FormFlex from '../../atoms/FormFlex';
 
 const GithubPreparationForm: FC<GitHubPreparationFormProps> = (
     props: GitHubPreparationFormProps,
 ) => {
-    const classes = useStyles();
-
     return (
         <Box display="flex" flexDirection="column">
             <FormGqlError error={props.gqlError} />
-            <form className={classes.form} onSubmit={props.handleSubmit}>
-                <DialogContent className={classes.dialogContent}>
+            <FormFlex handleSubmit={props.handleSubmit}>
+                <DialogContent
+                    sx={{
+                        minHeight: '248px',
+                    }}
+                >
                     <ControlledTextInput
                         name="githubUser"
                         label="GitHub User"
                         formProps={props}
-                        className={classes.input}
+                        className="DrawerFormField"
                         required
                         autoFocus
                     />
@@ -47,7 +32,7 @@ const GithubPreparationForm: FC<GitHubPreparationFormProps> = (
                     handleDialogClose={props.handleDialogClose}
                     confirmText={props.submitText}
                 />
-            </form>
+            </FormFlex>
         </Box>
     );
 };

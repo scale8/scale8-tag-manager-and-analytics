@@ -64,7 +64,7 @@ const UnsubscribeSection: FC<UnsubscribeSectionProps> = (props: UnsubscribeSecti
                                 );
                             });
                         }}
-                        style={{
+                        sx={{
                             color: '#ffffff',
                             backgroundColor: theme.palette.error.main,
                         }}

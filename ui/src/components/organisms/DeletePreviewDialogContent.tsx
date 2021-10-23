@@ -1,48 +1,16 @@
 import { Dispatch, FC, Fragment, SetStateAction } from 'react';
 import {
     Box,
-    Button,
     DialogActions,
     DialogContent,
     DialogContentText,
-    lighten,
     List,
     ListItem,
     ListItemText,
 } from '@mui/material';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
-import { grey } from '@mui/material/colors';
 import TextAreaInput from '../atoms/InputTypes/TextAreaInput';
-
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            padding: theme.spacing(0, 2, 1, 2),
-        },
-        list: {
-            padding: theme.spacing(0, 2),
-        },
-        dialogActions: {
-            padding: theme.spacing(2),
-            justifyContent: 'center',
-        },
-        cancel: {
-            color: theme.palette.getContrastText(grey[700]),
-            backgroundColor: grey[500],
-            '&:hover': {
-                backgroundColor: grey[700],
-            },
-        },
-        confirm: {
-            color: theme.palette.getContrastText(theme.palette.error.main),
-            backgroundColor: lighten(theme.palette.error.main, 0.4),
-            '&:hover': {
-                backgroundColor: theme.palette.error.main,
-            },
-        },
-    }),
-);
+import { DialogDangerConfirmButton } from '../atoms/DialogDangerConfirmButton';
+import { DialogCancelButton } from '../atoms/DialogCancelButton';
 
 type DeleteWithPreviewProps = {
     handleCancel: () => void;
@@ -56,15 +24,18 @@ type DeleteWithPreviewProps = {
 };
 
 const DeletePreviewDialogContent: FC<DeleteWithPreviewProps> = (props: DeleteWithPreviewProps) => {
-    const classes = useStyles();
-
     return (
         <>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
                     {props.groups.length === 0 ? props.textNoGroups : props.text}
                 </DialogContentText>
-                <List dense className={classes.list}>
+                <List
+                    dense
+                    sx={{
+                        padding: (theme) => theme.spacing(0, 2),
+                    }}
+                >
                     {props.groups.map((group, key) => (
                         <Fragment key={key}>
                             <ListItemText secondary={group.title} />
@@ -79,7 +50,7 @@ const DeletePreviewDialogContent: FC<DeleteWithPreviewProps> = (props: DeleteWit
                 {props.disableComments && (
                     <Box marginTop={3} marginBottom={1}>
                         <TextAreaInput
-                            style={{ width: '100%', minWidth: '300px' }}
+                            sx={{ width: '100%', minWidth: '300px' }}
                             name="comments"
                             label="Comments"
                             value={props.comments}
@@ -88,13 +59,13 @@ const DeletePreviewDialogContent: FC<DeleteWithPreviewProps> = (props: DeleteWit
                     </Box>
                 )}
             </DialogContent>
-            <DialogActions className={classes.dialogActions}>
-                <Button onClick={props.handleCancel} className={classes.cancel} autoFocus>
+            <DialogActions sx={{ padding: 2, justifyContent: 'center' }}>
+                <DialogCancelButton onClick={props.handleCancel} autoFocus>
                     Cancel
-                </Button>
-                <Button onClick={props.handleConfirm} className={classes.confirm}>
+                </DialogCancelButton>
+                <DialogDangerConfirmButton onClick={props.handleConfirm}>
                     Confirm
-                </Button>
+                </DialogDangerConfirmButton>
             </DialogActions>
         </>
     );

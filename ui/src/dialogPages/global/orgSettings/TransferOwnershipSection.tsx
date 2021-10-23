@@ -46,7 +46,7 @@ const TransferOwnershipSection: FC<TransferOwnershipSectionProps> = (
                                 },
                             );
                         }}
-                        style={{
+                        sx={{
                             color: '#ffffff',
                             backgroundColor: theme.palette.error.main,
                         }}

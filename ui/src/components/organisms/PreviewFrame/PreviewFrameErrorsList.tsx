@@ -1,5 +1,5 @@
 import { FC, useContext } from 'react';
-import { Box, CircularProgress, useTheme } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -14,7 +14,6 @@ import { previewFrameContext } from '../../../context/PreviewFrameContext';
 import { PreviewElementType } from '../../../types/PreviewFrameTypes';
 
 const PreviewFrameErrorsList: FC = () => {
-    const theme = useTheme();
     const { revisionStatus, previewFrameData, setCurrentTagCode, setGotoElement } =
         useContext(previewFrameContext);
 
@@ -115,9 +114,9 @@ const PreviewFrameErrorsList: FC = () => {
                         {findErrorItemName(error.entityId, error.entityType).name}
                     </ListItemText>
                     <WarningIcon
-                        style={{
+                        sx={{
                             backgroundColor: 'transparent',
-                            color: theme.palette.error.main,
+                            color: (theme) => theme.palette.error.main,
                             margin: '3px',
                         }}
                     />

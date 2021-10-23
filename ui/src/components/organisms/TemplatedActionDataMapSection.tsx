@@ -1,8 +1,6 @@
 import { FC, Fragment } from 'react';
 import { Box, Button, Tooltip } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import { PlatformDataMapInput } from '../../types/DataMapsTypes';
-import clsx from 'clsx';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { getCurrentDataMapInputFromParentsIndexes } from '../../utils/PlatformDataMapsUtils';
@@ -25,38 +23,9 @@ export type TemplatedActionDataMapSectionProps = {
     disabled: boolean;
 };
 
-const useStyles = makeStyles((theme) => ({
-    line: {
-        width: '100%',
-        padding: theme.spacing(1),
-        display: 'flex',
-        alignItems: 'center',
-    },
-    border: {
-        borderBottom: '1px solid #e0e0e0',
-    },
-    evenBg: {
-        background: 'rgba(0, 0, 0, 0.03)',
-    },
-    children: {
-        width: '100%',
-        padding: theme.spacing(0, 1, 1, 1),
-    },
-    childrenBox: {
-        margin: theme.spacing(1),
-        border: '1px solid #e0e0e0',
-        background: '#ffffff',
-    },
-    noElements: {
-        width: '100%',
-    },
-}));
-
 const TemplatedActionDataMapSection: FC<TemplatedActionDataMapSectionProps> = (
     props: TemplatedActionDataMapSectionProps,
 ) => {
-    const classes = useStyles();
-
     const {
         addDataMap,
         deleteDataMap,
@@ -80,32 +49,42 @@ const TemplatedActionDataMapSection: FC<TemplatedActionDataMapSectionProps> = (
     return (
         <>
             {currentDataMap.length === 0 ? (
-                <div className={classes.line}>
-                    <Alert icon={false} color="info" className={classes.noElements}>
+                <Box
+                    p={1}
+                    sx={{
+                        width: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Alert icon={false} color="info" sx={{ marginTop: 1, width: '100%' }}>
                         No Form Components Defined
                     </Alert>
-                </div>
+                </Box>
             ) : (
                 currentDataMap.map((_: PlatformDataMapInput, index) => {
                     const hasChildren = _.type === 'Object' || _.type === 'Object Array';
                     const Icon = getPlatformDataMapIcon(_.type);
                     return (
                         <Fragment key={index}>
-                            <div
+                            <Box
+                                p={1}
+                                sx={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    borderBottom: hasChildren ? '1px solid #e0e0e0' : undefined,
+                                    background: index % 2 !== 0 ? 'rgba(0, 0, 0, 0.03)' : undefined,
+                                }}
                                 key={index}
-                                className={clsx(
-                                    classes.line,
-                                    hasChildren || classes.border,
-                                    index % 2 !== 0 && classes.evenBg,
-                                )}
                             >
                                 <Box flexGrow={1} display="flex" alignItems="center">
                                     <Tooltip title={_.type}>
                                         <Box
-                                            bgcolor={grey[300]}
-                                            style={{
+                                            sx={{
+                                                background: grey[300],
                                                 padding: '3px',
-                                                height: 30,
+                                                height: 25,
                                                 overflow: 'hidden',
                                                 marginRight: '8px',
                                                 borderRadius: 5,
@@ -155,17 +134,25 @@ const TemplatedActionDataMapSection: FC<TemplatedActionDataMapSectionProps> = (
                                         </IconButton>
                                     </>
                                 )}
-                            </div>
+                            </Box>
                             {hasChildren && (
-                                <div
-                                    className={clsx(
-                                        classes.children,
-                                        classes.border,
-                                        index % 2 !== 0 && classes.evenBg,
-                                    )}
+                                <Box
+                                    p={1}
+                                    sx={{
+                                        width: '100%',
+                                        borderBottom: '1px solid #e0e0e0',
+                                        background:
+                                            index % 2 !== 0 ? 'rgba(0, 0, 0, 0.03)' : undefined,
+                                    }}
                                 >
                                     <b>Children:</b>
-                                    <div className={classes.childrenBox}>
+                                    <Box
+                                        m={1}
+                                        sx={{
+                                            border: '1px solid #e0e0e0',
+                                            background: '#ffffff',
+                                        }}
+                                    >
                                         <TemplatedActionDataMapSection
                                             addDataMap={addDataMap}
                                             deleteDataMap={deleteDataMap}
@@ -175,8 +162,8 @@ const TemplatedActionDataMapSection: FC<TemplatedActionDataMapSectionProps> = (
                                             platformDataMaps={platformDataMaps}
                                             disabled={disabled}
                                         />
-                                    </div>
-                                </div>
+                                    </Box>
+                                </Box>
                             )}
                         </Fragment>
                     );
