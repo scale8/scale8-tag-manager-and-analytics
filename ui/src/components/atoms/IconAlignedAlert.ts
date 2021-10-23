@@ -1,10 +1,11 @@
 import { Alert } from '@mui/material';
-import withStyles from '@mui/styles/withStyles';
+import { styled } from '@mui/material/styles';
+import { AlertProps } from '@mui/material/Alert/Alert';
 
-const IconAlignedAlert = withStyles({
-    icon: {
+const IconAlignedAlert = styled(Alert)<AlertProps>(() => ({
+    '& .MuiAlert-icon': {
         alignItems: 'center',
     },
-})(Alert);
+}));
 
 export default IconAlignedAlert;

@@ -1,7 +1,6 @@
 import { FC, FocusEventHandler } from 'react';
 import { InputType } from '../../../gql/generated/globalTypes';
 import TextInput from './TextInput';
-import makeStyles from '@mui/styles/makeStyles';
 import TextAreaInput from './TextAreaInput';
 import DateStringInput from './DateStringInput';
 import DateStampInput from './DateStampInput';
@@ -49,16 +48,9 @@ export type FormElementWithInputTypeProps = {
     flatten: boolean;
 };
 
-const useStyles = makeStyles(() => ({
-    input: {
-        width: '100%',
-    },
-}));
-
-const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
+export const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
     props: FormElementWithInputTypeProps,
 ) => {
-    const classes = useStyles();
     const {
         inputType,
         values,
@@ -79,6 +71,8 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
         ...inputProps
     } = props;
 
+    const sxStyle = { width: '100%' };
+
     if (inputType === InputType.OBJECT_ARRAY_INPUT || inputType === InputType.OBJECT_INPUT) {
         return null;
     } else if (
@@ -91,7 +85,7 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
             <TextInput
                 value={dataMapValueToString(values[0])}
                 setValue={(v) => setValue(v, 0)}
-                className={classes.input}
+                sx={sxStyle}
                 validationError={errors.has(0) ? errors.get(0) : undefined}
                 {...inputProps}
             />
@@ -104,7 +98,7 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
             <TextInputWithMacros
                 value={dataMapValueToString(values[0])}
                 setValue={(v) => setValue(v, 0)}
-                className={classes.input}
+                sx={sxStyle}
                 validationError={errors.has(0) ? errors.get(0) : undefined}
                 appPlatformRevisions={appPlatformRevisions}
                 {...inputProps}
@@ -122,7 +116,7 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
             <TextAreaInput
                 value={dataMapValueToString(values[0])}
                 setValue={(v) => setValue(v, 0)}
-                className={classes.input}
+                sx={sxStyle}
                 validationError={errors.has(0) ? errors.get(0) : undefined}
                 {...inputProps}
             />
@@ -132,7 +126,7 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
             <DomSelectorInput
                 value={dataMapValueToString(values[0])}
                 setValue={(v) => setValue(v, 0)}
-                className={classes.input}
+                sx={sxStyle}
                 validationError={errors.has(0) ? errors.get(0) : undefined}
                 {...inputProps}
             />
@@ -142,7 +136,7 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
             <DateStringInput
                 value={values[0].toString()}
                 setValue={(v) => setValue(v, 0)}
-                className={classes.input}
+                sx={sxStyle}
                 validationError={errors.has(0) ? errors.get(0) : undefined}
                 {...inputProps}
             />
@@ -152,7 +146,7 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
             <DateStampInput
                 value={Number.isInteger(values[0]) ? (values[0] as number) : ''}
                 setValue={(v) => setValue(v, 0)}
-                className={classes.input}
+                sx={sxStyle}
                 validationError={errors.has(0) ? errors.get(0) : undefined}
                 {...inputProps}
             />
@@ -162,7 +156,7 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
             <DateStringInput
                 value={values[0].toString()}
                 setValue={(v) => setValue(v, 0)}
-                className={classes.input}
+                sx={sxStyle}
                 validationError={errors.has(0) ? errors.get(0) : undefined}
                 includeTime
                 {...inputProps}
@@ -173,7 +167,7 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
             <DateStampInput
                 value={Number.isInteger(values[0]) ? (values[0] as number) : ''}
                 setValue={(v) => setValue(v, 0)}
-                className={classes.input}
+                sx={sxStyle}
                 validationError={errors.has(0) ? errors.get(0) : undefined}
                 includeTime
                 {...inputProps}
@@ -184,7 +178,7 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
             <ColorInput
                 value={values[0].toString()}
                 setValue={(v) => setValue(v, 0)}
-                className={classes.input}
+                sx={sxStyle}
                 validationError={errors.has(0) ? errors.get(0) : undefined}
                 {...inputProps}
             />
@@ -194,7 +188,7 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
             <IntegerInput
                 value={Number.isInteger(values[0]) ? (values[0] as number) : ''}
                 setValue={(v) => setValue(v, 0)}
-                className={classes.input}
+                sx={sxStyle}
                 validationError={errors.has(0) ? errors.get(0) : undefined}
                 {...inputProps}
             />
@@ -204,7 +198,7 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
             <FloatInput
                 value={isNaN(parseFloat(values[0].toString())) ? '' : (values[0] as number)}
                 setValue={(v) => setValue(v, 0)}
-                className={classes.input}
+                sx={sxStyle}
                 validationError={errors.has(0) ? errors.get(0) : undefined}
                 {...inputProps}
             />
@@ -310,7 +304,7 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
                 value={values[0].toString()}
                 setValue={(v) => setValue(v, 0)}
                 validationError={errors.has(0) ? errors.get(0) : undefined}
-                className={classes.input}
+                sx={sxStyle}
                 optionValues={optionValues}
                 {...inputProps}
             />
@@ -321,7 +315,7 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
                 value={values[0] === '' ? [] : (values as string[])}
                 setValue={(v) => (setValues !== undefined ? setValues(v) : setValue(v[0], 0))}
                 validationError={errors.has(0) ? errors.get(0) : undefined}
-                className={classes.input}
+                sx={sxStyle}
                 optionValues={optionValues}
                 {...inputProps}
             />
@@ -333,7 +327,7 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
                 value={values[0].toString()}
                 setValue={(v: string) => setValue(v, 0)}
                 validationError={errors.has(0) ? errors.get(0) : undefined}
-                className={classes.input}
+                sx={sxStyle}
                 optionValues={optionValues}
                 {...inputProps}
             />
@@ -344,7 +338,7 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
                 value={values[0] === '' ? '' : !!values[0]}
                 setValue={(v) => setValue(v, 0)}
                 validationError={errors.has(0) ? errors.get(0) : undefined}
-                className={classes.input}
+                sx={sxStyle}
                 {...inputProps}
             />
         );
@@ -355,7 +349,7 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
                 value={values[0] === '' ? defaultBoolean : !!values[0]}
                 setValue={(v) => setValue(v, 0)}
                 validationError={errors.has(0) ? errors.get(0) : undefined}
-                className={classes.input}
+                sx={sxStyle}
                 {...inputProps}
             />
         );
@@ -364,7 +358,7 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
             <CountrySelect
                 value={dataMapValueToString(values[0])}
                 setValue={(v) => setValue(v, 0)}
-                className={classes.input}
+                sx={sxStyle}
                 validationError={errors.has(0) ? errors.get(0) : undefined}
                 {...inputProps}
             />
@@ -386,7 +380,7 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
                 value={values[0].toString()}
                 setValue={(v) => setValue(v, 0)}
                 validationError={errors.has(0) ? errors.get(0) : undefined}
-                className={classes.input}
+                sx={sxStyle}
                 optionValues={[]}
                 keyTextValues={matchConditionValues
                     .filter((matchConditionValue) =>
@@ -405,7 +399,7 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
                 value={values[0].toString()}
                 setValue={(v) => setValue(v, 0)}
                 validationError={errors.has(0) ? errors.get(0) : undefined}
-                className={classes.input}
+                sx={sxStyle}
                 optionValues={[]}
                 keyTextValues={matchConditionValues
                     .filter((matchConditionValue) => matchConditionValue.types.includes('Custom'))
@@ -422,7 +416,7 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
                 value={values[0].toString()}
                 setValue={(v) => setValue(v, 0)}
                 validationError={errors.has(0) ? errors.get(0) : undefined}
-                className={classes.input}
+                sx={sxStyle}
                 optionValues={[]}
                 keyTextValues={matchConditionValues
                     .filter((matchConditionValue) =>
@@ -441,7 +435,7 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
                 value={values[0].toString()}
                 setValue={(v) => setValue(v, 0)}
                 validationError={errors.has(0) ? errors.get(0) : undefined}
-                className={classes.input}
+                sx={sxStyle}
                 optionValues={[]}
                 keyTextValues={
                     revisions === undefined
@@ -460,7 +454,7 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
                 value={values[0].toString()}
                 setValue={(v) => setValue(v, 0)}
                 validationError={errors.has(0) ? errors.get(0) : undefined}
-                className={classes.input}
+                sx={sxStyle}
                 optionValues={[]}
                 keyTextValues={
                     environments === undefined
@@ -473,7 +467,15 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
                 {...inputProps}
             />
         );
-    } else if (inputType === InputType.CONSENT_PURPOSES) {
+    } else if (
+        inputType === InputType.CONSENT_PURPOSES ||
+        inputType === InputType.CONSENT_VENDORS
+    ) {
+        const consentEntity = (() => {
+            if (inputType === InputType.CONSENT_PURPOSES) return consentPurposes;
+            return consentVendors;
+        })();
+
         return (
             <IntegerSelectInput
                 multiple={setValues !== undefined}
@@ -482,32 +484,11 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
                     setValues !== undefined ? setValues(v as number[]) : setValue(v as number, 0)
                 }
                 validationError={errors.has(0) ? errors.get(0) : undefined}
-                className={classes.input}
+                sx={sxStyle}
                 keyTextValues={
-                    consentPurposes === undefined
+                    consentEntity === undefined
                         ? []
-                        : consentPurposes.map((_) => ({
-                              key: _.id,
-                              text: _.name,
-                          }))
-                }
-                {...inputProps}
-            />
-        );
-    } else if (inputType === InputType.CONSENT_VENDORS) {
-        return (
-            <IntegerSelectInput
-                multiple={setValues !== undefined}
-                value={values as number[]}
-                setValue={(v) =>
-                    setValues !== undefined ? setValues(v as number[]) : setValue(v as number, 0)
-                }
-                validationError={errors.has(0) ? errors.get(0) : undefined}
-                className={classes.input}
-                keyTextValues={
-                    consentVendors === undefined
-                        ? []
-                        : consentVendors.map((_) => ({
+                        : consentEntity.map((_) => ({
                               key: _.id,
                               text: _.name,
                           }))
@@ -519,5 +500,3 @@ const FormElementWithInputType: FC<FormElementWithInputTypeProps> = (
         return <p>Input type {inputType} not implemented</p>;
     }
 };
-
-export { FormElementWithInputType };

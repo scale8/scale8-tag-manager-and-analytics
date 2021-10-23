@@ -1,6 +1,5 @@
-import makeStyles from '@mui/styles/makeStyles';
 import { FC, useEffect } from 'react';
-import { IconButton } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
 import { TextFieldProps } from '@mui/material/TextField/TextField';
@@ -8,43 +7,8 @@ import IntegerInput from './IntegerInput';
 import FloatInput from './FloatInput';
 import TextInput from './TextInput';
 import TextAreaInput from './TextAreaInput';
-import clsx from 'clsx';
-
-const useStyles = makeStyles((theme) => ({
-    arrayContainer: {
-        width: '100%',
-        borderRadius: '4px',
-        border: '1px solid #e1e4e8',
-        padding: theme.spacing(1),
-    },
-    arrayContainerUnContained: {
-        width: '100%',
-        borderRadius: 0,
-        border: 0,
-        padding: theme.spacing(1, 0),
-    },
-    lineContainer: {
-        display: 'flex',
-    },
-    closeButtonContainer: {
-        marginTop: '15px',
-        marginLeft: '5px',
-        flexGrow: 0,
-    },
-    closeButtonContainerSmallInput: {
-        marginTop: '6px',
-        marginLeft: '5px',
-        flexGrow: 0,
-    },
-    label: {
-        marginTop: theme.spacing(1),
-        fontSize: '0.9em',
-    },
-    input: {
-        width: '100%',
-        margin: theme.spacing(0, 0, 1),
-    },
-}));
+import { SxProps } from '@mui/system';
+import { Theme } from '@mui/material/styles';
 
 export type ArrayInputProps = Omit<TextFieldProps, 'value'> & {
     name: string;
@@ -60,7 +24,6 @@ export type ArrayInputProps = Omit<TextFieldProps, 'value'> & {
 };
 
 const ArrayInput: FC<ArrayInputProps> = (props: ArrayInputProps) => {
-    const classes = useStyles();
     const {
         name,
         label,
@@ -81,19 +44,27 @@ const ArrayInput: FC<ArrayInputProps> = (props: ArrayInputProps) => {
         }
     }, [values, required, addArrayElement, name]);
 
+    const inputStyle: SxProps<Theme> = {
+        width: '100%',
+        margin: (theme) => theme.spacing(0, 0, 1),
+    };
+
     return (
         <>
-            <label className={classes.label}>
+            <Box component="label" sx={{ marginTop: 1, fontSize: '0.9em' }}>
                 {label}
                 {required && contained && ' *'}
-            </label>
-            <div
-                className={clsx(
-                    contained ? classes.arrayContainer : classes.arrayContainerUnContained,
-                )}
+            </Box>
+            <Box
+                sx={{
+                    width: '100%',
+                    borderRadius: contained ? '4px' : 0,
+                    border: contained ? '1px solid #e1e4e8' : 0,
+                    padding: (theme) => (contained ? theme.spacing(1) : theme.spacing(1, 0)),
+                }}
             >
                 {values.map((currentValue, index) => (
-                    <div className={classes.lineContainer} key={index}>
+                    <Box sx={{ display: 'flex' }} key={index}>
                         {arrayType === 'int' && (
                             <IntegerInput
                                 name={`${name}-${index}`}
@@ -108,7 +79,7 @@ const ArrayInput: FC<ArrayInputProps> = (props: ArrayInputProps) => {
                                 }
                                 variant="outlined"
                                 required
-                                className={classes.input}
+                                sx={inputStyle}
                                 {...textFieldProps}
                             />
                         )}
@@ -128,7 +99,7 @@ const ArrayInput: FC<ArrayInputProps> = (props: ArrayInputProps) => {
                                 }
                                 variant="outlined"
                                 required
-                                className={classes.input}
+                                sx={inputStyle}
                                 {...textFieldProps}
                             />
                         )}
@@ -144,7 +115,7 @@ const ArrayInput: FC<ArrayInputProps> = (props: ArrayInputProps) => {
                                 }
                                 variant="outlined"
                                 required
-                                className={classes.input}
+                                sx={inputStyle}
                                 {...textFieldProps}
                             />
                         )}
@@ -159,17 +130,17 @@ const ArrayInput: FC<ArrayInputProps> = (props: ArrayInputProps) => {
                                         : undefined
                                 }
                                 required
-                                className={classes.input}
+                                sx={inputStyle}
                                 {...textFieldProps}
                             />
                         )}
                         {!textFieldProps.disabled && (!required || values.length > 1) && (
-                            <div
-                                className={clsx(
-                                    textFieldProps.size === 'small'
-                                        ? classes.closeButtonContainerSmallInput
-                                        : classes.closeButtonContainer,
-                                )}
+                            <Box
+                                sx={{
+                                    flexGrow: 0,
+                                    marginLeft: '5px',
+                                    marginTop: textFieldProps.size === 'small' ? '6px' : '15px',
+                                }}
                             >
                                 <IconButton
                                     aria-label="delete"
@@ -180,9 +151,9 @@ const ArrayInput: FC<ArrayInputProps> = (props: ArrayInputProps) => {
                                 >
                                     <CloseIcon fontSize="small" />
                                 </IconButton>
-                            </div>
+                            </Box>
                         )}
-                    </div>
+                    </Box>
                 ))}
                 {!textFieldProps.disabled && (
                     <IconButton
@@ -195,7 +166,7 @@ const ArrayInput: FC<ArrayInputProps> = (props: ArrayInputProps) => {
                         <AddIcon fontSize="small" />
                     </IconButton>
                 )}
-            </div>
+            </Box>
         </>
     );
 };

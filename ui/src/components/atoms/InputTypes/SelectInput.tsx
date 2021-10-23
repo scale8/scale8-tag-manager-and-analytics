@@ -63,6 +63,7 @@ const SelectInput: FC<SelectInputProps> = (props: SelectInputProps) => {
 
     return (
         <FormControl
+            variant="standard"
             {...formControlProps}
             onInvalid={(event) => {
                 event.preventDefault();
