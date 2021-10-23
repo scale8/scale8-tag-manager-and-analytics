@@ -30,7 +30,7 @@ export const AppErrorDetailsContainer: FC<ChildrenOnlyProps & { removeFilter: ()
                     size="small"
                     disableRipple
                     onClick={removeFilter}
-                    style={{
+                    sx={{
                         position: 'absolute',
                         marginTop: '9px',
                         marginLeft: '10px',

@@ -121,7 +121,7 @@ const S8TableToolbar = <T extends RowData>(props: S8TableToolbarProps<T>): React
 
             <>
                 <Tooltip title="Select columns">
-                    <span style={{ color: 'rgba(0, 0, 0, 0.87)' }}>
+                    <Box component="span" sx={{ color: 'rgba(0, 0, 0, 0.87)' }}>
                         <IconButton
                             onClick={handleClick}
                             color="inherit"
@@ -130,7 +130,7 @@ const S8TableToolbar = <T extends RowData>(props: S8TableToolbarProps<T>): React
                         >
                             <ViewColumnIcon />
                         </IconButton>
-                    </span>
+                    </Box>
                 </Tooltip>
                 <Menu
                     anchorOrigin={{

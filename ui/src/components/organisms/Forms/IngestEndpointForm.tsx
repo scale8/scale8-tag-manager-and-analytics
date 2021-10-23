@@ -6,6 +6,7 @@ import StorageProviderSelector from '../../molecules/StorageProviderSelector';
 import CheckBoxInput from '../../atoms/InputTypes/CheckBoxInput';
 import { Mode } from '../../../gql/generated/globalTypes';
 import { useConfigState } from '../../../context/AppContext';
+import { Box } from '@mui/material';
 
 const IngestEndpointForm: FC<IngestEndpointFormProps> = (props: IngestEndpointFormProps) => {
     const { mode } = useConfigState();
@@ -30,12 +31,12 @@ const IngestEndpointForm: FC<IngestEndpointFormProps> = (props: IngestEndpointFo
                         }}
                         label="Enable Analytics"
                         className="DrawerFormField"
-                        style={{ marginLeft: '-11px' }}
+                        sx={{ marginLeft: '-11px' }}
                         color="primary"
                     />
-                    <small className="DrawerFormField" style={{ marginTop: '-24px' }}>
+                    <Box component="small" className="DrawerFormField" sx={{ marginTop: '-24px' }}>
                         Enable analytics dashboard when using Data Manager.
-                    </small>
+                    </Box>
                     {props.values.analyticsEnabled && (
                         <StorageProviderSelector
                             {...props}

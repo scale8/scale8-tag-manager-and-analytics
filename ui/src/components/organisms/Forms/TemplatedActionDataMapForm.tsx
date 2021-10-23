@@ -7,7 +7,7 @@ import {
     getPlatformDataMapVarType,
     getSelectValuesForPlatformDataMapType,
 } from '../../../utils/PlatformDataMapTypeUtils';
-import { Box, FormControlLabel, Radio, RadioGroup, useTheme } from '@mui/material';
+import { Box, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import { DataMapDefaultValueFormSection } from '../../molecules/DataMapDefaultValueFormSection';
 import ArrayInput from '../../atoms/InputTypes/ArrayInput';
 import ControlledTextAreaInput from '../../atoms/ControlledInputs/ControlledTextAreaInput';
@@ -17,8 +17,6 @@ import ValidationRulesSection from '../../molecules/ValidationRulesSection';
 const TemplatedActionDataMapForm: FC<TemplatedActionDataMapFormProps> = (
     props: TemplatedActionDataMapFormProps,
 ) => {
-    const theme = useTheme();
-
     const getRadioValue = () => {
         if (props.values.useDefault) {
             return 'default';
@@ -73,9 +71,9 @@ const TemplatedActionDataMapForm: FC<TemplatedActionDataMapFormProps> = (
                 <RadioGroup
                     value={getRadioValue()}
                     onChange={handleRadioChange}
-                    style={{
+                    sx={{
                         width: '100%',
-                        marginBottom: theme.spacing(3),
+                        marginBottom: (theme) => theme.spacing(3),
                     }}
                 >
                     <FormControlLabel

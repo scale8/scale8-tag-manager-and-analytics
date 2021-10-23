@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import {
     Box,
     Button,
@@ -97,14 +97,18 @@ const AccountSectionEndpointTable: FC<AccountSectionAppTableProps> = (
                             <TableCell className={classes.contentCell}>
                                 <Box width={70}>
                                     <Sparklines data={endpoint.requests} width={70} height={20}>
-                                        <SparklinesLine style={{ fill: 'none' }} />
+                                        <SparklinesLine
+                                            style={useMemo(() => ({ fill: 'none' }), [])}
+                                        />
                                     </Sparklines>
                                 </Box>
                             </TableCell>
                             <TableCell className={classes.contentCell}>
                                 <Box width={70}>
                                     <Sparklines data={endpoint.bytes} width={70} height={20}>
-                                        <SparklinesLine style={{ fill: 'none' }} />
+                                        <SparklinesLine
+                                            style={useMemo(() => ({ fill: 'none' }), [])}
+                                        />
                                     </Sparklines>
                                 </Box>
                             </TableCell>

@@ -117,9 +117,10 @@ const CodeShiki: FC<ShikiProps> = ({ code, language, errorPosition, setLoaded })
                                             errorPosition.col <= nextCharCount;
                                         prevCharCount = nextCharCount;
                                         return (
-                                            <span
+                                            <Box
+                                                component="span"
                                                 key={tokenIndex}
-                                                style={{
+                                                sx={{
                                                     color: token.color,
                                                     background: tokenHasError
                                                         ? '#FF000040'
@@ -141,22 +142,23 @@ const CodeShiki: FC<ShikiProps> = ({ code, language, errorPosition, setLoaded })
                                                             0,
                                                             relativeCharPosition - 1,
                                                         )}
-                                                        <span
+                                                        <Box
+                                                            component="span"
                                                             ref={errorRef}
-                                                            style={{
+                                                            sx={{
                                                                 background: '#FF000060',
                                                             }}
                                                         >
                                                             {token.content.charAt(
                                                                 relativeCharPosition - 1,
                                                             )}
-                                                        </span>
+                                                        </Box>
                                                         {token.content.slice(relativeCharPosition)}
                                                     </>
                                                 ) : (
                                                     <>{token.content}</>
                                                 )}
-                                            </span>
+                                            </Box>
                                         );
                                     })}
                                 </span>

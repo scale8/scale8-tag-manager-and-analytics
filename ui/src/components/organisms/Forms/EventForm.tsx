@@ -1,4 +1,3 @@
-import { useTheme } from '@mui/material/styles';
 import { FC, useEffect, useState } from 'react';
 import { Checkbox, FormControlLabel } from '@mui/material';
 import ControlledFilteredSelects from '../../atoms/ControlledInputs/ControlledFilteredSelects';
@@ -14,6 +13,7 @@ import {
     EventValues,
 } from '../../../dialogPages/tagManager/app/trigger/EventCreate';
 import { buildEventName } from '../../../dialogPages/tagManager/app/trigger/EventUpdate';
+import { Box } from '@mui/system';
 
 const getDescription = (values: EventValues, availableEvents: SelectValueWithSub[]): string => {
     if (!values.eventId) {
@@ -26,7 +26,6 @@ const getDescription = (values: EventValues, availableEvents: SelectValueWithSub
 };
 
 const EventForm: FC<EventFormProps> = (props: EventFormProps) => {
-    const theme = useTheme();
     const notAvailable = props.availableEvents.length < 1;
 
     const [useCustom, setUseCustom] = useState(!!props.useCustom);
@@ -107,14 +106,15 @@ const EventForm: FC<EventFormProps> = (props: EventFormProps) => {
                         missingSubMessage="There are no more events available from this platform."
                         hideNoSub
                     />
-                    <small
-                        style={{
+                    <Box
+                        component="small"
+                        sx={{
                             width: '100%',
-                            margin: theme.spacing(0, 0, 2),
+                            margin: (theme) => theme.spacing(0, 0, 2),
                         }}
                     >
                         {getDescription(values, availableEvents)}
-                    </small>
+                    </Box>
                     {props.values.mappedPlatformValues !== undefined &&
                         props.values.eventId !== '' && (
                             <MappedPlatformValuesForm
@@ -156,7 +156,7 @@ const EventForm: FC<EventFormProps> = (props: EventFormProps) => {
             {useCustom ? (
                 <>
                     <FormControlLabel
-                        style={{ marginBottom: theme.spacing(3) }}
+                        sx={{ marginBottom: (theme) => theme.spacing(3) }}
                         control={
                             <Checkbox
                                 name="useEventAsName"
@@ -185,7 +185,7 @@ const EventForm: FC<EventFormProps> = (props: EventFormProps) => {
                         props.values.eventId !== '' && (
                             <>
                                 <FormControlLabel
-                                    style={{ marginBottom: theme.spacing(3) }}
+                                    sx={{ marginBottom: (theme) => theme.spacing(3) }}
                                     control={
                                         <Checkbox
                                             name="generateName"

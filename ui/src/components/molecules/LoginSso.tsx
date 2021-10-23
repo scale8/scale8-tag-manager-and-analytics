@@ -13,7 +13,7 @@ const LoginSso: FC<LoginSsoProps> = (props: LoginSsoProps) => {
             <Divider />
             <Box
                 fontSize={11}
-                style={{ textAlign: 'center' }}
+                sx={{ textAlign: 'center' }}
                 width="100px"
                 m="auto"
                 bgcolor="background.paper"

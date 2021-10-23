@@ -60,13 +60,13 @@ const InfoButton: FC<InfoProps> = (props: InfoProps) => {
             <IconButton
                 size="small"
                 disableRipple
-                style={{
+                sx={{
                     color: navigationColor,
                     background: 'transparent',
                 }}
                 onClick={handleClick}
             >
-                <HelpIcon style={{ fontSize: 15 }} />
+                <HelpIcon sx={{ fontSize: 15 }} />
             </IconButton>
             <Popover
                 anchorOrigin={{

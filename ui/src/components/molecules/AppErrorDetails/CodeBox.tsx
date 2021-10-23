@@ -66,7 +66,7 @@ export const CodeBox: FC<{ fileUrl: string; errorRow: number; errorCol: number }
             <Box zIndex={1} height={250}>
                 <Paper
                     elevation={5}
-                    style={{
+                    sx={{
                         height: 250,
                         backgroundColor: '#2e3440',
                         zIndex: 2,

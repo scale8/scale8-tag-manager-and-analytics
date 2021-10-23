@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { Checkbox, FormControlLabel, useTheme } from '@mui/material';
+import { Checkbox, FormControlLabel } from '@mui/material';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import ControlledSelect from '../../atoms/ControlledInputs/ControlledSelect';
 import ControlledTextAreaInput from '../../atoms/ControlledInputs/ControlledTextAreaInput';
@@ -10,8 +10,6 @@ import StorageProviderSelector from '../../molecules/StorageProviderSelector';
 const IngestEndpointEnvironmentForm: FC<IngestEndpointEnvironmentFormProps> = (
     props: IngestEndpointEnvironmentFormProps,
 ) => {
-    const theme = useTheme();
-
     const [customDomain, setCustomDomain] = useState(
         (props.gqlError?.message ?? '').indexOf('Certificate') !== -1,
     );
@@ -46,7 +44,7 @@ const IngestEndpointEnvironmentForm: FC<IngestEndpointEnvironmentFormProps> = (
 
             {props.hasCustomDomain === undefined && (
                 <FormControlLabel
-                    style={{ marginBottom: theme.spacing(1) }}
+                    sx={{ marginBottom: (theme) => theme.spacing(1) }}
                     control={
                         <Checkbox
                             name="customDomain"

@@ -53,7 +53,7 @@ const PreviewFrameRuleHeader: FC<PreviewFrameRuleHeaderProps> = (
             <Box>
                 <Box display="flex" alignItems="center" height="56px" py={1}>
                     <Select
-                        style={{ width: '100%' }}
+                        sx={{ width: '100%' }}
                         value={ruleIndex.toString()}
                         onChange={(event: SelectChangeEvent) =>
                             setRuleIndex(parseInt(event.target.value as string))

@@ -60,7 +60,7 @@ const RadioInput: FC<SelectInputProps> = (props: SelectInputProps) => {
             {label && (
                 <Box
                     color={disabled ? 'rgba(0, 0, 0, 0.38)' : 'inherit'}
-                    style={{
+                    sx={{
                         fontSize: '12px',
                     }}
                 >

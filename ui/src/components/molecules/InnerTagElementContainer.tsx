@@ -55,7 +55,7 @@ const InnerTagElementContainer: FC<InnerTagElementContainerProps> = (
                     <>
                         {props.applied !== undefined && (
                             <ListItemIcon
-                                style={{
+                                sx={{
                                     minWidth: '10px',
                                     paddingRight: '10px',
                                 }}

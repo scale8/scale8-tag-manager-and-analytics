@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { Box, Checkbox, FormControlLabel, useTheme } from '@mui/material';
+import { Box, Checkbox, FormControlLabel } from '@mui/material';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import ControlledSelect from '../../atoms/ControlledInputs/ControlledSelect';
 import EnvironmentVariablesInput from '../../atoms/EnvironmentVariablesInput';
@@ -8,8 +8,6 @@ import DrawerFormLayout from '../../molecules/DrawerFormLayout';
 import { EnvironmentFormProps } from '../../../dialogPages/tagManager/app/EnvironmentCreate';
 
 const EnvironmentForm: FC<EnvironmentFormProps> = (props: EnvironmentFormProps) => {
-    const theme = useTheme();
-
     const [customDomain, setCustomDomain] = useState(
         (props.gqlError?.message ?? '').indexOf('Certificate') !== -1,
     );
@@ -51,8 +49,8 @@ const EnvironmentForm: FC<EnvironmentFormProps> = (props: EnvironmentFormProps) 
 
             {props.hasCustomDomain === undefined && (
                 <FormControlLabel
-                    style={{
-                        marginBottom: theme.spacing(1),
+                    sx={{
+                        marginBottom: (theme) => theme.spacing(1),
                     }}
                     control={
                         <Checkbox

@@ -3,29 +3,13 @@ import { Box, CircularProgress, Grid, Typography } from '@mui/material';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import AppBar from '@mui/material/AppBar';
-import makeStyles from '@mui/styles/makeStyles';
 import Alert from '@mui/material/Alert';
 import { PreviewFrameTagRules } from './PreviewFrameTagRules';
 import { findTagIndex, matchTagCode } from '../../../utils/PreviewUtils';
 import { TagType } from '../../../gql/generated/globalTypes';
 import { previewFrameContext } from '../../../context/PreviewFrameContext';
 
-const useStyles = makeStyles(() => ({
-    appBar: {
-        minHeight: '34px',
-        borderBottom: '1px solid #dadada',
-    },
-    tabs: {
-        minHeight: '34px',
-    },
-    tab: {
-        minHeight: '34px',
-        fontSize: '0.8em',
-    },
-}));
-
 const PreviewFrameTagInfo: FC = () => {
-    const classes = useStyles();
     const {
         revisionStatus,
         previewFrameData,
@@ -94,7 +78,10 @@ const PreviewFrameTagInfo: FC = () => {
                     <AppBar
                         position="static"
                         color="default"
-                        className={classes.appBar}
+                        sx={{
+                            minHeight: '34px!important',
+                            borderBottom: '1px solid #dadada',
+                        }}
                         elevation={0}
                     >
                         <Tabs
@@ -103,11 +90,16 @@ const PreviewFrameTagInfo: FC = () => {
                             textColor="primary"
                             onChange={handleChange}
                             aria-label="disabled tabs example"
-                            className={classes.tabs}
+                            sx={{
+                                minHeight: '34px',
+                            }}
                         >
                             {loadedTags.map((_) => (
                                 <Tab
-                                    className={classes.tab}
+                                    sx={{
+                                        minHeight: '34px',
+                                        fontSize: '0.8em',
+                                    }}
                                     key={_.tagCode.index}
                                     label={`Tag #${_.tagCode.index}`}
                                 />

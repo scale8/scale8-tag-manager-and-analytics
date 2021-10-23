@@ -11,7 +11,7 @@ export const TraceBox: FC<{ trace: string }> = ({ trace }) => {
             <Box zIndex={1} height={250}>
                 <Paper
                     elevation={5}
-                    style={{
+                    sx={{
                         height: 250,
                         backgroundColor: '#2e3440',
                         zIndex: 2,

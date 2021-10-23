@@ -29,7 +29,7 @@ const RevisionDiff: FC<RevisionDiffProps> = (props: RevisionDiffProps) => {
                 {formInfoProps !== undefined && <InfoButton {...formInfoProps} />}
             </InfoDialogTitle>
             <DialogContent
-                style={{
+                sx={{
                     margin: 0,
                     padding: 0,
                 }}

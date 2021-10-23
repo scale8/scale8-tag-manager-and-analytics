@@ -81,7 +81,7 @@ const S8TableHead = <T extends RowData>(
                 )}
                 {columns.map((column, index) => (
                     <TableCell
-                        style={{
+                        sx={{
                             whiteSpace: 'nowrap',
                         }}
                         key={column.field.toString()}

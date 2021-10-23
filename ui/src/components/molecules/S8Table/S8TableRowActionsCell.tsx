@@ -28,7 +28,7 @@ const S8TableRowActionsCell = <T extends RowData>(
             id={actionId}
             align="center"
             padding="none"
-            style={{
+            sx={{
                 width: '0.1%',
                 whiteSpace: 'nowrap',
                 padding: '0 5px',

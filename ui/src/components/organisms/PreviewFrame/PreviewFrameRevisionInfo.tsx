@@ -3,28 +3,19 @@ import { Box, CircularProgress } from '@mui/material';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import AppBar from '@mui/material/AppBar';
-import makeStyles from '@mui/styles/makeStyles';
 import { PreviewFrameErrorsList } from './PreviewFrameErrorsList';
 import { PreviewFrameDataLayers } from './PreviewFrameDataLayers';
 import { TabularData } from '../../molecules/TabularData';
 import { previewFrameContext } from '../../../context/PreviewFrameContext';
-
-const useStyles = makeStyles(() => ({
-    appBar: {
-        minHeight: '34px',
-        borderBottom: '1px solid #dadada',
-    },
-    tabs: {
-        minHeight: '34px',
-    },
-    tab: {
-        minHeight: '34px',
-        fontSize: '0.8em',
-    },
-}));
+import { SxProps } from '@mui/system';
+import { Theme } from '@mui/material/styles';
 
 const PreviewFrameRevisionInfo: FC = () => {
-    const classes = useStyles();
+    const tabStyle: SxProps<Theme> = {
+        minHeight: '34px',
+        fontSize: '0.8em',
+    };
+
     const { revisionStatus, previewFrameData, setRevisionTab, revisionTab } =
         useContext(previewFrameContext);
 
@@ -51,7 +42,10 @@ const PreviewFrameRevisionInfo: FC = () => {
                     <AppBar
                         position="static"
                         color="default"
-                        className={classes.appBar}
+                        sx={{
+                            minHeight: '34px!important',
+                            borderBottom: '1px solid #dadada',
+                        }}
                         elevation={0}
                     >
                         <Tabs
@@ -60,12 +54,14 @@ const PreviewFrameRevisionInfo: FC = () => {
                             textColor="primary"
                             onChange={handleChange}
                             aria-label="disabled tabs example"
-                            className={classes.tabs}
+                            sx={{
+                                minHeight: '34px',
+                            }}
                         >
-                            <Tab className={classes.tab} label="Data Layers " />
-                            <Tab className={classes.tab} label="Revision" />
-                            <Tab className={classes.tab} label="Platform" />
-                            {errors.length > 0 && <Tab className={classes.tab} label="Errors" />}
+                            <Tab sx={tabStyle} label="Data Layers " />
+                            <Tab sx={tabStyle} label="Revision" />
+                            <Tab sx={tabStyle} label="Platform" />
+                            {errors.length > 0 && <Tab sx={tabStyle} label="Errors" />}
                         </Tabs>
                     </AppBar>
                     {revisionTab === 0 && (

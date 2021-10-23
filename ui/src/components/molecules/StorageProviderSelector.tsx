@@ -71,7 +71,7 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
                     }}
                     label="Edit Storage Provider Settings"
                     className="DrawerFormField"
-                    style={{ marginLeft: '-11px' }}
+                    sx={{ marginLeft: '-11px' }}
                     color="primary"
                 />
             )}
@@ -174,7 +174,7 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
                             }}
                             label="Use API Mongo Server"
                             className="DrawerFormField"
-                            style={{ marginLeft: '-11px' }}
+                            sx={{ marginLeft: '-11px' }}
                             color="primary"
                         />
                         {!props.values.useApiMongoServer && (

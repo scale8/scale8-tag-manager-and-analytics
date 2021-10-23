@@ -62,7 +62,7 @@ const TagElementList: FC<TagElementListProps> = (props: TagElementListProps) => 
                         <ListItem className={classes.listItem}>
                             {item.icon !== undefined && (
                                 <ListItemIcon
-                                    style={{
+                                    sx={{
                                         minWidth: '10px',
                                         paddingRight: '10px',
                                     }}

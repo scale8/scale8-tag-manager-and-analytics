@@ -62,7 +62,7 @@ const TagForm: FC<TagFormProps> = (props: TagFormProps) => {
                     }}
                     label="Load the tag automatically"
                     className="DrawerFormField"
-                    style={{ marginLeft: '-11px' }}
+                    sx={{ marginLeft: '-11px' }}
                     color="primary"
                 />
             )}

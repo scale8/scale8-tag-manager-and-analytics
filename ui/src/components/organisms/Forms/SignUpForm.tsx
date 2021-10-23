@@ -217,7 +217,7 @@ const SignUpForm: FC<SignUpFormProps> = (props: SignUpFormProps) => {
                                     I agree to the{' '}
                                     <Link
                                         href={'https://scale8.com/legal/terms'}
-                                        style={{ color: 'rgba(0, 0, 0, 0.87)' }}
+                                        sx={{ color: 'rgba(0, 0, 0, 0.87)' }}
                                     >
                                         Terms of Service
                                     </Link>

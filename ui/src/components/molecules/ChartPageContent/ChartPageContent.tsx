@@ -1,17 +1,5 @@
-import makeStyles from '@mui/styles/makeStyles';
 import { FC, ReactNode } from 'react';
 import { Box, Card, Grid } from '@mui/material';
-
-const useStyles = makeStyles((theme) => ({
-    cardGrid: {},
-    card: {
-        height: '100%',
-        padding: theme.spacing(2),
-        display: 'flex',
-        border: '1px solid rgba(0, 0, 0, 0.12)',
-        borderRadius: '4px',
-    },
-}));
 
 export type ChartPageContentProps = {
     summaryBlock: ReactNode;
@@ -21,18 +9,35 @@ export type ChartPageContentProps = {
 };
 
 const ChartPageContent: FC<ChartPageContentProps> = (props: ChartPageContentProps) => {
-    const classes = useStyles();
-
     return (
         <Box sx={{ padding: (theme) => theme.spacing(0, 0, 4, 0) }}>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    <Card className={classes.card} elevation={0}>
+                    <Card
+                        sx={{
+                            height: '100%',
+                            padding: (theme) => theme.spacing(2),
+                            display: 'flex',
+                            border: '1px solid rgba(0, 0, 0, 0.12)',
+                            borderRadius: '4px',
+                        }}
+                        elevation={0}
+                    >
                         {props.summaryBlock}
                     </Card>
                 </Grid>
                 <Grid item xs={12}>
-                    <Card className={classes.card} style={{ minHeight: '300px' }} elevation={0}>
+                    <Card
+                        sx={{
+                            height: '100%',
+                            padding: (theme) => theme.spacing(2),
+                            display: 'flex',
+                            border: '1px solid rgba(0, 0, 0, 0.12)',
+                            borderRadius: '4px',
+                            minHeight: '300px',
+                        }}
+                        elevation={0}
+                    >
                         {props.chartBlock}
                     </Card>
                 </Grid>

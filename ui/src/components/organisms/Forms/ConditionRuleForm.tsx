@@ -1,6 +1,5 @@
-import { useTheme } from '@mui/material/styles';
 import { FC, useEffect, useState } from 'react';
-import { Checkbox, FormControlLabel } from '@mui/material';
+import { Box, Checkbox, FormControlLabel } from '@mui/material';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import ControlledSelect from '../../atoms/ControlledInputs/ControlledSelect';
 import { ConditionType, InputType, VarType } from '../../../gql/generated/globalTypes';
@@ -42,7 +41,6 @@ const platformDataMapsToSelectValues = (
 };
 
 const ConditionRuleForm: FC<ConditionRuleFormProps> = (props: ConditionRuleFormProps) => {
-    const theme = useTheme();
     const [useCustom, setUseCustom] = useState(false);
     const [generateName, setGenerateName] = useState(
         props.generateName === undefined ? true : props.generateName,
@@ -128,14 +126,15 @@ const ConditionRuleForm: FC<ConditionRuleFormProps> = (props: ConditionRuleFormP
                 />
             )}
             {currentDataContainer && (
-                <small
-                    style={{
+                <Box
+                    component="small"
+                    sx={{
                         width: '100%',
-                        margin: theme.spacing(0, 0, 2),
+                        margin: (theme) => theme.spacing(0, 0, 2),
                     }}
                 >
                     {currentDataContainer.description}
-                </small>
+                </Box>
             )}
 
             {notAvailable && (
@@ -187,25 +186,27 @@ const ConditionRuleForm: FC<ConditionRuleFormProps> = (props: ConditionRuleFormP
                 />
             )}
             {noConditions ? (
-                <small
-                    style={{
+                <Box
+                    component="small"
+                    sx={{
                         width: '100%',
-                        margin: theme.spacing(0, 0, 2),
+                        margin: (theme) => theme.spacing(0, 0, 2),
                     }}
                 >
                     It is not possible to use this data element in a condition.
-                </small>
+                </Box>
             ) : (
                 (props.currentDataElement !== undefined || useCustom) && (
                     <>
-                        <small
-                            style={{
+                        <Box
+                            component="small"
+                            sx={{
                                 width: '100%',
-                                margin: theme.spacing(0, 0, 2),
+                                margin: (theme) => theme.spacing(0, 0, 2),
                             }}
                         >
                             {props.currentDataElement?.description}
-                        </small>
+                        </Box>
                         {isRawObject && (
                             <ControlledTextInput
                                 name="matchKey"
@@ -273,7 +274,7 @@ const ConditionRuleForm: FC<ConditionRuleFormProps> = (props: ConditionRuleFormP
             {ready && !noConditions && (
                 <>
                     <FormControlLabel
-                        style={{ marginBottom: theme.spacing(3) }}
+                        sx={{ marginBottom: (theme) => theme.spacing(3) }}
                         control={
                             <Checkbox
                                 name="generateName"

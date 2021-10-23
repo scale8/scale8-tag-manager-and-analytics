@@ -1,5 +1,5 @@
 import { ChangeEvent, FC, useEffect, useState } from 'react';
-import { FormControlLabel, Radio, RadioGroup, useTheme } from '@mui/material';
+import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import ControlledSelect from '../../atoms/ControlledInputs/ControlledSelect';
 import {
@@ -20,7 +20,6 @@ import { IngestEndpointDataMapFormProps } from '../../../dialogPages/dataManager
 const IngestEndpointDataMapForm: FC<IngestEndpointDataMapFormProps> = (
     props: IngestEndpointDataMapFormProps,
 ) => {
-    const theme = useTheme();
     const [useMacro, setUseMacro] = useState(false);
 
     const getRadioValue = () => {
@@ -124,9 +123,9 @@ const IngestEndpointDataMapForm: FC<IngestEndpointDataMapFormProps> = (
             <RadioGroup
                 value={getRadioValue()}
                 onChange={handleRadioChange}
-                style={{
+                sx={{
                     width: '100%',
-                    marginBottom: theme.spacing(3),
+                    marginBottom: (theme) => theme.spacing(3),
                 }}
             >
                 <FormControlLabel

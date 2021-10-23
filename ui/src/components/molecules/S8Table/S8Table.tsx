@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEvent, ReactElement, ReactNode } from 'react';
+import { ChangeEvent, MouseEvent, ReactElement, ReactNode, useMemo } from 'react';
 import createStyles from '@mui/styles/createStyles';
 import makeStyles from '@mui/styles/makeStyles';
 import Table from '@mui/material/Table';
@@ -161,7 +161,7 @@ const S8Table = <T extends RowData>(props: S8TableProps<T>): ReactElement => {
                 return (
                     <Box width={150}>
                         <Sparklines data={value} width={150} height={30}>
-                            <SparklinesLine style={{ fill: 'none' }} />
+                            <SparklinesLine style={useMemo(() => ({ fill: 'none' }), [])} />
                         </Sparklines>
                     </Box>
                 );
@@ -191,7 +191,7 @@ const S8Table = <T extends RowData>(props: S8TableProps<T>): ReactElement => {
                                 onClick={emptyAction.onClick}
                                 variant="contained"
                                 color="primary"
-                                style={{
+                                sx={{
                                     color: '#ffffff',
                                     background: navigationColor,
                                 }}

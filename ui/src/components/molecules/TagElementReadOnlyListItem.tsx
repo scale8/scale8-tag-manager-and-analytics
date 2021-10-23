@@ -1,5 +1,6 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import {
+    Box,
     Divider,
     IconButton,
     lighten,
@@ -49,7 +50,7 @@ const TagElementReadOnlyListItem: FC<TagElementListItemProps> = (
             <ListItem disableGutters>
                 {item.applied !== undefined && (
                     <ListItemIcon
-                        style={{
+                        sx={{
                             minWidth: '10px',
                             paddingRight: '10px',
                         }}
@@ -69,7 +70,7 @@ const TagElementReadOnlyListItem: FC<TagElementListItemProps> = (
                         onClick={() => {
                             setShowInfoId(showInfoId === item.id ? '' : item.id);
                         }}
-                        style={{
+                        sx={{
                             backgroundColor: 'transparent',
                             color: lighten(
                                 theme.palette.info.main,
@@ -83,7 +84,7 @@ const TagElementReadOnlyListItem: FC<TagElementListItemProps> = (
                 )}
                 {itemHasErrors && (
                     <WarningIcon
-                        style={{
+                        sx={{
                             backgroundColor: 'transparent',
                             color: theme.palette.error.main,
                             margin: '3px',
@@ -94,8 +95,8 @@ const TagElementReadOnlyListItem: FC<TagElementListItemProps> = (
             <Divider />
             {(itemHasErrors || showInfoId === item.id) && (
                 <div>
-                    <div
-                        style={{
+                    <Box
+                        sx={{
                             background: '#202225',
                             padding: '8px',
                         }}
@@ -104,8 +105,8 @@ const TagElementReadOnlyListItem: FC<TagElementListItemProps> = (
                             item.log
                                 .filter((_) => _.isError || showInfoId === item.id)
                                 .map((_, index) => (
-                                    <div
-                                        style={{
+                                    <Box
+                                        sx={{
                                             color: _.isError ? '#e8847b' : '#dddddd',
                                             fontSize: '14px',
                                             fontFamily: 'monospace',
@@ -114,9 +115,9 @@ const TagElementReadOnlyListItem: FC<TagElementListItemProps> = (
                                         key={index}
                                     >
                                         {_.msg}
-                                    </div>
+                                    </Box>
                                 ))}
-                    </div>
+                    </Box>
                     <Divider />
                 </div>
             )}

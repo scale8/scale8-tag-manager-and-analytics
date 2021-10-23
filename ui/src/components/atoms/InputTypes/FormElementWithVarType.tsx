@@ -91,7 +91,7 @@ const FormElementWithVarType: FC<FormElementWithVarTypeProps> = (
                 value={Number.isInteger(values[0]) ? (values[0] as number) : ''}
                 setValue={(v) => setValue(v, 0)}
                 name={name}
-                style={{ width: '100%', marginBottom: '8px' }}
+                sx={sxStyle}
                 disabled={disabled}
             />
         );
@@ -104,7 +104,7 @@ const FormElementWithVarType: FC<FormElementWithVarTypeProps> = (
                 value={isNaN(parseFloat(values[0].toString())) ? '' : (values[0] as number)}
                 setValue={(v) => setValue(v, 0)}
                 name={name}
-                style={{ width: '100%', marginBottom: '8px' }}
+                sx={sxStyle}
                 disabled={disabled}
             />
         );

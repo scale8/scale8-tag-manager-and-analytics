@@ -3,14 +3,11 @@ import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInpu
 import DrawerFormLayout from '../../molecules/DrawerFormLayout';
 import ControlledSelect from '../../atoms/ControlledInputs/ControlledSelect';
 import { Checkbox, FormControlLabel } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 import ControlledTextAreaInput from '../../atoms/ControlledInputs/ControlledTextAreaInput';
 import PositiveInRangeInput from '../../atoms/InputTypes/PositiveInRangeInput';
 import { RuleFormProps } from '../../../dialogPages/tagManager/app/tag/RuleCreate';
 
 const RuleForm: FC<RuleFormProps> = (props: RuleFormProps) => {
-    const theme = useTheme();
-
     const { values, availableGlobalTriggers, handleChange } = props;
 
     const [useGlobalTrigger, setUseGlobalTrigger] = useState(false);
@@ -42,7 +39,7 @@ const RuleForm: FC<RuleFormProps> = (props: RuleFormProps) => {
             {availableGlobalTriggers !== undefined && (
                 <>
                     <FormControlLabel
-                        style={{ marginBottom: theme.spacing(3) }}
+                        sx={{ marginBottom: (theme) => theme.spacing(3) }}
                         control={
                             <Checkbox
                                 name="useGlobalTrigger"
@@ -71,7 +68,7 @@ const RuleForm: FC<RuleFormProps> = (props: RuleFormProps) => {
                 </>
             )}
             <FormControlLabel
-                style={{ marginBottom: theme.spacing(3) }}
+                sx={{ marginBottom: (theme) => theme.spacing(3) }}
                 control={
                     <Checkbox
                         name="repeatable"

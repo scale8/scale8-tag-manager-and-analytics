@@ -37,10 +37,7 @@ const LoginForm: FC<LoginFormProps> = (props: LoginFormProps) => {
                     </Box>
                     <Box fontSize={18} width="100%" textAlign="center">
                         Please log in or{' '}
-                        <Link
-                            href={toRequestPasswordReset()}
-                            style={{ color: 'rgba(0, 0, 0, 0.87)' }}
-                        >
+                        <Link href={toRequestPasswordReset()} sx={{ color: 'rgba(0, 0, 0, 0.87)' }}>
                             reset you password
                         </Link>{' '}
                         if needed.

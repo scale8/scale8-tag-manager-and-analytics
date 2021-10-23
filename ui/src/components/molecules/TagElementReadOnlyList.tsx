@@ -23,8 +23,8 @@ const TagElementReadOnlyList: FC<TagElementListProps> = (props: TagElementListPr
             <Divider />
             <List
                 dense
-                style={{
-                    paddingTop: '0',
+                sx={{
+                    paddingTop: '0!important',
                 }}
             >
                 {props.items.length === 0 && (

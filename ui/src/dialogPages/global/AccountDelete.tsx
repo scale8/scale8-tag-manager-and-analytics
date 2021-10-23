@@ -2,7 +2,6 @@ import { FC } from 'react';
 import { DialogPageProps } from '../../types/DialogTypes';
 import { Box, Button, DialogContent, lighten } from '@mui/material';
 import DialogActionsWithCancel from '../../components/molecules/DialogActionsWithCancel';
-import makeStyles from '@mui/styles/makeStyles';
 import { useMutation } from '@apollo/client';
 import Loader from '../../components/organisms/Loader';
 import { DeleteAccount } from '../../gql/generated/DeleteAccount';
@@ -12,23 +11,7 @@ import { useLoggedInState } from '../../context/AppContext';
 import Navigate from '../../components/atoms/Next/Navigate';
 import { toLogin } from '../../utils/NavigationPaths';
 
-const useStyles = makeStyles((theme) => ({
-    dialogContent: {
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '248px',
-    },
-    deleteButton: {
-        color: '#ffffff',
-        backgroundColor: lighten(theme.palette.error.main, 0.4),
-        '&:hover': {
-            backgroundColor: theme.palette.error.main,
-        },
-    },
-}));
-
 const AccountDelete: FC<DialogPageProps> = (props: DialogPageProps) => {
-    const classes = useStyles();
     const { templateInteractions } = useLoggedInState();
     const { ask } = templateInteractions;
     const { handleDialogClose } = props;
@@ -52,7 +35,13 @@ const AccountDelete: FC<DialogPageProps> = (props: DialogPageProps) => {
 
     return (
         <Box display="flex" flexDirection="column">
-            <DialogContent className={classes.dialogContent}>
+            <DialogContent
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    minHeight: '248px',
+                }}
+            >
                 <FormGqlError error={gqlError} />
                 <small>
                     If you delete your account you will be a automatically removed from all
@@ -73,7 +62,13 @@ const AccountDelete: FC<DialogPageProps> = (props: DialogPageProps) => {
                             })();
                         });
                     }}
-                    className={classes.deleteButton}
+                    sx={{
+                        color: '#ffffff',
+                        backgroundColor: (theme) => lighten(theme.palette.error.main, 0.4),
+                        '&:hover': {
+                            backgroundColor: (theme) => theme.palette.error.main,
+                        },
+                    }}
                     disableElevation
                 >
                     Delete Account

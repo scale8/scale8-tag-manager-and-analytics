@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { Checkbox, FormControlLabel, useTheme } from '@mui/material';
+import { Box, Checkbox, FormControlLabel } from '@mui/material';
 import { MappedPlatformValuesForm } from '../../molecules/MappedPlatformValues/MappedPlatformValuesForm';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import ControlledFilteredSelects from '../../atoms/ControlledInputs/ControlledFilteredSelects';
@@ -24,8 +24,6 @@ const getDescription = (values: ActionValues, platformActions: SelectValueWithSu
 };
 
 const ActionForm: FC<ActionFormProps> = (props: ActionFormProps) => {
-    const theme = useTheme();
-
     const noPlatformActions = props.platformActions.length < 1;
 
     const [generateName, setGenerateName] = useState(
@@ -68,9 +66,12 @@ const ActionForm: FC<ActionFormProps> = (props: ActionFormProps) => {
                     hideNoSub
                 />
             )}
-            <small style={{ width: '100%', margin: theme.spacing(0, 0, 2) }}>
+            <Box
+                component="small"
+                sx={{ width: '100%', margin: (theme) => theme.spacing(0, 0, 2) }}
+            >
                 {getDescription(values, props.platformActions)}
-            </small>
+            </Box>
             {props.values.mappedPlatformValues !== undefined &&
                 props.values.platformActionId !== '' && (
                     <>
@@ -81,7 +82,7 @@ const ActionForm: FC<ActionFormProps> = (props: ActionFormProps) => {
                             {...props}
                         />
                         <FormControlLabel
-                            style={{ marginBottom: theme.spacing(3) }}
+                            sx={{ marginBottom: (theme) => theme.spacing(3) }}
                             control={
                                 <Checkbox
                                     name="generateName"
