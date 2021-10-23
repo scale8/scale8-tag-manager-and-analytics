@@ -31,7 +31,7 @@ const IngestEndpointForm: FC<IngestEndpointFormProps> = (props: IngestEndpointFo
                         }}
                         label="Enable Analytics"
                         className="DrawerFormField"
-                        sx={{ marginLeft: '-11px' }}
+                        sx={{ marginLeft: '-11px!important' }}
                         color="primary"
                     />
                     <Box component="small" className="DrawerFormField" sx={{ marginTop: '-24px' }}>

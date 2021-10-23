@@ -88,7 +88,7 @@ const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
                                 }}
                                 label="Enable Analytics"
                                 className="DrawerFormField"
-                                sx={{ marginLeft: '-11px' }}
+                                sx={{ marginLeft: '-11px!important' }}
                                 color="primary"
                             />
                             <Box
@@ -107,7 +107,7 @@ const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
                                 }}
                                 label="Enable Error Tracking"
                                 className="DrawerFormField"
-                                sx={{ marginLeft: '-11px' }}
+                                sx={{ marginLeft: '-11px!important' }}
                                 color="primary"
                             />
                             <Box
