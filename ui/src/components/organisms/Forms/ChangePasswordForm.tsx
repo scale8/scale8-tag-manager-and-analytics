@@ -1,49 +1,36 @@
-import makeStyles from '@mui/styles/makeStyles';
 import { FC } from 'react';
-import { Box, DialogContent } from '@mui/material';
+import { Box, DialogContent, Link } from '@mui/material';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import FormGqlError from '../../atoms/FormGqlError';
 import DialogActionsWithCancel from '../../molecules/DialogActionsWithCancel';
 import { toRequestPasswordReset } from '../../../utils/NavigationPaths';
 import { ChangePasswordFormProps } from '../../../dialogPages/global/ChangePassword';
-
-const useStyles = makeStyles((theme) => ({
-    form: {
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    dialogContent: {
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '248px',
-    },
-    resetPasswordLink: {
-        color: theme.palette.common.black,
-        fontWeight: 'bold',
-    },
-    input: {
-        width: '100%',
-        margin: theme.spacing(0, 0, 3),
-    },
-}));
+import FormFlex from '../../atoms/FormFlex';
 
 const ChangePasswordForm: FC<ChangePasswordFormProps> = (props: ChangePasswordFormProps) => {
-    const classes = useStyles();
-
     return (
         <Box display="flex" flexDirection="column">
             <FormGqlError error={props.gqlError} />
-            <form className={classes.form} onSubmit={props.handleSubmit}>
-                <DialogContent className={classes.dialogContent}>
+            <FormFlex handleSubmit={props.handleSubmit}>
+                <DialogContent
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        minHeight: '248px',
+                    }}
+                >
                     {props.hasLinkedSSO && (
                         <small>
                             If you never set the password please click{' '}
-                            <a
-                                className={classes.resetPasswordLink}
+                            <Link
+                                sx={{
+                                    color: (theme) => theme.palette.common.black,
+                                    fontWeight: 'bold',
+                                }}
                                 href={toRequestPasswordReset({ email: props.email })}
                             >
                                 here
-                            </a>{' '}
+                            </Link>{' '}
                             to create one.
                             <br />
                             <br />
@@ -54,7 +41,7 @@ const ChangePasswordForm: FC<ChangePasswordFormProps> = (props: ChangePasswordFo
                         name="oldPassword"
                         label="Old Password"
                         formProps={props}
-                        className={classes.input}
+                        className="DrawerFormField"
                         required
                         inputProps={{
                             autoComplete: 'password',
@@ -66,7 +53,7 @@ const ChangePasswordForm: FC<ChangePasswordFormProps> = (props: ChangePasswordFo
                         name="newPassword"
                         label="New Password"
                         formProps={props}
-                        className={classes.input}
+                        className="DrawerFormField"
                         required
                         inputProps={{
                             autoComplete: 'new-password',
@@ -77,7 +64,7 @@ const ChangePasswordForm: FC<ChangePasswordFormProps> = (props: ChangePasswordFo
                         name="newPasswordConfirm"
                         label="Confirm New Password"
                         formProps={props}
-                        className={classes.input}
+                        className="DrawerFormField"
                         required
                         inputProps={{
                             autoComplete: 'new-password',
@@ -90,7 +77,7 @@ const ChangePasswordForm: FC<ChangePasswordFormProps> = (props: ChangePasswordFo
                     handleDialogClose={props.handleDialogClose}
                     confirmText={props.submitText}
                 />
-            </form>
+            </FormFlex>
         </Box>
     );
 };
