@@ -8,42 +8,9 @@ import {
     FormGroup,
     FormHelperText,
 } from '@mui/material';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
-import clsx from 'clsx';
 import { PlatformActionPermissionURLParts } from '../../../gql/generated/globalTypes';
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        checkboxes: {
-            display: 'flex',
-            '& fieldset': {
-                marginTop: 0,
-            },
-        },
-        formControl: {
-            margin: theme.spacing(3),
-        },
-        light: {
-            color: theme.palette.secondary.main,
-            '& th, & td': {
-                color: theme.palette.secondary.main,
-            },
-        },
-        checkbox: {
-            '&:hover': {
-                backgroundColor: 'transparent',
-            },
-        },
-        error: {
-            color: theme.palette.error.main,
-        },
-    }),
-);
-
 const UrlPartsTable: FC<UpdateActionPermissionProps> = (props: UpdateActionPermissionProps) => {
-    const classes = useStyles();
-
     const { permission, updatePermission, readOnly } = props;
 
     const checkChecked = (part: PlatformActionPermissionURLParts): boolean => {
@@ -70,15 +37,17 @@ const UrlPartsTable: FC<UpdateActionPermissionProps> = (props: UpdateActionPermi
 
     return (
         <>
-            <Box mt={3} className={clsx(classes.light, props.hasError && classes.error)}>
+            <Box
+                mt={3}
+                sx={{
+                    color: (theme) =>
+                        props.hasError ? theme.palette.error.main : theme.palette.secondary.main,
+                }}
+            >
                 URL Parts
             </Box>
-            <div className={classes.checkboxes}>
-                <FormControl
-                    error={props.hasError}
-                    component="fieldset"
-                    className={classes.formControl}
-                >
+            <Box sx={{ display: 'flex', '& fieldset': { marginTop: 0 } }}>
+                <FormControl error={props.hasError} component="fieldset" sx={{ margin: 3 }}>
                     <FormGroup>
                         <FormControlLabel
                             control={
@@ -107,7 +76,7 @@ const UrlPartsTable: FC<UpdateActionPermissionProps> = (props: UpdateActionPermi
                     </FormGroup>
                     <FormHelperText>Select at least one.</FormHelperText>
                 </FormControl>
-                <FormControl component="fieldset" className={classes.formControl}>
+                <FormControl component="fieldset" sx={{ margin: 3 }}>
                     <FormGroup>
                         <FormControlLabel
                             control={
@@ -135,7 +104,7 @@ const UrlPartsTable: FC<UpdateActionPermissionProps> = (props: UpdateActionPermi
                         />
                     </FormGroup>
                 </FormControl>
-                <FormControl component="fieldset" className={classes.formControl}>
+                <FormControl component="fieldset" sx={{ margin: 3 }}>
                     <FormGroup>
                         <FormControlLabel
                             control={
@@ -150,7 +119,7 @@ const UrlPartsTable: FC<UpdateActionPermissionProps> = (props: UpdateActionPermi
                         />
                     </FormGroup>
                 </FormControl>
-            </div>
+            </Box>
         </>
     );
 };

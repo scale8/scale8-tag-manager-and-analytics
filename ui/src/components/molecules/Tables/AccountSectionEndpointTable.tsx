@@ -12,37 +12,11 @@ import {
     Theme,
     Tooltip,
 } from '@mui/material';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
 import { Sparklines, SparklinesLine } from 'react-sparklines';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useRouter } from 'next/router';
 import { toDataManager, toIngestEndpoint } from '../../../utils/NavigationPaths';
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        headerCell: {
-            paddingLeft: 0,
-        },
-        contentCell: {
-            paddingLeft: 0,
-            borderBottom: 0,
-            '&:last-of-type': {
-                paddingLeft: 0,
-                paddingRight: 0,
-            },
-        },
-        button: {
-            color: '#ffffff',
-            backgroundColor: theme.palette.dataManagerColor.main,
-            width: '100%',
-            '&:hover': {
-                color: '#ffffff',
-                backgroundColor: theme.palette.dataManagerColor.main,
-            },
-        },
-    }),
-);
+import { SxProps } from '@mui/system';
 
 export type AccountSectionAppTableProps = {
     endpoints: {
@@ -57,8 +31,6 @@ export type AccountSectionAppTableProps = {
 const AccountSectionEndpointTable: FC<AccountSectionAppTableProps> = (
     props: AccountSectionAppTableProps,
 ) => {
-    const classes = useStyles();
-
     const router = useRouter();
 
     const { endpoints, dmId } = props;
@@ -70,7 +42,15 @@ const AccountSectionEndpointTable: FC<AccountSectionAppTableProps> = (
                 onClick={() => {
                     router.push(toDataManager({ id: dmId })).then();
                 }}
-                className={classes.button}
+                sx={{
+                    color: '#ffffff',
+                    backgroundColor: (theme) => theme.palette.tagManagerColor.main,
+                    width: '100%',
+                    '&:hover': {
+                        color: '#ffffff',
+                        backgroundColor: (theme) => theme.palette.tagManagerColor.main,
+                    },
+                }}
                 color="inherit"
                 disableElevation
             >
@@ -79,22 +59,35 @@ const AccountSectionEndpointTable: FC<AccountSectionAppTableProps> = (
         );
     }
 
+    const headerCell: SxProps<Theme> = {
+        paddingLeft: 0,
+    };
+
+    const contentCell: SxProps<Theme> = {
+        paddingLeft: 0,
+        borderBottom: 0,
+        '&:last-of-type': {
+            paddingLeft: 0,
+            paddingRight: 0,
+        },
+    };
+
     return (
         <TableContainer>
             <Table size="small">
                 <TableHead>
                     <TableRow>
-                        <TableCell className={classes.headerCell}>Endpoints</TableCell>
-                        <TableCell className={classes.headerCell}>Requests</TableCell>
-                        <TableCell className={classes.headerCell}>Bytes</TableCell>
-                        <TableCell className={classes.headerCell} align="right" />
+                        <TableCell sx={headerCell}>Endpoints</TableCell>
+                        <TableCell sx={headerCell}>Requests</TableCell>
+                        <TableCell sx={headerCell}>Bytes</TableCell>
+                        <TableCell sx={headerCell} align="right" />
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {endpoints.map((endpoint) => (
                         <TableRow key={endpoint.id}>
-                            <TableCell className={classes.contentCell}>{endpoint.name}</TableCell>
-                            <TableCell className={classes.contentCell}>
+                            <TableCell sx={contentCell}>{endpoint.name}</TableCell>
+                            <TableCell sx={contentCell}>
                                 <Box width={70}>
                                     <Sparklines data={endpoint.requests} width={70} height={20}>
                                         <SparklinesLine
@@ -103,7 +96,7 @@ const AccountSectionEndpointTable: FC<AccountSectionAppTableProps> = (
                                     </Sparklines>
                                 </Box>
                             </TableCell>
-                            <TableCell className={classes.contentCell}>
+                            <TableCell sx={contentCell}>
                                 <Box width={70}>
                                     <Sparklines data={endpoint.bytes} width={70} height={20}>
                                         <SparklinesLine
@@ -112,7 +105,7 @@ const AccountSectionEndpointTable: FC<AccountSectionAppTableProps> = (
                                     </Sparklines>
                                 </Box>
                             </TableCell>
-                            <TableCell className={classes.contentCell} align="right">
+                            <TableCell sx={contentCell} align="right">
                                 <Tooltip title="Select Application">
                                     <IconButton
                                         onClick={() => {

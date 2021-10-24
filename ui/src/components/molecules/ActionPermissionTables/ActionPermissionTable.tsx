@@ -1,5 +1,3 @@
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import {
     Box,
@@ -24,30 +22,6 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { useLoggedInState } from '../../../context/AppContext';
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        light: {
-            color: theme.palette.secondary.main,
-            '& th, & td': {
-                color: theme.palette.secondary.main,
-            },
-        },
-        tableRow: {
-            '&:last-of-type td, &:last-of-type th': {
-                borderBottom: 0,
-            },
-        },
-        addButton: {
-            marginTop: theme.spacing(1),
-        },
-        checkbox: {
-            '&:hover': {
-                backgroundColor: 'transparent',
-            },
-        },
-    }),
-);
-
 export type ActionPermissionTableRowProps = {
     eventName?: string;
     host?: string;
@@ -71,15 +45,13 @@ type ActionPermissionBooleanColumnProps = {
 const ActionPermissionBooleanColumn: FC<ActionPermissionBooleanColumnProps> = (
     props: ActionPermissionBooleanColumnProps,
 ) => {
-    const classes = useStyles();
-
     const { editMode, editChecked, checked, onChange } = props;
 
     return (
         <TableCell width={100} align="center">
             {editMode ? (
                 <Checkbox
-                    className={classes.checkbox}
+                    sx={{ '&:hover': { backgroundColor: 'transparent' } }}
                     icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
                     checkedIcon={<CheckBoxIcon fontSize="small" />}
                     checked={editChecked}
@@ -99,7 +71,6 @@ const ActionPermissionBooleanColumn: FC<ActionPermissionBooleanColumnProps> = (
 const ActionPermissionTableRow: FC<ActionPermissionTableRowProps> = (
     props: ActionPermissionTableRowProps,
 ) => {
-    const classes = useStyles();
     const { eventName, host, variableScope, index, editIndex, commit, cancel, deleteRow, editRow } =
         props;
 
@@ -126,7 +97,13 @@ const ActionPermissionTableRow: FC<ActionPermissionTableRowProps> = (
     }, [variableScope, eventName, host, index, editIndex]);
 
     return (
-        <TableRow className={classes.tableRow}>
+        <TableRow
+            sx={{
+                '&:last-of-type td, &:last-of-type th': {
+                    borderBottom: 0,
+                },
+            }}
+        >
             {eventName !== undefined && (
                 <TableCell component="th" scope="row" width={450}>
                     {index === editIndex ? (
@@ -289,8 +266,6 @@ export type ActionPermissionTableProps = UpdateActionPermissionProps & {
 const ActionPermissionTable: FC<ActionPermissionTableProps> = (
     props: ActionPermissionTableProps,
 ) => {
-    const classes = useStyles();
-
     const { templateInteractions } = useLoggedInState();
     const { setSnackbarError } = templateInteractions;
 
@@ -383,11 +358,18 @@ const ActionPermissionTable: FC<ActionPermissionTableProps> = (
 
     return (
         <>
-            <Box mt={3} className={classes.light}>
+            <Box mt={3} sx={{ color: (theme) => theme.palette.secondary.main }}>
                 {title}
             </Box>
             {(editIndex === -1 || (elements !== undefined && elements.length > 0)) && (
-                <Table className={classes.light}>
+                <Table
+                    sx={{
+                        color: (theme) => theme.palette.secondary.main,
+                        '& th, & td': {
+                            color: (theme) => theme.palette.secondary.main,
+                        },
+                    }}
+                >
                     <TableHead>
                         {permissionElementKey === 'eventNames' && (
                             <TableRow>
@@ -480,7 +462,7 @@ const ActionPermissionTable: FC<ActionPermissionTableProps> = (
                         setEditIndex(-1);
                     }}
                     startIcon={<AddIcon />}
-                    className={classes.addButton}
+                    sx={{ marginTop: 1 }}
                     disabled={editIndex !== -2}
                 >
                     {submitText}
