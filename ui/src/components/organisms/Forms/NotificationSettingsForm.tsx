@@ -1,31 +1,18 @@
-import makeStyles from '@mui/styles/makeStyles';
 import { FC } from 'react';
 import { Box, FormControlLabel } from '@mui/material';
 import ControlledSwitch from '../../atoms/ControlledInputs/ControlledSwitch';
 import FormGqlError from '../../atoms/FormGqlError';
 import DialogActionsWithCancel from '../../molecules/DialogActionsWithCancel';
 import { NotificationsSettingsFormProps } from '../../../dialogPages/global/NotificationsSettings';
-
-const useStyles = makeStyles((theme) => ({
-    form: {
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    input: {
-        width: '100%',
-        margin: theme.spacing(0, 0, 3),
-    },
-}));
+import FormFlex from '../../atoms/FormFlex';
 
 const NotificationSettingsForm: FC<NotificationsSettingsFormProps> = (
     props: NotificationsSettingsFormProps,
 ) => {
-    const classes = useStyles();
-
     return (
         <Box display="flex" flexDirection="column">
             <FormGqlError error={props.gqlError} />
-            <form className={classes.form} onSubmit={props.handleSubmit}>
+            <FormFlex handleSubmit={props.handleSubmit}>
                 <Box height="328px">
                     <FormControlLabel
                         control={<ControlledSwitch name="emailNotifications" formProps={props} />}
@@ -37,7 +24,7 @@ const NotificationSettingsForm: FC<NotificationsSettingsFormProps> = (
                     handleDialogClose={props.handleDialogClose}
                     confirmText={props.submitText}
                 />
-            </form>
+            </FormFlex>
         </Box>
     );
 };

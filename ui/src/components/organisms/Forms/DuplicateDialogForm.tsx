@@ -4,7 +4,6 @@ import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInpu
 import FormGqlError from '../../atoms/FormGqlError';
 import { DuplicateFormProps } from '../../../utils/forms/DuplicateDialogFormUtils';
 import DialogActionsWithCancel from '../../molecules/DialogActionsWithCancel';
-import { useTheme } from '@mui/styles';
 
 export type DuplicateDialogProps = DuplicateFormProps & {
     oldName: string;
@@ -13,8 +12,6 @@ export type DuplicateDialogProps = DuplicateFormProps & {
 };
 
 const DuplicateDialogForm: FC<DuplicateDialogProps> = (props: DuplicateDialogProps) => {
-    const theme = useTheme();
-
     return (
         <Box
             component="form"
@@ -32,7 +29,7 @@ const DuplicateDialogForm: FC<DuplicateDialogProps> = (props: DuplicateDialogPro
                     formProps={props}
                     sx={{
                         width: '100%',
-                        margin: theme.spacing(2, 0, 1),
+                        margin: (theme) => theme.spacing(2, 0, 1),
                     }}
                     required
                     autoFocus
