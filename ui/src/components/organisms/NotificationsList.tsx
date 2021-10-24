@@ -9,36 +9,24 @@ import {
     ListItemText,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import makeStyles from '@mui/styles/makeStyles';
 import Tooltip from '@mui/material/Tooltip';
 import DialogActionsWithCancel from '../molecules/DialogActionsWithCancel';
 import { NotificationType } from '../../gql/generated/globalTypes';
 import { NotificationsListProps } from '../../dialogPages/global/NotificationsNotifications';
 
-const useStyles = makeStyles(() => ({
-    list: {
-        paddingTop: '0',
-    },
-    listItem: {
-        maxWidth: '495px',
-    },
-}));
-
 const NotificationsList: FC<NotificationsListProps> = (props: NotificationsListProps) => {
-    const classes = useStyles();
-
     return (
         <Box display="flex" flexDirection="column">
             <Box height="328px" overflow="auto">
-                <List className={classes.list}>
+                <List sx={{ paddingTop: '0' }}>
                     {props.notifications.length === 0 ? (
-                        <ListItem className={classes.listItem}>
+                        <ListItem sx={{ maxWidth: '495px' }}>
                             <ListItemText primary="There are no notifications to display" />
                         </ListItem>
                     ) : (
                         props.notifications.map((notification) => (
                             <Fragment key={notification.id}>
-                                <ListItem className={classes.listItem}>
+                                <ListItem sx={{ maxWidth: '495px' }}>
                                     <ListItemText
                                         primary={
                                             notification.type === NotificationType.WELCOME

@@ -1,20 +1,9 @@
 import { FC } from 'react';
 import { Box, DialogContent, DialogContentText } from '@mui/material';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
 import CopyBlock from '../atoms/CopyBlock';
 import { buildTagInstallMarkup } from '../../utils/TextUtils';
 import DialogActionsWithCancel from '../molecules/DialogActionsWithCancel';
 import Alert from '@mui/material/Alert';
-
-const useStyles = makeStyles(() =>
-    createStyles({
-        root: {
-            display: 'flex',
-            flexDirection: 'column',
-        },
-    }),
-);
 
 export type TagInstallInstructionsDialogProps = {
     handleDialogClose: (checkChanges: boolean) => void;
@@ -27,11 +16,9 @@ export type TagInstallInstructionsDialogProps = {
 const TagInstallInstructionsDialog: FC<TagInstallInstructionsDialogProps> = (
     props: TagInstallInstructionsDialogProps,
 ) => {
-    const classes = useStyles();
-
     if (props.autoLoad) {
         return (
-            <div className={classes.root}>
+            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <DialogContent>
                     <Alert severity="info">
                         This tag will be loaded automatically when you load your environment.
@@ -41,12 +28,12 @@ const TagInstallInstructionsDialog: FC<TagInstallInstructionsDialogProps> = (
                     </Alert>
                 </DialogContent>
                 <DialogActionsWithCancel handleDialogClose={props.handleDialogClose} />
-            </div>
+            </Box>
         );
     }
 
     return (
-        <div className={classes.root}>
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <DialogContent>
                 <DialogContentText component="div" id="alert-dialog-description">
                     Please install the following tag in the appropriate place:
@@ -61,7 +48,7 @@ const TagInstallInstructionsDialog: FC<TagInstallInstructionsDialogProps> = (
                 </DialogContentText>
             </DialogContent>
             <DialogActionsWithCancel handleDialogClose={props.handleDialogClose} />
-        </div>
+        </Box>
     );
 };
 

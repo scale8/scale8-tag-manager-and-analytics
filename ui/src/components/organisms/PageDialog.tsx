@@ -1,26 +1,10 @@
 import { FC, ReactNode, useEffect } from 'react';
 import { Dialog } from '@mui/material';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
 import { DialogBaseProps } from '../../types/DialogTypes';
 import { useLoggedInState } from '../../context/AppContext';
 import DialogActionsWithCancel from '../molecules/DialogActionsWithCancel';
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            minWidth: '100px',
-            maxWidth: '700px',
-            '& .errorBox': {
-                margin: theme.spacing(2),
-            },
-        },
-    }),
-);
-
 const PageDialog: FC<DialogBaseProps> = (props: DialogBaseProps & { children?: ReactNode }) => {
-    const classes = useStyles();
-
     const { open, children, handleDialogClose } = props;
 
     const { teleport } = useLoggedInState();
@@ -40,8 +24,12 @@ const PageDialog: FC<DialogBaseProps> = (props: DialogBaseProps & { children?: R
                 open={open}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
-                classes={{
-                    paper: classes.root,
+                sx={{
+                    '& .MuiDialog-paper': {
+                        minWidth: '100px',
+                        maxWidth: '700px',
+                        '& .errorBox': { margin: 2 },
+                    },
                 }}
             >
                 {children}
