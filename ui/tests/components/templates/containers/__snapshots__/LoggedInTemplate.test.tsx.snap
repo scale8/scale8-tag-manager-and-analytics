@@ -6,10 +6,10 @@ exports[`LoggedInTemplate renders LoggedInTemplate unchanged 1`] = `
     class="MuiBox-root css-jq8mvv"
   >
     <div
-      class="makeStyles-root-1"
+      class="MuiBox-root css-7xm6n4"
     >
       <div
-        class="makeStyles-logo-3"
+        class="MuiBox-root css-tmox93"
       >
         <svg
           viewBox="0 0 186 339"
@@ -74,10 +74,10 @@ exports[`LoggedInTemplate renders LoggedInTemplate unchanged 1`] = `
         </svg>
       </div>
       <div
-        class="makeStyles-main-2"
+        class="MuiBox-root css-fthphr"
       />
       <div
-        class="makeStyles-admin-5"
+        class="MuiBox-root css-sivrza"
       >
         <button
           aria-label="Admin Area"
@@ -103,7 +103,7 @@ exports[`LoggedInTemplate renders LoggedInTemplate unchanged 1`] = `
         </button>
       </div>
       <div
-        class="makeStyles-iconButton-7"
+        class="MuiBox-root css-sivrza"
       >
         <div
           class="MuiBox-root css-0"
@@ -133,7 +133,7 @@ exports[`LoggedInTemplate renders LoggedInTemplate unchanged 1`] = `
         </div>
       </div>
       <div
-        class="makeStyles-iconButton-7"
+        class="MuiBox-root css-sivrza"
       >
         <div
           aria-label="Notifications"
@@ -172,7 +172,7 @@ exports[`LoggedInTemplate renders LoggedInTemplate unchanged 1`] = `
         </div>
       </div>
       <div
-        class="makeStyles-userSelector-8"
+        class="MuiBox-root css-jzbn0a"
       >
         <button
           aria-controls="simple-menu"
