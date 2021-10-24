@@ -61,6 +61,7 @@ const ControlledFilteredSelects = <T extends { [key: string]: any }>(
         <>
             {hasSub && (
                 <FormControl
+                    variant="standard"
                     className={formControlProps.className}
                     onInvalid={(event) => {
                         event.preventDefault();
@@ -92,6 +93,7 @@ const ControlledFilteredSelects = <T extends { [key: string]: any }>(
                     <small>{missingSubMessage}</small>
                 ) : (
                     <FormControl
+                        variant="standard"
                         {...formControlProps}
                         onInvalid={(event) => {
                             event.preventDefault();

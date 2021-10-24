@@ -1,22 +1,6 @@
 import { FC } from 'react';
 import { Card, CardContent, CardHeader, IconButton, Tooltip } from '@mui/material';
-import createStyles from '@mui/styles/createStyles';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import makeStyles from '@mui/styles/makeStyles';
-
-const useStyles = makeStyles(() =>
-    createStyles({
-        title: {
-            paddingBottom: 0,
-        },
-        button: {
-            marginRight: '5px;',
-        },
-        card: {
-            border: '1px solid #e1e4e8',
-        },
-    }),
-);
 
 type DashboardAccountSectionProps = {
     title: string;
@@ -29,17 +13,16 @@ const DashboardAccountSection: FC<DashboardAccountSectionProps> = (
     props: DashboardAccountSectionProps,
 ) => {
     const { title, linkText, action, content } = props;
-    const classes = useStyles();
 
     return (
-        <Card elevation={0} className={classes.card}>
+        <Card elevation={0} sx={{ border: '1px solid #e1e4e8' }}>
             <CardHeader
-                className={classes.title}
+                sx={{ paddingBottom: 0 }}
                 action={
                     action === undefined ? undefined : (
                         <Tooltip title={linkText}>
                             <IconButton
-                                className={classes.button}
+                                sx={{ marginRight: '5px;' }}
                                 onClick={action}
                                 aria-label={linkText}
                                 size="large"

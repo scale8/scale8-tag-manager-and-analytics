@@ -1,7 +1,5 @@
 import { FC, MouseEvent, useState } from 'react';
-import { IconButton, Popover, Theme } from '@mui/material';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
+import { Box, IconButton, Popover } from '@mui/material';
 import Markdown from 'markdown-to-jsx';
 import HelpIcon from '@mui/icons-material/Help';
 import { getInfo } from '../../info/getInfo';
@@ -9,26 +7,6 @@ import { navigationColorFromSectionLocator } from '../../containers/SectionsDeta
 import { standardMarkdownOptions } from '../../utils/MarkdownUtils';
 import { getDocUrl } from '../../utils/ConfigUtils';
 import { useLoggedInState } from '../../context/AppContext';
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        infoContent: {
-            backgroundColor: '#f5f5f5',
-            width: '400px',
-            maxHeight: '300px',
-            overflow: 'auto',
-            padding: theme.spacing(2, 2, 0),
-            '& p': {
-                margin: theme.spacing(0, 0, 2, 0),
-                display: 'inline-block',
-            },
-            '& a': {
-                color: 'inherit',
-                textDecoration: 'underline',
-            },
-        },
-    }),
-);
 
 export type InfoProps = {
     side: 'left' | 'right';
@@ -40,7 +18,6 @@ const InfoButton: FC<InfoProps> = (props: InfoProps) => {
     const { sectionHistory } = templateInteractions;
     const navigationColor = navigationColorFromSectionLocator(sectionHistory.current);
 
-    const classes = useStyles();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
     const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -81,11 +58,27 @@ const InfoButton: FC<InfoProps> = (props: InfoProps) => {
                 onClose={handleClose}
                 anchorEl={anchorEl}
             >
-                <div className={classes.infoContent}>
+                <Box
+                    sx={{
+                        backgroundColor: '#f5f5f5',
+                        width: '400px',
+                        maxHeight: '300px',
+                        overflow: 'auto',
+                        padding: (theme) => theme.spacing(2, 2, 0),
+                        '& p': {
+                            margin: (theme) => theme.spacing(0, 0, 2, 0),
+                            display: 'inline-block',
+                        },
+                        '& a': {
+                            color: 'inherit',
+                            textDecoration: 'underline',
+                        },
+                    }}
+                >
                     <Markdown options={standardMarkdownOptions}>
                         {getInfo(props.id).replace('{{DOCUMENTATION_URL}}', getDocUrl())}
                     </Markdown>
-                </div>
+                </Box>
             </Popover>
         </>
     );

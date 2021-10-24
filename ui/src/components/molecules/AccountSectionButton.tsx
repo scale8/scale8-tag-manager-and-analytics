@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import { Box, Button, Tooltip } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
 
 type AccountSectionButtonProps = {
@@ -15,7 +14,6 @@ export const AccountSectionButton: FC<AccountSectionButtonProps> = (
     props: AccountSectionButtonProps,
 ) => {
     const { isTag, isOwner, clickAction, text, tooltip } = props;
-    const theme = useTheme();
 
     return (
         <Box textAlign="center" pt={1}>
@@ -24,13 +22,14 @@ export const AccountSectionButton: FC<AccountSectionButtonProps> = (
                     <Button
                         variant="contained"
                         onClick={clickAction}
-                        style={
+                        sx={
                             isOwner
                                 ? {
                                       color: '#ffffff',
-                                      backgroundColor: isTag
-                                          ? theme.palette.tagManagerColor.main
-                                          : theme.palette.dataManagerColor.main,
+                                      backgroundColor: (theme) =>
+                                          isTag
+                                              ? theme.palette.tagManagerColor.main
+                                              : theme.palette.dataManagerColor.main,
                                       width: '100%',
                                   }
                                 : {

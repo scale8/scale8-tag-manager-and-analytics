@@ -1,49 +1,13 @@
 import { FC } from 'react';
 import { SignUpContainerProps } from '../molecules/SignUpContainer';
-import makeStyles from '@mui/styles/makeStyles';
 import { Step, StepLabel, Stepper } from '@mui/material';
-
-const useTagManagerStyles = makeStyles((theme) => ({
-    active: {
-        color: `${theme.palette.tagManagerColor.main} !important`,
-    },
-    completed: {
-        color: `${theme.palette.tagManagerColor.main} !important`,
-    },
-}));
-const useDataManagerStyles = makeStyles((theme) => ({
-    active: {
-        color: `${theme.palette.dataManagerColor.main} !important`,
-    },
-    completed: {
-        color: `${theme.palette.dataManagerColor.main} !important`,
-    },
-}));
-const useInviteStyles = makeStyles((theme) => ({
-    active: {
-        color: `${theme.palette.commonColor.main} !important`,
-    },
-    completed: {
-        color: `${theme.palette.commonColor.main} !important`,
-    },
-}));
+import { SxProps } from '@mui/system';
+import { Theme } from '@mui/material/styles';
 
 const SignUpProgress: FC<Omit<SignUpContainerProps, 'children'>> = (
     props: Omit<SignUpContainerProps, 'children'>,
 ) => {
     const { type, isCompleted, isPrepare } = props;
-    const selectClasses = () => {
-        if (type === 'tag-manager') {
-            return useTagManagerStyles();
-        }
-
-        if (type === 'data-manager') {
-            return useDataManagerStyles();
-        }
-
-        return useInviteStyles();
-    };
-    const classes = selectClasses();
 
     const selectActiveStep = () => {
         if (isPrepare) return 2;
@@ -51,42 +15,33 @@ const SignUpProgress: FC<Omit<SignUpContainerProps, 'children'>> = (
         return 0;
     };
 
+    const stepLabelStyle: SxProps<Theme> = {
+        '& .MuiStepLabel-active, & .MuiStepLabel-completed': {
+            color: (theme) => {
+                if (type === 'tag-manager') {
+                    return `${theme.palette.tagManagerColor.main} !important`;
+                }
+
+                if (type === 'data-manager') {
+                    return `${theme.palette.dataManagerColor.main} !important`;
+                }
+
+                return `${theme.palette.commonColor.main} !important`;
+            },
+        },
+    };
+
     return (
         <div>
             <Stepper activeStep={selectActiveStep()} color="red">
                 <Step>
-                    <StepLabel
-                        StepIconProps={{
-                            classes: {
-                                active: classes.active,
-                                completed: classes.completed,
-                            },
-                        }}
-                    >
-                        Create Account
-                    </StepLabel>
+                    <StepLabel sx={stepLabelStyle}>Create Account</StepLabel>
                 </Step>
                 <Step>
-                    <StepLabel
-                        StepIconProps={{
-                            classes: {
-                                active: classes.active,
-                                completed: classes.completed,
-                            },
-                        }}
-                    >
-                        Confirm Email
-                    </StepLabel>
+                    <StepLabel sx={stepLabelStyle}>Confirm Email</StepLabel>
                 </Step>
                 <Step>
-                    <StepLabel
-                        StepIconProps={{
-                            classes: {
-                                active: classes.active,
-                                completed: classes.completed,
-                            },
-                        }}
-                    >
+                    <StepLabel sx={stepLabelStyle}>
                         {type === 'tag-manager' ? 'Install Tags' : 'Prepare Account'}
                     </StepLabel>
                 </Step>

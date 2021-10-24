@@ -1,7 +1,5 @@
 import { FC, useState } from 'react';
 import { Box, Checkbox, FormControlLabel } from '@mui/material';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
 import { FormElementWithVarType } from '../atoms/InputTypes/FormElementWithVarType';
 import { DataMapsPayloadValues } from '../../types/DataMapsTypes';
 import { AppPlatformRevision } from '../../types/TagRulesTypes';
@@ -11,20 +9,6 @@ import { PlatformValueEdit } from '../atoms/PlatformValueEdit';
 import { SelectValueWithSub } from '../../hooks/form/useFormValidation';
 import { isValueFromPlatform, isVarTypeScalar } from '../../utils/VarTypeUtils';
 import { buildDataContainersFilteredPlatforms } from '../../utils/DataContainersUtils';
-
-const useStyles = makeStyles(() =>
-    createStyles({
-        checkbox: {
-            fontSize: '11px',
-        },
-        checkboxIcon: {
-            fontSize: '14px',
-        },
-        checkboxLabel: {
-            fontSize: '11px',
-        },
-    }),
-);
 
 export type DataContainersElementsFilteredContainer = {
     id: string;
@@ -49,8 +33,6 @@ export type DataMapsValueEditProps = {
 };
 
 const DataMapsValueEdit: FC<DataMapsValueEditProps> = (props: DataMapsValueEditProps) => {
-    const classes = useStyles();
-
     const { disabled, dataMapsPayloadValues: v, appPlatformRevisions, ...s } = props;
 
     const [usePlatformValue, setUsePlatformValue] = useState(isValueFromPlatform(v.values[0]));
@@ -65,13 +47,15 @@ const DataMapsValueEdit: FC<DataMapsValueEditProps> = (props: DataMapsValueEditP
         <Box>
             {canUsePlatformValue && (
                 <FormControlLabel
-                    classes={{
-                        root: classes.checkbox,
-                        label: classes.checkboxLabel,
+                    sx={{
+                        fontSize: '11px',
+                        '& .MuiFormControlLabel-label': {
+                            fontSize: '11px',
+                        },
                     }}
                     control={
                         <Checkbox
-                            className={classes.checkboxIcon}
+                            sx={{ fontSize: '14px' }}
                             icon={<CheckBoxOutlineBlankIcon fontSize="inherit" />}
                             checkedIcon={<CheckBoxIcon fontSize="inherit" />}
                             name="usePlatformValue"

@@ -48,6 +48,7 @@ export const ControlledTimezoneSelect = <T extends { [key: string]: any }>(
             renderOption={(props, option) => getTimezoneLabel(option)}
             renderInput={(params) => (
                 <TextField
+                    variant="standard"
                     {...textFieldProps}
                     {...params}
                     error={!!formProps.errors[props.name] || requiredError}

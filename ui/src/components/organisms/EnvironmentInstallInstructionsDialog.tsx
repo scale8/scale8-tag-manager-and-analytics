@@ -1,21 +1,9 @@
 import { FC } from 'react';
-import { DialogContent, DialogContentText } from '@mui/material';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
+import { Box, DialogContent, DialogContentText } from '@mui/material';
 import { InfoButton, InfoProps } from '../molecules/InfoButton';
 import InfoDialogTitle from '../molecules/InfoDialogTitle';
 import EnvironmentInstallInstructions from './EnvironmentInstallInstructions';
 import { Mode } from '../../gql/generated/globalTypes';
-
-const useStyles = makeStyles(() =>
-    createStyles({
-        root: {
-            display: 'flex',
-            flexDirection: 'column',
-            width: '700px',
-        },
-    }),
-);
 
 export type InstallInstructionsDialogProps = {
     handleDialogClose: (checkChanges: boolean) => void;
@@ -33,8 +21,6 @@ export type InstallInstructionsDialogProps = {
 const EnvironmentInstallInstructionsDialog: FC<InstallInstructionsDialogProps> = (
     props: InstallInstructionsDialogProps,
 ) => {
-    const classes = useStyles();
-
     return (
         <>
             <InfoDialogTitle handleDialogClose={props.handleDialogClose}>
@@ -42,13 +28,13 @@ const EnvironmentInstallInstructionsDialog: FC<InstallInstructionsDialogProps> =
                 {props.formInfoProps !== undefined && <InfoButton {...props.formInfoProps} />}
             </InfoDialogTitle>
             <DialogContent sx={{ margin: 0, padding: 0 }} dividers>
-                <div className={classes.root}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', width: '700px' }}>
                     <DialogContent>
                         <DialogContentText component="div" id="alert-dialog-description">
                             <EnvironmentInstallInstructions {...props} />
                         </DialogContentText>
                     </DialogContent>
-                </div>
+                </Box>
             </DialogContent>
         </>
     );

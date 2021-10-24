@@ -10,7 +10,6 @@ import {
     ListItemSecondaryAction,
     ListItemText,
 } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -19,19 +18,7 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import HistoryIcon from '@mui/icons-material/History';
 import { TagElementListItem } from '../../utils/ElementListUtils';
-
-const useStyles = makeStyles(() => ({
-    list: {
-        paddingTop: '0',
-    },
-    addButton: {},
-    addButtonContainer: {
-        width: '100%',
-    },
-    listItem: {
-        paddingRight: '160px',
-    },
-}));
+import { useConfigState } from '../../context/AppContext';
 
 type TagElementListProps = {
     title: string;
@@ -48,7 +35,7 @@ type TagElementListProps = {
 };
 
 const TagElementList: FC<TagElementListProps> = (props: TagElementListProps) => {
-    const classes = useStyles();
+    const { isAuditEnabled } = useConfigState();
 
     return (
         <Box paddingBottom={3}>
@@ -56,10 +43,10 @@ const TagElementList: FC<TagElementListProps> = (props: TagElementListProps) => 
                 {props.title}
             </Box>
             <Divider />
-            <List dense className={classes.list}>
+            <List dense sx={{ paddingTop: '0' }}>
                 {props.items.map((item, index) => (
                     <Fragment key={item.id}>
-                        <ListItem className={classes.listItem}>
+                        <ListItem sx={{ paddingRight: '160px' }}>
                             {item.icon !== undefined && (
                                 <ListItemIcon
                                     sx={{
@@ -90,7 +77,7 @@ const TagElementList: FC<TagElementListProps> = (props: TagElementListProps) => 
                                                 <VisibilityIcon />
                                             </IconButton>
                                         ))}
-                                    {!props.disabled && props.historyButtonClick && (
+                                    {!props.disabled && props.historyButtonClick && isAuditEnabled && (
                                         <IconButton
                                             edge="end"
                                             aria-label="inspect"
@@ -164,10 +151,9 @@ const TagElementList: FC<TagElementListProps> = (props: TagElementListProps) => 
                     </Fragment>
                 ))}
             </List>
-            <div className={classes.addButtonContainer}>
+            <Box sx={{ width: '100%' }}>
                 <Button
                     size="small"
-                    className={classes.addButton}
                     variant="outlined"
                     startIcon={<AddIcon />}
                     onClick={props.addButtonClick}
@@ -175,7 +161,7 @@ const TagElementList: FC<TagElementListProps> = (props: TagElementListProps) => 
                 >
                     {props.addButtonText}
                 </Button>
-            </div>
+            </Box>
         </Box>
     );
 };

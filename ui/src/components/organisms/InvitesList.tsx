@@ -10,36 +10,24 @@ import {
     ListItemText,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import makeStyles from '@mui/styles/makeStyles';
 import Tooltip from '@mui/material/Tooltip';
 import CheckIcon from '@mui/icons-material/Check';
 import DialogActionsWithCancel from '../molecules/DialogActionsWithCancel';
 import { InvitesListProps } from '../../dialogPages/global/NotificationsInvites';
 
-const useStyles = makeStyles(() => ({
-    list: {
-        paddingTop: '0',
-    },
-    listItem: {
-        paddingRight: '93px',
-    },
-}));
-
 const InvitesList: FC<InvitesListProps> = (props: InvitesListProps) => {
-    const classes = useStyles();
-
     return (
         <Box display="flex" flexDirection="column">
             <Box height="328px" overflow="auto">
-                <List className={classes.list}>
+                <List sx={{ paddingTop: 0 }}>
                     {props.invites.length === 0 ? (
-                        <ListItem className={classes.listItem}>
+                        <ListItem sx={{ paddingRight: '93px' }}>
                             <ListItemText primary="There are no invites to display" />
                         </ListItem>
                     ) : (
                         props.invites.map((invite) => (
                             <Fragment key={invite.id}>
-                                <ListItem className={classes.listItem}>
+                                <ListItem sx={{ paddingRight: '93px' }}>
                                     <ListItemText
                                         primary={`You've been invited to join the organization: ${invite.org.name}`}
                                     />

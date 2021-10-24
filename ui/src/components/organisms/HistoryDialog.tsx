@@ -1,7 +1,5 @@
 import { FC, ReactNode } from 'react';
-import { DialogContent, DialogContentText, Paper } from '@mui/material';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
+import { Box, DialogContent, DialogContentText, Paper } from '@mui/material';
 import { InfoButton, InfoProps } from '../molecules/InfoButton';
 import InfoDialogTitle from '../molecules/InfoDialogTitle';
 import Timeline from '@mui/lab/Timeline';
@@ -23,25 +21,6 @@ import { TimelineContent } from '@mui/lab';
 import TimelineDot from '@mui/lab/TimelineDot';
 import { timestampDisplay } from '../../utils/DateTimeUtils';
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            flexDirection: 'column',
-            width: '700px',
-        },
-        paper: {
-            padding: '6px 16px',
-            marginBottom: theme.spacing(5),
-        },
-        comments: {
-            marginTop: theme.spacing(1),
-            fontSize: '0.9em',
-            color: 'rgba(0, 0, 0, 0.54)',
-        },
-    }),
-);
-
 export type HistoryDialogProps = {
     handleDialogClose: (checkChanges: boolean) => void;
     title: string;
@@ -52,8 +31,6 @@ export type HistoryDialogProps = {
 type Audit = EntitiesHistory_getHistoryForEntities;
 
 const HistoryDialog: FC<HistoryDialogProps> = (props: HistoryDialogProps) => {
-    const classes = useStyles();
-
     const chooseDot = (action: string, method: string): ReactNode => {
         if (method === 'ADD_LINKED_ENTITY') {
             return (
@@ -105,7 +82,7 @@ const HistoryDialog: FC<HistoryDialogProps> = (props: HistoryDialogProps) => {
                 {props.formInfoProps !== undefined && <InfoButton {...props.formInfoProps} />}
             </InfoDialogTitle>
             <DialogContent sx={{ margin: 0, padding: 0 }} dividers>
-                <div className={classes.root}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', width: '700px' }}>
                     <DialogContent>
                         <DialogContentText component="div" id="alert-dialog-description">
                             <Timeline position="alternate">
@@ -127,7 +104,10 @@ const HistoryDialog: FC<HistoryDialogProps> = (props: HistoryDialogProps) => {
                                             </TimelineSeparator>
 
                                             <TimelineContent>
-                                                <Paper elevation={3} className={classes.paper}>
+                                                <Paper
+                                                    elevation={3}
+                                                    sx={{ padding: '6px 16px', marginBottom: 5 }}
+                                                >
                                                     <Typography variant="h6" component="h1">
                                                         {audit.user === null
                                                             ? 'System'
@@ -145,7 +125,11 @@ const HistoryDialog: FC<HistoryDialogProps> = (props: HistoryDialogProps) => {
                                                     {audit.comments !== '' &&
                                                         audit.comments !== null && (
                                                             <Typography
-                                                                className={classes.comments}
+                                                                sx={{
+                                                                    marginTop: 1,
+                                                                    fontSize: '0.9em',
+                                                                    color: 'rgba(0, 0, 0, 0.54)',
+                                                                }}
                                                             >
                                                                 {audit.comments}
                                                             </Typography>
@@ -158,7 +142,7 @@ const HistoryDialog: FC<HistoryDialogProps> = (props: HistoryDialogProps) => {
                             </Timeline>
                         </DialogContentText>
                     </DialogContent>
-                </div>
+                </Box>
             </DialogContent>
         </>
     );

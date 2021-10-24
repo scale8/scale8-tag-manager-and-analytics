@@ -63,6 +63,7 @@ const ControlledSelect = <T extends { [key: string]: any }>(
 
     return (
         <FormControl
+            variant="standard"
             {...formControlProps}
             onInvalid={(event) => {
                 event.preventDefault();

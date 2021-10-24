@@ -12,7 +12,7 @@ const ControlledBooleanSelect = <T extends { [key: string]: any }>(
     };
 
     return (
-        <FormControl {...formControlProps}>
+        <FormControl variant="standard" {...formControlProps}>
             <InputLabel>{label}</InputLabel>
             <Select
                 label={label}

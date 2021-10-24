@@ -1,31 +1,10 @@
 import { FC } from 'react';
-import { Box, Button, DialogActions, DialogContent, DialogContentText } from '@mui/material';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
-import { grey } from '@mui/material/colors';
+import { Box, DialogActions, DialogContent, DialogContentText } from '@mui/material';
 import { MappedPlatformValuesDisplay } from '../molecules/MappedPlatformValues/MappedPlatformValuesDisplay';
 import { MappedPlatformValues } from '../../types/MappedPlatformValuesTypes';
 import { AppPlatformRevision } from '../../types/TagRulesTypes';
 import { IngestEndpointForEnvironmentSelection } from '../../types/IngestEndpointsTypes';
-
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            padding: theme.spacing(0, 2, 1, 2),
-        },
-        dialogActions: {
-            padding: theme.spacing(2),
-            justifyContent: 'center',
-        },
-        cancel: {
-            color: theme.palette.getContrastText(grey[900]),
-            backgroundColor: grey[700],
-            '&:hover': {
-                backgroundColor: grey[900],
-            },
-        },
-    }),
-);
+import { DialogCancelButton } from '../atoms/DialogCancelButton';
 
 type InspectDialogContentProps = {
     appPlatformRevisions?: AppPlatformRevision[];
@@ -40,8 +19,6 @@ type InspectDialogContentProps = {
 };
 
 const InspectActionDialog: FC<InspectDialogContentProps> = (props: InspectDialogContentProps) => {
-    const classes = useStyles();
-
     return (
         <>
             <DialogContent>
@@ -61,10 +38,10 @@ const InspectActionDialog: FC<InspectDialogContentProps> = (props: InspectDialog
                     />
                 </DialogContentText>
             </DialogContent>
-            <DialogActions className={classes.dialogActions}>
-                <Button onClick={props.handleClose} className={classes.cancel} autoFocus>
+            <DialogActions sx={{ padding: 2, justifyContent: 'center' }}>
+                <DialogCancelButton onClick={props.handleClose} autoFocus>
                     Close
-                </Button>
+                </DialogCancelButton>
             </DialogActions>
         </>
     );
