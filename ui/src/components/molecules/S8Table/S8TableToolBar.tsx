@@ -1,9 +1,6 @@
 import { Dispatch, MouseEvent, ReactElement, SetStateAction, useState } from 'react';
 import { lighten, Theme } from '@mui/material/styles';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
 import Toolbar from '@mui/material/Toolbar';
-import clsx from 'clsx';
 import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
@@ -21,6 +18,7 @@ import {
 } from '@mui/material';
 import { BulkAction, Column, CoupleAction, FreeAction, RowData } from './S8TableTypes';
 import { InfoButton, InfoProps } from '../InfoButton';
+import { SxProps } from '@mui/system';
 
 interface S8TableToolbarProps<T extends RowData> {
     selected: string[];
@@ -36,42 +34,7 @@ interface S8TableToolbarProps<T extends RowData> {
     actionsLocked?: boolean;
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            paddingLeft: theme.spacing(2),
-            paddingRight: theme.spacing(2),
-        },
-        highlight: {
-            color: theme.palette.secondary.main,
-            backgroundColor: lighten(theme.palette.secondary.light, 0.9),
-        },
-        title: {
-            flex: '1 1 100%',
-        },
-        freeAction: {
-            color: 'white',
-            backgroundColor: theme.palette.primary.main,
-            width: '40px',
-            height: '40px',
-            marginLeft: theme.spacing(4),
-            boxShadow:
-                '0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12)',
-            '&:hover': {
-                backgroundColor: theme.palette.primary.main,
-                boxShadow:
-                    '0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)',
-            },
-        },
-        search: {
-            width: '300px',
-            marginLeft: theme.spacing(2),
-        },
-    }),
-);
-
 const S8TableToolbar = <T extends RowData>(props: S8TableToolbarProps<T>): ReactElement => {
-    const classes = useStyles();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
     const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -95,15 +58,33 @@ const S8TableToolbar = <T extends RowData>(props: S8TableToolbarProps<T>): React
     } = props;
     const numSelected = selected.length;
 
+    const freeActionStyle: SxProps<Theme> = {
+        color: 'white',
+        backgroundColor: (theme) => theme.palette.primary.main,
+        width: '40px',
+        height: '40px',
+        marginLeft: 4,
+        boxShadow:
+            '0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12)',
+        '&:hover': {
+            backgroundColor: (theme) => theme.palette.primary.main,
+            boxShadow:
+                '0px 3px 5px -1px rgba(0,0,0,0.2), 0px 6px 10px 0px rgba(0,0,0,0.14), 0px 1px 18px 0px rgba(0,0,0,0.12)',
+        },
+    };
+
     return (
         <Toolbar
-            className={clsx(classes.root, {
-                [classes.highlight]: numSelected > 0,
-            })}
+            sx={{
+                padding: (theme) => theme.spacing(0, 2),
+                color: (theme) => (numSelected > 0 ? theme.palette.secondary.main : undefined),
+                backgroundColor: (theme) =>
+                    numSelected > 0 ? lighten(theme.palette.secondary.light, 0.9) : undefined,
+            }}
         >
             {numSelected > 0 ? (
                 <Typography
-                    className={classes.title}
+                    sx={{ flex: '1 1 100%' }}
                     color="inherit"
                     variant="subtitle1"
                     component="div"
@@ -111,7 +92,7 @@ const S8TableToolbar = <T extends RowData>(props: S8TableToolbarProps<T>): React
                     {numSelected} selected
                 </Typography>
             ) : (
-                <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
+                <Typography sx={{ flex: '1 1 100%' }} variant="h6" id="tableTitle" component="div">
                     <Box component="span" mr="3px">
                         {title}
                     </Box>
@@ -183,7 +164,7 @@ const S8TableToolbar = <T extends RowData>(props: S8TableToolbarProps<T>): React
                     }
                     value={filter}
                     onChange={(e) => setFilter(e.target.value)}
-                    className={classes.search}
+                    sx={{ width: '300px', marginLeft: 2 }}
                     placeholder="Search"
                     inputProps={{ 'aria-label': 'search' }}
                     endAdornment={
@@ -203,7 +184,7 @@ const S8TableToolbar = <T extends RowData>(props: S8TableToolbarProps<T>): React
                         <Tooltip key={i} title={action.tooltip}>
                             <span>
                                 <IconButton
-                                    className={classes.freeAction}
+                                    sx={freeActionStyle}
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         action.onClick(e);
@@ -225,7 +206,7 @@ const S8TableToolbar = <T extends RowData>(props: S8TableToolbarProps<T>): React
                         <Tooltip key={i} title={action.tooltip}>
                             <span>
                                 <IconButton
-                                    className={classes.freeAction}
+                                    sx={freeActionStyle}
                                     disabled={
                                         numSelected !== 2 || (actionsLocked && !action.unLockable)
                                     }
@@ -248,7 +229,7 @@ const S8TableToolbar = <T extends RowData>(props: S8TableToolbarProps<T>): React
                         <Tooltip key={i} title={action.tooltip}>
                             <span>
                                 <IconButton
-                                    className={classes.freeAction}
+                                    sx={freeActionStyle}
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         action.onClick(selected, e);

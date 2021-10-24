@@ -5,8 +5,6 @@ import TableCell from '@mui/material/TableCell';
 import Checkbox from '@mui/material/Checkbox';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import { BulkAction, Column, CoupleAction, Order, RowAction, RowData } from './S8TableTypes';
-import createStyles from '@mui/styles/createStyles';
-import makeStyles from '@mui/styles/makeStyles';
 import { InfoButton } from '../InfoButton';
 import { Box } from '@mui/material';
 import { getInfo } from '../../../info/getInfo';
@@ -24,27 +22,9 @@ interface S8TableHeadProps<T extends RowData> {
     coupleActions?: CoupleAction[];
 }
 
-const useStyles = makeStyles(() =>
-    createStyles({
-        visuallyHidden: {
-            border: 0,
-            clip: 'rect(0 0 0 0)',
-            height: 1,
-            margin: -1,
-            overflow: 'hidden',
-            padding: 0,
-            position: 'absolute',
-            top: 20,
-            width: 1,
-        },
-    }),
-);
-
 const S8TableHead = <T extends RowData>(
     props: S8TableHeadProps<T>,
 ): ReactElement<any, any> | null => {
-    const classes = useStyles();
-
     const {
         columns,
         onSelectAllClick,
@@ -102,9 +82,22 @@ const S8TableHead = <T extends RowData>(
                                 {column.title}
                             </Box>
                             {orderBy === column.field ? (
-                                <span className={classes.visuallyHidden}>
+                                <Box
+                                    component="span"
+                                    sx={{
+                                        border: 0,
+                                        clip: 'rect(0 0 0 0)',
+                                        height: 1,
+                                        margin: '-1px',
+                                        overflow: 'hidden',
+                                        padding: 0,
+                                        position: 'absolute',
+                                        top: 20,
+                                        width: 1,
+                                    }}
+                                >
                                     {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                </span>
+                                </Box>
                             ) : null}
                         </TableSortLabel>
                         {column.columnInfoProps !== undefined &&
