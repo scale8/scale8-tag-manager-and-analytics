@@ -1,13 +1,10 @@
 import CircularProgress, { CircularProgressProps } from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import { FC } from 'react';
-import { useTheme } from '@mui/material';
 
 export const CircularProgressWithLabel: FC<
     CircularProgressProps & { value: number; forErrors?: boolean }
 > = (props: CircularProgressProps & { value: number; forErrors?: boolean }) => {
-    const theme = useTheme();
-
     const { forErrors, ...circularProgressProps } = props;
 
     return (
@@ -21,7 +18,7 @@ export const CircularProgressWithLabel: FC<
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
-                color={theme.palette.grey[100]}
+                sx={{ color: (theme) => theme.palette.grey[100] }}
             >
                 <CircularProgress
                     variant="determinate"

@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Box, Button, useTheme } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import DangerBox from '../../../components/molecules/DangerBox';
 import { PageActionProps, pageActions } from '../../../actions/PageActions';
 import { AccountProduct } from '../../../gql/generated/globalTypes';
@@ -12,7 +12,6 @@ export type UnsubscribeSectionProps = OrgSettingsSectionProps & {
 };
 
 const UnsubscribeSection: FC<UnsubscribeSectionProps> = (props: UnsubscribeSectionProps) => {
-    const theme = useTheme();
     const { data, valuesRefresh } = props;
     const { templateInteractions } = useLoggedInState();
     const { ask, dispatchDialogAction } = templateInteractions;
@@ -66,7 +65,7 @@ const UnsubscribeSection: FC<UnsubscribeSectionProps> = (props: UnsubscribeSecti
                         }}
                         sx={{
                             color: '#ffffff',
-                            backgroundColor: theme.palette.error.main,
+                            backgroundColor: (theme) => theme.palette.error.main,
                         }}
                         disableElevation
                     >

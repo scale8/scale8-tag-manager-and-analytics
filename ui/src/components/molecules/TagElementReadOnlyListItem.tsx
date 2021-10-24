@@ -7,7 +7,6 @@ import {
     ListItem,
     ListItemIcon,
     ListItemText,
-    useTheme,
 } from '@mui/material';
 import AppliedIcon from '../atoms/Icons/AppliedIcon';
 import WarningIcon from '@mui/icons-material/Warning';
@@ -26,7 +25,6 @@ type TagElementListItemProps = {
 const TagElementReadOnlyListItem: FC<TagElementListItemProps> = (
     props: TagElementListItemProps,
 ) => {
-    const theme = useTheme();
     const { item, itemType, appliedVerb, gotoElement } = props;
     const [showInfoId, setShowInfoId] = useState('');
     const itemRef = useRef<HTMLInputElement>(null);
@@ -72,10 +70,8 @@ const TagElementReadOnlyListItem: FC<TagElementListItemProps> = (
                         }}
                         sx={{
                             backgroundColor: 'transparent',
-                            color: lighten(
-                                theme.palette.info.main,
-                                showInfoId === item.id ? 0 : 0.8,
-                            ),
+                            color: (theme) =>
+                                lighten(theme.palette.info.main, showInfoId === item.id ? 0 : 0.8),
                             marginLeft: '3px',
                         }}
                     >
@@ -86,7 +82,7 @@ const TagElementReadOnlyListItem: FC<TagElementListItemProps> = (
                     <WarningIcon
                         sx={{
                             backgroundColor: 'transparent',
-                            color: theme.palette.error.main,
+                            color: (theme) => theme.palette.error.main,
                             margin: '3px',
                         }}
                     />

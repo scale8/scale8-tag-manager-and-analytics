@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Box, Button, useTheme } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import DangerBox from '../../../components/molecules/DangerBox';
 import { PageActionProps, pageActions } from '../../../actions/PageActions';
 import { Mode } from '../../../gql/generated/globalTypes';
@@ -13,7 +13,6 @@ type TransferOwnershipSectionProps = OrgSettingsSectionProps & {
 const TransferOwnershipSection: FC<TransferOwnershipSectionProps> = (
     props: TransferOwnershipSectionProps,
 ) => {
-    const theme = useTheme();
     const { mode } = useConfigState();
     const { templateInteractions, orgUserState } = useLoggedInState();
     const { ask, dispatchDialogAction } = templateInteractions;
@@ -48,7 +47,7 @@ const TransferOwnershipSection: FC<TransferOwnershipSectionProps> = (
                         }}
                         sx={{
                             color: '#ffffff',
-                            backgroundColor: theme.palette.error.main,
+                            backgroundColor: (theme) => theme.palette.error.main,
                         }}
                         disableElevation
                     >

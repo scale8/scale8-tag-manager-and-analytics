@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Box, Button, useTheme } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import DangerBox from '../../../components/molecules/DangerBox';
 import { PageActionProps, pageActions } from '../../../actions/PageActions';
 import { Mode } from '../../../gql/generated/globalTypes';
@@ -13,7 +13,6 @@ export type RemoveOrganizationSectionProps = OrgSettingsSectionProps & {
 const RemoveOrganizationSection: FC<RemoveOrganizationSectionProps> = (
     props: RemoveOrganizationSectionProps,
 ) => {
-    const theme = useTheme();
     const { data, valuesRefresh } = props;
     const { mode } = useConfigState();
     const { templateInteractions, orgUserState } = useLoggedInState();
@@ -46,7 +45,7 @@ const RemoveOrganizationSection: FC<RemoveOrganizationSectionProps> = (
                         }}
                         sx={{
                             color: '#ffffff',
-                            backgroundColor: theme.palette.error.main,
+                            backgroundColor: (theme) => theme.palette.error.main,
                         }}
                         disableElevation
                     >

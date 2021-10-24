@@ -7,7 +7,6 @@ import {
     FormControlLabel,
     FormGroup,
     FormHelperText,
-    useTheme,
 } from '@mui/material';
 import FormError from '../../atoms/FormError';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
@@ -20,8 +19,6 @@ import FormFull from '../../atoms/FormFull';
 
 const SignUpForm: FC<SignUpFormProps> = (props: SignUpFormProps) => {
     const { type, values, handleChange, errors, qsEmail } = props;
-
-    const theme = useTheme();
 
     const setCaptchaToken = (token: string) => handleChange('CAPTCHAToken', token);
 
@@ -194,7 +191,7 @@ const SignUpForm: FC<SignUpFormProps> = (props: SignUpFormProps) => {
                 <FormControl error={errors['agree'] !== undefined}>
                     <FormGroup>
                         <FormControlLabel
-                            color={theme.palette.error.main}
+                            sx={{ color: (theme) => theme.palette.error.main }}
                             // error={errors['agree']}
                             control={
                                 <Checkbox
@@ -205,14 +202,14 @@ const SignUpForm: FC<SignUpFormProps> = (props: SignUpFormProps) => {
                                 />
                             }
                             label={
-                                <span
-                                    style={
-                                        errors['agree'] === undefined
-                                            ? {}
-                                            : {
-                                                  color: theme.palette.error.main,
-                                              }
-                                    }
+                                <Box
+                                    component="span"
+                                    sx={{
+                                        color: (theme) =>
+                                            errors['agree'] === undefined
+                                                ? undefined
+                                                : theme.palette.error.main,
+                                    }}
                                 >
                                     I agree to the{' '}
                                     <Link
@@ -221,7 +218,7 @@ const SignUpForm: FC<SignUpFormProps> = (props: SignUpFormProps) => {
                                     >
                                         Terms of Service
                                     </Link>
-                                </span>
+                                </Box>
                             }
                         />
                     </FormGroup>

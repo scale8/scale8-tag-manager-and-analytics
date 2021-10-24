@@ -1,26 +1,17 @@
-import makeStyles from '@mui/styles/makeStyles';
 import { FC, ReactNode } from 'react';
 import PageTitle, { PageTitleProps } from '../molecules/PageTitle';
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        padding: theme.spacing(0, 2, 4, 2),
-    },
-    section: {},
-}));
+import { Box } from '@mui/material';
 
 const NonTablePageContainer: FC<PageTitleProps> = (
     props: PageTitleProps & { children?: ReactNode },
 ) => {
-    const classes = useStyles();
-
     const { children, ...titleProps } = props;
 
     return (
-        <div className={classes.root}>
+        <Box sx={{ padding: (theme) => theme.spacing(0, 2, 4, 2) }}>
             <PageTitle {...titleProps} />
-            <div className={classes.section}>{children}</div>
-        </div>
+            <div>{children}</div>
+        </Box>
     );
 };
 

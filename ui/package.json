@@ -24,7 +24,6 @@
         "@mui/icons-material": "^5.0.4",
         "@mui/lab": "^5.0.0-alpha.51",
         "@mui/material": "^5.0.4",
-        "@mui/styles": "^5.0.1",
         "@scale8/mui-daterange-picker": "^0.0.6",
         "@scale8/s8-interpreter": "^0.3.2",
         "@stripe/react-stripe-js": "^1.4.1",

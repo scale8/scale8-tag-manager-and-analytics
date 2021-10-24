@@ -4,7 +4,6 @@ import CopyBlock from '../atoms/CopyBlock';
 import { DataMapsPayload } from '../organisms/DataMapsPayloadBuilder';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import Alert from '@mui/material/Alert';
-import makeStyles from '@mui/styles/makeStyles';
 import {
     IngestEndpointInstallInstructionCode,
     IngestEndpointInstallSnippet,
@@ -31,31 +30,9 @@ export type IngestEndpointInstallInstructionCodeProps = {
     snippet: IngestEndpointInstallSnippet;
 };
 
-const useStyles = makeStyles((theme) => ({
-    tabButton: {
-        minWidth: '120px',
-        padding: theme.spacing(1),
-    },
-    selectedBtn: {
-        color: '#000000 !important',
-    },
-    formControl: {
-        marginBottom: theme.spacing(2),
-        minWidth: 400,
-        maxWidth: 400,
-    },
-    select: {
-        '&:focus': {
-            backgroundColor: 'transparent',
-        },
-    },
-}));
-
 const IngestEndpointInstallInstructions: FC<IngestEndpointInstallInstructionsDialogProps> = (
     props: IngestEndpointInstallInstructionsDialogProps,
 ) => {
-    const classes = useStyles();
-
     const [tab, setTab] = useState('pixel');
     const [snippetId, setSnippetId] = useState('curl');
 
@@ -97,9 +74,12 @@ const IngestEndpointInstallInstructions: FC<IngestEndpointInstallInstructionsDia
             <Box mt={2}>
                 <ToggleButtonGroup value={tab} exclusive onChange={handleTab} aria-label="tab">
                     <ToggleButton
-                        classes={{
-                            root: classes.tabButton,
-                            selected: classes.selectedBtn,
+                        sx={{
+                            minWidth: '120px',
+                            padding: 1,
+                            '&.Mui-selected': {
+                                color: '#000000 !important',
+                            },
                         }}
                         value="pixel"
                         aria-label="Pixel"
@@ -107,9 +87,12 @@ const IngestEndpointInstallInstructions: FC<IngestEndpointInstallInstructionsDia
                         Pixel
                     </ToggleButton>
                     <ToggleButton
-                        classes={{
-                            root: classes.tabButton,
-                            selected: classes.selectedBtn,
+                        sx={{
+                            minWidth: '120px',
+                            padding: 1,
+                            '&.Mui-selected': {
+                                color: '#000000 !important',
+                            },
                         }}
                         value="code"
                         aria-label="Code"
@@ -130,14 +113,23 @@ const IngestEndpointInstallInstructions: FC<IngestEndpointInstallInstructionsDia
             )}
             {tab === 'code' && (
                 <Box fontSize={12} mt={3} pb={2}>
-                    <FormControl variant="outlined" className={classes.formControl}>
+                    <FormControl
+                        variant="outlined"
+                        sx={{
+                            marginBottom: 2,
+                            minWidth: 400,
+                            maxWidth: 400,
+                        }}
+                    >
                         <InputLabel htmlFor="select-language">Select Language</InputLabel>
                         <Select
                             native
                             value={snippetId}
                             onChange={handleSnippetChange}
-                            classes={{
-                                root: classes.select,
+                            sx={{
+                                '&:focus': {
+                                    backgroundColor: 'transparent',
+                                },
                             }}
                             label="Select Language"
                             inputProps={{

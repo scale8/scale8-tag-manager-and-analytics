@@ -1,56 +1,11 @@
 import { FC, MouseEvent, useState } from 'react';
-import {
-    Avatar,
-    Box,
-    ListItemIcon,
-    Menu,
-    MenuItem,
-    Theme,
-    Typography,
-    useTheme,
-} from '@mui/material';
-import createStyles from '@mui/styles/createStyles';
+import { Avatar, Box, ListItemIcon, Menu, MenuItem, Typography } from '@mui/material';
 import AvatarButton from '../atoms/AvatarButton';
-import makeStyles from '@mui/styles/makeStyles';
 import LogoutIcon from '../atoms/Icons/LogoutIcon';
 import ProfileIcon from '../atoms/Icons/ProfileIcon';
 import { UserSelectorProps } from '../../containers/global/LoggedInSection';
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            '& > *': {
-                margin: theme.spacing(1),
-            },
-        },
-        small: {
-            width: theme.spacing(3),
-            height: theme.spacing(3),
-        },
-        large: {
-            width: theme.spacing(7),
-            height: theme.spacing(7),
-        },
-        menuContent: {
-            width: 300,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'transparent',
-            opacity: '1!important',
-            flexDirection: 'column',
-        },
-        avatarLarge: {
-            width: theme.spacing(7),
-            height: theme.spacing(7),
-        },
-    }),
-);
-
 const UserSelector: FC<UserSelectorProps> = (props: UserSelectorProps) => {
-    const theme = useTheme();
-    const classes = useStyles();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
     const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -81,12 +36,29 @@ const UserSelector: FC<UserSelectorProps> = (props: UserSelectorProps) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <MenuItem disabled className={classes.menuContent}>
+                <MenuItem
+                    disabled
+                    sx={{
+                        width: 300,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: 'transparent',
+                        opacity: '1!important',
+                        flexDirection: 'column',
+                    }}
+                >
                     <Box pt={2}>
-                        <Avatar src={props.imgSrc} className={classes.large} />
+                        <Avatar
+                            src={props.imgSrc}
+                            sx={{
+                                width: (theme) => theme.spacing(7),
+                                height: (theme) => theme.spacing(7),
+                            }}
+                        />
                     </Box>
                     <Box
-                        color={theme.palette.text.primary}
+                        sx={{ color: (theme) => theme.palette.text.primary }}
                         pt={2}
                         textOverflow="ellipsis"
                         overflow="hidden"

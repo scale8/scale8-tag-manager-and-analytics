@@ -7,16 +7,8 @@ import {
     IngestEndpointForEnvironmentSelection,
 } from '../../types/IngestEndpointsTypes';
 import { AppPlatformRevision } from '../../types/TagRulesTypes';
-import makeStyles from '@mui/styles/makeStyles';
-import { Box, useTheme } from '@mui/material';
+import { Box } from '@mui/material';
 import { SelectValueWithSub } from '../../hooks/form/useFormValidation';
-
-const useStyles = makeStyles((theme) => ({
-    input: {
-        width: '100%',
-        margin: theme.spacing(0, 0, 3),
-    },
-}));
 
 type SelectIngestEndpointProps = {
     ingestEndpointId: string;
@@ -26,8 +18,6 @@ type SelectIngestEndpointProps = {
 };
 
 const SelectIngestEndpoint: FC<SelectIngestEndpointProps> = (props: SelectIngestEndpointProps) => {
-    const classes = useStyles();
-
     const ingestEndpointSelectOptions: SelectValueWithSub[] =
         props.ingestEndpoints === undefined
             ? []
@@ -38,9 +28,12 @@ const SelectIngestEndpoint: FC<SelectIngestEndpointProps> = (props: SelectIngest
 
     if (ingestEndpointSelectOptions.length === 0) {
         return (
-            <small className={classes.input}>
+            <Box
+                component="small"
+                sx={{ width: '100%', margin: (theme) => theme.spacing(0, 0, 3) }}
+            >
                 There are no endpoints defined in this Organization.
-            </small>
+            </Box>
         );
     }
 
@@ -52,7 +45,7 @@ const SelectIngestEndpoint: FC<SelectIngestEndpointProps> = (props: SelectIngest
             setValue={(v) => props.setIngestEndpointId(v)}
             optionValues={[]}
             keyTextValues={ingestEndpointSelectOptions}
-            className={classes.input}
+            sx={{ width: '100%', margin: (theme) => theme.spacing(0, 0, 3) }}
             disabled={props.disabled}
             required
         />
@@ -82,8 +75,6 @@ type SelectIngestEndpointEnvironmentProps = {
 const SelectIngestEndpointEnvironment: FC<SelectIngestEndpointEnvironmentProps> = (
     props: SelectIngestEndpointEnvironmentProps,
 ) => {
-    const classes = useStyles();
-
     const availableEnvironments = findAvailableEnvironments(
         props.ingestEndpointId,
         props.ingestEndpoints,
@@ -95,9 +86,12 @@ const SelectIngestEndpointEnvironment: FC<SelectIngestEndpointEnvironmentProps> 
 
     if (availableEnvironments.length === 0) {
         return (
-            <small className={classes.input}>
+            <Box
+                component="small"
+                sx={{ width: '100%', margin: (theme) => theme.spacing(0, 0, 3) }}
+            >
                 There are no environments defined for this endpoint.
-            </small>
+            </Box>
         );
     }
 
@@ -112,7 +106,7 @@ const SelectIngestEndpointEnvironment: FC<SelectIngestEndpointEnvironmentProps> 
                 key: _.id,
                 text: _.name,
             }))}
-            className={classes.input}
+            sx={{ width: '100%', margin: (theme) => theme.spacing(0, 0, 3) }}
             disabled={props.disabled}
             required
         />
@@ -161,8 +155,6 @@ export type IngestEndpointPayloadInputTypeProps = {
 const IngestEndpointPayloadInputType: FC<IngestEndpointPayloadInputTypeProps> = (
     props: IngestEndpointPayloadInputTypeProps,
 ) => {
-    const theme = useTheme();
-
     const { value, setValue, ingestEndpoints, appPlatformRevisions } = props;
 
     const { ingest_environment_id: initialEnvironmentId, payload: initialPayload } =
@@ -230,7 +222,7 @@ const IngestEndpointPayloadInputType: FC<IngestEndpointPayloadInputTypeProps> = 
             )}
 
             {props.validationError !== undefined && (
-                <Box fontWeight={600} mb="3px" color={theme.palette.error.main}>
+                <Box fontWeight={600} mb="3px" sx={{ color: (theme) => theme.palette.error.main }}>
                     Please specify all the checked values
                 </Box>
             )}

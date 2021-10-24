@@ -1,11 +1,10 @@
 import { FC } from 'react';
-import { Box, Button, useTheme } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { PageActionProps, pageActions } from '../../../actions/PageActions';
 import { useLoggedInState } from '../../../context/AppContext';
 import { OrgSettingsSectionProps } from '../../../types/props/OrgSettingsSectionProps';
 
 const PaymentInformationSection: FC<OrgSettingsSectionProps> = (props: OrgSettingsSectionProps) => {
-    const theme = useTheme();
     const { data } = props;
 
     const { templateInteractions } = useLoggedInState();
@@ -31,7 +30,7 @@ const PaymentInformationSection: FC<OrgSettingsSectionProps> = (props: OrgSettin
                     }}
                     sx={{
                         color: '#ffffff',
-                        backgroundColor: theme.palette.commonColor.main,
+                        backgroundColor: (theme) => theme.palette.commonColor.main,
                     }}
                     disableElevation
                 >

@@ -1,20 +1,7 @@
 import { FC, useState } from 'react';
-import makeStyles from '@mui/styles/makeStyles';
 import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CloseIcon from '@mui/icons-material/Close';
-
-const useStyles = makeStyles((theme) => ({
-    speedDial: {
-        '&  .MuiFab-root': {
-            color: theme.palette.common.black,
-        },
-        '& > .MuiFab-root': {
-            backgroundColor: 'transparent',
-            boxShadow: 'none',
-        },
-    },
-}));
 
 export type SectionAction = {
     icon: JSX.Element;
@@ -32,7 +19,6 @@ type SectionActionsSpeedDialProps = {
 const SectionActionsSpeedDial: FC<SectionActionsSpeedDialProps> = (
     props: SectionActionsSpeedDialProps,
 ) => {
-    const classes = useStyles();
     const [open, setOpen] = useState(false);
 
     const handleOpen = () => {
@@ -48,7 +34,15 @@ const SectionActionsSpeedDial: FC<SectionActionsSpeedDialProps> = (
             {!props.hide && (
                 <SpeedDial
                     ariaLabel="Section actions"
-                    className={classes.speedDial}
+                    sx={{
+                        '&  .MuiFab-root': {
+                            color: (theme) => theme.palette.common.black,
+                        },
+                        '& > .MuiFab-root': {
+                            backgroundColor: 'transparent',
+                            boxShadow: 'none',
+                        },
+                    }}
                     icon={<SpeedDialIcon icon={<MoreVertIcon />} openIcon={<CloseIcon />} />}
                     onClose={handleClose}
                     onOpen={handleOpen}
