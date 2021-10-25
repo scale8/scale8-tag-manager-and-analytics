@@ -1,76 +1,115 @@
-import { Box, IconButton } from '@material-ui/core';
-import { FC, useEffect } from 'react';
-import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
-import CloseIcon from '@material-ui/icons/Close';
-import { DatePickerProps } from '@material-ui/pickers/DatePicker/DatePicker';
+import { TextField } from '@mui/material';
+import { FC, ReactElement, useState } from 'react';
 import {
-    dateTimePickerDateUtils,
-    dateToUTCTimestampOrNull,
-    UTCNow,
+    addMinutesUTC,
+    dateToUTCTimestamp,
+    getTimezoneOffset,
+    startOfDayFromTimestamp,
+    startOfMinuteUTC,
+    subMinutesUTC,
     UTCTimestamp,
 } from '../../../utils/DateTimeUtils';
+import { DesktopDatePicker, DesktopDateTimePicker, LocalizationProvider } from '@mui/lab';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import { InputBaseProps } from '@mui/material/InputBase';
+import { FormProps } from '../../../hooks/form/useFormValidation';
+import { TextFieldProps as MuiTextFieldPropsType } from '@mui/material/TextField/TextField';
+import { SxProps } from '@mui/system';
+import { Theme } from '@mui/material/styles';
+import * as React from 'react';
 
-export type DateInputProps = Omit<DatePickerProps, 'value' | 'onChange'> & {
+export type DateInputProps = {
     name: string;
+    label?: React.ReactNode;
+    disabled?: boolean;
+    onBlur?: InputBaseProps['onBlur'];
     value: UTCTimestamp | null;
     setValue: (v: UTCTimestamp | null) => void;
-    required: boolean;
+    required?: boolean;
     validationError?: string;
+    className?: string;
+    sx?: SxProps<Theme>;
+    includeTime?: boolean;
 };
 
-const DateInput: FC<DateInputProps> = (props: DateInputProps) => {
-    const { name, value, setValue, validationError, required, disabled, ...datePickerProps } =
-        props;
+export type ControlledDateInputProps<Values extends { [key: string]: any }> = Omit<
+    DateInputProps,
+    'value' | 'setValue'
+> & {
+    formProps: FormProps<Values>;
+};
 
-    useEffect(() => {
-        if (required && !disabled && value === null) {
-            setValue(UTCNow);
-        }
-    }, [value, required, setValue]);
+const DateInput: FC<DateInputProps> = ({
+    name,
+    label,
+    value,
+    setValue,
+    validationError,
+    className,
+    sx,
+    required,
+    disabled,
+    onBlur,
+    includeTime,
+}) => {
+    const [requiredError, setRequiredError] = useState(false);
+
+    const displayDateToValueWithTime = (date: Date) =>
+        subMinutesUTC(dateToUTCTimestamp(date), getTimezoneOffset());
+
+    const displayDateToValue = (date: Date, withTime: boolean) =>
+        withTime
+            ? startOfMinuteUTC(displayDateToValueWithTime(date))
+            : startOfDayFromTimestamp(displayDateToValueWithTime(date));
+
+    const valueToDisplayDate = (valueUTC: UTCTimestamp) =>
+        new Date(addMinutesUTC(valueUTC, getTimezoneOffset()));
+
+    const pickerDateInputProps: {
+        renderInput: (props: MuiTextFieldPropsType) => ReactElement;
+        onChange: (date: Date | null) => void;
+        disabled: undefined | boolean;
+        label?: React.ReactNode;
+        inputFormat: string;
+        value: Date | null;
+    } = {
+        label,
+        value: value === null ? null : valueToDisplayDate(value),
+        inputFormat: includeTime ? 'dd/MM/yyyy HH:mm' : 'dd/MM/yyyy',
+        onChange: (date) => {
+            setRequiredError(false);
+            setValue(date === null ? null : displayDateToValue(date, !!includeTime));
+        },
+        disabled,
+        renderInput: (params) => (
+            <TextField
+                {...params}
+                error={validationError !== undefined || requiredError}
+                helperText={requiredError ? 'Required value' : validationError}
+                required={required}
+                onBlur={onBlur}
+                className={className}
+                onInvalid={(event) => {
+                    event.preventDefault();
+                    setRequiredError(true);
+                }}
+                sx={{
+                    minWidth: '200px',
+                    ...(sx ?? {}),
+                }}
+                name={name}
+            />
+        ),
+    };
 
     return (
-        <MuiPickersUtilsProvider utils={dateTimePickerDateUtils}>
-            <div>
-                <DatePicker
-                    autoOk
-                    variant="inline"
-                    value={value}
-                    format="dd/MM/yyyy"
-                    name={name}
-                    error={validationError !== undefined}
-                    helperText={validationError}
-                    required={required}
-                    onChange={(date: MaterialUiPickersDate) => {
-                        if (date === null && required) {
-                            setValue(UTCNow);
-                        } else {
-                            setValue(dateToUTCTimestampOrNull(date, true));
-                        }
-                    }}
-                    disabled={disabled}
-                    {...datePickerProps}
-                />
-                {!required && !disabled && (
-                    <Box display="inline-box" position="relative">
-                        <IconButton
-                            style={{
-                                marginLeft: -25,
-                                marginTop: 0,
-                                position: 'absolute',
-                            }}
-                            aria-label="empty"
-                            onClick={() => {
-                                setValue(null);
-                            }}
-                            size="small"
-                        >
-                            <CloseIcon fontSize="small" />
-                        </IconButton>
-                    </Box>
-                )}
-            </div>
-        </MuiPickersUtilsProvider>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+            {includeTime ? (
+                <DesktopDateTimePicker {...pickerDateInputProps} />
+            ) : (
+                <DesktopDatePicker {...pickerDateInputProps} />
+            )}
+        </LocalizationProvider>
     );
 };
 

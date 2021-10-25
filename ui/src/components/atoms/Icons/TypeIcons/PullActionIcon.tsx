@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { SvgIconProps } from '@material-ui/core';
-import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+import { SvgIconProps } from '@mui/material';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 
 const PullActionIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

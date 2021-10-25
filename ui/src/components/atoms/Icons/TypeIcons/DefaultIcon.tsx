@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import CropLandscapeIcon from '@material-ui/icons/CropLandscape';
-import { SvgIconProps } from '@material-ui/core';
+import CropLandscapeIcon from '@mui/icons-material/CropLandscape';
+import { SvgIconProps } from '@mui/material';
 
 const DefaultIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

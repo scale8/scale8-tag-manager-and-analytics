@@ -1,7 +1,7 @@
 import { FC, MouseEvent, useState } from 'react';
-import { TextFieldProps } from '@material-ui/core/TextField/TextField';
-import { Box, IconButton, InputAdornment, Popover, TextField } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
+import { TextFieldProps } from '@mui/material/TextField/TextField';
+import { Box, IconButton, InputAdornment, Popover, TextField } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import { autocompleteOff } from '../../../utils/BrowserUtils';
 import LazyColorPicker from '../LibraryLoaders/LazyColorPicker';
 
@@ -27,11 +27,12 @@ const ColorInput: FC<ColorInputProps> = (props: ColorInputProps) => {
         <>
             <div>
                 <TextField
+                    variant="standard"
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
-                                <div
-                                    style={{
+                                <Box
+                                    sx={{
                                         height: '22px',
                                         width: '22px',
                                         border: value === '' ? 'none' : '1px solid #555555',
@@ -63,7 +64,7 @@ const ColorInput: FC<ColorInputProps> = (props: ColorInputProps) => {
                 {!required && !disabled && (
                     <Box display="inline-box" position="relative">
                         <IconButton
-                            style={{
+                            sx={{
                                 marginLeft: -25,
                                 marginTop: 0,
                                 position: 'absolute',

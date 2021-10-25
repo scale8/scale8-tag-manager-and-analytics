@@ -1,38 +1,8 @@
 import { Dispatch, FC, SetStateAction } from 'react';
-import {
-    Box,
-    Button,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    lighten,
-} from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { grey } from '@material-ui/core/colors';
+import { Box, DialogActions, DialogContent, DialogContentText } from '@mui/material';
 import TextAreaInput from '../atoms/InputTypes/TextAreaInput';
-
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        dialogActions: {
-            padding: theme.spacing(2),
-            justifyContent: 'center',
-        },
-        cancel: {
-            color: theme.palette.getContrastText(grey[700]),
-            backgroundColor: grey[500],
-            '&:hover': {
-                backgroundColor: grey[700],
-            },
-        },
-        confirm: {
-            color: theme.palette.getContrastText(theme.palette.error.main),
-            backgroundColor: lighten(theme.palette.error.main, 0.4),
-            '&:hover': {
-                backgroundColor: theme.palette.error.main,
-            },
-        },
-    }),
-);
+import { DialogDangerConfirmButton } from '../atoms/DialogDangerConfirmButton';
+import { DialogCancelButton } from '../atoms/DialogCancelButton';
 
 type DeleteWithPreviewProps = {
     handleCancel: () => void;
@@ -43,15 +13,13 @@ type DeleteWithPreviewProps = {
 };
 
 const DeleteCommentDialogContent: FC<DeleteWithPreviewProps> = (props: DeleteWithPreviewProps) => {
-    const classes = useStyles();
-
     return (
         <>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">{props.text}</DialogContentText>
                 <Box marginTop={3} marginBottom={1}>
                     <TextAreaInput
-                        style={{ width: '100%', minWidth: '300px' }}
+                        sx={{ width: '100%', minWidth: '300px' }}
                         name="comments"
                         label="Comments"
                         value={props.comments}
@@ -59,13 +27,13 @@ const DeleteCommentDialogContent: FC<DeleteWithPreviewProps> = (props: DeleteWit
                     />
                 </Box>
             </DialogContent>
-            <DialogActions className={classes.dialogActions}>
-                <Button onClick={props.handleCancel} className={classes.cancel} autoFocus>
+            <DialogActions sx={{ padding: 2, justifyContent: 'center' }}>
+                <DialogCancelButton onClick={props.handleCancel} autoFocus>
                     Cancel
-                </Button>
-                <Button onClick={props.handleConfirm} className={classes.confirm}>
+                </DialogCancelButton>
+                <DialogDangerConfirmButton onClick={props.handleConfirm}>
                     Confirm
-                </Button>
+                </DialogDangerConfirmButton>
             </DialogActions>
         </>
     );

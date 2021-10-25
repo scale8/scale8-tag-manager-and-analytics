@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Box, Button, useTheme } from '@material-ui/core';
+import { Box, Button } from '@mui/material';
 import { PageActionProps, pageActions } from '../../../actions/PageActions';
 import { useLoggedInState } from '../../../context/AppContext';
 import { useRouter } from 'next/router';
@@ -7,7 +7,6 @@ import { toOrgList } from '../../../utils/NavigationPaths';
 
 const LeaveOrganizationSection: FC<{ id: string }> = (props: { id: string }) => {
     const { id } = props;
-    const theme = useTheme();
     const router = useRouter();
     const { templateInteractions, orgUserState } = useLoggedInState();
     const { dispatchDialogAction, ask } = templateInteractions;
@@ -34,9 +33,9 @@ const LeaveOrganizationSection: FC<{ id: string }> = (props: { id: string }) => 
                             pageActions.removeMe(pageActionProps, id);
                         });
                     }}
-                    style={{
+                    sx={{
                         color: '#ffffff',
-                        backgroundColor: theme.palette.error.main,
+                        backgroundColor: (theme) => theme.palette.error.main,
                     }}
                     disableElevation
                 >

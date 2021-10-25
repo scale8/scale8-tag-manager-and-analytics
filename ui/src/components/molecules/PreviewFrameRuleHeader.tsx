@@ -1,5 +1,5 @@
-import { ChangeEvent, Dispatch, FC, SetStateAction } from 'react';
-import { Box, MenuItem, Select } from '@material-ui/core';
+import { Dispatch, FC, SetStateAction } from 'react';
+import { Box, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import AppliedIcon from '../atoms/Icons/AppliedIcon';
 import { timestampDisplay } from '../../utils/DateTimeUtils';
 import { RuleStatus } from '../../types/PreviewFrameTypes';
@@ -53,9 +53,9 @@ const PreviewFrameRuleHeader: FC<PreviewFrameRuleHeaderProps> = (
             <Box>
                 <Box display="flex" alignItems="center" height="56px" py={1}>
                     <Select
-                        style={{ width: '100%' }}
+                        sx={{ width: '100%' }}
                         value={ruleIndex.toString()}
-                        onChange={(event: ChangeEvent<{ value: unknown }>) =>
+                        onChange={(event: SelectChangeEvent) =>
                             setRuleIndex(parseInt(event.target.value as string))
                         }
                         name="rule-run"

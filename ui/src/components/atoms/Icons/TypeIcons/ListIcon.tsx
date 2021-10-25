@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { SvgIconProps } from '@material-ui/core';
-import ViewListIcon from '@material-ui/icons/ViewList';
+import { SvgIconProps } from '@mui/material';
+import ViewListIcon from '@mui/icons-material/ViewList';
 
 const ListIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

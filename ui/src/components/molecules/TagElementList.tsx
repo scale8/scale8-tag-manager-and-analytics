@@ -9,29 +9,16 @@ import {
     ListItemIcon,
     ListItemSecondaryAction,
     ListItemText,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
-import DeleteIcon from '@material-ui/icons/Delete';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import EditIcon from '@material-ui/icons/Edit';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-import HistoryIcon from '@material-ui/icons/History';
+} from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import EditIcon from '@mui/icons-material/Edit';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import HistoryIcon from '@mui/icons-material/History';
 import { TagElementListItem } from '../../utils/ElementListUtils';
-
-const useStyles = makeStyles(() => ({
-    list: {
-        paddingTop: '0',
-    },
-    addButton: {},
-    addButtonContainer: {
-        width: '100%',
-    },
-    listItem: {
-        paddingRight: '160px',
-    },
-}));
+import { useConfigState } from '../../context/AppContext';
 
 type TagElementListProps = {
     title: string;
@@ -48,7 +35,7 @@ type TagElementListProps = {
 };
 
 const TagElementList: FC<TagElementListProps> = (props: TagElementListProps) => {
-    const classes = useStyles();
+    const { isAuditEnabled } = useConfigState();
 
     return (
         <Box paddingBottom={3}>
@@ -56,13 +43,13 @@ const TagElementList: FC<TagElementListProps> = (props: TagElementListProps) => 
                 {props.title}
             </Box>
             <Divider />
-            <List dense className={classes.list}>
+            <List dense sx={{ paddingTop: '0' }}>
                 {props.items.map((item, index) => (
                     <Fragment key={item.id}>
-                        <ListItem className={classes.listItem}>
+                        <ListItem sx={{ paddingRight: '160px' }}>
                             {item.icon !== undefined && (
                                 <ListItemIcon
-                                    style={{
+                                    sx={{
                                         minWidth: '10px',
                                         paddingRight: '10px',
                                     }}
@@ -85,11 +72,12 @@ const TagElementList: FC<TagElementListProps> = (props: TagElementListProps) => 
                                                             item.text,
                                                         );
                                                 }}
+                                                size="large"
                                             >
                                                 <VisibilityIcon />
                                             </IconButton>
                                         ))}
-                                    {!props.disabled && props.historyButtonClick && (
+                                    {!props.disabled && props.historyButtonClick && isAuditEnabled && (
                                         <IconButton
                                             edge="end"
                                             aria-label="inspect"
@@ -97,6 +85,7 @@ const TagElementList: FC<TagElementListProps> = (props: TagElementListProps) => 
                                                 if (props.historyButtonClick !== undefined)
                                                     props.historyButtonClick(item.id, item.text);
                                             }}
+                                            size="large"
                                         >
                                             <HistoryIcon />
                                         </IconButton>
@@ -110,6 +99,7 @@ const TagElementList: FC<TagElementListProps> = (props: TagElementListProps) => 
                                                     if (props.editButtonClick !== undefined)
                                                         props.editButtonClick(item.id, item.text);
                                                 }}
+                                                size="large"
                                             >
                                                 <EditIcon />
                                             </IconButton>
@@ -121,6 +111,7 @@ const TagElementList: FC<TagElementListProps> = (props: TagElementListProps) => 
                                             onClick={() => {
                                                 props.deleteButtonClick(item.id, item.text);
                                             }}
+                                            size="large"
                                         >
                                             <DeleteIcon />
                                         </IconButton>
@@ -134,6 +125,7 @@ const TagElementList: FC<TagElementListProps> = (props: TagElementListProps) => 
                                                     props.moveUpClick(item.id, item.text);
                                             }}
                                             disabled={index === 0}
+                                            size="large"
                                         >
                                             <ArrowUpwardIcon />
                                         </IconButton>
@@ -147,6 +139,7 @@ const TagElementList: FC<TagElementListProps> = (props: TagElementListProps) => 
                                                     props.moveDownClick(item.id, item.text);
                                             }}
                                             disabled={index === props.items.length - 1}
+                                            size="large"
                                         >
                                             <ArrowDownwardIcon />
                                         </IconButton>
@@ -158,19 +151,17 @@ const TagElementList: FC<TagElementListProps> = (props: TagElementListProps) => 
                     </Fragment>
                 ))}
             </List>
-            <div className={classes.addButtonContainer}>
+            <Box sx={{ width: '100%' }}>
                 <Button
                     size="small"
-                    className={classes.addButton}
                     variant="outlined"
-                    color="default"
                     startIcon={<AddIcon />}
                     onClick={props.addButtonClick}
                     disabled={props.disabled}
                 >
                     {props.addButtonText}
                 </Button>
-            </div>
+            </Box>
         </Box>
     );
 };

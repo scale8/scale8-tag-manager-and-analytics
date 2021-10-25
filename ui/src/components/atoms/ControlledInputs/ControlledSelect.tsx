@@ -1,4 +1,4 @@
-import { ChangeEvent, ReactElement, useState } from 'react';
+import { ReactElement, useState } from 'react';
 import {
     FormControl,
     FormHelperText,
@@ -6,7 +6,8 @@ import {
     ListSubheader,
     MenuItem,
     Select,
-} from '@material-ui/core';
+    SelectChangeEvent,
+} from '@mui/material';
 import { ControlledSelectProps, SelectValueWithSub } from '../../../hooks/form/useFormValidation';
 import SelectValueMenuItem from '../SelectValueMenuItem';
 import { selectCompare } from '../../../utils/SelectUtils';
@@ -33,7 +34,7 @@ const ControlledSelect = <T extends { [key: string]: any }>(
         ? resetErrorsOnKeys.map((_) => ({ valueKey: _, value: '' }))
         : undefined;
 
-    const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
+    const handleChange = (event: SelectChangeEvent) => {
         setRequiredError(false);
         formProps.handleChange(name, event.target.value, extraValues);
     };
@@ -62,6 +63,7 @@ const ControlledSelect = <T extends { [key: string]: any }>(
 
     return (
         <FormControl
+            variant="standard"
             {...formControlProps}
             onInvalid={(event) => {
                 event.preventDefault();
@@ -71,6 +73,7 @@ const ControlledSelect = <T extends { [key: string]: any }>(
         >
             <InputLabel>{inputLabel}</InputLabel>
             <Select
+                label={inputLabel}
                 value={formProps.values[name]}
                 onChange={handleChange}
                 onBlur={formProps.handleBlur}

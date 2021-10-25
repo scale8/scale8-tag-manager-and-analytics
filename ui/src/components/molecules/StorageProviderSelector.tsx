@@ -6,7 +6,7 @@ import ControlledTextInput from '../atoms/ControlledInputs/ControlledTextInput';
 import ControlledCodeInput from '../atoms/ControlledInputs/ControlledCodeInput';
 import { FormProps } from '../../hooks/form/useFormValidation';
 import ControlledBooleanSelect from '../atoms/ControlledInputs/ControlledBooleanSelect';
-import { Alert } from '@material-ui/lab';
+import { Alert } from '@mui/material';
 import {
     getStorageProviderLabel,
     initialStorageProviderFields,
@@ -71,7 +71,7 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
                     }}
                     label="Edit Storage Provider Settings"
                     className="DrawerFormField"
-                    style={{ marginLeft: '-11px' }}
+                    sx={{ marginLeft: '-11px!important' }}
                     color="primary"
                 />
             )}
@@ -174,7 +174,7 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
                             }}
                             label="Use API Mongo Server"
                             className="DrawerFormField"
-                            style={{ marginLeft: '-11px' }}
+                            sx={{ marginLeft: '-11px!important' }}
                             color="primary"
                         />
                         {!props.values.useApiMongoServer && (

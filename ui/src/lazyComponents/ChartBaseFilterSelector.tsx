@@ -1,31 +1,17 @@
-import { ChangeEvent, FC } from 'react';
+import { FC } from 'react';
 import { AppAnalyticsContentProps } from '../types/props/AppAnalyticsContentProps';
 import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import { useQuery } from '@apollo/client';
-import { FormControl, InputLabel, makeStyles, MenuItem, Select } from '@material-ui/core';
+import { SelectChangeEvent } from '@mui/material';
 import PageAppChartBaseFilterQuery from '../gql/queries/PageAppChartBaseFilterQuery';
 import { AppChartBaseData } from '../gql/generated/AppChartBaseData';
 import { AppErrorContentProps } from '../types/props/AppErrorContentProps';
-
-const useStyles = makeStyles((theme) => ({
-    selectRoot: {
-        '&:focus': {
-            backgroundColor: '#ffffff',
-        },
-        width: '200px',
-    },
-    selectContainer: {
-        marginRight: theme.spacing(2),
-        marginBottom: theme.spacing(1),
-    },
-}));
+import { ChartBaseFilterSelectorContent } from '../components/organisms/ChartBaseFilterSelectorContent';
 
 const ChartBaseFilterSelector: FC<AppAnalyticsContentProps | AppErrorContentProps> = (
     props: AppAnalyticsContentProps | AppErrorContentProps,
 ) => {
     const { appQueryOptions, id, setFilter } = props;
-
-    const classes = useStyles();
 
     return queryLoaderAndError<AppChartBaseData>(
         false,
@@ -37,7 +23,7 @@ const ChartBaseFilterSelector: FC<AppAnalyticsContentProps | AppErrorContentProp
 
             const currentEnvironmentKey = appQueryOptions.filter_options.environment ?? ' ';
 
-            const handleEnvironmentChange = (e: ChangeEvent<{ value: unknown }>) => {
+            const handleEnvironmentChange = (e: SelectChangeEvent) => {
                 if (e.target.value === ' ') {
                     setFilter('environment', undefined);
                 } else {
@@ -49,7 +35,7 @@ const ChartBaseFilterSelector: FC<AppAnalyticsContentProps | AppErrorContentProp
 
             const currentRevisionKey = appQueryOptions.filter_options.revision ?? ' ';
 
-            const handleRevisionChange = (e: ChangeEvent<{ value: unknown }>) => {
+            const handleRevisionChange = (e: SelectChangeEvent) => {
                 if (e.target.value === ' ') {
                     setFilter('revision', undefined);
                 } else {
@@ -58,50 +44,14 @@ const ChartBaseFilterSelector: FC<AppAnalyticsContentProps | AppErrorContentProp
             };
 
             return (
-                <>
-                    <FormControl
-                        variant="outlined"
-                        size="small"
-                        className={classes.selectContainer}
-                    >
-                        <InputLabel id="environment-label">Environment</InputLabel>
-                        <Select
-                            labelId="environment-label"
-                            classes={{ root: classes.selectRoot }}
-                            value={currentEnvironmentKey}
-                            onChange={handleEnvironmentChange}
-                            label="Environment"
-                        >
-                            <MenuItem value={' '}>All Environments</MenuItem>
-                            {loadedEnvironments.map((environment) => (
-                                <MenuItem key={environment.id} value={environment.id}>
-                                    {environment.name}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                    <FormControl
-                        variant="outlined"
-                        size="small"
-                        className={classes.selectContainer}
-                    >
-                        <InputLabel id="revision-label">Revision</InputLabel>
-                        <Select
-                            labelId="revision-label"
-                            classes={{ root: classes.selectRoot }}
-                            value={currentRevisionKey}
-                            onChange={handleRevisionChange}
-                            label="Revision"
-                        >
-                            <MenuItem value={' '}>All Revisions</MenuItem>
-                            {loadedRevisions.map((revision) => (
-                                <MenuItem key={revision.id} value={revision.id}>
-                                    {revision.name}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </>
+                <ChartBaseFilterSelectorContent
+                    loadedEnvironments={loadedEnvironments}
+                    currentEnvironmentKey={currentEnvironmentKey}
+                    handleEnvironmentChange={handleEnvironmentChange}
+                    loadedRevisions={loadedRevisions}
+                    currentRevisionKey={currentRevisionKey}
+                    handleRevisionChange={handleRevisionChange}
+                />
             );
         },
         true,

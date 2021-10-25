@@ -1,9 +1,9 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import { Box, Container, Paper } from '@material-ui/core';
+import { Box, Container, Paper } from '@mui/material';
 import { useQuery } from '@apollo/client';
 import ProductSettingsQuery from '../../gql/queries/ProductSettingsQuery';
 import { ProductSettings } from '../../gql/generated/ProductSettings';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 import { toDataManager, toOrg, toTagManager } from '../../utils/NavigationPaths';
 import Loader from '../../components/organisms/Loader';
 import Navigate from '../../components/atoms/Next/Navigate';

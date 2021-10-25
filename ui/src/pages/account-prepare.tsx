@@ -3,7 +3,7 @@ import Head from 'next/head';
 import SignUpContainer from '../components/molecules/SignUpContainer';
 import { useParams } from '../hooks/useParams';
 import Loader from '../components/organisms/Loader';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import { TagManagerInstallInstructions } from '../lazyComponents/TagManagerInstallInstructions';
 import { useMutation } from '@apollo/client';
 import { CompleteSignUp } from '../gql/generated/CompleteSignUp';
@@ -84,7 +84,7 @@ const AccountPrepareContent: FC<AccountPrepareContentProps> = (
                         Your sign up request was unsuccessful, please{' '}
                         <Link
                             href={toSignUp({ type: type === 'invite' ? 'tag-manager' : type })}
-                            style={{ color: '#1b1b1b' }}
+                            sx={{ color: '#1b1b1b' }}
                         >
                             sign up again
                         </Link>

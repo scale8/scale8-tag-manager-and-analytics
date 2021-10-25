@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { SvgIconProps } from '@material-ui/core';
-import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak';
+import { SvgIconProps } from '@mui/material';
+import CenterFocusWeakIcon from '@mui/icons-material/CenterFocusWeak';
 
 const ActionIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

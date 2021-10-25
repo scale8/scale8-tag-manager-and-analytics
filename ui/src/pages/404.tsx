@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Box, Typography } from '@material-ui/core';
+import { Box, Typography } from '@mui/material';
 import Link from '../components/atoms/Next/Link';
 import Head from 'next/head';
 
@@ -24,7 +24,7 @@ const NotFoundPage: FC = () => {
                 <Typography variant="h3" component="div">
                     Page not found
                 </Typography>
-                <Link href={'/login'} style={{ color: '#aaaaaa', marginTop: '20px' }}>
+                <Link href={'/login'} sx={{ color: '#aaaaaa', marginTop: '20px' }}>
                     Back to login
                 </Link>
             </Box>

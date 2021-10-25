@@ -1,14 +1,14 @@
 import { FC } from 'react';
-import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
+import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import {
     ActionGroupDistributionSection,
     ActionGroupDistributionSectionProps,
 } from './ActionGroupDistributionSection';
-import HistoryIcon from '@material-ui/icons/History';
+import HistoryIcon from '@mui/icons-material/History';
 import { SectionAction } from '../../molecules/SectionActionsSpeedDial';
 import { pageActions } from '../../../actions/PageActions';
 import { moveDownId, moveUpId } from '../../../utils/ArrayUtils';

@@ -1,5 +1,5 @@
-import { ChangeEvent, ReactElement } from 'react';
-import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
+import { ReactElement } from 'react';
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { ControlledBooleanSelectProps } from '../../../hooks/form/useFormValidation';
 
 const ControlledBooleanSelect = <T extends { [key: string]: any }>(
@@ -7,14 +7,15 @@ const ControlledBooleanSelect = <T extends { [key: string]: any }>(
 ): ReactElement => {
     const { name, formProps, label, ...formControlProps } = props;
 
-    const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
+    const handleChange = (event: SelectChangeEvent) => {
         formProps.handleChange(name, event.target.value === 'TRUE');
     };
 
     return (
-        <FormControl {...formControlProps}>
+        <FormControl variant="standard" {...formControlProps}>
             <InputLabel>{label}</InputLabel>
             <Select
+                label={label}
                 value={formProps.values[name] ? 'TRUE' : 'FALSE'}
                 onChange={handleChange}
                 onBlur={formProps.handleBlur}

@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import BusinessIcon from '@material-ui/icons/Business';
-import { SvgIconProps } from '@material-ui/core';
+import BusinessIcon from '@mui/icons-material/Business';
+import { SvgIconProps } from '@mui/material';
 
 const OrgIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

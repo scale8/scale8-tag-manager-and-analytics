@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { DialogPageProps } from '../../types/DialogTypes';
 import RegenerateOrgUserPasswordQuery from '../../gql/mutations/RegenerateOrgUserPasswordQuery';
 import InfoDialogTitle from '../../components/molecules/InfoDialogTitle';
-import { Box, DialogContent, DialogContentText, Typography } from '@material-ui/core';
+import { Box, DialogContent, DialogContentText, Typography } from '@mui/material';
 import CopyBlock from '../../components/atoms/CopyBlock';
 import {
     DialogDirectMutation,
@@ -22,7 +22,7 @@ const DisplayNewPassword: FC<RenderDataProps> = (props: RenderDataProps) => {
                     {props.name === '' ? 'Password for new user' : `New Password for ${props.name}`}
                 </InfoDialogTitle>
                 <DialogContent
-                    style={{
+                    sx={{
                         margin: 0,
                         padding: 0,
                     }}

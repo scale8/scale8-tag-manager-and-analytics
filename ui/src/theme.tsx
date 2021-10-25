@@ -1,8 +1,8 @@
-import grey from '@material-ui/core/colors/grey';
-import { createTheme } from '@material-ui/core/styles';
+import { createTheme } from '@mui/material/styles';
 import { getProductSection, ProductSectionKey } from './containers/SectionsDetails';
+import { grey } from '@mui/material/colors';
 
-declare module '@material-ui/core/styles/createPalette' {
+declare module '@mui/material/styles/createPalette' {
     interface Palette {
         adminColor: Palette['primary'];
         dataManagerColor: Palette['primary'];
@@ -58,31 +58,41 @@ const theme = createTheme({
             fontSize: 14,
         },
     },
-    overrides: {
+    components: {
         MuiTableCell: {
-            head: {
-                fontWeight: 600,
+            styleOverrides: {
+                head: {
+                    fontWeight: 600,
+                },
             },
         },
         MuiSvgIcon: {
-            root: {
-                fontSize: '1.25rem',
+            styleOverrides: {
+                root: {
+                    fontSize: '1.25rem',
+                },
             },
         },
         MuiButton: {
-            root: {
-                fontWeight: 600,
+            styleOverrides: {
+                root: {
+                    fontWeight: 600,
+                },
             },
         },
         MuiTooltip: {
-            tooltip: {
-                fontSize: '.8rem',
+            styleOverrides: {
+                tooltip: {
+                    fontSize: '.8rem',
+                },
             },
         },
         MuiDialogActions: {
-            spacing: {
-                '& > :not(:first-child)': {
-                    marginLeft: '16px',
+            styleOverrides: {
+                spacing: {
+                    '& > :not(:first-of-type)': {
+                        marginLeft: '16px',
+                    },
                 },
             },
         },

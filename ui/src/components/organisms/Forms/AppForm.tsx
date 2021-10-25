@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import DrawerFormLayout from '../../molecules/DrawerFormLayout';
-import { Box, Checkbox, Divider, FormControlLabel, useTheme } from '@material-ui/core';
+import { Box, Checkbox, Divider, FormControlLabel } from '@mui/material';
 import Loader from '../Loader';
 import { AppFormProps } from '../../../dialogPages/tagManager/app/AppCreate';
 import StorageProviderSelector from '../../molecules/StorageProviderSelector';
@@ -11,7 +11,6 @@ import { useConfigState } from '../../../context/AppContext';
 
 const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
     const { mode } = useConfigState();
-    const theme = useTheme();
 
     const [useDomainName, setUseDomainName] = useState(
         props.useDomainName === undefined ? true : props.useDomainName,
@@ -56,7 +55,7 @@ const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
                         required
                     />
                     <FormControlLabel
-                        style={{ marginBottom: theme.spacing(3) }}
+                        sx={{ marginBottom: (theme) => theme.spacing(3) }}
                         control={
                             <Checkbox
                                 name="useDomainName"
@@ -89,13 +88,17 @@ const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
                                 }}
                                 label="Enable Analytics"
                                 className="DrawerFormField"
-                                style={{ marginLeft: '-11px' }}
+                                sx={{ marginLeft: '-11px!important' }}
                                 color="primary"
                             />
-                            <small className="DrawerFormField" style={{ marginTop: '-24px' }}>
+                            <Box
+                                component="small"
+                                className="DrawerFormField"
+                                sx={{ marginTop: '-24px' }}
+                            >
                                 Enable simple analytics dashboard when using Tag Manager. We
                                 recommend this option is left enabled.
-                            </small>
+                            </Box>
                             <CheckBoxInput
                                 name="errorTrackingEnabled"
                                 value={props.values.errorTrackingEnabled}
@@ -104,14 +107,18 @@ const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
                                 }}
                                 label="Enable Error Tracking"
                                 className="DrawerFormField"
-                                style={{ marginLeft: '-11px' }}
+                                sx={{ marginLeft: '-11px!important' }}
                                 color="primary"
                             />
-                            <small className="DrawerFormField" style={{ marginTop: '-24px' }}>
+                            <Box
+                                component="small"
+                                className="DrawerFormField"
+                                sx={{ marginTop: '-24px' }}
+                            >
                                 Enable basic website and mobile website application errors directly
                                 in the dashboard. If you are using another service you may wish to
                                 disable this option.
-                            </small>
+                            </Box>
                             {(props.values.analyticsEnabled ||
                                 props.values.errorTrackingEnabled) && (
                                 <StorageProviderSelector

@@ -1,83 +1,18 @@
 import { FC } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import { UserSelector } from '../molecules/UserSelector';
-import { Badge, Box, IconButton, Tooltip } from '@material-ui/core';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
-import clsx from 'clsx';
+import { Badge, Box, IconButton, Tooltip } from '@mui/material';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 import OrgIcon from '../atoms/Icons/OrgIcon';
 import { logoFromSectionLocator, SectionKey } from '../../containers/SectionsDetails';
 import { useLoggedInState } from '../../context/AppContext';
 import { SideBarProps } from '../../containers/global/LoggedInSection';
 import { useRouter } from 'next/router';
 import { toAdmin, toOrgList } from '../../utils/NavigationPaths';
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        position: 'fixed',
-        display: 'flex',
-        boxSizing: 'border-box',
-        flexDirection: 'column',
-        backgroundColor: theme.palette.primary.main,
-        flexGrow: 0,
-        width: '50px',
-        height: '100vh',
-    },
-    main: {
-        flexGrow: 1,
-        alignSelf: 'center',
-    },
-    logo: {
-        paddingTop: '15px',
-        alignSelf: 'center',
-        alignItems: 'center',
-        width: 27,
-        height: 50,
-        cursor: 'pointer',
-    },
-    logoButton: {
-        padding: '0px',
-    },
-    admin: {
-        display: 'flex',
-        width: '64px',
-        height: '48px',
-        color: 'white',
-        alignSelf: 'center',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 0,
-        marginBottom: '10px',
-        '&$adminOn': {
-            color: theme.palette.adminColor.main,
-        },
-    },
-    adminOn: {},
-    iconButton: {
-        display: 'flex',
-        width: '64px',
-        height: '48px',
-        color: 'white',
-        alignSelf: 'center',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 0,
-        marginBottom: '10px',
-    },
-    userSelector: {
-        display: 'flex',
-        width: '64px',
-        height: '48px',
-        alignSelf: 'center',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 0,
-        marginBottom: '10px',
-    },
-}));
+import { SxProps } from '@mui/system';
+import { Theme } from '@mui/material/styles';
 
 const SideBar: FC<SideBarProps> = (props: SideBarProps) => {
-    const classes = useStyles();
     const router = useRouter();
 
     const { templateInteractions } = useLoggedInState();
@@ -87,19 +22,66 @@ const SideBar: FC<SideBarProps> = (props: SideBarProps) => {
 
     const CurrentLogo = logoFromSectionLocator(sectionHistory.current);
 
+    const iconButton: SxProps<Theme> = {
+        display: 'flex',
+        width: '64px',
+        height: '48px',
+        color: 'white',
+        alignSelf: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 0,
+        marginBottom: '10px',
+    };
+
     return (
-        <div className={classes.root}>
-            <div
-                className={classes.logo}
+        <Box
+            sx={{
+                position: 'fixed',
+                display: 'flex',
+                boxSizing: 'border-box',
+                flexDirection: 'column',
+                backgroundColor: (theme) => theme.palette.primary.main,
+                flexGrow: 0,
+                width: '50px',
+                height: '100vh',
+            }}
+        >
+            <Box
+                sx={{
+                    paddingTop: '15px',
+                    alignSelf: 'center',
+                    alignItems: 'center',
+                    width: 27,
+                    height: 50,
+                    cursor: 'pointer',
+                }}
                 onClick={() => {
                     router.push(toOrgList).then();
                 }}
             >
                 <CurrentLogo width={27} />
-            </div>
-            <div className={classes.main} />
+            </Box>
+            <Box
+                sx={{
+                    flexGrow: 1,
+                    alignSelf: 'center',
+                }}
+            />
             {props.isAdmin && (
-                <div className={clsx(classes.admin, inAdmin && classes.adminOn)}>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        width: '64px',
+                        height: '48px',
+                        color: (theme) => (inAdmin ? theme.palette.adminColor.main : 'white'),
+                        alignSelf: 'center',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: 0,
+                        marginBottom: '10px',
+                    }}
+                >
                     <Tooltip title="Admin Area" placement="right">
                         <IconButton
                             color="inherit"
@@ -113,13 +95,14 @@ const SideBar: FC<SideBarProps> = (props: SideBarProps) => {
                                     router.push(toAdmin).then();
                                 }
                             }}
+                            size="large"
                         >
                             <SettingsApplicationsIcon />
                         </IconButton>
                     </Tooltip>
-                </div>
+                </Box>
             )}
-            <div className={classes.iconButton}>
+            <Box sx={iconButton}>
                 <Box>
                     <Tooltip title="Manage Organizations" placement="right">
                         <IconButton
@@ -127,27 +110,43 @@ const SideBar: FC<SideBarProps> = (props: SideBarProps) => {
                             onClick={() => {
                                 router.push(toOrgList).then();
                             }}
+                            size="large"
                         >
                             <OrgIcon />
                         </IconButton>
                     </Tooltip>
                 </Box>
-            </div>
-            <div className={classes.iconButton}>
+            </Box>
+            <Box sx={iconButton}>
                 <Tooltip title="Notifications" placement="right">
                     <Box>
-                        <IconButton color="inherit" onClick={props.handleNotificationClick}>
+                        <IconButton
+                            color="inherit"
+                            onClick={props.handleNotificationClick}
+                            size="large"
+                        >
                             <Badge badgeContent={props.unreadNotifications} color="secondary">
                                 <NotificationsIcon />
                             </Badge>
                         </IconButton>
                     </Box>
                 </Tooltip>
-            </div>
-            <div className={classes.userSelector}>
+            </Box>
+            <Box
+                sx={{
+                    display: 'flex',
+                    width: '64px',
+                    height: '48px',
+                    alignSelf: 'center',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: 0,
+                    marginBottom: '10px',
+                }}
+            >
                 <UserSelector {...props.userSelectorProps} />
-            </div>
-        </div>
+            </Box>
+        </Box>
     );
 };
 

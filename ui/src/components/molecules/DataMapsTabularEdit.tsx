@@ -1,70 +1,13 @@
 import { FC } from 'react';
-import { Box, Checkbox, IconButton } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Box, Checkbox, IconButton } from '@mui/material';
 import { VarType } from '../../gql/generated/globalTypes';
-import clsx from 'clsx';
-import AddIcon from '@material-ui/icons/Add';
-import CloseIcon from '@material-ui/icons/Close';
+import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@mui/icons-material/Close';
 import { DataMapsPayloadValues } from '../../types/DataMapsTypes';
 import { AppPlatformRevision } from '../../types/TagRulesTypes';
 import { DataMapsValueEdit } from './DataMapsValueEdit';
 import { getDefaultValueString } from '../../utils/DataMapUtils';
 import { snakeToTitleCase } from '../../utils/TextUtils';
-
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        mainTable: {
-            width: '100%',
-            margin: theme.spacing(2, 0),
-            border: '1px solid #dddddd',
-        },
-        innerTable: {
-            width: '100%',
-        },
-        table: {
-            borderCollapse: 'separate',
-            borderSpacing: 0,
-
-            '& td, & th': {
-                textAlign: 'left',
-            },
-            '& th': {
-                padding: theme.spacing(1),
-            },
-            '& td': {
-                padding: theme.spacing(0, 1),
-                borderTop: '1px solid #dddddd',
-            },
-            '& th:first-child, & td:first-child': {
-                borderRight: '1px solid #dddddd',
-            },
-            '& td$objectSpacer': {
-                padding: 0,
-                borderTop: 0,
-                width: '20px',
-                background: '#eeeeee',
-            },
-            '& td$arraySpacer': {
-                padding: 0,
-                background: '#ffffff',
-                borderTop: '1px solid #dddddd',
-                borderRight: '1px solid #dddddd',
-                width: '30px',
-                verticalAlign: 'top',
-            },
-            '& td$inputCell': {
-                width: '40%',
-            },
-        },
-        objectSpacer: {},
-        arraySpacer: {},
-        inputCell: {},
-        input: {
-            width: '100%',
-            margin: theme.spacing(0, 0, 3),
-        },
-    }),
-);
 
 export type DataMapsTabularEditSetters = {
     removeObjectArrayElement: (keyPath: string, index: number) => void;
@@ -84,21 +27,20 @@ export type DataMapsPayloadValuesRowProps = DataMapsTabularEditSetters & {
 const DataMapsPayloadValuesScalarRow: FC<DataMapsPayloadValuesRowProps> = (
     props: DataMapsPayloadValuesRowProps,
 ) => {
-    const classes = useStyles();
-
     const { disabled, dataMapsPayloadValues: v, appPlatformRevisions, ...s } = props;
 
     return (
         <tr>
-            <td
+            <Box
+                component="td"
                 colSpan={3}
-                style={{
+                sx={{
                     paddingLeft: 0,
                 }}
             >
                 <Box display="flex" alignItems="center">
                     <Checkbox
-                        style={{ marginTop: '2px' }}
+                        sx={{ marginTop: '2px' }}
                         checked={v.include}
                         onChange={(event) => {
                             s.setInclude(v.keyPath, event.target.checked);
@@ -112,16 +54,17 @@ const DataMapsPayloadValuesScalarRow: FC<DataMapsPayloadValuesRowProps> = (
                         }
                     />
                     <Box display="flex" flexDirection="column" py={1}>
-                        <Box style={{ wordBreak: 'break-all' }}>{v.keyPath}</Box>
+                        <Box sx={{ wordBreak: 'break-all' }}>{v.keyPath}</Box>
                         <Box fontStyle="italic" color="#666666" fontSize="13px">
                             ({snakeToTitleCase(v.dataMap.var_type)})
                         </Box>
                     </Box>
                 </Box>
-            </td>
-            <td
-                className={classes.inputCell}
-                style={{
+            </Box>
+            <Box
+                component="td"
+                className="inputCell"
+                sx={{
                     background: v.include ? 'transparent' : '#f9f9f9',
                 }}
             >
@@ -153,7 +96,7 @@ const DataMapsPayloadValuesScalarRow: FC<DataMapsPayloadValuesRowProps> = (
                         </>
                     </Box>
                 )}
-            </td>
+            </Box>
         </tr>
     );
 };
@@ -166,17 +109,18 @@ const DataMapsPayloadValuesObjectRow: FC<DataMapsPayloadValuesRowProps> = (
 
     return (
         <tr>
-            <td
+            <Box
+                component="td"
                 colSpan={4}
-                style={{
+                sx={{
                     background: v.include ? '#eeeeee' : '#f9f9f9',
-                    padding: 0,
-                    borderRight: 0,
+                    padding: '0!important',
+                    borderRight: '0!important',
                 }}
             >
                 <Box display="flex" alignItems="center">
                     <Checkbox
-                        style={{ marginTop: '2px' }}
+                        sx={{ marginTop: '2px' }}
                         checked={v.include}
                         onChange={(event) => {
                             s.setInclude(v.keyPath, event.target.checked);
@@ -189,7 +133,7 @@ const DataMapsPayloadValuesObjectRow: FC<DataMapsPayloadValuesRowProps> = (
                     />
                     {v.keyPath}
                 </Box>
-            </td>
+            </Box>
         </tr>
     );
 };
@@ -197,24 +141,26 @@ const DataMapsPayloadValuesObjectRow: FC<DataMapsPayloadValuesRowProps> = (
 const DataMapsPayloadValuesObjectContentRow: FC<DataMapsPayloadValuesRowProps> = (
     props: DataMapsPayloadValuesRowProps,
 ) => {
-    const classes = useStyles();
-
     const { disabled, dataMapsPayloadValues: v, appPlatformRevisions, ...s } = props;
 
     if (!v.include || v.objects[0].children.length === 0) return null;
 
     return (
         <tr>
-            <td className={classes.objectSpacer} />
-            <td
+            <td className="objectSpacer" />
+            <Box
+                component="td"
                 colSpan={3}
-                style={{
-                    padding: 0,
-                    margin: 0,
-                    borderTop: 0,
+                sx={{
+                    padding: '0!important',
+                    margin: '0!important',
+                    borderTop: '0!important',
                 }}
             >
-                <table className={clsx(classes.table, classes.innerTable)}>
+                <Box
+                    component="table"
+                    sx={{ borderCollapse: 'separate', borderSpacing: 0, width: '100%' }}
+                >
                     <tbody>
                         {v.objects.map((object) =>
                             object.children.map((dataMapsPayloadValues: DataMapsPayloadValues) => (
@@ -229,8 +175,8 @@ const DataMapsPayloadValuesObjectContentRow: FC<DataMapsPayloadValuesRowProps> =
                             )),
                         )}
                     </tbody>
-                </table>
-            </td>
+                </Box>
+            </Box>
         </tr>
     );
 };
@@ -238,8 +184,6 @@ const DataMapsPayloadValuesObjectContentRow: FC<DataMapsPayloadValuesRowProps> =
 const DataMapsPayloadValuesObjectArrayRows: FC<DataMapsPayloadValuesRowProps> = (
     props: DataMapsPayloadValuesRowProps,
 ) => {
-    const classes = useStyles();
-
     const { disabled, dataMapsPayloadValues: v, appPlatformRevisions, ...s } = props;
 
     if (!v.include) return null;
@@ -248,8 +192,8 @@ const DataMapsPayloadValuesObjectArrayRows: FC<DataMapsPayloadValuesRowProps> = 
         <>
             {v.objects.map((object, index) => (
                 <tr key={index}>
-                    <td className={classes.objectSpacer} />
-                    <td className={classes.arraySpacer}>
+                    <td className="objectSpacer" />
+                    <td className="arraySpacer">
                         {v.objects.length > 1 && !disabled && (
                             <IconButton
                                 aria-label="delete"
@@ -262,15 +206,19 @@ const DataMapsPayloadValuesObjectArrayRows: FC<DataMapsPayloadValuesRowProps> = 
                             </IconButton>
                         )}
                     </td>
-                    <td
+                    <Box
+                        component="td"
                         colSpan={2}
-                        style={{
-                            padding: 0,
-                            margin: 0,
-                            borderTop: 0,
+                        sx={{
+                            padding: '0!important',
+                            margin: '0!important',
+                            borderTop: '0!important',
                         }}
                     >
-                        <table className={clsx(classes.table, classes.innerTable)}>
+                        <Box
+                            component="table"
+                            sx={{ borderCollapse: 'separate', borderSpacing: 0, width: '100%' }}
+                        >
                             <tbody>
                                 {object.children.map(
                                     (dataMapsPayloadValues: DataMapsPayloadValues) => (
@@ -285,8 +233,8 @@ const DataMapsPayloadValuesObjectArrayRows: FC<DataMapsPayloadValuesRowProps> = 
                                     ),
                                 )}
                             </tbody>
-                        </table>
-                    </td>
+                        </Box>
+                    </Box>
                 </tr>
             ))}
         </>
@@ -298,22 +246,22 @@ const DataMapsPayloadValuesArrayAddRow: FC<DataMapsPayloadValuesRowProps> = (
 ) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { disabled, dataMapsPayloadValues: v, ...s } = props;
-    const classes = useStyles();
 
     if (!v.include) return null;
 
     return (
         <tr>
-            <td className={classes.objectSpacer} />
-            <td
+            <td className="objectSpacer" />
+            <Box
+                component="td"
                 colSpan={3}
-                style={{
-                    padding: 0,
-                    borderRight: 0,
+                sx={{
+                    padding: '0!important',
+                    borderRight: '0!important',
                 }}
             >
                 <IconButton
-                    style={{
+                    sx={{
                         marginLeft: '5px',
                     }}
                     aria-label="add"
@@ -324,7 +272,7 @@ const DataMapsPayloadValuesArrayAddRow: FC<DataMapsPayloadValuesRowProps> = (
                 >
                     <AddIcon fontSize="small" />
                 </IconButton>
-            </td>
+            </Box>
         </tr>
     );
 };
@@ -363,12 +311,49 @@ export type DataMapsTabularEditProps = DataMapsTabularEditSetters & {
 };
 
 const DataMapsTabularEdit: FC<DataMapsTabularEditProps> = (props: DataMapsTabularEditProps) => {
-    const classes = useStyles();
-
     const { disabled, dataMapsPayloadValues: v, ...s } = props;
 
     return (
-        <table className={clsx(classes.table, classes.mainTable)}>
+        <Box
+            component="table"
+            sx={{
+                width: '100%',
+                margin: (theme) => theme.spacing(2, 0),
+                border: '1px solid #dddddd',
+                borderCollapse: 'separate',
+                borderSpacing: 0,
+                '& td, & th': {
+                    textAlign: 'left',
+                },
+                '& th': {
+                    padding: (theme) => theme.spacing(1),
+                },
+                '& td': {
+                    padding: (theme) => theme.spacing(0, 1),
+                    borderTop: '1px solid #dddddd',
+                },
+                '& th:first-of-type, & td:first-of-type': {
+                    borderRight: '1px solid #dddddd',
+                },
+                '& td.objectSpacer': {
+                    padding: 0,
+                    borderTop: 0,
+                    width: '20px',
+                    background: '#eeeeee',
+                },
+                '& td.arraySpacer': {
+                    padding: 0,
+                    background: '#ffffff',
+                    borderTop: '1px solid #dddddd',
+                    borderRight: '1px solid #dddddd',
+                    width: '30px',
+                    verticalAlign: 'top',
+                },
+                '& td.inputCell': {
+                    width: '40%',
+                },
+            }}
+        >
             <thead>
                 <tr>
                     <th colSpan={3}>Key</th>
@@ -385,7 +370,7 @@ const DataMapsTabularEdit: FC<DataMapsTabularEditProps> = (props: DataMapsTabula
                     />
                 ))}
             </tbody>
-        </table>
+        </Box>
     );
 };
 

@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { SvgIconProps } from '@material-ui/core';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { SvgIconProps } from '@mui/material';
 
 const LogoutIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

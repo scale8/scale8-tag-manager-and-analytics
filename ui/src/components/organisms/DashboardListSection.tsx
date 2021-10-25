@@ -1,29 +1,12 @@
 import { ChangeEvent, FC, useState } from 'react';
-import { Box, Card, Divider } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import { Box, Card, Divider } from '@mui/material';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 import TabsTabPanel from '../molecules/TabsTabPanel';
 import {
     AppDashboardList,
     DashboardListProps,
 } from '../../lazyComponents/abstractions/AppDashboardList';
-
-const useStyles = makeStyles(() => ({
-    card: {
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        border: '1px solid rgba(0, 0, 0, 0.12)',
-        borderRadius: '4px',
-    },
-    tab: {
-        minWidth: '50px',
-    },
-    hideIndicator: {
-        display: 'none',
-    },
-}));
 
 type DashboardSectionTab = {
     title: string;
@@ -35,8 +18,6 @@ type DashboardListSectionProps = {
 };
 
 const DashboardListSection: FC<DashboardListSectionProps> = (props: DashboardListSectionProps) => {
-    const classes = useStyles();
-
     const { tabs } = props;
 
     const [value, setValue] = useState(0);
@@ -46,7 +27,16 @@ const DashboardListSection: FC<DashboardListSectionProps> = (props: DashboardLis
     };
 
     return (
-        <Card className={classes.card} elevation={0}>
+        <Card
+            sx={{
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                border: '1px solid rgba(0, 0, 0, 0.12)',
+                borderRadius: '4px',
+            }}
+            elevation={0}
+        >
             <Box bgcolor="#f5f5f5;" width="100%" height="48px">
                 <Tabs
                     value={value}
@@ -54,13 +44,17 @@ const DashboardListSection: FC<DashboardListSectionProps> = (props: DashboardLis
                     indicatorColor="primary"
                     textColor="primary"
                     variant="fullWidth"
-                    classes={tabs.length > 1 ? {} : { indicator: classes.hideIndicator }}
+                    sx={{
+                        '& .MuiTabs-indicator': {
+                            display: tabs.length > 1 ? undefined : 'none',
+                        },
+                    }}
                 >
                     {tabs.map((tab) => (
                         <Tab
                             disableRipple
                             key={tab.title}
-                            classes={{ root: classes.tab }}
+                            sx={{ minWidth: '50px' }}
                             label={tab.title}
                             wrapped
                         />

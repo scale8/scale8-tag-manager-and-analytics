@@ -1,9 +1,16 @@
-import { ChangeEvent, ReactElement, useEffect, useState } from 'react';
-import clsx from 'clsx';
+import { ReactElement, useEffect, useState } from 'react';
 import { QueryResult } from '@apollo/client/react/types/types';
-import { Box, DialogContent, Divider, InputBase, MenuItem, Select } from '@material-ui/core';
+import {
+    Box,
+    DialogContent,
+    Divider,
+    InputBase,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+} from '@mui/material';
 import { Line } from 'react-chartjs-2';
-import RefreshIcon from '@material-ui/icons/Refresh';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { InfoButton, InfoProps } from '../components/molecules/InfoButton';
 import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import InfoDialogTitle from '../components/molecules/InfoDialogTitle';
@@ -11,7 +18,6 @@ import {
     labelsFromRange,
     prepareUsageRange,
     UsageDetails,
-    useStyles,
     zoomDefaultAggregateMinutes,
     zoomMaxAggregateMinutes,
     zoomMinAggregateMinutes,
@@ -31,7 +37,6 @@ export type UsageProps<UsageData> = UsagePageProps & {
 const Usage = <UsageData extends Record<string, any>>(
     props: UsageProps<UsageData>,
 ): ReactElement => {
-    const classes = useStyles();
     const [zoom, setZoom] = useState('1h');
     const [aggregateMinutes, setAggregateMinutes] = useState(1);
     const zoomLevels = ['1h', '2h', '12h', '1d', '3d', '1w', '2w'];
@@ -130,7 +135,7 @@ const Usage = <UsageData extends Record<string, any>>(
                     {formInfoProps !== undefined && <InfoButton {...formInfoProps} />}
                 </InfoDialogTitle>
                 <DialogContent
-                    style={{
+                    sx={{
                         margin: 0,
                         padding: 0,
                     }}
@@ -138,12 +143,16 @@ const Usage = <UsageData extends Record<string, any>>(
                 >
                     <Box display="flex" justifyContent="flex-end" mt={1} mr={5}>
                         <Select
-                            className={classes.dropdown}
+                            sx={{
+                                marginTop: '-4px',
+                                '& .MuiSelect-select:focus': {
+                                    backgroundColor: 'transparent',
+                                },
+                            }}
                             input={<InputBase />}
-                            labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={aggregateMinutes}
-                            onChange={(event: ChangeEvent<{ value: unknown }>) => {
+                            onChange={(event: SelectChangeEvent<number>) => {
                                 setAggregateMinutes(event.target.value as number);
                             }}
                         >
@@ -162,29 +171,63 @@ const Usage = <UsageData extends Record<string, any>>(
                                     </MenuItem>
                                 ))}
                         </Select>
-                        <Divider className={classes.divider} orientation="vertical" flexItem />
+                        <Divider
+                            sx={{
+                                height: '20px',
+                                marginTop: '2px',
+                                marginLeft: '13px',
+                            }}
+                            orientation="vertical"
+                            flexItem
+                        />
                         {zoomLevels.map((zoomLevel) => (
-                            <span
+                            <Box
+                                component="span"
                                 key={zoomLevel}
-                                className={clsx(
-                                    classes.zoomSelect,
-                                    zoom === zoomLevel && classes.selected,
-                                )}
+                                sx={{
+                                    fontWeight: 'bold',
+                                    marginLeft: '20px',
+                                    cursor: 'pointer',
+                                    '&:hover': {
+                                        color: '#40a9ff',
+                                        opacity: 1,
+                                    },
+                                    '&.selected': {
+                                        color: '#1890ff',
+                                        cursor: 'default',
+                                    },
+                                    '&:focus': {
+                                        color: '#40a9ff',
+                                    },
+                                }}
+                                className={zoom === zoomLevel ? 'selected' : undefined}
                                 onClick={() => setZoom(zoomLevel)}
                             >
                                 {zoomLevel}
-                            </span>
+                            </Box>
                         ))}
                         <Divider
-                            style={{
+                            sx={{
+                                height: '20px',
+                                marginTop: '2px',
                                 marginLeft: '23px',
                             }}
-                            className={classes.divider}
                             orientation="vertical"
                             flexItem
                         />
                         <RefreshIcon
-                            className={classes.zoomSelect}
+                            sx={{
+                                fontWeight: 'bold',
+                                marginLeft: '20px',
+                                cursor: 'pointer',
+                                '&:hover': {
+                                    color: '#40a9ff',
+                                    opacity: 1,
+                                },
+                                '&:focus': {
+                                    color: '#40a9ff',
+                                },
+                            }}
                             onClick={() => {
                                 (async () => {
                                     await mainQuery.refetch();

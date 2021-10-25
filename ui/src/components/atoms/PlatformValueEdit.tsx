@@ -1,38 +1,17 @@
 import { FC, useEffect, useState } from 'react';
-import { Box, Checkbox, FormControlLabel } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Box, Checkbox, FormControlLabel } from '@mui/material';
 import SelectInput from './InputTypes/SelectInput';
 import {
     DataContainersElementsFilteredContainer,
     DataContainersFilteredPlatform,
 } from '../molecules/DataMapsValueEdit';
 import TextInput from './InputTypes/TextInput';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { SelectValueWithSub } from '../../hooks/form/useFormValidation';
 import { splitOnce } from '../../utils/TextUtils';
-
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        input: {
-            width: '100%',
-            margin: theme.spacing(0, 0, 1),
-        },
-        checkbox: {
-            fontSize: '11px',
-        },
-        checkboxIcon: {
-            fontSize: '14px',
-        },
-        checkboxLabel: {
-            fontSize: '11px',
-        },
-        description: {
-            width: '100%',
-            color: '#666666',
-        },
-    }),
-);
+import { SxProps } from '@mui/system';
+import { Theme } from '@mui/material/styles';
 
 const findCurrentDataElement = (
     dataElement: string,
@@ -169,7 +148,10 @@ const PlatformValueEdit: FC<PlatformValueEditProps> = (props: PlatformValueEditP
         currentDataContainer.allowCustom &&
         currentDataContainer.elements.length < 1;
 
-    const classes = useStyles();
+    const inputStyle: SxProps<Theme> = {
+        width: '100%',
+        margin: (theme) => theme.spacing(0, 0, 1),
+    };
 
     return (
         <Box>
@@ -187,7 +169,7 @@ const PlatformValueEdit: FC<PlatformValueEditProps> = (props: PlatformValueEditP
                     key: _.id,
                     text: _.name,
                 }))}
-                className={classes.input}
+                sx={inputStyle}
                 disabled={disabled}
                 required
             />
@@ -209,20 +191,22 @@ const PlatformValueEdit: FC<PlatformValueEditProps> = (props: PlatformValueEditP
                                   text: _.name,
                               }))
                     }
-                    className={classes.input}
+                    sx={inputStyle}
                     disabled={disabled}
                     required
                 />
             )}
             {hasDataMapsAndCustom && (
                 <FormControlLabel
-                    classes={{
-                        root: classes.checkbox,
-                        label: classes.checkboxLabel,
+                    sx={{
+                        fontSize: '11px',
+                        '& .MuiFormControlLabel-label': {
+                            fontSize: '11px',
+                        },
                     }}
                     control={
                         <Checkbox
-                            className={classes.checkboxIcon}
+                            sx={{ fontSize: '14px' }}
                             icon={<CheckBoxOutlineBlankIcon fontSize="inherit" />}
                             checkedIcon={<CheckBoxIcon fontSize="inherit" />}
                             name="useCustom"
@@ -249,7 +233,7 @@ const PlatformValueEdit: FC<PlatformValueEditProps> = (props: PlatformValueEditP
                     setValue={(v) => setDataElement(v)}
                     name="customDataElement"
                     label="Custom Data Element"
-                    className={classes.input}
+                    sx={inputStyle}
                     disabled={disabled}
                     required
                 />
@@ -258,7 +242,7 @@ const PlatformValueEdit: FC<PlatformValueEditProps> = (props: PlatformValueEditP
                 <SelectInput
                     value={dataElement}
                     setValue={(v) => setDataElement(v)}
-                    className={classes.input}
+                    sx={inputStyle}
                     label="Data Element"
                     name="matchId"
                     optionValues={[]}
@@ -269,7 +253,9 @@ const PlatformValueEdit: FC<PlatformValueEditProps> = (props: PlatformValueEditP
             )}
             {currentDataElement?.description !== undefined && (
                 <Box mb={1}>
-                    <small className={classes.description}>{currentDataElement.description}</small>
+                    <Box component="small" sx={{ width: '100%', color: '#666666' }}>
+                        {currentDataElement.description}
+                    </Box>
                 </Box>
             )}
             {currentDataElement?.unFilteredSubCount === 0 && (
@@ -279,7 +265,7 @@ const PlatformValueEdit: FC<PlatformValueEditProps> = (props: PlatformValueEditP
                         setValue={(v) => setRawObjectKey(v)}
                         name="rawObjectKey"
                         label="Key"
-                        className={classes.input}
+                        sx={inputStyle}
                         disabled={disabled}
                         required
                     />

@@ -1,13 +1,6 @@
 import { FC, MouseEventHandler } from 'react';
-import { Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
-
-const useStyles = makeStyles(() => ({
-    addButtonContainer: {
-        width: '100%',
-    },
-}));
+import { Box, Button } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 
 type RulesButtonProps = {
     text: string;
@@ -16,21 +9,18 @@ type RulesButtonProps = {
 };
 
 const RulesAddButton: FC<RulesButtonProps> = (props: RulesButtonProps) => {
-    const classes = useStyles();
-
     return (
-        <div className={classes.addButtonContainer}>
+        <Box sx={{ width: '100%' }}>
             <Button
                 size="small"
                 variant="outlined"
-                color="default"
                 onClick={props.onClick}
                 startIcon={<AddIcon />}
                 disabled={props.disabled}
             >
                 {props.text}
             </Button>
-        </div>
+        </Box>
     );
 };
 export default RulesAddButton;

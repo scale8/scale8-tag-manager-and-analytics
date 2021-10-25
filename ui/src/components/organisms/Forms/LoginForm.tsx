@@ -1,6 +1,5 @@
-import { makeStyles } from '@material-ui/core/styles';
 import { FC } from 'react';
-import { Box, Button } from '@material-ui/core';
+import { Box, Button } from '@mui/material';
 import FormTitle from '../../molecules/FormTitle';
 import FormError from '../../atoms/FormError';
 import LoginLinks from '../../molecules/LoginLinks';
@@ -11,25 +10,9 @@ import Link from '../../atoms/Next/Link';
 import { LoginFormProps } from '../../../types/props/forms/LoginFormProps';
 import { useConfigState } from '../../../context/AppContext';
 import { toRequestPasswordReset } from '../../../utils/NavigationPaths';
-
-const useStyles = makeStyles((theme) => ({
-    form: {
-        width: '100%', // Fix IE 11 issue.
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-        color: '#ffffff',
-        backgroundColor: theme.palette.commonColor.main,
-        '&:hover': {
-            color: '#ffffff',
-            backgroundColor: theme.palette.commonColor.main,
-        },
-    },
-}));
+import FormFull from '../../atoms/FormFull';
 
 const LoginForm: FC<LoginFormProps> = (props: LoginFormProps) => {
-    const classes = useStyles();
-
     const { useGithubSSO } = useConfigState();
 
     return (
@@ -54,10 +37,7 @@ const LoginForm: FC<LoginFormProps> = (props: LoginFormProps) => {
                     </Box>
                     <Box fontSize={18} width="100%" textAlign="center">
                         Please log in or{' '}
-                        <Link
-                            href={toRequestPasswordReset()}
-                            style={{ color: 'rgba(0, 0, 0, 0.87)' }}
-                        >
+                        <Link href={toRequestPasswordReset()} sx={{ color: 'rgba(0, 0, 0, 0.87)' }}>
                             reset you password
                         </Link>{' '}
                         if needed.
@@ -65,7 +45,7 @@ const LoginForm: FC<LoginFormProps> = (props: LoginFormProps) => {
                 </Box>
             )}
 
-            <form className={classes.form} onSubmit={props.handleSubmit}>
+            <FormFull handleSubmit={props.handleSubmit}>
                 <ControlledTextInput
                     name="email"
                     label="Email Address"
@@ -97,12 +77,12 @@ const LoginForm: FC<LoginFormProps> = (props: LoginFormProps) => {
                     fullWidth
                     variant="contained"
                     color="primary"
-                    className={classes.submit}
+                    className="formFullMainColorSubmit"
                     disabled={props.isSubmitting}
                 >
                     {props.submitText}
                 </Button>
-            </form>
+            </FormFull>
             <LoginLinks />
             {useGithubSSO && <LoginSso handleGithubButtonClick={props.handleGithubButtonClick} />}
         </LoggedOutFormContainer>

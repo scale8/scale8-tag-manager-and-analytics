@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import { ActionsPageSection } from './ActionsPageSection';
-import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import HistoryIcon from '@material-ui/icons/History';
+import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import HistoryIcon from '@mui/icons-material/History';
 import { ActionGroup } from '../../../types/TagRulesTypes';
 import { PageActionProps, pageActions } from '../../../actions/PageActions';
 import { DistributionElementContainer } from '../../molecules/DistributionElementContainer';

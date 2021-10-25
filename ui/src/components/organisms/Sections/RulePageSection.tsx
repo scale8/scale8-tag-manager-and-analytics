@@ -1,11 +1,11 @@
 import { FC } from 'react';
-import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import { Box } from '@material-ui/core';
-import HistoryIcon from '@material-ui/icons/History';
+import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import { Box } from '@mui/material';
+import HistoryIcon from '@mui/icons-material/History';
 import { Rule, Trigger } from '../../../types/TagRulesTypes';
 import { ValuesRefreshFunction } from '../../../types/GqlTypes';
 import { PageActionProps, pageActions } from '../../../actions/PageActions';

@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { SvgIconProps } from '@material-ui/core';
-import TvIcon from '@material-ui/icons/Tv';
+import { SvgIconProps } from '@mui/material';
+import TvIcon from '@mui/icons-material/Tv';
 
 const VisualActionIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

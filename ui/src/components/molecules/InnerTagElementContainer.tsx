@@ -1,31 +1,15 @@
 import { FC, ReactNode } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import {
+    Box,
     Divider,
     ListItem,
     ListItemIcon,
     ListItemSecondaryAction,
     ListItemText,
-} from '@material-ui/core';
+} from '@mui/material';
 import { SectionAction, SectionActionsSpeedDial } from './SectionActionsSpeedDial';
 import AppliedIcon from '../atoms/Icons/AppliedIcon';
 import Link from '../atoms/Next/Link';
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        border: '1px solid rgba(0, 0, 0, 0.12)',
-        marginBottom: theme.spacing(2),
-    },
-    containerHeader: {
-        margin: 0,
-        padding: 0,
-        position: 'relative',
-        listStyle: 'none',
-    },
-    content: {
-        padding: theme.spacing(2),
-    },
-}));
 
 type InnerTagElementContainerProps = {
     children: ReactNode;
@@ -43,19 +27,23 @@ type InnerTagElementContainerProps = {
 const InnerTagElementContainer: FC<InnerTagElementContainerProps> = (
     props: InnerTagElementContainerProps,
 ) => {
-    const classes = useStyles();
-
     return (
-        <div className={classes.root}>
-            <ul
-                className={classes.containerHeader}
-                style={props.highlight ? { background: '#f5f5f5' } : {}}
+        <Box sx={{ border: '1px solid rgba(0, 0, 0, 0.12)', marginBottom: 2 }}>
+            <Box
+                component="ul"
+                sx={{
+                    margin: 0,
+                    padding: 0,
+                    position: 'relative',
+                    listStyle: 'none',
+                    background: props.highlight ? '#f5f5f5' : undefined,
+                }}
             >
                 <ListItem>
                     <>
                         {props.applied !== undefined && (
                             <ListItemIcon
-                                style={{
+                                sx={{
                                     minWidth: '10px',
                                     paddingRight: '10px',
                                 }}
@@ -86,15 +74,12 @@ const InnerTagElementContainer: FC<InnerTagElementContainerProps> = (
                         </ListItemSecondaryAction>
                     </>
                 </ListItem>
-            </ul>
+            </Box>
             <Divider />
-            <div
-                className={classes.content}
-                style={props.highlight ? { background: '#f5f5f5' } : {}}
-            >
+            <Box p={2} sx={{ background: props.highlight ? '#f5f5f5' : undefined }}>
                 {props.children}
-            </div>
-        </div>
+            </Box>
+        </Box>
     );
 };
 

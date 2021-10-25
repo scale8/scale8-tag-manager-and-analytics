@@ -1,26 +1,12 @@
 import { FC } from 'react';
-import { DialogContent, DialogContentText } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { DialogContent, DialogContentText } from '@mui/material';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import ControlledSelect from '../../atoms/ControlledInputs/ControlledSelect';
 import { FormProps } from '../../../hooks/form/useFormValidation';
 import FormGqlError from '../../atoms/FormGqlError';
 import DialogActionsWithCancel from '../../molecules/DialogActionsWithCancel';
 import { RevisionPreviewValues } from '../../../dialogPages/tagManager/app/AppRevisionPreview';
-
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        form: {
-            display: 'flex',
-            flexDirection: 'column',
-            minWidth: '500px',
-        },
-        input: {
-            width: '100%',
-            margin: theme.spacing(0, 0, 3),
-        },
-    }),
-);
+import FormFlex from '../../atoms/FormFlex';
 
 type RevisionPreviewFormProps = FormProps<RevisionPreviewValues> & {
     environments: { name: string; url: string }[];
@@ -29,10 +15,8 @@ type RevisionPreviewFormProps = FormProps<RevisionPreviewValues> & {
 };
 
 const RevisionPreviewForm: FC<RevisionPreviewFormProps> = (props: RevisionPreviewFormProps) => {
-    const classes = useStyles();
-
     return (
-        <form className={classes.form} onSubmit={props.handleSubmit}>
+        <FormFlex handleSubmit={props.handleSubmit}>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
                     {props.description}
@@ -40,7 +24,7 @@ const RevisionPreviewForm: FC<RevisionPreviewFormProps> = (props: RevisionPrevie
                 <FormGqlError error={props.gqlError} />
                 {props.environments.length > 0 && (
                     <ControlledSelect
-                        className={classes.input}
+                        className="DrawerFormField"
                         label="Environment"
                         name="environment"
                         values={[
@@ -57,7 +41,7 @@ const RevisionPreviewForm: FC<RevisionPreviewFormProps> = (props: RevisionPrevie
                     name="url"
                     label="App URL"
                     formProps={props}
-                    className={classes.input}
+                    className="DrawerFormField"
                     required
                     autoFocus
                 />
@@ -68,7 +52,7 @@ const RevisionPreviewForm: FC<RevisionPreviewFormProps> = (props: RevisionPrevie
                 confirmText={props.submitText}
                 ignoreChanges
             />
-        </form>
+        </FormFlex>
     );
 };
 

@@ -1,35 +1,22 @@
 import { FC, ReactNode } from 'react';
-import { Box, Drawer } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Box, Drawer } from '@mui/material';
 import { DialogBaseProps } from '../../types/DialogTypes';
-
-const useStyles = makeStyles(() => ({
-    root: {
-        flexShrink: 0,
-    },
-    mainBox: {
-        transition: 'width 0.2s',
-        overflowX: 'hidden',
-    },
-}));
 
 type MainDrawerProps = DialogBaseProps & {
     children: ReactNode;
 };
 
 const MainDrawer: FC<MainDrawerProps> = (props: MainDrawerProps) => {
-    const classes = useStyles();
-
     const mainSectionWidth = props.width ? props.width : 432;
 
     const secondaryOpen = props.secondaryPageComponent !== undefined;
 
     return (
-        <Drawer className={classes.root} anchor="right" open={props.open}>
+        <Drawer sx={{ flexShrink: 0 }} anchor="right" open={props.open}>
             <Box
                 display="flex"
                 width={mainSectionWidth + (secondaryOpen ? 432 : 0)}
-                className={classes.mainBox}
+                sx={{ transition: 'width 0.2s', overflowX: 'hidden' }}
             >
                 <Box flexShrink={0} width={mainSectionWidth} minHeight="100vh">
                     {props.children}

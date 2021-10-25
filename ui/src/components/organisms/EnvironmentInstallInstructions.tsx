@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import SelectInput from '../atoms/InputTypes/SelectInput';
 import CheckBoxInput from '../atoms/InputTypes/CheckBoxInput';
 import CopyBlock from '../atoms/CopyBlock';
@@ -67,7 +67,7 @@ const EnvironmentInstallInstructions: FC<InstallInstructionsProps> = (
             <Box>Please select the appropriate configuration for your application:</Box>
             <Box my={2} width="100%">
                 <SelectInput
-                    style={{ width: 200 }}
+                    sx={{ width: 200 }}
                     value={type}
                     setValue={(v) => setType(v as 'Tag Manager' | 'Analytics Only')}
                     optionValues={['Tag Manager', 'Analytics Only']}
@@ -78,7 +78,7 @@ const EnvironmentInstallInstructions: FC<InstallInstructionsProps> = (
             {type === 'Analytics Only' && (
                 <Box my={2} width="100%">
                     <CheckBoxInput
-                        style={{ marginRight: 40 }}
+                        sx={{ marginRight: 40 }}
                         name="spaSupport"
                         value={spaSupport}
                         setValue={(v) => {

@@ -1,14 +1,12 @@
 import { FC, Fragment } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
-import IconButton from '@material-ui/core/IconButton';
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
-import CloseIcon from '@material-ui/icons/Close';
-import clsx from 'clsx';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+import CloseIcon from '@mui/icons-material/Close';
 import { DataMapsColumn, DataMapsTable, DataMapsTableRow } from './DataMapsTable';
-import EditIcon from '@material-ui/icons/Edit';
-import VisibilityIcon from '@material-ui/icons/Visibility';
+import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 type RowProps = {
     isPlatform: boolean;
@@ -23,17 +21,6 @@ type RowProps = {
     level: number;
 };
 
-const useRowStyles = makeStyles({
-    rowWithChildren: {
-        '& > *': {
-            borderBottom: 'unset',
-        },
-    },
-    evenRow: {
-        background: 'rgba(0, 0, 0, 0.03)',
-    },
-});
-
 const DataMapsRow: FC<RowProps> = (props: RowProps) => {
     const {
         row,
@@ -47,23 +34,28 @@ const DataMapsRow: FC<RowProps> = (props: RowProps) => {
         isPlatform,
         level,
     } = props;
-    const classes = useRowStyles();
     const hasChildren = row.varType === 'OBJECT' || row.varType === 'ARRAY_OBJECT';
 
     return (
         <Fragment>
             <TableRow
-                className={clsx(
-                    hasChildren && classes.rowWithChildren,
-                    index % 2 !== 0 && classes.evenRow,
-                )}
+                sx={{
+                    background: index % 2 !== 0 ? 'rgba(0, 0, 0, 0.03)' : undefined,
+                    ...(hasChildren
+                        ? {
+                              '& > *': {
+                                  borderBottom: 'unset',
+                              },
+                          }
+                        : {}),
+                }}
             >
                 {columns.map((column) => (
                     <TableCell key={column.field}>{row[column.field]}</TableCell>
                 ))}
 
                 <TableCell
-                    style={{
+                    sx={{
                         width: '0.1%',
                     }}
                 >
@@ -102,9 +94,13 @@ const DataMapsRow: FC<RowProps> = (props: RowProps) => {
                 </TableCell>
             </TableRow>
             {hasChildren && (
-                <TableRow className={clsx(index % 2 !== 0 && classes.evenRow)}>
+                <TableRow
+                    sx={{
+                        background: index % 2 !== 0 ? 'rgba(0, 0, 0, 0.03)' : undefined,
+                    }}
+                >
                     <TableCell
-                        style={{ paddingBottom: 0, paddingTop: 0 }}
+                        sx={{ paddingBottom: 0, paddingTop: 0 }}
                         colSpan={columns.length + 1}
                     >
                         <Box m={1}>

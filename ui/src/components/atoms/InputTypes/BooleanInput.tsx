@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { FormControlProps } from '@material-ui/core';
+import { FormControlProps } from '@mui/material';
 import SelectInput from './SelectInput';
 
 export type BooleanInputProps = Omit<FormControlProps, 'children'> & {

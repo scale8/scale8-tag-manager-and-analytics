@@ -1,5 +1,5 @@
 import { FC, ReactNode, useContext } from 'react';
-import { Box, CircularProgress } from '@material-ui/core';
+import { Box, CircularProgress } from '@mui/material';
 import { TabularData } from '../../molecules/TabularData';
 import { kebabToTitleCase } from '../../../utils/TextUtils';
 import { previewFrameContext } from '../../../context/PreviewFrameContext';

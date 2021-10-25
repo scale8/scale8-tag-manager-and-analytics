@@ -11,14 +11,14 @@ import { GithubPreparationValues } from '../../gql/generated/GithubPreparationVa
 import nameValidator from '../../utils/validators/nameValidator';
 import { DialogPageProps } from '../../types/DialogTypes';
 import { queryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
-import { Box, Button, DialogActions, DialogContent, lighten } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { grey } from '@material-ui/core/colors';
+import { Box, DialogActions, DialogContent } from '@mui/material';
 import FormGqlError from '../../components/atoms/FormGqlError';
 import GithubAccountRemoveQuery from '../../gql/mutations/GithubAccountRemoveQuery';
 import { GithubAccountRemoveValues } from '../../gql/generated/GithubAccountRemoveValues';
 import GithubLoginForUser from './GithubLoginForUser';
 import { logError } from '../../utils/logUtils';
+import { DialogConfirmButton } from '../../components/atoms/DialogConfirmButton';
+import { DialogCancelButton } from '../../components/atoms/DialogCancelButton';
 
 type GithubAccountAfterLoadProps = DialogPageProps & {
     hasLinkedSSO: boolean;
@@ -87,34 +87,9 @@ const GithubAccountUseForm: FC<GithubAccountAfterLoadProps> = (
     return <GithubPreparationForm {...formProps} />;
 };
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        dialogActions: {
-            padding: theme.spacing(2),
-            justifyContent: 'center',
-        },
-        cancel: {
-            color: theme.palette.getContrastText(grey[700]),
-            backgroundColor: grey[500],
-            '&:hover': {
-                backgroundColor: grey[700],
-            },
-        },
-        confirm: {
-            color: theme.palette.getContrastText('#0096a6'),
-            backgroundColor: lighten('#0096a6', 0.4),
-            '&:hover': {
-                backgroundColor: '#0096a6',
-            },
-        },
-    }),
-);
-
 const RemoveGithubAccountUseForm: FC<GithubAccountAfterLoadProps> = (
     props: GithubAccountAfterLoadProps,
 ) => {
-    const classes = useStyles();
-
     const [GithubAccountRemove, { loading, data, error: gqlError }] =
         useMutation<GithubAccountRemoveValues>(GithubAccountRemoveQuery);
 
@@ -128,17 +103,17 @@ const RemoveGithubAccountUseForm: FC<GithubAccountAfterLoadProps> = (
 
     return (
         <Box display="flex" flexDirection="column">
-            <DialogContent style={{ minHeight: 248 }}>
+            <DialogContent sx={{ minHeight: 248 }}>
                 <FormGqlError error={gqlError} />
                 This account is connected to the github account:
                 <br />
                 <b>{props.githubUser}</b>
             </DialogContent>
-            <DialogActions className={classes.dialogActions}>
-                <Button onClick={() => props.handleDialogClose(false)} className={classes.cancel}>
+            <DialogActions sx={{ padding: 2, justifyContent: 'center' }}>
+                <DialogCancelButton onClick={() => props.handleDialogClose(false)}>
                     Cancel
-                </Button>
-                <Button
+                </DialogCancelButton>
+                <DialogConfirmButton
                     onClick={() => {
                         (async () => {
                             try {
@@ -148,10 +123,9 @@ const RemoveGithubAccountUseForm: FC<GithubAccountAfterLoadProps> = (
                             }
                         })();
                     }}
-                    className={classes.confirm}
                 >
                     Disconnect Github Account
-                </Button>
+                </DialogConfirmButton>
             </DialogActions>
         </Box>
     );

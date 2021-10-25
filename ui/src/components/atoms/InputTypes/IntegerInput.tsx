@@ -1,6 +1,6 @@
-import { TextField } from '@material-ui/core';
+import { TextField } from '@mui/material';
 import { ChangeEvent, FC, useState } from 'react';
-import { TextFieldProps } from '@material-ui/core/TextField/TextField';
+import { TextFieldProps } from '@mui/material/TextField/TextField';
 import { autocompleteOff } from '../../../utils/BrowserUtils';
 
 export type IntegerInputProps = TextFieldProps & {
@@ -17,6 +17,7 @@ const IntegerInput: FC<IntegerInputProps> = (props: IntegerInputProps) => {
 
     return (
         <TextField
+            variant="standard"
             value={value}
             onInvalid={(event) => {
                 event.preventDefault();

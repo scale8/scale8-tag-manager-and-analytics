@@ -1,4 +1,3 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import {
     Box,
@@ -11,41 +10,17 @@ import {
     TableHead,
     TableRow,
     TextField,
-} from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import CheckIcon from '@material-ui/icons/Check';
-import EditIcon from '@material-ui/icons/Edit';
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import CheckIcon from '@mui/icons-material/Check';
+import EditIcon from '@mui/icons-material/Edit';
 import { UpdateActionPermissionProps } from '../ActionPermissions/ActionPermissionSection';
 import { ApolloError } from '@apollo/client/errors';
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from '@mui/icons-material/Add';
 import { VariableReadWriteExecuteScopeInput } from '../../../types/ActionPermissionsTypes';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { useLoggedInState } from '../../../context/AppContext';
-
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        light: {
-            color: theme.palette.secondary.main,
-            '& th, & td': {
-                color: theme.palette.secondary.main,
-            },
-        },
-        tableRow: {
-            '&:last-child td, &:last-child th': {
-                borderBottom: 0,
-            },
-        },
-        addButton: {
-            marginTop: theme.spacing(1),
-        },
-        checkbox: {
-            '&:hover': {
-                backgroundColor: 'transparent',
-            },
-        },
-    }),
-);
 
 export type ActionPermissionTableRowProps = {
     eventName?: string;
@@ -70,15 +45,13 @@ type ActionPermissionBooleanColumnProps = {
 const ActionPermissionBooleanColumn: FC<ActionPermissionBooleanColumnProps> = (
     props: ActionPermissionBooleanColumnProps,
 ) => {
-    const classes = useStyles();
-
     const { editMode, editChecked, checked, onChange } = props;
 
     return (
         <TableCell width={100} align="center">
             {editMode ? (
                 <Checkbox
-                    className={classes.checkbox}
+                    sx={{ '&:hover': { backgroundColor: 'transparent' } }}
                     icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
                     checkedIcon={<CheckBoxIcon fontSize="small" />}
                     checked={editChecked}
@@ -98,7 +71,6 @@ const ActionPermissionBooleanColumn: FC<ActionPermissionBooleanColumnProps> = (
 const ActionPermissionTableRow: FC<ActionPermissionTableRowProps> = (
     props: ActionPermissionTableRowProps,
 ) => {
-    const classes = useStyles();
     const { eventName, host, variableScope, index, editIndex, commit, cancel, deleteRow, editRow } =
         props;
 
@@ -125,11 +97,18 @@ const ActionPermissionTableRow: FC<ActionPermissionTableRowProps> = (
     }, [variableScope, eventName, host, index, editIndex]);
 
     return (
-        <TableRow className={classes.tableRow}>
+        <TableRow
+            sx={{
+                '&:last-of-type td, &:last-of-type th': {
+                    borderBottom: 0,
+                },
+            }}
+        >
             {eventName !== undefined && (
                 <TableCell component="th" scope="row" width={450}>
                     {index === editIndex ? (
                         <TextField
+                            variant="standard"
                             fullWidth
                             value={editEventName}
                             onChange={(
@@ -147,6 +126,7 @@ const ActionPermissionTableRow: FC<ActionPermissionTableRowProps> = (
                 <TableCell component="th" scope="row" width={450}>
                     {index === editIndex ? (
                         <TextField
+                            variant="standard"
                             fullWidth
                             value={editHost}
                             onChange={(
@@ -165,6 +145,7 @@ const ActionPermissionTableRow: FC<ActionPermissionTableRowProps> = (
                     <TableCell component="th" scope="row" width={170}>
                         {index === editIndex ? (
                             <TextField
+                                variant="standard"
                                 value={editVariableName}
                                 onChange={(
                                     event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
@@ -285,8 +266,6 @@ export type ActionPermissionTableProps = UpdateActionPermissionProps & {
 const ActionPermissionTable: FC<ActionPermissionTableProps> = (
     props: ActionPermissionTableProps,
 ) => {
-    const classes = useStyles();
-
     const { templateInteractions } = useLoggedInState();
     const { setSnackbarError } = templateInteractions;
 
@@ -379,11 +358,18 @@ const ActionPermissionTable: FC<ActionPermissionTableProps> = (
 
     return (
         <>
-            <Box mt={3} className={classes.light}>
+            <Box mt={3} sx={{ color: (theme) => theme.palette.secondary.main }}>
                 {title}
             </Box>
             {(editIndex === -1 || (elements !== undefined && elements.length > 0)) && (
-                <Table className={classes.light}>
+                <Table
+                    sx={{
+                        color: (theme) => theme.palette.secondary.main,
+                        '& th, & td': {
+                            color: (theme) => theme.palette.secondary.main,
+                        },
+                    }}
+                >
                     <TableHead>
                         {permissionElementKey === 'eventNames' && (
                             <TableRow>
@@ -472,12 +458,11 @@ const ActionPermissionTable: FC<ActionPermissionTableProps> = (
                 <Button
                     size="small"
                     variant="outlined"
-                    color="default"
                     onClick={() => {
                         setEditIndex(-1);
                     }}
                     startIcon={<AddIcon />}
-                    className={classes.addButton}
+                    sx={{ marginTop: 1 }}
                     disabled={editIndex !== -2}
                 >
                     {submitText}

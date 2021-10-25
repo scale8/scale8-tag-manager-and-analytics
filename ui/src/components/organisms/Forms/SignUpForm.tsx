@@ -1,4 +1,3 @@
-import { makeStyles } from '@material-ui/core/styles';
 import { FC, useEffect, useState } from 'react';
 import {
     Box,
@@ -8,8 +7,7 @@ import {
     FormControlLabel,
     FormGroup,
     FormHelperText,
-    useTheme,
-} from '@material-ui/core';
+} from '@mui/material';
 import FormError from '../../atoms/FormError';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import SignUpContainer from '../../molecules/SignUpContainer';
@@ -17,69 +15,24 @@ import Loader from '../Loader';
 import Captcha from '../../atoms/Captcha';
 import { SignUpFormProps } from '../../../types/props/forms/SignUpFormProps';
 import Link from '../../atoms/Next/Link';
-
-const useTagManagerStyles = makeStyles((theme) => ({
-    form: {
-        width: '100%', // Fix IE 11 issue.
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-        color: '#ffffff',
-        backgroundColor: theme.palette.tagManagerColor.main,
-        '&:hover': {
-            color: '#ffffff',
-            backgroundColor: theme.palette.tagManagerColor.main,
-        },
-    },
-}));
-const useDataManagerStyles = makeStyles((theme) => ({
-    form: {
-        width: '100%', // Fix IE 11 issue.
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-        color: '#ffffff',
-        backgroundColor: theme.palette.dataManagerColor.main,
-        '&:hover': {
-            color: '#ffffff',
-            backgroundColor: theme.palette.dataManagerColor.main,
-        },
-    },
-}));
-const useInviteStyles = makeStyles((theme) => ({
-    form: {
-        width: '100%', // Fix IE 11 issue.
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-        color: '#ffffff',
-        backgroundColor: theme.palette.commonColor.main,
-        '&:hover': {
-            color: '#ffffff',
-            backgroundColor: theme.palette.commonColor.main,
-        },
-    },
-}));
+import FormFull from '../../atoms/FormFull';
 
 const SignUpForm: FC<SignUpFormProps> = (props: SignUpFormProps) => {
     const { type, values, handleChange, errors, qsEmail } = props;
 
-    const theme = useTheme();
-
     const setCaptchaToken = (token: string) => handleChange('CAPTCHAToken', token);
 
-    const selectClasses = () => {
+    const determineSubmitClass = () => {
         if (type === 'tag-manager') {
-            return useTagManagerStyles();
+            return 'formFullTMColorSubmit';
         }
 
         if (type === 'data-manager') {
-            return useDataManagerStyles();
+            return 'formFullDMColorSubmit';
         }
 
-        return useInviteStyles();
+        return 'formFullMainColorSubmit';
     };
-    const classes = selectClasses();
 
     const [generatePassword, setGeneratePassword] = useState(true);
 
@@ -138,7 +91,7 @@ const SignUpForm: FC<SignUpFormProps> = (props: SignUpFormProps) => {
                     <FormError error={props.gqlError.message} />
                 </Box>
             )}
-            <form className={classes.form} onSubmit={props.handleSubmit}>
+            <FormFull handleSubmit={props.handleSubmit}>
                 <ControlledTextInput
                     name="tempAccessCode"
                     label="Public beta access code"
@@ -238,7 +191,7 @@ const SignUpForm: FC<SignUpFormProps> = (props: SignUpFormProps) => {
                 <FormControl error={errors['agree'] !== undefined}>
                     <FormGroup>
                         <FormControlLabel
-                            color={theme.palette.error.main}
+                            sx={{ color: (theme) => theme.palette.error.main }}
                             // error={errors['agree']}
                             control={
                                 <Checkbox
@@ -249,23 +202,23 @@ const SignUpForm: FC<SignUpFormProps> = (props: SignUpFormProps) => {
                                 />
                             }
                             label={
-                                <span
-                                    style={
-                                        errors['agree'] === undefined
-                                            ? {}
-                                            : {
-                                                  color: theme.palette.error.main,
-                                              }
-                                    }
+                                <Box
+                                    component="span"
+                                    sx={{
+                                        color: (theme) =>
+                                            errors['agree'] === undefined
+                                                ? undefined
+                                                : theme.palette.error.main,
+                                    }}
                                 >
                                     I agree to the{' '}
                                     <Link
                                         href={'https://scale8.com/legal/terms'}
-                                        style={{ color: 'rgba(0, 0, 0, 0.87)' }}
+                                        sx={{ color: 'rgba(0, 0, 0, 0.87)' }}
                                     >
                                         Terms of Service
                                     </Link>
-                                </span>
+                                </Box>
                             }
                         />
                     </FormGroup>
@@ -284,12 +237,12 @@ const SignUpForm: FC<SignUpFormProps> = (props: SignUpFormProps) => {
                     type="submit"
                     fullWidth
                     variant="contained"
-                    className={classes.submit}
+                    className={determineSubmitClass()}
                     disabled={props.isSubmitting}
                 >
                     {props.submitText}
                 </Button>
-            </form>
+            </FormFull>
         </SignUpContainer>
     );
 };

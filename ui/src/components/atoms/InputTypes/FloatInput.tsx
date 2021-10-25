@@ -1,6 +1,6 @@
 import { ChangeEvent, FC, useState } from 'react';
-import { TextField } from '@material-ui/core';
-import { TextFieldProps } from '@material-ui/core/TextField/TextField';
+import { TextField } from '@mui/material';
+import { TextFieldProps } from '@mui/material/TextField/TextField';
 import { autocompleteOff } from '../../../utils/BrowserUtils';
 
 export type FloatInputProps = TextFieldProps & {
@@ -19,6 +19,7 @@ const FloatInput: FC<FloatInputProps> = (props: FloatInputProps) => {
 
     return (
         <TextField
+            variant="standard"
             value={
                 value === null ? '' : `${value}${trailingDecimalPoint ? '.' : ''}${trailingZeros}`
             }

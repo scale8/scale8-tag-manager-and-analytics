@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Box, CircularProgress } from '@material-ui/core';
+import { Box, CircularProgress } from '@mui/material';
 
 const Loader: FC = () => {
     return (

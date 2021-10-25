@@ -1,9 +1,9 @@
 import { FC } from 'react';
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
-import { SvgIconProps, Tooltip, useTheme } from '@material-ui/core';
-import WarningIcon from '@material-ui/icons/Warning';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
+import { SvgIconProps, Tooltip } from '@mui/material';
+import WarningIcon from '@mui/icons-material/Warning';
 
 type AppliedIconProps = {
     iconProps?: SvgIconProps;
@@ -14,13 +14,11 @@ type AppliedIconProps = {
 };
 
 const AppliedIcon: FC<AppliedIconProps> = (props: AppliedIconProps) => {
-    const theme = useTheme();
-
     const { iconProps, ruleGroupCompleted, applied, verb, error } = props;
     if (error) {
         return (
             <Tooltip title={verb}>
-                <WarningIcon style={{ color: theme.palette.error.main }} {...iconProps} />
+                <WarningIcon sx={{ color: (theme) => theme.palette.error.main }} {...iconProps} />
             </Tooltip>
         );
     }
@@ -29,7 +27,7 @@ const AppliedIcon: FC<AppliedIconProps> = (props: AppliedIconProps) => {
         return (
             <Tooltip title={verb}>
                 <CheckCircleOutlineIcon
-                    style={{ color: theme.palette.success.main }}
+                    sx={{ color: (theme) => theme.palette.success.main }}
                     {...iconProps}
                 />
             </Tooltip>
@@ -39,14 +37,14 @@ const AppliedIcon: FC<AppliedIconProps> = (props: AppliedIconProps) => {
     if (!ruleGroupCompleted) {
         return (
             <Tooltip title="Pending">
-                <HourglassEmptyIcon style={{ color: '#888888' }} {...iconProps} />
+                <HourglassEmptyIcon sx={{ color: '#888888' }} {...iconProps} />
             </Tooltip>
         );
     }
 
     return (
         <Tooltip title={`Not ${verb}`}>
-            <HighlightOffIcon style={{ color: '#888888' }} {...iconProps} />
+            <HighlightOffIcon sx={{ color: '#888888' }} {...iconProps} />
         </Tooltip>
     );
 };

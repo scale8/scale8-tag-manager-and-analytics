@@ -2,7 +2,7 @@
 
 import { FC } from 'react';
 import { ConditionMode } from '../gql/generated/globalTypes';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import {
     buildConditionRuleCreateInput,
     ConditionRuleFormProps,

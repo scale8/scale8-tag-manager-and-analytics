@@ -8,44 +8,11 @@ import {
     Step,
     StepLabel,
     Stepper,
-} from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+} from '@mui/material';
 import { DataMapsPayload, DataMapsPayloadBuilder } from './DataMapsPayloadBuilder';
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from '@mui/icons-material/Close';
 import { DataMapsPayloadValues } from '../../types/DataMapsTypes';
 import { IngestEndpointDataMap } from '../../types/IngestEndpointsTypes';
-
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        header: {
-            minWidth: '700px',
-            flexShrink: 0,
-            borderBottom: '1px solid #dddddd',
-        },
-        footer: {
-            borderTop: '1px solid #dddddd',
-            flexShrink: 0,
-            minHeight: '51px',
-            padding: theme.spacing(1),
-            justifyContent: 'center',
-        },
-        content: {
-            flexGrow: 1,
-            overflow: 'auto',
-            minHeight: '2em',
-        },
-        stepper: {
-            padding: theme.spacing(2),
-            width: '550px',
-        },
-        closeButton: {
-            position: 'absolute',
-            right: '11px',
-            top: '11px',
-            color: theme.palette.grey[700],
-        },
-    }),
-);
 
 export type DialogWithPayloadBuilderProps = {
     dataMaps: IngestEndpointDataMap[];
@@ -58,8 +25,6 @@ export type DialogWithPayloadBuilderProps = {
 const DialogWithPayloadBuilder: FC<DialogWithPayloadBuilderProps> = (
     props: PropsWithChildren<DialogWithPayloadBuilderProps>,
 ) => {
-    const classes = useStyles();
-
     const { handleDialogClose, children, payload, ...payloadBuilderProps } = props;
 
     const [activeStep, setActiveStep] = useState(0);
@@ -78,8 +43,20 @@ const DialogWithPayloadBuilder: FC<DialogWithPayloadBuilderProps> = (
 
     return (
         <>
-            <div className={classes.header}>
-                <Stepper className={classes.stepper} activeStep={activeStep}>
+            <Box
+                sx={{
+                    minWidth: '700px',
+                    flexShrink: 0,
+                    borderBottom: '1px solid #dddddd',
+                }}
+            >
+                <Stepper
+                    sx={{
+                        padding: (theme) => theme.spacing(2),
+                        width: '550px',
+                    }}
+                    activeStep={activeStep}
+                >
                     {steps.map((label) => {
                         return (
                             <Step key={label}>
@@ -91,13 +68,25 @@ const DialogWithPayloadBuilder: FC<DialogWithPayloadBuilderProps> = (
                 <IconButton
                     size="small"
                     onClick={() => handleDialogClose(true)}
-                    className={classes.closeButton}
+                    sx={{
+                        position: 'absolute',
+                        right: '11px',
+                        top: '11px',
+                        color: (theme) => theme.palette.grey[700],
+                    }}
                     aria-label="close"
                 >
                     <CloseIcon />
                 </IconButton>
-            </div>
-            <DialogContent className={classes.content}>
+            </Box>
+            <DialogContent
+                sx={{
+                    padding: (theme) => theme.spacing(1, 3),
+                    flexGrow: 1,
+                    overflow: 'auto',
+                    minHeight: '2em',
+                }}
+            >
                 <Box display={activeStep === 0 ? 'block' : 'none'}>
                     <DataMapsPayloadBuilder
                         {...payloadBuilderProps}
@@ -109,7 +98,15 @@ const DialogWithPayloadBuilder: FC<DialogWithPayloadBuilderProps> = (
                 </Box>
                 {activeStep > 0 && children}
             </DialogContent>
-            <DialogActions className={classes.footer}>
+            <DialogActions
+                sx={{
+                    borderTop: '1px solid #dddddd',
+                    flexShrink: 0,
+                    minHeight: '51px',
+                    padding: (theme) => theme.spacing(1),
+                    justifyContent: 'center',
+                }}
+            >
                 {payload === null ? (
                     <Box fontWeight={600} mb="3px">
                         Please specify all the checked values

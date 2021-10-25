@@ -1,43 +1,29 @@
-import { makeStyles } from '@material-ui/core/styles';
 import { ChangeEvent, ReactElement, useState } from 'react';
-import { Box, Divider, Grid, IconButton, TextField } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import AddIcon from '@material-ui/icons/Add';
+import { Box, Divider, Grid, IconButton, TextField } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import AddIcon from '@mui/icons-material/Add';
 import { EnvironmentVariablesInputProps } from '../../types/props/EnvironmentVariablesInputProps';
 
-const useStyles = makeStyles((theme) => ({
-    arrayContainer: {
-        width: '100%',
-        borderRadius: '4px',
-        border: '1px solid #e1e4e8',
-    },
-    sectionContainer: {
-        minHeight: theme.spacing(2),
-        padding: theme.spacing(1),
-    },
-    label: {
-        marginTop: theme.spacing(1),
-        fontSize: '0.9em',
-    },
-    input: {
-        width: '100%',
-        margin: theme.spacing(0, 0, 1),
-    },
-}));
-
-const EnvironmentVariablesInput = <T extends { [key: string]: any }>(
-    props: EnvironmentVariablesInputProps,
-): ReactElement => {
-    const classes = useStyles();
+const EnvironmentVariablesInput = (props: EnvironmentVariablesInputProps): ReactElement => {
     const { values, label } = props;
     const [currentKey, setCurrentKey] = useState('');
     const [currentValue, setCurrentValue] = useState('');
 
     return (
         <>
-            <label className={classes.label}>{label}</label>
-            <div className={classes.arrayContainer}>
-                <div className={classes.sectionContainer}>
+            <Box
+                component="label"
+                sx={{ marginTop: (theme) => theme.spacing(1), fontSize: '0.9em' }}
+            >
+                {label}
+            </Box>
+            <Box sx={{ width: '100%', borderRadius: '4px', border: '1px solid #e1e4e8' }}>
+                <Box
+                    sx={{
+                        minHeight: (theme) => theme.spacing(2),
+                        padding: (theme) => theme.spacing(1),
+                    }}
+                >
                     {values.length === 0 && (
                         <Box m={1} textAlign="center">
                             <small>No environment variables</small>
@@ -61,9 +47,16 @@ const EnvironmentVariablesInput = <T extends { [key: string]: any }>(
                             </Grid>
                         </Grid>
                     ))}
-                </div>
+                </Box>
                 <Divider />
-                <Grid container alignItems="center" className={classes.sectionContainer}>
+                <Grid
+                    container
+                    alignItems="center"
+                    sx={{
+                        minHeight: (theme) => theme.spacing(2),
+                        padding: (theme) => theme.spacing(1),
+                    }}
+                >
                     <Grid item xs>
                         <TextField
                             label="Key"
@@ -110,7 +103,7 @@ const EnvironmentVariablesInput = <T extends { [key: string]: any }>(
                         </IconButton>
                     </Grid>
                 </Grid>
-            </div>
+            </Box>
         </>
     );
 };

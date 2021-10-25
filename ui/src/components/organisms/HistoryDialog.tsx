@@ -1,45 +1,25 @@
 import { FC, ReactNode } from 'react';
-import { DialogContent, DialogContentText, Paper } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Box, DialogContent, DialogContentText, Paper } from '@mui/material';
 import { InfoButton, InfoProps } from '../molecules/InfoButton';
 import InfoDialogTitle from '../molecules/InfoDialogTitle';
-import Timeline from '@material-ui/lab/Timeline';
-import TimelineItem from '@material-ui/lab/TimelineItem';
-import TimelineSeparator from '@material-ui/lab/TimelineSeparator';
-import TimelineConnector from '@material-ui/lab/TimelineConnector';
-import TimelineOppositeContent from '@material-ui/lab/TimelineOppositeContent';
-import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
-import Typography from '@material-ui/core/Typography';
+import Timeline from '@mui/lab/Timeline';
+import TimelineItem from '@mui/lab/TimelineItem';
+import TimelineSeparator from '@mui/lab/TimelineSeparator';
+import TimelineConnector from '@mui/lab/TimelineConnector';
+import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
+import Typography from '@mui/material/Typography';
 import {
     EntitiesHistory,
     EntitiesHistory_getHistoryForEntities,
 } from '../../gql/generated/EntitiesHistory';
 import { snakeToTitleCase } from '../../utils/TextUtils';
-import { TimelineContent } from '@material-ui/lab';
-import TimelineDot from '@material-ui/lab/TimelineDot';
+import { TimelineContent } from '@mui/lab';
+import TimelineDot from '@mui/lab/TimelineDot';
 import { timestampDisplay } from '../../utils/DateTimeUtils';
-
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            flexDirection: 'column',
-            width: '700px',
-        },
-        paper: {
-            padding: '6px 16px',
-            marginBottom: theme.spacing(5),
-        },
-        comments: {
-            marginTop: theme.spacing(1),
-            fontSize: '0.9em',
-            color: 'rgba(0, 0, 0, 0.54)',
-        },
-    }),
-);
 
 export type HistoryDialogProps = {
     handleDialogClose: (checkChanges: boolean) => void;
@@ -51,8 +31,6 @@ export type HistoryDialogProps = {
 type Audit = EntitiesHistory_getHistoryForEntities;
 
 const HistoryDialog: FC<HistoryDialogProps> = (props: HistoryDialogProps) => {
-    const classes = useStyles();
-
     const chooseDot = (action: string, method: string): ReactNode => {
         if (method === 'ADD_LINKED_ENTITY') {
             return (
@@ -103,17 +81,11 @@ const HistoryDialog: FC<HistoryDialogProps> = (props: HistoryDialogProps) => {
                 {props.title}
                 {props.formInfoProps !== undefined && <InfoButton {...props.formInfoProps} />}
             </InfoDialogTitle>
-            <DialogContent
-                style={{
-                    margin: 0,
-                    padding: 0,
-                }}
-                dividers
-            >
-                <div className={classes.root}>
+            <DialogContent sx={{ margin: 0, padding: 0 }} dividers>
+                <Box sx={{ display: 'flex', flexDirection: 'column', width: '700px' }}>
                     <DialogContent>
                         <DialogContentText component="div" id="alert-dialog-description">
-                            <Timeline align="alternate">
+                            <Timeline position="alternate">
                                 {props.historyData.getHistoryForEntities.map(
                                     (audit: Audit, index) => (
                                         <TimelineItem key={audit.id}>
@@ -132,7 +104,10 @@ const HistoryDialog: FC<HistoryDialogProps> = (props: HistoryDialogProps) => {
                                             </TimelineSeparator>
 
                                             <TimelineContent>
-                                                <Paper elevation={3} className={classes.paper}>
+                                                <Paper
+                                                    elevation={3}
+                                                    sx={{ padding: '6px 16px', marginBottom: 5 }}
+                                                >
                                                     <Typography variant="h6" component="h1">
                                                         {audit.user === null
                                                             ? 'System'
@@ -150,7 +125,11 @@ const HistoryDialog: FC<HistoryDialogProps> = (props: HistoryDialogProps) => {
                                                     {audit.comments !== '' &&
                                                         audit.comments !== null && (
                                                             <Typography
-                                                                className={classes.comments}
+                                                                sx={{
+                                                                    marginTop: 1,
+                                                                    fontSize: '0.9em',
+                                                                    color: 'rgba(0, 0, 0, 0.54)',
+                                                                }}
                                                             >
                                                                 {audit.comments}
                                                             </Typography>
@@ -163,7 +142,7 @@ const HistoryDialog: FC<HistoryDialogProps> = (props: HistoryDialogProps) => {
                             </Timeline>
                         </DialogContentText>
                     </DialogContent>
-                </div>
+                </Box>
             </DialogContent>
         </>
     );

@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import TrackChangesIcon from '@material-ui/icons/TrackChanges';
-import { SvgIconProps } from '@material-ui/core';
+import TrackChangesIcon from '@mui/icons-material/TrackChanges';
+import { SvgIconProps } from '@mui/material';
 
 const IngestEndpointIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

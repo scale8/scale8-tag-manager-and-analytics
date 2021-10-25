@@ -1,37 +1,13 @@
-import { makeStyles } from '@material-ui/core/styles';
 import { FC, useEffect } from 'react';
-import { Box, IconButton } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import AddIcon from '@material-ui/icons/Add';
-import { TextFieldProps } from '@material-ui/core/TextField/TextField';
-import clsx from 'clsx';
+import { Box, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import AddIcon from '@mui/icons-material/Add';
+import { TextFieldProps } from '@mui/material/TextField/TextField';
 import TextInput from './InputTypes/TextInput';
 import { PlatformDataMapValidation } from '../../types/DataMapsTypes';
 import SelectInput from './InputTypes/SelectInput';
 import { ValidationType } from '../../gql/generated/globalTypes';
 import IntegerInput from './InputTypes/IntegerInput';
-
-const useStyles = makeStyles((theme) => ({
-    arrayContainer: {
-        width: '100%',
-        borderRadius: '4px',
-        border: '1px solid #e1e4e8',
-    },
-    arrayContainerUnContained: {
-        width: '100%',
-        borderRadius: 0,
-        border: 0,
-        padding: theme.spacing(1, 0),
-    },
-    lineContainer: {
-        display: 'flex',
-        marginBottom: '8px',
-    },
-    label: {
-        marginTop: theme.spacing(1),
-        fontSize: '0.9em',
-    },
-}));
 
 export type ValidationInputProps = Omit<TextFieldProps, 'value'> & {
     name: string;
@@ -47,7 +23,6 @@ export type ValidationInputProps = Omit<TextFieldProps, 'value'> & {
 };
 
 const ValidationRulesInput: FC<ValidationInputProps> = (props: ValidationInputProps) => {
-    const classes = useStyles();
     const {
         name,
         label,
@@ -70,17 +45,20 @@ const ValidationRulesInput: FC<ValidationInputProps> = (props: ValidationInputPr
 
     return (
         <>
-            <label className={classes.label}>
+            <Box component="label" sx={{ marginTop: 1, fontSize: '0.9em' }}>
                 {label}
                 {required && contained && ' *'}
-            </label>
-            <div
-                className={clsx(
-                    contained ? classes.arrayContainer : classes.arrayContainerUnContained,
-                )}
+            </Box>
+            <Box
+                sx={{
+                    width: '100%',
+                    borderRadius: contained ? '4px' : 0,
+                    border: contained ? '1px solid #e1e4e8' : 0,
+                    padding: (theme) => (contained ? undefined : theme.spacing(1, 0)),
+                }}
             >
                 {values.map((currentValue, index) => (
-                    <div className={classes.lineContainer} key={index}>
+                    <Box sx={{ display: 'flex', marginBottom: '8px' }} key={index}>
                         <Box
                             flexGrow={1}
                             display="flex"
@@ -186,7 +164,7 @@ const ValidationRulesInput: FC<ValidationInputProps> = (props: ValidationInputPr
                                 </Box>
                             )}
                         </Box>
-                    </div>
+                    </Box>
                 ))}
                 {!textFieldProps.disabled && (
                     <Box p={1}>
@@ -201,7 +179,7 @@ const ValidationRulesInput: FC<ValidationInputProps> = (props: ValidationInputPr
                         </IconButton>
                     </Box>
                 )}
-            </div>
+            </Box>
         </>
     );
 };

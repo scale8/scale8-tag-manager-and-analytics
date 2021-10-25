@@ -1,13 +1,13 @@
 import { FC } from 'react';
 import TextInput from './TextInput';
-import DateTimeStringInput from './DateTimeStringInput';
-import DateTimeStampInput from './DateTimeStampInput';
 import IntegerInput from './IntegerInput';
 import FloatInput from './FloatInput';
 import ArrayInput from './ArrayInput';
 import BooleanInput from './BooleanInput';
 import { dataMapValueToString } from '../../../utils/DataMapUtils';
 import { VarType } from '../../../gql/generated/globalTypes';
+import DateStampInput from './DateStampInput';
+import DateStringInput from './DateStringInput';
 
 export type FormElementWithVarTypeProps = {
     name: string;
@@ -26,6 +26,8 @@ const FormElementWithVarType: FC<FormElementWithVarTypeProps> = (
     const { varType, values, setValue, removeArrayElement, addArrayElement, name, disabled } =
         props;
 
+    const sxStyle = { width: '100%', marginBottom: '8px' };
+
     if (varType === VarType.STRING) {
         return (
             <TextInput
@@ -34,7 +36,7 @@ const FormElementWithVarType: FC<FormElementWithVarTypeProps> = (
                 setValue={(v) => setValue(v, 0)}
                 name={name}
                 variant="standard"
-                style={{ width: '100%', marginBottom: '8px' }}
+                sx={sxStyle}
                 disabled={disabled}
             />
         );
@@ -48,7 +50,7 @@ const FormElementWithVarType: FC<FormElementWithVarTypeProps> = (
                 setValue={(v) => setValue(v, 0)}
                 name={name}
                 variant="standard"
-                style={{ width: '100%', marginBottom: '8px' }}
+                sx={sxStyle}
                 disabled={disabled}
             />
         );
@@ -56,26 +58,28 @@ const FormElementWithVarType: FC<FormElementWithVarTypeProps> = (
 
     if (varType === VarType.DATETIME) {
         return (
-            <DateTimeStringInput
+            <DateStringInput
                 required
                 value={values[0].toString()}
                 setValue={(v) => setValue(v, 0)}
                 name={name}
-                style={{ width: '100%', marginBottom: '8px' }}
+                sx={sxStyle}
                 disabled={disabled}
+                includeTime
             />
         );
     }
 
     if (varType === VarType.TIMESTAMP) {
         return (
-            <DateTimeStampInput
+            <DateStampInput
                 required
                 value={Number.isInteger(values[0]) ? (values[0] as number) : ''}
                 setValue={(v) => setValue(v, 0)}
                 name={name}
-                style={{ width: '100%', marginBottom: '8px' }}
+                sx={sxStyle}
                 disabled={disabled}
+                includeTime
             />
         );
     }
@@ -87,7 +91,7 @@ const FormElementWithVarType: FC<FormElementWithVarTypeProps> = (
                 value={Number.isInteger(values[0]) ? (values[0] as number) : ''}
                 setValue={(v) => setValue(v, 0)}
                 name={name}
-                style={{ width: '100%', marginBottom: '8px' }}
+                sx={sxStyle}
                 disabled={disabled}
             />
         );
@@ -100,7 +104,7 @@ const FormElementWithVarType: FC<FormElementWithVarTypeProps> = (
                 value={isNaN(parseFloat(values[0].toString())) ? '' : (values[0] as number)}
                 setValue={(v) => setValue(v, 0)}
                 name={name}
-                style={{ width: '100%', marginBottom: '8px' }}
+                sx={sxStyle}
                 disabled={disabled}
             />
         );

@@ -5,20 +5,20 @@ import {
     RowAction,
     RowData,
 } from '../components/molecules/S8Table/S8TableTypes';
-import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
-import LockIcon from '@material-ui/icons/Lock';
-import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import SettingsIcon from '@material-ui/icons/Settings';
-import CodeIcon from '@material-ui/icons/Code';
-import HistoryIcon from '@material-ui/icons/History';
-import PublishIcon from '@material-ui/icons/Publish';
-import LockOpenIcon from '@material-ui/icons/LockOpen';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
+import LockIcon from '@mui/icons-material/Lock';
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import SettingsIcon from '@mui/icons-material/Settings';
+import CodeIcon from '@mui/icons-material/Code';
+import HistoryIcon from '@mui/icons-material/History';
+import PublishIcon from '@mui/icons-material/Publish';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
 
 export const buildEditAction = (
     onClick: (data: RowData) => void,

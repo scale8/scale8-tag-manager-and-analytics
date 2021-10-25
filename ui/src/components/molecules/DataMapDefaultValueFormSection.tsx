@@ -1,4 +1,4 @@
-import { TextFieldProps } from '@material-ui/core/TextField/TextField';
+import { TextFieldProps } from '@mui/material/TextField/TextField';
 import { FormProps } from '../../hooks/form/useFormValidation';
 import { ReactElement } from 'react';
 import { VarType } from '../../gql/generated/globalTypes';
@@ -6,8 +6,6 @@ import ControlledTextInput from '../atoms/ControlledInputs/ControlledTextInput';
 import ControlledIntegerInput from '../atoms/ControlledInputs/ControlledIntegerInput';
 import ControlledFloatInput from '../atoms/ControlledInputs/ControlledFloatInput';
 import ArrayInput from '../atoms/InputTypes/ArrayInput';
-import ControlledDateTimeStampInput from '../atoms/ControlledInputs/ControlledDateTimeStampInput';
-import ControlledDateTimeStringInput from '../atoms/ControlledInputs/ControlledDateTimeStringInput';
 import ControlledBooleanSelect from '../atoms/ControlledInputs/ControlledBooleanSelect';
 import { isVarTypeArray } from '../../utils/VarTypeUtils';
 import ControlledCodeInput from '../atoms/ControlledInputs/ControlledCodeInput';
@@ -77,23 +75,23 @@ const DataMapDefaultValueFormSection = <T extends { [key: string]: any }>(
             );
         } else if (varType === VarType.TIMESTAMP) {
             return (
-                <ControlledDateTimeStampInput
+                <ControlledDateStampInput
                     name="defaultValue"
                     label="Default Value"
                     formProps={formProps}
                     disabled={props.readOnly}
-                    fullWidth
+                    includeTime
                     required
                 />
             );
         } else if (varType === VarType.DATETIME) {
             return (
-                <ControlledDateTimeStringInput
+                <ControlledDateStringInput
                     name="defaultValue"
                     label="Default Value"
                     formProps={formProps}
                     disabled={props.readOnly}
-                    fullWidth
+                    includeTime
                     required
                 />
             );
@@ -229,7 +227,7 @@ const DataMapDefaultValueFormSection = <T extends { [key: string]: any }>(
                     label="Default Value"
                     formProps={formProps}
                     disabled={props.readOnly}
-                    style={{ width: '100%' }}
+                    sx={{ width: '100%' }}
                 />
             );
         } else if (platformDataMapType === 'Country') {
@@ -257,7 +255,6 @@ const DataMapDefaultValueFormSection = <T extends { [key: string]: any }>(
                 <ControlledDateStampInput
                     name="defaultValue"
                     label="Default Value"
-                    fullWidth
                     formProps={formProps}
                 />
             );
@@ -266,26 +263,25 @@ const DataMapDefaultValueFormSection = <T extends { [key: string]: any }>(
                 <ControlledDateStringInput
                     name="defaultValue"
                     label="Default Value"
-                    fullWidth
                     formProps={formProps}
                 />
             );
         } else if (platformDataMapType === 'DateTime Stamp') {
             return (
-                <ControlledDateTimeStampInput
+                <ControlledDateStampInput
                     name="defaultValue"
                     label="Default Value"
-                    fullWidth
                     formProps={formProps}
+                    includeTime
                 />
             );
         } else if (platformDataMapType === 'DateTime String') {
             return (
-                <ControlledDateTimeStringInput
+                <ControlledDateStringInput
                     name="defaultValue"
                     label="Default Value"
-                    fullWidth
                     formProps={formProps}
+                    includeTime
                 />
             );
         } else if (

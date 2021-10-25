@@ -1,8 +1,7 @@
 import { Dispatch, FC, ReactNode, SetStateAction } from 'react';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { TemplatedActionFormProps } from '../../types/props/forms/TemplatedActionFormProps';
-import { Alert } from '@material-ui/lab';
-import { Box, Collapse } from '@material-ui/core';
+import { Alert } from '@mui/material';
+import { Box, Collapse } from '@mui/material';
 import { PlatformActionPermissionInput } from '../../types/ActionPermissionsTypes';
 import { PlatformActionPermissionRequest } from '../../gql/generated/globalTypes';
 import GlobalVariableActionPermission from '../molecules/ActionPermissions/GlobalVariableActionPermission';
@@ -18,33 +17,7 @@ import CreateIFrameActionPermission from '../molecules/ActionPermissions/CreateI
 import PixelActionPermission from '../molecules/ActionPermissions/PixelActionPermission';
 import ReadPageUrlActionPermission from '../molecules/ActionPermissions/ReadPageUrlActionPermission';
 import ReadReferrerUrlActionPermission from '../molecules/ActionPermissions/ReadReferrerUrlActionPermission';
-
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        line: {
-            width: '100%',
-            padding: theme.spacing(1),
-            display: 'flex',
-            alignItems: 'center',
-        },
-        noElements: {
-            width: '100%',
-        },
-        container: {
-            height: '100%',
-            width: '100%',
-            display: 'flex',
-            flexFlow: 'column nowrap',
-        },
-        alert: {
-            borderRadius: 0,
-            borderBottom: '1px solid #e1e4e8',
-        },
-        alertIcon: {
-            alignItems: 'center',
-        },
-    }),
-);
+import IconAlignedAlert from '../atoms/IconAlignedAlert';
 
 type TemplatedActionPermissionsProps = TemplatedActionFormProps & {
     permissionInfoOpen: boolean;
@@ -54,8 +27,6 @@ type TemplatedActionPermissionsProps = TemplatedActionFormProps & {
 const TemplatedActionPermissions: FC<TemplatedActionPermissionsProps> = (
     props: TemplatedActionPermissionsProps,
 ) => {
-    const classes = useStyles();
-
     const { permissionInfoOpen, setPermissionInfoOpen } = props;
 
     const validationError = props.errors['permissionRequests'];
@@ -201,14 +172,13 @@ const TemplatedActionPermissions: FC<TemplatedActionPermissionsProps> = (
     };
 
     return (
-        <div className={classes.container}>
+        <Box sx={{ height: '100%', width: '100%', display: 'flex', flexFlow: 'column nowrap' }}>
             <Collapse in={!props.readOnly && permissionInfoOpen}>
-                <Alert
-                    classes={{
-                        root: classes.alert,
-                        icon: classes.alertIcon,
+                <IconAlignedAlert
+                    sx={{
+                        borderRadius: 0,
+                        borderBottom: '1px solid #e1e4e8',
                     }}
-                    className={classes.alert}
                     onClose={() => {
                         setPermissionInfoOpen(false);
                     }}
@@ -217,15 +187,15 @@ const TemplatedActionPermissions: FC<TemplatedActionPermissionsProps> = (
                     Permissions are automatically detected based on APIs used in the Code tab.{' '}
                     <br />
                     Use this tab to set limitations on the detected permissions.
-                </Alert>
+                </IconAlignedAlert>
             </Collapse>
 
             {activePermissionRequests.length === 0 && (
-                <div className={classes.line}>
-                    <Alert icon={false} color="info" className={classes.noElements}>
+                <Box sx={{ width: '100%', padding: 1, display: 'flex', alignItems: 'center' }}>
+                    <Alert icon={false} color="info" sx={{ width: '100%' }}>
                         No Permissions Defined
                     </Alert>
-                </div>
+                </Box>
             )}
 
             {activePermissionRequests.map((permission: PlatformActionPermissionInput) => (
@@ -233,7 +203,7 @@ const TemplatedActionPermissions: FC<TemplatedActionPermissionsProps> = (
                     {selectPermission(permission)}
                 </Box>
             ))}
-        </div>
+        </Box>
     );
 };
 

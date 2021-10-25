@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { SvgIconProps } from '@material-ui/core';
-import CallMadeIcon from '@material-ui/icons/CallMade';
+import { SvgIconProps } from '@mui/material';
+import CallMadeIcon from '@mui/icons-material/CallMade';
 
 const TriggerIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

@@ -1,29 +1,15 @@
-import { ChangeEvent, FC } from 'react';
+import { FC } from 'react';
 import { AppAnalyticsContentProps } from '../types/props/AppAnalyticsContentProps';
 import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import { useQuery } from '@apollo/client';
 import AppEventsQuery from '../gql/queries/AppEventsQuery';
 import { AppEventsQueryData } from '../gql/generated/AppEventsQueryData';
-import { FormControl, InputLabel, makeStyles, MenuItem, Select } from '@material-ui/core';
+import { SelectChangeEvent } from '@mui/material';
 import { kebabToTitleCase } from '../utils/TextUtils';
-
-const useStyles = makeStyles((theme) => ({
-    selectRoot: {
-        '&:focus': {
-            backgroundColor: '#ffffff',
-        },
-        width: '200px',
-    },
-    selectContainer: {
-        marginRight: theme.spacing(2),
-        marginBottom: theme.spacing(1),
-    },
-}));
+import { ChartEventSelectorContent } from '../components/organisms/ChartEventSelectorContent';
 
 const ChartEventSelector: FC<AppAnalyticsContentProps> = (props: AppAnalyticsContentProps) => {
     const { appQueryOptions, id, setFilter, setEventGroup } = props;
-
-    const classes = useStyles();
 
     const extractFilters = () => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -87,7 +73,7 @@ const ChartEventSelector: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCon
                 }
             }
 
-            const handleEventChange = (e: ChangeEvent<{ value: unknown }>) => {
+            const handleEventChange = (e: SelectChangeEvent) => {
                 if (e.target.value === ' ') {
                     setFilter('event', undefined);
                 } else {
@@ -109,7 +95,7 @@ const ChartEventSelector: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCon
 
             const currentGroupKey = appQueryOptions.filter_options.event_group ?? ' ';
 
-            const handleEventGroupChange = (e: ChangeEvent<{ value: unknown }>) => {
+            const handleEventGroupChange = (e: SelectChangeEvent) => {
                 if (e.target.value === ' ') {
                     setEventGroup(undefined);
                 } else {
@@ -125,51 +111,16 @@ const ChartEventSelector: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCon
             };
 
             return (
-                <>
-                    <FormControl
-                        variant="outlined"
-                        size="small"
-                        className={classes.selectContainer}
-                    >
-                        <InputLabel id="event-label">Event Group</InputLabel>
-                        <Select
-                            labelId="event-label"
-                            classes={{ root: classes.selectRoot }}
-                            value={currentGroupKey}
-                            onChange={handleEventGroupChange}
-                            label="Event Group"
-                        >
-                            {groups.map((group) => (
-                                <MenuItem key={group.key} value={group.key}>
-                                    {displayGroup(group)}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                    <FormControl
-                        variant="outlined"
-                        size="small"
-                        className={classes.selectContainer}
-                    >
-                        <InputLabel id="event-label">Event</InputLabel>
-                        <Select
-                            labelId="event-label"
-                            classes={{ root: classes.selectRoot }}
-                            value={currentItemKey}
-                            onChange={handleEventChange}
-                            label="Event"
-                        >
-                            {isGroupFiltered && <MenuItem value=" ">All Events</MenuItem>}
-                            {items
-                                .filter((item) => !isGroupFiltered || item.count !== 0)
-                                .map((item) => (
-                                    <MenuItem key={item.key} value={item.key}>
-                                        {kebabToTitleCase(item.key)} ({item.count})
-                                    </MenuItem>
-                                ))}
-                        </Select>
-                    </FormControl>
-                </>
+                <ChartEventSelectorContent
+                    items={items}
+                    groups={groups}
+                    handleEventChange={handleEventChange}
+                    currentGroupKey={currentGroupKey}
+                    handleEventGroupChange={handleEventGroupChange}
+                    displayGroup={displayGroup}
+                    currentItemKey={currentItemKey}
+                    isGroupFiltered={isGroupFiltered}
+                />
             );
         },
         true,

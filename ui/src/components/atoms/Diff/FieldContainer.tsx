@@ -1,68 +1,54 @@
 import { FC, ReactNode } from 'react';
-import { createStyles, Theme } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
+import { Box } from '@mui/material';
 import { snakeToTitleCase } from '../../../utils/TextUtils';
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {},
-        field: {
-            display: 'flex',
-            border: '1px solid #e1e4e8',
-        },
-        fieldSide: {
-            flex: '50%',
-            padding: theme.spacing(1),
-            fontWeight: 'bold',
-            backgroundColor: '#f5f5f5',
-            color: '#24292e',
-        },
-        left: {
-            borderRight: '1px solid #e1e4e8',
-        },
-        right: {},
-        empty: {
-            color: '#999999',
-        },
-        diff: {
-            border: '1px solid #e1e4e8',
-            borderTop: 0,
-        },
-    }),
-);
-
-type FieldContainerProps = {
+const FieldContainer: FC<{
     field: string;
     leftEmpty: boolean;
     rightEmpty: boolean;
     children?: ReactNode;
-};
-
-const FieldContainer: FC<FieldContainerProps> = (props: FieldContainerProps) => {
-    const classes = useStyles();
-    const { field, children, leftEmpty, rightEmpty } = props;
-
+}> = ({ field, children, leftEmpty, rightEmpty }) => {
     const fieldFormatted = snakeToTitleCase(field);
     return (
-        <div className={classes.root}>
-            <div className={classes.field}>
-                <div
-                    className={clsx(classes.fieldSide, classes.left, {
-                        [classes.empty]: leftEmpty,
-                    })}
+        <div className="root">
+            <Box
+                sx={{
+                    display: 'flex',
+                    border: '1px solid #e1e4e8',
+                }}
+            >
+                <Box
+                    p={1}
+                    sx={{
+                        flex: '50%',
+                        fontWeight: 'bold',
+                        backgroundColor: '#f5f5f5',
+                        color: leftEmpty ? '#999999' : '#24292e',
+                        borderRight: '1px solid #e1e4e8',
+                    }}
                 >
                     {fieldFormatted}:
-                </div>
-                <div
-                    className={clsx(classes.fieldSide, classes.right, {
-                        [classes.empty]: rightEmpty,
-                    })}
+                </Box>
+                <Box
+                    p={1}
+                    sx={{
+                        flex: '50%',
+                        fontWeight: 'bold',
+                        backgroundColor: '#f5f5f5',
+                        color: rightEmpty ? '#999999' : '#24292e',
+                    }}
                 >
                     {fieldFormatted}:
-                </div>
-            </div>
-            <div className={classes.diff}>{children}</div>
+                </Box>
+            </Box>
+            <Box
+                sx={{
+                    border: '1px solid #e1e4e8',
+                    borderTop: 0,
+                }}
+            >
+                {children}
+            </Box>
         </div>
     );
 };

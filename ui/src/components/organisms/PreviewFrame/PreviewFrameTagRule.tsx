@@ -4,7 +4,7 @@ import { PreviewFrameData_getRevision_tags_rule_groups_rules } from '../../../gq
 import RuleSection from '../../atoms/RuleSection';
 import { extractCurrentElementLog, ruleHasError } from '../../../utils/PreviewUtils';
 import TagElementReadOnlyList from '../../molecules/TagElementReadOnlyList';
-import { Box, Typography } from '@material-ui/core';
+import { Box, Typography } from '@mui/material';
 import { PreviewFrameActionGroupDistribution } from './PreviewFrameActionGroupDistribution';
 import { ConditionRule, RuleEvent } from '../../../types/TagRulesTypes';
 import PreviewFrameRuleHeader, {
@@ -15,7 +15,7 @@ import {
     eventsToListItems,
     exceptionsToListItems,
 } from '../../../utils/ElementListUtils';
-import Alert from '@material-ui/lab/Alert';
+import Alert from '@mui/material/Alert';
 import { previewFrameContext } from '../../../context/PreviewFrameContext';
 import {
     ActionGroupDistributionStatus,

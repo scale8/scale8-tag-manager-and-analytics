@@ -4,30 +4,8 @@ import {
     buildPlatformDataMapPayload,
     buildPlatformDataMapSample,
 } from '../../utils/PlatformDataMapsUtils';
-import { Box } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Box } from '@mui/material';
 import LazyHighlight from '../atoms/LibraryLoaders/LazyHighlight';
-
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        sampleLabel: {
-            padding: theme.spacing(1, 1, 0, 1),
-            fontSize: '0.9em',
-        },
-        container: {
-            padding: theme.spacing(1, 2),
-            height: '100%',
-            width: '100%',
-            display: 'flex',
-            flexFlow: 'column nowrap',
-        },
-        code: {
-            '& pre': {
-                margin: 0,
-            },
-        },
-    }),
-);
 
 export type TemplatedActionDataMapPayloadSampleProps = {
     platformDataMaps: PlatformDataMapInput[];
@@ -36,12 +14,26 @@ export type TemplatedActionDataMapPayloadSampleProps = {
 const TemplatedActionPayloadSample: FC<TemplatedActionDataMapPayloadSampleProps> = (
     props: TemplatedActionDataMapPayloadSampleProps,
 ) => {
-    const classes = useStyles();
     const { platformDataMaps } = props;
 
     return (
-        <div className={classes.container}>
-            <div className={classes.sampleLabel}>Payload Sample</div>
+        <Box
+            sx={{
+                padding: (theme) => theme.spacing(1, 2),
+                height: '100%',
+                width: '100%',
+                display: 'flex',
+                flexFlow: 'column nowrap',
+            }}
+        >
+            <Box
+                sx={{
+                    padding: (theme) => theme.spacing(1, 1, 0, 1),
+                    fontSize: '0.9em',
+                }}
+            >
+                Payload Sample
+            </Box>
             <Box flex={1} position="relative">
                 <Box
                     height="100%"
@@ -53,7 +45,11 @@ const TemplatedActionPayloadSample: FC<TemplatedActionDataMapPayloadSampleProps>
                     bgcolor="#002b36"
                     border={1}
                     borderColor="#002b36"
-                    className={classes.code}
+                    sx={{
+                        '& pre': {
+                            margin: 0,
+                        },
+                    }}
                 >
                     <LazyHighlight
                         language="json"
@@ -67,7 +63,7 @@ const TemplatedActionPayloadSample: FC<TemplatedActionDataMapPayloadSampleProps>
                     />
                 </Box>
             </Box>
-        </div>
+        </Box>
     );
 };
 

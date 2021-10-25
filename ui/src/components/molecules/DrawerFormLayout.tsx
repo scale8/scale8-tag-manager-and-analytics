@@ -1,24 +1,10 @@
-import { makeStyles } from '@material-ui/core/styles';
 import { FC, ReactNode } from 'react';
-import { Box, Button } from '@material-ui/core';
+import { Box, Button } from '@mui/material';
 import FormGqlError from '../atoms/FormGqlError';
 import { InfoButton } from './InfoButton';
 import { MainDrawerTitle } from './MainDrawerTitle';
 import { FormCommonProps } from '../../types/props/forms/CommonFormProps';
-
-const useStyles = makeStyles((theme) => ({
-    form: {
-        display: 'flex',
-        flexDirection: 'column',
-        '& .DrawerFormField': {
-            width: '100%',
-            margin: theme.spacing(0, 0, 3),
-        },
-    },
-    submit: {
-        margin: theme.spacing(4, 0, 2),
-    },
-}));
+import FormFlex from '../atoms/FormFlex';
 
 type DrawerFormLayoutProps = FormCommonProps & {
     children?: ReactNode;
@@ -29,8 +15,6 @@ type DrawerFormLayoutProps = FormCommonProps & {
 };
 
 const DrawerFormLayout: FC<DrawerFormLayoutProps> = (props: DrawerFormLayoutProps) => {
-    const classes = useStyles();
-
     return (
         <Box display="flex" flexDirection="column" height="100vh">
             {!props.noTitle && (
@@ -42,7 +26,7 @@ const DrawerFormLayout: FC<DrawerFormLayoutProps> = (props: DrawerFormLayoutProp
             <Box flex={1} position="relative" width="100%">
                 <Box p={3} height="100%" width="100%" position="absolute" overflow="auto">
                     <FormGqlError error={props.gqlError} />
-                    <form className={classes.form} onSubmit={props.handleSubmit}>
+                    <FormFlex handleSubmit={props.handleSubmit}>
                         {props.children}
                         {!props.noSubmit && (
                             <Box display="Flex" justifyContent="flex-end">
@@ -50,7 +34,9 @@ const DrawerFormLayout: FC<DrawerFormLayoutProps> = (props: DrawerFormLayoutProp
                                     type="submit"
                                     variant="contained"
                                     color="primary"
-                                    className={classes.submit}
+                                    sx={{
+                                        margin: (theme) => theme.spacing(4, 0, 2),
+                                    }}
                                     disabled={
                                         props.submitDisable === undefined
                                             ? props.isSubmitting
@@ -61,7 +47,7 @@ const DrawerFormLayout: FC<DrawerFormLayoutProps> = (props: DrawerFormLayoutProp
                                 </Button>
                             </Box>
                         )}
-                    </form>
+                    </FormFlex>
                 </Box>
             </Box>
         </Box>

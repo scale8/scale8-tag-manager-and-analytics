@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import { useQuery } from '@apollo/client';
-import { Box, CircularProgress } from '@material-ui/core';
+import { Box, CircularProgress } from '@mui/material';
 import { AppAnalyticsContentProps } from '../types/props/AppAnalyticsContentProps';
 import { ApolloError } from '@apollo/client/errors';
 import GQLError from '../components/atoms/GqlError';

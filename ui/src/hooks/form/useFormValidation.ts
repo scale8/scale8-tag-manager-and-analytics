@@ -7,16 +7,14 @@ import {
     useEffect,
     useState,
 } from 'react';
-import { TextFieldProps } from '@material-ui/core/TextField/TextField';
-import { FormControlProps } from '@material-ui/core';
-import { DateTimePickerProps } from '@material-ui/pickers';
-import { SwitchProps } from '@material-ui/core/Switch/Switch';
+import { TextFieldProps } from '@mui/material/TextField/TextField';
+import { FormControlProps } from '@mui/material';
+import { SwitchProps } from '@mui/material/Switch/Switch';
 import {
     ValidateConfiguration,
     validateFormValues,
 } from '../../utils/validators/validateFormValues';
 import { FormCommonProps } from '../../types/props/forms/CommonFormProps';
-import { DatePickerProps } from '@material-ui/pickers/DatePicker/DatePicker';
 
 export type FormValues = { [key: string]: any };
 export type FormErrors<T> = { [P in keyof T]?: string };
@@ -70,22 +68,6 @@ export type CodeInputProps = BaseCodeInputProps & {
 };
 
 export type ControlledCodeInputProps<Values extends { [key: string]: any }> = BaseCodeInputProps & {
-    formProps: FormProps<Values>;
-};
-
-export type ControlledDateTimeInputProps<Values extends { [key: string]: any }> = Omit<
-    DateTimePickerProps,
-    'value' | 'onChange'
-> & {
-    name: string;
-    formProps: FormProps<Values>;
-};
-
-export type ControlledDateInputProps<Values extends { [key: string]: any }> = Omit<
-    DatePickerProps,
-    'value' | 'onChange'
-> & {
-    name: string;
     formProps: FormProps<Values>;
 };
 

@@ -1,36 +1,8 @@
 import { FC } from 'react';
-import {
-    Box,
-    Button,
-    DialogActions,
-    DialogContent,
-    List,
-    ListItem,
-    ListItemText,
-} from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { grey } from '@material-ui/core/colors';
+import { Box, DialogActions, DialogContent, List, ListItem, ListItemText } from '@mui/material';
 
 import { FinaliseRevision_finaliseRevision } from '../../gql/generated/FinaliseRevision';
-
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            padding: theme.spacing(0, 2, 1, 2),
-        },
-        dialogActions: {
-            padding: theme.spacing(2),
-            justifyContent: 'center',
-        },
-        cancel: {
-            color: theme.palette.getContrastText(grey[900]),
-            backgroundColor: grey[700],
-            '&:hover': {
-                backgroundColor: grey[900],
-            },
-        },
-    }),
-);
+import { DialogCancelButton } from '../atoms/DialogCancelButton';
 
 type FinalizeRevisionErrorDialogProps = {
     errors: FinaliseRevision_finaliseRevision[];
@@ -40,8 +12,6 @@ type FinalizeRevisionErrorDialogProps = {
 const FinalizeRevisionErrorDialog: FC<FinalizeRevisionErrorDialogProps> = (
     props: FinalizeRevisionErrorDialogProps,
 ) => {
-    const classes = useStyles();
-
     return (
         <>
             <DialogContent>
@@ -70,10 +40,10 @@ const FinalizeRevisionErrorDialog: FC<FinalizeRevisionErrorDialogProps> = (
                     ))}
                 </List>
             </DialogContent>
-            <DialogActions className={classes.dialogActions}>
-                <Button onClick={props.handleClose} className={classes.cancel} autoFocus>
+            <DialogActions sx={{ padding: 2, justifyContent: 'center' }}>
+                <DialogCancelButton onClick={props.handleClose} autoFocus>
                     Close
-                </Button>
+                </DialogCancelButton>
             </DialogActions>
         </>
     );

@@ -1,8 +1,7 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import {
     Box,
     Button,
-    createStyles,
     IconButton,
     Table,
     TableBody,
@@ -12,37 +11,12 @@ import {
     TableRow,
     Theme,
     Tooltip,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+} from '@mui/material';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Sparklines, SparklinesLine } from 'react-sparklines';
 import { useRouter } from 'next/router';
 import { toApp, toTagManager } from '../../../utils/NavigationPaths';
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        headerCell: {
-            paddingLeft: 0,
-        },
-        contentCell: {
-            paddingLeft: 0,
-            borderBottom: 0,
-            '&:last-child': {
-                paddingLeft: 0,
-                paddingRight: 0,
-            },
-        },
-        button: {
-            color: '#ffffff',
-            backgroundColor: theme.palette.tagManagerColor.main,
-            width: '100%',
-            '&:hover': {
-                color: '#ffffff',
-                backgroundColor: theme.palette.tagManagerColor.main,
-            },
-        },
-    }),
-);
+import { SxProps } from '@mui/system';
 
 export type AccountSectionAppTableProps = {
     applications: { name: string; pageViews: number[]; id: string }[];
@@ -52,8 +26,6 @@ export type AccountSectionAppTableProps = {
 const AccountSectionAppTable: FC<AccountSectionAppTableProps> = (
     props: AccountSectionAppTableProps,
 ) => {
-    const classes = useStyles();
-
     const router = useRouter();
 
     const { applications, tmId } = props;
@@ -65,7 +37,15 @@ const AccountSectionAppTable: FC<AccountSectionAppTableProps> = (
                 onClick={() => {
                     router.push(toTagManager({ id: tmId }, 'apps')).then();
                 }}
-                className={classes.button}
+                sx={{
+                    color: '#ffffff',
+                    backgroundColor: (theme) => theme.palette.tagManagerColor.main,
+                    width: '100%',
+                    '&:hover': {
+                        color: '#ffffff',
+                        backgroundColor: (theme) => theme.palette.tagManagerColor.main,
+                    },
+                }}
                 color="inherit"
                 disableElevation
             >
@@ -74,34 +54,50 @@ const AccountSectionAppTable: FC<AccountSectionAppTableProps> = (
         );
     }
 
+    const headerCell: SxProps<Theme> = {
+        paddingLeft: 0,
+    };
+
+    const contentCell: SxProps<Theme> = {
+        paddingLeft: 0,
+        borderBottom: 0,
+        '&:last-of-type': {
+            paddingLeft: 0,
+            paddingRight: 0,
+        },
+    };
+
     return (
         <TableContainer>
             <Table size="small">
                 <TableHead>
                     <TableRow>
-                        <TableCell className={classes.headerCell}>Applications</TableCell>
-                        <TableCell className={classes.headerCell}>Page views</TableCell>
-                        <TableCell className={classes.headerCell} align="right" />
+                        <TableCell sx={headerCell}>Applications</TableCell>
+                        <TableCell sx={headerCell}>Page views</TableCell>
+                        <TableCell sx={headerCell} align="right" />
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {applications.map((app) => (
                         <TableRow key={app.id}>
-                            <TableCell className={classes.contentCell}>{app.name}</TableCell>
-                            <TableCell className={classes.contentCell}>
+                            <TableCell sx={contentCell}>{app.name}</TableCell>
+                            <TableCell sx={contentCell}>
                                 <Box width={150}>
                                     <Sparklines data={app.pageViews} width={150} height={20}>
-                                        <SparklinesLine style={{ fill: 'none' }} />
+                                        <SparklinesLine
+                                            style={useMemo(() => ({ fill: 'none' }), [])}
+                                        />
                                     </Sparklines>
                                 </Box>
                             </TableCell>
-                            <TableCell className={classes.contentCell} align="right">
+                            <TableCell sx={contentCell} align="right">
                                 <Tooltip title="Select Application">
                                     <IconButton
                                         onClick={() => {
                                             router.push(toApp({ id: app.id })).then();
                                         }}
                                         aria-label="Select Application"
+                                        size="large"
                                     >
                                         <ArrowForwardIcon fontSize="inherit" />
                                     </IconButton>

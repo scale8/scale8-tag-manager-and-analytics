@@ -1,5 +1,12 @@
-import { ChangeEvent, ReactElement, useState } from 'react';
-import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@material-ui/core';
+import { ReactElement, useState } from 'react';
+import {
+    FormControl,
+    FormHelperText,
+    InputLabel,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+} from '@mui/material';
 import {
     ControlledFilteredSelectProps,
     SelectValueWithSub,
@@ -26,13 +33,13 @@ const ControlledFilteredSelects = <T extends { [key: string]: any }>(
     const [requiredError, setRequiredError] = useState(false);
     const [requiredFilterError, setRequiredFilterError] = useState(false);
 
-    const handleFilterChange = (event: ChangeEvent<{ value: unknown }>) => {
+    const handleFilterChange = (event: SelectChangeEvent) => {
         setRequiredFilterError(false);
         setFilterValue(event.target.value as string);
         formProps.handleChange(name, '');
     };
 
-    const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
+    const handleChange = (event: SelectChangeEvent) => {
         setRequiredError(false);
         formProps.handleChange(name, event.target.value);
     };
@@ -54,6 +61,7 @@ const ControlledFilteredSelects = <T extends { [key: string]: any }>(
         <>
             {hasSub && (
                 <FormControl
+                    variant="standard"
                     className={formControlProps.className}
                     onInvalid={(event) => {
                         event.preventDefault();
@@ -64,6 +72,7 @@ const ControlledFilteredSelects = <T extends { [key: string]: any }>(
                 >
                     <InputLabel>{filterLabel}</InputLabel>
                     <Select
+                        label={filterLabel}
                         value={filterValue}
                         disabled={props.disabled}
                         onChange={handleFilterChange}
@@ -84,6 +93,7 @@ const ControlledFilteredSelects = <T extends { [key: string]: any }>(
                     <small>{missingSubMessage}</small>
                 ) : (
                     <FormControl
+                        variant="standard"
                         {...formControlProps}
                         onInvalid={(event) => {
                             event.preventDefault();
@@ -93,6 +103,7 @@ const ControlledFilteredSelects = <T extends { [key: string]: any }>(
                     >
                         <InputLabel>{label}</InputLabel>
                         <Select
+                            label={label}
                             value={formProps.values[name]}
                             onChange={handleChange}
                             onBlur={formProps.handleBlur}

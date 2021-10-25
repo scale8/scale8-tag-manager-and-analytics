@@ -1,23 +1,21 @@
 import { FC } from 'react';
-import { Chip } from '@material-ui/core';
+import { Chip } from '@mui/material';
 import { AppQueryFilters } from '../../types/props/AppAnalyticsContentProps';
-import { withStyles } from '@material-ui/core/styles';
-import FilterListIcon from '@material-ui/icons/FilterList';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import { styled } from '@mui/material/styles';
 
-const FilterChip = withStyles({
-    root: {
-        marginRight: '8px',
-        marginBottom: '8px',
-        backgroundColor: 'transparent!important',
-        borderRadius: '5px',
-        padding: '19px 0',
-        maxWidth: 508,
-    },
-    label: {
+const FilterChip = styled(Chip)({
+    marginRight: '8px',
+    marginBottom: '8px',
+    backgroundColor: 'transparent!important',
+    borderRadius: '5px',
+    padding: '19px 0',
+    maxWidth: 508,
+    '& .MuiChip-label': {
         paddingBottom: '2px',
         display: 'inline-block',
     },
-})(Chip);
+});
 
 export type ChartFilterSelectorProps = {
     filters: AppQueryFilters;

@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { SvgIconProps } from '@material-ui/core';
-import BugReportIcon from '@material-ui/icons/BugReport';
+import { SvgIconProps } from '@mui/material';
+import BugReportIcon from '@mui/icons-material/BugReport';
 
 const LogActionIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

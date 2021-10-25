@@ -1,30 +1,13 @@
-import { makeStyles } from '@material-ui/core/styles';
 import { FC } from 'react';
-import { Box, Button } from '@material-ui/core';
+import { Box, Button } from '@mui/material';
 import FormError from '../../atoms/FormError';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import LoggedOutFormContainer from '../../molecules/LoggedOutFormContainer';
 import FormTitle from '../../molecules/FormTitle';
 import { SetupFormProps } from '../../../types/props/forms/SetupFormProps';
-
-const useStyles = makeStyles((theme) => ({
-    form: {
-        width: '100%', // Fix IE 11 issue.
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-        color: '#ffffff',
-        backgroundColor: theme.palette.commonColor.main,
-        '&:hover': {
-            color: '#ffffff',
-            backgroundColor: theme.palette.commonColor.main,
-        },
-    },
-}));
+import FormFull from '../../atoms/FormFull';
 
 const SetupForm: FC<SetupFormProps> = (props: SetupFormProps) => {
-    const classes = useStyles();
-
     return (
         <LoggedOutFormContainer>
             <Box mb={2}>
@@ -36,7 +19,7 @@ const SetupForm: FC<SetupFormProps> = (props: SetupFormProps) => {
                 </Box>
             )}
 
-            <form className={classes.form} onSubmit={props.handleSubmit}>
+            <FormFull handleSubmit={props.handleSubmit}>
                 <ControlledTextInput
                     name="email"
                     label="Email Address"
@@ -108,12 +91,12 @@ const SetupForm: FC<SetupFormProps> = (props: SetupFormProps) => {
                     fullWidth
                     variant="contained"
                     color="primary"
-                    className={classes.submit}
+                    className="formFullMainColorSubmit"
                     disabled={props.isSubmitting}
                 >
                     {props.submitText}
                 </Button>
-            </form>
+            </FormFull>
         </LoggedOutFormContainer>
     );
 };

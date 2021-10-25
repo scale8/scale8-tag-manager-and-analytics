@@ -1,18 +1,5 @@
 import { FC, MouseEventHandler } from 'react';
-import { Avatar, IconButton } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        padding: 0,
-        width: theme.spacing(4.5),
-        height: theme.spacing(4.5),
-    },
-    avatar: {
-        width: theme.spacing(4.5),
-        height: theme.spacing(4.5),
-    },
-}));
+import { Avatar, IconButton } from '@mui/material';
 
 type AvatarButtonProps = {
     loading: boolean;
@@ -21,17 +8,28 @@ type AvatarButtonProps = {
 };
 
 const AvatarButton: FC<AvatarButtonProps> = (props: AvatarButtonProps) => {
-    const classes = useStyles();
-
     return (
         <IconButton
-            className={classes.root}
+            sx={{
+                padding: 0,
+                width: (theme) => theme.spacing(4.5),
+                height: (theme) => theme.spacing(4.5),
+            }}
             color="inherit"
             aria-controls="simple-menu"
             aria-haspopup="true"
             onClick={props.handleClick}
+            size="large"
         >
-            {!props.loading && <Avatar src={props.imgSrc} className={classes.avatar} />}
+            {!props.loading && (
+                <Avatar
+                    src={props.imgSrc}
+                    sx={{
+                        width: (theme) => theme.spacing(4.5),
+                        height: (theme) => theme.spacing(4.5),
+                    }}
+                />
+            )}
         </IconButton>
     );
 };

@@ -1,4 +1,3 @@
-import { makeStyles } from '@material-ui/core/styles';
 import {
     displayDayMonth,
     displayDayMonthTime,
@@ -8,7 +7,7 @@ import {
     startOfMinuteUTC,
     subHoursUTC,
     subMinutesUTC,
-    UTCNow,
+    UTCCurrent,
     UTCTimestamp,
 } from './DateTimeUtils';
 
@@ -17,37 +16,6 @@ export type UsageDetails = {
     field1: number;
     field2: number;
 };
-
-export const useStyles = makeStyles(() => ({
-    zoomSelect: {
-        fontWeight: 'bold',
-        marginLeft: '20px',
-        cursor: 'pointer',
-        '&:hover': {
-            color: '#40a9ff',
-            opacity: 1,
-        },
-        '&$selected': {
-            color: '#1890ff',
-            cursor: 'default',
-        },
-        '&:focus': {
-            color: '#40a9ff',
-        },
-    },
-    dropdown: {
-        marginTop: '-4px',
-        '& .MuiSelect-select:focus': {
-            backgroundColor: 'transparent',
-        },
-    },
-    divider: {
-        height: '20px',
-        marginTop: '2px',
-        marginLeft: '13px',
-    },
-    selected: {},
-}));
 
 const zoomToMinutes = (zoom: string): number => {
     switch (zoom) {
@@ -165,7 +133,7 @@ export const prepareUsageRange = (
     aggregateMinutes: number,
 ): UsageDetails[] => {
     const aggregateRatio = aggregateMinutes;
-    const initialDate = roundByRatio(startOfMinuteUTC(UTCNow), aggregateRatio);
+    const initialDate = roundByRatio(startOfMinuteUTC(UTCCurrent()), aggregateRatio);
 
     const aggregateDateEntries = [];
     for (let i = 0; i <= zoomToMinutes(zoom) / aggregateMinutes; i++) {

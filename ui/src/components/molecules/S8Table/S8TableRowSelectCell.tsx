@@ -1,8 +1,8 @@
 import { ReactElement } from 'react';
 
-import TableCell from '@material-ui/core/TableCell';
+import TableCell from '@mui/material/TableCell';
 import { BulkAction, CoupleAction, RowData } from './S8TableTypes';
-import Checkbox from '@material-ui/core/Checkbox';
+import Checkbox from '@mui/material/Checkbox';
 
 interface S8TableRowSelectCellProps<T extends RowData> {
     index: number;

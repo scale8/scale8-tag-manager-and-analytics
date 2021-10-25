@@ -1,21 +1,18 @@
 import { FC } from 'react';
-
-import { createStyles, Theme } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            width: '100%',
-            height: theme.spacing(4),
-            color: '#cccccc',
-        },
-    }),
-);
+import { Box } from '@mui/material';
 
 const NoChanges: FC = () => {
-    const classes = useStyles();
-    return <div className={classes.root}>No Changes</div>;
+    return (
+        <Box
+            sx={{
+                width: '100%',
+                height: (theme) => theme.spacing(4),
+                color: '#cccccc',
+            }}
+        >
+            No Changes
+        </Box>
+    );
 };
 
 export default NoChanges;

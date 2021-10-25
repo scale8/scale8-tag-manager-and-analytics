@@ -1,6 +1,6 @@
 import { ChangeEvent, FC, ReactNode } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import {
+    Box,
     Checkbox,
     Divider,
     FormControlLabel,
@@ -10,70 +10,8 @@ import {
     ListItemSecondaryAction,
     ListItemText,
     Slider,
-} from '@material-ui/core';
+} from '@mui/material';
 import { SectionAction, SectionActionsSpeedDial } from './SectionActionsSpeedDial';
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        display: 'flex',
-        border: '1px solid rgba(0, 0, 0, 0.12)',
-        marginBottom: theme.spacing(2),
-    },
-    containerLeft: {
-        display: 'flex',
-        flexDirection: 'column',
-        borderRight: '1px solid rgba(0, 0, 0, 0.12)',
-        minHeight: 250,
-    },
-    input: {
-        width: 64,
-        '& input': {
-            paddingLeft: 15,
-            textAlign: 'center',
-            zIndex: 9,
-        },
-        '& input:focus, & input:hover': {
-            zIndex: 11,
-        },
-    },
-    adornment: {
-        position: 'absolute',
-        right: 0,
-        marginRight: 1,
-        top: 13,
-        zIndex: 10,
-    },
-    slider: {
-        marginLeft: 18,
-    },
-    lock: {
-        borderTop: '1px solid rgba(0, 0, 0, 0.42)',
-        margin: 0,
-        paddingLeft: 5,
-    },
-    lockLabel: {
-        fontSize: '12px',
-    },
-    lockCheckbox: {
-        padding: 0,
-    },
-    containerRight: {
-        flexGrow: 1,
-    },
-    containerHeader: {
-        margin: 0,
-        padding: 0,
-        position: 'relative',
-        listStyle: 'none',
-    },
-    content: {
-        padding: theme.spacing(2),
-    },
-    addButton: {},
-    addButtonContainer: {
-        width: '100%',
-    },
-}));
 
 type DistributionElementContainerContainerProps = {
     children: ReactNode;
@@ -91,8 +29,6 @@ type DistributionElementContainerContainerProps = {
 const DistributionElementContainer: FC<DistributionElementContainerContainerProps> = (
     props: DistributionElementContainerContainerProps,
 ) => {
-    const classes = useStyles();
-
     const handleSliderChange = (event: any, newValue: number | number[]) => {
         props.setDistributionValue(
             props.id,
@@ -108,11 +44,34 @@ const DistributionElementContainer: FC<DistributionElementContainerContainerProp
     };
 
     return (
-        <div className={classes.root}>
-            <div className={classes.containerLeft}>
+        <Box
+            sx={{
+                display: 'flex',
+                border: '1px solid rgba(0, 0, 0, 0.12)',
+                marginBottom: 2,
+            }}
+        >
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    borderRight: '1px solid rgba(0, 0, 0, 0.12)',
+                    minHeight: '250px',
+                }}
+            >
                 <Input
                     disabled={props.readonly}
-                    className={classes.input}
+                    sx={{
+                        width: '64px',
+                        '& input': {
+                            paddingLeft: '15px',
+                            textAlign: 'center',
+                            zIndex: 9,
+                        },
+                        '& input:focus, & input:hover': {
+                            zIndex: 11,
+                        },
+                    }}
                     value={props.distribution / 10}
                     margin="dense"
                     onChange={handleInputChange}
@@ -125,17 +84,27 @@ const DistributionElementContainer: FC<DistributionElementContainerContainerProp
                         'aria-labelledby': 'input-slider',
                     }}
                     endAdornment={
-                        <InputAdornment className={classes.adornment} position="start">
+                        <InputAdornment
+                            sx={{
+                                position: 'absolute',
+                                right: 0,
+                                marginRight: 1,
+                                top: 13,
+                                zIndex: 10,
+                            }}
+                            position="start"
+                        >
                             %
                         </InputAdornment>
                     }
                 />
                 <Slider
+                    size="small"
                     disabled={props.readonly}
                     min={0}
                     step={1}
                     max={100}
-                    className={classes.slider}
+                    sx={{ marginLeft: '18px' }}
                     orientation="vertical"
                     value={props.distribution / 10}
                     onChangeCommitted={() => props.commitDistribution()}
@@ -143,14 +112,18 @@ const DistributionElementContainer: FC<DistributionElementContainerContainerProp
                     aria-labelledby="vertical-slider"
                 />
                 <FormControlLabel
-                    classes={{
-                        root: classes.lock,
-                        label: classes.lockLabel,
+                    sx={{
+                        borderTop: '1px solid rgba(0, 0, 0, 0.42)',
+                        margin: 0,
+                        paddingLeft: '5px',
+                        '& .MuiFormControlLabel-label': {
+                            fontSize: '12px',
+                        },
                     }}
                     control={
                         <Checkbox
                             disabled={props.readonly}
-                            className={classes.lockCheckbox}
+                            sx={{ padding: 0 }}
                             checked={props.locked}
                             name="lock-checkbox"
                             onChange={(event) => {
@@ -161,9 +134,17 @@ const DistributionElementContainer: FC<DistributionElementContainerContainerProp
                     }
                     label="Lock"
                 />
-            </div>
-            <div className={classes.containerRight}>
-                <ul className={classes.containerHeader}>
+            </Box>
+            <Box sx={{ flexGrow: 1 }}>
+                <Box
+                    component="ul"
+                    sx={{
+                        margin: 0,
+                        padding: 0,
+                        position: 'relative',
+                        listStyle: 'none',
+                    }}
+                >
                     <ListItem>
                         <ListItemText primary={props.title} />
                         <ListItemSecondaryAction>
@@ -174,11 +155,11 @@ const DistributionElementContainer: FC<DistributionElementContainerContainerProp
                             />
                         </ListItemSecondaryAction>
                     </ListItem>
-                </ul>
+                </Box>
                 <Divider />
-                <div className={classes.content}>{props.children}</div>
-            </div>
-        </div>
+                <Box sx={{ padding: 2 }}>{props.children}</Box>
+            </Box>
+        </Box>
     );
 };
 

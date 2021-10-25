@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import DetailsIcon from '@material-ui/icons/Details';
-import { SvgIconProps } from '@material-ui/core';
+import DetailsIcon from '@mui/icons-material/Details';
+import { SvgIconProps } from '@mui/material';
 
 const DefaultEventIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

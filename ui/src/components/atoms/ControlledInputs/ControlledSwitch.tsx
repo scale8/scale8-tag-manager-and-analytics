@@ -1,5 +1,5 @@
 import { ChangeEvent, ReactElement } from 'react';
-import { Switch } from '@material-ui/core';
+import { Switch } from '@mui/material';
 import { ControlledSwitchProps } from '../../../hooks/form/useFormValidation';
 
 const ControlledSwitch = <T extends { [key: string]: any }>(

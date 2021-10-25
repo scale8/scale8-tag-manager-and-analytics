@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import FlipToFrontIcon from '@material-ui/icons/FlipToFront';
-import { SvgIconProps } from '@material-ui/core';
+import FlipToFrontIcon from '@mui/icons-material/FlipToFront';
+import { SvgIconProps } from '@mui/material';
 
 const PreviewHighlightIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

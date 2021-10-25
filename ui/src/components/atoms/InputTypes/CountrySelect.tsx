@@ -1,20 +1,9 @@
 import { FC, ReactElement, useState } from 'react';
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { makeStyles } from '@material-ui/core/styles';
-import { TextFieldProps } from '@material-ui/core/TextField/TextField';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import { TextFieldProps } from '@mui/material/TextField/TextField';
 import { autocompleteOff } from '../../../utils/BrowserUtils';
 import { countryCodes, countryToFlag, getCountryLabel } from '../../../utils/CountryUtils';
-
-const useStyles = makeStyles({
-    option: {
-        fontSize: 15,
-        '& > span': {
-            marginRight: 10,
-            fontSize: 18,
-        },
-    },
-});
 
 export type CountrySelectProps = TextFieldProps & {
     name: string;
@@ -25,15 +14,23 @@ export type CountrySelectProps = TextFieldProps & {
 };
 
 const CountrySelect: FC<CountrySelectProps> = (props: CountrySelectProps): ReactElement => {
-    const classes = useStyles();
     const { name, value, setValue, validationError, disabled, ...textFieldProps } = props;
 
     const [requiredError, setRequiredError] = useState(false);
 
     return (
         <Autocomplete
+            sx={{
+                '& .MuiAutocomplete-option': {
+                    fontSize: '15px',
+                    '& > span': {
+                        marginRight: '10px',
+                        fontSize: '18px',
+                    },
+                },
+            }}
             value={value === '' ? null : getCountryLabel(value)}
-            getOptionSelected={(option, value) => getCountryLabel(option) === value}
+            isOptionEqualToValue={(option, value) => getCountryLabel(option) === value}
             onInvalid={(event) => {
                 event.preventDefault();
                 setRequiredError(true);
@@ -45,12 +42,9 @@ const CountrySelect: FC<CountrySelectProps> = (props: CountrySelectProps): React
             options={countryCodes.sort((a, b) =>
                 getCountryLabel(a) > getCountryLabel(b) ? 1 : -1,
             )}
-            classes={{
-                option: classes.option,
-            }}
             autoHighlight
             getOptionLabel={(option) => option}
-            renderOption={(option) => (
+            renderOption={(props, option) => (
                 <>
                     <span>{countryToFlag(option)}</span>
                     {getCountryLabel(option)} ({option})
@@ -58,6 +52,7 @@ const CountrySelect: FC<CountrySelectProps> = (props: CountrySelectProps): React
             )}
             renderInput={(params) => (
                 <TextField
+                    variant="standard"
                     {...params}
                     error={validationError !== undefined || requiredError}
                     helperText={requiredError ? 'Required value' : validationError}

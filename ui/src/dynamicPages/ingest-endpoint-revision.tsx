@@ -1,6 +1,5 @@
 import { FC } from 'react';
-import { Box } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
+import { Box } from '@mui/material';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { DynamicPageProps } from '../pageLoader/DynamicPageLoader';
@@ -17,6 +16,7 @@ import { PageActionProps, pageActions } from '../actions/PageActions';
 import PageTitle from '../components/molecules/PageTitle';
 import { buildStandardMainInfo } from '../utils/InfoLabelsUtils';
 import { toIngestEndpointRevision } from '../utils/NavigationPaths';
+import { AlertRevisionFinal } from '../components/atoms/AlertRevisionFinal';
 
 const IngestEndpointDataMapsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const revisionId = props.params.id ?? '';
@@ -71,34 +71,22 @@ const IngestEndpointDataMapsPage: FC<DynamicPageProps> = (props: DynamicPageProp
             return (
                 <Box>
                     {locked && (
-                        <Alert severity="warning">
-                            This revision has been marked as final. No further changes are possible.
-                            Please{' '}
-                            <span
-                                style={{
-                                    color: 'inherit',
-                                    textDecoration: 'underline',
-                                    cursor: 'pointer',
-                                }}
-                                onClick={() => {
-                                    pageActions.duplicateIngestEndpointRevision(
-                                        pageActionProps,
-                                        revisionId,
-                                        (
-                                            id: string,
-                                            pageRefresh: () => void,
-                                            handleDialogClose: (checkChanges: boolean) => void,
-                                        ) => {
-                                            handleDialogClose(false);
-                                            router.push(toIngestEndpointRevision({ id })).then();
-                                        },
-                                    );
-                                }}
-                            >
-                                <b>clone</b>
-                            </span>{' '}
-                            the revision to continue working on it.
-                        </Alert>
+                        <AlertRevisionFinal
+                            onCloneLinkClick={() => {
+                                pageActions.duplicateIngestEndpointRevision(
+                                    pageActionProps,
+                                    revisionId,
+                                    (
+                                        id: string,
+                                        pageRefresh: () => void,
+                                        handleDialogClose: (checkChanges: boolean) => void,
+                                    ) => {
+                                        handleDialogClose(false);
+                                        router.push(toIngestEndpointRevision({ id })).then();
+                                    },
+                                );
+                            }}
+                        />
                     )}
                     <Box mb={4}>
                         <Box mx={2}>

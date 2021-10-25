@@ -1,37 +1,26 @@
 import { FC } from 'react';
-import { DatePickerProps } from '@material-ui/pickers/DatePicker/DatePicker';
-import DateInput from './DateInput';
-import { UTCNow } from '../../../utils/DateTimeUtils';
+import DateInput, { DateInputProps } from './DateInput';
 
-export type DateStampInputProps = Omit<DatePickerProps, 'value' | 'onChange'> & {
-    name: string;
+export type DateStampInputProps = Omit<DateInputProps, 'value' | 'setValue'> & {
     value: number | '';
     setValue: (v: number | '') => void;
-    required: boolean;
-    validationError?: string;
 };
 
 const DateStampInput: FC<DateStampInputProps> = (props: DateStampInputProps) => {
-    const { name, value, setValue, validationError, required, ...datePickerProps } = props;
+    const { value, setValue, required, ...dateInputProps } = props;
 
     return (
         <DateInput
-            name={name}
             value={value !== '' ? value : null}
             setValue={(date) => {
                 if (date === null) {
-                    if (required) {
-                        setValue(UTCNow);
-                    } else {
-                        setValue('');
-                    }
+                    setValue('');
                 } else {
                     setValue(date);
                 }
             }}
-            validationError={validationError}
             required={required}
-            {...datePickerProps}
+            {...dateInputProps}
         />
     );
 };

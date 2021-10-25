@@ -1,7 +1,7 @@
 import { FC, Fragment } from 'react';
 import { MappedPlatformValues } from '../../../types/MappedPlatformValuesTypes';
 import { MappedPlatformElementTypeSelect } from './MappedPlatformElementTypeSelect';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import { AppPlatformRevision } from '../../../types/TagRulesTypes';
 import { IngestEndpointForEnvironmentSelection } from '../../../types/IngestEndpointsTypes';
 

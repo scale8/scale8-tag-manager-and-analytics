@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import Alert from '@material-ui/lab/Alert';
+import Alert from '@mui/material/Alert';
 
 type GenericErrorProps = {
     error: string;

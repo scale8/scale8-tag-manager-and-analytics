@@ -1,5 +1,5 @@
 import { FC, Fragment } from 'react';
-import { Box, Typography } from '@material-ui/core';
+import { Box, Typography } from '@mui/material';
 import { TagElementContainer } from '../../molecules/TagElementContainer';
 import { PreviewFrameData_getRevision_tags_rule_groups } from '../../../gql/generated/PreviewFrameData';
 import RuleContainerDivider from '../../atoms/RuleContainerDivider';

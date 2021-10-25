@@ -1,31 +1,14 @@
 import { FC, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import TextInput, { TextInputProps } from './TextInput';
 import SelectInput from './SelectInput';
-import { InputAdornment } from '@material-ui/core';
-import { InputProps as StandardInputProps } from '@material-ui/core/Input/Input';
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
-    },
-    selector: {
-        width: '100%',
-        padding: theme.spacing(1, 0, 1),
-    },
-    label: {
-        fontSize: '0.9em',
-        padding: theme.spacing(1, 0, 1),
-    },
-}));
+import { Box, InputAdornment } from '@mui/material';
+import { InputProps as StandardInputProps } from '@mui/material/Input/Input';
 
 type DomSelectorProps = TextInputProps & {
     initialSelector?: 'ID' | 'Class Name' | 'Custom';
 };
 
 const DomSelectorInput: FC<DomSelectorProps> = (props: DomSelectorProps) => {
-    const classes = useStyles();
-
     const { label, required, value, setValue, initialSelector, disabled, ...textInputProps } =
         props;
 
@@ -64,11 +47,14 @@ const DomSelectorInput: FC<DomSelectorProps> = (props: DomSelectorProps) => {
     };
 
     return (
-        <div className={classes.root}>
-            <label className={classes.label}>
+        <Box sx={{ width: '100%' }}>
+            <Box
+                component="label"
+                sx={{ fontSize: '0.9em', padding: (theme) => theme.spacing(1, 0, 1) }}
+            >
                 {label}
                 {required && ' *'}
-            </label>
+            </Box>
             <SelectInput
                 required
                 label=""
@@ -79,7 +65,10 @@ const DomSelectorInput: FC<DomSelectorProps> = (props: DomSelectorProps) => {
                     setValue('');
                 }}
                 optionValues={['ID', 'Class Name', 'Custom']}
-                className={classes.selector}
+                sx={{
+                    width: '100%',
+                    padding: (theme) => theme.spacing(1, 0, 1),
+                }}
                 disabled={disabled}
             />
             <TextInput
@@ -95,7 +84,7 @@ const DomSelectorInput: FC<DomSelectorProps> = (props: DomSelectorProps) => {
                 disabled={disabled}
                 {...textInputProps}
             />
-        </div>
+        </Box>
     );
 };
 

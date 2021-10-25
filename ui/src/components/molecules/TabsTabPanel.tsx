@@ -1,4 +1,5 @@
 import { FC, ReactNode } from 'react';
+import { Box } from '@mui/material';
 
 type TabPanelProps = {
     children?: ReactNode;
@@ -11,16 +12,16 @@ const TabsTabPanel: FC<TabPanelProps> = (props: TabPanelProps) => {
     const { children, value, index, fullHeight, ...other } = props;
 
     return (
-        <div
+        <Box
             role="tabpanel"
             hidden={value !== index}
             id={`tabpanel-${index}`}
             aria-labelledby={`tab-${index}`}
-            style={fullHeight ? { height: '100%' } : { maxHeight: '100%', overflow: 'auto' }}
+            sx={fullHeight ? { height: '100%' } : { maxHeight: '100%', overflow: 'auto' }}
             {...other}
         >
             {value === index && children}
-        </div>
+        </Box>
     );
 };
 

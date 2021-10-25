@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import ExtensionIcon from '@material-ui/icons/Extension';
-import { SvgIconProps } from '@material-ui/core';
+import ExtensionIcon from '@mui/icons-material/Extension';
+import { SvgIconProps } from '@mui/material';
 
 const ServiceIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

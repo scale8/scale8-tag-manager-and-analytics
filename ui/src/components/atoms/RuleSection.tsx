@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react';
-import { Box, Divider } from '@material-ui/core';
+import { Box, Divider } from '@mui/material';
 
 type RuleDescriptionProps = {
     main: string;

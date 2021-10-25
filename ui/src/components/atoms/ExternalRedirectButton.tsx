@@ -1,19 +1,6 @@
-import { makeStyles } from '@material-ui/core/styles';
 import { FC } from 'react';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import { useRouter } from 'next/router';
-
-const useStyles = makeStyles((theme) => ({
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-        color: '#ffffff',
-        backgroundColor: theme.palette.tagManagerColor.main,
-        '&:hover': {
-            color: '#ffffff',
-            backgroundColor: theme.palette.tagManagerColor.main,
-        },
-    },
-}));
 
 const ExternalRedirectButton: FC<{ link: string; text: string }> = (props: {
     link: string;
@@ -21,7 +8,6 @@ const ExternalRedirectButton: FC<{ link: string; text: string }> = (props: {
 }) => {
     const { link, text } = props;
     const router = useRouter();
-    const classes = useStyles();
 
     return (
         <Button
@@ -31,7 +17,15 @@ const ExternalRedirectButton: FC<{ link: string; text: string }> = (props: {
             }}
             fullWidth
             variant="contained"
-            className={classes.submit}
+            sx={{
+                margin: (theme) => theme.spacing(3, 0, 2),
+                color: '#ffffff',
+                backgroundColor: (theme) => theme.palette.tagManagerColor.main,
+                '&:hover': {
+                    color: '#ffffff',
+                    backgroundColor: (theme) => theme.palette.tagManagerColor.main,
+                },
+            }}
         >
             {text}
         </Button>

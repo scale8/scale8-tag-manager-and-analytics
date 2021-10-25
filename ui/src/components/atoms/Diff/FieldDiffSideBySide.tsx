@@ -1,44 +1,15 @@
 import { FC } from 'react';
-import { createStyles, Theme } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Box } from '@mui/material';
 import { DiffMap, FieldDiff } from '../../../types/DiffTypes';
 import ObjectDiff from './ObjectDiff';
 import FieldContainer from './FieldContainer';
 import FieldValuesComparison from './FieldValuesComparison';
 import DiffSpacer from './DiffSpacer';
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            padding: theme.spacing(2),
-        },
-        refSection: {},
-        sectionTitle: {
-            backgroundColor: '#eeeeee',
-            border: '1px solid #e1e4e8',
-            padding: theme.spacing(1),
-        },
-        refSectionContent: {
-            borderLeft: '1px solid #e1e4e8',
-            borderRight: '1px solid #e1e4e8',
-            borderBottom: '1px solid #e1e4e8',
-        },
-        objSectionContent: {
-            padding: theme.spacing(1, 1, 0),
-            borderLeft: '1px dashed #e1e4e8',
-            borderRight: '1px dashed #e1e4e8',
-            borderBottom: '1px dashed #e1e4e8',
-        },
-    }),
-);
-
 const FieldDiffSideBySide: FC<{
     fieldDiff: FieldDiff;
     diffMap: DiffMap;
-}> = (props: { fieldDiff: FieldDiff; diffMap: DiffMap }) => {
-    const classes = useStyles();
-    const { fieldDiff, diffMap } = props;
-
+}> = ({ fieldDiff, diffMap }) => {
     if (!fieldDiff.hasChanges) {
         return null;
     }
@@ -54,17 +25,46 @@ const FieldDiffSideBySide: FC<{
                 leftEmpty={fieldDiff.left.length < 1}
                 rightEmpty={fieldDiff.right.length < 1}
             >
-                <div className={classes.root}>
-                    <div className={classes.refSection}>
-                        <div className={classes.sectionTitle}>Linked References</div>
-                        <div className={classes.refSectionContent}>
+                <Box p={2}>
+                    <div>
+                        <Box
+                            p={1}
+                            sx={{
+                                backgroundColor: '#eeeeee',
+                                border: '1px solid #e1e4e8',
+                            }}
+                        >
+                            Linked References
+                        </Box>
+                        <Box
+                            sx={{
+                                borderLeft: '1px solid #e1e4e8',
+                                borderRight: '1px solid #e1e4e8',
+                                borderBottom: '1px solid #e1e4e8',
+                            }}
+                        >
                             <FieldValuesComparison fieldDiff={fieldDiff} diffMap={diffMap} />
-                        </div>
+                        </Box>
                     </div>
                     <DiffSpacer height={2} />
-                    <div className={classes.refSection}>
-                        <div className={classes.sectionTitle}>Linked Objects</div>
-                        <div className={classes.objSectionContent}>
+                    <div>
+                        <Box
+                            p={1}
+                            sx={{
+                                backgroundColor: '#eeeeee',
+                                border: '1px solid #e1e4e8',
+                            }}
+                        >
+                            Linked Objects
+                        </Box>
+                        <Box
+                            sx={{
+                                padding: (theme) => theme.spacing(1, 1, 0),
+                                borderLeft: '1px dashed #e1e4e8',
+                                borderRight: '1px dashed #e1e4e8',
+                                borderBottom: '1px dashed #e1e4e8',
+                            }}
+                        >
                             {objectKeys.map((objKey) => (
                                 <ObjectDiff
                                     key={objKey}
@@ -73,9 +73,9 @@ const FieldDiffSideBySide: FC<{
                                     fieldDiff={fieldDiff}
                                 />
                             ))}
-                        </div>
+                        </Box>
                     </div>
-                </div>
+                </Box>
             </FieldContainer>
         );
     }

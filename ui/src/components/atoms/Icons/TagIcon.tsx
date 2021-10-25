@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import LabelIcon from '@material-ui/icons/Label';
-import { SvgIconProps } from '@material-ui/core';
+import LabelIcon from '@mui/icons-material/Label';
+import { SvgIconProps } from '@mui/material';
 
 const TagIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

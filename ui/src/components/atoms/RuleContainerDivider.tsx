@@ -1,28 +1,5 @@
 import { FC } from 'react';
-import { Divider } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        position: 'relative',
-        textAlign: 'center',
-        margin: theme.spacing(5, 3),
-    },
-    text: {
-        backgroundColor: 'white',
-        position: 'absolute',
-        padding: '0 5px',
-        marginTop: '-10px',
-        display: 'inline-block',
-        textTransform: 'uppercase',
-        fontSize: '15px',
-        color: '#888888',
-    },
-    dark: {
-        backgroundColor: '#f5f5f5',
-    },
-}));
+import { Box, Divider } from '@mui/material';
 
 type RuleContainerDividerProps = {
     text: string;
@@ -30,21 +7,32 @@ type RuleContainerDividerProps = {
 };
 
 const RuleContainerDivider: FC<RuleContainerDividerProps> = (props: RuleContainerDividerProps) => {
-    const classes = useStyles();
-
     const { text } = props;
 
     return (
-        <div className={classes.root}>
+        <Box
+            sx={{
+                position: 'relative',
+                textAlign: 'center',
+                margin: (theme) => theme.spacing(5, 3),
+            }}
+        >
             <Divider />
-            <div
-                className={clsx(classes.text, {
-                    [classes.dark]: props.dark,
-                })}
+            <Box
+                sx={{
+                    position: 'absolute',
+                    padding: '0 5px',
+                    marginTop: '-10px',
+                    display: 'inline-block',
+                    textTransform: 'uppercase',
+                    fontSize: '15px',
+                    color: '#888888',
+                    backgroundColor: props.dark ? '#f5f5f5' : 'white',
+                }}
             >
                 {text}
-            </div>
-        </div>
+            </Box>
+        </Box>
     );
 };
 

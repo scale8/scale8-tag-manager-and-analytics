@@ -1,7 +1,7 @@
 import { MouseEventHandler } from 'react';
 import { FC } from 'react';
-import { Box, Button, Divider } from '@material-ui/core';
-import GitHubIcon from '@material-ui/icons/GitHub';
+import { Box, Button, Divider } from '@mui/material';
+import GitHubIcon from '@mui/icons-material/GitHub';
 
 type LoginSsoProps = {
     handleGithubButtonClick: MouseEventHandler;
@@ -13,7 +13,7 @@ const LoginSso: FC<LoginSsoProps> = (props: LoginSsoProps) => {
             <Divider />
             <Box
                 fontSize={11}
-                style={{ textAlign: 'center' }}
+                sx={{ textAlign: 'center' }}
                 width="100px"
                 m="auto"
                 bgcolor="background.paper"

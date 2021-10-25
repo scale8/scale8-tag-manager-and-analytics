@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import PersonIcon from '@material-ui/icons/Person';
-import { SvgIconProps } from '@material-ui/core';
+import PersonIcon from '@mui/icons-material/Person';
+import { SvgIconProps } from '@mui/material';
 
 const ProfileIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

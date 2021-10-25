@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useState } from 'react';
+import { FC, useState } from 'react';
 import {
     FormControl,
     FormControlProps,
@@ -7,7 +7,8 @@ import {
     ListSubheader,
     MenuItem,
     Select,
-} from '@material-ui/core';
+    SelectChangeEvent,
+} from '@mui/material';
 import { SelectValueWithSub } from '../../../hooks/form/useFormValidation';
 
 export type SelectInputProps = Omit<FormControlProps, 'children'> & {
@@ -35,7 +36,7 @@ const SelectInput: FC<SelectInputProps> = (props: SelectInputProps) => {
 
     const [requiredError, setRequiredError] = useState(false);
 
-    const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
+    const handleChange = (event: SelectChangeEvent) => {
         setRequiredError(false);
         setValue(event.target.value as string);
     };
@@ -62,6 +63,7 @@ const SelectInput: FC<SelectInputProps> = (props: SelectInputProps) => {
 
     return (
         <FormControl
+            variant="standard"
             {...formControlProps}
             onInvalid={(event) => {
                 event.preventDefault();
@@ -71,7 +73,7 @@ const SelectInput: FC<SelectInputProps> = (props: SelectInputProps) => {
             required={required}
         >
             {label && <InputLabel>{label}</InputLabel>}
-            <Select value={value} onChange={handleChange} name={name}>
+            <Select label={label} value={value} onChange={handleChange} name={name}>
                 {!required && <MenuItem value="">--Not Set--</MenuItem>}
 
                 {[...optionValues].sort().map((v, key) => (

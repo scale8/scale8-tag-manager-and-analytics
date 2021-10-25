@@ -1,14 +1,12 @@
-import { ChangeEvent, MouseEvent, ReactElement, ReactNode } from 'react';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableRow from '@material-ui/core/TableRow';
-import clsx from 'clsx';
+import { ChangeEvent, MouseEvent, ReactElement, ReactNode, useMemo } from 'react';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableRow from '@mui/material/TableRow';
 import { getComparator, stableSort } from '../../../utils/ArrayUtils';
 import { FieldAction, FieldType, RowData, S8TableProps } from './S8TableTypes';
-import { Box, Button, TablePagination, Tooltip } from '@material-ui/core';
+import { Box, Button, TablePagination, Tooltip } from '@mui/material';
 import S8TableToolbar from './S8TableToolBar';
 import S8TableHead from './S8TableHead';
 import S8TableRowActionsCell from './S8TableRowActionsCell';
@@ -17,37 +15,6 @@ import { Sparklines, SparklinesLine } from 'react-sparklines';
 import { timestampDisplay } from '../../../utils/DateTimeUtils';
 import { navigationColorFromSectionLocator } from '../../../containers/SectionsDetails';
 import { useLoggedInState } from '../../../context/AppContext';
-
-const useStyles = makeStyles(() =>
-    createStyles({
-        root: {
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-        },
-        content: {
-            flex: '1 0 auto',
-        },
-        table: {
-            minWidth: 750,
-        },
-        footer: {
-            flexShrink: 0,
-            height: 52,
-        },
-        clickableCell: {
-            cursor: 'pointer',
-            '& .value': {
-                display: 'inline-block',
-                borderBottom: '1px dotted #000000',
-            },
-            '&:hover .value': {
-                borderBottom: '1px solid #000000',
-            },
-        },
-    }),
-);
 
 const S8Table = <T extends RowData>(props: S8TableProps<T>): ReactElement => {
     const {
@@ -85,8 +52,6 @@ const S8Table = <T extends RowData>(props: S8TableProps<T>): ReactElement => {
     const { templateInteractions } = useLoggedInState();
     const { sectionHistory } = templateInteractions;
     const navigationColor = navigationColorFromSectionLocator(sectionHistory.current);
-
-    const classes = useStyles();
 
     const visibleColumns = columns.filter((_) => !_.hidden);
 
@@ -160,7 +125,7 @@ const S8Table = <T extends RowData>(props: S8TableProps<T>): ReactElement => {
                 return (
                     <Box width={150}>
                         <Sparklines data={value} width={150} height={30}>
-                            <SparklinesLine style={{ fill: 'none' }} />
+                            <SparklinesLine style={useMemo(() => ({ fill: 'none' }), [])} />
                         </Sparklines>
                     </Box>
                 );
@@ -190,7 +155,7 @@ const S8Table = <T extends RowData>(props: S8TableProps<T>): ReactElement => {
                                 onClick={emptyAction.onClick}
                                 variant="contained"
                                 color="primary"
-                                style={{
+                                sx={{
                                     color: '#ffffff',
                                     background: navigationColor,
                                 }}
@@ -271,10 +236,20 @@ const S8Table = <T extends RowData>(props: S8TableProps<T>): ReactElement => {
                                             ? 'none'
                                             : 'normal'
                                     }
-                                    className={clsx(
-                                        findCurrentFieldAction(column.field, row) !== undefined &&
-                                            classes.clickableCell,
-                                    )}
+                                    sx={
+                                        findCurrentFieldAction(column.field, row) === undefined
+                                            ? undefined
+                                            : {
+                                                  cursor: 'pointer',
+                                                  '& .value': {
+                                                      display: 'inline-block',
+                                                      borderBottom: '1px dotted #000000',
+                                                  },
+                                                  '&:hover .value': {
+                                                      borderBottom: '1px solid #000000',
+                                                  },
+                                              }
+                                    }
                                     onClick={(
                                         e:
                                             | MouseEvent<HTMLTableHeaderCellElement>
@@ -322,7 +297,7 @@ const S8Table = <T extends RowData>(props: S8TableProps<T>): ReactElement => {
     );
 
     return (
-        <div className={classes.root}>
+        <Box sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
             <S8TableToolbar
                 selected={selected}
                 title={title}
@@ -336,8 +311,8 @@ const S8Table = <T extends RowData>(props: S8TableProps<T>): ReactElement => {
                 columns={columns}
                 setColumns={setColumns}
             />
-            <TableContainer className={classes.content}>
-                <Table className={classes.table}>
+            <TableContainer sx={{ flex: '1 0 auto' }}>
+                <Table sx={{ minWidth: 750 }}>
                     <S8TableHead<T>
                         columns={visibleColumns}
                         numSelected={selected.length}
@@ -354,7 +329,7 @@ const S8Table = <T extends RowData>(props: S8TableProps<T>): ReactElement => {
                 </Table>
             </TableContainer>
             <TablePagination
-                className={classes.footer}
+                sx={{ flexShrink: 0, height: 52 }}
                 rowsPerPageOptions={[10, 20, 50, 100]}
                 component="div"
                 count={data.length}
@@ -363,7 +338,7 @@ const S8Table = <T extends RowData>(props: S8TableProps<T>): ReactElement => {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
             />
-        </div>
+        </Box>
     );
 };
 export default S8Table;

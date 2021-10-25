@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { SvgIconProps } from '@material-ui/core';
+import { SvgIconProps } from '@mui/material';
 import SelectorIcon from '../TypeIcons/SelectorIcon';
 
 const DomSelectorIcon: FC<SvgIconProps> = (props: SvgIconProps) => {

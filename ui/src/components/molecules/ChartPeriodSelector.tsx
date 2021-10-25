@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, ReactNode, useEffect, useRef, useState } from 'react';
+import { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import {
     Box,
     CircularProgress,
@@ -6,13 +6,11 @@ import {
     FormControl,
     IconButton,
     InputLabel,
-    makeStyles,
     MenuItem,
     Popover,
     Select,
-    useTheme,
-} from '@material-ui/core';
-import { DateRangePicker } from 'materialui-daterange-picker';
+    SelectChangeEvent,
+} from '@mui/material';
 import { ChartPeriodProps, ChartPeriodType } from '../../hooks/chart/useChartPeriod';
 import {
     addDaysUTC,
@@ -29,23 +27,8 @@ import {
     subMonthsUTC,
     UTCTimestamp,
 } from '../../utils/DateTimeUtils';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-
-const useStyles = makeStyles(() => ({
-    selectRoot: {
-        '&:focus': {
-            backgroundColor: '#ffffff',
-        },
-        width: '150px',
-    },
-    arrowButton: {
-        padding: 0,
-        backgroundColor: 'transparent!important',
-    },
-    arrowIconForward: {
-        transform: 'rotate(180deg)',
-    },
-}));
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { DateRangePicker } from '@scale8/mui-daterange-picker';
 
 const ArrowBlock: FC<{
     onPrevClick: () => void;
@@ -53,19 +36,34 @@ const ArrowBlock: FC<{
     nextDisabled: boolean;
 }> = (props: { onPrevClick: () => void; onNextClick: () => void; nextDisabled: boolean }) => {
     const { onPrevClick, onNextClick, nextDisabled } = props;
-    const classes = useStyles();
     return (
         <>
-            <IconButton className={classes.arrowButton} onClick={onPrevClick} disableRipple>
+            <IconButton
+                sx={{
+                    padding: '0!important',
+                    backgroundColor: 'transparent!important',
+                }}
+                onClick={onPrevClick}
+                disableRipple
+                size="large"
+            >
                 <ArrowBackIosIcon />
             </IconButton>
             <IconButton
-                className={classes.arrowButton}
+                sx={{
+                    padding: '0!important',
+                    backgroundColor: 'transparent!important',
+                }}
                 onClick={onNextClick}
                 disabled={nextDisabled}
                 disableRipple
+                size="large"
             >
-                <ArrowBackIosIcon className={classes.arrowIconForward} />
+                <ArrowBackIosIcon
+                    sx={{
+                        transform: 'rotate(180deg)',
+                    }}
+                />
             </IconButton>
         </>
     );
@@ -77,9 +75,6 @@ export type ChartPeriodSelectorProps = ChartPeriodProps & {
 };
 
 const ChartPeriodSelector: FC<ChartPeriodSelectorProps> = (props: ChartPeriodSelectorProps) => {
-    const classes = useStyles();
-    const theme = useTheme();
-
     const [rangeAnchorEl, setRangeAnchorEl] = useState<Element | null>(null);
     const [selectValue, setSelectValue] = useState<string>('');
     const [selectDisplay, setSelectDisplay] = useState<string>('');
@@ -134,7 +129,7 @@ const ChartPeriodSelector: FC<ChartPeriodSelectorProps> = (props: ChartPeriodSel
         },
     ];
 
-    const handleChange = (event: ChangeEvent<{ value: unknown }>) => {
+    const handleChange = (event: SelectChangeEvent) => {
         const value = event.target.value as string;
         const m = selectValuePeriod.find((_) => value === _.v);
         if (m === undefined) {
@@ -231,13 +226,13 @@ const ChartPeriodSelector: FC<ChartPeriodSelectorProps> = (props: ChartPeriodSel
                         variant="determinate"
                         value={100}
                         size={30}
-                        style={{ color: '#e5e5e5' }}
+                        sx={{ color: '#e5e5e5' }}
                     />
                     <CircularProgress
                         variant="determinate"
                         value={100 - ticks}
                         size={30}
-                        style={{
+                        sx={{
                             position: 'absolute',
                             left: 0,
                             color: props.type === 'app' ? '#44cce0' : '#ff0084',
@@ -246,14 +241,14 @@ const ChartPeriodSelector: FC<ChartPeriodSelectorProps> = (props: ChartPeriodSel
                 </Box>
             )}
 
-            <Box height={5} width={theme.spacing(2)} />
+            <Box height={5} sx={{ width: (theme) => theme.spacing(2) }} />
             <FormControl variant="outlined" size="small">
                 <InputLabel
-                    style={{
+                    sx={{
                         backgroundColor: '#ffffff',
-                        paddingLeft: 5,
-                        paddingRight: 5,
-                        marginLeft: -5,
+                        paddingLeft: '5px',
+                        paddingRight: '8px',
+                        marginLeft: '-3px',
                     }}
                     id="period-label"
                     shrink={true}
@@ -261,8 +256,16 @@ const ChartPeriodSelector: FC<ChartPeriodSelectorProps> = (props: ChartPeriodSel
                     Period
                 </InputLabel>
                 <Select
+                    label="Period"
                     ref={rangeRef}
-                    classes={{ root: classes.selectRoot }}
+                    sx={{
+                        '& .MuiInputBase-input': {
+                            '&:focus': {
+                                backgroundColor: '#ffffff',
+                            },
+                            width: '150px',
+                        },
+                    }}
                     value={selectValue}
                     displayEmpty
                     renderValue={(value): ReactNode => {

@@ -1,7 +1,5 @@
 import { FC } from 'react';
 import { useQuery } from '@apollo/client';
-import { Box } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
 import { useRouter } from 'next/router';
 import { DynamicPageProps } from '../pageLoader/DynamicPageLoader';
 import { useLoggedInState } from '../context/AppContext';
@@ -14,6 +12,8 @@ import { ActionGroupDistributionSection } from '../components/organisms/Sections
 import { ActionGroupDistribution } from '../types/TagRulesTypes';
 import { buildStandardMainInfo } from '../utils/InfoLabelsUtils';
 import { toAppRevision } from '../utils/NavigationPaths';
+import { Box } from '@mui/material';
+import { AlertRevisionFinal } from '../components/atoms/AlertRevisionFinal';
 
 const GlobalActionPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const id = props.params.id ?? '';
@@ -38,36 +38,22 @@ const GlobalActionPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
             return (
                 <Box>
                     {data.getActionGroupDistribution.revision.locked && (
-                        <Alert severity="warning">
-                            This revision has been marked as final. No further changes are possible.
-                            Please{' '}
-                            <span
-                                style={{
-                                    color: 'inherit',
-                                    textDecoration: 'underline',
-                                    cursor: 'pointer',
-                                }}
-                                onClick={() => {
-                                    pageActions.duplicateAppRevision(
-                                        pageActionProps,
-                                        data.getActionGroupDistribution.revision.id,
-                                        (
-                                            id: string,
-                                            pageRefresh: () => void,
-                                            handleDialogClose: (checkChanges: boolean) => void,
-                                        ) => {
-                                            handleDialogClose(false);
-                                            router
-                                                .push(toAppRevision({ id }), 'global-actions')
-                                                .then();
-                                        },
-                                    );
-                                }}
-                            >
-                                <b>clone</b>
-                            </span>{' '}
-                            the revision to continue working on it.
-                        </Alert>
+                        <AlertRevisionFinal
+                            onCloneLinkClick={() => {
+                                pageActions.duplicateAppRevision(
+                                    pageActionProps,
+                                    data.getActionGroupDistribution.revision.id,
+                                    (
+                                        id: string,
+                                        pageRefresh: () => void,
+                                        handleDialogClose: (checkChanges: boolean) => void,
+                                    ) => {
+                                        handleDialogClose(false);
+                                        router.push(toAppRevision({ id }, 'global-actions')).then();
+                                    },
+                                );
+                            }}
+                        />
                     )}
                     <NonTablePageContainer
                         title="Global Action"

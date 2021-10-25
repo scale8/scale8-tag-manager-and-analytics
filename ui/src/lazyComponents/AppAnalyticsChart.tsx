@@ -9,7 +9,7 @@ import {
 } from '../hooks/chart/useChartPeriod';
 import AppChartQuery from '../gql/queries/AppChartQuery';
 import { useQuery } from '@apollo/client';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import { AppAnalyticsContentProps } from '../types/props/AppAnalyticsContentProps';
 import { AppChartQueryData } from '../gql/generated/AppChartQueryData';
 import { ApolloError } from '@apollo/client/errors';

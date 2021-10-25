@@ -1,52 +1,19 @@
 import { FC } from 'react';
 import {
     Box,
-    Button,
     Checkbox,
     DialogActions,
     DialogContent,
     DialogContentText,
     FormControlLabel,
-} from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { grey } from '@material-ui/core/colors';
+} from '@mui/material';
 import { MappedPlatformValuesDisplay } from '../molecules/MappedPlatformValues/MappedPlatformValuesDisplay';
 import { MappedPlatformValues } from '../../types/MappedPlatformValuesTypes';
 import TextInput from '../atoms/InputTypes/TextInput';
 import IntegerInput from '../atoms/InputTypes/IntegerInput';
-
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        root: {
-            padding: theme.spacing(0, 2, 1, 2),
-        },
-        dialogActions: {
-            padding: theme.spacing(2),
-            justifyContent: 'center',
-        },
-        input: {
-            width: '100%',
-            margin: theme.spacing(0, 0, 3),
-        },
-        checkbox: {
-            display: 'block',
-            width: '100%',
-            marginBottom: theme.spacing(3),
-        },
-        cancel: {
-            color: theme.palette.getContrastText(grey[900]),
-            backgroundColor: grey[700],
-            '&:hover': {
-                backgroundColor: grey[900],
-            },
-        },
-        description: {
-            display: 'block',
-            width: '100%',
-            margin: theme.spacing(0, 0, 2),
-        },
-    }),
-);
+import { DialogCancelButton } from '../atoms/DialogCancelButton';
+import { SxProps } from '@mui/system';
+import { Theme } from '@mui/material/styles';
 
 type InspectEventDialogContentProps = {
     platformData: MappedPlatformValues;
@@ -64,7 +31,10 @@ type InspectEventDialogContentProps = {
 const InspectEventDialog: FC<InspectEventDialogContentProps> = (
     props: InspectEventDialogContentProps,
 ) => {
-    const classes = useStyles();
+    const inputStyle: SxProps<Theme> = {
+        width: '100%',
+        margin: (theme) => theme.spacing(0, 0, 3),
+    };
 
     return (
         <>
@@ -81,7 +51,7 @@ const InspectEventDialog: FC<InspectEventDialogContentProps> = (
                             setValue={() => {
                                 // disabled
                             }}
-                            className={classes.input}
+                            sx={inputStyle}
                             variant="standard"
                             disabled
                         />
@@ -94,7 +64,7 @@ const InspectEventDialog: FC<InspectEventDialogContentProps> = (
                             setValue={() => {
                                 // disabled
                             }}
-                            className={classes.input}
+                            sx={inputStyle}
                             variant="standard"
                             disabled
                         />
@@ -107,13 +77,22 @@ const InspectEventDialog: FC<InspectEventDialogContentProps> = (
                             setValue={() => {
                                 // disabled
                             }}
-                            className={classes.input}
+                            sx={inputStyle}
                             variant="standard"
                             disabled
                         />
                     )}
                     {props.eventDescription && (
-                        <small className={classes.description}>{props.eventDescription}</small>
+                        <Box
+                            component="small"
+                            sx={{
+                                display: 'block',
+                                width: '100%',
+                                margin: (theme) => theme.spacing(0, 0, 2),
+                            }}
+                        >
+                            {props.eventDescription}
+                        </Box>
                     )}
                     <MappedPlatformValuesDisplay
                         mappedPlatformValues={props.platformData}
@@ -122,7 +101,7 @@ const InspectEventDialog: FC<InspectEventDialogContentProps> = (
                         parentLocators={[]}
                     />
                     <FormControlLabel
-                        className={classes.checkbox}
+                        sx={{ display: 'block', width: '100%', marginBottom: 3 }}
                         control={
                             <Checkbox
                                 name="useClearState"
@@ -144,17 +123,17 @@ const InspectEventDialog: FC<InspectEventDialogContentProps> = (
                             setValue={() => {
                                 // disabled
                             }}
-                            className={classes.input}
+                            sx={inputStyle}
                             variant="standard"
                             disabled
                         />
                     )}
                 </DialogContentText>
             </DialogContent>
-            <DialogActions className={classes.dialogActions}>
-                <Button onClick={props.handleClose} className={classes.cancel} autoFocus>
+            <DialogActions sx={{ padding: 2, justifyContent: 'center' }}>
+                <DialogCancelButton onClick={props.handleClose} autoFocus>
                     Close
-                </Button>
+                </DialogCancelButton>
             </DialogActions>
         </>
     );

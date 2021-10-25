@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { SvgIconProps } from '@material-ui/core';
+import { SvgIconProps } from '@mui/material';
 import ObjectsIcon from '../TypeIcons/ObjectsIcon';
 
 const ObjectArrayIcon: FC<SvgIconProps> = (props: SvgIconProps) => {

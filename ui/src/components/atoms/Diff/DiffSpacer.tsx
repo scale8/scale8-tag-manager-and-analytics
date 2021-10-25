@@ -1,24 +1,17 @@
 import { FC } from 'react';
+import { Box } from '@mui/material';
 
-import { createStyles, Theme } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-
-type SpacerProps = {
+const DiffSpacer: FC<{
     height: number;
-};
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            width: '100%',
-            height: (props: SpacerProps) => theme.spacing(props.height),
-        },
-    }),
-);
-
-const DiffSpacer: FC<SpacerProps> = (props: SpacerProps) => {
-    const classes = useStyles(props);
-    return <div className={classes.root} />;
+}> = ({ height }) => {
+    return (
+        <Box
+            sx={{
+                width: '100%',
+                height: (theme) => theme.spacing(height),
+            }}
+        />
+    );
 };
 
 export default DiffSpacer;

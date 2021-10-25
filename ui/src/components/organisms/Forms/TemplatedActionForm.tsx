@@ -1,10 +1,9 @@
 import { ChangeEvent, FC, useEffect, useState } from 'react';
-import { Badge, Box, Button, createStyles, Divider, lighten } from '@material-ui/core';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import { Badge, BadgeProps, Box, Button, Divider, lighten } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 import TabsTabPanel from '../../molecules/TabsTabPanel';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { MainDrawerTitle } from '../../molecules/MainDrawerTitle';
 import { InfoButton } from '../../molecules/InfoButton';
 import { TemplatedActionFormProps } from '../../../types/props/forms/TemplatedActionFormProps';
@@ -22,35 +21,9 @@ import { useLoggedInState } from '../../../context/AppContext';
 import { triggerUpdateTemplatedActionDataMap } from '../../../dialogPages/tagManager/platform/TemplatedActionDataMapUpdate';
 import { deleteTemplatedActionDataMap } from '../../../dialogPages/tagManager/platform/TemplatedActionDataMapDelete';
 import { triggerAddTemplatedActionDataMap } from '../../../dialogPages/tagManager/platform/TemplatedActionDataMapCreate';
-
-const useStyles = makeStyles((theme) => ({
-    form: {
-        '& .DrawerFormField': {
-            width: '100%',
-            margin: theme.spacing(0, 0, 3),
-        },
-        minHeight: '100vh',
-        display: 'flex',
-        flexFlow: 'column nowrap',
-    },
-    save: {
-        color: theme.palette.getContrastText(theme.palette.info.main),
-        backgroundColor: theme.palette.info.main,
-        '&:hover': {
-            backgroundColor: lighten(theme.palette.info.main, 0.4),
-        },
-        marginRight: theme.spacing(2),
-    },
-    previewSeparator: {
-        background: `url('./img/pattern.png')`,
-        padding: theme.spacing(1, 2, 1, 2),
-        fontSize: 24,
-    },
-}));
+import { styled } from '@mui/material/styles';
 
 const TemplatedActionForm: FC<TemplatedActionFormProps> = (props: TemplatedActionFormProps) => {
-    const classes = useStyles();
-
     const { gqlError, errors } = props;
 
     const { templateInteractions } = useLoggedInState();
@@ -85,18 +58,28 @@ const TemplatedActionForm: FC<TemplatedActionFormProps> = (props: TemplatedActio
         setTabIndex(newValue);
     };
 
-    const StyledBadge = withStyles((theme) =>
-        createStyles({
-            badge: {
-                right: -17,
-                top: 9,
-                backgroundColor: theme.palette.error.main,
-            },
-        }),
-    )(Badge);
+    const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
+        '& .MuiBadge-badge': {
+            right: -17,
+            top: 7,
+            backgroundColor: theme.palette.error.main,
+        },
+    }));
 
     return (
-        <form className={classes.form} onSubmit={props.handleSubmit}>
+        <Box
+            component="form"
+            sx={{
+                '& .DrawerFormField': {
+                    width: '100%',
+                    margin: (theme) => theme.spacing(0, 0, 3),
+                },
+                minHeight: '100vh',
+                display: 'flex',
+                flexFlow: 'column nowrap',
+            }}
+            onSubmit={props.handleSubmit}
+        >
             <MainDrawerTitle handleDialogClose={props.handleDialogClose}>
                 <Box flexGrow={1}>
                     {props.title}
@@ -107,7 +90,16 @@ const TemplatedActionForm: FC<TemplatedActionFormProps> = (props: TemplatedActio
                         <Button
                             size="small"
                             type="submit"
-                            className={classes.save}
+                            sx={{
+                                marginRight: (theme) => theme.spacing(2),
+                                color: (theme) =>
+                                    theme.palette.getContrastText(theme.palette.info.main),
+                                backgroundColor: (theme) => theme.palette.info.main,
+                                '&:hover': {
+                                    backgroundColor: (theme) =>
+                                        lighten(theme.palette.info.main, 0.4),
+                                },
+                            }}
                             disabled={props.isSubmitting}
                         >
                             Save
@@ -256,7 +248,15 @@ const TemplatedActionForm: FC<TemplatedActionFormProps> = (props: TemplatedActio
                                 />
                             </Box>
                             <Divider />
-                            <div className={classes.previewSeparator}>Form Preview</div>
+                            <Box
+                                sx={{
+                                    background: `url('/img/pattern.png')`,
+                                    padding: (theme) => theme.spacing(1, 2, 1, 2),
+                                    fontSize: 24,
+                                }}
+                            >
+                                Form Preview
+                            </Box>
                             <Divider />
                             <Box flex="1" height="50%" width="100%" overflow="auto">
                                 <Box>
@@ -288,7 +288,7 @@ const TemplatedActionForm: FC<TemplatedActionFormProps> = (props: TemplatedActio
                     </TabsTabPanel>
                 </Box>
             </Box>
-        </form>
+        </Box>
     );
 };
 

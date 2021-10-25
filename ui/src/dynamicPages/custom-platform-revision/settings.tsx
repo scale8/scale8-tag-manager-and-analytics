@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useQuery } from '@apollo/client';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import { queryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
 import { DynamicPageProps } from '../../pageLoader/DynamicPageLoader';
 import { PlatformSettingPageData } from '../../gql/generated/PlatformSettingPageData';

@@ -1,19 +1,5 @@
-import { makeStyles } from '@material-ui/core/styles';
 import { FC, ReactNode } from 'react';
-import { Card, Container, Grid } from '@material-ui/core';
-
-const useStyles = makeStyles((theme) => ({
-    cardGrid: {
-        padding: theme.spacing(0, 0, 4, 0),
-    },
-    card: {
-        height: '100%',
-        padding: theme.spacing(2),
-        display: 'flex',
-        border: '1px solid rgba(0, 0, 0, 0.12)',
-        borderRadius: '4px',
-    },
-}));
+import { Box, Card, Grid } from '@mui/material';
 
 export type ChartPageContentProps = {
     summaryBlock: ReactNode;
@@ -23,18 +9,35 @@ export type ChartPageContentProps = {
 };
 
 const ChartPageContent: FC<ChartPageContentProps> = (props: ChartPageContentProps) => {
-    const classes = useStyles();
-
     return (
-        <Container className={classes.cardGrid} maxWidth="xl">
+        <Box sx={{ padding: (theme) => theme.spacing(0, 0, 4, 0) }}>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    <Card className={classes.card} elevation={0}>
+                    <Card
+                        sx={{
+                            height: '100%',
+                            padding: (theme) => theme.spacing(2),
+                            display: 'flex',
+                            border: '1px solid rgba(0, 0, 0, 0.12)',
+                            borderRadius: '4px',
+                        }}
+                        elevation={0}
+                    >
                         {props.summaryBlock}
                     </Card>
                 </Grid>
                 <Grid item xs={12}>
-                    <Card className={classes.card} style={{ minHeight: '300px' }} elevation={0}>
+                    <Card
+                        sx={{
+                            height: '100%',
+                            padding: (theme) => theme.spacing(2),
+                            display: 'flex',
+                            border: '1px solid rgba(0, 0, 0, 0.12)',
+                            borderRadius: '4px',
+                            minHeight: '300px',
+                        }}
+                        elevation={0}
+                    >
                         {props.chartBlock}
                     </Card>
                 </Grid>
@@ -49,7 +52,7 @@ const ChartPageContent: FC<ChartPageContentProps> = (props: ChartPageContentProp
                     </Grid>
                 ))}
             </Grid>
-        </Container>
+        </Box>
     );
 };
 

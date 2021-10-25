@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Box, DialogContent } from '@material-ui/core';
+import { Box, DialogContent } from '@mui/material';
 import { RevisionDiffElement } from '../../../types/DiffTypes';
 import Diff from './Diff';
 import { addHasChangesToDiffMap, revisionDiffsToMap } from '../../../utils/DiffUtils';
@@ -29,7 +29,7 @@ const RevisionDiff: FC<RevisionDiffProps> = (props: RevisionDiffProps) => {
                 {formInfoProps !== undefined && <InfoButton {...formInfoProps} />}
             </InfoDialogTitle>
             <DialogContent
-                style={{
+                sx={{
                     margin: 0,
                     padding: 0,
                 }}

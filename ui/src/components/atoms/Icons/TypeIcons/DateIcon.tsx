@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import { SvgIconProps } from '@material-ui/core';
-import TodayIcon from '@material-ui/icons/Today';
+import { SvgIconProps } from '@mui/material';
+import TodayIcon from '@mui/icons-material/Today';
 
 const DateIcon: FC<SvgIconProps> = (props: SvgIconProps) => {
     return (

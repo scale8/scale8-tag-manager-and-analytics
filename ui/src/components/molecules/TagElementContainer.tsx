@@ -1,30 +1,7 @@
 import { FC, ReactNode } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Card, CardContent, CardHeader } from '@material-ui/core';
-import clsx from 'clsx';
+import { Card, CardContent, CardHeader } from '@mui/material';
 import { SectionAction, SectionActionsSpeedDial } from './SectionActionsSpeedDial';
 import AppliedIcon from '../atoms/Icons/AppliedIcon';
-
-const useStyles = makeStyles((theme) => ({
-    card: {
-        marginBottom: theme.spacing(2),
-        border: '1px solid #e1e4e8',
-    },
-    cardHeader: {
-        padding: theme.spacing(1, 2, 1, 2),
-    },
-    title: {
-        fontSize: '18px',
-    },
-    dark: {
-        backgroundColor: 'rgba(0, 0, 0, 0.04)',
-    },
-    section: { padding: theme.spacing(0, 2) },
-    avatar: {
-        paddingTop: '7px',
-        marginRight: '10px',
-    },
-}));
 
 type TagElementContainerProps = {
     children: ReactNode;
@@ -39,22 +16,27 @@ type TagElementContainerProps = {
 };
 
 const TagElementContainer: FC<TagElementContainerProps> = (props: TagElementContainerProps) => {
-    const classes = useStyles();
-
     return (
         <Card
-            className={clsx(classes.card, {
-                [classes.dark]: props.dark,
-            })}
+            sx={{
+                marginBottom: 2,
+                border: '1px solid #e1e4e8',
+                backgroundColor: props.dark ? 'rgba(0, 0, 0, 0.04)' : undefined,
+            }}
             elevation={0}
         >
             {!props.noHeader && (
                 <CardHeader
-                    classes={{
-                        title: classes.title,
-                        avatar: classes.avatar,
+                    sx={{
+                        padding: (theme) => theme.spacing(1, 2, 1, 2),
+                        '& .MuiCardHeader-title': {
+                            fontSize: '18px',
+                        },
+                        '& .MuiCardHeader-avatar': {
+                            paddingTop: '7px',
+                            marginRight: '10px',
+                        },
                     }}
-                    className={classes.cardHeader}
                     avatar={
                         props.applied === undefined ? undefined : (
                             <AppliedIcon
@@ -78,7 +60,9 @@ const TagElementContainer: FC<TagElementContainerProps> = (props: TagElementCont
                     title={props.title}
                 />
             )}
-            <CardContent className={classes.section}>{props.children}</CardContent>
+            <CardContent sx={{ padding: (theme) => theme.spacing(0, 2) }}>
+                {props.children}
+            </CardContent>
         </Card>
     );
 };

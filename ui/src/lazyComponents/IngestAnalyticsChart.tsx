@@ -8,7 +8,7 @@ import {
     labelsFromChartPeriod,
 } from '../hooks/chart/useChartPeriod';
 import { useQuery } from '@apollo/client';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import { ApolloError } from '@apollo/client/errors';
 import GQLError from '../components/atoms/GqlError';
 import { IngestEndpointAnalyticsContentProps } from '../types/props/IngestEndpointAnalyticsContentProps';

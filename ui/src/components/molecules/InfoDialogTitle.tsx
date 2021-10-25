@@ -1,25 +1,6 @@
 import { FC, ReactNode } from 'react';
-import { DialogTitle, IconButton, Typography } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import CloseIcon from '@material-ui/icons/Close';
-
-const useStyles = makeStyles((theme) =>
-    createStyles({
-        title: {
-            flex: 1,
-        },
-        titleWithMargin: {
-            marginLeft: theme.spacing(2),
-            flex: 1,
-        },
-        closeButton: {
-            position: 'absolute',
-            right: theme.spacing(1),
-            top: '11px',
-            color: theme.palette.grey[500],
-        },
-    }),
-);
+import { DialogTitle, IconButton, Typography } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 type InfoDialogTitleProps = {
     children: ReactNode;
@@ -28,25 +9,31 @@ type InfoDialogTitleProps = {
 };
 
 const InfoDialogTitle: FC<InfoDialogTitleProps> = (props: InfoDialogTitleProps) => {
-    const classes = useStyles();
-
     return (
-        <DialogTitle style={{ display: 'flex', height: 68 }}>
+        <DialogTitle sx={{ display: 'flex', height: 68 }}>
             <Typography
                 component="div"
                 variant="h6"
-                className={
-                    props.fullscreen !== undefined && props.fullscreen
-                        ? classes.titleWithMargin
-                        : classes.title
-                }
+                sx={{
+                    flex: 1,
+                    marginLeft: (theme) =>
+                        props.fullscreen !== undefined && props.fullscreen
+                            ? theme.spacing(2)
+                            : undefined,
+                }}
             >
                 {props.children}
             </Typography>
             <IconButton
                 onClick={() => props.handleDialogClose(true)}
-                className={classes.closeButton}
+                sx={{
+                    position: 'absolute',
+                    right: (theme) => theme.spacing(1),
+                    top: '11px',
+                    color: (theme) => theme.palette.grey[500],
+                }}
                 aria-label="close"
+                size="large"
             >
                 <CloseIcon />
             </IconButton>

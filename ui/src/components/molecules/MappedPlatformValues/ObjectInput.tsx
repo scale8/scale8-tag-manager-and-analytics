@@ -1,55 +1,15 @@
-import { makeStyles } from '@material-ui/core/styles';
 import { FC } from 'react';
 import {
     MappedPlatformElementFormProps,
     MappedPlatformValuesForm,
 } from './MappedPlatformValuesForm';
-import { IconButton } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
-import CloseIcon from '@material-ui/icons/Close';
+import { Box, IconButton } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@mui/icons-material/Close';
 import { VarType } from '../../../gql/generated/globalTypes';
 import { buildDataMapLabel } from '../../../utils/DataMapUtils';
 
-const useStyles = makeStyles((theme) => ({
-    objectContainer: {
-        width: '100%',
-        borderRadius: '4px',
-        border: '1px solid #e1e4e8',
-    },
-    label: {
-        padding: theme.spacing(1),
-    },
-    labelDisabled: {
-        padding: theme.spacing(1),
-        color: 'rgba(0, 0, 0, 0.38)',
-    },
-    content: {
-        borderTop: '1px solid #e1e4e8',
-        display: 'flex',
-    },
-    add: {
-        borderTop: '1px solid #e1e4e8',
-        padding: theme.spacing(1),
-    },
-    objectElementContainer: {
-        width: '100%',
-        padding: theme.spacing(1),
-        flexGrow: 1,
-        '& div:last-child': {
-            marginBottom: 0,
-        },
-    },
-    closeButtonContainer: {
-        borderLeft: '1px solid #e1e4e8',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexGrow: 0,
-    },
-}));
-
 const ObjectInput: FC<MappedPlatformElementFormProps> = (props: MappedPlatformElementFormProps) => {
-    const classes = useStyles();
     const { mappedPlatformElement, parentLocators, disabled, ...parentProps } = props;
 
     const canAdd =
@@ -60,14 +20,21 @@ const ObjectInput: FC<MappedPlatformElementFormProps> = (props: MappedPlatformEl
             mappedPlatformElement.platformDataMap.var_type === VarType.ARRAY_OBJECT);
 
     return (
-        <div className={classes.objectContainer}>
-            <div className={disabled ? classes.labelDisabled : classes.label}>
+        <Box sx={{ width: '100%', borderRadius: '4px', border: '1px solid #e1e4e8' }}>
+            <Box sx={{ color: disabled ? 'rgba(0, 0, 0, 0.38)' : undefined, padding: 1 }}>
                 {buildDataMapLabel(mappedPlatformElement.platformDataMap.key)}
                 {mappedPlatformElement.platformDataMap.is_optional || ' *'}
-            </div>
+            </Box>
             {mappedPlatformElement.children.map((platformDataObject, index) => (
-                <div className={classes.content} key={index}>
-                    <div className={classes.objectElementContainer}>
+                <Box sx={{ borderTop: '1px solid #e1e4e8', display: 'flex' }} key={index}>
+                    <Box
+                        sx={{
+                            width: '100%',
+                            padding: 1,
+                            flexGrow: 1,
+                            '& div:last-of-type': { marginBottom: 0 },
+                        }}
+                    >
                         <MappedPlatformValuesForm
                             {...parentProps}
                             mappedPlatformValues={platformDataObject}
@@ -80,11 +47,19 @@ const ObjectInput: FC<MappedPlatformElementFormProps> = (props: MappedPlatformEl
                             ]}
                             disabled={disabled}
                         />
-                    </div>
+                    </Box>
                     {!disabled &&
                         (mappedPlatformElement.platformDataMap.is_optional ||
                             mappedPlatformElement.children.length > 1) && (
-                            <div className={classes.closeButtonContainer}>
+                            <Box
+                                sx={{
+                                    borderLeft: '1px solid #e1e4e8',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    flexGrow: 0,
+                                }}
+                            >
                                 <IconButton
                                     aria-label="delete"
                                     onClick={() => {
@@ -98,13 +73,13 @@ const ObjectInput: FC<MappedPlatformElementFormProps> = (props: MappedPlatformEl
                                 >
                                     <CloseIcon fontSize="small" />
                                 </IconButton>
-                            </div>
+                            </Box>
                         )}
-                </div>
+                </Box>
             ))}
 
             {canAdd && (
-                <div className={classes.add}>
+                <Box sx={{ borderTop: '1px solid #e1e4e8', padding: 1 }}>
                     <IconButton
                         aria-label="add"
                         onClick={() => {
@@ -117,9 +92,9 @@ const ObjectInput: FC<MappedPlatformElementFormProps> = (props: MappedPlatformEl
                     >
                         <AddIcon fontSize="small" />
                     </IconButton>
-                </div>
+                </Box>
             )}
-        </div>
+        </Box>
     );
 };
 
