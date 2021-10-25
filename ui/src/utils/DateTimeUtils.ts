@@ -129,11 +129,6 @@ export const dateToUTCTimestamp = (d: Date, displayValueToUTC = false): UTCTimes
     );
 };
 
-export const dateToUTCTimestampOrNull = (
-    d: Date | null,
-    displayValueToUTC = false,
-): UTCTimestamp | null => (d === null ? null : dateToUTCTimestamp(d, displayValueToUTC));
-
 export const stringToUTCTimestamp = (v: string, format = apiStringDateFormat): UTCTimestamp => {
     return dateToUTCTimestamp(parse(`${v} +0000`, `${format} xx`, now));
 };
@@ -154,6 +149,8 @@ export const isSameMonthUTC = (left: UTCTimestamp, right: UTCTimestamp): boolean
 
     return leftElements.month === rightElements.month;
 };
+
+export const getTimezoneOffset = (): number => now.getTimezoneOffset();
 
 export const addDaysUTC = (value: UTCTimestamp, days: number): UTCTimestamp =>
     dateToUTCTimestamp(addDays(new Date(value), days));
@@ -206,7 +203,7 @@ export const getHoursUTC = (value: UTCTimestamp): UTCTimestamp => {
     return elements.hour;
 };
 
-export const setMinutesUTC = (minutes: number, value: UTCTimestamp): UTCTimestamp => {
+export const setMinutesUTC = (value: UTCTimestamp, minutes: number): UTCTimestamp => {
     const elements = dateToUTCElements(new Date(value));
 
     return Date.UTC(
@@ -220,7 +217,7 @@ export const setMinutesUTC = (minutes: number, value: UTCTimestamp): UTCTimestam
     );
 };
 
-export const setHoursUTC = (hours: number, value: UTCTimestamp): UTCTimestamp => {
+export const setHoursUTC = (value: UTCTimestamp, hours: number): UTCTimestamp => {
     const elements = dateToUTCElements(new Date(value));
 
     return Date.UTC(
@@ -350,20 +347,5 @@ export const timestampToDataMapString = (timestamp: UTCTimestamp): string => {
     const e = dateToPrintableUTCElements(new Date(timestamp));
     return `${e.year}-${e.month}-${e.date} ${e.hour}:${e.minute}:${e.seconds}.${e.milliseconds}`;
 };
-
-// export class dateTimePickerDateUtils extends DateFnsUtils {
-//     parse = (value: string, formatString: string): Date =>
-//         parse(
-//             timestampDisplay(dateToUTCTimestamp(parse(value, formatString, now))),
-//             'dd/MM/yyyy, HH:mm:ss',
-//             now,
-//         );
-//
-//     format = (value: Date, formatString: string): string =>
-//         format(
-//             parse(timestampDisplay(dateToUTCTimestamp(value)), 'dd/MM/yyyy, HH:mm:ss', now),
-//             formatString,
-//         );
-// }
 
 export { isSameMinute as isSameMinuteTimestamp };

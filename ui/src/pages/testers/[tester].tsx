@@ -8,6 +8,7 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import { getNodeEnv } from '../../utils/ConfigUtils';
 import ErrorHighlightTester from '../../testers/error-highlight-tester';
 import UsageTester from '../../testers/usage-tester';
+import DatetimeTester from '../../testers/datetime-tester';
 
 export const getStaticPaths: GetStaticPaths = async () => {
     if (getNodeEnv() === 'development') {
@@ -18,6 +19,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
                 { params: { tester: 'diff-tester' } },
                 { params: { tester: 'error-highlight-tester' } },
                 { params: { tester: 'usage-tester' } },
+                { params: { tester: 'datetime-tester' } },
             ],
             fallback: false,
         };
@@ -47,6 +49,8 @@ const Tester: FC = () => {
             return <ErrorHighlightTester />;
         case 'usage-tester':
             return <UsageTester />;
+        case 'datetime-tester':
+            return <DatetimeTester />;
         default:
             return <Navigate to="/404" />;
     }

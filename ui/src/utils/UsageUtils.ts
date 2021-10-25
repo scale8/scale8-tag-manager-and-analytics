@@ -7,7 +7,7 @@ import {
     startOfMinuteUTC,
     subHoursUTC,
     subMinutesUTC,
-    UTCNow,
+    UTCCurrent,
     UTCTimestamp,
 } from './DateTimeUtils';
 
@@ -133,7 +133,7 @@ export const prepareUsageRange = (
     aggregateMinutes: number,
 ): UsageDetails[] => {
     const aggregateRatio = aggregateMinutes;
-    const initialDate = roundByRatio(startOfMinuteUTC(UTCNow), aggregateRatio);
+    const initialDate = roundByRatio(startOfMinuteUTC(UTCCurrent()), aggregateRatio);
 
     const aggregateDateEntries = [];
     for (let i = 0; i <= zoomToMinutes(zoom) / aggregateMinutes; i++) {

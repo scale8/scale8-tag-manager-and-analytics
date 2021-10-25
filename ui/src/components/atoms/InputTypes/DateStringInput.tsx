@@ -3,7 +3,6 @@ import DateInput, { DateInputProps } from './DateInput';
 import {
     dataMapStringToUTCTimestamp,
     timestampToDataMapString,
-    UTCNow,
 } from '../../../utils/DateTimeUtils';
 
 export type DateStringInputProps = Omit<DateInputProps, 'value' | 'setValue'> & {
@@ -19,11 +18,7 @@ const DateStringInput: FC<DateStringInputProps> = (props: DateStringInputProps) 
             value={value !== '' ? dataMapStringToUTCTimestamp(value) : null}
             setValue={(date) => {
                 if (date === null) {
-                    if (required) {
-                        setValue(timestampToDataMapString(UTCNow));
-                    } else {
-                        setValue('');
-                    }
+                    setValue('');
                 } else {
                     setValue(timestampToDataMapString(date));
                 }

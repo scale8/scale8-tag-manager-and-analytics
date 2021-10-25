@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import DateInput, { DateInputProps } from './DateInput';
-import { UTCNow } from '../../../utils/DateTimeUtils';
 
 export type DateStampInputProps = Omit<DateInputProps, 'value' | 'setValue'> & {
     value: number | '';
@@ -15,11 +14,7 @@ const DateStampInput: FC<DateStampInputProps> = (props: DateStampInputProps) => 
             value={value !== '' ? value : null}
             setValue={(date) => {
                 if (date === null) {
-                    if (required) {
-                        setValue(UTCNow);
-                    } else {
-                        setValue('');
-                    }
+                    setValue('');
                 } else {
                     setValue(date);
                 }

@@ -11,7 +11,7 @@ const UsageTester: FC = () => {
     return (
         <>
             <Head>
-                <title>Scale8 - Diff Test</title>
+                <title>Scale8 - Usage Test</title>
                 <meta name="description" content="Scale8 - Diff Test." />
             </Head>
 

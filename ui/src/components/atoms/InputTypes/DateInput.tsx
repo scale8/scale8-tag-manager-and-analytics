@@ -1,9 +1,16 @@
-import { Box, IconButton, TextField } from '@mui/material';
-import { FC, ReactElement, useEffect } from 'react';
-import CloseIcon from '@mui/icons-material/Close';
-import { UTCNow, UTCTimestamp } from '../../../utils/DateTimeUtils';
+import { TextField } from '@mui/material';
+import { FC, ReactElement, useState } from 'react';
+import {
+    addMinutesUTC,
+    dateToUTCTimestamp,
+    getTimezoneOffset,
+    startOfDayFromTimestamp,
+    startOfMinuteUTC,
+    subMinutesUTC,
+    UTCTimestamp,
+} from '../../../utils/DateTimeUtils';
 import { DesktopDatePicker, DesktopDateTimePicker, LocalizationProvider } from '@mui/lab';
-import AdapterDayjs from '@mui/lab/AdapterDayjs';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { InputBaseProps } from '@mui/material/InputBase';
 import { FormProps } from '../../../hooks/form/useFormValidation';
 import { TextFieldProps as MuiTextFieldPropsType } from '@mui/material/TextField/TextField';
@@ -45,72 +52,63 @@ const DateInput: FC<DateInputProps> = ({
     onBlur,
     includeTime,
 }) => {
-    useEffect(() => {
-        if (required && !disabled && value === null) {
-            setValue(UTCNow);
-        }
-    }, [value, required, setValue]);
+    const [requiredError, setRequiredError] = useState(false);
+
+    const displayDateToValueWithTime = (date: Date) =>
+        subMinutesUTC(dateToUTCTimestamp(date), getTimezoneOffset());
+
+    const displayDateToValue = (date: Date, withTime: boolean) =>
+        withTime
+            ? startOfMinuteUTC(displayDateToValueWithTime(date))
+            : startOfDayFromTimestamp(displayDateToValueWithTime(date));
+
+    const valueToDisplayDate = (valueUTC: UTCTimestamp) =>
+        new Date(addMinutesUTC(valueUTC, getTimezoneOffset()));
 
     const pickerDateInputProps: {
         renderInput: (props: MuiTextFieldPropsType) => ReactElement;
-        onChange: (date: UTCTimestamp | null) => void;
+        onChange: (date: Date | null) => void;
         disabled: undefined | boolean;
         label?: React.ReactNode;
         inputFormat: string;
-        value: number | null;
+        value: Date | null;
     } = {
         label,
-        value,
-        inputFormat: includeTime ? 'dd/MM/yyyy' : 'dd/MM/yyyy HH:mm:ss',
+        value: value === null ? null : valueToDisplayDate(value),
+        inputFormat: includeTime ? 'dd/MM/yyyy HH:mm' : 'dd/MM/yyyy',
         onChange: (date) => {
-            if (date === null && required) {
-                setValue(UTCNow);
-            } else {
-                setValue(date);
-            }
+            setRequiredError(false);
+            setValue(date === null ? null : displayDateToValue(date, !!includeTime));
         },
         disabled,
         renderInput: (params) => (
             <TextField
                 {...params}
-                error={validationError !== undefined}
-                helperText={validationError}
+                error={validationError !== undefined || requiredError}
+                helperText={requiredError ? 'Required value' : validationError}
                 required={required}
                 onBlur={onBlur}
                 className={className}
-                sx={sx}
+                onInvalid={(event) => {
+                    event.preventDefault();
+                    setRequiredError(true);
+                }}
+                sx={{
+                    minWidth: '200px',
+                    ...(sx ?? {}),
+                }}
                 name={name}
             />
         ),
     };
 
     return (
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <div>
-                {includeTime ? (
-                    <DesktopDateTimePicker {...pickerDateInputProps} />
-                ) : (
-                    <DesktopDatePicker {...pickerDateInputProps} />
-                )}
-                {!required && !disabled && (
-                    <Box display="inline-box" position="relative">
-                        <IconButton
-                            sx={{
-                                marginLeft: -25,
-                                marginTop: 0,
-                                position: 'absolute',
-                            }}
-                            aria-label="empty"
-                            onClick={() => {
-                                setValue(null);
-                            }}
-                            size="small"
-                        >
-                            <CloseIcon fontSize="small" />
-                        </IconButton>
-                    </Box>
-                )}
-            </div>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+            {includeTime ? (
+                <DesktopDateTimePicker {...pickerDateInputProps} />
+            ) : (
+                <DesktopDatePicker {...pickerDateInputProps} />
+            )}
         </LocalizationProvider>
     );
 };
