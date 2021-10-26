@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
+import java.net.URL;
 import java.util.Optional;
 
 @Singleton
@@ -26,8 +27,13 @@ public class Geo {
   Reader GEO_DB;
 
   public Geo(Env env, Loader loader) {
-    Optional<InputStream> db = loader.getResourceAsInputStream(env.MMDB_FILE);
     try {
+      Optional<InputStream> db;
+      if (env.MMDB_FILE.startsWith("http")) {
+        db = Optional.of(new URL(env.MMDB_FILE).openStream());
+      } else {
+        db = loader.getResourceAsInputStream(env.MMDB_FILE);
+      }
       this.GEO_DB = db.isPresent() ? new Reader(db.get()) : new Reader(new File(env.MMDB_FILE));
     } catch (IOException e) {
       LOG.warn(

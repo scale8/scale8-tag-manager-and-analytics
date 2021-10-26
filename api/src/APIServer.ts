@@ -222,6 +222,8 @@ export default class APIServer {
     }
 
     public async startServer(): Promise<void> {
+        await this.config.dump();
+
         await this.storage.configure(); //we need to make sure our storage backend is properly configured
         this.logger.info(`Connecting to MongoDB...`).then();
         await this.shell.connect();

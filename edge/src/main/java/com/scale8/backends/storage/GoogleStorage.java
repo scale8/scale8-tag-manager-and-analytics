@@ -8,6 +8,7 @@ import com.scale8.Env;
 import io.micronaut.context.annotation.Replaces;
 import io.micronaut.context.annotation.Requires;
 import javax.inject.Singleton;
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -26,14 +27,18 @@ public class GoogleStorage implements StorageInterface {
   }
 
   private Storage getStorage() throws IOException {
+    ServiceAccountCredentials credentials;
+    if (!env.GOOGLE_CREDENTIALS.equals("")) {
+      credentials =
+          ServiceAccountCredentials.fromStream(
+              new ByteArrayInputStream(
+                  env.GOOGLE_CREDENTIALS.trim().getBytes(StandardCharsets.UTF_8)));
+    } else {
+      credentials =
+          ServiceAccountCredentials.fromStream(new FileInputStream(env.GOOGLE_CREDENTIALS_FILE));
+    }
     if (storage == null) {
-      storage =
-          StorageOptions.newBuilder()
-              .setCredentials(
-                  ServiceAccountCredentials.fromStream(
-                      new FileInputStream(env.GOOGLE_CREDENTIALS_FILE)))
-              .build()
-              .getService();
+      storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
     }
     return storage;
   }

@@ -9,6 +9,8 @@ dotenv.config();
 
 @injectable()
 export default abstract class BaseConfig {
+    public abstract dump(): Promise<void>;
+
     public abstract getConfigEntry(key: string): Promise<string | undefined>;
 
     private static getFromEnvVarOrElse(key: string, orElse: string): string {
@@ -108,14 +110,14 @@ export default abstract class BaseConfig {
 
     public async getCdnDomain(): Promise<string> {
         return await this.getConfigEntryOrElse(
-            'CDN_DOMAIN',
+            'S8_EDGE_SERVER',
             this.isProduction() ? 'cdn.scale8.com' : 'cdn-dev.scale8.com',
         );
     }
 
     public async getUiUrl(): Promise<string> {
         return await this.getConfigEntryOrElse(
-            'UI_URL',
+            'S8_ROOT_SERVER',
             this.isProduction() ? 'https://scale8.com' : 'http://ui-dev.scale8.com:3000',
         );
     }
@@ -126,6 +128,10 @@ export default abstract class BaseConfig {
 
     public async getCertPath(): Promise<string> {
         return await this.getConfigEntryOrElse('CERT_PATH', '');
+    }
+
+    public async getGCJson(): Promise<string> {
+        return await this.getConfigEntryThrows('GC_JSON');
     }
 
     public async getGCKeyFile(): Promise<string> {

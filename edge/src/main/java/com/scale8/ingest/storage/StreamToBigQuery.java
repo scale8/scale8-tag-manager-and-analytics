@@ -69,15 +69,22 @@ public class StreamToBigQuery extends StorageProvider {
       throws IOException, NoSuchAlgorithmException {
     String instanceKey = ingestSettings.getIngestEndpointEnvironmentId() + ingestSettings.asHash();
     BigQuery instance = this.bigQueryInstances.get(instanceKey);
+
+    ServiceAccountCredentials credentials;
+    if (!env.GOOGLE_CREDENTIALS.equals("")) {
+      credentials =
+          ServiceAccountCredentials.fromStream(
+              new ByteArrayInputStream(
+                  env.GOOGLE_CREDENTIALS.trim().getBytes(StandardCharsets.UTF_8)));
+    } else {
+      credentials =
+          ServiceAccountCredentials.fromStream(new FileInputStream(env.GOOGLE_CREDENTIALS_FILE));
+    }
+
     if (instance == null) {
       instance =
           ingestSettings.getIsCommercial() && ingestSettings.getIsManaged()
-              ? BigQueryOptions.newBuilder()
-                  .setCredentials(
-                      ServiceAccountCredentials.fromStream(
-                          new FileInputStream(env.GOOGLE_CREDENTIALS_FILE)))
-                  .build()
-                  .getService()
+              ? BigQueryOptions.newBuilder().setCredentials(credentials).build().getService()
               : BigQueryOptions.newBuilder()
                   .setCredentials(
                       GoogleCredentials.fromStream(

@@ -1,25 +1,115 @@
 package com.scale8;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.scale8.extended.types.Tuple;
+import software.amazon.awssdk.auth.credentials.AwsCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
+import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueRequest;
+import software.amazon.awssdk.services.secretsmanager.model.SecretsManagerException;
+
 import javax.inject.Singleton;
+import java.util.HashMap;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Singleton
 public class Env {
 
+  private HashMap<String, String> config;
   private final String serverId = UUID.randomUUID().toString();
+
+  private SecretsManagerClient getSecretsManager() {
+    if (!AWS_KEY_STORE_ID.equals("") && !AWS_KEY_STORE_SECRET.equals("")) {
+      // if provided, use secrets manager
+      return SecretsManagerClient.builder()
+          .credentialsProvider(
+              StaticCredentialsProvider.create(
+                  new AwsCredentials() {
+                    @Override
+                    public String accessKeyId() {
+                      return AWS_KEY_STORE_ID;
+                    }
+
+                    @Override
+                    public String secretAccessKey() {
+                      return AWS_KEY_STORE_SECRET;
+                    }
+                  }))
+          .region(Region.EU_CENTRAL_1)
+          .build();
+    } else if (IS_COMMERICAL) {
+      return SecretsManagerClient.builder().region(Region.EU_CENTRAL_1).build();
+    } else {
+      return null;
+    }
+  }
+
+  private HashMap<String, String> getConfig() {
+    if (config == null) {
+      SecretsManagerClient secretsManagerClient = getSecretsManager();
+      if (secretsManagerClient == null) {
+        config = new HashMap<>();
+      } else {
+        try {
+          String secret =
+              secretsManagerClient
+                  .getSecretValue(
+                      GetSecretValueRequest.builder()
+                          .secretId("SCALE8_" + ENV.toUpperCase())
+                          .build())
+                  .secretString();
+          config =
+              new Gson()
+                  .fromJson(secret, JsonObject.class).entrySet().stream()
+                      .flatMap(
+                          entry -> {
+                            JsonElement value = entry.getValue();
+                            return value.isJsonPrimitive()
+                                ? Stream.of(new Tuple<>(entry.getKey(), value.toString()))
+                                : Stream.empty();
+                          })
+                      .collect(
+                          Collectors.toMap(
+                              (k) -> k.x, (v) -> v.y, (prev, next) -> next, HashMap::new));
+          secretsManagerClient.close();
+        } catch (SecretsManagerException e) {
+          config = new HashMap<>();
+        }
+      }
+    }
+    return config;
+  }
+
+  private String getOrElseFromEnvOnly(String name, String orElse){
+    String envVar = System.getenv(name);
+    return envVar == null? orElse : envVar;
+  }
 
   private String getOrElse(String name, String orElse) {
     String envVar = System.getenv(name);
     if (envVar == null) {
-      return orElse;
+      HashMap<String, String> conf = getConfig();
+      String val = conf.get(name);
+      return val == null ? orElse : val;
     } else {
       return envVar;
     }
   }
 
-  public final String ENV = getOrElse("S8_ENV", "production");
+  public final Boolean IS_COMMERICAL = getOrElseFromEnvOnly("SERVER_MODE", "SELF_HOSTED").equals("COMMERCIAL");
+
+  public final String ENV = getOrElseFromEnvOnly("S8_ENV", "production");
 
   public final Boolean IS_PROD = ENV.equals("production");
+
+  public final String AWS_KEY_STORE_ID = getOrElseFromEnvOnly("AWS_KEY_STORE_ID", "");
+
+  public final String AWS_KEY_STORE_SECRET = getOrElseFromEnvOnly("AWS_KEY_STORE_SECRET", "");
 
   public final String AWS_ID = getOrElse("AWS_ID", "");
 
@@ -27,7 +117,9 @@ public class Env {
 
   public final String AWS_REGION = getOrElse("AWS_REGION", "");
 
-  public final String GOOGLE_CREDENTIALS_FILE = getOrElse("GOOGLE_CREDENTIALS_FILE", "");
+  public final String GOOGLE_CREDENTIALS = getOrElse("GC_JSON", "");
+
+  public final String GOOGLE_CREDENTIALS_FILE = getOrElse("GC_KEY_FILE", "");
 
   public final String MONGO_CONNECT_STRING =
       getOrElse("MONGO_CONNECT_STRING", "mongodb://127.0.0.1:27017");
