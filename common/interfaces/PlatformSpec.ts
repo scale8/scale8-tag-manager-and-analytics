@@ -99,6 +99,7 @@ export interface PlatformSpec {
         minor: number;
         patch: number;
     };
+    settings?: PlatformInputSpec[];
     actions?: (PlatformActionSpec & PlatformActionFunctions)[];
     events?: (PlatformEventSpec & PlatformEventFunctions)[];
     data_containers?: (PlatformDataContainerSpec & PlatformDataContainerFunctions)[];
@@ -111,6 +112,7 @@ export interface PlatformConfigOnly {
         minor: number;
         patch: number;
     };
+    settings?: PlatformInputSpec[];
     actions?: PlatformActionSpec[];
     events?: PlatformEventSpec[];
     data_containers?: PlatformDataContainerSpec[];
