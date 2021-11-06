@@ -282,6 +282,7 @@ export default class PlatformRevisionManager extends Manager<PlatformRevision> {
                 },
             };
         };
+        const settings = (config.settings || []).map((_) => createPlatformMap(_));
         const events = (config.events || []).map((_) => {
             return {
                 persistence_id: _.persistence_id,
@@ -315,6 +316,7 @@ export default class PlatformRevisionManager extends Manager<PlatformRevision> {
             actor,
             {
                 name: version,
+                settings: settings,
                 events: events,
                 data_containers: dataContainers,
                 actions: actions,
