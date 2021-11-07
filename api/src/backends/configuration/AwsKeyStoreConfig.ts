@@ -15,9 +15,10 @@ export default class AwsKeyStoreConfig extends BaseConfig {
     }
 
     private async getSecretsManager(): Promise<SecretsManager | undefined> {
-        const awsKeyStoreId = await this.environmentConfig.getAwsKeyStoreId();
-        const awsKeyStoreSecret = await this.environmentConfig.getAwsKeyStoreSecret();
-        const awsKeyStoreRegion = await this.environmentConfig.getAwsKeyStoreRegion();
+        const awsKeyStoreId = this.environmentConfig.getAwsKeyStoreId();
+        const awsKeyStoreSecret = this.environmentConfig.getAwsKeyStoreSecret();
+        const awsKeyStoreRegion = this.environmentConfig.getAwsKeyStoreRegion();
+
         if (awsKeyStoreId !== undefined && awsKeyStoreSecret !== undefined) {
             //if provided, use secrets manager
             return new SecretsManager({
@@ -43,25 +44,18 @@ export default class AwsKeyStoreConfig extends BaseConfig {
             if (secretsManager === undefined) {
                 this.config = {};
             } else {
-                //need to fetch from AWS Secret Manager...
-                this.config = await new Promise<{ [k: string]: any }>((resolve, reject) => {
-                    const key = 'SCALE8_' + this.getEnvironment().toUpperCase();
-                    secretsManager.getSecretValue(
-                        {
-                            SecretId: key,
-                        },
-                        (err, data) => {
-                            if (err || data.SecretString === undefined) {
-                                reject(`Failed to fetch secrets for ${key}`);
-                            } else {
-                                resolve(JSON.parse(data.SecretString));
-                            }
-                        },
-                    );
-                });
+                this.config = JSON.parse(
+                    (
+                        await secretsManager
+                            .getSecretValue({
+                                SecretId: 'SCALE8_' + this.getEnvironment().toUpperCase(),
+                            })
+                            .promise()
+                    ).SecretString ?? '{}',
+                );
             }
         }
-        return this.config;
+        return this.config ?? {};
     }
 
     async getConfigEntry(key: string): Promise<string | undefined> {

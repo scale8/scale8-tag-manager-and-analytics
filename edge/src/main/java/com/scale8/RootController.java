@@ -3,6 +3,7 @@ package com.scale8;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.scale8.asset.Loader;
+import com.scale8.backends.storage.StorageInterface;
 import com.scale8.extended.ExtendedRequest;
 import com.scale8.mmdb.Geo;
 import io.micronaut.http.HttpRequest;
@@ -39,6 +40,9 @@ public class RootController {
 
   @Inject Geo geo;
 
+  @Inject
+  StorageInterface storage;
+
   private ExtendedRequest createExtendedRequest(
       HttpRequest<String> request, String id, Map<String, String> extraParameters) {
     return new ExtendedRequest(
@@ -53,6 +57,11 @@ public class RootController {
             ? ingestEntity.add(extendedRequest, payload.get())
             : List.of("Failed to find payload");
     return issues.isEmpty() ? OK_JSON : new Gson().toJson(issues);
+  }
+
+  @Get(uri = "/test", produces = APPLICATION_JSON)
+  public String test(HttpRequest<String> request) throws Exception {
+    return storage.getClass().getName();
   }
 
   @Get(produces = APPLICATION_JSON)

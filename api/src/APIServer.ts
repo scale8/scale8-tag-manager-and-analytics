@@ -4,10 +4,8 @@ import ResolverRegister from './gql/ResolverRegister';
 import TypeDefRegister from './gql/TypeDefRegister';
 import TYPES from './container/IOC.types';
 import { ApolloError, ApolloServer } from 'apollo-server-express';
-import AuthDirective from './gql/directives/AuthDirective';
 import CTX from './gql/ctx/CTX';
 import fs from 'fs';
-import container from './container/IOC.config';
 import Shell from './mongo/database/Shell';
 import express, { Express } from 'express';
 import https from 'https';
@@ -19,12 +17,9 @@ import bodyParser from 'body-parser';
 import { GraphQLError } from 'graphql';
 import { getSessionUser } from './utils/SessionUtils';
 import BaseLogger from './backends/logging/abstractions/BaseLogger';
-import Scale8Setup from './bootstrap/Scale8Setup';
 import BaseConfig from './backends/configuration/abstractions/BaseConfig';
 import { Mode } from './enums/Mode';
-import BaseStorage from './backends/storage/abstractions/BaseStorage';
 
-// noinspection JSUnusedLocalSymbols
 @injectable()
 export default class APIServer {
     protected readonly resolverRegister: ResolverRegister;
@@ -35,7 +30,6 @@ export default class APIServer {
     protected readonly gqlServer: ApolloServer;
     protected readonly routing: Routing;
     protected readonly config: BaseConfig;
-    protected readonly storage: BaseStorage;
 
     protected httpsServer?: https.Server;
     protected httpServer?: http.Server;
@@ -47,7 +41,6 @@ export default class APIServer {
         @inject(TYPES.Shell) shell: Shell,
         @inject(TYPES.Routing) routing: Routing,
         @inject(TYPES.BackendConfig) config: BaseConfig,
-        @inject(TYPES.BackendStorage) storage: BaseStorage,
     ) {
         this.resolverRegister = resolverRegister;
         this.typeDefRegister = typeDefRegister;
@@ -55,7 +48,6 @@ export default class APIServer {
         this.shell = shell;
         this.routing = routing;
         this.config = config;
-        this.storage = storage;
         this.gqlServer = this.getGQLServer();
         this.app = this.getApp();
     }
@@ -177,9 +169,6 @@ export default class APIServer {
 
         return new ApolloServer({
             typeDefs,
-            schemaDirectives: {
-                auth: AuthDirective,
-            },
             resolvers,
             formatError: (err: GraphQLError) => {
                 const path =
@@ -222,12 +211,10 @@ export default class APIServer {
     }
 
     public async startServer(): Promise<void> {
-        await this.config.dump();
+        //await this.config.dump();
 
-        await this.storage.configure(); //we need to make sure our storage backend is properly configured
         this.logger.info(`Connecting to MongoDB...`).then();
         await this.shell.connect();
-        await container.resolve(Scale8Setup).setup();
 
         if (this.config.getMode() === Mode.COMMERCIAL) {
             const port = await this.config.getApiHttpsPort();

@@ -70,33 +70,35 @@ public class StreamToBigQuery extends StorageProvider {
     String instanceKey = ingestSettings.getIngestEndpointEnvironmentId() + ingestSettings.asHash();
     BigQuery instance = this.bigQueryInstances.get(instanceKey);
 
-    ServiceAccountCredentials credentials;
-    if (!env.GOOGLE_CREDENTIALS.equals("")) {
-      credentials =
-          ServiceAccountCredentials.fromStream(
-              new ByteArrayInputStream(
-                  env.GOOGLE_CREDENTIALS.trim().getBytes(StandardCharsets.UTF_8)));
-    } else {
-      credentials =
-          ServiceAccountCredentials.fromStream(new FileInputStream(env.GOOGLE_CREDENTIALS_FILE));
-    }
-
     if (instance == null) {
-      instance =
-          ingestSettings.getIsCommercial() && ingestSettings.getIsManaged()
-              ? BigQueryOptions.newBuilder().setCredentials(credentials).build().getService()
-              : BigQueryOptions.newBuilder()
-                  .setCredentials(
-                      GoogleCredentials.fromStream(
-                          new ByteArrayInputStream(
-                              new Gson()
-                                  .toJson(
-                                      ingestSettings
-                                          .getBigQueryStreamConfig()
-                                          .getServiceAccountJson())
-                                  .getBytes(StandardCharsets.UTF_8))))
-                  .build()
-                  .getService();
+      if (ingestSettings.getIsCommercial() && ingestSettings.getIsManaged()) {
+        ServiceAccountCredentials credentials;
+        if (!env.GOOGLE_CREDENTIALS.equals("")) {
+          credentials =
+              ServiceAccountCredentials.fromStream(
+                  new ByteArrayInputStream(
+                      env.GOOGLE_CREDENTIALS.trim().getBytes(StandardCharsets.UTF_8)));
+        } else {
+          credentials =
+              ServiceAccountCredentials.fromStream(
+                  new FileInputStream(env.GOOGLE_CREDENTIALS_FILE));
+        }
+        instance = BigQueryOptions.newBuilder().setCredentials(credentials).build().getService();
+      } else {
+        instance =
+            BigQueryOptions.newBuilder()
+                .setCredentials(
+                    GoogleCredentials.fromStream(
+                        new ByteArrayInputStream(
+                            new Gson()
+                                .toJson(
+                                    ingestSettings
+                                        .getBigQueryStreamConfig()
+                                        .getServiceAccountJson())
+                                .getBytes(StandardCharsets.UTF_8))))
+                .build()
+                .getService();
+      }
       this.bigQueryInstances.put(instanceKey, instance);
     }
     return instance;

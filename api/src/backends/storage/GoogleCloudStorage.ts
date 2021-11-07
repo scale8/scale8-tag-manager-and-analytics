@@ -12,7 +12,6 @@ export default class GoogleCloudStorage extends BaseStorage {
 
     protected async getStorage() {
         const serviceAccountJson = await getServiceAccountJsonFromConfig();
-
         if (this.storage === undefined) {
             this.storage = new Storage({
                 projectId: serviceAccountJson.project_id,

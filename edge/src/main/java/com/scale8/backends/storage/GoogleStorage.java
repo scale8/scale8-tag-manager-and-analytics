@@ -5,6 +5,7 @@ import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import com.scale8.Env;
+import com.scale8.extended.conditions.RequiresGoogleStorageRequestedCondition;
 import io.micronaut.context.annotation.Replaces;
 import io.micronaut.context.annotation.Requires;
 import javax.inject.Singleton;
@@ -16,7 +17,7 @@ import java.nio.charset.StandardCharsets;
 
 @Replaces(StorageInterface.class)
 @Singleton
-@Requires(property = "backend-storage", value = "google")
+@Requires(condition = RequiresGoogleStorageRequestedCondition.class)
 public class GoogleStorage implements StorageInterface {
 
   final Env env;
@@ -27,17 +28,17 @@ public class GoogleStorage implements StorageInterface {
   }
 
   private Storage getStorage() throws IOException {
-    ServiceAccountCredentials credentials;
-    if (!env.GOOGLE_CREDENTIALS.equals("")) {
-      credentials =
-          ServiceAccountCredentials.fromStream(
-              new ByteArrayInputStream(
-                  env.GOOGLE_CREDENTIALS.trim().getBytes(StandardCharsets.UTF_8)));
-    } else {
-      credentials =
-          ServiceAccountCredentials.fromStream(new FileInputStream(env.GOOGLE_CREDENTIALS_FILE));
-    }
     if (storage == null) {
+      ServiceAccountCredentials credentials;
+      if (!env.GOOGLE_CREDENTIALS.equals("")) {
+        credentials =
+            ServiceAccountCredentials.fromStream(
+                new ByteArrayInputStream(
+                    env.GOOGLE_CREDENTIALS.trim().getBytes(StandardCharsets.UTF_8)));
+      } else {
+        credentials =
+            ServiceAccountCredentials.fromStream(new FileInputStream(env.GOOGLE_CREDENTIALS_FILE));
+      }
       storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
     }
     return storage;

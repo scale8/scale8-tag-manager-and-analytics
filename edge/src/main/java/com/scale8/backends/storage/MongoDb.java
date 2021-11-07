@@ -2,6 +2,7 @@ package com.scale8.backends.storage;
 
 import com.mongodb.client.*;
 import com.scale8.Env;
+import com.scale8.extended.conditions.RequiresMongoDBStorageCondition;
 import io.micronaut.context.annotation.Replaces;
 import io.micronaut.context.annotation.Requires;
 import org.bson.Document;
@@ -11,7 +12,7 @@ import java.io.IOException;
 
 @Replaces(StorageInterface.class)
 @Singleton
-@Requires(property = "backend-storage", value = "mongodb")
+@Requires(condition = RequiresMongoDBStorageCondition.class)
 public class MongoDb implements StorageInterface {
 
   final Env env;

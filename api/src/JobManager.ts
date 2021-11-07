@@ -6,6 +6,7 @@ import Shell from './mongo/database/Shell';
 import GenericError from './errors/GenericError';
 import { LogPriority } from './enums/LogPriority';
 import { updateUsageJob } from './jobs/UpdateUsage';
+import { setupChecks } from './jobs/SetupChecks';
 
 //register .env as soon as possible...
 dotenv.config();
@@ -22,17 +23,18 @@ const exit = async (success: boolean) => {
     process.exit(success ? 0 : 1);
 };
 
-const jobs: Job[] = [updateUsageJob];
+const jobs: Job[] = [updateUsageJob, setupChecks];
 
 const runJobArg = process.argv.find((value) => value.startsWith('--run-job='));
 
-export const runJob = (job: Job) => {
-    return (async () => {
+if (runJobArg !== undefined) {
+    const jobName = runJobArg.split('=')[1].trim();
+    const job = jobs.find((_) => _.name === jobName);
+    if (job !== undefined) {
         const logger = container.get<BaseLogger>(TYPES.BackendLogger);
-        const handleSuccess = () => {
-            logger.info(`Job ${job.name} has completed`).then();
-        };
+
         const handleError = (e: string | Error) => {
+            console.error(e);
             const msg = typeof e === 'string' ? e : e.message;
             const previous = typeof e === 'string' ? undefined : e;
             logger
@@ -47,27 +49,32 @@ export const runJob = (job: Job) => {
                 .then();
             exit(false).then();
         };
-        try {
-            const res = job.job();
-            if (res instanceof Promise) {
-                res.then(() => handleSuccess())
-                    .catch((reason) => handleError(reason))
-                    .finally(() => exit(false).then());
-            } else {
-                handleSuccess();
-            }
-            await exit(true);
-        } catch (e) {
-            handleError(e);
-        }
-    })();
-};
 
-if (runJobArg !== undefined) {
-    const jobName = runJobArg.split('=')[1].trim();
-    const job = jobs.find((_) => _.name === jobName);
-    if (job !== undefined) {
-        runJob(job).then();
+        const runJob = (job: Job) => {
+            return (async () => {
+                const handleSuccess = () => {
+                    logger.info(`Job ${job.name} has completed`).then();
+                };
+                try {
+                    const res = job.job();
+                    if (res instanceof Promise) {
+                        await res;
+                    } else {
+                        handleSuccess();
+                    }
+                    await exit(true);
+                } catch (e) {
+                    handleError(e);
+                }
+            })();
+        };
+        (async () => {
+            try {
+                await runJob(job);
+            } catch (e) {
+                handleError(e);
+            }
+        })();
     } else {
         console.error(`Job '${jobName}' not found. Valid jobs: -`);
         jobs.forEach((_) => console.log(`   -> ${_.name}`));

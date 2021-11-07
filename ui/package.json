@@ -3,8 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "dev": "next dev",
-        "dev:local:api": "NEXT_PUBLIC_API_URL=http://localhost:8082 next dev",
+        "dev": "NEXT_PUBLIC_API_URL=http://127.0.0.1:8082 next dev",
         "test": "jest",
         "test:watch": "jest --watch",
         "build": "next build",

@@ -13,8 +13,12 @@ export default abstract class BaseConfig {
 
     public abstract getConfigEntry(key: string): Promise<string | undefined>;
 
+    private static getFromEnvVar(key: string): string | undefined {
+        return process.env[key];
+    }
+
     private static getFromEnvVarOrElse(key: string, orElse: string): string {
-        const value = process.env[key];
+        const value = BaseConfig.getFromEnvVar(key);
         return value === undefined ? orElse : value;
     }
 
@@ -168,16 +172,16 @@ export default abstract class BaseConfig {
         return Number(await this.getConfigEntryOrElse('MAX_REVISION_ELEMENTS', '750'));
     }
 
-    public async getAwsKeyStoreId(): Promise<string | undefined> {
-        return await this.getConfigEntry('AWS_KEY_STORE_ID');
+    public getAwsKeyStoreId(): string | undefined {
+        return BaseConfig.getFromEnvVar('AWS_KEY_STORE_ID');
     }
 
-    public async getAwsKeyStoreSecret(): Promise<string | undefined> {
-        return await this.getConfigEntry('AWS_KEY_STORE_SECRET');
+    public getAwsKeyStoreSecret(): string | undefined {
+        return BaseConfig.getFromEnvVar('AWS_KEY_STORE_SECRET');
     }
 
-    public async getAwsKeyStoreRegion(): Promise<string> {
-        return await this.getConfigEntryOrElse('AWS_KEY_STORE_REGION', 'eu-central-1');
+    public getAwsKeyStoreRegion(): string {
+        return BaseConfig.getFromEnvVarOrElse('AWS_KEY_STORE_REGION', 'eu-central-1');
     }
 
     public async getDefaultDatabase(): Promise<string> {

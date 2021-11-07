@@ -111,6 +111,8 @@ public class Env {
 
   public final String AWS_KEY_STORE_SECRET = getOrElseFromEnvOnly("AWS_KEY_STORE_SECRET", "");
 
+  public final String STORAGE_BACKEND = getOrElse("STORAGE_BACKEND", "mongodb");
+
   public final String AWS_ID = getOrElse("AWS_ID", "");
 
   public final String AWS_SECRET = getOrElse("AWS_SECRET", "");
