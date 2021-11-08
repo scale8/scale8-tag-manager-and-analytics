@@ -59,6 +59,7 @@ if (runJobArg !== undefined) {
                     const res = job.job();
                     if (res instanceof Promise) {
                         await res;
+                        handleSuccess();
                     } else {
                         handleSuccess();
                     }

@@ -23,5 +23,6 @@ export const setupChecks = {
         }
         logger.info(`Running Scale8 Setup...`).then();
         await container.resolve(Scale8Setup).setup();
+        logger.info(`Completed Scale8 Setup...`).then();
     },
 };
