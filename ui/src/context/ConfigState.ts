@@ -10,6 +10,7 @@ export type ConfigState = {
     useTwoFactorAuth: boolean;
     isAuditEnabled: boolean;
     isConfigured: boolean;
+    isDev: boolean;
     consentPurposes: { id: number; name: string }[];
     consentVendors: { id: number; name: string }[];
     tagManagerProducts: ListProductData[];
@@ -24,6 +25,7 @@ export const configInitialState = {
     useTwoFactorAuth: false,
     isAuditEnabled: false,
     isConfigured: false,
+    isDev: false,
     consentPurposes: [],
     consentVendors: [],
     tagManagerProducts: [],
@@ -38,6 +40,7 @@ export const configStateFromData = (data?: ConfigQueryData): ConfigState => ({
     useTwoFactorAuth: data?.config.use_two_factor_auth ?? false,
     isAuditEnabled: data?.config.is_audit_enabled ?? false,
     isConfigured: data?.config.is_configured ?? false,
+    isDev: data?.config.is_dev ?? false,
     consentPurposes: data?.config.consent_purposes ?? [],
     consentVendors: data?.config.consent_vendors ?? [],
     tagManagerProducts: data?.config.tag_manager_products ?? [],

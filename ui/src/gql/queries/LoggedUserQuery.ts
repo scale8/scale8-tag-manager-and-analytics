@@ -28,6 +28,7 @@ const LoggedUserQuery = gql`
         }
         config {
             is_configured
+            is_dev
             mode
             use_signup
             use_email

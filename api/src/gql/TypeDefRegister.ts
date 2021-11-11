@@ -762,6 +762,10 @@ export default class TypeDefRegister {
                 Whether the application will record an audit trail
                 """
                 is_audit_enabled: Boolean
+                """
+                The backend started in developer mode
+                """
+                is_dev: Boolean
             }
 
             """

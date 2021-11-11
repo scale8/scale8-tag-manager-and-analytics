@@ -1,4 +1,3 @@
-
 # This file was generated based on ".graphqlconfig". Do not edit manually.
 
 schema {
@@ -316,6 +315,8 @@ type Config {
     is_audit_enabled: Boolean
     "If the platform has been setup and configured yet"
     is_configured: Boolean
+    "The backend started in developer mode"
+    is_dev: Boolean
     "The application mode currently in use"
     mode: Mode!
     "A list of Tag Manager Products"
