@@ -9,16 +9,17 @@ import emailValidator from '../utils/validators/emailValidator';
 import nameValidator from '../utils/validators/nameValidator';
 import Loader from '../components/organisms/Loader';
 import SetupForm from '../components/organisms/Forms/SetupForm';
-import { CreateFirstOrgInput } from '../gql/generated/globalTypes';
+import { CreateFirstOrgInput, Mode } from '../gql/generated/globalTypes';
 import { SetupValues } from '../types/props/forms/SetupFormProps';
 import Navigate from '../components/atoms/Next/Navigate';
 import LoggedOutSectionWithConfig from '../containers/global/LoggedOutSectionWithConfig';
 import { useConfigState } from '../context/AppContext';
 import { toLogin } from '../utils/NavigationPaths';
 import { logError } from '../utils/logUtils';
+import CommercialDevIndex from '../components/organisms/CommercialDevIndex';
 
 const SetupContent: FC = () => {
-    const { isConfigured } = useConfigState();
+    const { isConfigured, mode, isDev } = useConfigState();
 
     const [setup, { loading, data, error: gqlError }] = useMutation(SetupQuery);
 
@@ -102,6 +103,10 @@ const SetupContent: FC = () => {
             // not in dialog
         },
     };
+
+    if (mode === Mode.COMMERCIAL && isDev) {
+        return <CommercialDevIndex />;
+    }
 
     if (isConfigured) {
         return <Navigate to={toLogin} />;

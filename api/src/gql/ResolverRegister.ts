@@ -226,6 +226,7 @@ export default class ResolverRegister {
                     use_github_sso: await this.config.gitHubSsoEnabled(),
                     use_email: await this.config.emailServerEnabled(),
                     is_audit_enabled: await this.config.isAuditEnabled(),
+                    is_dev: this.config.isDevelopment(),
                 };
             },
             ...this.managers

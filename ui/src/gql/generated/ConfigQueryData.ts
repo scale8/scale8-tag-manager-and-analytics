@@ -57,6 +57,10 @@ export interface ConfigQueryData_config {
    */
   is_configured: boolean | null;
   /**
+   * The backend started in developer mode
+   */
+  is_dev: boolean | null;
+  /**
    * The application mode currently in use
    */
   mode: Mode;
