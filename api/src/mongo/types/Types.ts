@@ -1,5 +1,5 @@
 import Model from '../abstractions/Model';
-import { CommonOptions, ObjectID } from 'mongodb';
+import { CommandOperationOptions, ObjectId } from 'mongodb';
 import DiffState from '../../enums/DiffState';
 import ScalarContainer from '../custom/ScalarContainer';
 import User from '../models/User';
@@ -23,10 +23,10 @@ export type IngestEndpointDataMapValidation = {
 };
 
 export type DataMapSchemaCheck = {
-    platform_data_map_id: ObjectID;
+    platform_data_map_id: ObjectId;
     model_links?: {
         name: string;
-        id: ObjectID;
+        id: ObjectId;
     }[];
     valid: boolean;
     issue?: string;
@@ -37,7 +37,7 @@ export type OperationActor = User | 'SYSTEM';
 export type SaveOptions = {
     user?: User;
     forceCreate?: boolean;
-    mongoOptions?: CommonOptions;
+    mongoOptions?: CommandOperationOptions;
     gqlMethod?: GQLMethod;
     userComments?: string;
     opConnectedModels?: Model[];
@@ -46,18 +46,18 @@ export type SaveOptions = {
 //Used to created a new instance of some Model type
 export type CT<U extends Model> = new (...args: any[]) => U;
 
-export type ModelScalars = string | number | boolean | null | Date | ObjectID;
+export type ModelScalars = string | number | boolean | null | Date | ObjectId;
 export type ModelType =
     | ModelScalars
     | ScalarContainer<string | number | boolean | Date>
-    | ObjectID[]
+    | ObjectId[]
     | Model
     | Model[];
 
-export type MongoScalars = string | number | boolean | null | ObjectID | Date;
+export type MongoScalars = string | number | boolean | null | ObjectId | Date;
 export type MongoType =
     | MongoScalars
-    | ObjectID[]
+    | ObjectId[]
     | MongoType[]
     | { [k: string]: MongoType }
     | { __arr: string[] | number[] | boolean[] | Date[] };

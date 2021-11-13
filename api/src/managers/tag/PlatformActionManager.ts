@@ -3,7 +3,7 @@ import Manager from '../../abstractions/Manager';
 import { gql } from 'apollo-server-express';
 import PlatformAction from '../../mongo/models/tag/PlatformAction';
 import CTX from '../../gql/ctx/CTX';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import PlatformDataMap from '../../mongo/models/tag/PlatformDataMap';
 import Platform from '../../mongo/models/tag/Platform';
 import PlatformRevision from '../../mongo/models/tag/PlatformRevision';
@@ -268,7 +268,7 @@ export default class PlatformActionManager extends Manager<PlatformAction> {
         deleteTemplatedAction: async (parent: any, args: any, ctx: CTX) => {
             const data = args.platformActionTemplatedDeleteInput;
             const platformAction = await this.repoFactory(PlatformAction).findByIdThrows(
-                new ObjectID(data.platform_action_id),
+                new ObjectId(data.platform_action_id),
                 userMessages.actionFailed,
             );
             return this.orgAuth.asUserWithCreateAccess(ctx, platformAction.orgId, async (me) => {
@@ -297,7 +297,7 @@ export default class PlatformActionManager extends Manager<PlatformAction> {
         createTemplatedAction: async (parent: any, args: any, ctx: CTX) => {
             const data = args.platformActionTemplatedCreateInput;
             const platformRevision = await this.repoFactory(PlatformRevision).findByIdThrows(
-                new ObjectID(data.platform_revision_id),
+                new ObjectId(data.platform_revision_id),
                 userMessages.revisionFailed,
             );
             return this.orgAuth.asUserWithCreateAccess(ctx, platformRevision.orgId, async (me) => {
@@ -345,7 +345,7 @@ export default class PlatformActionManager extends Manager<PlatformAction> {
         updateTemplatedAction: async (parent: any, args: any, ctx: CTX) => {
             const data = args.platformActionTemplatedUpdateInput;
             const platformAction = await this.repoFactory(PlatformAction).findByIdThrows(
-                new ObjectID(data.platform_action_id),
+                new ObjectId(data.platform_action_id),
                 userMessages.actionFailed,
             );
             return this.orgAuth.asUserWithCreateAccess(ctx, platformAction.orgId, async (me) => {
@@ -433,7 +433,7 @@ export default class PlatformActionManager extends Manager<PlatformAction> {
     protected gqlExtendedQueryResolvers = {
         getPlatformAction: async (parent: any, args: any, ctx: CTX) => {
             const platformAction = await this.repoFactory(PlatformAction).findByIdThrows(
-                new ObjectID(args.id),
+                new ObjectId(args.id),
                 userMessages.actionFailed,
             );
             const platformRevision = await this.repoFactory(PlatformRevision).findByIdThrows(
@@ -457,7 +457,7 @@ export default class PlatformActionManager extends Manager<PlatformAction> {
         PlatformAction: {
             permissions_requests: async (parent: any, args: any, ctx: CTX) => {
                 const platformAction = await this.repoFactory(PlatformAction).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.actionFailed,
                 );
                 const platformRevision = await this.repoFactory(PlatformRevision).findByIdThrows(
@@ -477,7 +477,7 @@ export default class PlatformActionManager extends Manager<PlatformAction> {
             },
             platform: async (parent: any, args: any, ctx: CTX) => {
                 const platformAction = await this.repoFactory(PlatformAction).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.actionFailed,
                 );
                 const platform = await this.repoFactory(Platform).findByIdThrows(
@@ -490,7 +490,7 @@ export default class PlatformActionManager extends Manager<PlatformAction> {
             },
             platform_revision: async (parent: any, args: any, ctx: CTX) => {
                 const platformAction = await this.repoFactory(PlatformAction).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.actionFailed,
                 );
                 const platformRevision = await this.repoFactory(PlatformRevision).findByIdThrows(
@@ -505,7 +505,7 @@ export default class PlatformActionManager extends Manager<PlatformAction> {
             },
             platform_data_maps: async (parent: any, args: any, ctx: CTX) => {
                 const platformAction = await this.repoFactory(PlatformAction).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.actionFailed,
                 );
                 const platformRevision = await this.repoFactory(PlatformRevision).findByIdThrows(

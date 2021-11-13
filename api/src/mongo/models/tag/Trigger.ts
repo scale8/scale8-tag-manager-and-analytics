@@ -1,6 +1,6 @@
 import Model from '../../abstractions/Model';
 import Field from '../../decorators/Field';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import Event from './Event';
 import ConditionRule from './ConditionRule';
 import Revision from './Revision';
@@ -9,15 +9,15 @@ import EventRepo from '../../repos/tag/EventRepo';
 import { RevisionEntityParentType } from '../../../enums/RevisionEntityParentType';
 
 export default class Trigger extends Model {
-    public getOrgEntityId(): ObjectID {
+    public getOrgEntityId(): ObjectId {
         return this.orgId;
     }
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'org_id',
     })
-    private readonly _org_id!: ObjectID;
+    private readonly _org_id!: ObjectId;
 
     @Field<string>({
         required: true,
@@ -33,44 +33,44 @@ export default class Trigger extends Model {
     })
     private readonly _parent_type: RevisionEntityParentType;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'tag_manager_account_id',
     })
-    private readonly _tag_manager_account_id!: ObjectID;
+    private readonly _tag_manager_account_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'app_id',
     })
-    private readonly _app_id!: ObjectID;
+    private readonly _app_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'revision_id',
     })
-    private readonly _revision_id!: ObjectID;
+    private readonly _revision_id!: ObjectId;
 
-    @Field<ObjectID[]>({
+    @Field<ObjectId[]>({
         repository: EventRepo,
         exposeToGQLAs: 'event_ids',
         exposeToConfig: true,
     })
-    private _event_ids: ObjectID[] = [];
+    private _event_ids: ObjectId[] = [];
 
-    @Field<ObjectID[]>({
+    @Field<ObjectId[]>({
         repository: ConditionRuleRepo,
         exposeToGQLAs: 'condition_rule_ids',
         exposeToConfig: true,
     })
-    private _condition_rule_ids: ObjectID[] = [];
+    private _condition_rule_ids: ObjectId[] = [];
 
-    @Field<ObjectID[]>({
+    @Field<ObjectId[]>({
         repository: ConditionRuleRepo,
         exposeToGQLAs: 'exception_rule_ids',
         exposeToConfig: true,
     })
-    private _exception_rule_ids: ObjectID[] = [];
+    private _exception_rule_ids: ObjectId[] = [];
 
     constructor(
         name: string,
@@ -94,7 +94,7 @@ export default class Trigger extends Model {
         this._exception_rule_ids = exceptionRules.map((_) => _.id);
     }
 
-    get orgId(): ObjectID {
+    get orgId(): ObjectId {
         return this._org_id;
     }
 
@@ -110,39 +110,39 @@ export default class Trigger extends Model {
         this._name = value;
     }
 
-    get tagManagerAccountId(): ObjectID {
+    get tagManagerAccountId(): ObjectId {
         return this._tag_manager_account_id;
     }
 
-    get appId(): ObjectID {
+    get appId(): ObjectId {
         return this._app_id;
     }
 
-    get revisionId(): ObjectID {
+    get revisionId(): ObjectId {
         return this._revision_id;
     }
 
-    get eventIds(): ObjectID[] {
+    get eventIds(): ObjectId[] {
         return this._event_ids;
     }
 
-    set eventIds(value: ObjectID[]) {
+    set eventIds(value: ObjectId[]) {
         this._event_ids = value;
     }
 
-    get conditionRuleIds(): ObjectID[] {
+    get conditionRuleIds(): ObjectId[] {
         return this._condition_rule_ids;
     }
 
-    set conditionRuleIds(value: ObjectID[]) {
+    set conditionRuleIds(value: ObjectId[]) {
         this._condition_rule_ids = value;
     }
 
-    get exceptionRuleIds(): ObjectID[] {
+    get exceptionRuleIds(): ObjectId[] {
         return this._exception_rule_ids;
     }
 
-    set exceptionRuleIds(value: ObjectID[]) {
+    set exceptionRuleIds(value: ObjectId[]) {
         this._exception_rule_ids = value;
     }
 }

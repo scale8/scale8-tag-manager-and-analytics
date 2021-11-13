@@ -6,7 +6,7 @@ import User from '../mongo/models/User';
 import CTX from '../gql/ctx/CTX';
 import OrgRole from '../mongo/models/OrgRole';
 import PermissionGroup from '../mongo/models/PermissionGroup';
-import { ObjectID, ObjectId } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import TYPES from '../container/IOC.types';
 import UserManager from './UserManager';
 import Invite from '../mongo/models/Invite';
@@ -550,7 +550,7 @@ export default class OrgManager extends Manager<Org> {
      */
     protected gqlExtendedQueryResolvers = {
         getOrg: async (parent: any, args: any, ctx: CTX) => {
-            const orgId = new ObjectID(args.id);
+            const orgId = new ObjectId(args.id);
             return await this.orgAuth.asUserWithViewAccess(ctx, orgId, async () =>
                 (await fetchOrg(orgId)).toGQLType(),
             );
@@ -558,8 +558,8 @@ export default class OrgManager extends Manager<Org> {
         getOrgUserPermissions: async (parent: any, args: any, ctx: CTX) => {
             return await this.getUserPermissionsGql(
                 ctx,
-                new ObjectID(args.orgId),
-                new ObjectID(args.userId),
+                new ObjectId(args.orgId),
+                new ObjectId(args.userId),
             );
         },
     };
@@ -574,14 +574,14 @@ export default class OrgManager extends Manager<Org> {
             permissions: async (parent: any, args: any, ctx: CTX) => {
                 return await this.getUserPermissionsGql(
                     ctx,
-                    new ObjectID(parent.org_id),
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.org_id),
+                    new ObjectId(parent.id),
                 );
             },
         },
         Org: {
             me: async (parent: any, args: any, ctx: CTX) => {
-                const org = await fetchOrg(new ObjectID(parent.id));
+                const org = await fetchOrg(new ObjectId(parent.id));
                 return this.orgAuth.asUserWithViewAccess(ctx, org.id, async (me) => ({
                     id: me.id,
                     org_id: org.id,
@@ -597,7 +597,7 @@ export default class OrgManager extends Manager<Org> {
                 }));
             },
             tag_manager_account: async (parent: any, args: any, ctx: CTX) => {
-                const org = await fetchOrg(new ObjectID(parent.id));
+                const org = await fetchOrg(new ObjectId(parent.id));
                 return this.orgAuth.asUserWithViewAccess(ctx, org.id, async () => {
                     const account = await this.repoFactory<TagManagerAccountRepo>(
                         TagManagerAccount,
@@ -606,7 +606,7 @@ export default class OrgManager extends Manager<Org> {
                 });
             },
             data_manager_account: async (parent: any, args: any, ctx: CTX) => {
-                const org = await fetchOrg(new ObjectID(parent.id));
+                const org = await fetchOrg(new ObjectId(parent.id));
                 return this.orgAuth.asUserWithViewAccess(ctx, org.id, async () => {
                     const account = await this.repoFactory<DataManagerAccountRepo>(
                         DataManagerAccount,
@@ -615,7 +615,7 @@ export default class OrgManager extends Manager<Org> {
                 });
             },
             users: async (parent: any, args: any, ctx: CTX) => {
-                const orgId: ObjectID = new ObjectID(parent.id);
+                const orgId: ObjectId = new ObjectId(parent.id);
                 return await this.orgAuth.asUserWithViewAccess(ctx, orgId, async () => {
                     const roles = await this.repoFactory(OrgRole).find({
                         _org_id: orgId,
@@ -628,7 +628,7 @@ export default class OrgManager extends Manager<Org> {
                 });
             },
             invites: async (parent: any, args: any, ctx: CTX) => {
-                const org = await fetchOrg(new ObjectID(parent.id));
+                const org = await fetchOrg(new ObjectId(parent.id));
                 return this.orgAuth.asUserWithViewAccess(ctx, org.id, async () =>
                     (
                         await this.repoFactory(Invite).find({
@@ -638,7 +638,7 @@ export default class OrgManager extends Manager<Org> {
                 );
             },
             is_paid: async (parent: any, args: any, ctx: CTX) => {
-                const org = await fetchOrg(new ObjectID(parent.id));
+                const org = await fetchOrg(new ObjectId(parent.id));
                 const stripeSubscriptionId = await this.stripeService.getStripeSubscriptionId(org);
                 return this.orgAuth.asUserWithViewAccess(
                     ctx,
@@ -647,7 +647,7 @@ export default class OrgManager extends Manager<Org> {
                 );
             },
             has_billing: async (parent: any, args: any, ctx: CTX) => {
-                const org = await fetchOrg(new ObjectID(parent.id));
+                const org = await fetchOrg(new ObjectId(parent.id));
                 return this.orgAuth.asUserWithViewAccess(
                     ctx,
                     org.id,
@@ -1155,7 +1155,7 @@ export default class OrgManager extends Manager<Org> {
                 There must be no subscription existing at the org level. This must be the first entry (e.g. the creation of a subscription)
                 Account must be in active or require payment state and not connected to a subscription yet
            */
-            const org = await fetchOrg(new ObjectID(data.org_id));
+            const org = await fetchOrg(new ObjectId(data.org_id));
             return await this.orgAuth.asUserWithOrgOwnership(ctx, org, async () => {
                 return subscribeToAccount(
                     org,
@@ -1242,7 +1242,7 @@ export default class OrgManager extends Manager<Org> {
                 User can cancel at anytime. We don't need to listen for the webhook in this instance, we can go ahead and terminate this subscription (provided there is a valid one)
                 Once cancelled, this tag manager account must be marked for clean up by the system... (we can double check everything is therefore in place before we delete and handle this with a cron)
              */
-            const org = await fetchOrg(new ObjectID(data.org_id));
+            const org = await fetchOrg(new ObjectId(data.org_id));
             return await this.orgAuth.asUserWithOrgOwnership(ctx, org, async () => {
                 //force a double check here...
                 return unsubscribeAccount(org, await this.getAccountByProduct(org, data.product));
@@ -1266,7 +1266,7 @@ export default class OrgManager extends Manager<Org> {
         );
     }
 
-    private async getUserPermissionsGql(ctx: CTX, orgId: ObjectID, userId: ObjectID) {
+    private async getUserPermissionsGql(ctx: CTX, orgId: ObjectId, userId: ObjectId) {
         return this.orgAuth.asUserWithViewAccess(ctx, orgId, async () => {
             const role = await this.repoFactory(OrgRole).findOneThrows(
                 {

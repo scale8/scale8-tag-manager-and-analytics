@@ -16,7 +16,7 @@ import TYPES from '../container/IOC.types';
 import Model from '../mongo/abstractions/Model';
 import DiffError from '../errors/DiffError';
 import ScalarContainer from '../mongo/custom/ScalarContainer';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import { RCT } from '../container/ChainDependenciesBinder';
 import Repo from '../mongo/abstractions/Repo';
 import DiffState from '../enums/DiffState';
@@ -95,10 +95,10 @@ const modelDiff = async (
             return value;
         } else if (value instanceof Date) {
             return new Date(value.getTime());
-        } else if (value instanceof ObjectID) {
+        } else if (value instanceof ObjectId) {
             return value.toString();
-        } else if (Array.isArray(value) && (value as any[]).every((_) => _ instanceof ObjectID)) {
-            return (value as ObjectID[]).map((_) => _.toString());
+        } else if (Array.isArray(value) && (value as any[]).every((_) => _ instanceof ObjectId)) {
+            return (value as ObjectId[]).map((_) => _.toString());
         } else {
             // Hide message in production
             throw new DiffError('Unable to covert value to GQL value', userMessages.diffFailed);
@@ -106,7 +106,7 @@ const modelDiff = async (
     };
 
     const getInstance = async (
-        value: ObjectID | null,
+        value: ObjectId | null,
         repository: RCT<Repo<Model>> | undefined,
     ): Promise<Model | null> => {
         if (value === null) {
@@ -126,7 +126,7 @@ const modelDiff = async (
 
     const getInstances = async (
         key: string,
-        values: ObjectID[] | null,
+        values: ObjectId[] | null,
         repository: RCT<Repo<Model>> | undefined,
     ): Promise<Model[]> => {
         if (values === null) {
@@ -193,7 +193,7 @@ const modelDiff = async (
         testValue: ModelType,
         platformInstance?: (value: ModelType) => CT<Model> | null,
     ): CT<Model> | null => {
-        if (!(testValue instanceof ObjectID)) {
+        if (!(testValue instanceof ObjectId)) {
             return null;
         } else if (platformInstance === undefined) {
             return null;
@@ -241,7 +241,7 @@ const modelDiff = async (
                             },
                             extraDiffs: [],
                         };
-                    } else if (leftValue instanceof ObjectID || rightValue instanceof ObjectID) {
+                    } else if (leftValue instanceof ObjectId || rightValue instanceof ObjectId) {
                         if (props.repository === undefined) {
                             //we are just comparing id strings and not doing a diff on underlying objects
                             const leftGQLValue = toGQLValue(leftValue);
@@ -269,11 +269,11 @@ const modelDiff = async (
                         } else {
                             //we have to fetch this from incoming model repo...
                             const lModel = await getInstance(
-                                leftValue instanceof ObjectID ? leftValue : null,
+                                leftValue instanceof ObjectId ? leftValue : null,
                                 props.repository,
                             );
                             const rModel = await getInstance(
-                                rightValue instanceof ObjectID ? rightValue : null,
+                                rightValue instanceof ObjectId ? rightValue : null,
                                 props.repository,
                             );
 
@@ -319,9 +319,9 @@ const modelDiff = async (
                         }
                     } else if (
                         (Array.isArray(leftValue) &&
-                            (leftValue as any[]).every((v) => v instanceof ObjectID)) ||
+                            (leftValue as any[]).every((v) => v instanceof ObjectId)) ||
                         (Array.isArray(rightValue) &&
-                            (rightValue as any[]).every((v) => v instanceof ObjectID))
+                            (rightValue as any[]).every((v) => v instanceof ObjectId))
                     ) {
                         if (props.repository === undefined) {
                             const leftGQLValue = toGQLValue(leftValue);
@@ -344,12 +344,12 @@ const modelDiff = async (
                         } else {
                             const lModels = await getInstances(
                                 key,
-                                leftValue as ObjectID[] | null,
+                                leftValue as ObjectId[] | null,
                                 props.repository,
                             );
                             const rModels = await getInstances(
                                 key,
-                                rightValue as ObjectID[] | null,
+                                rightValue as ObjectId[] | null,
                                 props.repository,
                             );
                             const persistenceMap: Map<

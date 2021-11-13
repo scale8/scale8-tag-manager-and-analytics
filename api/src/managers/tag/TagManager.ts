@@ -3,7 +3,7 @@ import { injectable } from 'inversify';
 import { gql } from 'apollo-server-express';
 import Tag from '../../mongo/models/tag/Tag';
 import CTX from '../../gql/ctx/CTX';
-import { ObjectId, ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import RuleGroup from '../../mongo/models/tag/RuleGroup';
 import Revision from '../../mongo/models/tag/Revision';
 import GQLError from '../../errors/GQLError';
@@ -370,7 +370,7 @@ export default class TagManager extends Manager<Tag> {
     protected gqlExtendedQueryResolvers = {
         getTag: async (parent: any, args: any, ctx: CTX) => {
             const tag = await this.repoFactory(Tag).findByIdThrows(
-                new ObjectID(args.id),
+                new ObjectId(args.id),
                 userMessages.tagFailed,
             );
             return await this.orgAuth.asUserWithViewAccess(ctx, tag.orgId, async () =>
@@ -388,7 +388,7 @@ export default class TagManager extends Manager<Tag> {
         Tag: {
             revision: async (parent: any, args: any, ctx: CTX) => {
                 const revision = await this.repoFactory(Revision).findByIdThrows(
-                    new ObjectID(parent.revision_id),
+                    new ObjectId(parent.revision_id),
                     userMessages.revisionFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, revision.orgId, async () =>
@@ -397,7 +397,7 @@ export default class TagManager extends Manager<Tag> {
             },
             rule_groups: async (parent: any, args: any, ctx: CTX) => {
                 const tag = await this.repoFactory(Tag).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.tagFailed,
                 );
                 return this.orgAuth.asUserWithViewAccess(ctx, tag.orgId, async () =>

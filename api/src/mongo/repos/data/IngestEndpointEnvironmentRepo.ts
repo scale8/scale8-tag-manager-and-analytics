@@ -1,13 +1,13 @@
 import Repo from '../../abstractions/Repo';
 import { injectable } from 'inversify';
-import { IndexSpecification } from 'mongodb';
+import { IndexDescription } from 'mongodb';
 import IngestEndpointEnvironment from '../../models/data/IngestEndpointEnvironment';
 
 @injectable()
 export default class IngestEndpointEnvironmentRepo extends Repo<IngestEndpointEnvironment> {
     protected readonly auditEnabled = true;
 
-    protected readonly indexes: IndexSpecification[] = [
+    protected readonly indexes: IndexDescription[] = [
         {
             background: false,
             key: {

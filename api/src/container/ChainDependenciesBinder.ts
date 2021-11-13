@@ -126,12 +126,11 @@ export class ChainDependenciesBinder {
             ),
         );
 
-        container.bind(factoryId).toFactory((context) => (managerName) => {
+        container.bind(factoryId).toFactory((context) => (managerName: string) => {
             const repoType = repoMap.get(managerName);
             if (!repoType) {
                 throw new Error(`Unmapped manager ${managerName}`);
             }
-
             return context.container.get(repoType);
         });
     }

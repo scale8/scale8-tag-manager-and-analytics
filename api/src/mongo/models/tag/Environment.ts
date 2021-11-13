@@ -1,21 +1,21 @@
 import Model from '../../abstractions/Model';
 import Field from '../../decorators/Field';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import Revision from './Revision';
 import App from './App';
 import EnvironmentVariable from '../EnvironmentVariable';
 import EnvironmentVariableRepo from '../../repos/EnvironmentVariableRepo';
 
 export default class Environment extends Model {
-    public getOrgEntityId(): ObjectID {
+    public getOrgEntityId(): ObjectId {
         return this.orgId;
     }
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'org_id',
     })
-    private readonly _org_id!: ObjectID;
+    private readonly _org_id!: ObjectId;
 
     @Field<string>({
         required: true,
@@ -33,22 +33,22 @@ export default class Environment extends Model {
     })
     private _custom_domain?: string;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'tag_manager_account_id',
     })
-    private readonly _tag_manager_account_id!: ObjectID;
+    private readonly _tag_manager_account_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'app_id',
     })
-    private readonly _app_id!: ObjectID;
+    private readonly _app_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         exposeToGQLAs: 'revision_id',
     })
-    private _revision_id!: ObjectID;
+    private _revision_id!: ObjectId;
 
     @Field<EnvironmentVariable[]>({
         repository: EnvironmentVariableRepo,
@@ -79,11 +79,11 @@ export default class Environment extends Model {
         this._env_vars = environmentVariables;
     }
 
-    get orgId(): ObjectID {
+    get orgId(): ObjectId {
         return this._org_id;
     }
 
-    get appId(): ObjectID {
+    get appId(): ObjectId {
         return this._app_id;
     }
 
@@ -111,15 +111,15 @@ export default class Environment extends Model {
         this._custom_domain = value;
     }
 
-    get tagManagerAccountId(): ObjectID {
+    get tagManagerAccountId(): ObjectId {
         return this._tag_manager_account_id;
     }
 
-    get revisionId(): ObjectID {
+    get revisionId(): ObjectId {
         return this._revision_id;
     }
 
-    set revisionId(value: ObjectID) {
+    set revisionId(value: ObjectId) {
         this._revision_id = value;
     }
 

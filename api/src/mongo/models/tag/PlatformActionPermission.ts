@@ -1,6 +1,6 @@
 import Model from '../../abstractions/Model';
 import Field from '../../decorators/Field';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import PlatformRevision from './PlatformRevision';
 import DatabaseError from '../../../errors/DatabaseError';
 import ScalarContainer from '../../custom/ScalarContainer';
@@ -16,15 +16,15 @@ type VariableReadWriteExecuteScope = {
 };
 
 export default class PlatformActionPermission extends Model {
-    public getOrgEntityId(): ObjectID {
+    public getOrgEntityId(): ObjectId {
         return this.orgId;
     }
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'org_id',
     })
-    private readonly _org_id!: ObjectID;
+    private readonly _org_id!: ObjectId;
 
     @Field<string>({
         required: true,
@@ -32,25 +32,25 @@ export default class PlatformActionPermission extends Model {
     })
     private readonly _name: string;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'tag_manager_account_id',
     })
-    private readonly _tag_manager_account_id!: ObjectID;
+    private readonly _tag_manager_account_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'platform_id',
         exposeToConfig: true,
     })
-    private readonly _platform_id!: ObjectID;
+    private readonly _platform_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'platform_revision_id',
         exposeToConfig: true,
     })
-    private readonly _revision_id!: ObjectID;
+    private readonly _revision_id!: ObjectId;
 
     @Field<PlatformActionPermissionRequest>({
         required: true,
@@ -160,19 +160,19 @@ export default class PlatformActionPermission extends Model {
         }
     }
 
-    get orgId(): ObjectID {
+    get orgId(): ObjectId {
         return this._org_id;
     }
 
-    get tagManagerAccountId(): ObjectID {
+    get tagManagerAccountId(): ObjectId {
         return this._tag_manager_account_id;
     }
 
-    get platformId(): ObjectID {
+    get platformId(): ObjectId {
         return this._platform_id;
     }
 
-    get platformRevisionId(): ObjectID {
+    get platformRevisionId(): ObjectId {
         return this._revision_id;
     }
 

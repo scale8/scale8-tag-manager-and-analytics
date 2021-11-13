@@ -1,6 +1,6 @@
 import Model from '../../abstractions/Model';
 import Field from '../../decorators/Field';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import PlatformDataContainer from './PlatformDataContainer';
 import ValidationError from '../../../errors/ValidationError';
 import PlatformDataMap from './PlatformDataMap';
@@ -10,15 +10,15 @@ import { ConditionType } from '../../../enums/ConditionType';
 import { DataMapValue } from '../../../../../common/types/Types';
 
 export default class ConditionRule extends Model {
-    public getOrgEntityId(): ObjectID {
+    public getOrgEntityId(): ObjectId {
         return this.orgId;
     }
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'org_id',
     })
-    private readonly _org_id!: ObjectID;
+    private readonly _org_id!: ObjectId;
 
     @Field<string>({
         required: true,
@@ -27,39 +27,39 @@ export default class ConditionRule extends Model {
     })
     private readonly _name: string;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'tag_manager_account_id',
     })
-    private readonly _tag_manager_account_id!: ObjectID;
+    private readonly _tag_manager_account_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'app_id',
     })
-    private readonly _app_id!: ObjectID;
+    private readonly _app_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'revision_id',
     })
-    private readonly _revision_id!: ObjectID;
+    private readonly _revision_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'platform_data_container_id',
         platformInstance: () => PlatformDataContainer,
         exposeToConfig: true,
     })
-    private _platform_data_container_id!: ObjectID;
+    private _platform_data_container_id!: ObjectId;
 
-    @Field<string | ObjectID>({
+    @Field<string | ObjectId>({
         required: true,
         exposeToGQLAs: 'match',
-        platformInstance: (_) => (_ instanceof ObjectID ? PlatformDataMap : null),
+        platformInstance: (_) => (_ instanceof ObjectId ? PlatformDataMap : null),
         exposeToConfig: true,
     })
-    private _match!: string | ObjectID;
+    private _match!: string | ObjectId;
 
     @Field<ConditionType>({
         required: false,
@@ -105,7 +105,7 @@ export default class ConditionRule extends Model {
         this._match_key = matchKey;
     }
 
-    get orgId(): ObjectID {
+    get orgId(): ObjectId {
         return this._org_id;
     }
 
@@ -113,19 +113,19 @@ export default class ConditionRule extends Model {
         return this._name;
     }
 
-    get tagManagerAccountId(): ObjectID {
+    get tagManagerAccountId(): ObjectId {
         return this._tag_manager_account_id;
     }
 
-    get appId(): ObjectID {
+    get appId(): ObjectId {
         return this._app_id;
     }
 
-    get revisionId(): ObjectID {
+    get revisionId(): ObjectId {
         return this._revision_id;
     }
 
-    get match(): string | ObjectID {
+    get match(): string | ObjectId {
         return this._match;
     }
 
@@ -153,7 +153,7 @@ export default class ConditionRule extends Model {
         this._match_value = value;
     }
 
-    get platformDataContainerId(): ObjectID {
+    get platformDataContainerId(): ObjectId {
         return this._platform_data_container_id;
     }
 

@@ -2,7 +2,7 @@ import Manager from '../../abstractions/Manager';
 import { injectable } from 'inversify';
 import { gql } from 'apollo-server-express';
 import CTX from '../../gql/ctx/CTX';
-import { ObjectId, ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import Event from '../../mongo/models/tag/Event';
 import ConditionRule from '../../mongo/models/tag/ConditionRule';
 import Revision from '../../mongo/models/tag/Revision';
@@ -195,7 +195,7 @@ export default class TriggerManager extends Manager<Trigger> {
     protected gqlExtendedQueryResolvers = {
         getTrigger: async (parent: any, args: any, ctx: CTX) => {
             const trigger = await this.repoFactory(Trigger).findByIdThrows(
-                new ObjectID(args.id),
+                new ObjectId(args.id),
                 userMessages.triggerFailed,
             );
             return await this.orgAuth.asUserWithViewAccess(ctx, trigger.orgId, async () =>
@@ -357,7 +357,7 @@ export default class TriggerManager extends Manager<Trigger> {
         Trigger: {
             revision: async (parent: any, args: any, ctx: CTX) => {
                 const revision = await this.repoFactory(Revision).findByIdThrows(
-                    new ObjectID(parent.revision_id),
+                    new ObjectId(parent.revision_id),
                     userMessages.revisionFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, revision.orgId, async () =>
@@ -366,7 +366,7 @@ export default class TriggerManager extends Manager<Trigger> {
             },
             events: async (parent: any, args: any, ctx: CTX) => {
                 const trigger = await this.repoFactory(Trigger).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.triggerFailed,
                 );
                 return this.orgAuth.asUserWithViewAccess(ctx, trigger.orgId, async () =>
@@ -377,7 +377,7 @@ export default class TriggerManager extends Manager<Trigger> {
             },
             condition_rules: async (parent: any, args: any, ctx: CTX) => {
                 const trigger = await this.repoFactory(Trigger).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.triggerFailed,
                 );
                 return this.orgAuth.asUserWithViewAccess(ctx, trigger.orgId, async () =>
@@ -388,7 +388,7 @@ export default class TriggerManager extends Manager<Trigger> {
             },
             exception_rules: async (parent: any, args: any, ctx: CTX) => {
                 const trigger = await this.repoFactory(Trigger).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.triggerFailed,
                 );
                 return this.orgAuth.asUserWithViewAccess(ctx, trigger.orgId, async () =>

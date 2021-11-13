@@ -195,7 +195,7 @@ container
 
 container
     .bind<Factory<BaseDatabase>>(TYPES.BackendDatabaseFactory)
-    .toFactory<BaseDatabase>((context) => {
+    .toFactory<BaseDatabase, [StorageProvider]>((context) => {
         return (storage_provider: StorageProvider) => {
             if (storage_provider === StorageProvider.MONGODB) {
                 return context.container.get<MongoDb>(TYPES.MongoDb);

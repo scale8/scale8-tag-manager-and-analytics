@@ -1,20 +1,20 @@
 import Model from '../../abstractions/Model';
 import Field from '../../decorators/Field';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import IngestEndpointRevision from './IngestEndpointRevision';
 import IngestEndpoint from './IngestEndpoint';
 import { StorageProvider } from '../../../enums/StorageProvider';
 
 export default class IngestEndpointEnvironment extends Model {
-    public getOrgEntityId(): ObjectID {
+    public getOrgEntityId(): ObjectId {
         return this.orgId;
     }
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'org_id',
     })
-    private readonly _org_id!: ObjectID;
+    private readonly _org_id!: ObjectId;
 
     @Field<string>({
         required: true,
@@ -27,18 +27,18 @@ export default class IngestEndpointEnvironment extends Model {
     })
     private _custom_domain?: string;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'data_manager_account_id',
     })
-    private readonly _data_manager_account_id!: ObjectID;
+    private readonly _data_manager_account_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'ingest_endpoint_id',
         exposeToConfig: true,
     })
-    private readonly _ingest_endpoint_id!: ObjectID;
+    private readonly _ingest_endpoint_id!: ObjectId;
 
     @Field<string>({
         required: true,
@@ -52,10 +52,10 @@ export default class IngestEndpointEnvironment extends Model {
     })
     private _config_hint!: string;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         exposeToGQLAs: 'ingest_endpoint_revision_id',
     })
-    private _ingest_endpoint_revision_id!: ObjectID;
+    private _ingest_endpoint_revision_id!: ObjectId;
 
     constructor(
         name: string,
@@ -80,15 +80,15 @@ export default class IngestEndpointEnvironment extends Model {
         }
     }
 
-    get orgId(): ObjectID {
+    get orgId(): ObjectId {
         return this._org_id;
     }
 
-    get dataManagerAccountId(): ObjectID {
+    get dataManagerAccountId(): ObjectId {
         return this._data_manager_account_id;
     }
 
-    get ingestEndpointId(): ObjectID {
+    get ingestEndpointId(): ObjectId {
         return this._ingest_endpoint_id;
     }
 
@@ -112,11 +112,11 @@ export default class IngestEndpointEnvironment extends Model {
         this._custom_domain = value;
     }
 
-    get ingestEndpointRevisionId(): ObjectID {
+    get ingestEndpointRevisionId(): ObjectId {
         return this._ingest_endpoint_revision_id;
     }
 
-    set ingestEndpointRevisionId(value: ObjectID) {
+    set ingestEndpointRevisionId(value: ObjectId) {
         this._ingest_endpoint_revision_id = value;
     }
 

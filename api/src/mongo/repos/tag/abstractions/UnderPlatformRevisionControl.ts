@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 import { OperationActor, SaveOptions } from '../../../types/Types';
 import DataError from '../../../../errors/DataError';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import PlatformAsset from '../../../models/tag/PlatformAsset';
 import PlatformAction from '../../../models/tag/PlatformAction';
 import PlatformDataContainer from '../../../models/tag/PlatformDataContainer';
@@ -25,7 +25,7 @@ export default class UnderPlatformRevisionControl<
 > extends RepoUnderRevisionControl<T> {
     protected readonly auditEnabled = true;
 
-    protected async isRevisionFinal(platformRevisionId: ObjectID): Promise<boolean> {
+    protected async isRevisionFinal(platformRevisionId: ObjectId): Promise<boolean> {
         //revision could be null at this stage if we are cloning. this is because children are cloned first before creating the new revision entity and linking it all back and finally saving.
         const revision = await this.repoFactory(PlatformRevision).findById(platformRevisionId);
         //check to make sure revision is not in a final state, if it is, then nothing else can happen. final state is removed when cloning automatically.

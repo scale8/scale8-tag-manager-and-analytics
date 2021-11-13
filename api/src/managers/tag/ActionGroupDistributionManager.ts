@@ -3,7 +3,7 @@ import { injectable } from 'inversify';
 import { gql } from 'apollo-server-express';
 import ActionGroup from '../../mongo/models/tag/ActionGroup';
 import CTX from '../../gql/ctx/CTX';
-import { ObjectId, ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import ActionGroupDistribution from '../../mongo/models/tag/ActionGroupDistribution';
 import Rule from '../../mongo/models/tag/Rule';
 import Revision from '../../mongo/models/tag/Revision';
@@ -201,7 +201,7 @@ export default class ActionGroupDistributionManager extends Manager<ActionGroupD
         getActionGroupDistribution: async (parent: any, args: any, ctx: CTX) => {
             const actionGroupDistribution = await this.repoFactory(
                 ActionGroupDistribution,
-            ).findByIdThrows(new ObjectID(args.id), userMessages.actionGroupDistributionFailed);
+            ).findByIdThrows(new ObjectId(args.id), userMessages.actionGroupDistributionFailed);
             return await this.orgAuth.asUserWithViewAccess(
                 ctx,
                 actionGroupDistribution.orgId,
@@ -442,7 +442,7 @@ export default class ActionGroupDistributionManager extends Manager<ActionGroupD
         ActionGroupDistribution: {
             revision: async (parent: any, args: any, ctx: CTX) => {
                 const revision = await this.repoFactory(Revision).findByIdThrows(
-                    new ObjectID(parent.revision_id),
+                    new ObjectId(parent.revision_id),
                     userMessages.revisionFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, revision.orgId, async () =>
@@ -453,7 +453,7 @@ export default class ActionGroupDistributionManager extends Manager<ActionGroupD
                 const actionGroupDistribution = await this.repoFactory(
                     ActionGroupDistribution,
                 ).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.actionGroupDistributionFailed,
                 );
                 return this.orgAuth.asUserWithViewAccess(

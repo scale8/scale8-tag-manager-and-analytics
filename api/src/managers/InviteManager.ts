@@ -3,7 +3,7 @@ import { injectable } from 'inversify';
 import { gql } from 'apollo-server-express';
 import Invite from '../mongo/models/Invite';
 import CTX from '../gql/ctx/CTX';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import userMessages from '../errors/UserMessages';
 import { fetchOrg } from '../utils/OrgUtils';
 
@@ -50,7 +50,7 @@ export default class InviteManager extends Manager<Invite> {
     protected gqlCustomResolvers = {
         Invite: {
             org: async (parent: any, args: any, ctx: CTX) => {
-                const inviteId = new ObjectID(parent.id);
+                const inviteId = new ObjectId(parent.id);
                 //if they have been invited to join the Org, they must at minimum be offered view access.
                 //while still not linked, they should be able to explore the org (top level only).
                 return await this.userAuth.asUser(ctx, async () => {
@@ -64,7 +64,7 @@ export default class InviteManager extends Manager<Invite> {
                 });
             },
             org_permissions: async (parent: any, args: any, ctx: CTX) => {
-                const inviteId = new ObjectID(parent.id);
+                const inviteId = new ObjectId(parent.id);
                 return await this.userAuth.asUser(ctx, async () => {
                     const invite = await this.repoFactory(Invite).findOneThrows(
                         {

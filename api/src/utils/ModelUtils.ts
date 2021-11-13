@@ -2,7 +2,7 @@ import Model from '../mongo/abstractions/Model';
 import User from '../mongo/models/User';
 import { RCT } from '../container/ChainDependenciesBinder';
 import Repo from '../mongo/abstractions/Repo';
-import { ClientSession, ObjectId, ObjectID } from 'mongodb';
+import { ClientSession, ObjectId } from 'mongodb';
 import userMessages from '../errors/UserMessages';
 import DataError from '../errors/DataError';
 import container from '../container/IOC.config';
@@ -21,9 +21,9 @@ export const createNewModelBranchFromModel = async <T extends Model>(
     oldModel: T,
     repository: RCT<Repo<Model>>,
 ): Promise<T> => {
-    const getRevisionId = (): ObjectID => {
-        const revisionId: ObjectID | undefined =
-            (oldModel as any)['_revision_id'] instanceof ObjectID
+    const getRevisionId = (): ObjectId => {
+        const revisionId: ObjectId | undefined =
+            (oldModel as any)['_revision_id'] instanceof ObjectId
                 ? (oldModel as any)['_revision_id']
                 : undefined;
         if (revisionId === undefined) {
@@ -42,11 +42,11 @@ export const createNewModelBranchFromModel = async <T extends Model>(
         repository,
         getRevisionId(),
         true,
-        new ObjectID(),
+        new ObjectId(),
     );
 };
 
-export const getNewModelsOrder = (currentOrder: ObjectID[], newOrder: string[]): ObjectID[] => {
+export const getNewModelsOrder = (currentOrder: ObjectId[], newOrder: string[]): ObjectId[] => {
     if (
         currentOrder.length === newOrder.length &&
         currentOrder.map((_) => _.toString()).every((_) => newOrder.indexOf(_) !== -1)
@@ -87,7 +87,7 @@ export const deleteModelCascading = async <T extends Model>(
                             //we have cascade delete on these linked items...
                             const repo: Repo<Model> = repoFromNameFactory(props.repository.name);
                             const deleteValue = (deleteModel as any)[key];
-                            if (deleteValue instanceof ObjectID) {
+                            if (deleteValue instanceof ObjectId) {
                                 return await deleteModelCascading(
                                     actor,
                                     await repo.findByIdThrows(
@@ -98,11 +98,11 @@ export const deleteModelCascading = async <T extends Model>(
                                 );
                             } else if (
                                 Array.isArray(deleteValue) &&
-                                deleteValue.every((v: any) => v instanceof ObjectID)
+                                deleteValue.every((v: any) => v instanceof ObjectId)
                             ) {
                                 return (
                                     await Promise.all(
-                                        (deleteValue as ObjectID[]).map(
+                                        (deleteValue as ObjectId[]).map(
                                             async (_) =>
                                                 await deleteModelCascading(
                                                     actor,

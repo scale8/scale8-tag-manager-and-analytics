@@ -2,13 +2,13 @@ import Repo from '../abstractions/Repo';
 import { injectable } from 'inversify';
 
 import SignUpRequest from '../models/SignUpRequest';
-import { IndexSpecification } from 'mongodb';
+import { IndexDescription } from 'mongodb';
 
 @injectable()
 export default class SignUpRequestRepo extends Repo<SignUpRequest> {
     protected readonly EXPIRES_AFTER = 3600 * 24;
 
-    protected readonly indexes: IndexSpecification[] = [
+    protected readonly indexes: IndexDescription[] = [
         {
             background: false,
             key: {

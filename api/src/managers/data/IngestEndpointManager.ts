@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 import Manager from '../../abstractions/Manager';
 import { gql } from 'apollo-server-express';
 import CTX from '../../gql/ctx/CTX';
-import { ObjectId, ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import IngestEndpoint from '../../mongo/models/data/IngestEndpoint';
 import DataManagerAccount from '../../mongo/models/data/DataManagerAccount';
 import IngestEndpointRevision from '../../mongo/models/data/IngestEndpointRevision';
@@ -405,7 +405,7 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
      */
     protected gqlExtendedQueryResolvers = {
         getIngestEndpoint: async (parent: any, args: any, ctx: CTX) => {
-            const id = new ObjectID(args.id);
+            const id = new ObjectId(args.id);
             const ingestEndpoint = await this.repoFactory(IngestEndpoint).findByIdThrows(
                 id,
                 userMessages.ingestEndpointFailed,
@@ -425,7 +425,7 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
         IngestEndpoint: {
             ingest_endpoint_revisions: async (parent: any, args: any, ctx: CTX) => {
                 const ingestEndpoint = await this.repoFactory(IngestEndpoint).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.ingestEndpointFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(
@@ -441,7 +441,7 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
             },
             ingest_endpoint_environments: async (parent: any, args: any, ctx: CTX) => {
                 const ingestEndpoint = await this.repoFactory(IngestEndpoint).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.ingestEndpointFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(
@@ -459,7 +459,7 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                 const dataManagerAccount = await this.repoFactory(
                     DataManagerAccount,
                 ).findByIdThrows(
-                    new ObjectID(parent.data_manager_account_id),
+                    new ObjectId(parent.data_manager_account_id),
                     userMessages.accountFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(
@@ -470,7 +470,7 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
             },
             request_stats: async (parent: any, args: any, ctx: CTX) => {
                 const ingestEndpoint = await this.repoFactory(IngestEndpoint).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.ingestEndpointFailed,
                 );
                 if (ingestEndpoint.storageProvider === StorageProvider.AWS_S3) {
@@ -492,7 +492,7 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
             },
             byte_stats: async (parent: any, args: any, ctx: CTX) => {
                 const ingestEndpoint = await this.repoFactory(IngestEndpoint).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.ingestEndpointFailed,
                 );
                 if (ingestEndpoint.storageProvider === StorageProvider.AWS_S3) {

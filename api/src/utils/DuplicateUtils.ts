@@ -2,7 +2,7 @@ import Model from '../mongo/abstractions/Model';
 import User from '../mongo/models/User';
 import { RCT } from '../container/ChainDependenciesBinder';
 import Repo from '../mongo/abstractions/Repo';
-import { ClientSession, ObjectID } from 'mongodb';
+import { ClientSession, ObjectId } from 'mongodb';
 import container from '../container/IOC.config';
 import RepoFromModelFactory from '../container/factoryTypes/RepoFromModelFactory';
 import TYPES from '../container/IOC.types';
@@ -26,9 +26,9 @@ export const duplicateModel = async <T extends Model>(
     oldModel: T,
     repository: RCT<Repo<Model>>,
     clientSession?: ClientSession,
-    revisionId?: ObjectID,
+    revisionId?: ObjectId,
     asNewBranch?: boolean, //if we are creating 'as a new branch', we'll need to generate new persistence ids...
-    newId?: ObjectID, //we can override the id of the item being cloned
+    newId?: ObjectId, //we can override the id of the item being cloned
 ): Promise<T> => {
     const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
     const repoFromNameFactory = container.get<RepoFromRepoNameFactory>(
@@ -38,7 +38,7 @@ export const duplicateModel = async <T extends Model>(
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
 
     const isParentModel = revisionId === undefined;
-    const parentModelId = revisionId === undefined ? new ObjectID() : revisionId;
+    const parentModelId = revisionId === undefined ? new ObjectId() : revisionId;
 
     //first fetch the correct model repo... (we may override underlying functions, so important)
     const modelRepo = repoFactory(oldModel.constructor.name);
@@ -61,10 +61,10 @@ export const duplicateModel = async <T extends Model>(
             return new Date(oldValue.getTime());
         } else if (oldValue instanceof ScalarContainer) {
             return new ScalarContainer(...oldValue.arr);
-        } else if (oldValue instanceof ObjectID) {
+        } else if (oldValue instanceof ObjectId) {
             if (oldInstanceRepo === undefined) {
                 //direct copy
-                return new ObjectID(oldValue); //used for parent relationships that need to hold.
+                return new ObjectId(oldValue); //used for parent relationships that need to hold.
             } else {
                 //ok, we need to clone this object and need to fetch it first
                 return (
@@ -83,11 +83,11 @@ export const duplicateModel = async <T extends Model>(
             }
         } else if (
             Array.isArray(oldValue) &&
-            (oldValue as any[]).every((v) => v instanceof ObjectID)
+            (oldValue as any[]).every((v) => v instanceof ObjectId)
         ) {
             return (await Promise.all(
-                (oldValue as ObjectID[]).map(async (v) => await getNewValue(v, oldInstanceRepo)),
-            )) as ObjectID[];
+                (oldValue as ObjectId[]).map(async (v) => await getNewValue(v, oldInstanceRepo)),
+            )) as ObjectId[];
         } else {
             // Hide message in production
             throw new DatabaseError(
@@ -185,8 +185,6 @@ export const duplicateModel = async <T extends Model>(
         forceCreate: isParentModel || newId !== undefined,
         mongoOptions: {
             session: clientSession,
-            j: true,
-            w: 'majority',
         },
     })) as T;
 
@@ -209,8 +207,6 @@ export const duplicateModel = async <T extends Model>(
                 {
                     mongoOptions: {
                         session: clientSession,
-                        j: true,
-                        w: 'majority',
                     },
                 },
             ),
@@ -225,9 +221,9 @@ export const duplicateModelWithSession = async <T extends Model>(
     actor: User,
     oldModel: T,
     repository: RCT<Repo<Model>>,
-    revisionId?: ObjectID,
+    revisionId?: ObjectId,
     asNewBranch?: boolean,
-    newId?: ObjectID, //we can override the id of the item being cloned
+    newId?: ObjectId, //we can override the id of the item being cloned
 ): Promise<T> => {
     const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
     const shell = container.get<Shell>(TYPES.Shell);

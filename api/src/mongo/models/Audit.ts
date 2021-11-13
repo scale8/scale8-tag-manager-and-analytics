@@ -1,5 +1,5 @@
 import Model from '../abstractions/Model';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import AuditAction from '../../enums/AuditAction';
 import Field from '../decorators/Field';
 import { OperationActor } from '../types/Types';
@@ -10,11 +10,11 @@ import ScalarContainer from '../custom/ScalarContainer';
 import userMessages from '../../errors/UserMessages';
 
 export default class Audit extends Model {
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: false,
         exposeToGQLAs: 'actor_id',
     })
-    private readonly _actor_id?: ObjectID;
+    private readonly _actor_id?: ObjectId;
 
     @Field<OperationOwner>({
         required: true,
@@ -22,11 +22,11 @@ export default class Audit extends Model {
     })
     private readonly _owner: OperationOwner;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'model_id',
     })
-    private readonly _model_id!: ObjectID;
+    private readonly _model_id!: ObjectId;
 
     @Field<string>({
         required: true,
@@ -40,16 +40,16 @@ export default class Audit extends Model {
     })
     private readonly _model!: string;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'parent_model_ids',
     })
-    private readonly _parent_model_ids!: ObjectID[];
+    private readonly _parent_model_ids!: ObjectId[];
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
     })
-    private readonly _org_id!: ObjectID;
+    private readonly _org_id!: ObjectId;
 
     @Field<AuditAction>({
         required: true,
@@ -105,7 +105,7 @@ export default class Audit extends Model {
             this._model_persisting_id = model._persisting_id;
             this._model = model.constructor.name;
             this._parent_model_ids = (model.cloneMaps || new ScalarContainer<string>()).arr.map(
-                (_) => new ObjectID(_.split('/')[0]),
+                (_) => new ObjectId(_.split('/')[0]),
             );
             this._org_id = model.getOrgEntityId();
             this._op_connected_models = new ScalarContainer<string>(
@@ -116,7 +116,7 @@ export default class Audit extends Model {
         this._comments = comments;
     }
 
-    get actor(): ObjectID | 'SYSTEM' {
+    get actor(): ObjectId | 'SYSTEM' {
         return this._actor_id ?? 'SYSTEM';
     }
 
@@ -124,11 +124,11 @@ export default class Audit extends Model {
         return this._owner;
     }
 
-    get orgId(): ObjectID {
+    get orgId(): ObjectId {
         return this._org_id;
     }
 
-    get modelId(): ObjectID {
+    get modelId(): ObjectId {
         return this._model_id;
     }
 
@@ -136,7 +136,7 @@ export default class Audit extends Model {
         return this._model;
     }
 
-    get parentModelIds(): ObjectID[] {
+    get parentModelIds(): ObjectId[] {
         return this._parent_model_ids;
     }
 

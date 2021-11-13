@@ -118,7 +118,7 @@ export default class GitHubAuth extends Handler {
                             ).id.toString()}/${encodeURIComponent(sessionToken)}`,
                         );
                     }
-                } catch (e) {
+                } catch (e: any) {
                     await this.logger.logError(e);
                     res.redirect(`${uiUrl}/sso/failure`);
                 }

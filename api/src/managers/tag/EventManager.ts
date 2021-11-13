@@ -3,7 +3,7 @@ import { injectable } from 'inversify';
 import { gql } from 'apollo-server-express';
 import Event from '../../mongo/models/tag/Event';
 import CTX from '../../gql/ctx/CTX';
-import { ObjectId, ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import PlatformEvent from '../../mongo/models/tag/PlatformEvent';
 import Revision from '../../mongo/models/tag/Revision';
 import GQLError from '../../errors/GQLError';
@@ -177,7 +177,7 @@ export default class EventManager extends Manager<Event> {
     protected gqlExtendedQueryResolvers = {
         getEvent: async (parent: any, args: any, ctx: CTX) => {
             const event = await this.repoFactory(Event).findByIdThrows(
-                new ObjectID(args.id),
+                new ObjectId(args.id),
                 userMessages.eventFailed,
             );
             return await this.orgAuth.asUserWithViewAccess(ctx, event.orgId, async () =>
@@ -291,7 +291,7 @@ export default class EventManager extends Manager<Event> {
 
                 if (platformEventId !== undefined) {
                     return await repoFactory(PlatformEvent).findByIdThrows(
-                        new ObjectID(platformEventId),
+                        new ObjectId(platformEventId),
                         userMessages.eventFailed,
                     );
                 } else if (typeof browserEvent === 'string') {
@@ -375,7 +375,7 @@ export default class EventManager extends Manager<Event> {
         Event: {
             event: async (parent: any, args: any, ctx: CTX) => {
                 const event = await this.repoFactory(Event).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.eventFailed,
                 );
                 if (typeof event.event === 'string') {
@@ -397,7 +397,7 @@ export default class EventManager extends Manager<Event> {
             },
             data_maps: async (parent: any, args: any, ctx: CTX) => {
                 const event = await this.repoFactory(Event).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.eventFailed,
                 );
                 return this.orgAuth.asUserWithViewAccess(ctx, event.orgId, async () =>

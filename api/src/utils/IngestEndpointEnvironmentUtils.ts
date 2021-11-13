@@ -1,5 +1,5 @@
 import IngestEndpointEnvironment from '../mongo/models/data/IngestEndpointEnvironment';
-import { MongoClient, ObjectID } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
 import User from '../mongo/models/User';
 import IngestEndpoint from '../mongo/models/data/IngestEndpoint';
 import IngestEndpointRevision from '../mongo/models/data/IngestEndpointRevision';
@@ -29,7 +29,7 @@ import Hash from '../core/Hash';
 import S3Service from '../aws/S3Service';
 import { AwsConfig, GCBigQueryStreamConfig, MongoDbPushConfig } from '../Types';
 
-export const getIngestEndpointCNAME = (ingestEndpointEnvironmentId: ObjectID | string): string => {
+export const getIngestEndpointCNAME = (ingestEndpointEnvironmentId: ObjectId | string): string => {
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
 
     return `${config.getEnvironmentIdPrefix()}${ingestEndpointEnvironmentId.toString()}.scale8.com`;
@@ -80,7 +80,7 @@ const getIngestUsageIngestEnvironmentId = async (
 };
 
 export const getStorageProviderConfig = async (
-    ingestEndpointEnvironmentId: ObjectID,
+    ingestEndpointEnvironmentId: ObjectId,
 ): Promise<GCBigQueryStreamConfig | AwsConfig | MongoDbPushConfig | Record<string, never>> => {
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
 
@@ -190,7 +190,7 @@ export const updateIngestEndpointEnvironment = async (
         if (ingestEndpointRevisionId !== undefined) {
             return await repoFactory(IngestEndpointRevision).findOneThrows(
                 {
-                    _id: new ObjectID(ingestEndpointRevisionId),
+                    _id: new ObjectId(ingestEndpointRevisionId),
                     _ingest_endpoint_id: ingestEndpointEnvironment.ingestEndpointId,
                 },
                 userMessages.revisionFailed,
@@ -235,7 +235,7 @@ export const createIngestEndpointEnvironment = async (
     provider: StorageProvider,
     providerConfig: StorageProviderConfig,
     ingestEndpointRevision: IngestEndpointRevision,
-    fixedId?: ObjectID,
+    fixedId?: ObjectId,
     customDomain?: string,
     customDomainCert?: string,
     customDomainKey?: string,
@@ -376,9 +376,7 @@ const getMongoDbProviderConfig = async (mongoPushConfig: MongoDbPushConfig) => {
 
     const getMongoConnection = async () => {
         try {
-            const client = new MongoClient(connectionString, {
-                useNewUrlParser: true,
-            });
+            const client = new MongoClient(connectionString);
             return await client.connect();
         } catch (e) {
             throw new GQLError(

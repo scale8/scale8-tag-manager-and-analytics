@@ -1,13 +1,13 @@
 import { injectable } from 'inversify';
 import RuleGroup from '../../models/tag/RuleGroup';
 import UnderRevisionControl from './abstractions/UnderRevisionControl';
-import { IndexSpecification } from 'mongodb';
+import { IndexDescription } from 'mongodb';
 
 @injectable()
 export default class RuleGroupRepo extends UnderRevisionControl<RuleGroup> {
     protected readonly auditEnabled = true;
 
-    protected readonly indexes: IndexSpecification[] = [
+    protected readonly indexes: IndexDescription[] = [
         {
             background: false,
             key: {

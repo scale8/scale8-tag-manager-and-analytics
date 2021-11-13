@@ -1051,7 +1051,7 @@ export default class UserManager extends Manager<User> {
                     firstName: user.firstName,
                     uiUrl: `${await this.config.getUiUrl()}/reset-password/${reset.token}`,
                 });
-            } catch (e) {
+            } catch (e: any) {
                 await this.logger.logError(e, `Failed to send password reset email to ${email}`);
             }
             return true;

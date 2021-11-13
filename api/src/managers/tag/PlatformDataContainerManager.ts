@@ -3,7 +3,7 @@ import Manager from '../../abstractions/Manager';
 import { gql } from 'apollo-server-express';
 import PlatformDataContainer from '../../mongo/models/tag/PlatformDataContainer';
 import CTX from '../../gql/ctx/CTX';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import PlatformDataMap from '../../mongo/models/tag/PlatformDataMap';
 import Platform from '../../mongo/models/tag/Platform';
 import PlatformRevision from '../../mongo/models/tag/PlatformRevision';
@@ -100,7 +100,7 @@ export default class PlatformDataContainerManager extends Manager<PlatformDataCo
         getPlatformDataContainer: async (parent: any, args: any, ctx: CTX) => {
             const platformDataContainer = await this.repoFactory(
                 PlatformDataContainer,
-            ).findByIdThrows(new ObjectID(args.id), userMessages.dataMapFailed);
+            ).findByIdThrows(new ObjectId(args.id), userMessages.dataMapFailed);
             const platformRevision = await this.repoFactory(PlatformRevision).findByIdThrows(
                 platformDataContainer.platformRevisionId,
                 userMessages.revisionFailed,
@@ -123,7 +123,7 @@ export default class PlatformDataContainerManager extends Manager<PlatformDataCo
             platform: async (parent: any, args: any, ctx: CTX) => {
                 const platformDataContainer = await this.repoFactory(
                     PlatformDataContainer,
-                ).findByIdThrows(new ObjectID(parent.id), userMessages.dataMapFailed);
+                ).findByIdThrows(new ObjectId(parent.id), userMessages.dataMapFailed);
                 const platform = await this.repoFactory(Platform).findByIdThrows(
                     platformDataContainer.platformId,
                     userMessages.platformFailed,
@@ -135,7 +135,7 @@ export default class PlatformDataContainerManager extends Manager<PlatformDataCo
             platform_revision: async (parent: any, args: any, ctx: CTX) => {
                 const platformDataContainer = await this.repoFactory(
                     PlatformDataContainer,
-                ).findByIdThrows(new ObjectID(parent.id), userMessages.dataMapFailed);
+                ).findByIdThrows(new ObjectId(parent.id), userMessages.dataMapFailed);
                 const platformRevision = await this.repoFactory(PlatformRevision).findByIdThrows(
                     platformDataContainer.platformRevisionId,
                     userMessages.revisionFailed,
@@ -149,7 +149,7 @@ export default class PlatformDataContainerManager extends Manager<PlatformDataCo
             platform_data_maps: async (parent: any, args: any, ctx: CTX) => {
                 const platformDataContainer = await this.repoFactory(
                     PlatformDataContainer,
-                ).findByIdThrows(new ObjectID(parent.id), userMessages.dataMapFailed);
+                ).findByIdThrows(new ObjectId(parent.id), userMessages.dataMapFailed);
                 const platformRevision = await this.repoFactory(PlatformRevision).findByIdThrows(
                     platformDataContainer.platformRevisionId,
                     userMessages.revisionFailed,

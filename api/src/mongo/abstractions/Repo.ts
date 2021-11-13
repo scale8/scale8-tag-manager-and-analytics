@@ -4,7 +4,14 @@ import { CT, ModelType, MongoType, OperationActor, SaveOptions } from '../types/
 import TYPES from '../../container/IOC.types';
 import FieldProps from '../interfaces/FieldProps';
 import ModelReflect from '../reflect/ModelReflect';
-import { Collection, CommonOptions, FilterQuery, IndexSpecification, ObjectID } from 'mongodb';
+import {
+    Collection,
+    Filter,
+    IndexDescription,
+    ObjectId,
+    Document,
+    InsertOneOptions, FindOneAndUpdateOptions,
+} from 'mongodb';
 import User from '../models/User';
 import AuditAction from '../../enums/AuditAction';
 import Audit from '../models/Audit';
@@ -30,7 +37,7 @@ export default abstract class Repo<T extends Model> {
     protected readonly model: CT<T>;
     protected readonly modelFromRepoFactory: ModelFromRepoFactory;
     protected readonly auditEnabled: boolean = false;
-    protected readonly indexes: IndexSpecification[] = [];
+    protected readonly indexes: IndexDescription[] = [];
 
     @inject(TYPES.BackendConfig) protected readonly config!: BaseConfig;
     @inject(TYPES.RepoFromModelFactory) protected readonly repoFactory!: RepoFromModelFactory;
@@ -80,13 +87,13 @@ export default abstract class Repo<T extends Model> {
             if (resultItem !== undefined) {
                 if (typeof resultItem === 'object' && Array.isArray(resultItem.__arr)) {
                     (model as any)[k] = new ScalarContainer(...resultItem.__arr);
-                } else if (v.repository === undefined || resultItem instanceof ObjectID) {
+                } else if (v.repository === undefined || resultItem instanceof ObjectId) {
                     (model as any)[k] = resultItem;
                 } else if (Array.isArray(resultItem) && resultItem.length === 0) {
                     (model as any)[k] = []; //empty array.
                 } else if (
                     Array.isArray(resultItem) &&
-                    resultItem.every((v: any) => v instanceof ObjectID)
+                    resultItem.every((v: any) => v instanceof ObjectId)
                 ) {
                     (model as any)[k] = resultItem;
                 } else {
@@ -106,7 +113,7 @@ export default abstract class Repo<T extends Model> {
     }
 
     public async findByIdThrows(
-        id: ObjectID,
+        id: ObjectId,
         userMessage?: string,
         error: GenericError = new EntityNotFoundError(
             `Unable to find id '${id}' on ${this.model.name}`,
@@ -128,10 +135,10 @@ export default abstract class Repo<T extends Model> {
     }
 
     public async findOneThrows(
-        query: FilterQuery<any>,
+        query: Filter<Document>,
         userMessage?: string,
         sort: { [k: string]: SortDirection } = {},
-        commonFilter: FilterQuery<any> = { _is_deleted: { $eq: false } },
+        commonFilter: Filter<Document> = { _is_deleted: { $eq: false } },
         error: GenericError = new EntityNotFoundError(
             `Unable to find one on ${this.model.name}`,
             'Record Not Found',
@@ -151,11 +158,11 @@ export default abstract class Repo<T extends Model> {
         }
     }
 
-    public async findById(id: ObjectID): Promise<T | null> {
+    public async findById(id: ObjectId): Promise<T | null> {
         return await this.findOne({ _id: id });
     }
 
-    public async findByIds(ids: ObjectID[], limit = 1000): Promise<T[]> {
+    public async findByIds(ids: ObjectId[], limit = 1000): Promise<T[]> {
         const res = await this.find({ _id: { $in: ids } }, {}, limit);
         const idModelMap = new Map(res.map((_) => [_.id.toString(), _]));
         return ids.map((_) => {
@@ -173,27 +180,27 @@ export default abstract class Repo<T extends Model> {
     }
 
     public async findOne(
-        query: FilterQuery<any>,
+        query: Filter<Document>,
         sort: { [k: string]: SortDirection } = {},
-        commonFilter: FilterQuery<any> = { _is_deleted: { $eq: false } },
+        commonFilter: Filter<Document> = { _is_deleted: { $eq: false } },
     ): Promise<T | null> {
         const result = await this.find(query, sort, 1, commonFilter);
         return result.length === 0 ? null : result[0];
     }
 
     public async count(
-        query: FilterQuery<any>,
-        commonFilter: FilterQuery<any> = { _is_deleted: { $eq: false } },
+        query: Filter<Document>,
+        commonFilter: Filter<Document> = { _is_deleted: { $eq: false } },
     ): Promise<number> {
         const collection = await this.getRepoCollection();
         return collection.countDocuments({ ...query, ...commonFilter });
     }
 
     public async find(
-        query: FilterQuery<any>,
+        query: Filter<Document>,
         sort: { [k: string]: SortDirection } = {},
         limit = 1000,
-        commonFilter: FilterQuery<any> = { _is_deleted: { $eq: false } },
+        commonFilter: Filter<Document> = { _is_deleted: { $eq: false } },
     ): Promise<T[]> {
         const collection = await this.getRepoCollection();
         const docs = await collection
@@ -234,8 +241,8 @@ export default abstract class Repo<T extends Model> {
         const collection = await this.getRepoCollection();
         const query = { _id: model.id };
         const result = await collection.deleteOne(query);
-        if (result.result.ok === 1) {
-            await this.logger.database(`Hard Delete on ${this.model.name}`, query, result.result);
+        if (result.acknowledged) {
+            await this.logger.database(`Hard Delete on ${this.model.name}`, query);
             await this.recordAudit(actor, owner, model, AuditAction.Delete, method, comments);
         } else {
             throw new DatabaseError(
@@ -293,19 +300,18 @@ export default abstract class Repo<T extends Model> {
         },
         actor: User | 'SYSTEM',
         owner: OperationOwner,
-        commonOptions: CommonOptions,
+        insertOneOptions: InsertOneOptions,
         method?: GQLMethod,
         comments?: string,
         opConnectedModels?: Model[],
     ): Promise<T> {
         const collection = await this.getRepoCollection();
-        const result = await collection.insertOne(setCommand.$set, commonOptions);
-        if (result.result.ok === 1) {
+        const result = await collection.insertOne(setCommand.$set, insertOneOptions);
+        if (result.acknowledged) {
             const newModel = this.toModelType(setCommand.$set) as T;
             await this.logger.database(
                 `Save result on ${this.model.name}`,
                 setCommand.$set,
-                result.result,
             );
             await this.recordAudit(
                 actor,
@@ -333,7 +339,7 @@ export default abstract class Repo<T extends Model> {
         },
         actor: User | 'SYSTEM',
         owner: OperationOwner,
-        commonOptions: CommonOptions,
+        findOneAndUpdateOptions: FindOneAndUpdateOptions,
         method?: GQLMethod,
         comments?: string,
         opConnectedModels?: Model[],
@@ -349,7 +355,7 @@ export default abstract class Repo<T extends Model> {
                 (cmd as any)['$unset'] = setCommand.$unset;
             }
             const collection = await this.getRepoCollection();
-            const result = await collection.findOneAndUpdate({ _id: model.id }, cmd, commonOptions);
+            const result = await collection.findOneAndUpdate({ _id: model.id }, cmd, findOneAndUpdateOptions);
             if (result.ok === 1) {
                 await this.logger.database(`Update result on ${this.model.name}`, setCommand);
                 await this.recordAudit(

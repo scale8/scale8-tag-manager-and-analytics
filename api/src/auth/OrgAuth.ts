@@ -1,7 +1,6 @@
 import CTX from '../gql/ctx/CTX';
 import User from '../mongo/models/User';
 import AuthenticationError from '../errors/AuthenticationError';
-import { ObjectID } from 'mongodb';
 import UserAuth from './UserAuth';
 import { inject, injectable } from 'inversify';
 import TYPES from '../container/IOC.types';
@@ -12,6 +11,7 @@ import PlatformRevision from '../mongo/models/tag/PlatformRevision';
 import PlatformRepo from '../mongo/repos/tag/PlatformRepo';
 import Org from '../mongo/models/Org';
 import userMessages from '../errors/UserMessages';
+import { ObjectId } from 'mongodb';
 
 @injectable()
 export default class OrgAuth {
@@ -19,7 +19,7 @@ export default class OrgAuth {
     @inject(TYPES.UserAuth) protected readonly userAuth!: UserAuth;
     @inject(TYPES.PlatformRepo) protected readonly platformRepo!: PlatformRepo;
 
-    protected async getRole(user: User, orgId: ObjectID): Promise<OrgRole> {
+    protected async getRole(user: User, orgId: ObjectId): Promise<OrgRole> {
         return this.orgRoleRepo.findOneThrows(
             {
                 _user_id: user.id,
@@ -92,7 +92,7 @@ export default class OrgAuth {
 
     public async asUserWithOrgAdmin<U>(
         ctx: CTX,
-        orgId: ObjectID,
+        orgId: ObjectId,
         doThisWith: (user: User) => U,
     ): Promise<U> {
         return this.userAuth.asUser(ctx, async (u) => {
@@ -119,7 +119,7 @@ export default class OrgAuth {
         });
     }
 
-    public async isUserWithViewAccess(ctx: CTX, orgId: ObjectID): Promise<boolean> {
+    public async isUserWithViewAccess(ctx: CTX, orgId: ObjectId): Promise<boolean> {
         const orgRole = await this.orgRoleRepo.findOne({
             _user_id: ctx.user?.id,
             _org_id: orgId,
@@ -133,7 +133,7 @@ export default class OrgAuth {
 
     public async asUserWithViewAccess<U>(
         ctx: CTX,
-        orgId: ObjectID,
+        orgId: ObjectId,
         doThisWith: (user: User) => U,
     ): Promise<U> {
         return this.userAuth.asUser(ctx, async (u) => {
@@ -148,7 +148,7 @@ export default class OrgAuth {
 
     public async asUserWithCreateAccess<U>(
         ctx: CTX,
-        orgId: ObjectID,
+        orgId: ObjectId,
         doThisWith: (user: User) => U,
     ): Promise<U> {
         return this.userAuth.asUser(ctx, async (u) => {
@@ -163,7 +163,7 @@ export default class OrgAuth {
 
     public async asUserWithEditAccess<U>(
         ctx: CTX,
-        orgId: ObjectID,
+        orgId: ObjectId,
         doThisWith: (user: User) => U,
     ): Promise<U> {
         return this.userAuth.asUser(ctx, async (u) => {
@@ -178,7 +178,7 @@ export default class OrgAuth {
 
     public async asUserWithDeleteAccess<U>(
         ctx: CTX,
-        orgId: ObjectID,
+        orgId: ObjectId,
         doThisWith: (user: User) => U,
     ): Promise<U> {
         return this.userAuth.asUser(ctx, async (u) => {

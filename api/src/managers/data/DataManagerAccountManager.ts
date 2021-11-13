@@ -2,7 +2,7 @@ import { injectable } from 'inversify';
 import Manager from '../../abstractions/Manager';
 import { gql } from 'apollo-server-express';
 import CTX from '../../gql/ctx/CTX';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import DataManagerAccount from '../../mongo/models/data/DataManagerAccount';
 import IngestEndpoint from '../../mongo/models/data/IngestEndpoint';
 import { differenceInDays } from 'date-fns';
@@ -89,7 +89,7 @@ export default class DataManagerAccountManager extends Manager<DataManagerAccoun
     protected gqlExtendedQueryResolvers = {
         getDataManagerAccount: async (parent: any, args: any, ctx: CTX) => {
             const dataManagerAccount = await this.repoFactory(DataManagerAccount).findByIdThrows(
-                new ObjectID(args.id),
+                new ObjectId(args.id),
                 userMessages.accountFailed,
             );
             return await this.orgAuth.asUserWithViewAccess(
@@ -108,7 +108,7 @@ export default class DataManagerAccountManager extends Manager<DataManagerAccoun
     protected gqlCustomResolvers = {
         DataManagerAccount: {
             org: async (parent: any, args: any, ctx: CTX) => {
-                const orgId = new ObjectID(parent.org_id);
+                const orgId = new ObjectId(parent.org_id);
                 return await this.orgAuth.asUserWithViewAccess(ctx, orgId, async () => {
                     return (await fetchOrg(orgId)).toGQLType();
                 });
@@ -116,7 +116,7 @@ export default class DataManagerAccountManager extends Manager<DataManagerAccoun
             ingest_endpoints: async (parent: any, args: any, ctx: CTX) => {
                 const dataManagerAccount = await this.repoFactory(
                     DataManagerAccount,
-                ).findByIdThrows(new ObjectID(parent.id), userMessages.accountFailed);
+                ).findByIdThrows(new ObjectId(parent.id), userMessages.accountFailed);
                 return await this.orgAuth.asUserWithViewAccess(
                     ctx,
                     dataManagerAccount.orgId,
@@ -130,7 +130,7 @@ export default class DataManagerAccountManager extends Manager<DataManagerAccoun
             },
             trial_expires_in: async (parent: any, args: any, ctx: CTX) => {
                 const account = await this.repoFactory(DataManagerAccount).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.accountFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, account.orgId, () => {
@@ -144,7 +144,7 @@ export default class DataManagerAccountManager extends Manager<DataManagerAccoun
             },
             is_trial: async (parent: any, args: any, ctx: CTX) => {
                 const account = await this.repoFactory(DataManagerAccount).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.accountFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, account.orgId, () => {
@@ -153,7 +153,7 @@ export default class DataManagerAccountManager extends Manager<DataManagerAccoun
             },
             trial_expired: async (parent: any, args: any, ctx: CTX) => {
                 const account = await this.repoFactory(DataManagerAccount).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.accountFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, account.orgId, () => {
@@ -161,7 +161,7 @@ export default class DataManagerAccountManager extends Manager<DataManagerAccoun
                 });
             },
             stripe_product_id: async (parent: any, args: any, ctx: CTX) => {
-                const org = await fetchOrg(new ObjectID(parent.org_id));
+                const org = await fetchOrg(new ObjectId(parent.org_id));
                 return await this.orgAuth.asUserWithViewAccess(ctx, org.id, async () => {
                     const stripeProductId = await this.stripeService.getStripeProductId(
                         org,
@@ -172,7 +172,7 @@ export default class DataManagerAccountManager extends Manager<DataManagerAccoun
                     if (stripeProductId !== undefined) {
                         const accountRepo = this.repoFactory(DataManagerAccount);
                         const account = await accountRepo.findByIdThrows(
-                            new ObjectID(parent.id),
+                            new ObjectId(parent.id),
                             userMessages.accountFailed,
                         );
 
@@ -187,7 +187,7 @@ export default class DataManagerAccountManager extends Manager<DataManagerAccoun
             },
             usage: async (parent: any, args: any, ctx: CTX) => {
                 const account = await this.repoFactory(DataManagerAccount).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.accountFailed,
                 );
                 return await usageFromAccount(account, ctx);

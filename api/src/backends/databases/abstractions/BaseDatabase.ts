@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 import App from '../../../mongo/models/tag/App';
 import IngestEndpoint from '../../../mongo/models/data/IngestEndpoint';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import GenericError from '../../../errors/GenericError';
 import { LogPriority } from '../../../enums/LogPriority';
 
@@ -62,7 +62,7 @@ export default abstract class BaseDatabase {
         return new Date(options.filter_options.to);
     }
 
-    protected getEntityUsageIngestEndpointEnvironmentId(entity: App | IngestEndpoint): ObjectID {
+    protected getEntityUsageIngestEndpointEnvironmentId(entity: App | IngestEndpoint): ObjectId {
         if (entity.usageIngestEndpointEnvironmentId === undefined) {
             throw new GenericError(
                 `Unable to find usage endpoint for ${

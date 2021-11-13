@@ -74,9 +74,7 @@ export default class MongoDb extends BaseDatabase {
             }
 
             try {
-                const client = new MongoClient(connectionString, {
-                    useNewUrlParser: true,
-                });
+                const client = new MongoClient(connectionString);
                 const connection = await client.connect();
                 this.mongoConnections.set(mongoConnectionKey, connection);
                 return connection;

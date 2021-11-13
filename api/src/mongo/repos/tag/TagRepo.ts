@@ -1,13 +1,13 @@
 import { injectable } from 'inversify';
 import Tag from '../../models/tag/Tag';
 import UnderRevisionControl from './abstractions/UnderRevisionControl';
-import { IndexSpecification } from 'mongodb';
+import { IndexDescription } from 'mongodb';
 
 @injectable()
 export default class TagRepo extends UnderRevisionControl<Tag> {
     protected readonly auditEnabled = true;
 
-    protected readonly indexes: IndexSpecification[] = [
+    protected readonly indexes: IndexDescription[] = [
         {
             background: false,
             key: {

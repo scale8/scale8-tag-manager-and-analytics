@@ -1,4 +1,4 @@
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import Field from '../decorators/Field';
 import RequiredFieldMissingError from '../../errors/RequiredFieldMissingError';
 import { ConfigType, GQLScalar, GQLType, ModelType, MongoType } from '../types/Types';
@@ -18,18 +18,18 @@ export default abstract class Model {
         return this.___previous;
     }
 
-    public getOrgEntityId(): ObjectID {
+    public getOrgEntityId(): ObjectId {
         throw new DatabaseError(
             `Org entity has not been defined on ${this.constructor.name}`,
             userMessages.genericDataFailure,
         );
     }
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: false, //this will be auto populated on save...
         exposeToGQLAs: 'id',
     })
-    private _id?: ObjectID;
+    private _id?: ObjectId;
 
     @Field<ScalarContainer<string>>({
         required: false,
@@ -70,7 +70,7 @@ export default abstract class Model {
     })
     private _deleted_at?: Date;
 
-    get id(): ObjectID {
+    get id(): ObjectId {
         if (this._id === undefined) {
             // Hide message in production
             throw new RequiredFieldMissingError('_id is undefined somehow');
@@ -157,12 +157,12 @@ export default abstract class Model {
                 return null;
             } else if (a instanceof Date) {
                 return { ___type: 'Date', value: a.getTime() };
-            } else if (a instanceof ObjectID) {
+            } else if (a instanceof ObjectId) {
                 return { ref: a.toString() };
             } else if (a instanceof ScalarContainer) {
                 return a.arr;
-            } else if (Array.isArray(a) && (a as any[]).every((v) => v instanceof ObjectID)) {
-                return (a as ObjectID[]).map((_) => {
+            } else if (Array.isArray(a) && (a as any[]).every((v) => v instanceof ObjectId)) {
+                return (a as ObjectId[]).map((_) => {
                     return { ref: _.toString() };
                 });
             } else {
@@ -195,12 +195,12 @@ export default abstract class Model {
                 return null;
             } else if (a instanceof Date) {
                 return a;
-            } else if (a instanceof ObjectID) {
+            } else if (a instanceof ObjectId) {
                 return a.toString();
             } else if (a instanceof ScalarContainer) {
                 return a.arr.map((_) => _.toString());
-            } else if (Array.isArray(a) && (a as any[]).every((v) => v instanceof ObjectID)) {
-                return (a as ObjectID[]).map((_) => _.toString());
+            } else if (Array.isArray(a) && (a as any[]).every((v) => v instanceof ObjectId)) {
+                return (a as ObjectId[]).map((_) => _.toString());
             } else {
                 throw new GQLError(
                     `Unable to covert ${a.toString()} to GQL type`,
@@ -225,7 +225,7 @@ export default abstract class Model {
             return modelType;
         } else if (modelType === null) {
             return null;
-        } else if (modelType instanceof Date || modelType instanceof ObjectID) {
+        } else if (modelType instanceof Date || modelType instanceof ObjectId) {
             return modelType;
         } else if (modelType instanceof ScalarContainer) {
             return { __arr: modelType.arr };
@@ -233,9 +233,9 @@ export default abstract class Model {
             return [];
         } else if (
             Array.isArray(modelType) &&
-            (modelType as any[]).every((v) => v instanceof ObjectID)
+            (modelType as any[]).every((v) => v instanceof ObjectId)
         ) {
-            return modelType as ObjectID[];
+            return modelType as ObjectId[];
         } else if (
             Array.isArray(modelType) &&
             (modelType as any[]).every((v) => v instanceof Model)
@@ -268,12 +268,12 @@ export default abstract class Model {
                 return new ScalarContainer(
                     ...v.arr.map((_) => (_ instanceof Date ? new Date(_.toISOString()) : _)),
                 );
-            } else if (v instanceof ObjectID) {
-                return new ObjectID(v.toString());
+            } else if (v instanceof ObjectId) {
+                return new ObjectId(v.toString());
             } else if (Array.isArray(v) && v.length === 0) {
                 return [];
-            } else if (Array.isArray(v) && (v as any[]).every((_) => _ instanceof ObjectID)) {
-                return (v as ObjectID[]).map((_) => new ObjectID(_.toString()));
+            } else if (Array.isArray(v) && (v as any[]).every((_) => _ instanceof ObjectId)) {
+                return (v as ObjectId[]).map((_) => new ObjectId(_.toString()));
             } else if (Array.isArray(v) && (v as any[]).every((_) => _ instanceof Model)) {
                 return (v as Model[]).map((_) => _.cloneModelData());
             } else if (v instanceof Model) {
@@ -308,7 +308,7 @@ export default abstract class Model {
     }
 
     protected modelTypesEqual(leftModelType?: ModelType, rightModelType?: ModelType): boolean {
-        if (leftModelType instanceof ObjectID && rightModelType instanceof ObjectID) {
+        if (leftModelType instanceof ObjectId && rightModelType instanceof ObjectId) {
             return leftModelType.equals(rightModelType);
         } else if (leftModelType instanceof Date && rightModelType instanceof Date) {
             return leftModelType.toISOString() === rightModelType.toISOString();
@@ -327,14 +327,14 @@ export default abstract class Model {
             return true;
         } else if (
             Array.isArray(leftModelType) &&
-            (leftModelType as any[]).every((v) => v instanceof ObjectID) &&
+            (leftModelType as any[]).every((v) => v instanceof ObjectId) &&
             Array.isArray(rightModelType) &&
-            (rightModelType as any[]).every((v) => v instanceof ObjectID)
+            (rightModelType as any[]).every((v) => v instanceof ObjectId)
         ) {
             return (
                 leftModelType.length === rightModelType.length &&
-                (leftModelType as ObjectID[]).every((v, i) =>
-                    v.equals((rightModelType as ObjectID[])[i]),
+                (leftModelType as ObjectId[]).every((v, i) =>
+                    v.equals((rightModelType as ObjectId[])[i]),
                 )
             );
         }

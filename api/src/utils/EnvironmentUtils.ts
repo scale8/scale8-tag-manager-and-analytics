@@ -1,4 +1,4 @@
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import User from '../mongo/models/User';
 import App from '../mongo/models/tag/App';
 import Revision from '../mongo/models/tag/Revision';
@@ -36,7 +36,7 @@ export const isEnvironmentVariableNameValid = (name: string): boolean => {
     return name.match(/^[A-Z_]+$/) !== null;
 };
 
-export const getCNAME = (environmentId: ObjectID | string): string => {
+export const getCNAME = (environmentId: ObjectId | string): string => {
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
 
     return `${config.getEnvironmentIdPrefix()}${environmentId.toString()}.scale8.com`;
@@ -53,7 +53,7 @@ const getConfigFromModels = (models: Model[]): ConfigType => {
     ).reduce((_, [k, v]) => ({ ..._, [k]: v }), {});
 };
 
-const generateConfig = async (revisionId: ObjectID | Revision): Promise<ConfigType> => {
+const generateConfig = async (revisionId: ObjectId | Revision): Promise<ConfigType> => {
     const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
 
     //generate a config to run the core (and other platforms) against...
@@ -270,7 +270,7 @@ export const buildConfig = async (environment: Environment): Promise<void> => {
     }
 };
 
-export const createCname = async (environment: { id: ObjectID }) => {
+export const createCname = async (environment: { id: ObjectId }) => {
     const route53Service = container.get<Route53Service>(TYPES.Route53Service);
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
     const logger = container.get<BaseLogger>(TYPES.BackendLogger);

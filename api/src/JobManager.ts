@@ -64,7 +64,7 @@ if (runJobArg !== undefined) {
                         handleSuccess();
                     }
                     await exit(true);
-                } catch (e) {
+                } catch (e: any) {
                     handleError(e);
                 }
             })();
@@ -72,7 +72,7 @@ if (runJobArg !== undefined) {
         (async () => {
             try {
                 await runJob(job);
-            } catch (e) {
+            } catch (e: any) {
                 handleError(e);
             }
         })();

@@ -2,7 +2,7 @@ import Repo from '../abstractions/Repo';
 import User from '../models/User';
 import { injectable } from 'inversify';
 import { OperationActor, SaveOptions } from '../types/Types';
-import { IndexSpecification, ObjectId, ObjectID } from 'mongodb';
+import { IndexDescription, ObjectId } from 'mongodb';
 import OperationOwner from '../../enums/OperationOwner';
 import Org from '../models/Org';
 import OrgRole from '../models/OrgRole';
@@ -11,7 +11,7 @@ import { fetchOrg } from '../../utils/OrgUtils';
 
 @injectable()
 export default class UserRepo extends Repo<User> {
-    protected readonly indexes: IndexSpecification[] = [
+    protected readonly indexes: IndexDescription[] = [
         {
             background: false,
             key: {
@@ -65,7 +65,7 @@ export default class UserRepo extends Repo<User> {
 
     public async convertToOrgUser(
         user: User,
-        orgId: ObjectID,
+        orgId: ObjectId,
     ): Promise<{
         updated_at: Date;
         org_id: ObjectId;

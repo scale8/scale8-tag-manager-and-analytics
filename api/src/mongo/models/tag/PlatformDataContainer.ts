@@ -1,21 +1,21 @@
 import Model from '../../abstractions/Model';
 import Field from '../../decorators/Field';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import PlatformDataMap from './PlatformDataMap';
 import PlatformRevision from './PlatformRevision';
 import PlatformDataMapRepo from '../../repos/tag/PlatformDataMapRepo';
 import { TypeIcon } from '../../../../../common/enums/TypeIcon';
 
 export default class PlatformDataContainer extends Model {
-    public getOrgEntityId(): ObjectID {
+    public getOrgEntityId(): ObjectId {
         return this.orgId;
     }
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'org_id',
     })
-    private readonly _org_id!: ObjectID;
+    private readonly _org_id!: ObjectId;
 
     @Field<string>({
         required: true,
@@ -32,25 +32,25 @@ export default class PlatformDataContainer extends Model {
     })
     private _description: string;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'tag_manager_account_id',
     })
-    private readonly _tag_manager_account_id!: ObjectID;
+    private readonly _tag_manager_account_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'platform_id',
         exposeToConfig: true,
     })
-    private readonly _platform_id!: ObjectID;
+    private readonly _platform_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'platform_revision_id',
         exposeToConfig: true,
     })
-    private readonly _revision_id!: ObjectID;
+    private readonly _revision_id!: ObjectId;
 
     @Field<string>({
         required: true,
@@ -59,13 +59,13 @@ export default class PlatformDataContainer extends Model {
     })
     private _allow_custom: boolean;
 
-    @Field<ObjectID[]>({
+    @Field<ObjectId[]>({
         repository: PlatformDataMapRepo,
         required: true,
         exposeToGQLAs: 'platform_data_map_ids',
         exposeToConfig: true,
     })
-    private _platform_data_map_ids: ObjectID[] = [];
+    private _platform_data_map_ids: ObjectId[] = [];
 
     @Field<TypeIcon>({
         required: false,
@@ -95,7 +95,7 @@ export default class PlatformDataContainer extends Model {
         this._icon = icon;
     }
 
-    get orgId(): ObjectID {
+    get orgId(): ObjectId {
         return this._org_id;
     }
 
@@ -115,15 +115,15 @@ export default class PlatformDataContainer extends Model {
         this._description = value;
     }
 
-    get tagManagerAccountId(): ObjectID {
+    get tagManagerAccountId(): ObjectId {
         return this._tag_manager_account_id;
     }
 
-    get platformId(): ObjectID {
+    get platformId(): ObjectId {
         return this._platform_id;
     }
 
-    get platformRevisionId(): ObjectID {
+    get platformRevisionId(): ObjectId {
         return this._revision_id;
     }
 
@@ -135,11 +135,11 @@ export default class PlatformDataContainer extends Model {
         this._allow_custom = value;
     }
 
-    get platformDataMapIds(): ObjectID[] {
+    get platformDataMapIds(): ObjectId[] {
         return this._platform_data_map_ids;
     }
 
-    set platformDataMapIds(value: ObjectID[]) {
+    set platformDataMapIds(value: ObjectId[]) {
         this._platform_data_map_ids = value;
     }
 

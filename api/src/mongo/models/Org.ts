@@ -1,11 +1,11 @@
 import Model from '../abstractions/Model';
 import Field from '../decorators/Field';
 import TimeZones from '../../core/TimeZones';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import User from './User';
 
 export default class Org extends Model {
-    public getOrgEntityId(): ObjectID {
+    public getOrgEntityId(): ObjectId {
         return this.id;
     }
 
@@ -22,11 +22,11 @@ export default class Org extends Model {
     })
     private _tz!: string;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'org_owner_user_id',
     })
-    private _org_owner_user_id!: ObjectID;
+    private _org_owner_user_id!: ObjectId;
 
     @Field<boolean>({
         required: false,
@@ -76,11 +76,11 @@ export default class Org extends Model {
         this._tz = value;
     }
 
-    set orgOwnerUser(value: ObjectID) {
+    set orgOwnerUser(value: ObjectId) {
         this._org_owner_user_id = value;
     }
 
-    get orgOwnerUser(): ObjectID {
+    get orgOwnerUser(): ObjectId {
         return this._org_owner_user_id;
     }
 

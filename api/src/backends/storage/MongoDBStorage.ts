@@ -58,7 +58,7 @@ export default class MongoDBStorage extends BaseStorage {
                 },
                 { upsert: true },
             );
-        } catch (e) {
+        } catch (e: any) {
             throw new GenericError(
                 `Failed to insert/update ${key} and respective value in ${bucketName}`,
                 LogPriority.ERROR,

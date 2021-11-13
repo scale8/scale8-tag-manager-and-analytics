@@ -7,7 +7,7 @@ import RepoFromModelFactory from '../container/factoryTypes/RepoFromModelFactory
 import TYPES from '../container/IOC.types';
 import AuthenticationError from '../errors/AuthenticationError';
 import userMessages from '../errors/UserMessages';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import BaseConfig from '../backends/configuration/abstractions/BaseConfig';
 
 export type SessionData = {
@@ -68,7 +68,7 @@ export const getSessionUser = async (uid: string, token: string): Promise<User> 
 
     return await repoFactory(User).findOneThrows(
         {
-            _id: new ObjectID(uid),
+            _id: new ObjectId(uid),
             $or: [{ '_sessions._token': token }, { _api_token: token }],
         },
         undefined,
@@ -83,7 +83,7 @@ export const getTempSessionUser = async (uid: string, token: string): Promise<Us
 
     return await repoFactory(User).findOneThrows(
         {
-            _id: new ObjectID(uid),
+            _id: new ObjectId(uid),
             $or: [{ '_temp_sessions._token': token }],
         },
         undefined,

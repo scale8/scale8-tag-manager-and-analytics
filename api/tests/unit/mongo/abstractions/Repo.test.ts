@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { Collection, Cursor } from 'mongodb';
+import { Collection, FindCursor } from 'mongodb';
 import TestUtils from '../../../utils/TestUtils';
 import Model from '../../../../src/mongo/abstractions/Model';
 import Repo from '../../../../src/mongo/abstractions/Repo';
@@ -13,7 +13,7 @@ import Mock = jest.Mock;
 describe('Abstract Repo', () => {
     const mockShell = {} as Shell;
     const mockCollection = {} as Collection;
-    const mockCursor = {} as Cursor;
+    const mockCursor = {} as FindCursor;
 
     beforeEach(TestUtils.beforeEachPrepareContainerAndDate);
     afterEach(TestUtils.afterEachRestoreContainerMocksAndDate);

@@ -1,6 +1,6 @@
 import Model from '../../abstractions/Model';
 import Field from '../../decorators/Field';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import AppPlatform from './AppPlatform';
 import AppPlatformRepo from '../../repos/tag/AppPlatformRepo';
 import TagManagerAccount from './TagManagerAccount';
@@ -8,15 +8,15 @@ import { AppType } from '../../../enums/AppType';
 import { StorageProvider } from '../../../enums/StorageProvider';
 
 export default class App extends Model {
-    public getOrgEntityId(): ObjectID {
+    public getOrgEntityId(): ObjectId {
         return this.orgId;
     }
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'org_id',
     })
-    private readonly _org_id!: ObjectID;
+    private readonly _org_id!: ObjectId;
 
     @Field<string>({
         required: true,
@@ -24,16 +24,16 @@ export default class App extends Model {
     })
     private _name: string;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'tag_manager_account_id',
     })
-    private readonly _tag_manager_account_id!: ObjectID;
+    private readonly _tag_manager_account_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: false,
     })
-    private _usage_ingest_endpoint_environment_id?: ObjectID;
+    private _usage_ingest_endpoint_environment_id?: ObjectId;
 
     @Field<boolean>({
         required: true,
@@ -107,15 +107,15 @@ export default class App extends Model {
         this._storage_provider = storageProvider;
     }
 
-    get orgId(): ObjectID {
+    get orgId(): ObjectId {
         return this._org_id;
     }
 
-    set usageIngestEndpointEnvironmentId(value: ObjectID | undefined) {
+    set usageIngestEndpointEnvironmentId(value: ObjectId | undefined) {
         this._usage_ingest_endpoint_environment_id = value;
     }
 
-    get usageIngestEndpointEnvironmentId(): ObjectID | undefined {
+    get usageIngestEndpointEnvironmentId(): ObjectId | undefined {
         return this._usage_ingest_endpoint_environment_id;
     }
 
@@ -127,7 +127,7 @@ export default class App extends Model {
         this._name = value;
     }
 
-    get tagManagerAccountId(): ObjectID {
+    get tagManagerAccountId(): ObjectId {
         return this._tag_manager_account_id;
     }
 

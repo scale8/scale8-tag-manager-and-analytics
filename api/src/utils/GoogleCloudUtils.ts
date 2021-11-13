@@ -1,4 +1,4 @@
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import { JWTInput } from 'google-auth-library/build/src/auth/credentials';
 import { getStorageProviderConfig } from './IngestEndpointEnvironmentUtils';
 import { GCBigQueryStreamConfig } from '../Types';
@@ -16,7 +16,7 @@ export const getServiceAccountJsonFromConfig = async (): Promise<JWTInput> => {
 };
 
 export const getBigQueryConfig = async (
-    entityUsageIngestEndpointEnvironmentId: ObjectID,
+    entityUsageIngestEndpointEnvironmentId: ObjectId,
 ): Promise<GCBigQueryStreamConfig> => {
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
 
@@ -35,7 +35,7 @@ export const getBigQueryConfig = async (
 };
 
 export const getServiceAccountJson = async (
-    entityUsageIngestEndpointEnvironmentId: ObjectID,
+    entityUsageIngestEndpointEnvironmentId: ObjectId,
 ): Promise<JWTInput> => {
     return (await getBigQueryConfig(entityUsageIngestEndpointEnvironmentId)).service_account_json;
 };

@@ -2,7 +2,7 @@ import { injectable } from 'inversify';
 import Manager from '../../abstractions/Manager';
 import { gql } from 'apollo-server-express';
 import CTX from '../../gql/ctx/CTX';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import PlatformRevision from '../../mongo/models/tag/PlatformRevision';
 import PlatformActionPermission from '../../mongo/models/tag/PlatformActionPermission';
 import userMessages from '../../errors/UserMessages';
@@ -127,7 +127,7 @@ export default class PlatformActionPermissionManager extends Manager<PlatformAct
         getPlatformActionPermission: async (parent: any, args: any, ctx: CTX) => {
             const platformActionPermission = await this.repoFactory(
                 PlatformActionPermission,
-            ).findByIdThrows(new ObjectID(args.id), userMessages.actionFailed);
+            ).findByIdThrows(new ObjectId(args.id), userMessages.actionFailed);
             const platformRevision = await this.repoFactory(PlatformRevision).findByIdThrows(
                 platformActionPermission.platformRevisionId,
                 userMessages.revisionFailed,
@@ -150,25 +150,25 @@ export default class PlatformActionPermissionManager extends Manager<PlatformAct
             variable_read_write_execute_scopes: async (parent: any) => {
                 const platformActionPermission = await this.repoFactory(
                     PlatformActionPermission,
-                ).findByIdThrows(new ObjectID(parent.id), userMessages.actionFailed);
+                ).findByIdThrows(new ObjectId(parent.id), userMessages.actionFailed);
                 return platformActionPermission.variableReadWriteScopes;
             },
             url_parts: async (parent: any) => {
                 const platformActionPermission = await this.repoFactory(
                     PlatformActionPermission,
-                ).findByIdThrows(new ObjectID(parent.id), userMessages.actionFailed);
+                ).findByIdThrows(new ObjectId(parent.id), userMessages.actionFailed);
                 return platformActionPermission.urlParts;
             },
             host_matches: async (parent: any) => {
                 const platformActionPermission = await this.repoFactory(
                     PlatformActionPermission,
-                ).findByIdThrows(new ObjectID(parent.id), userMessages.actionFailed);
+                ).findByIdThrows(new ObjectId(parent.id), userMessages.actionFailed);
                 return platformActionPermission.hostMatches;
             },
             event_names: async (parent: any) => {
                 const platformActionPermission = await this.repoFactory(
                     PlatformActionPermission,
-                ).findByIdThrows(new ObjectID(parent.id));
+                ).findByIdThrows(new ObjectId(parent.id));
                 return platformActionPermission.eventNames;
             },
         },

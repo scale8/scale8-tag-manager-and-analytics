@@ -4,12 +4,11 @@ import TYPES from '../../src/container/IOC.types';
 import TypeDefRegister from '../../src/gql/TypeDefRegister';
 import ResolverRegister from '../../src/gql/ResolverRegister';
 import { ApolloServer } from 'apollo-server-express';
-import AuthDirective from '../../src/gql/directives/AuthDirective';
 import BaseLogger from '../../src/backends/logging/abstractions/BaseLogger';
 import BaseConfig from '../../src/backends/configuration/abstractions/BaseConfig';
 import Org from '../../src/mongo/models/Org';
 import User from '../../src/mongo/models/User';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import Audit from '../../src/mongo/models/Audit';
 import OperationOwner from '../../src/enums/OperationOwner';
 import AuditAction from '../../src/enums/AuditAction';
@@ -91,16 +90,13 @@ export default class TestUtils {
 
         return new ApolloServer({
             typeDefs,
-            schemaDirectives: {
-                auth: AuthDirective,
-            },
             resolvers,
             context: () => ({ user: { id: 1, email: 'a@a.a' } }),
         });
     }
 
     private static addModelFields<M extends Model>(m: M, id: string): M {
-        m['_id'] = new ObjectID(id);
+        m['_id'] = new ObjectId(id);
         m['_persisting_id'] = 'pId';
         m['_created_at'] = new Date('2020-12-17T03:24:00');
         m['_updated_at'] = new Date('2020-12-20T05:24:00');

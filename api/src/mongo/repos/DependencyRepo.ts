@@ -1,11 +1,11 @@
 import Repo from '../abstractions/Repo';
 import { injectable } from 'inversify';
-import { IndexSpecification } from 'mongodb';
+import { IndexDescription } from 'mongodb';
 import Dependency from '../models/Dependency';
 
 @injectable()
 export default class DependencyRepo extends Repo<Dependency> {
-    protected readonly indexes: IndexSpecification[] = [
+    protected readonly indexes: IndexDescription[] = [
         {
             background: false,
             key: {

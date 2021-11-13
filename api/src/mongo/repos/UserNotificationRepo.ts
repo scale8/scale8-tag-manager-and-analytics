@@ -1,13 +1,13 @@
 import Repo from '../abstractions/Repo';
 import { injectable } from 'inversify';
 import UserNotification from '../models/UserNotification';
-import { IndexSpecification } from 'mongodb';
+import { IndexDescription } from 'mongodb';
 
 @injectable()
 export default class UserNotificationRepo extends Repo<UserNotification> {
     protected readonly EXPIRES_AFTER = 86400 * 90;
 
-    protected readonly indexes: IndexSpecification[] = [
+    protected readonly indexes: IndexDescription[] = [
         {
             background: false,
             key: {

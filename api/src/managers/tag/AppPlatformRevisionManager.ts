@@ -2,7 +2,7 @@ import Manager from '../../abstractions/Manager';
 import { injectable } from 'inversify';
 import { gql } from 'apollo-server-express';
 import CTX from '../../gql/ctx/CTX';
-import { ObjectId, ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import AppPlatformRevision from '../../mongo/models/tag/AppPlatformRevision';
 import PlatformRevision from '../../mongo/models/tag/PlatformRevision';
 import DataMap from '../../mongo/models/tag/DataMap';
@@ -152,7 +152,7 @@ export default class AppPlatformRevisionManager extends Manager<AppPlatformRevis
     protected gqlExtendedQueryResolvers = {
         getAppPlatformRevision: async (parent: any, args: any, ctx: CTX) => {
             const appPlatformRevision = await this.repoFactory(AppPlatformRevision).findByIdThrows(
-                new ObjectID(args.id),
+                new ObjectId(args.id),
                 userMessages.revisionFailed,
             );
             return await this.orgAuth.asUserWithViewAccess(
@@ -382,7 +382,7 @@ export default class AppPlatformRevisionManager extends Manager<AppPlatformRevis
                                                     _.right.id,
                                                     userMessages.diffFailed,
                                                 );
-                                                (model as any)[prop.field] = new ObjectID(newValue);
+                                                (model as any)[prop.field] = new ObjectId(newValue);
                                                 await repo.save(model, me, OperationOwner.USER, {
                                                     gqlMethod: GQLMethod.AUTO_MERGE,
                                                 });
@@ -421,7 +421,7 @@ export default class AppPlatformRevisionManager extends Manager<AppPlatformRevis
             platform_revision: async (parent: any, args: any, ctx: CTX) => {
                 const appPlatformRevision = await this.repoFactory(
                     AppPlatformRevision,
-                ).findByIdThrows(new ObjectID(parent.id), userMessages.revisionFailed);
+                ).findByIdThrows(new ObjectId(parent.id), userMessages.revisionFailed);
                 const platformRevision = await this.repoFactory(PlatformRevision).findByIdThrows(
                     appPlatformRevision.platformRevisionId,
                     userMessages.revisionFailed,
@@ -435,7 +435,7 @@ export default class AppPlatformRevisionManager extends Manager<AppPlatformRevis
             platform_settings: async (parent: any, args: any, ctx: CTX) => {
                 const appPlatformRevision = await this.repoFactory(
                     AppPlatformRevision,
-                ).findByIdThrows(new ObjectID(parent.id), userMessages.revisionFailed);
+                ).findByIdThrows(new ObjectId(parent.id), userMessages.revisionFailed);
                 return this.orgAuth.asUserWithViewAccess(ctx, appPlatformRevision.orgId, async () =>
                     (
                         await this.repoFactory(DataMap).findByIds(
@@ -448,7 +448,7 @@ export default class AppPlatformRevisionManager extends Manager<AppPlatformRevis
     };
 
     private async removeLinkedRevisionEntities(
-        linked: { model: string; id: ObjectID }[],
+        linked: { model: string; id: ObjectId }[],
         revision: Revision,
         preview: boolean,
         actor: User,
@@ -459,7 +459,7 @@ export default class AppPlatformRevisionManager extends Manager<AppPlatformRevis
                     if (_.model === PlatformAction.name) {
                         const actions = await this.repoFactory(Action).find({
                             _revision_id: revision.id,
-                            _platform_action_id: new ObjectID(_.id),
+                            _platform_action_id: new ObjectId(_.id),
                         });
                         if (!preview) {
                             const actionIds = actions.map((action) => action.id);
@@ -491,7 +491,7 @@ export default class AppPlatformRevisionManager extends Manager<AppPlatformRevis
                     } else if (_.model === PlatformEvent.name) {
                         const events = await this.repoFactory(Event).find({
                             _revision_id: revision.id,
-                            _event: new ObjectID(_.id),
+                            _event: new ObjectId(_.id),
                         });
                         if (!preview) {
                             const eventIds = events.map((event) => event.id);
@@ -523,7 +523,7 @@ export default class AppPlatformRevisionManager extends Manager<AppPlatformRevis
                     } else if (_.model === PlatformDataContainer.name) {
                         const conditionRules = await this.repoFactory(ConditionRule).find({
                             _revision_id: revision.id,
-                            _platform_data_container_id: new ObjectID(_.id),
+                            _platform_data_container_id: new ObjectId(_.id),
                         });
                         if (!preview) {
                             const conditionRuleIds = conditionRules.map(

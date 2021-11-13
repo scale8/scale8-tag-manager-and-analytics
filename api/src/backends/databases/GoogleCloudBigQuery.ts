@@ -75,7 +75,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
             });
             const [rows] = await job.getQueryResults();
             return rows;
-        } catch (e) {
+        } catch (e: any) {
             this.logger.warn(e.message, e).then();
             return [];
         }

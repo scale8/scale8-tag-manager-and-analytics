@@ -1,5 +1,5 @@
 import Org from '../mongo/models/Org';
-import { ObjectId, ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import container from '../container/IOC.config';
 import RepoFromModelFactory from '../container/factoryTypes/RepoFromModelFactory';
 import TYPES from '../container/IOC.types';
@@ -18,7 +18,7 @@ import OrgRole from '../mongo/models/OrgRole';
 import GenericError from '../errors/GenericError';
 import { LogPriority } from '../enums/LogPriority';
 
-export const fetchOrg = async (id: ObjectID): Promise<Org> => {
+export const fetchOrg = async (id: ObjectId): Promise<Org> => {
     const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
     return repoFactory(Org).findByIdThrows(id, userMessages.orgFailed);
 };

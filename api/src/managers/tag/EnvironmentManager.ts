@@ -3,7 +3,7 @@ import { inject, injectable } from 'inversify';
 import { gql } from 'apollo-server-express';
 import Environment from '../../mongo/models/tag/Environment';
 import CTX from '../../gql/ctx/CTX';
-import { ObjectId, ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import Revision from '../../mongo/models/tag/Revision';
 import App from '../../mongo/models/tag/App';
 import GQLError from '../../errors/GQLError';
@@ -245,7 +245,7 @@ export default class EnvironmentManager extends Manager<Environment> {
     protected gqlExtendedQueryResolvers = {
         getEnvironment: async (parent: any, args: any, ctx: CTX) => {
             const environment = await this.repoFactory(Environment).findByIdThrows(
-                new ObjectID(args.id),
+                new ObjectId(args.id),
                 userMessages.environmentFailed,
             );
             return await this.orgAuth.asUserWithViewAccess(ctx, environment.orgId, async () =>
@@ -316,7 +316,7 @@ export default class EnvironmentManager extends Manager<Environment> {
                 //we are trying to attach a new revision to this environment
                 const revision = await this.repoFactory(Revision).findOneThrows(
                     {
-                        _id: new ObjectID(data.revision_id),
+                        _id: new ObjectId(data.revision_id),
                         _tag_manager_account_id: environment.tagManagerAccountId,
                     },
                     userMessages.revisionFailed,
@@ -376,7 +376,7 @@ export default class EnvironmentManager extends Manager<Environment> {
                     //we are trying to attach a new revision to this environment
                     const revision = await this.repoFactory(Revision).findOneThrows(
                         {
-                            _id: new ObjectID(data.revision_id),
+                            _id: new ObjectId(data.revision_id),
                             _tag_manager_account_id: app.tagManagerAccountId,
                         },
                         userMessages.revisionFailed,
@@ -417,7 +417,7 @@ export default class EnvironmentManager extends Manager<Environment> {
             cname: async (parent: any) => getCNAME(parent.id),
             install_domain: async (parent: any, args: any, ctx: CTX) => {
                 const env = await this.repoFactory(Environment).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.environmentFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, env.orgId, async () => {
@@ -430,7 +430,7 @@ export default class EnvironmentManager extends Manager<Environment> {
             },
             revision: async (parent: any, args: any, ctx: CTX) => {
                 const env = await this.repoFactory(Environment).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.environmentFailed,
                 );
                 return this.orgAuth.asUserWithViewAccess(ctx, env.orgId, async () => {
@@ -444,7 +444,7 @@ export default class EnvironmentManager extends Manager<Environment> {
             },
             environment_variables: async (parent: any, args: any, ctx: CTX) => {
                 const env = await this.repoFactory(Environment).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.environmentFailed,
                 );
                 return this.orgAuth.asUserWithViewAccess(ctx, env.orgId, async () => {
@@ -456,7 +456,7 @@ export default class EnvironmentManager extends Manager<Environment> {
             },
             event_request_stats: async (parent: any, args: any, ctx: CTX) => {
                 const env = await this.repoFactory(Environment).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.environmentFailed,
                 );
                 return fetchEventRequests('environment', env, args, ctx);

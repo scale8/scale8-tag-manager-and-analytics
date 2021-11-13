@@ -1,6 +1,6 @@
 import Model from '../abstractions/Model';
 import Field from '../decorators/Field';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import PermissionGroup from './PermissionGroup';
 import PermissionGroupRepo from '../repos/PermissionGroupRepo';
 
@@ -12,11 +12,11 @@ export default class Invite extends Model {
     })
     private readonly _email: string;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'org_id',
     })
-    private readonly _org_id!: ObjectID;
+    private readonly _org_id!: ObjectId;
 
     @Field<PermissionGroup>({
         repository: PermissionGroupRepo,
@@ -26,7 +26,7 @@ export default class Invite extends Model {
 
     constructor(
         email: string,
-        orgId: ObjectID,
+        orgId: ObjectId,
         orgPermissions: PermissionGroup = new PermissionGroup(true, false, false, false, false),
     ) {
         super();
@@ -39,7 +39,7 @@ export default class Invite extends Model {
         return this._email;
     }
 
-    get orgId(): ObjectID {
+    get orgId(): ObjectId {
         return this._org_id;
     }
 

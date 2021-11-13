@@ -3,7 +3,7 @@ import { injectable } from 'inversify';
 import Audit from '../mongo/models/Audit';
 import { gql } from 'apollo-server-express';
 import CTX from '../gql/ctx/CTX';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import OrgRole from '../mongo/models/OrgRole';
 import User from '../mongo/models/User';
 import GQLError from '../errors/GQLError';
@@ -105,7 +105,7 @@ export default class AuditManager extends Manager<Audit> {
      */
     protected gqlExtendedQueryResolvers = {
         getHistoryForEntities: async (parent: any, args: any, ctx: CTX) => {
-            const getAuditsForEntity = async (id: ObjectID): Promise<Audit[]> => {
+            const getAuditsForEntity = async (id: ObjectId): Promise<Audit[]> => {
                 //get the audit history of this element...
                 const audits = await this.repoFactory(Audit).find({
                     _model_id: id,
@@ -127,7 +127,7 @@ export default class AuditManager extends Manager<Audit> {
                             $or: model.cloneMaps.arr.map((cloneMap: string) => {
                                 const [id, date] = cloneMap.split('/');
                                 return {
-                                    _model_id: new ObjectID(id),
+                                    _model_id: new ObjectId(id),
                                     _created_at: { $lte: new Date(date) },
                                 };
                             }),
@@ -141,7 +141,7 @@ export default class AuditManager extends Manager<Audit> {
             const entityIds: string[] = args.entities;
             const audits: Audit[] = (
                 await Promise.all(
-                    entityIds.map((entityId) => getAuditsForEntity(new ObjectID(entityId))),
+                    entityIds.map((entityId) => getAuditsForEntity(new ObjectId(entityId))),
                 )
             ).flat();
             if (audits.length > 0) {
@@ -170,7 +170,7 @@ export default class AuditManager extends Manager<Audit> {
         Audit: {
             user: async (parent: any, args: any, ctx: CTX) => {
                 const audit = await this.repoFactory(Audit).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.auditFailed,
                 );
                 if (audit.actor === 'SYSTEM') {
@@ -199,7 +199,7 @@ export default class AuditManager extends Manager<Audit> {
             },
             connected_models: async (parent: any, args: any, ctx: CTX) => {
                 const audit = await this.repoFactory(Audit).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.auditFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, audit.orgId, () =>

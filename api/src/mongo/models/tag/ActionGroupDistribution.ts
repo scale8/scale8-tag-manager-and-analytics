@@ -1,6 +1,6 @@
 import Model from '../../abstractions/Model';
 import Field from '../../decorators/Field';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import Revision from './Revision';
 import ActionGroupRepo from '../../repos/tag/ActionGroupRepo';
 import ActionGroup from './ActionGroup';
@@ -8,15 +8,15 @@ import { RevisionEntityParentType } from '../../../enums/RevisionEntityParentTyp
 import { ActionGroupDistributionType } from '../../../enums/ActionGroupDistributionType';
 
 export default class ActionGroupDistribution extends Model {
-    public getOrgEntityId(): ObjectID {
+    public getOrgEntityId(): ObjectId {
         return this.orgId;
     }
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'org_id',
     })
-    private readonly _org_id!: ObjectID;
+    private readonly _org_id!: ObjectId;
 
     @Field<string>({
         required: true,
@@ -32,23 +32,23 @@ export default class ActionGroupDistribution extends Model {
     })
     private readonly _parent_type: RevisionEntityParentType;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'tag_manager_account_id',
     })
-    private readonly _tag_manager_account_id!: ObjectID;
+    private readonly _tag_manager_account_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'app_id',
     })
-    private readonly _app_id!: ObjectID;
+    private readonly _app_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'revision_id',
     })
-    private readonly _revision_id!: ObjectID;
+    private readonly _revision_id!: ObjectId;
 
     @Field<ActionGroupDistributionType>({
         required: true,
@@ -57,12 +57,12 @@ export default class ActionGroupDistribution extends Model {
     })
     private _action_group_distribution_type: ActionGroupDistributionType;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         repository: ActionGroupRepo,
         exposeToGQLAs: 'action_ids',
         exposeToConfig: true,
     })
-    private _action_group_ids: ObjectID[] = [];
+    private _action_group_ids: ObjectId[] = [];
 
     constructor(
         name: string,
@@ -84,7 +84,7 @@ export default class ActionGroupDistribution extends Model {
         this._action_group_distribution_type = actionGroupDistributionType;
     }
 
-    get orgId(): ObjectID {
+    get orgId(): ObjectId {
         return this._org_id;
     }
 
@@ -100,23 +100,23 @@ export default class ActionGroupDistribution extends Model {
         this._name = value;
     }
 
-    get tagManagerAccountId(): ObjectID {
+    get tagManagerAccountId(): ObjectId {
         return this._tag_manager_account_id;
     }
 
-    get appId(): ObjectID {
+    get appId(): ObjectId {
         return this._app_id;
     }
 
-    get revisionId(): ObjectID {
+    get revisionId(): ObjectId {
         return this._revision_id;
     }
 
-    get actionGroupIds(): ObjectID[] {
+    get actionGroupIds(): ObjectId[] {
         return this._action_group_ids;
     }
 
-    set actionGroupIds(value: ObjectID[]) {
+    set actionGroupIds(value: ObjectId[]) {
         this._action_group_ids = value;
     }
 }
