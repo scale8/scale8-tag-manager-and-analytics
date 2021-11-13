@@ -1,3 +1,5 @@
+// noinspection JSUnusedLocalSymbols
+
 import 'reflect-metadata';
 import { inject, injectable } from 'inversify';
 import ResolverRegister from './gql/ResolverRegister';
@@ -94,6 +96,7 @@ export default class APIServer {
             app.post(route.path, route.handling);
         });
 
+        //Todo: Start the server when appropriate
         (async () => {
             await this.gqlServer.start();
             this.gqlServer.applyMiddleware({ app });

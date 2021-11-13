@@ -38,7 +38,7 @@ const GithubLoginForUser: FC<DialogPageProps> = (props: DialogPageProps) => {
 
                         props.handleDialogClose(false);
                         props.pageRefresh();
-                    } catch (e) {
+                    } catch (e: any) {
                         props.handleDialogClose(false);
                         setSsoError(`GitHub login failed: ${e.message}`);
                     }

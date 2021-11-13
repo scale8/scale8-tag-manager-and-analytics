@@ -131,7 +131,7 @@ const LoginContent: FC<{ reason: string | undefined }> = (props: {
             } else {
                 setSsoError(`GitHub login failed`);
             }
-        } catch (e) {
+        } catch (e: any) {
             setSsoError(`GitHub login failed: ${e.message}`);
         }
     };
