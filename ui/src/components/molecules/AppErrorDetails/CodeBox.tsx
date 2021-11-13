@@ -35,7 +35,7 @@ export const CodeBox: FC<{ fileUrl: string; errorRow: number; errorCol: number }
                 console.log(e);
             }
         })();
-    }, [fileUrl]);
+    }, [fileUrl, errorCol, errorRow]);
 
     const blink = keyframes({
         '0%': {

@@ -22,7 +22,7 @@ const NavigateWithError: FC<NavigateWithErrorProps> = (props: NavigateWithErrorP
         } as ApolloError);
 
         router.push(props.to).then();
-    }, []);
+    });
 
     return <Loader />;
 };

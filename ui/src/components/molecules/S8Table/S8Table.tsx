@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEvent, ReactElement, ReactNode, useMemo } from 'react';
+import { ChangeEvent, MouseEvent, ReactElement, ReactNode } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -15,6 +15,7 @@ import { Sparklines, SparklinesLine } from 'react-sparklines';
 import { timestampDisplay } from '../../../utils/DateTimeUtils';
 import { navigationColorFromSectionLocator } from '../../../containers/SectionsDetails';
 import { useLoggedInState } from '../../../context/AppContext';
+import { useSparkLineStyle } from '../../../hooks/useSparkLineStyle';
 
 const S8Table = <T extends RowData>(props: S8TableProps<T>): ReactElement => {
     const {
@@ -117,6 +118,8 @@ const S8Table = <T extends RowData>(props: S8TableProps<T>): ReactElement => {
 
     const isSelected = (id: string) => selected.indexOf(id) !== -1;
 
+    const sparkLineStyle = useSparkLineStyle();
+
     const renderValue = (type: FieldType, value: any): ReactNode => {
         switch (type) {
             case 'boolean':
@@ -125,7 +128,7 @@ const S8Table = <T extends RowData>(props: S8TableProps<T>): ReactElement => {
                 return (
                     <Box width={150}>
                         <Sparklines data={value} width={150} height={30}>
-                            <SparklinesLine style={useMemo(() => ({ fill: 'none' }), [])} />
+                            <SparklinesLine style={sparkLineStyle} />
                         </Sparklines>
                     </Box>
                 );

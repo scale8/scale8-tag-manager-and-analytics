@@ -12,7 +12,7 @@ const Navigate: FC<NavigateProps> = (props: NavigateProps) => {
 
     useEffect(() => {
         router.push(props.to).then();
-    }, []);
+    });
 
     return <Loader />;
 };

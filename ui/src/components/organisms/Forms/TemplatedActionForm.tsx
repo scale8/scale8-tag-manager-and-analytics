@@ -33,7 +33,7 @@ const TemplatedActionForm: FC<TemplatedActionFormProps> = (props: TemplatedActio
         if (gqlError) {
             setSnackbarError(gqlError);
         }
-    }, [gqlError]);
+    }, [gqlError, setSnackbarError]);
 
     const tabErrors: {
         code: boolean;

@@ -10,7 +10,8 @@ import {
     IndexDescription,
     ObjectId,
     Document,
-    InsertOneOptions, FindOneAndUpdateOptions,
+    InsertOneOptions,
+    FindOneAndUpdateOptions,
 } from 'mongodb';
 import User from '../models/User';
 import AuditAction from '../../enums/AuditAction';
@@ -59,12 +60,6 @@ export default abstract class Repo<T extends Model> {
 
     protected async getRepoCollection(): Promise<Collection> {
         return await this.shell.getCollection(this.model.name);
-    }
-
-    public async createIndexes(): Promise<void> {
-        if (this.indexes.length > 0) {
-            await (await this.getRepoCollection()).createIndexes(this.indexes);
-        }
     }
 
     public getMapping(model: Model): Map<string, FieldProps<ModelType>> {
@@ -309,10 +304,7 @@ export default abstract class Repo<T extends Model> {
         const result = await collection.insertOne(setCommand.$set, insertOneOptions);
         if (result.acknowledged) {
             const newModel = this.toModelType(setCommand.$set) as T;
-            await this.logger.database(
-                `Save result on ${this.model.name}`,
-                setCommand.$set,
-            );
+            await this.logger.database(`Save result on ${this.model.name}`, setCommand.$set);
             await this.recordAudit(
                 actor,
                 owner,
@@ -355,7 +347,11 @@ export default abstract class Repo<T extends Model> {
                 (cmd as any)['$unset'] = setCommand.$unset;
             }
             const collection = await this.getRepoCollection();
-            const result = await collection.findOneAndUpdate({ _id: model.id }, cmd, findOneAndUpdateOptions);
+            const result = await collection.findOneAndUpdate(
+                { _id: model.id },
+                cmd,
+                findOneAndUpdateOptions,
+            );
             if (result.ok === 1) {
                 await this.logger.database(`Update result on ${this.model.name}`, setCommand);
                 await this.recordAudit(

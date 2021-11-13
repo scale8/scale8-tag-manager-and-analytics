@@ -16,6 +16,7 @@ const PageDialog: FC<DialogBaseProps> = (props: DialogBaseProps & { children?: R
                 <DialogActionsWithCancel handleDialogClose={handleDialogClose} />,
             );
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [open]);
 
     return (

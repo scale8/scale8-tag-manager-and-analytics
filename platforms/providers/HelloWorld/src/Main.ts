@@ -2,6 +2,7 @@ import { PlatformSpec } from '../../../../common/interfaces/PlatformSpec';
 import { InputType } from '../../../../common/enums/InputType';
 import registerPlatformSpec from '../../../common/RegisterPlatform';
 
+// noinspection JSUnusedLocalSymbols
 const spec: PlatformSpec = {
     name: 'Hello World', // name of your platform
     version: {
@@ -27,6 +28,7 @@ const spec: PlatformSpec = {
                 // the action logic. 'data' is made available to act on user inputs and also other properties
                 data,
                 log: (msg: string) => void,
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 err: (msg: string) => void,
             ): Promise<any> => {
                 const message = `Hello ${data.props.hello}`;

@@ -7,16 +7,18 @@ import LazyCodeEditor from '../atoms/LibraryLoaders/LazyCodeEditor';
 const TemplatedActionCodeInput: FC<TemplatedActionFormProps> = (
     props: TemplatedActionFormProps,
 ) => {
+    const { handleBlur } = props;
+
     const validationError = props.errors['code'];
 
     const [permissionRequestsChanged, setPermissionRequestsChanged] = useState(false);
 
     useEffect(() => {
         if (permissionRequestsChanged) {
-            props.handleBlur();
+            handleBlur();
             setPermissionRequestsChanged(false);
         }
-    }, [permissionRequestsChanged]);
+    }, [permissionRequestsChanged, handleBlur]);
 
     const onBlur = () => {
         props.handleChange(

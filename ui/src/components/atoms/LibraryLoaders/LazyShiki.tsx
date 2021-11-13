@@ -8,7 +8,6 @@ export type ShikiProps = {
         row: number;
         col: number;
     };
-    setLoaded?: () => void;
 };
 
 const LazyShiki: FC<ShikiProps> = (props: ShikiProps) => {

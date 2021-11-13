@@ -1,5 +1,8 @@
 import { TypeIcon } from '../../../../../common/enums/TypeIcon';
-import { PlatformDataContainerChangeData, PlatformDataContainerGetData } from '../../../../common/types/Types';
+import {
+    PlatformDataContainerChangeData,
+    PlatformDataContainerGetData,
+} from '../../../../common/types/Types';
 import { find } from '../../../../common/lib/util/ObjectSearch';
 import { getQueryStringAsObject, getTopWindow } from '../../../../common/lib/util/WindowElement';
 

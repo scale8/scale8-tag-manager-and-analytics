@@ -25,7 +25,7 @@ const InfoDialog: FC<InfoDialogProps> = (props: InfoDialogProps) => {
                 </DialogActions>,
             );
         }
-    }, [open]);
+    }, [open, handleDialogClose, teleport]);
 
     return (
         <>

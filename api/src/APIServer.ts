@@ -93,7 +93,11 @@ export default class APIServer {
         this.routing.fetchPostHandlers().forEach((route) => {
             app.post(route.path, route.handling);
         });
-        this.gqlServer.applyMiddleware({ app });
+
+        (async () => {
+            await this.gqlServer.start();
+            this.gqlServer.applyMiddleware({ app });
+        })();
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         app.use((err: any, req: express.Request, res: express.Response, next: any) => {

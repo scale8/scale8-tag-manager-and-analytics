@@ -50,6 +50,7 @@ const TwoFactorEnableForm: FC<TwoFactorEnableFormProps> = (props: TwoFactorEnabl
                                 flexDirection="column"
                             >
                                 <Box>
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
                                         alt="QR 2-Factor Code"
                                         src={`http://chart.apis.google.com/chart?chs=150x150&chld=L|0&cht=qr&chl=otpauth://totp/Scale8:${encodeURI(

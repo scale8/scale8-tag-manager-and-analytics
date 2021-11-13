@@ -9,7 +9,7 @@ import onigasm from 'arraybuffer-loader!shiki/dist/onigasm.wasm';
 import { ShikiProps } from './LazyShiki';
 import { Box } from '@mui/material';
 
-const CodeShiki: FC<ShikiProps> = ({ code, language, errorPosition, setLoaded }) => {
+const CodeShiki: FC<ShikiProps> = ({ code, language, errorPosition }) => {
     const [tokens, setTokens] = useState<IThemedToken[][]>([]);
 
     const shikiRef = useRef<HTMLDivElement>(null);
@@ -37,9 +37,6 @@ const CodeShiki: FC<ShikiProps> = ({ code, language, errorPosition, setLoaded })
                     ],
                 });
                 setTokens(highlighter.codeToThemedTokens(code, language));
-                if (setLoaded !== undefined) {
-                    setLoaded();
-                }
             } catch (e) {
                 console.log(e);
             }

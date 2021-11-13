@@ -34,7 +34,7 @@ const PreviewFrameTagInfo: FC = () => {
             scrollToTop();
             setGotoElement(undefined);
         }
-    }, [gotoElement, currentTagCode]);
+    }, [gotoElement, currentTagCode, setGotoElement]);
 
     const loadedTags = revisionStatus?.tags.filter((_) => _.tagCode.code === currentTagCode?.code);
 

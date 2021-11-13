@@ -185,6 +185,7 @@ const IngestEndpointPayloadInputType: FC<IngestEndpointPayloadInputTypeProps> = 
         } else {
             setValue('', 0);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [environmentId, payload]);
 
     const ingestEndpointEnvironment: IngestEndpointEnvironment | undefined = useMemo(

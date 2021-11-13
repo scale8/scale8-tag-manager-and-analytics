@@ -56,7 +56,7 @@ const DebugFrame: FC = () => {
             }
         });
         parent.postMessage(messageFromFrameEvent('ready'), '*');
-    }, []);
+    });
 
     const previewFrameContextValue: PreviewFrameContext = {
         revisionStatus,

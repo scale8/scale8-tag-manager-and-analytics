@@ -26,7 +26,7 @@ const DebugHighlighter: FC = () => {
                 return () => clearTimeout(timer);
             }
         });
-    }, []);
+    });
 
     return <HighlighterLayout code={code} index={index} flashing={flashing} />;
 };

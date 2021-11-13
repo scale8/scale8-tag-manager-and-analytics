@@ -3,7 +3,7 @@ export const getCookieItem = (key: string, decode = true): string | null => {
         document.cookie.replace(
             new RegExp(
                 '(?:(?:^|.*;)\\s*' +
-                    encodeURIComponent(key).replace(/[\-\.\+\*]/g, '\\$&') +
+                    encodeURIComponent(key).replace(/[-.+*]/g, '\\$&') +
                     '\\s*\\=\\s*([^;]*).*$)|^.*$',
             ),
             '$1',

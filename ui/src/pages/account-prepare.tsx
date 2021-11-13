@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef } from 'react';
+import { FC, useEffect, useMemo, useRef } from 'react';
 import Head from 'next/head';
 import SignUpContainer from '../components/molecules/SignUpContainer';
 import { useParams } from '../hooks/useParams';
@@ -8,12 +8,12 @@ import { TagManagerInstallInstructions } from '../lazyComponents/TagManagerInsta
 import { useMutation } from '@apollo/client';
 import { CompleteSignUp } from '../gql/generated/CompleteSignUp';
 import CompleteSignUpQuery from '../gql/mutations/CompleteSignUpQuery';
-import { CompleteSignUpInput } from '../gql/generated/globalTypes';
-import { buildSignUpType } from '../utils/SignUpUtils';
 import Link from '../components/atoms/Next/Link';
 import { useRouter } from 'next/router';
 import LoggedOutSection from '../containers/global/LoggedOutSection';
 import { toSignUp } from '../utils/NavigationPaths';
+import { CompleteSignUpInput } from '../gql/generated/globalTypes';
+import { buildSignUpType } from '../utils/SignUpUtils';
 import { logError } from '../utils/logUtils';
 
 type AccountPrepareContentProps = {
@@ -30,7 +30,9 @@ const AccountPrepareContent: FC<AccountPrepareContentProps> = (
 
     const [complete, { data, error: gqlError }] = useMutation<CompleteSignUp>(CompleteSignUpQuery);
 
-    const completeSignup = () => {
+    const timer = useRef<NodeJS.Timeout | null>(null);
+
+    const doCompleteSignup = () => {
         localStorage.removeItem('uid');
         localStorage.removeItem('token');
 
@@ -50,23 +52,23 @@ const AccountPrepareContent: FC<AccountPrepareContentProps> = (
         })();
     };
 
-    const timer = useRef<NodeJS.Timeout | null>(null);
-
     useEffect(() => {
         timer.current = setTimeout(() => {
-            completeSignup();
+            doCompleteSignup();
         }, 2000);
         return () => {
             if (timer.current !== null) {
                 clearTimeout(timer.current);
             }
         };
-    }, []);
+    });
 
     const completeSignUp = data?.completeSignUp;
 
+    const isTagManager = useMemo(() => type === 'tag-manager', [type]);
+
     useEffect(() => {
-        if (completeSignUp !== undefined && type !== 'tag-manager') {
+        if (completeSignUp !== undefined && !isTagManager) {
             if (completeSignUp.uid !== '' && completeSignUp.token !== '') {
                 localStorage.setItem('uid', completeSignUp.uid);
                 localStorage.setItem('token', completeSignUp.token);
@@ -74,7 +76,7 @@ const AccountPrepareContent: FC<AccountPrepareContentProps> = (
 
             router.push(completeSignUp.url).then();
         }
-    }, [completeSignUp]);
+    }, [completeSignUp, isTagManager, router]);
 
     if (gqlError) {
         return (

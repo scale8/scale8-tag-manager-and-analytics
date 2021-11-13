@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 import {
     Box,
     Button,
@@ -17,6 +17,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useRouter } from 'next/router';
 import { toDataManager, toIngestEndpoint } from '../../../utils/NavigationPaths';
 import { SxProps } from '@mui/system';
+import { useSparkLineStyle } from '../../../hooks/useSparkLineStyle';
 
 export type AccountSectionAppTableProps = {
     endpoints: {
@@ -32,6 +33,8 @@ const AccountSectionEndpointTable: FC<AccountSectionAppTableProps> = (
     props: AccountSectionAppTableProps,
 ) => {
     const router = useRouter();
+
+    const sparkLineStyle = useSparkLineStyle();
 
     const { endpoints, dmId } = props;
 
@@ -90,18 +93,14 @@ const AccountSectionEndpointTable: FC<AccountSectionAppTableProps> = (
                             <TableCell sx={contentCell}>
                                 <Box width={70}>
                                     <Sparklines data={endpoint.requests} width={70} height={20}>
-                                        <SparklinesLine
-                                            style={useMemo(() => ({ fill: 'none' }), [])}
-                                        />
+                                        <SparklinesLine style={sparkLineStyle} />
                                     </Sparklines>
                                 </Box>
                             </TableCell>
                             <TableCell sx={contentCell}>
                                 <Box width={70}>
                                     <Sparklines data={endpoint.bytes} width={70} height={20}>
-                                        <SparklinesLine
-                                            style={useMemo(() => ({ fill: 'none' }), [])}
-                                        />
+                                        <SparklinesLine style={sparkLineStyle} />
                                     </Sparklines>
                                 </Box>
                             </TableCell>
