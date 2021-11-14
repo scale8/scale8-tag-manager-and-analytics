@@ -186,4 +186,4 @@ const LoggedInSection: FC<ChildrenOnlyProps> = (props: ChildrenOnlyProps) => {
     );
 };
 
-export { LoggedInSection };
+export default LoggedInSection;
