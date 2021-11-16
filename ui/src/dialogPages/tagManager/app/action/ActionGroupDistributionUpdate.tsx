@@ -109,4 +109,4 @@ const ActionGroupDistributionUpdate: FC<DialogPageProps> = (props: DialogPagePro
     );
 };
 
-export { ActionGroupDistributionUpdate };
+export default ActionGroupDistributionUpdate;

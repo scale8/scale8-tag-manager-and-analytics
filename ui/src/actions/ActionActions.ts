@@ -1,6 +1,5 @@
+import { FC } from 'react';
 import { PageActionProps } from './PageActions';
-import { ActionGroupDistributionDuplicate } from '../dialogPages/tagManager/app/action/ActionGroupDistributionDuplicate';
-import { ActionGroupDistributionUpdate } from '../dialogPages/tagManager/app/action/ActionGroupDistributionUpdate';
 import { ActionCreate } from '../dialogPages/tagManager/app/action/ActionCreate';
 import { ActionDelete } from '../dialogPages/tagManager/app/action/ActionDelete';
 import { ActionOrderUpdate } from '../dialogPages/tagManager/app/action/ActionOrderUpdate';
@@ -28,6 +27,16 @@ import {
     openLightboxWithName,
     openWideDrawer,
 } from '../utils/PageActionUtils';
+import dynamic from 'next/dynamic';
+import { DialogPageProps } from '../types/DialogTypes';
+
+const ActionGroupDistributionDuplicate = dynamic(
+    () => import('../dialogPages/tagManager/app/action/ActionGroupDistributionDuplicate'),
+) as FC<DialogPageProps>;
+
+const ActionGroupDistributionUpdate = dynamic(
+    () => import('../dialogPages/tagManager/app/action/ActionGroupDistributionUpdate'),
+) as FC<DialogPageProps>;
 
 const actionActions = {
     createGlobalAction: (pageActionProps: PageActionProps, revisionId: string): void => {

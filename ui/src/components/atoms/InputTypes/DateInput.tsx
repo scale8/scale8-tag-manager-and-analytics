@@ -1,4 +1,4 @@
-import { TextField } from '@mui/material';
+import TextField from '@mui/material/TextField';
 import { FC, ReactElement, useState } from 'react';
 import {
     addMinutesUTC,

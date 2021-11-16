@@ -1,12 +1,7 @@
 import { FC } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
-import {
-    chartDataFromAppGroupingCount,
-    ChartPeriodType,
-    datesFromChartPeriod,
-    labelsFromChartPeriod,
-} from '../hooks/chart/useChartPeriod';
+
 import AppChartQuery from '../gql/queries/AppChartQuery';
 import { useQuery } from '@apollo/client';
 import { Box } from '@mui/material';
@@ -15,21 +10,8 @@ import { AppChartQueryData } from '../gql/generated/AppChartQueryData';
 import { ApolloError } from '@apollo/client/errors';
 import GQLError from '../components/atoms/GqlError';
 import { getEventLabel } from '../utils/AnalyticsUtils';
-
-const ticksLimitFromPeriodType = (type: ChartPeriodType): number | undefined => {
-    switch (type) {
-        case 'day':
-            return 6;
-        case 'realtime':
-        case 'custom':
-            return 8;
-        case '30d':
-        case 'month':
-            return 10;
-        default:
-            return undefined;
-    }
-};
+import { ChartOptions } from 'chart.js';
+import { buildAppChartVars } from '../utils/GraphUtils';
 
 const AppAnalyticsChart: FC<AppAnalyticsContentProps> = (props: AppAnalyticsContentProps) => {
     const { appQueryOptions, chartPeriodProps, id, refreshAt } = props;
@@ -45,17 +27,9 @@ const AppAnalyticsChart: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCont
             },
         }),
         (queryData: AppChartQueryData) => {
-            const rangeFrom = queryData.getApp.event_request_stats.from as number;
-            const rangeTo = queryData.getApp.event_request_stats.to as number;
-
-            const labels = labelsFromChartPeriod(rangeFrom, rangeTo, chartPeriodProps.period);
-            const dates = datesFromChartPeriod(rangeFrom, rangeTo, chartPeriodProps.period);
-            const ticksLimit = ticksLimitFromPeriodType(chartPeriodProps.period);
-
-            const chartData = chartDataFromAppGroupingCount(
-                dates,
-                queryData.getApp.event_request_stats.result,
-                chartPeriodProps.period,
+            const { labels, ticksLimit, chartData } = buildAppChartVars(
+                queryData,
+                chartPeriodProps,
             );
 
             const data = {
@@ -69,7 +43,7 @@ const AppAnalyticsChart: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCont
                         borderColor: '#39cce0',
                         borderWidth: 3,
                         lineTension: 0,
-                        yAxisID: 'y-axis-1',
+                        yAxisID: 'yAxis1',
                     },
                     {
                         label: `${eventLabel} Events`,
@@ -79,60 +53,58 @@ const AppAnalyticsChart: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCont
                         borderColor: '#737373',
                         borderWidth: 3,
                         lineTension: 0,
-                        yAxisID: 'y-axis-2',
+                        yAxisID: 'yAxis2',
                     },
                 ],
             };
 
-            const options = {
-                showAllTooltips: true,
+            const options: ChartOptions<'bar'> = {
+                // plugins: {
+                //     tooltip: {
+                //         enabled: true,
+                //     },
+                // },
                 maintainAspectRatio: false,
                 responsive: true,
                 scales: {
-                    xAxes: [
-                        {
-                            scaleLabel: {
-                                display: false,
-                            },
-                            ticks: {
-                                autoSkip: true,
-                                maxTicksLimit: ticksLimit,
-                            },
-                            gridLines: {
-                                display: false,
-                            },
+                    xAxis: {
+                        title: {
+                            display: false,
                         },
-                    ],
-                    yAxes: [
-                        {
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'Unique visitors',
-                            },
-                            ticks: {
-                                beginAtZero: true,
-                                precision: 0,
-                            },
-                            type: 'linear',
+                        ticks: {
+                            autoSkip: true,
+                            maxTicksLimit: ticksLimit,
+                        },
+                        grid: {
+                            display: false,
+                        },
+                    },
+                    yAxis1: {
+                        type: 'linear',
+                        beginAtZero: true,
+                        title: {
                             display: true,
-                            position: 'left',
-                            id: 'y-axis-1',
+                            text: 'Unique visitors',
                         },
-                        {
-                            scaleLabel: {
-                                display: true,
-                                labelString: `${eventLabel} Events`,
-                            },
-                            ticks: {
-                                beginAtZero: true,
-                                precision: 0,
-                            },
-                            type: 'linear',
+                        ticks: {
+                            precision: 0,
+                        },
+                        display: true,
+                        position: 'left',
+                    },
+                    yAxis2: {
+                        type: 'linear',
+                        beginAtZero: true,
+                        title: {
                             display: true,
-                            position: 'right',
-                            id: 'y-axis-2',
+                            text: `${eventLabel} Events`,
                         },
-                    ],
+                        ticks: {
+                            precision: 0,
+                        },
+                        display: true,
+                        position: 'right',
+                    },
                 },
             };
 
