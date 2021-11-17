@@ -64,4 +64,4 @@ const OrgUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { OrgUpdate };
+export default OrgUpdate;

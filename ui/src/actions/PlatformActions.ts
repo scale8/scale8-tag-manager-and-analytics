@@ -5,9 +5,21 @@ import {
     openDrawerContextOnly,
     openLightbox,
 } from '../utils/PageActionUtils';
-import { PlatformCreate } from '../dialogPages/tagManager/platform/PlatformCreate';
-import { PlatformUpdate } from '../dialogPages/tagManager/platform/PlatformUpdate';
-import { PlatformPublish } from '../dialogPages/tagManager/platform/PlatformPublish';
+import dynamic from 'next/dynamic';
+import { FC } from 'react';
+import { DialogPageProps } from '../types/DialogTypes';
+
+const PlatformCreate = dynamic(
+    () => import('../dialogPages/tagManager/platform/PlatformCreate'),
+) as FC<DialogPageProps>;
+
+const PlatformUpdate = dynamic(
+    () => import('../dialogPages/tagManager/platform/PlatformUpdate'),
+) as FC<DialogPageProps>;
+
+const PlatformPublish = dynamic(
+    () => import('../dialogPages/tagManager/platform/PlatformPublish'),
+) as FC<DialogPageProps>;
 
 const platformActions = {
     createPlatform: (pageActionProps: PageActionProps, developerAccountId: string): void => {

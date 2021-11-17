@@ -4,10 +4,10 @@ import TagInstructionsQuery from '../../../../gql/queries/TagInstructionsQuery';
 import { TagInstructionsData } from '../../../../gql/generated/TagInstructionsData';
 import TagInstallInstructionsDialog from '../../../../components/organisms/TagInstallInstructionsDialog';
 import { DialogPageProps } from '../../../../types/DialogTypes';
-import { queryLoaderAndError } from '../../../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../../../abstractions/QueryLoaderAndError';
 
 const TagInstallInstructions: FC<DialogPageProps> = (props: DialogPageProps) => {
-    return queryLoaderAndError<TagInstructionsData>(
+    return QueryLoaderAndError<TagInstructionsData>(
         false,
         useQuery<TagInstructionsData>(TagInstructionsQuery, {
             variables: { id: props.id },
@@ -26,4 +26,4 @@ const TagInstallInstructions: FC<DialogPageProps> = (props: DialogPageProps) => 
     );
 };
 
-export { TagInstallInstructions };
+export default TagInstallInstructions;

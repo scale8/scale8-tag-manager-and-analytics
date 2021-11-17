@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { AppAnalyticsContentProps } from '../types/props/AppAnalyticsContentProps';
-import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import { useQuery } from '@apollo/client';
 import AppEventsQuery from '../gql/queries/AppEventsQuery';
 import { AppEventsQueryData } from '../gql/generated/AppEventsQueryData';
@@ -27,7 +27,7 @@ const ChartEventSelector: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCon
         return filters;
     };
 
-    return queryLoaderAndError<AppEventsQueryData>(
+    return QueryLoaderAndError<AppEventsQueryData>(
         false,
         useQuery<AppEventsQueryData>(AppEventsQuery, {
             variables: {

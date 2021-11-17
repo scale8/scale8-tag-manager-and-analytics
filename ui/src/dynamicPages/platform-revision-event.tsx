@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useQuery } from '@apollo/client';
 import { Box } from '@mui/material';
 import { DynamicPageProps } from '../pageLoader/DynamicPageLoader';
-import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import { PlatformEventsDataMapsData } from '../gql/generated/PlatformEventsDataMapsData';
 import PagePlatformEventsDataMapsQuery from '../gql/queries/PagePlatformEventsDataMapsQuery';
 import {
@@ -16,7 +16,7 @@ import { buildStandardMainInfo } from '../utils/InfoLabelsUtils';
 const PlatformEventDataMapsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const dataContainerId = props.params.id ?? '';
 
-    return queryLoaderAndError<PlatformEventsDataMapsData>(
+    return QueryLoaderAndError<PlatformEventsDataMapsData>(
         true,
         useQuery<PlatformEventsDataMapsData>(PagePlatformEventsDataMapsQuery, {
             variables: { id: dataContainerId },

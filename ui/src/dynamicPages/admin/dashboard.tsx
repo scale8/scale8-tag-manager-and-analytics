@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client';
 import { useLoggedInState } from '../../context/AppContext';
 import Navigate from '../../components/atoms/Next/Navigate';
 import { toOrgSelect, toSignupApproval } from '../../utils/NavigationPaths';
-import { queryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
 import { PageAdminDashboardData } from '../../gql/generated/PageAdminDashboardData';
 import PageAdminDashboardQuery from '../../gql/queries/PageAdminDashboardQuery';
 import { DashboardParagraphs } from '../../components/molecules/DashboardParagraphs';
@@ -17,48 +17,46 @@ const AdminDashboardPage: FC<DynamicPageProps> = () => {
 
     const router = useRouter();
 
+    const pageAdminDashboardQuery = useQuery(PageAdminDashboardQuery);
+
     if (!userIsAdmin) {
         return <Navigate to={toOrgSelect} />;
     }
 
-    return queryLoaderAndError<PageAdminDashboardData>(
-        true,
-        useQuery(PageAdminDashboardQuery),
-        () => {
-            const signupRequests = 0;
+    return QueryLoaderAndError<PageAdminDashboardData>(true, pageAdminDashboardQuery, () => {
+        const signupRequests = 0;
 
-            const buildAdminParagraphs = () => (
-                <DashboardParagraphs
-                    paragraphs={[
-                        () => (
-                            <>
-                                There are <b>{signupRequests}</b> pending signup requests.
-                            </>
-                        ),
-                    ]}
-                />
-            );
+        const buildAdminParagraphs = () => (
+            <DashboardParagraphs
+                paragraphs={[
+                    () => (
+                        <>
+                            There are <b>{signupRequests}</b> pending signup requests.
+                        </>
+                    ),
+                ]}
+            />
+        );
 
-            const dashboardProps: DashboardProps = {
-                dashboardSections: [
-                    {
-                        title: 'Signup Requests',
-                        content: buildAdminParagraphs,
-                        linkText: 'Go to SignUp Approval',
-                        action: () => {
-                            router.push(toSignupApproval).then();
-                        },
+        const dashboardProps: DashboardProps = {
+            dashboardSections: [
+                {
+                    title: 'Signup Requests',
+                    content: buildAdminParagraphs,
+                    linkText: 'Go to SignUp Approval',
+                    action: () => {
+                        router.push(toSignupApproval).then();
                     },
-                ],
-            };
+                },
+            ],
+        };
 
-            return (
-                <>
-                    <Dashboard {...dashboardProps} />
-                </>
-            );
-        },
-    );
+        return (
+            <>
+                <Dashboard {...dashboardProps} />
+            </>
+        );
+    });
 };
 
 export default AdminDashboardPage;

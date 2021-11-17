@@ -5,14 +5,14 @@ import { DialogDirectMutation, DialogMutationFunction } from '../abstractions/Di
 import { useRouter } from 'next/router';
 import { toDataManager } from '../../utils/NavigationPaths';
 
-const redirectToDataManager: FC<{
+const RedirectToDataManager: FC<{
     data: any;
 }> = (props: { data: any }) => {
     const router = useRouter();
 
     useEffect(() => {
         router.push(toDataManager({ id: props.data.startDataManagerTrial.id })).then();
-    }, []);
+    });
 
     return null;
 };
@@ -31,7 +31,7 @@ const DataManagerStartTrial: FC<DialogPageProps> = (props: DialogPageProps) => {
                 });
             }}
             mutation={StartDataManagerTrialQuery}
-            renderData={redirectToDataManager}
+            renderData={RedirectToDataManager}
             {...props}
             pageRefresh={() => {
                 //no need to refresh
@@ -40,4 +40,4 @@ const DataManagerStartTrial: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { DataManagerStartTrial };
+export default DataManagerStartTrial;

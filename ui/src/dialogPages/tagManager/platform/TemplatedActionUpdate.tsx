@@ -152,4 +152,4 @@ const TemplatedActionUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { TemplatedActionUpdate };
+export default TemplatedActionUpdate;

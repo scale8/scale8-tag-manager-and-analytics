@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import { useQuery } from '@apollo/client';
 import { DynamicPageProps } from '../pageLoader/DynamicPageLoader';
 import { useLoggedInState } from '../context/AppContext';
-import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import { TagContentPageData } from '../gql/generated/TagContentPageData';
 import PageTagContentQuery from '../gql/queries/PageTagContentQuery';
 import { PageActionProps, pageActions } from '../actions/PageActions';
@@ -25,7 +25,7 @@ const RulesPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const { templateInteractions } = useLoggedInState();
     const { dispatchDialogAction } = templateInteractions;
 
-    return queryLoaderAndError<TagContentPageData>(
+    return QueryLoaderAndError<TagContentPageData>(
         true,
         useQuery(PageTagContentQuery, {
             variables: { id: tagId },

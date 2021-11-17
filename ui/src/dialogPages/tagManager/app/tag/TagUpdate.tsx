@@ -78,4 +78,4 @@ const TagUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { TagUpdate };
+export default TagUpdate;

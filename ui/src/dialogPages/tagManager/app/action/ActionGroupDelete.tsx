@@ -91,4 +91,4 @@ const ActionGroupDelete: FC<DialogPageProps> = (props: DialogPageProps) => {
     return <DialogDeletePreview {...dialogDeletePreviewProps} />;
 };
 
-export { ActionGroupDelete };
+export default ActionGroupDelete;

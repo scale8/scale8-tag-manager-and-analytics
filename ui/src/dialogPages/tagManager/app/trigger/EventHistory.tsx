@@ -6,4 +6,4 @@ const EventHistory: FC<DialogPageProps> = (props: DialogPageProps) => {
     return <DialogEntityHistory infoKeyBase="events" {...props} />;
 };
 
-export { EventHistory };
+export default EventHistory;

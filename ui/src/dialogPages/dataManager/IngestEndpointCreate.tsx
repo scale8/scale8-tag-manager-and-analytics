@@ -119,4 +119,4 @@ const IngestEndpointCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { IngestEndpointCreate };
+export default IngestEndpointCreate;

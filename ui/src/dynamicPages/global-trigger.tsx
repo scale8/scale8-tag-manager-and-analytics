@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { DynamicPageProps } from '../pageLoader/DynamicPageLoader';
 import { useLoggedInState } from '../context/AppContext';
-import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import { GlobalTriggerPageData } from '../gql/generated/GlobalTriggerPageData';
 import PageGlobalTriggerContentQuery from '../gql/queries/PageGlobalTriggerContentQuery';
 import { PageActionProps, pageActions } from '../actions/PageActions';
@@ -22,7 +22,7 @@ const GlobalTriggerPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const { templateInteractions } = useLoggedInState();
     const { dispatchDialogAction } = templateInteractions;
 
-    return queryLoaderAndError<GlobalTriggerPageData>(
+    return QueryLoaderAndError<GlobalTriggerPageData>(
         true,
         useQuery(PageGlobalTriggerContentQuery, {
             variables: { id: triggerId },

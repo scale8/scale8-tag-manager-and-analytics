@@ -6,7 +6,7 @@ import { UTCTimestamp } from '../utils/DateTimeUtils';
 import { useLoggedInState } from '../context/AppContext';
 import { useRefresh } from '../hooks/useRefresh';
 
-const queryLoaderAndError = <T extends any>(
+const QueryLoaderAndError = <T,>(
     isPage: boolean,
     queryResult: QueryResult<T>,
     afterLoad: (
@@ -69,4 +69,4 @@ const queryLoaderAndError = <T extends any>(
     );
 };
 
-export { queryLoaderAndError };
+export { QueryLoaderAndError };

@@ -6,4 +6,4 @@ const EnvironmentHistory: FC<DialogPageProps> = (props: DialogPageProps) => {
     return <DialogEntityHistory infoKeyBase="appEnvironments" {...props} />;
 };
 
-export { EnvironmentHistory };
+export default EnvironmentHistory;

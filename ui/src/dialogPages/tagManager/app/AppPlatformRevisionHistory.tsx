@@ -6,4 +6,4 @@ const AppPlatformRevisionHistory: FC<DialogPageProps> = (props: DialogPageProps)
     return <DialogEntityHistory infoKeyBase="appPlatformRevisions" {...props} />;
 };
 
-export { AppPlatformRevisionHistory };
+export default AppPlatformRevisionHistory;

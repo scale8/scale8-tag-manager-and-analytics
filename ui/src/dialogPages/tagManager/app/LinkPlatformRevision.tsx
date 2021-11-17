@@ -51,7 +51,7 @@ export type AppPlatformRevisionFormProps =
             }[];
         };
 
-const buildAppPlatformRevisionLinkInput = (
+export const buildAppPlatformRevisionLinkInput = (
     revisionId: string,
     platformRevisionId: string,
     mappedPlatformValues: MappedPlatformValues,
@@ -166,4 +166,4 @@ const LinkPlatformRevision: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { LinkPlatformRevision, buildAppPlatformRevisionLinkInput };
+export default LinkPlatformRevision;

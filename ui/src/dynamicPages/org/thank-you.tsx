@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import { toDataManager, toOrg, toTagManager } from '../../utils/NavigationPaths';
 import Loader from '../../components/organisms/Loader';
 import Navigate from '../../components/atoms/Next/Navigate';
-import { queryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
 import NavigateWithError from '../../components/atoms/Next/NavigateWithError';
 import { DynamicPageProps } from '../../pageLoader/DynamicPageLoader';
 
@@ -36,7 +36,7 @@ const OrgThankYouPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
         }
     }
 
-    return queryLoaderAndError<ProductSettings>(
+    return QueryLoaderAndError<ProductSettings>(
         true,
         useQuery<ProductSettings>(ProductSettingsQuery, {
             variables: {

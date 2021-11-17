@@ -22,6 +22,8 @@ const AppAnalyticsSources: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCo
         },
     };
 
+    const lazyQuery = useLazyQuery(AppReferrersQuery);
+
     return (
         <DashboardListSection
             tabs={[
@@ -38,7 +40,7 @@ const AppAnalyticsSources: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCo
                                   addFilter: (value) => {
                                       props.setFilter('referrer_tld', value);
                                   },
-                                  lazyQuery: useLazyQuery(AppReferrersQuery),
+                                  lazyQuery,
                                   lazyQueryVariables: queryOptions,
                                   useSourceIcon: true,
                                   allowFilterOnSingleEntity: true,
@@ -54,7 +56,7 @@ const AppAnalyticsSources: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCo
                                   addFilter: (value) => {
                                       props.setFilter('referrer', value);
                                   },
-                                  lazyQuery: useLazyQuery(AppReferrersQuery),
+                                  lazyQuery,
                                   lazyQueryVariables: queryOptions,
                                   refreshAt,
                                   forErrors: false,

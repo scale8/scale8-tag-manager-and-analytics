@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Bar } from 'react-chartjs-2';
-import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import {
     chartDataFromGroupingCount,
     datesFromChartPeriod,
@@ -22,7 +22,7 @@ const IngestAnalyticsChart: FC<IngestEndpointAnalyticsContentProps> = (
 ) => {
     const { ingestQueryOptions, chartPeriodProps, id, refreshAt } = props;
 
-    return queryLoaderAndError<IngestChartQueryData>(
+    return QueryLoaderAndError<IngestChartQueryData>(
         false,
         useQuery<IngestChartQueryData>(IngestChartQuery, {
             variables: {

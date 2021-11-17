@@ -7,12 +7,33 @@ import {
     openLightbox,
     openLightboxNoRefresh,
 } from '../utils/PageActionUtils';
-import { IngestEndpointDiff } from '../dialogPages/dataManager/IngestEndpointDiff';
-import { IngestEndpointRevisionPayloadPreview } from '../dialogPages/dataManager/IngestEndpointRevisionPayloadPreview';
-import { IngestEndpointRevisionUpdate } from '../dialogPages/dataManager/IngestEndpointRevisionUpdate';
-import { IngestEndpointRevisionDuplicate } from '../dialogPages/dataManager/IngestEndpointRevisionDuplicate';
-import { IngestEndpointRevisionFinalise } from '../dialogPages/dataManager/IngestEndpointRevisionFinalise';
-import { IngestEndpointRevisionHistory } from '../dialogPages/dataManager/IngestEndpointRevisionHistory';
+import dynamic from 'next/dynamic';
+import { FC } from 'react';
+import { DialogPageProps } from '../types/DialogTypes';
+
+const IngestEndpointDiff = dynamic(
+    () => import('../dialogPages/dataManager/IngestEndpointDiff'),
+) as FC<DialogPageProps>;
+
+const IngestEndpointRevisionPayloadPreview = dynamic(
+    () => import('../dialogPages/dataManager/IngestEndpointRevisionPayloadPreview'),
+) as FC<DialogPageProps>;
+
+const IngestEndpointRevisionUpdate = dynamic(
+    () => import('../dialogPages/dataManager/IngestEndpointRevisionUpdate'),
+) as FC<DialogPageProps>;
+
+const IngestEndpointRevisionDuplicate = dynamic(
+    () => import('../dialogPages/dataManager/IngestEndpointRevisionDuplicate'),
+) as FC<DialogPageProps>;
+
+const IngestEndpointRevisionFinalise = dynamic(
+    () => import('../dialogPages/dataManager/IngestEndpointRevisionFinalise'),
+) as FC<DialogPageProps>;
+
+const IngestEndpointRevisionHistory = dynamic(
+    () => import('../dialogPages/dataManager/IngestEndpointRevisionHistory'),
+) as FC<DialogPageProps>;
 
 const ingestEndpointRevisionActions = {
     compareIngestEndpointRevisions: (

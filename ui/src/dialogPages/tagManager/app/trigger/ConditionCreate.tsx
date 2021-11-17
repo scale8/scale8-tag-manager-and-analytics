@@ -17,4 +17,4 @@ const ConditionCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { ConditionCreate };
+export default ConditionCreate;

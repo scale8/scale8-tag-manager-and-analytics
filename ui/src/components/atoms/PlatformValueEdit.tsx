@@ -133,7 +133,6 @@ const PlatformValueEdit: FC<PlatformValueEditProps> = (props: PlatformValueEditP
         } else {
             setValue('');
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dataElement, rawObjectKey]);
 
     const hasDataMaps =

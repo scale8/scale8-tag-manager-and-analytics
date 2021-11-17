@@ -116,4 +116,4 @@ const IngestEndpointEnvironmentUpdate: FC<DialogPageProps> = (props: DialogPageP
     );
 };
 
-export { IngestEndpointEnvironmentUpdate };
+export default IngestEndpointEnvironmentUpdate;

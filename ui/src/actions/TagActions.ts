@@ -6,12 +6,33 @@ import {
     openLightbox,
     openLightboxNoRefresh,
 } from '../utils/PageActionUtils';
-import { TagCreate } from '../dialogPages/tagManager/app/tag/TagCreate';
-import { TagInstallInstructions } from '../dialogPages/tagManager/app/tag/TagInstallInstructions';
-import { TagUpdate } from '../dialogPages/tagManager/app/tag/TagUpdate';
-import { TagDuplicate } from '../dialogPages/tagManager/app/tag/TagDuplicate';
-import { TagDelete } from '../dialogPages/tagManager/app/tag/TagDelete';
-import { TagHistory } from '../dialogPages/tagManager/app/tag/TagHistory';
+import dynamic from 'next/dynamic';
+import { FC } from 'react';
+import { DialogPageProps } from '../types/DialogTypes';
+
+const TagCreate = dynamic(
+    () => import('../dialogPages/tagManager/app/tag/TagCreate'),
+) as FC<DialogPageProps>;
+
+const TagInstallInstructions = dynamic(
+    () => import('../dialogPages/tagManager/app/tag/TagInstallInstructions'),
+) as FC<DialogPageProps>;
+
+const TagUpdate = dynamic(
+    () => import('../dialogPages/tagManager/app/tag/TagUpdate'),
+) as FC<DialogPageProps>;
+
+const TagDuplicate = dynamic(
+    () => import('../dialogPages/tagManager/app/tag/TagDuplicate'),
+) as FC<DialogPageProps>;
+
+const TagDelete = dynamic(
+    () => import('../dialogPages/tagManager/app/tag/TagDelete'),
+) as FC<DialogPageProps>;
+
+const TagHistory = dynamic(
+    () => import('../dialogPages/tagManager/app/tag/TagHistory'),
+) as FC<DialogPageProps>;
 
 const tagActions = {
     createTag: (

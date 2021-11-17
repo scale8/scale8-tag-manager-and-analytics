@@ -82,4 +82,4 @@ const InstallAppPlatform: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { InstallAppPlatform };
+export default InstallAppPlatform;

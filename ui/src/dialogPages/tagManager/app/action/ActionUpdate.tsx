@@ -41,7 +41,7 @@ const buildActionUpdateInput = (
     };
 };
 
-const buildActionName = (
+export const buildActionName = (
     platformActionId: string | undefined,
     platformActions: SelectValueWithSub[],
 ): string => {
@@ -190,4 +190,4 @@ const ActionUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { ActionUpdate, buildActionName };
+export default ActionUpdate;

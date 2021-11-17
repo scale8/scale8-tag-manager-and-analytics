@@ -71,4 +71,4 @@ const RuleGroupCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { RuleGroupCreate };
+export default RuleGroupCreate;

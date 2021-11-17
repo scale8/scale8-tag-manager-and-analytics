@@ -11,7 +11,7 @@ import InspectEventDialog from '../../../../components/organisms/InspectEventDia
 import { mappedPlatformValuesFromDataMapsWithValues } from '../../../../utils/MappedPlatformValuesUtils';
 import { DialogPageProps } from '../../../../types/DialogTypes';
 import InspectEventQuery from '../../../../gql/queries/InspectEventQuery';
-import { queryLoaderAndError } from '../../../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../../../abstractions/QueryLoaderAndError';
 import { useConfigState } from '../../../../context/AppContext';
 
 const EventInspect: FC<DialogPageProps> = (props: DialogPageProps) => {
@@ -23,7 +23,7 @@ const EventInspect: FC<DialogPageProps> = (props: DialogPageProps) => {
         props.handleDialogClose(true);
     };
 
-    return queryLoaderAndError<InspectEventData>(
+    return QueryLoaderAndError<InspectEventData>(
         false,
         useQuery<InspectEventData>(InspectEventQuery, {
             variables: { id },
@@ -82,4 +82,4 @@ const EventInspect: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { EventInspect };
+export default EventInspect;

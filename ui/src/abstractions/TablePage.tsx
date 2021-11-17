@@ -14,7 +14,7 @@ import {
 import { useTableStateManager } from '../hooks/table/useTableStateManager';
 import { InfoProps } from '../components/molecules/InfoButton';
 import { PageActionProps } from '../actions/PageActions';
-import { queryLoaderAndError } from './QueryLoaderAndError';
+import { QueryLoaderAndError } from './QueryLoaderAndError';
 import { useLoggedInState } from '../context/AppContext';
 import { AlertRevisionFinal } from '../components/atoms/AlertRevisionFinal';
 
@@ -74,7 +74,7 @@ const TablePage = <Row extends RowData, TableData>(
         tableStateManager.setPage(0);
     };
 
-    return queryLoaderAndError<TableData>(
+    return QueryLoaderAndError<TableData>(
         true,
         mainQuery,
         (data: TableData, valuesRefresh: (mustResetCache: boolean) => void) => {

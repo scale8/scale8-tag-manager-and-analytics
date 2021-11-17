@@ -80,7 +80,6 @@ const IngestEndpointDataMapForm: FC<IngestEndpointDataMapFormProps> = (
 
     useEffect(() => {
         setUseMacro(getMacroValues().includes(defaultValue.toString()) ? true : useMacro);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [defaultValue]);
 
     const varTypeRawValues = Object.keys(VarType)

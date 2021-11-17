@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Bar } from 'react-chartjs-2';
-import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 
 import AppChartQuery from '../gql/queries/AppChartQuery';
 import { useQuery } from '@apollo/client';
@@ -15,7 +15,7 @@ import { buildAppChartVars } from '../utils/GraphUtils';
 const AppErrorsChart: FC<AppErrorContentProps> = (props: AppErrorContentProps) => {
     const { appQueryOptions, chartPeriodProps, id, refreshAt } = props;
 
-    return queryLoaderAndError<AppChartQueryData>(
+    return QueryLoaderAndError<AppChartQueryData>(
         false,
         useQuery<AppChartQueryData>(AppChartQuery, {
             variables: {

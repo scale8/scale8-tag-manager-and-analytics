@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import { DialogPageProps } from '../../types/DialogTypes';
-import { queryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
 import { useQuery } from '@apollo/client';
 import LoggedUserQuery from '../../gql/queries/LoggedUserQuery';
 import GenericError from '../../components/atoms/GenericError';
@@ -12,7 +12,7 @@ import { getApiUrl } from '../../utils/ConfigUtils';
 const GithubLoginForUser: FC<DialogPageProps> = (props: DialogPageProps) => {
     const [ssoError, setSsoError] = useState('');
 
-    return queryLoaderAndError<LoggedUser>(
+    return QueryLoaderAndError<LoggedUser>(
         false,
         useQuery<LoggedUser>(LoggedUserQuery),
         (data: LoggedUser) => {

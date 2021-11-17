@@ -6,4 +6,4 @@ const GlobalTriggerHistory: FC<DialogPageProps> = (props: DialogPageProps) => {
     return <DialogEntityHistory infoKeyBase="globalTriggers" {...props} />;
 };
 
-export { GlobalTriggerHistory };
+export default GlobalTriggerHistory;

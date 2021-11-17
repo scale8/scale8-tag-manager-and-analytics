@@ -6,4 +6,4 @@ const TagHistory: FC<DialogPageProps> = (props: DialogPageProps) => {
     return <DialogEntityHistory infoKeyBase="tags" {...props} />;
 };
 
-export { TagHistory };
+export default TagHistory;

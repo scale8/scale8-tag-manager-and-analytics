@@ -6,4 +6,4 @@ const ConditionHistory: FC<DialogPageProps> = (props: DialogPageProps) => {
     return <DialogEntityHistory infoKeyBase="conditions" {...props} />;
 };
 
-export { ConditionHistory };
+export default ConditionHistory;

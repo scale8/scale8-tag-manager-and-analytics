@@ -23,4 +23,4 @@ const OrgUserDelete: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { OrgUserDelete };
+export default OrgUserDelete;

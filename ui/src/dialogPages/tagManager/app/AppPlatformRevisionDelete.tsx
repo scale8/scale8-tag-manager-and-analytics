@@ -87,4 +87,4 @@ const AppPlatformRevisionDelete: FC<DialogPageProps> = (props: DialogPageProps) 
     return <DialogDeletePreview {...dialogDeletePreviewProps} />;
 };
 
-export { AppPlatformRevisionDelete };
+export default AppPlatformRevisionDelete;

@@ -20,7 +20,7 @@ import { DialogPreloadForm, DialogPreloadFormProps } from '../../../abstractions
 import { getActionIcon } from '../../../../utils/TypeIconsUtils';
 import { useConfigState } from '../../../../context/AppContext';
 
-const buildActionCreateInput = (
+export const buildActionCreateInput = (
     actionName: string,
     actionGroupId: string,
     platformActionId: string,
@@ -152,4 +152,4 @@ const ActionCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { ActionCreate, buildActionCreateInput };
+export default ActionCreate;

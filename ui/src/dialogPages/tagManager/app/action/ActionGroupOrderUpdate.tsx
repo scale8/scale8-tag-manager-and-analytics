@@ -30,4 +30,4 @@ const ActionGroupOrderUpdate: FC<DialogPageProps> = (props: DialogPageProps) => 
     );
 };
 
-export { ActionGroupOrderUpdate };
+export default ActionGroupOrderUpdate;

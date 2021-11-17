@@ -134,4 +134,4 @@ const EnvironmentCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { EnvironmentCreate };
+export default EnvironmentCreate;

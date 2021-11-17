@@ -117,4 +117,4 @@ const EnvironmentEditVariables: FC<DialogPageProps> = (props: DialogPageProps) =
     );
 };
 
-export { EnvironmentEditVariables };
+export default EnvironmentEditVariables;

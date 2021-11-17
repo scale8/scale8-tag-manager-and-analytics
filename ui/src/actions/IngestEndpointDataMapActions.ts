@@ -1,14 +1,28 @@
 import { PageActionProps } from './PageActions';
 import { launchHidden, openDrawer } from '../utils/PageActionUtils';
-import {
-    IngestEndpointDataMapCreate,
-    IngestEndpointDataMapCreateLastLevel,
-} from '../dialogPages/dataManager/IngestEndpointDataMapCreate';
-import {
-    IngestEndpointDataMapInspect,
-    IngestEndpointDataMapUpdate,
-} from '../dialogPages/dataManager/IngestEndpointDataMapUpdate';
-import { IngestEndpointDataMapDelete } from '../dialogPages/dataManager/IngestEndpointDataMapDelete';
+import dynamic from 'next/dynamic';
+import { FC } from 'react';
+import { DialogPageProps } from '../types/DialogTypes';
+
+const IngestEndpointDataMapCreate = dynamic(
+    () => import('../dialogPages/dataManager/IngestEndpointDataMapCreate'),
+) as FC<DialogPageProps>;
+
+const IngestEndpointDataMapCreateLastLevel = dynamic(
+    () => import('../dialogPages/dataManager/IngestEndpointDataMapCreateLastLevel'),
+) as FC<DialogPageProps>;
+
+const IngestEndpointDataMapInspect = dynamic(
+    () => import('../dialogPages/dataManager/IngestEndpointDataMapInspect'),
+) as FC<DialogPageProps>;
+
+const IngestEndpointDataMapUpdate = dynamic(
+    () => import('../dialogPages/dataManager/IngestEndpointDataMapUpdate'),
+) as FC<DialogPageProps>;
+
+const IngestEndpointDataMapDelete = dynamic(
+    () => import('../dialogPages/dataManager/IngestEndpointDataMapDelete'),
+) as FC<DialogPageProps>;
 
 const ingestEndpointDataMapActions = {
     createDataIngestEndpointMap: (

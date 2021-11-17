@@ -77,4 +77,4 @@ const OrgUserInvite: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { OrgUserInvite };
+export default OrgUserInvite;

@@ -22,7 +22,6 @@ const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
         if (values.domain !== '' && useDomainName && values.name !== props.values.domain) {
             handleChange('name', values.domain);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [values, handleChange, useDomainName]);
 
     return (

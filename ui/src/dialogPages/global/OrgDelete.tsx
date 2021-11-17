@@ -27,4 +27,4 @@ const OrgDelete: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { OrgDelete };
+export default OrgDelete;

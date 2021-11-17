@@ -7,7 +7,7 @@ import PreviewRevisionGetQuery from '../../../gql/queries/PreviewRevisionGetQuer
 import urlValidator from '../../../utils/validators/urlValidator';
 import { DialogPageProps } from '../../../types/DialogTypes';
 import { usePageDialogControls } from '../../../hooks/dialog/usePageDialogControls';
-import { queryLoaderAndError } from '../../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../../abstractions/QueryLoaderAndError';
 import RevisionPreviewDisplayForm from '../../../components/organisms/Forms/RevisionPreviewDisplayForm';
 
 type AppRevisionPreviewAfterSubmitProps = DialogPageProps & {
@@ -154,7 +154,7 @@ const AppRevisionPreviewFormAfterLoad: FC<AppRevisionPreviewAfterLoadProps> = (
 };
 
 const AppRevisionPreview: FC<DialogPageProps> = (props: DialogPageProps) => {
-    return queryLoaderAndError<PreviewRevisionGetData>(
+    return QueryLoaderAndError<PreviewRevisionGetData>(
         false,
         useQuery<PreviewRevisionGetData>(PreviewRevisionGetQuery, {
             variables: { id: props.id },
@@ -174,4 +174,4 @@ const AppRevisionPreview: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { AppRevisionPreview };
+export default AppRevisionPreview;

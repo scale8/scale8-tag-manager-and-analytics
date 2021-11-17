@@ -6,4 +6,4 @@ const ExceptionHistory: FC<DialogPageProps> = (props: DialogPageProps) => {
     return <DialogEntityHistory infoKeyBase="exceptions" {...props} />;
 };
 
-export { ExceptionHistory };
+export default ExceptionHistory;

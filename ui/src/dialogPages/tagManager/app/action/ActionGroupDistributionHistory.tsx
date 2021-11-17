@@ -6,4 +6,4 @@ const ActionGroupDistributionHistory: FC<DialogPageProps> = (props: DialogPagePr
     return <DialogEntityHistory infoKeyBase="actionGroupDistributions" {...props} />;
 };
 
-export { ActionGroupDistributionHistory };
+export default ActionGroupDistributionHistory;

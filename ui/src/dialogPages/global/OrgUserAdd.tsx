@@ -82,4 +82,4 @@ const OrgUserAdd: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { OrgUserAdd };
+export default OrgUserAdd;

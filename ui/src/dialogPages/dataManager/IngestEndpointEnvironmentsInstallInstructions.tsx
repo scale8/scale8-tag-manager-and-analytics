@@ -7,7 +7,7 @@ import { DataMapsPayload } from '../../components/organisms/DataMapsPayloadBuild
 import DialogWithPayloadBuilder from '../../components/organisms/DialogWithPayloadBuilder';
 import { IngestEndpointDataMap } from '../../types/IngestEndpointsTypes';
 import { DialogPageProps } from '../../types/DialogTypes';
-import { queryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
 import { useConfigState } from '../../context/AppContext';
 
 const IngestEndpointEnvironmentsInstallInstructions: FC<DialogPageProps> = (
@@ -16,7 +16,7 @@ const IngestEndpointEnvironmentsInstallInstructions: FC<DialogPageProps> = (
     const [payload, setPayload] = useState<DataMapsPayload>(null);
     const { mode } = useConfigState();
 
-    return queryLoaderAndError<IngestEndpointEnvironmentInstructionsGetData>(
+    return QueryLoaderAndError<IngestEndpointEnvironmentInstructionsGetData>(
         false,
         useQuery<IngestEndpointEnvironmentInstructionsGetData>(
             IngestEndpointEnvironmentInstructionsGetQuery,
@@ -50,4 +50,4 @@ const IngestEndpointEnvironmentsInstallInstructions: FC<DialogPageProps> = (
     );
 };
 
-export { IngestEndpointEnvironmentsInstallInstructions };
+export default IngestEndpointEnvironmentsInstallInstructions;

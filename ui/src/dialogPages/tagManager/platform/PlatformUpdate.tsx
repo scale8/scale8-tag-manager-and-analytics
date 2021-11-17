@@ -96,4 +96,4 @@ const PlatformUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { PlatformUpdate };
+export default PlatformUpdate;

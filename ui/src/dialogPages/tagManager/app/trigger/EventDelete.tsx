@@ -30,4 +30,4 @@ const EventDelete: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { EventDelete };
+export default EventDelete;

@@ -153,4 +153,4 @@ const EventCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { EventCreate };
+export default EventCreate;

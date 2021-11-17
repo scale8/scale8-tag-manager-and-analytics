@@ -5,7 +5,7 @@ import { PageSelectOrgData, PageSelectOrgData_me_orgs } from '../gql/generated/P
 import PageSelectOrgQuery from '../gql/queries/PageSelectOrgQuery';
 import { useQuery } from '@apollo/client';
 import { pageActions } from '../actions/PageActions';
-import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import Navigate from '../components/atoms/Next/Navigate';
 import { SelectOrg } from '../components/organisms/SelectOrg';
 import { toApp, toOrg, toOrgList, toTagManager } from '../utils/NavigationPaths';
@@ -44,7 +44,7 @@ const SelectOrgPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
         }
     }, [invites]);
 
-    return queryLoaderAndError<PageSelectOrgData>(true, queryResult, (data: PageSelectOrgData) => {
+    return QueryLoaderAndError<PageSelectOrgData>(true, queryResult, (data: PageSelectOrgData) => {
         if (data.me.orgs.length === 0 || invites > 0) {
             return <Navigate to={toOrgList} />;
         }

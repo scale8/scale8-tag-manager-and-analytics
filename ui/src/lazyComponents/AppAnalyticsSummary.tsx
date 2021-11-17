@@ -12,14 +12,14 @@ import {
 } from '../utils/AnalyticsUtils';
 import { ApolloError } from '@apollo/client/errors';
 import GQLError from '../components/atoms/GqlError';
-import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 
 const AppAnalyticsSummary: FC<AppAnalyticsContentProps> = (props: AppAnalyticsContentProps) => {
     const { appSummaryQueryOptions, appSummaryQueryOptionsPrev, id, refreshAt } = props;
 
     const eventLabel = getEventLabel(appSummaryQueryOptions);
 
-    return queryLoaderAndError<AppSummaryQueryData>(
+    return QueryLoaderAndError<AppSummaryQueryData>(
         false,
         useQuery<AppSummaryQueryData>(AppSummaryQuery, {
             variables: {

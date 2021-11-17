@@ -133,4 +133,4 @@ const AppUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { AppUpdate };
+export default AppUpdate;

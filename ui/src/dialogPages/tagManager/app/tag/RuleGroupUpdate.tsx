@@ -74,4 +74,4 @@ const RuleGroupUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { RuleGroupUpdate };
+export default RuleGroupUpdate;

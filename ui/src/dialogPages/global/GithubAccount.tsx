@@ -10,7 +10,7 @@ import { PrepareGitHubLinkInput } from '../../gql/generated/globalTypes';
 import { GithubPreparationValues } from '../../gql/generated/GithubPreparationValues';
 import nameValidator from '../../utils/validators/nameValidator';
 import { DialogPageProps } from '../../types/DialogTypes';
-import { queryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
 import { Box, DialogActions, DialogContent } from '@mui/material';
 import FormGqlError from '../../components/atoms/FormGqlError';
 import GithubAccountRemoveQuery from '../../gql/mutations/GithubAccountRemoveQuery';
@@ -142,7 +142,7 @@ const GithubAccountAfterLoad: FC<GithubAccountAfterLoadProps> = (
 };
 
 const GithubAccount: FC<DialogPageProps> = (props: DialogPageProps) => {
-    return queryLoaderAndError<LoggedUser>(
+    return QueryLoaderAndError<LoggedUser>(
         false,
         useQuery<LoggedUser>(LoggedUserQuery),
         (data: LoggedUser) => {

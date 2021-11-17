@@ -23,15 +23,13 @@ const usePageDialogControls = (
         }
     }, [noChanges, setHasChangesCallback]);
 
-    const followUpCallback = followUp !== undefined ? useCallback(followUp, []) : undefined;
-
     const pageRefreshCallback = useCallback(pageRefresh, []);
     const handleDialogCloseCallback = useCallback(handleDialogClose, []);
 
     useEffect(() => {
         if (successfullySaved) {
-            if (followUpCallback !== undefined && savedId !== undefined) {
-                followUpCallback(savedId, pageRefreshCallback, handleDialogClose);
+            if (followUp !== undefined && savedId !== undefined) {
+                followUp(savedId, pageRefreshCallback, handleDialogClose);
             } else {
                 pageRefreshCallback();
                 handleDialogClose(false);

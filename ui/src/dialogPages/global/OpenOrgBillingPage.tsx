@@ -40,4 +40,4 @@ const OpenOrgBillingPage: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { OpenOrgBillingPage };
+export default OpenOrgBillingPage;

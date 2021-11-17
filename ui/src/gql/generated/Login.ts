@@ -28,7 +28,7 @@ export interface Login_login_TempSession {
    */
   uid: string;
   /**
-   * Temporary token to povide on next step of 2-factor auth (see Login2FAInput)
+   * Temporary token to provide on next step of 2-factor auth (see Login2FAInput)
    */
   temp_token: string;
 }

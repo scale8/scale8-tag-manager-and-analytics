@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { AppAnalyticsContentProps } from '../types/props/AppAnalyticsContentProps';
-import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import { useQuery } from '@apollo/client';
 import { SelectChangeEvent } from '@mui/material';
 import PageAppChartBaseFilterQuery from '../gql/queries/PageAppChartBaseFilterQuery';
@@ -13,7 +13,7 @@ const ChartBaseFilterSelector: FC<AppAnalyticsContentProps | AppErrorContentProp
 ) => {
     const { appQueryOptions, id, setFilter } = props;
 
-    return queryLoaderAndError<AppChartBaseData>(
+    return QueryLoaderAndError<AppChartBaseData>(
         false,
         useQuery<AppChartBaseData>(PageAppChartBaseFilterQuery, {
             variables: { id },

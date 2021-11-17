@@ -30,4 +30,4 @@ const ConditionDelete: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { ConditionDelete };
+export default ConditionDelete;

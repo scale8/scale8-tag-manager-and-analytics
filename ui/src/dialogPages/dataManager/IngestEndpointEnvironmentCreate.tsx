@@ -161,4 +161,4 @@ const IngestEndpointEnvironmentCreate: FC<DialogPageProps> = (props: DialogPageP
     );
 };
 
-export { IngestEndpointEnvironmentCreate };
+export default IngestEndpointEnvironmentCreate;

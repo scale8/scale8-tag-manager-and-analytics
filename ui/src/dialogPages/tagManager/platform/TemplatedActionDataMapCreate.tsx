@@ -82,7 +82,7 @@ const triggerAddTemplatedActionDataMap = (
         payload: {
             secondaryDialogValues,
             // eslint-disable-next-line @typescript-eslint/no-use-before-define
-            secondaryPageComponent: templatedActionDataMapCreate,
+            secondaryPageComponent: TemplatedActionDataMapCreate,
         },
     });
 };
@@ -113,7 +113,7 @@ const TemplatedActionValueSetter = (
     }
 };
 
-const templatedActionDataMapCreate: FC = () => {
+const TemplatedActionDataMapCreate: FC = () => {
     const { templateInteractions } = useLoggedInState();
     const { dispatchDialogAction, dialogState } = templateInteractions;
     const { secondaryDialogValues } = dialogState;
@@ -205,7 +205,7 @@ export const createDataMapInput = (
 };
 
 export {
-    templatedActionDataMapCreate,
+    TemplatedActionDataMapCreate,
     triggerAddTemplatedActionDataMap,
     TemplatedActionValueSetter,
 };

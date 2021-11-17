@@ -5,7 +5,7 @@ import { useConfigState, useLoggedInState } from '../../context/AppContext';
 import PageTitle from '../../components/molecules/PageTitle';
 import { buildStandardMainInfo } from '../../utils/InfoLabelsUtils';
 import { OrgSettingsContainer } from '../../components/molecules/OrgSettingsContainer';
-import { queryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
 import { ProductSettings } from '../../gql/generated/ProductSettings';
 import { useQuery } from '@apollo/client';
 import ProductSettingsQuery from '../../gql/queries/ProductSettingsQuery';
@@ -21,7 +21,7 @@ const OrgSettings: FC<{ id: string }> = (props: { id: string }) => {
     const { id } = props;
     const { mode } = useConfigState();
 
-    return queryLoaderAndError<ProductSettings>(
+    return QueryLoaderAndError<ProductSettings>(
         true,
         useQuery<ProductSettings>(ProductSettingsQuery, {
             notifyOnNetworkStatusChange: true,

@@ -340,7 +340,6 @@ const DataMapsPayloadBuilder: FC<DataMapsPayloadBuilderProps> = (
         setDataMapsPayloadValues(
             buildDataMapsPayloadValues(props.dataMaps, null, -1, initialPayload),
         );
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dataMaps, setDataMapsPayloadValues]);
 
     useEffect(() => {

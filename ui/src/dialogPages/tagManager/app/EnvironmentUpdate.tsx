@@ -100,4 +100,4 @@ const EnvironmentUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { EnvironmentUpdate };
+export default EnvironmentUpdate;

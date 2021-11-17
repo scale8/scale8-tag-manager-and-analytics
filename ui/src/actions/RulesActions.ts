@@ -6,18 +6,57 @@ import {
     openInfo,
     openLightbox,
 } from '../utils/PageActionUtils';
-import { RuleCreate } from '../dialogPages/tagManager/app/tag/RuleCreate';
-import { RuleDuplicate } from '../dialogPages/tagManager/app/tag/RuleDuplicate';
-import { RuleOrderUpdate } from '../dialogPages/tagManager/app/tag/RuleOrderUpdate';
-import { RuleDelete } from '../dialogPages/tagManager/app/tag/RuleDelete';
-import { RuleUpdate } from '../dialogPages/tagManager/app/tag/RuleUpdate';
-import { RuleHistory } from '../dialogPages/tagManager/app/tag/RuleHistory';
-import { RuleGroupCreate } from '../dialogPages/tagManager/app/tag/RuleGroupCreate';
-import { RuleGroupDuplicate } from '../dialogPages/tagManager/app/tag/RuleGroupDuplicate';
-import { RuleGroupOrderUpdate } from '../dialogPages/tagManager/app/tag/RuleGroupOrderUpdate';
-import { RuleGroupDelete } from '../dialogPages/tagManager/app/tag/RuleGroupDelete';
-import { RuleGroupUpdate } from '../dialogPages/tagManager/app/tag/RuleGroupUpdate';
-import { RuleGroupHistory } from '../dialogPages/tagManager/app/tag/RuleGroupHistory';
+import dynamic from 'next/dynamic';
+import { FC } from 'react';
+import { DialogPageProps } from '../types/DialogTypes';
+
+const RuleCreate = dynamic(
+    () => import('../dialogPages/tagManager/app/tag/RuleCreate'),
+) as FC<DialogPageProps>;
+
+const RuleDuplicate = dynamic(
+    () => import('../dialogPages/tagManager/app/tag/RuleDuplicate'),
+) as FC<DialogPageProps>;
+
+const RuleOrderUpdate = dynamic(
+    () => import('../dialogPages/tagManager/app/tag/RuleOrderUpdate'),
+) as FC<DialogPageProps>;
+
+const RuleDelete = dynamic(
+    () => import('../dialogPages/tagManager/app/tag/RuleDelete'),
+) as FC<DialogPageProps>;
+
+const RuleUpdate = dynamic(
+    () => import('../dialogPages/tagManager/app/tag/RuleUpdate'),
+) as FC<DialogPageProps>;
+
+const RuleHistory = dynamic(
+    () => import('../dialogPages/tagManager/app/tag/RuleHistory'),
+) as FC<DialogPageProps>;
+
+const RuleGroupCreate = dynamic(
+    () => import('../dialogPages/tagManager/app/tag/RuleGroupCreate'),
+) as FC<DialogPageProps>;
+
+const RuleGroupDuplicate = dynamic(
+    () => import('../dialogPages/tagManager/app/tag/RuleGroupDuplicate'),
+) as FC<DialogPageProps>;
+
+const RuleGroupOrderUpdate = dynamic(
+    () => import('../dialogPages/tagManager/app/tag/RuleGroupOrderUpdate'),
+) as FC<DialogPageProps>;
+
+const RuleGroupDelete = dynamic(
+    () => import('../dialogPages/tagManager/app/tag/RuleGroupDelete'),
+) as FC<DialogPageProps>;
+
+const RuleGroupUpdate = dynamic(
+    () => import('../dialogPages/tagManager/app/tag/RuleGroupUpdate'),
+) as FC<DialogPageProps>;
+
+const RuleGroupHistory = dynamic(
+    () => import('../dialogPages/tagManager/app/tag/RuleGroupHistory'),
+) as FC<DialogPageProps>;
 
 const ruleActions = {
     createRule: (pageActionProps: PageActionProps, id: string, tagId: string): void => {

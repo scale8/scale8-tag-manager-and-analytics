@@ -242,7 +242,6 @@ const DynamicPageLoader: FC<PageLoaderProps> = (props: PageLoaderProps) => {
             teleport('breadcrumb', <></>);
             teleport('side', <></>);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page]);
 
     if (pageRequiresId(page) && paramsId === undefined) {

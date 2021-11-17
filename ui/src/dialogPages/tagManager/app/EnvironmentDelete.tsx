@@ -27,4 +27,4 @@ const EnvironmentDelete: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { EnvironmentDelete };
+export default EnvironmentDelete;

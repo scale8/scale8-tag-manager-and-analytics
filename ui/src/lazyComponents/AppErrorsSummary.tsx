@@ -5,7 +5,7 @@ import SummaryDetail from '../components/atoms/SummaryDetail';
 import { buildSummaryDetailPropsFromValue, calculateEventsPerUser } from '../utils/AnalyticsUtils';
 import { ApolloError } from '@apollo/client/errors';
 import GQLError from '../components/atoms/GqlError';
-import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import { AppErrorContentProps } from '../types/props/AppErrorContentProps';
 import AppSummaryQuery from '../gql/queries/AppSummaryQuery';
 import { AppSummaryQueryData } from '../gql/generated/AppSummaryQueryData';
@@ -13,7 +13,7 @@ import { AppSummaryQueryData } from '../gql/generated/AppSummaryQueryData';
 const AppErrorsSummary: FC<AppErrorContentProps> = (props: AppErrorContentProps) => {
     const { appSummaryQueryOptions, appSummaryQueryOptionsPrev, id, refreshAt } = props;
 
-    return queryLoaderAndError<AppSummaryQueryData>(
+    return QueryLoaderAndError<AppSummaryQueryData>(
         false,
         useQuery<AppSummaryQueryData>(AppSummaryQuery, {
             variables: {

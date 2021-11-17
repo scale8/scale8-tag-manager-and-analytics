@@ -12,7 +12,7 @@ import {
 import { Line } from 'react-chartjs-2';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { InfoButton, InfoProps } from '../components/molecules/InfoButton';
-import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import InfoDialogTitle from '../components/molecules/InfoDialogTitle';
 import {
     labelsFromRange,
@@ -57,7 +57,7 @@ const Usage = <UsageData extends Record<string, any>>(
         setAggregateMinutes(zoomDefaultAggregateMinutes(zoom));
     }, [zoom]);
 
-    return queryLoaderAndError<UsageData>(false, mainQuery, (queryData: UsageData) => {
+    return QueryLoaderAndError<UsageData>(false, mainQuery, (queryData: UsageData) => {
         const usageRange = prepareUsageRange(extractUsage(queryData), zoom, aggregateMinutes);
 
         const data = {

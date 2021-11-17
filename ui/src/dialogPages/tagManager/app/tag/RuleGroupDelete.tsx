@@ -101,4 +101,4 @@ const RuleGroupDelete: FC<DialogPageProps> = (props: DialogPageProps) => {
     return <DialogDeletePreview {...dialogDeletePreviewProps} />;
 };
 
-export { RuleGroupDelete };
+export default RuleGroupDelete;

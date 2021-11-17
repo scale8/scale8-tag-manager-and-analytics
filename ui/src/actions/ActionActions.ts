@@ -1,23 +1,5 @@
 import { FC } from 'react';
 import { PageActionProps } from './PageActions';
-import { ActionCreate } from '../dialogPages/tagManager/app/action/ActionCreate';
-import { ActionDelete } from '../dialogPages/tagManager/app/action/ActionDelete';
-import { ActionOrderUpdate } from '../dialogPages/tagManager/app/action/ActionOrderUpdate';
-import { ActionInspect } from '../dialogPages/tagManager/app/action/ActionInspect';
-import { ActionGroupCreate } from '../dialogPages/tagManager/app/action/ActionGroupCreate';
-import { ActionGroupDuplicate } from '../dialogPages/tagManager/app/action/ActionGroupDuplicate';
-import { ActionGroupOrderUpdate } from '../dialogPages/tagManager/app/action/ActionGroupOrderUpdate';
-import { ActionGroupDelete } from '../dialogPages/tagManager/app/action/ActionGroupDelete';
-import { ActionGroupUpdate } from '../dialogPages/tagManager/app/action/ActionGroupUpdate';
-import { ActionGroupDistributionCreate } from '../dialogPages/tagManager/app/action/ActionGroupDistributionCreate';
-import { ActionGroupDistributionOrderUpdate } from '../dialogPages/tagManager/app/action/ActionGroupDistributionOrderUpdate';
-import { ActionGroupDistributionUnlink } from '../dialogPages/tagManager/app/action/ActionGroupDistributionUnlink';
-import { ActionGroupDistributionAdd } from '../dialogPages/tagManager/app/action/ActionGroupDistributionAdd';
-import { ActionUpdate } from '../dialogPages/tagManager/app/action/ActionUpdate';
-import { ActionGroupDistributionHistory } from '../dialogPages/tagManager/app/action/ActionGroupDistributionHistory';
-import { ActionGroupHistory } from '../dialogPages/tagManager/app/action/ActionGroupHistory';
-import { ActionHistory } from '../dialogPages/tagManager/app/action/ActionHistory';
-import { ActionGroupDistributionDelete } from '../dialogPages/tagManager/app/action/ActionGroupDistributionDelete';
 import {
     launchHidden,
     openDrawer,
@@ -36,6 +18,78 @@ const ActionGroupDistributionDuplicate = dynamic(
 
 const ActionGroupDistributionUpdate = dynamic(
     () => import('../dialogPages/tagManager/app/action/ActionGroupDistributionUpdate'),
+) as FC<DialogPageProps>;
+
+const ActionCreate = dynamic(
+    () => import('../dialogPages/tagManager/app/action/ActionCreate'),
+) as FC<DialogPageProps>;
+
+const ActionDelete = dynamic(
+    () => import('../dialogPages/tagManager/app/action/ActionDelete'),
+) as FC<DialogPageProps>;
+
+const ActionOrderUpdate = dynamic(
+    () => import('../dialogPages/tagManager/app/action/ActionOrderUpdate'),
+) as FC<DialogPageProps>;
+
+const ActionInspect = dynamic(
+    () => import('../dialogPages/tagManager/app/action/ActionInspect'),
+) as FC<DialogPageProps>;
+
+const ActionGroupCreate = dynamic(
+    () => import('../dialogPages/tagManager/app/action/ActionGroupCreate'),
+) as FC<DialogPageProps>;
+
+const ActionGroupDuplicate = dynamic(
+    () => import('../dialogPages/tagManager/app/action/ActionGroupDuplicate'),
+) as FC<DialogPageProps>;
+
+const ActionGroupOrderUpdate = dynamic(
+    () => import('../dialogPages/tagManager/app/action/ActionGroupOrderUpdate'),
+) as FC<DialogPageProps>;
+
+const ActionGroupDelete = dynamic(
+    () => import('../dialogPages/tagManager/app/action/ActionGroupDelete'),
+) as FC<DialogPageProps>;
+
+const ActionGroupUpdate = dynamic(
+    () => import('../dialogPages/tagManager/app/action/ActionGroupUpdate'),
+) as FC<DialogPageProps>;
+
+const ActionGroupDistributionCreate = dynamic(
+    () => import('../dialogPages/tagManager/app/action/ActionGroupDistributionCreate'),
+) as FC<DialogPageProps>;
+
+const ActionGroupDistributionOrderUpdate = dynamic(
+    () => import('../dialogPages/tagManager/app/action/ActionGroupDistributionOrderUpdate'),
+) as FC<DialogPageProps>;
+
+const ActionGroupDistributionUnlink = dynamic(
+    () => import('../dialogPages/tagManager/app/action/ActionGroupDistributionUnlink'),
+) as FC<DialogPageProps>;
+
+const ActionGroupDistributionAdd = dynamic(
+    () => import('../dialogPages/tagManager/app/action/ActionGroupDistributionAdd'),
+) as FC<DialogPageProps>;
+
+const ActionUpdate = dynamic(
+    () => import('../dialogPages/tagManager/app/action/ActionUpdate'),
+) as FC<DialogPageProps>;
+
+const ActionGroupDistributionHistory = dynamic(
+    () => import('../dialogPages/tagManager/app/action/ActionGroupDistributionHistory'),
+) as FC<DialogPageProps>;
+
+const ActionGroupHistory = dynamic(
+    () => import('../dialogPages/tagManager/app/action/ActionGroupHistory'),
+) as FC<DialogPageProps>;
+
+const ActionHistory = dynamic(
+    () => import('../dialogPages/tagManager/app/action/ActionHistory'),
+) as FC<DialogPageProps>;
+
+const ActionGroupDistributionDelete = dynamic(
+    () => import('../dialogPages/tagManager/app/action/ActionGroupDistributionDelete'),
 ) as FC<DialogPageProps>;
 
 const actionActions = {

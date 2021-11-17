@@ -50,7 +50,6 @@ const PreviewFrameTagRule: FC<PreviewFrameTagRuleProps> = (props: PreviewFrameTa
                     ),
                 }))
                 .sort((a, b) => b.index - a.index),
-        // eslint-disable-next-line react-hooks/exhaustive-deps
         [rawStatuses],
     );
 
@@ -63,7 +62,6 @@ const PreviewFrameTagRule: FC<PreviewFrameTagRuleProps> = (props: PreviewFrameTa
                 setRuleIndex(firstError.index);
             }
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ruleStatuses]);
 
     const ruleStatus = ruleStatuses.find((_) => _.index === ruleIndex) || rawStatuses[0];

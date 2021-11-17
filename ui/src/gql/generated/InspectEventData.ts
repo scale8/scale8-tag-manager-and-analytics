@@ -604,7 +604,7 @@ export interface InspectEventData_getEvent {
    */
   name: string;
   /**
-   * The period after which the event state should be cleared. -1 = Inactive, 0 = Immidately, > 0, after some time specified in milliseconds. This useful for events that need to be re-triggered within some period of time to pass the check stage.
+   * The period after which the event state should be cleared. -1 = Inactive, 0 = Immediately, > 0, after some time specified in milliseconds. This useful for events that need to be re-triggered within some period of time to pass the check stage.
    */
   clear_state_ms: number;
   /**

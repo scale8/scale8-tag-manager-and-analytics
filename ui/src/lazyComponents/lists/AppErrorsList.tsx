@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { AppErrorContentProps } from '../../types/props/AppErrorContentProps';
-import { lazyQueryLoaderAndError } from '../../abstractions/LazyQueryLoaderAndError';
+import { LazyQueryLoaderAndError } from '../../abstractions/LazyQueryLoaderAndError';
 import { useLazyQuery } from '@apollo/client';
 import AppErrorsQuery from '../../gql/queries/AppErrorsQuery';
 import { AppErrorsQueryData } from '../../gql/generated/AppErrorsQueryData';
@@ -41,7 +41,7 @@ const AppErrorsList: FC<AppErrorContentProps> = (props: AppErrorContentProps) =>
         }));
     };
 
-    return lazyQueryLoaderAndError(
+    return LazyQueryLoaderAndError(
         false,
         useLazyQuery(AppErrorsQuery),
         queryOptions,

@@ -6,13 +6,45 @@ import {
     openLightbox,
     openLightboxNoRefresh,
 } from '../utils/PageActionUtils';
-import { AppDiff } from '../dialogPages/tagManager/app/AppDiff';
-import { AppRevisionPreview } from '../dialogPages/tagManager/app/AppRevisionPreview';
-import { AppRevisionUpdate } from '../dialogPages/tagManager/app/AppRevisionUpdate';
-import { AppRevisionDuplicate } from '../dialogPages/tagManager/app/AppRevisionDuplicate';
-import { AppRevisionFinalise } from '../dialogPages/tagManager/app/AppRevisionFinalise';
-import { AppRevisionDeploy } from '../dialogPages/tagManager/app/AppRevisionDeploy';
-import { AppRevisionHistory } from '../dialogPages/tagManager/app/AppRevisionHistory';
+import dynamic from 'next/dynamic';
+import { FC } from 'react';
+import { DialogPageProps } from '../types/DialogTypes';
+
+/*
+import \{ (.+) \} from (.+);$
+
+const $1 = dynamic(
+    () => import($2),
+) as FC<DialogPageProps>;
+ */
+
+const AppDiff = dynamic(
+    () => import('../dialogPages/tagManager/app/AppDiff'),
+) as FC<DialogPageProps>;
+
+const AppRevisionPreview = dynamic(
+    () => import('../dialogPages/tagManager/app/AppRevisionPreview'),
+) as FC<DialogPageProps>;
+
+const AppRevisionUpdate = dynamic(
+    () => import('../dialogPages/tagManager/app/AppRevisionUpdate'),
+) as FC<DialogPageProps>;
+
+const AppRevisionDuplicate = dynamic(
+    () => import('../dialogPages/tagManager/app/AppRevisionDuplicate'),
+) as FC<DialogPageProps>;
+
+const AppRevisionFinalise = dynamic(
+    () => import('../dialogPages/tagManager/app/AppRevisionFinalise'),
+) as FC<DialogPageProps>;
+
+const AppRevisionDeploy = dynamic(
+    () => import('../dialogPages/tagManager/app/AppRevisionDeploy'),
+) as FC<DialogPageProps>;
+
+const AppRevisionHistory = dynamic(
+    () => import('../dialogPages/tagManager/app/AppRevisionHistory'),
+) as FC<DialogPageProps>;
 
 const appRevisionActions = {
     compareAppRevisions: (

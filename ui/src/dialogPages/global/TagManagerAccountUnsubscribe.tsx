@@ -7,4 +7,4 @@ const TagManagerAccountUnsubscribe: FC<DialogPageProps> = (props: DialogPageProp
     return <AccountUnsubscribe {...props} product={AccountProduct.TAG_MANAGER} />;
 };
 
-export { TagManagerAccountUnsubscribe };
+export default TagManagerAccountUnsubscribe;

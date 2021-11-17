@@ -30,4 +30,4 @@ const ActionGroupDistributionUnlink: FC<DialogPageProps> = (props: DialogPagePro
     );
 };
 
-export { ActionGroupDistributionUnlink };
+export default ActionGroupDistributionUnlink;

@@ -62,4 +62,4 @@ const TagDuplicate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { TagDuplicate };
+export default TagDuplicate;

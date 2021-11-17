@@ -19,7 +19,7 @@ import { DialogForm, DialogFormProps } from '../../abstractions/DialogForm';
 import { actionPermissionsFromCode } from '../../../utils/ActionPermissionsUtils';
 import { useLoggedInState } from '../../../context/AppContext';
 
-const convertPlatformDataMapsForInput = (
+export const convertPlatformDataMapsForInput = (
     dataMapInputs: PlatformDataMapInput[],
 ): PlatformActionTemplatedDataMapCreateInput[] => {
     return dataMapInputs.map((input: PlatformDataMapInput) => ({
@@ -142,4 +142,4 @@ const TemplatedActionCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { TemplatedActionCreate, convertPlatformDataMapsForInput };
+export default TemplatedActionCreate;

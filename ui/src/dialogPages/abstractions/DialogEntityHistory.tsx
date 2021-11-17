@@ -4,7 +4,7 @@ import { DialogPageProps } from '../../types/DialogTypes';
 import { EntitiesHistory } from '../../gql/generated/EntitiesHistory';
 import HistoryQuery from '../../gql/queries/HistoryQuery';
 import HistoryDialog from '../../components/organisms/HistoryDialog';
-import { queryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
 import { buildStandardFormInfo } from '../../utils/InfoLabelsUtils';
 
 export type DialogEntityHistoryProps = DialogPageProps & {
@@ -12,7 +12,7 @@ export type DialogEntityHistoryProps = DialogPageProps & {
 };
 
 const DialogEntityHistory: FC<DialogEntityHistoryProps> = (props: DialogEntityHistoryProps) => {
-    return queryLoaderAndError<EntitiesHistory>(
+    return QueryLoaderAndError<EntitiesHistory>(
         false,
         useQuery<EntitiesHistory>(HistoryQuery, {
             variables: {

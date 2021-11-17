@@ -6,4 +6,4 @@ const ActionHistory: FC<DialogPageProps> = (props: DialogPageProps) => {
     return <DialogEntityHistory infoKeyBase="actions" {...props} />;
 };
 
-export { ActionHistory };
+export default ActionHistory;

@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useQuery } from '@apollo/client';
 import EnvironmentInstructionsGetQuery from '../gql/queries/EnvironmentInstructionsGetQuery';
 import { EnvironmentInstructionsGetData } from '../gql/generated/EnvironmentInstructionsGetData';
-import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import EnvironmentInstallInstructions from '../components/organisms/EnvironmentInstallInstructions';
 import ExternalRedirectButton from '../components/atoms/ExternalRedirectButton';
 import { useConfigState } from '../context/AppContext';
@@ -18,7 +18,7 @@ const TagManagerInstallInstructions: FC<TagManagerInstallInstructionsProps> = (
 ) => {
     const { mode } = useConfigState();
 
-    return queryLoaderAndError<EnvironmentInstructionsGetData>(
+    return QueryLoaderAndError<EnvironmentInstructionsGetData>(
         false,
         useQuery<EnvironmentInstructionsGetData>(EnvironmentInstructionsGetQuery, {
             variables: { id: props.environmentId },

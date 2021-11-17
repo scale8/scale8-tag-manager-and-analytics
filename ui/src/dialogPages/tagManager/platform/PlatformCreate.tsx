@@ -103,4 +103,4 @@ const PlatformCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { PlatformCreate };
+export default PlatformCreate;

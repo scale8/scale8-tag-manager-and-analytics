@@ -6,7 +6,6 @@ import descriptionValidator from '../validators/descriptionValidator';
 import requiredStringValidator from '../validators/requiredStringValidator';
 import parsedCodeValidator from '../validators/parsedCodeValidator';
 import { PlatformActionPermissionRequest } from '../../gql/generated/globalTypes';
-import { FormValues } from '../../hooks/form/useFormValidation';
 
 export type TemplatedActionsValues = {
     name: string;
@@ -41,7 +40,7 @@ const TemplatedActionValidators: ValidateConfiguration<TemplatedActionsValues>[]
     },
     {
         field: 'code',
-        validator: async <T extends FormValues>(
+        validator: async (
             value: string | boolean | PlatformActionPermissionInput[] | PlatformDataMapInput[],
         ): Promise<-1 | 0> => {
             return (value as string).includes('success()') ? -1 : 0;
@@ -65,7 +64,7 @@ const TemplatedActionValidators: ValidateConfiguration<TemplatedActionsValues>[]
     },
     {
         field: 'permissionRequests',
-        validator: async <T extends FormValues>(
+        validator: async (
             value: string | boolean | PlatformActionPermissionInput[] | PlatformDataMapInput[],
         ): Promise<-1 | 0> => {
             return (value as PlatformActionPermissionInput[]).find((_) => {

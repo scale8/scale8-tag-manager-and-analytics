@@ -4,10 +4,10 @@ import DiffAppQuery from '../../../gql/queries/DiffAppQuery';
 import { DiffApp } from '../../../gql/generated/DiffApp';
 import { RevisionDiff } from '../../../components/molecules/Diff/RevisionDiff';
 import { DialogPageProps } from '../../../types/DialogTypes';
-import { queryLoaderAndError } from '../../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../../abstractions/QueryLoaderAndError';
 
 const AppDiff: FC<DialogPageProps> = (props: DialogPageProps) => {
-    return queryLoaderAndError<DiffApp>(
+    return QueryLoaderAndError<DiffApp>(
         false,
         useQuery<DiffApp>(DiffAppQuery, {
             variables: {
@@ -36,4 +36,4 @@ const AppDiff: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { AppDiff };
+export default AppDiff;

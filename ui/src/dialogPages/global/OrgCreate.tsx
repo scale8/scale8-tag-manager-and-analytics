@@ -54,4 +54,4 @@ const OrgCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
     return <DialogForm<OrgValues, OrgFormProps, CreateOrg> {...orgCreateProps} />;
 };
 
-export { OrgCreate };
+export default OrgCreate;

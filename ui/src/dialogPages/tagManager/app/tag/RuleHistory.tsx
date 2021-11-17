@@ -6,4 +6,4 @@ const RuleHistory: FC<DialogPageProps> = (props: DialogPageProps) => {
     return <DialogEntityHistory infoKeyBase="rules" {...props} />;
 };
 
-export { RuleHistory };
+export default RuleHistory;

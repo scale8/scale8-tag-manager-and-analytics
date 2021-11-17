@@ -26,4 +26,4 @@ const OrgUserCancelInvitation: FC<DialogPageProps> = (props: DialogPageProps) =>
     );
 };
 
-export { OrgUserCancelInvitation };
+export default OrgUserCancelInvitation;

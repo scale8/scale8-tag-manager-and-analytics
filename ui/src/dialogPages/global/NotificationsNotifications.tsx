@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client';
 import LoggedUserQuery from '../../gql/queries/LoggedUserQuery';
 import { LoggedUser, LoggedUser_me_user_notifications } from '../../gql/generated/LoggedUser';
 import { DialogPageProps } from '../../types/DialogTypes';
-import { queryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
 import { NotificationsList } from '../../components/organisms/NotificationsList';
 import DismissUserNotificationQuery from '../../gql/mutations/DismissUserNotificationQuery';
 import { DialogMutationFunction } from '../abstractions/DialogDirectMutation';
@@ -19,7 +19,7 @@ const NotificationsNotifications: FC<DialogPageProps> = (props: DialogPageProps)
     const [dismissing, setDismissing] = useState(false);
     const [mutationId, setMutationId] = useState('');
 
-    return queryLoaderAndError<LoggedUser>(
+    return QueryLoaderAndError<LoggedUser>(
         false,
         useQuery(LoggedUserQuery, { notifyOnNetworkStatusChange: true }),
         (data: LoggedUser, valuesRefresh: (mustResetCache: boolean) => void) => {

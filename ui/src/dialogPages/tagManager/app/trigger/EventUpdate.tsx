@@ -56,7 +56,7 @@ const getAvailableEvents = (formLoadedData: UpdateEventGetData): SelectValueWith
         }) as SelectValueWithSub[],
     }));
 
-const buildEventName = (
+export const buildEventName = (
     eventId: string | undefined,
     availableEvents: SelectValueWithSub[],
 ): string => {
@@ -202,4 +202,4 @@ const EventUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { EventUpdate, buildEventName };
+export default EventUpdate;
