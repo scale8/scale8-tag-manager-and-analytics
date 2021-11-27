@@ -47,11 +47,11 @@ const AccountSectionEndpointTable: FC<AccountSectionAppTableProps> = (
                 }}
                 sx={{
                     color: '#ffffff',
-                    backgroundColor: (theme) => theme.palette.tagManagerColor.main,
+                    backgroundColor: (theme) => theme.palette.dataManagerColor.main,
                     width: '100%',
                     '&:hover': {
                         color: '#ffffff',
-                        backgroundColor: (theme) => theme.palette.tagManagerColor.main,
+                        backgroundColor: (theme) => theme.palette.dataManagerColor.main,
                     },
                 }}
                 color="inherit"

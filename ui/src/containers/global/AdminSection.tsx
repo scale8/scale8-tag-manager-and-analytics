@@ -41,12 +41,12 @@ const AdminSection: FC<ChildrenOnlyProps> = (props: ChildrenOnlyProps) => {
         buildButtonsProps: (data) => [buildAdminButtonProps(router, data.me.orgs)],
         buildMenuItemsProps: () => [
             {
-                icon: <AdminDashboardIcon />,
+                icon: () => <AdminDashboardIcon />,
                 label: 'Dashboard',
                 link: toAdmin,
             },
             {
-                icon: <SignUpApprovalIcon />,
+                icon: () => <SignUpApprovalIcon />,
                 label: 'Signup Approval',
                 link: toSignupApproval,
             },

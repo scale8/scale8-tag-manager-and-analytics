@@ -30,6 +30,7 @@ export type UserSelectorProps = {
 
 export type SideBarProps = {
     handleNotificationClick: MouseEventHandler;
+    children?: React.ReactNode;
     userSelectorProps: UserSelectorProps;
     isAdmin: boolean;
     unreadNotifications: number;

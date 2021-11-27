@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { UserSelector } from '../molecules/UserSelector';
-import { Badge, Box, IconButton, Tooltip } from '@mui/material';
+import { Badge, Box, IconButton, lighten, Tooltip } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 import OrgIcon from '../atoms/Icons/OrgIcon';
@@ -26,7 +26,7 @@ const SideBar: FC<SideBarProps> = (props: SideBarProps) => {
         display: 'flex',
         width: '64px',
         height: '48px',
-        color: 'white',
+        color: (theme) => theme.palette.primary.main,
         alignSelf: 'center',
         alignItems: 'center',
         justifyContent: 'center',
@@ -41,7 +41,7 @@ const SideBar: FC<SideBarProps> = (props: SideBarProps) => {
                 display: 'flex',
                 boxSizing: 'border-box',
                 flexDirection: 'column',
-                backgroundColor: (theme) => theme.palette.primary.main,
+                backgroundColor: (theme) => lighten(theme.palette.primary.main, 0.9),
                 flexGrow: 0,
                 width: '50px',
                 height: '100vh',

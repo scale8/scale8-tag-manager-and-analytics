@@ -18,7 +18,7 @@ import { useRouter } from 'next/router';
 import { ChildrenAndIdProps } from '../../../types/props/ChildrenAndIdProps';
 import { toApp } from '../../../utils/NavigationPaths';
 import { analyticsEnabled } from '../../../utils/AnalyticsUtils';
-import { SideMenuButtonProps } from '../../../components/molecules/SideMenuButton';
+import { PageMenuButtonProps } from '../../../components/molecules/SideMenuButton';
 import AppErrorsIcon from '../../../components/atoms/Icons/AppErrorsIcon';
 
 const AppSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
@@ -57,38 +57,38 @@ const AppSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
                 true,
             ),
         ],
-        buildMenuItemsProps: (_, data) => [
+        buildMenuItemsProps: (data) => [
             ...((analyticsEnabled(data.getApp)
                 ? [
                       {
-                          icon: <AppAnalyticsIcon />,
+                          icon: () => <AppAnalyticsIcon />,
                           label: 'Analytics',
                           link: toApp({ id }, 'analytics'),
                       },
                   ]
-                : []) as SideMenuButtonProps[]),
+                : []) as PageMenuButtonProps[]),
 
             ...((data.getApp.error_tracking_enabled
                 ? [
                       {
-                          icon: <AppErrorsIcon />,
+                          icon: () => <AppErrorsIcon />,
                           label: 'Errors',
                           link: toApp({ id }, 'errors'),
                       },
                   ]
-                : []) as SideMenuButtonProps[]),
+                : []) as PageMenuButtonProps[]),
             {
-                icon: <RevisionIcon />,
+                icon: () => <RevisionIcon />,
                 label: 'Revisions',
                 link: toApp({ id }, 'revisions'),
             },
             {
-                icon: <EnvironmentIcon />,
+                icon: () => <EnvironmentIcon />,
                 label: 'Environments',
                 link: toApp({ id }, 'environments'),
             },
             {
-                icon: <PlatformIcon />,
+                icon: () => <PlatformIcon />,
                 label: 'Installed Platforms',
                 link: toApp({ id }, 'platforms'),
             },

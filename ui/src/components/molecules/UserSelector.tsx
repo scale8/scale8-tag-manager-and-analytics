@@ -29,8 +29,8 @@ const UserSelector: FC<UserSelectorProps> = (props: UserSelectorProps) => {
                     horizontal: 'right',
                 }}
                 transformOrigin={{
-                    vertical: 80,
-                    horizontal: -2,
+                    vertical: 2,
+                    horizontal: -15,
                 }}
                 keepMounted
                 open={Boolean(anchorEl)}

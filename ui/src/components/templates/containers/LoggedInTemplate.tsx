@@ -1,28 +1,19 @@
 import { FC, MouseEvent, SyntheticEvent } from 'react';
 import SideBar from '../../organisms/SideBar';
-import { Box, Snackbar } from '@mui/material';
+import { Box, lighten, Snackbar } from '@mui/material';
 import CancelConfirmDialog from '../../organisms/CancelConfirmDialog';
 import { MainDrawer } from '../../organisms/MainDrawer';
 import { DialogBaseProps, DialogPageProps } from '../../../types/DialogTypes';
 import GQLError from '../../atoms/GqlError';
 import InfoDialog from '../../organisms/InfoDialog';
 import PageDialog from '../../organisms/PageDialog';
-import { navigationColorFromSectionLocator } from '../../../containers/SectionsDetails';
 import { useLoggedInState } from '../../../context/AppContext';
 import { LoggedInProps } from '../../../containers/global/LoggedInSection';
-import { grey } from '@mui/material/colors';
 
 const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
     const { templateInteractions } = useLoggedInState();
-    const {
-        ask,
-        dispatchDialogAction,
-        dialogState,
-        snackbarError,
-        setSnackbarError,
-        sectionHistory,
-    } = templateInteractions;
-    const navigationColor = navigationColorFromSectionLocator(sectionHistory.current);
+    const { ask, dispatchDialogAction, dialogState, snackbarError, setSnackbarError } =
+        templateInteractions;
 
     const handleDialogClose = (checkChanges: boolean) => {
         if (checkChanges && dialogState.pageHasChanges) {
@@ -113,7 +104,10 @@ const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
                         borderStyle: 'solid',
                         borderWidth: '15px 15px 0 0',
                         borderColor: (theme) =>
-                            `${theme.palette.primary.main} transparent transparent transparent`,
+                            `${lighten(
+                                theme.palette.primary.main,
+                                0.9,
+                            )} transparent transparent transparent`,
                     }}
                 />
                 <Box
@@ -126,7 +120,6 @@ const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
                 >
                     <Box
                         flexShrink={0}
-                        bgcolor={navigationColor}
                         sx={{
                             '& .breadcrumb': {
                                 padding: (theme) => theme.spacing(3.5, 2, 1.5, 2),
@@ -153,10 +146,10 @@ const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
                         >
                             <Box
                                 flexShrink={0}
-                                bgcolor={grey['50']}
                                 color="grey.800"
                                 sx={{
                                     '& .sideMenu': {
+                                        margin: (theme) => theme.spacing(0, 2),
                                         width: '190px',
                                     },
                                 }}
@@ -172,17 +165,6 @@ const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
                                 }}
                                 bgcolor="background.paper"
                             >
-                                <Box
-                                    sx={{
-                                        zIndex: (theme) => theme.zIndex.appBar,
-                                        position: 'absolute',
-                                        width: 0,
-                                        height: 0,
-                                        borderStyle: 'solid',
-                                        borderWidth: '15px 15px 0 0',
-                                        borderColor: `${navigationColor} transparent transparent transparent`,
-                                    }}
-                                />
                                 {props.children}
                             </Box>
                         </Box>

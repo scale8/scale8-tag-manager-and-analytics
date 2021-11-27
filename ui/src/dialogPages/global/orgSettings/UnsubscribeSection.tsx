@@ -47,7 +47,7 @@ const UnsubscribeSection: FC<UnsubscribeSectionProps> = (props: UnsubscribeSecti
     return (
         <>
             <Box height={32} />
-            <DangerBox>
+            <DangerBox dark>
                 Account reset cannot be undone. Please be certain.
                 <br />
                 All data and subscriptions will be removed.

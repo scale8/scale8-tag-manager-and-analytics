@@ -54,7 +54,7 @@ const Breadcrumb: FC<BreadcrumbProps> = (props: BreadcrumbProps) => {
                 display="flex"
                 flexShrink={0}
                 className="breadcrumb"
-                color="white"
+                sx={{ color: (theme) => theme.palette.primary.main }}
                 fontSize="1.5rem"
                 flexWrap="nowrap"
                 whiteSpace="nowrap"

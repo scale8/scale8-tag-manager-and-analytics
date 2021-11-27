@@ -65,27 +65,27 @@ const CustomPlatformRevisionSection: FC<ChildrenAndIdProps> = (props: ChildrenAn
         ],
         buildMenuItemsProps: () => [
             {
-                icon: <SettingIcon />,
+                icon: () => <SettingIcon />,
                 label: 'Settings',
                 link: toCustomPlatformRevision({ id }, 'settings'),
             },
             {
-                icon: <AssetIcon />,
+                icon: () => <AssetIcon />,
                 label: 'Assets',
                 link: toCustomPlatformRevision({ id }, 'assets'),
             },
             {
-                icon: <ActionIcon />,
+                icon: () => <ActionIcon />,
                 label: 'Actions',
                 link: toCustomPlatformRevision({ id }, 'actions'),
             },
             {
-                icon: <DataContainerIcon />,
+                icon: () => <DataContainerIcon />,
                 label: 'Data Containers',
                 link: toCustomPlatformRevision({ id }, 'data-containers'),
             },
             {
-                icon: <EventIcon />,
+                icon: () => <EventIcon />,
                 label: 'Events',
                 link: toCustomPlatformRevision({ id }, 'events'),
             },

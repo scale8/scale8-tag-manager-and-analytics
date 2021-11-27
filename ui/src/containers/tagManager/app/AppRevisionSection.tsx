@@ -70,22 +70,22 @@ const AppRevisionSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) =
         ],
         buildMenuItemsProps: () => [
             {
-                icon: <TagIcon />,
+                icon: () => <TagIcon />,
                 label: 'Tags',
                 link: toAppRevision({ id }, 'tags'),
             },
             {
-                icon: <TriggerIcon />,
+                icon: () => <TriggerIcon />,
                 label: 'Global Triggers',
                 link: toAppRevision({ id }, 'global-triggers'),
             },
             {
-                icon: <ActionIcon />,
+                icon: () => <ActionIcon />,
                 label: 'Global Actions',
                 link: toAppRevision({ id }, 'global-actions'),
             },
             {
-                icon: <PlatformRevisionIcon />,
+                icon: () => <PlatformRevisionIcon />,
                 label: 'Platform Revisions',
                 link: toAppRevision({ id }, 'app-platform-revisions'),
             },

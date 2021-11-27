@@ -17,13 +17,35 @@ import { useRouter } from 'next/router';
 import { ChildrenAndIdProps } from '../../types/props/ChildrenAndIdProps';
 import { toIngestEndpoint } from '../../utils/NavigationPaths';
 import { analyticsEnabled } from '../../utils/AnalyticsUtils';
-import { SideMenuButtonProps } from '../../components/molecules/SideMenuButton';
+import { PageMenuButtonProps } from '../../components/molecules/SideMenuButton';
 
 const IngestEndpointSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
     const router = useRouter();
     const { id, children } = props;
 
     const { orgUserState, templateInteractions } = useLoggedInState();
+
+    const buildMenuItemsProps = (data: NavIngestEndpoint): PageMenuButtonProps[] => [
+        ...((analyticsEnabled(data.getIngestEndpoint)
+            ? [
+                  {
+                      icon: () => <IngestAnalyticsIcon />,
+                      label: 'Analytics',
+                      link: toIngestEndpoint({ id }, 'analytics'),
+                  },
+              ]
+            : []) as PageMenuButtonProps[]),
+        {
+            icon: () => <RevisionIcon />,
+            label: 'Revisions',
+            link: toIngestEndpoint({ id }, 'revisions'),
+        },
+        {
+            icon: () => <EnvironmentIcon />,
+            label: 'Environments',
+            link: toIngestEndpoint({ id }, 'environments'),
+        },
+    ];
 
     const sectionProps: SectionProps<NavIngestEndpoint> = {
         children,
@@ -54,27 +76,7 @@ const IngestEndpointSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps
                 true,
             ),
         ],
-        buildMenuItemsProps: (_, data) => [
-            ...((analyticsEnabled(data.getIngestEndpoint)
-                ? [
-                      {
-                          icon: <IngestAnalyticsIcon />,
-                          label: 'Analytics',
-                          link: toIngestEndpoint({ id }, 'analytics'),
-                      },
-                  ]
-                : []) as SideMenuButtonProps[]),
-            {
-                icon: <RevisionIcon />,
-                label: 'Revisions',
-                link: toIngestEndpoint({ id }, 'revisions'),
-            },
-            {
-                icon: <EnvironmentIcon />,
-                label: 'Environments',
-                link: toIngestEndpoint({ id }, 'environments'),
-            },
-        ],
+        buildMenuItemsProps,
         extractOrgUserDetails: (data) => data.getIngestEndpoint.data_manager_account.org,
         accountExpireIn: orgUserState?.dataManagerAccount?.trialExpiration ?? undefined,
         accountIsTrial: orgUserState?.dataManagerAccount?.isTrial ?? undefined,

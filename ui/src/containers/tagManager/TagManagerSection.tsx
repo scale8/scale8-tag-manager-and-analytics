@@ -1,19 +1,18 @@
 import { FC } from 'react';
 import { useQuery } from '@apollo/client';
-import {
-    buildOrgButtonProps,
-    buildTagManagerButtonProps,
-} from '../../utils/BreadcrumbButtonsUtils';
+import { buildTagManagerButtonProps } from '../../utils/BreadcrumbButtonsUtils';
 import NavTagManagerQuery from '../../gql/queries/NavTagManagerQuery';
 import { NavTagManager } from '../../gql/generated/NavTagManager';
 import AppIcon from '../../components/atoms/Icons/AppIcon';
 import PlatformIcon from '../../components/atoms/Icons/PlatformIcon';
 import { Section, SectionProps } from '../abstractions/Section';
 import { SectionKey } from '../SectionsDetails';
-import { useLoggedInState } from '../../context/AppContext';
+import { useConfigState, useLoggedInState } from '../../context/AppContext';
 import { useRouter } from 'next/router';
 import { ChildrenAndIdProps } from '../../types/props/ChildrenAndIdProps';
 import { toTagManager } from '../../utils/NavigationPaths';
+import { buildOrgButtons } from '../global/OrgSection';
+import OrgDashboardIcon from '../../components/atoms/Icons/OrgDashboardIcon';
 
 const TagManagerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
     const router = useRouter();
@@ -21,6 +20,7 @@ const TagManagerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) =>
     const { id, children } = props;
 
     const { orgUserState } = useLoggedInState();
+    const { useSignup } = useConfigState();
 
     const sectionProps: SectionProps<NavTagManager> = {
         children,
@@ -29,12 +29,15 @@ const TagManagerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) =>
         queryResult: useQuery<NavTagManager>(NavTagManagerQuery, {
             variables: { id },
         }),
-        buildButtonsProps: (data) => [
-            buildOrgButtonProps(
-                router,
+        buildButtonsProps: (data, orgPermissions) => [
+            ...buildOrgButtons(
                 data.me.orgs,
-                data.getTagManagerAccount.org.id,
-                data.getTagManagerAccount.org.name,
+                data.getTagManagerAccount.org,
+                router,
+                orgPermissions,
+                useSignup,
+                'Services',
+                () => <OrgDashboardIcon />,
             ),
             buildTagManagerButtonProps(
                 router,
@@ -45,12 +48,12 @@ const TagManagerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) =>
         ],
         buildMenuItemsProps: () => [
             {
-                icon: <AppIcon />,
+                icon: () => <AppIcon />,
                 label: 'Applications',
                 link: toTagManager({ id }, 'apps'),
             },
             {
-                icon: <PlatformIcon />,
+                icon: () => <PlatformIcon />,
                 label: 'Platforms',
                 link: toTagManager({ id }, 'platforms'),
             },

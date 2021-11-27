@@ -1,19 +1,19 @@
 import { FC } from 'react';
 import NextLink from 'next/link';
-import { Box, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import { Box, ListItem, ListItemIcon, ListItemText, SvgIconProps } from '@mui/material';
 import { useRouter } from 'next/router';
 
-export type SideMenuButtonProps = {
+export type PageMenuButtonProps = {
     link: string;
     label: string;
-    icon: JSX.Element;
+    icon: FC<SvgIconProps>;
     disabled?: boolean;
 };
 
-const SideMenuButton: FC<SideMenuButtonProps> = (props: SideMenuButtonProps) => {
+const SideMenuButton: FC<PageMenuButtonProps> = (props: PageMenuButtonProps) => {
     const router = useRouter();
 
-    const listItemBackgroundColor = router.asPath === props.link ? '#d8d8d8' : undefined;
+    const listItemBackgroundColor = router.asPath === props.link ? '#d3d5d5' : undefined;
 
     return (
         <>
@@ -25,7 +25,7 @@ const SideMenuButton: FC<SideMenuButtonProps> = (props: SideMenuButtonProps) => 
                     height: 0,
                     borderStyle: 'solid',
                     borderWidth: '15px 15px 0 0',
-                    borderColor: '#fafafa transparent transparent transparent',
+                    borderColor: '#ffffff transparent transparent transparent',
                 }}
             />
             <NextLink href={props.link} passHref>
@@ -49,7 +49,7 @@ const SideMenuButton: FC<SideMenuButtonProps> = (props: SideMenuButtonProps) => 
                             justifyContent: 'center',
                         }}
                     >
-                        {props.icon}
+                        <props.icon sx={{ fontSize: '1rem' }} />
                     </ListItemIcon>
                     <ListItemText
                         sx={{
@@ -69,7 +69,7 @@ const SideMenuButton: FC<SideMenuButtonProps> = (props: SideMenuButtonProps) => 
                     right: 0,
                     borderStyle: 'solid',
                     borderWidth: '0 0 15px 15px',
-                    borderColor: 'transparent transparent #fafafa transparent',
+                    borderColor: 'transparent transparent #ffffff transparent',
                     marginTop: '-15px',
                 }}
             />
