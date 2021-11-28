@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { useQuery } from '@apollo/client';
 import PageOrgQuery from '../gql/queries/PageOrgQuery';
 import { OrgPageData } from '../gql/generated/OrgPageData';
@@ -12,9 +12,7 @@ import {
 import { pageActions } from '../actions/PageActions';
 import { TableRowBase } from '../types/TableRow';
 import { extractBaseColumns } from '../utils/TableRowUtils';
-import { SectionKey } from '../containers/SectionsDetails';
 import { toOrg } from '../utils/NavigationPaths';
-import { useLoggedInState } from '../context/AppContext';
 import { useRouter } from 'next/router';
 import { TablePage, TablePageProps } from '../abstractions/TablePage';
 import { DynamicPageProps } from '../pageLoader/DynamicPageLoader';

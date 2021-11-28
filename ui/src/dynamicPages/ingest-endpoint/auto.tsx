@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { useLoggedInState } from '../../context/AppContext';
 import { DynamicPageProps } from '../../pageLoader/DynamicPageLoader';
-import { ingestRevisionSections } from '../../containers/SectionsDetails';
 import { toIngestEndpoint } from '../../utils/NavigationPaths';
 import Navigate from '../../components/atoms/Next/Navigate';
 
