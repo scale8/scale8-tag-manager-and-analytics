@@ -12,7 +12,6 @@ import { useRouter } from 'next/router';
 import { ChildrenAndIdProps } from '../../types/props/ChildrenAndIdProps';
 import { toTagManager } from '../../utils/NavigationPaths';
 import { buildOrgButtons } from '../global/OrgSection';
-import OrgDashboardIcon from '../../components/atoms/Icons/OrgDashboardIcon';
 
 const TagManagerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
     const router = useRouter();
@@ -37,7 +36,6 @@ const TagManagerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) =>
                 orgPermissions,
                 useSignup,
                 'Services',
-                () => <OrgDashboardIcon />,
             ),
             buildTagManagerButtonProps(
                 router,

@@ -19,7 +19,6 @@ import { ChildrenAndIdProps } from '../../types/props/ChildrenAndIdProps';
 import { toOrg } from '../../utils/NavigationPaths';
 import { PageMenuButtonProps } from '../../components/molecules/SideMenuButton';
 import { CurrentOrgPermissions } from '../../context/OrgUserReducer';
-import { SvgIconProps } from '@mui/material';
 
 export const buildOrgTabsMenu = (
     orgPermissions: CurrentOrgPermissions,
@@ -66,15 +65,18 @@ export const buildOrgButtons = (
     orgPermissions: CurrentOrgPermissions,
     useSignup: boolean,
     forceCurrentEntry?: string,
-    forceCurrentIcon?: FC<SvgIconProps>,
-    isCurrentPage = false,
 ): BreadcrumbButtonProps[] => [
-    buildOrgButtonProps(router, orgs, currentOrg.id, currentOrg.name, isCurrentPage),
+    buildOrgButtonProps(
+        router,
+        orgs,
+        currentOrg.id,
+        currentOrg.name,
+        forceCurrentEntry === undefined,
+    ),
     buildTabButtonProps(
         router,
         buildOrgTabsMenu(orgPermissions, currentOrg.id, useSignup),
         forceCurrentEntry,
-        forceCurrentIcon,
     ),
 ];
 
@@ -93,16 +95,7 @@ const OrgSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
             variables: { id },
         }),
         buildButtonsProps: (data, orgPermissions) => {
-            return buildOrgButtons(
-                data.me.orgs,
-                data.getOrg,
-                router,
-                orgPermissions,
-                useSignup,
-                undefined,
-                undefined,
-                true,
-            );
+            return buildOrgButtons(data.me.orgs, data.getOrg, router, orgPermissions, useSignup);
         },
         buildMenuItemsProps: (_, orgPermissions) => {
             return buildOrgTabsMenu(orgPermissions, id, useSignup);

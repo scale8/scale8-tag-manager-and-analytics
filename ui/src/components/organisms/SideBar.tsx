@@ -64,7 +64,7 @@ const SideBar: FC<SideBarProps> = (props: SideBarProps) => {
                     width: '50px',
                 }}
             >
-                {!props.isAdmin && (
+                {props.isAdmin && (
                     <Box>
                         <Tooltip title="Admin Area" placement="right">
                             <IconButton

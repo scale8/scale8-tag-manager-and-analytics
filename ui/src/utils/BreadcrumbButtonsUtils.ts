@@ -510,7 +510,6 @@ export const buildTabButtonProps = (
     router: NextRouter,
     menuEntries: PageMenuButtonProps[],
     forceCurrentEntry?: string,
-    forceCurrentIcon?: FC<SvgIconProps>,
 ): BreadcrumbButtonProps => {
     const actions: BreadcrumbAction[] = menuEntries
         .filter((_) => !_.disabled)
@@ -522,17 +521,19 @@ export const buildTabButtonProps = (
 
     const routerEntry = menuEntries.find((_) => router.asPath === _.link);
 
+    const forcedCurrentEntry = menuEntries.find((_) => forceCurrentEntry ?? '' === _.label);
+
     return buildButtonPropsFromActions(
         actions,
         '',
-        forceCurrentEntry ?? routerEntry?.label ?? '',
-        true,
+        forcedCurrentEntry?.label ?? routerEntry?.label ?? '',
+        forceCurrentEntry === undefined,
         () => {
-            // Idle
+            if (forcedCurrentEntry !== undefined) router.push(forcedCurrentEntry.link).then();
         },
         'Tab',
         'Change Tab',
         undefined,
-        forceCurrentIcon ?? routerEntry?.icon,
+        forcedCurrentEntry?.icon ?? routerEntry?.icon,
     );
 };
