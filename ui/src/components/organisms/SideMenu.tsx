@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { Box, List } from '@mui/material';
 import { SideMenuButton, PageMenuButtonProps } from '../molecules/SideMenuButton';
 
 type SideMenuProps = {
@@ -11,13 +10,9 @@ const SideMenu: FC<SideMenuProps> = (props: SideMenuProps) => {
 
     return (
         <div className="sideMenu">
-            <Box height={25} />
-            <List disablePadding>
-                {menuItemsProps.map((menuItemProps, key) => (
-                    <SideMenuButton key={key} {...menuItemProps} />
-                ))}
-            </List>
-            <Box height={15} />
+            {menuItemsProps.map((menuItemProps, key) => (
+                <SideMenuButton key={key} {...menuItemProps} />
+            ))}
         </div>
     );
 };

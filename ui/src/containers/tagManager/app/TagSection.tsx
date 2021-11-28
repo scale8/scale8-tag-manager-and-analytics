@@ -25,8 +25,7 @@ const TagSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
 
     const { orgUserState, templateInteractions } = useLoggedInState();
 
-    const { ask, dispatchDialogAction, setRefreshCurrentPage, sectionHistory } =
-        templateInteractions;
+    const { ask, dispatchDialogAction, setRefreshCurrentPage } = templateInteractions;
     const currentOrgPermissions = extractPermissionsFromOrgUser(orgUserState);
 
     const sectionProps: SectionProps<NavTag> = {
@@ -76,7 +75,6 @@ const TagSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
                 setRefreshCurrentPage,
                 ask,
                 data.getTag.revision.locked,
-                sectionHistory,
             ),
         accountExpireIn: orgUserState?.tagManagerAccount?.trialExpiration ?? undefined,
         accountIsTrial: orgUserState?.tagManagerAccount?.isTrial ?? undefined,

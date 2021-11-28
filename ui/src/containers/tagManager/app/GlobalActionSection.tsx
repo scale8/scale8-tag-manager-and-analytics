@@ -25,8 +25,7 @@ const GlobalActionSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) 
 
     const { orgUserState, templateInteractions } = useLoggedInState();
 
-    const { ask, dispatchDialogAction, setRefreshCurrentPage, sectionHistory } =
-        templateInteractions;
+    const { ask, dispatchDialogAction, setRefreshCurrentPage } = templateInteractions;
     const currentOrgPermissions = extractPermissionsFromOrgUser(orgUserState);
 
     const sectionProps: SectionProps<NavGlobalAction> = {
@@ -86,7 +85,6 @@ const GlobalActionSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) 
                 setRefreshCurrentPage,
                 ask,
                 data.getActionGroupDistribution.revision.locked,
-                sectionHistory,
             ),
         accountExpireIn: orgUserState?.tagManagerAccount?.trialExpiration ?? undefined,
         accountIsTrial: orgUserState?.tagManagerAccount?.isTrial ?? undefined,

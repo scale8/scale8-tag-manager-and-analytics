@@ -28,8 +28,7 @@ const AppRevisionSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) =
     const { id, children } = props;
 
     const { orgUserState, templateInteractions } = useLoggedInState();
-    const { ask, dispatchDialogAction, setRefreshCurrentPage, sectionHistory } =
-        templateInteractions;
+    const { ask, dispatchDialogAction, setRefreshCurrentPage } = templateInteractions;
 
     const currentOrgPermissions = extractPermissionsFromOrgUser(orgUserState);
 
@@ -101,7 +100,6 @@ const AppRevisionSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) =
                 setRefreshCurrentPage,
                 ask,
                 data.getRevision.locked,
-                sectionHistory,
             ),
         accountExpireIn: orgUserState?.tagManagerAccount?.trialExpiration ?? undefined,
         accountIsTrial: orgUserState?.tagManagerAccount?.isTrial ?? undefined,

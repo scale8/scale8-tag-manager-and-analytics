@@ -58,12 +58,8 @@ const Section = <Q extends { [key: string]: any }>(props: SectionProps<Q>): Reac
 
     const { templateInteractions, orgUserState, dispatchOrgUserAction, teleport } =
         useLoggedInState();
-    const {
-        setSnackbarError,
-        refreshCurrentSection,
-        setRefreshCurrentSection,
-        dispatchSectionAction,
-    } = templateInteractions;
+    const { setSnackbarError, refreshCurrentSection, setRefreshCurrentSection, setSection } =
+        templateInteractions;
 
     const { loading, error, data } = queryResult;
 
@@ -77,10 +73,7 @@ const Section = <Q extends { [key: string]: any }>(props: SectionProps<Q>): Reac
     };
 
     useEffect(() => {
-        dispatchSectionAction({
-            type: 'section',
-            payload: sectionKey,
-        });
+        setSection(sectionKey);
     }, [sectionKey]);
 
     useEffect(() => {

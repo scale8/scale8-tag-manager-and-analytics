@@ -25,8 +25,7 @@ const GlobalTriggerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps)
 
     const { orgUserState, templateInteractions } = useLoggedInState();
 
-    const { ask, dispatchDialogAction, setRefreshCurrentPage, sectionHistory } =
-        templateInteractions;
+    const { ask, dispatchDialogAction, setRefreshCurrentPage } = templateInteractions;
     const currentOrgPermissions = extractPermissionsFromOrgUser(orgUserState);
 
     const sectionProps: SectionProps<NavGlobalTrigger> = {
@@ -84,7 +83,6 @@ const GlobalTriggerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps)
                 setRefreshCurrentPage,
                 ask,
                 data.getTrigger.revision.locked,
-                sectionHistory,
             ),
         accountExpireIn: orgUserState?.tagManagerAccount?.trialExpiration ?? undefined,
         accountIsTrial: orgUserState?.tagManagerAccount?.isTrial ?? undefined,

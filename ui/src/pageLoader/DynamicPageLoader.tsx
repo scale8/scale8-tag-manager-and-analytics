@@ -230,14 +230,9 @@ const DynamicPageLoader: FC<PageLoaderProps> = (props: PageLoaderProps) => {
 
     const id = paramsId ?? '';
 
-    const { templateInteractions, teleport } = useLoggedInState();
-    const { dispatchSectionAction } = templateInteractions;
+    const { teleport } = useLoggedInState();
 
     useEffect(() => {
-        dispatchSectionAction({
-            type: 'page',
-            payload: page,
-        });
         if (dynamicPagesSections.root.includes(page)) {
             teleport('breadcrumb', <></>);
             teleport('side', <></>);

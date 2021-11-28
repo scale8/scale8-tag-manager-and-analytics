@@ -85,7 +85,21 @@ const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
                 minHeight: '100vh',
             }}
         >
-            <SideBar {...props.sideBarProps} />
+            <SideBar {...props.sideBarProps}>
+                <Box
+                    flexShrink={0}
+                    sx={{
+                        '& .sideMenu': {
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            width: '50px',
+                        },
+                    }}
+                >
+                    {props.sideMenu}
+                </Box>
+            </SideBar>
             <Box
                 sx={{
                     marginLeft: '50px',
@@ -141,32 +155,14 @@ const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
                             height="100%"
                             position="absolute"
                             width="100%"
-                            overflow="hidden"
-                            display="flex"
+                            sx={{
+                                overflowX: 'auto',
+                            }}
+                            bgcolor="background.paper"
+                            flexShrink={1}
+                            flexGrow={1}
                         >
-                            <Box
-                                flexShrink={0}
-                                color="grey.800"
-                                sx={{
-                                    '& .sideMenu': {
-                                        margin: (theme) => theme.spacing(0, 2),
-                                        width: '190px',
-                                    },
-                                }}
-                            >
-                                {props.sideMenu}
-                            </Box>
-                            <Box
-                                flexShrink={1}
-                                flexGrow={1}
-                                sx={{
-                                    height: '100%',
-                                    overflowX: 'auto',
-                                }}
-                                bgcolor="background.paper"
-                            >
-                                {props.children}
-                            </Box>
+                            {props.children}
                         </Box>
                     </Box>
                 </Box>

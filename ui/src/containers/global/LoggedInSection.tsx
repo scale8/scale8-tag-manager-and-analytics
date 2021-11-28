@@ -10,7 +10,6 @@ import { CancelConfirmDialogProps } from '../../types/props/CancelConfirmDialogP
 import { pageActions } from '../../actions/PageActions';
 import { dialogReducer } from '../../context/DialogReducer';
 import { orgUserReducer } from '../../context/OrgUserReducer';
-import { sectionHistoryReducer } from '../../context/SectionHistoryReducer';
 import GithubCheck from '../../dialogPages/global/GithubCheck';
 import { ChildrenOnlyProps } from '../../types/props/ChildrenOnlyProps';
 import Navigate from '../../components/atoms/Next/Navigate';
@@ -18,6 +17,7 @@ import { dialogInit } from '../../context/LoggedInState';
 import { useAppContext } from '../../context/AppContext';
 import Loader from '../../components/organisms/Loader';
 import { configStateFromData } from '../../context/ConfigState';
+import { SectionKey } from '../SectionsDetails';
 
 export type UserSelectorProps = {
     loading: boolean;
@@ -58,10 +58,8 @@ const LoggedInSection: FC<ChildrenOnlyProps> = (props: ChildrenOnlyProps) => {
 
     const [orgUserState, dispatchOrgUserAction] = useReducer(orgUserReducer, null);
 
-    const [sectionHistory, dispatchSectionAction] = useReducer(sectionHistoryReducer, {
-        current: undefined,
-        previous: undefined,
-    });
+    const [section, setSection] = useState<symbol>(SectionKey.loggedOut);
+
     const [sectionHasAnalytics, setSectionHasAnalytics] = useState(false);
 
     const [gates, dispatchGatesAction] = useReducer(
@@ -96,8 +94,8 @@ const LoggedInSection: FC<ChildrenOnlyProps> = (props: ChildrenOnlyProps) => {
                     setRefreshCurrentPage,
                     refreshCurrentSection,
                     setRefreshCurrentSection,
-                    sectionHistory,
-                    dispatchSectionAction,
+                    section,
+                    setSection,
                     sectionHasAnalytics,
                     setSectionHasAnalytics,
                 },
@@ -121,7 +119,7 @@ const LoggedInSection: FC<ChildrenOnlyProps> = (props: ChildrenOnlyProps) => {
         refreshCurrentSection,
         snackbarError,
         orgUserState,
-        sectionHistory,
+        section,
     ]);
 
     if (error || logOut) {
