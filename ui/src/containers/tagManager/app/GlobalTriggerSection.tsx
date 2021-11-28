@@ -25,7 +25,8 @@ const GlobalTriggerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps)
 
     const { orgUserState, templateInteractions } = useLoggedInState();
 
-    const { ask, dispatchDialogAction, setRefreshCurrentPage } = templateInteractions;
+    const { ask, dispatchDialogAction, setRefreshCurrentPage } =
+        templateInteractions;
     const currentOrgPermissions = extractPermissionsFromOrgUser(orgUserState);
 
     const sectionProps: SectionProps<NavGlobalTrigger> = {
