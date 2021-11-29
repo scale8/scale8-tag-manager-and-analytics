@@ -8,18 +8,88 @@ import ActionIcon from '../../../components/atoms/Icons/ActionIcon';
 import DataContainerIcon from '../../../components/atoms/Icons/DataContainerIcon';
 import EventIcon from '../../../components/atoms/Icons/EventIcon';
 import {
-    buildCustomPlatformButtonProps,
-    buildOrgButtonProps,
+    BreadcrumbButtonProps,
     buildPlatformRevisionButtonProps,
-    buildTagManagerButtonProps,
+    buildTabButtonProps,
 } from '../../../utils/BreadcrumbButtonsUtils';
-import { Section, SectionProps } from '../../abstractions/Section';
+import { Section, SectionItem, SectionProps } from '../../abstractions/Section';
 import { PlatformType } from '../../../gql/generated/globalTypes';
 import { SectionKey } from '../../SectionsDetails';
-import { useLoggedInState } from '../../../context/AppContext';
-import { useRouter } from 'next/router';
+import { useConfigState, useLoggedInState } from '../../../context/AppContext';
+import { NextRouter, useRouter } from 'next/router';
 import { ChildrenAndIdProps } from '../../../types/props/ChildrenAndIdProps';
 import { toCustomPlatformRevision } from '../../../utils/NavigationPaths';
+import { PageMenuButtonProps } from '../../../components/molecules/SideMenuButton';
+import { CurrentOrgPermissions } from '../../../context/OrgUserReducer';
+import { buildPlatformButtons } from './PlatformSection';
+
+export const buildCustomPlatformRevisionTabsMenu = (id: string): PageMenuButtonProps[] => [
+    {
+        icon: () => <SettingIcon />,
+        label: 'Settings',
+        link: toCustomPlatformRevision({ id }, 'settings'),
+    },
+    {
+        icon: () => <AssetIcon />,
+        label: 'Assets',
+        link: toCustomPlatformRevision({ id }, 'assets'),
+    },
+    {
+        icon: () => <ActionIcon />,
+        label: 'Actions',
+        link: toCustomPlatformRevision({ id }, 'actions'),
+    },
+    {
+        icon: () => <DataContainerIcon />,
+        label: 'Data Containers',
+        link: toCustomPlatformRevision({ id }, 'data-containers'),
+    },
+    {
+        icon: () => <EventIcon />,
+        label: 'Events',
+        link: toCustomPlatformRevision({ id }, 'events'),
+    },
+];
+
+export const buildCustomPlatformRevisionButtons = (
+    orgs: SectionItem[],
+    currentOrg: SectionItem,
+    tagManagerId: string,
+    dataManagerId: string,
+    platforms: SectionItem[],
+    currentPlatform: SectionItem,
+    platformsRevisions: SectionItem[],
+    currentPlatformRevision: SectionItem,
+    router: NextRouter,
+    orgPermissions: CurrentOrgPermissions,
+    useSignup: boolean,
+    forceCurrentEntry?: string,
+): BreadcrumbButtonProps[] => [
+    ...buildPlatformButtons(
+        PlatformType.CUSTOM,
+        orgs,
+        currentOrg,
+        tagManagerId,
+        dataManagerId,
+        platforms,
+        currentPlatform,
+        router,
+        orgPermissions,
+        useSignup,
+    ),
+    buildPlatformRevisionButtonProps(
+        router,
+        platformsRevisions,
+        currentPlatformRevision.id,
+        currentPlatformRevision.name,
+        forceCurrentEntry === undefined,
+    ),
+    buildTabButtonProps(
+        router,
+        buildCustomPlatformRevisionTabsMenu(currentPlatformRevision.id),
+        forceCurrentEntry,
+    ),
+];
 
 const CustomPlatformRevisionSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
     const router = useRouter();
@@ -27,6 +97,7 @@ const CustomPlatformRevisionSection: FC<ChildrenAndIdProps> = (props: ChildrenAn
     const { id, children } = props;
 
     const { orgUserState } = useLoggedInState();
+    const { useSignup } = useConfigState();
 
     const sectionProps: SectionProps<NavPlatformRevision> = {
         children,
@@ -34,62 +105,25 @@ const CustomPlatformRevisionSection: FC<ChildrenAndIdProps> = (props: ChildrenAn
         queryResult: useQuery<NavPlatformRevision>(NavPlatformRevisionQuery, {
             variables: { id },
         }),
-        buildButtonsProps: (data) => [
-            buildOrgButtonProps(
-                router,
+        buildButtonsProps: (data, orgPermissions) => {
+            return buildCustomPlatformRevisionButtons(
                 data.me.orgs,
-                data.getPlatformRevision.platform.tag_manager_account.org.id,
-                data.getPlatformRevision.platform.tag_manager_account.org.name,
-            ),
-            buildTagManagerButtonProps(
-                router,
+                data.getPlatformRevision.platform.tag_manager_account.org,
                 data.getPlatformRevision.platform.tag_manager_account.id,
                 data.getPlatformRevision.platform.tag_manager_account.org.data_manager_account
                     ?.id ?? '',
-            ),
-            buildCustomPlatformButtonProps(
-                router,
                 data.getPlatformRevision.platform.tag_manager_account.platforms.filter(
                     (_) => _.type === PlatformType.CUSTOM,
                 ),
-                data.getPlatformRevision.platform.id,
-                data.getPlatformRevision.platform.name,
-            ),
-            buildPlatformRevisionButtonProps(
-                router,
+                data.getPlatformRevision.platform,
                 data.getPlatformRevision.platform.platform_revisions,
-                id,
-                data.getPlatformRevision.name,
-                true,
-            ),
-        ],
-        buildMenuItemsProps: () => [
-            {
-                icon: () => <SettingIcon />,
-                label: 'Settings',
-                link: toCustomPlatformRevision({ id }, 'settings'),
-            },
-            {
-                icon: () => <AssetIcon />,
-                label: 'Assets',
-                link: toCustomPlatformRevision({ id }, 'assets'),
-            },
-            {
-                icon: () => <ActionIcon />,
-                label: 'Actions',
-                link: toCustomPlatformRevision({ id }, 'actions'),
-            },
-            {
-                icon: () => <DataContainerIcon />,
-                label: 'Data Containers',
-                link: toCustomPlatformRevision({ id }, 'data-containers'),
-            },
-            {
-                icon: () => <EventIcon />,
-                label: 'Events',
-                link: toCustomPlatformRevision({ id }, 'events'),
-            },
-        ],
+                data.getPlatformRevision,
+                router,
+                orgPermissions,
+                useSignup,
+            );
+        },
+        buildMenuItemsProps: () => buildCustomPlatformRevisionTabsMenu(id),
         extractOrgUserDetails: (data) => data.getPlatformRevision.platform.tag_manager_account.org,
         accountExpireIn: orgUserState?.tagManagerAccount?.trialExpiration ?? undefined,
         accountIsTrial: orgUserState?.tagManagerAccount?.isTrial ?? undefined,

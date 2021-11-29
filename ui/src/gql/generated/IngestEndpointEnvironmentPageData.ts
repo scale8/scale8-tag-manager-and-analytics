@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 import { IngestQueryOptions, StorageProvider } from "./globalTypes";
@@ -66,7 +65,9 @@ export interface IngestEndpointEnvironmentPageData_getIngestEndpoint_ingest_endp
    */
   install_domain: string;
   /**
-   * A hint of the credentials currently in use by the `IngestEndpointEnvironment`. For security reasons we don't enable to full retrival of this information via the API. It does not persist in our database or servers and remains in our vault.
+   * A hint of the credentials currently in use by the `IngestEndpointEnvironment`.
+   * For security reasons we don't enable to full retrival of this information via
+   * the API. It does not persist in our database or servers and remains in our vault.
    */
   config_hint: string;
   /**

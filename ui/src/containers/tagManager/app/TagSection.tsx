@@ -2,21 +2,16 @@ import { FC } from 'react';
 import { useQuery } from '@apollo/client';
 import NavTagQuery from '../../../gql/queries/NavTagQuery';
 import { NavTag } from '../../../gql/generated/NavTag';
-import {
-    buildAppButtonProps,
-    buildAppRevisionButtonProps,
-    buildOrgButtonProps,
-    buildTagButtonProps,
-    buildTagManagerButtonProps,
-} from '../../../utils/BreadcrumbButtonsUtils';
+import { buildTagButtonProps } from '../../../utils/BreadcrumbButtonsUtils';
 import { Section, SectionProps } from '../../abstractions/Section';
 import { buildAppRevisionBreadcrumbActions } from '../../../utils/BuildAppRevisionBreadcrumbActions';
 import { extractPermissionsFromOrgUser } from '../../../context/OrgUserReducer';
 import { SectionKey } from '../../SectionsDetails';
-import { useLoggedInState } from '../../../context/AppContext';
+import { useConfigState, useLoggedInState } from '../../../context/AppContext';
 import { useRouter } from 'next/router';
 import { ChildrenAndIdProps } from '../../../types/props/ChildrenAndIdProps';
 import { analyticsEnabled } from '../../../utils/AnalyticsUtils';
+import { buildAppRevisionButtons } from './AppRevisionSection';
 
 const TagSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
     const router = useRouter();
@@ -24,6 +19,7 @@ const TagSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
     const { id, children } = props;
 
     const { orgUserState, templateInteractions } = useLoggedInState();
+    const { useSignup } = useConfigState();
 
     const { ask, dispatchDialogAction, setRefreshCurrentPage } = templateInteractions;
     const currentOrgPermissions = extractPermissionsFromOrgUser(orgUserState);
@@ -37,29 +33,22 @@ const TagSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
         initContext: (data) => {
             templateInteractions.setSectionHasAnalytics(analyticsEnabled(data.getTag.revision.app));
         },
-        buildButtonsProps: (data) => [
-            buildOrgButtonProps(
-                router,
+        buildButtonsProps: (data, orgPermissions) => [
+            ...buildAppRevisionButtons(
                 data.me.orgs,
-                data.getTag.revision.app.tag_manager_account.org.id,
-                data.getTag.revision.app.tag_manager_account.org.name,
-            ),
-            buildTagManagerButtonProps(
-                router,
+                data.getTag.revision.app.tag_manager_account.org,
                 data.getTag.revision.app.tag_manager_account.id,
                 data.getTag.revision.app.tag_manager_account.org.data_manager_account?.id ?? '',
-            ),
-            buildAppButtonProps(
-                router,
                 data.getTag.revision.app.tag_manager_account.apps,
-                data.getTag.revision.app.id,
-                data.getTag.revision.app.name,
-            ),
-            buildAppRevisionButtonProps(
-                router,
+                data.getTag.revision.app,
                 data.getTag.revision.app.revisions,
-                data.getTag.revision.id,
-                data.getTag.revision.name,
+                data.getTag.revision,
+                analyticsEnabled(data.getTag.revision.app),
+                data.getTag.revision.app.error_tracking_enabled,
+                router,
+                orgPermissions,
+                useSignup,
+                'Tags',
             ),
             buildTagButtonProps(router, data.getTag.revision.tags, id, data.getTag.name, true),
         ],

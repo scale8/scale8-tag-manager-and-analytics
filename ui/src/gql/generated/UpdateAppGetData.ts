@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 import { AppType, StorageProvider } from "./globalTypes";
@@ -24,7 +23,8 @@ export interface UpdateAppGetData_getApp {
    */
   domain: string;
   /**
-   * The `AppType` associated with this App. Please note that currently on WEB is supported. MOBILE_APP will be introduced soon!
+   * The `AppType` associated with this App. Please note that currently on WEB is
+   * supported. MOBILE_APP will be introduced soon!
    */
   type: AppType;
   /**

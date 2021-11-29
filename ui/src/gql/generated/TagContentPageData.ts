@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 import { RevisionEntityParentType, TypeIcon, ActionGroupDistributionType } from "./globalTypes";
@@ -306,7 +305,8 @@ export interface TagContentPageData_getTag_rule_groups_rules {
    */
   trigger: TagContentPageData_getTag_rule_groups_rules_trigger;
   /**
-   * All set of `ActionGroupDistribution`'s attached to this `Rule` and will be triggered once `Event` and `ConditionRule`'s are considered
+   * All set of `ActionGroupDistribution`'s attached to this `Rule` and will be
+   * triggered once `Event` and `ConditionRule`'s are considered
    */
   action_groups_distributions: TagContentPageData_getTag_rule_groups_rules_action_groups_distributions[];
   /**

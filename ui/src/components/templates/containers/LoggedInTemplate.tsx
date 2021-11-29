@@ -1,6 +1,6 @@
 import { FC, MouseEvent, SyntheticEvent } from 'react';
 import SideBar from '../../organisms/SideBar';
-import { Box, lighten, Snackbar } from '@mui/material';
+import { Box, Snackbar } from '@mui/material';
 import CancelConfirmDialog from '../../organisms/CancelConfirmDialog';
 import { MainDrawer } from '../../organisms/MainDrawer';
 import { DialogBaseProps, DialogPageProps } from '../../../types/DialogTypes';
@@ -117,11 +117,7 @@ const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
                         height: 0,
                         borderStyle: 'solid',
                         borderWidth: '15px 15px 0 0',
-                        borderColor: (theme) =>
-                            `${lighten(
-                                theme.palette.primary.main,
-                                0.9,
-                            )} transparent transparent transparent`,
+                        borderColor: '#e0e0e0 transparent transparent transparent',
                     }}
                 />
                 <Box

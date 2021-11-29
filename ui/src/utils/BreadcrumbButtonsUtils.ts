@@ -532,7 +532,7 @@ export const buildTabButtonProps = (
     return buildButtonPropsFromActions(
         actions,
         '',
-        forcedCurrentEntry?.label ?? routerEntry?.label ?? '',
+        forcedCurrentEntry?.label ?? routerEntry?.label ?? '...',
         forceCurrentEntry === undefined,
         () => {
             if (forcedCurrentEntry !== undefined) router.push(forcedCurrentEntry.link).then();

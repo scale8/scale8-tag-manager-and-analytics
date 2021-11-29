@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 import { PlatformType } from "./globalTypes";
@@ -28,7 +27,9 @@ export interface PlatformPageData_getTagManagerAccount_platforms {
    */
   name: string;
   /**
-   * `PlatformRevision`s the are linked to this `Platform`. Please note that if the `Platform` has been made public and `PlatformRevision` has been published, it will be avalible to ***any*** Scale8 Tag Manager User to install in their `App`
+   * `PlatformRevision`s the are linked to this `Platform`. Please note that if the
+   * `Platform` has been made public and `PlatformRevision` has been published, it
+   * will be avalible to ***any*** Scale8 Tag Manager User to install in their `App`
    */
   platform_revisions: PlatformPageData_getTagManagerAccount_platforms_platform_revisions[];
   /**

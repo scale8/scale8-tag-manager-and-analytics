@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 import { StorageProvider } from "./globalTypes";
@@ -109,7 +108,8 @@ export interface NavTag_getTag_revision_app_tag_manager_account_org_me {
    */
   permissions: NavTag_getTag_revision_app_tag_manager_account_org_me_permissions;
   /**
-   * If the `OrgUser` currently has ownership of this `Org`. Ownership is required to manage billing, upgrades, downgrades and termination of an Org.
+   * If the `OrgUser` currently has ownership of this `Org`. Ownership is required
+   * to manage billing, upgrades, downgrades and termination of an Org.
    */
   owner: boolean;
   can_create_tag_manager_trial: boolean;
@@ -127,11 +127,14 @@ export interface NavTag_getTag_revision_app_tag_manager_account_org {
    */
   name: string;
   /**
-   * A `TagManagerAccount` associated with this `Org`. A Scale8 Tag Manager account might not exist yet unless a trial has been requested or product has been subscribed to.
+   * A `TagManagerAccount` associated with this `Org`. A Scale8 Tag Manager account
+   * might not exist yet unless a trial has been requested or product has been subscribed to.
    */
   tag_manager_account: NavTag_getTag_revision_app_tag_manager_account_org_tag_manager_account | null;
   /**
-   * A `DataManagerAccount` associated with this `Org`. A Scale8 Data Manager account might not exist yet unless a trial has been requested or product has been subscribed to.
+   * A `DataManagerAccount` associated with this `Org`. A Scale8 Data Manager
+   * account might not exist yet unless a trial has been requested or product has
+   * been subscribed to.
    */
   data_manager_account: NavTag_getTag_revision_app_tag_manager_account_org_data_manager_account | null;
   /**
@@ -161,6 +164,10 @@ export interface NavTag_getTag_revision_app {
    * Whether the analytics on the `App` is enabled
    */
   analytics_enabled: boolean;
+  /**
+   * Whether the error tracking on the `App` is enabled
+   */
+  error_tracking_enabled: boolean;
   /**
    * The storage provider used by the `App` to track data
    */

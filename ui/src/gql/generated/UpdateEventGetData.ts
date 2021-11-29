@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 import { TypeIcon, VarType, InputType, ValidationType } from "./globalTypes";
@@ -120,7 +119,8 @@ export interface UpdateEventGetData_getTrigger_revision_app_platform_revisions_p
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -164,7 +164,8 @@ export interface UpdateEventGetData_getTrigger_revision_app_platform_revisions_p
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -180,7 +181,8 @@ export interface UpdateEventGetData_getTrigger_revision_app_platform_revisions_p
    */
   default_value: UpdateEventGetData_getTrigger_revision_app_platform_revisions_platform_revision_platform_events_platform_data_maps_child_platform_data_maps_default_value | null;
   /**
-   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These contain nested `PlatformDataMap` in a document or array document structure respectivly
+   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These
+   * contain nested `PlatformDataMap` in a document or array document structure respectivly
    */
   child_platform_data_maps: UpdateEventGetData_getTrigger_revision_app_platform_revisions_platform_revision_platform_events_platform_data_maps_child_platform_data_maps_child_platform_data_maps[];
 }
@@ -212,7 +214,8 @@ export interface UpdateEventGetData_getTrigger_revision_app_platform_revisions_p
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -228,7 +231,8 @@ export interface UpdateEventGetData_getTrigger_revision_app_platform_revisions_p
    */
   default_value: UpdateEventGetData_getTrigger_revision_app_platform_revisions_platform_revision_platform_events_platform_data_maps_default_value | null;
   /**
-   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These contain nested `PlatformDataMap` in a document or array document structure respectivly
+   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These
+   * contain nested `PlatformDataMap` in a document or array document structure respectivly
    */
   child_platform_data_maps: UpdateEventGetData_getTrigger_revision_app_platform_revisions_platform_revision_platform_events_platform_data_maps_child_platform_data_maps[];
 }
@@ -252,7 +256,8 @@ export interface UpdateEventGetData_getTrigger_revision_app_platform_revisions_p
    */
   description: string;
   /**
-   * List of `PlatformDataMap`s that create a document style key => value map. This can be directly accessed by the event when called.
+   * List of `PlatformDataMap`s that create a document style key => value map. This
+   * can be directly accessed by the event when called.
    */
   platform_data_maps: UpdateEventGetData_getTrigger_revision_app_platform_revisions_platform_revision_platform_events_platform_data_maps[];
 }
@@ -428,7 +433,8 @@ export interface UpdateEventGetData_getEvent_event_PlatformEvent_platform_data_m
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -472,7 +478,8 @@ export interface UpdateEventGetData_getEvent_event_PlatformEvent_platform_data_m
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -488,7 +495,8 @@ export interface UpdateEventGetData_getEvent_event_PlatformEvent_platform_data_m
    */
   default_value: UpdateEventGetData_getEvent_event_PlatformEvent_platform_data_maps_child_platform_data_maps_default_value | null;
   /**
-   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These contain nested `PlatformDataMap` in a document or array document structure respectivly
+   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These
+   * contain nested `PlatformDataMap` in a document or array document structure respectivly
    */
   child_platform_data_maps: UpdateEventGetData_getEvent_event_PlatformEvent_platform_data_maps_child_platform_data_maps_child_platform_data_maps[];
 }
@@ -520,7 +528,8 @@ export interface UpdateEventGetData_getEvent_event_PlatformEvent_platform_data_m
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -536,7 +545,8 @@ export interface UpdateEventGetData_getEvent_event_PlatformEvent_platform_data_m
    */
   default_value: UpdateEventGetData_getEvent_event_PlatformEvent_platform_data_maps_default_value | null;
   /**
-   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These contain nested `PlatformDataMap` in a document or array document structure respectivly
+   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These
+   * contain nested `PlatformDataMap` in a document or array document structure respectivly
    */
   child_platform_data_maps: UpdateEventGetData_getEvent_event_PlatformEvent_platform_data_maps_child_platform_data_maps[];
 }
@@ -560,7 +570,8 @@ export interface UpdateEventGetData_getEvent_event_PlatformEvent {
    */
   platform: UpdateEventGetData_getEvent_event_PlatformEvent_platform;
   /**
-   * List of `PlatformDataMap`s that create a document style key => value map. This can be directly accessed by the event when called.
+   * List of `PlatformDataMap`s that create a document style key => value map. This
+   * can be directly accessed by the event when called.
    */
   platform_data_maps: UpdateEventGetData_getEvent_event_PlatformEvent_platform_data_maps[];
 }
@@ -908,7 +919,9 @@ export interface UpdateEventGetData_getEvent {
    */
   event: UpdateEventGetData_getEvent_event;
   /**
-   * The period after which the event state should be cleared. -1 = Inactive, 0 = Immidately, > 0, after some time specified in milliseconds. This useful for events that need to be re-triggered within some period of time to pass the check stage.
+   * The period after which the event state should be cleared. -1 = Inactive, 0 =
+   * Immidately, > 0, after some time specified in milliseconds. This useful for
+   * events that need to be re-triggered within some period of time to pass the check stage.
    */
   clear_state_ms: number;
   /**

@@ -1,22 +1,17 @@
 import { FC } from 'react';
 import { useQuery } from '@apollo/client';
-import {
-    buildAppButtonProps,
-    buildAppRevisionButtonProps,
-    buildGlobalActionButtonProps,
-    buildOrgButtonProps,
-    buildTagManagerButtonProps,
-} from '../../../utils/BreadcrumbButtonsUtils';
+import { buildGlobalActionButtonProps } from '../../../utils/BreadcrumbButtonsUtils';
 import { Section, SectionProps } from '../../abstractions/Section';
 import NavGlobalActionQuery from '../../../gql/queries/NavGlobalActionQuery';
 import { NavGlobalAction } from '../../../gql/generated/NavGlobalAction';
 import { buildAppRevisionBreadcrumbActions } from '../../../utils/BuildAppRevisionBreadcrumbActions';
 import { extractPermissionsFromOrgUser } from '../../../context/OrgUserReducer';
 import { SectionKey } from '../../SectionsDetails';
-import { useLoggedInState } from '../../../context/AppContext';
+import { useConfigState, useLoggedInState } from '../../../context/AppContext';
 import { useRouter } from 'next/router';
 import { ChildrenAndIdProps } from '../../../types/props/ChildrenAndIdProps';
 import { analyticsEnabled } from '../../../utils/AnalyticsUtils';
+import { buildAppRevisionButtons } from './AppRevisionSection';
 
 const GlobalActionSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
     const router = useRouter();
@@ -24,6 +19,7 @@ const GlobalActionSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) 
     const { id, children } = props;
 
     const { orgUserState, templateInteractions } = useLoggedInState();
+    const { useSignup } = useConfigState();
 
     const { ask, dispatchDialogAction, setRefreshCurrentPage } = templateInteractions;
     const currentOrgPermissions = extractPermissionsFromOrgUser(orgUserState);
@@ -39,30 +35,23 @@ const GlobalActionSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) 
                 analyticsEnabled(data.getActionGroupDistribution.revision.app),
             );
         },
-        buildButtonsProps: (data) => [
-            buildOrgButtonProps(
-                router,
+        buildButtonsProps: (data, orgPermissions) => [
+            ...buildAppRevisionButtons(
                 data.me.orgs,
-                data.getActionGroupDistribution.revision.app.tag_manager_account.org.id,
-                data.getActionGroupDistribution.revision.app.tag_manager_account.org.name,
-            ),
-            buildTagManagerButtonProps(
-                router,
+                data.getActionGroupDistribution.revision.app.tag_manager_account.org,
                 data.getActionGroupDistribution.revision.app.tag_manager_account.id,
                 data.getActionGroupDistribution.revision.app.tag_manager_account.org
                     .data_manager_account?.id ?? '',
-            ),
-            buildAppButtonProps(
-                router,
                 data.getActionGroupDistribution.revision.app.tag_manager_account.apps,
-                data.getActionGroupDistribution.revision.app.id,
-                data.getActionGroupDistribution.revision.app.name,
-            ),
-            buildAppRevisionButtonProps(
-                router,
+                data.getActionGroupDistribution.revision.app,
                 data.getActionGroupDistribution.revision.app.revisions,
-                data.getActionGroupDistribution.revision.id,
-                data.getActionGroupDistribution.revision.name,
+                data.getActionGroupDistribution.revision,
+                analyticsEnabled(data.getActionGroupDistribution.revision.app),
+                data.getActionGroupDistribution.revision.app.error_tracking_enabled,
+                router,
+                orgPermissions,
+                useSignup,
+                'Global Actions',
             ),
             buildGlobalActionButtonProps(
                 router,

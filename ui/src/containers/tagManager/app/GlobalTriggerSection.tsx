@@ -2,21 +2,16 @@ import { FC } from 'react';
 import { useQuery } from '@apollo/client';
 import NavGlobalTriggerQuery from '../../../gql/queries/NavGlobalTriggerQuery';
 import { NavGlobalTrigger } from '../../../gql/generated/NavGlobalTrigger';
-import {
-    buildAppButtonProps,
-    buildAppRevisionButtonProps,
-    buildGlobalTriggerButtonProps,
-    buildOrgButtonProps,
-    buildTagManagerButtonProps,
-} from '../../../utils/BreadcrumbButtonsUtils';
+import { buildGlobalTriggerButtonProps } from '../../../utils/BreadcrumbButtonsUtils';
 import { Section, SectionProps } from '../../abstractions/Section';
 import { buildAppRevisionBreadcrumbActions } from '../../../utils/BuildAppRevisionBreadcrumbActions';
 import { extractPermissionsFromOrgUser } from '../../../context/OrgUserReducer';
 import { SectionKey } from '../../SectionsDetails';
-import { useLoggedInState } from '../../../context/AppContext';
+import { useConfigState, useLoggedInState } from '../../../context/AppContext';
 import { useRouter } from 'next/router';
 import { ChildrenAndIdProps } from '../../../types/props/ChildrenAndIdProps';
 import { analyticsEnabled } from '../../../utils/AnalyticsUtils';
+import { buildAppRevisionButtons } from './AppRevisionSection';
 
 const GlobalTriggerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
     const router = useRouter();
@@ -24,6 +19,7 @@ const GlobalTriggerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps)
     const { id, children } = props;
 
     const { orgUserState, templateInteractions } = useLoggedInState();
+    const { useSignup } = useConfigState();
 
     const { ask, dispatchDialogAction, setRefreshCurrentPage } = templateInteractions;
     const currentOrgPermissions = extractPermissionsFromOrgUser(orgUserState);
@@ -39,29 +35,22 @@ const GlobalTriggerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps)
                 analyticsEnabled(data.getTrigger.revision.app),
             );
         },
-        buildButtonsProps: (data) => [
-            buildOrgButtonProps(
-                router,
+        buildButtonsProps: (data, orgPermissions) => [
+            ...buildAppRevisionButtons(
                 data.me.orgs,
-                data.getTrigger.revision.app.tag_manager_account.org.id,
-                data.getTrigger.revision.app.tag_manager_account.org.name,
-            ),
-            buildTagManagerButtonProps(
-                router,
+                data.getTrigger.revision.app.tag_manager_account.org,
                 data.getTrigger.revision.app.tag_manager_account.id,
                 data.getTrigger.revision.app.tag_manager_account.org.data_manager_account?.id ?? '',
-            ),
-            buildAppButtonProps(
-                router,
                 data.getTrigger.revision.app.tag_manager_account.apps,
-                data.getTrigger.revision.app.id,
-                data.getTrigger.revision.app.name,
-            ),
-            buildAppRevisionButtonProps(
-                router,
+                data.getTrigger.revision.app,
                 data.getTrigger.revision.app.revisions,
-                data.getTrigger.revision.id,
-                data.getTrigger.revision.name,
+                data.getTrigger.revision,
+                analyticsEnabled(data.getTrigger.revision.app),
+                data.getTrigger.revision.app.error_tracking_enabled,
+                router,
+                orgPermissions,
+                useSignup,
+                'Global Triggers',
             ),
             buildGlobalTriggerButtonProps(
                 router,

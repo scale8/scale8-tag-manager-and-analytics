@@ -60,7 +60,7 @@
         "eslint-plugin-prettier": "^4.0.0",
         "eslint-plugin-unused-imports": "^1.1.5",
         "file-loader": "^6.2.0",
-        "graphql": "^15.6.1",
+        "graphql": "^14.0.2",
         "highlight.js": "^11.2.0",
         "identity-obj-proxy": "^3.0.0",
         "jest": "^27.3.1",

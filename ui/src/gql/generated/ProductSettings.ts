@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 // ====================================================
@@ -59,7 +58,8 @@ export interface ProductSettings_getOrg_me {
    */
   id: string;
   /**
-   * If the `OrgUser` currently has ownership of this `Org`. Ownership is required to manage billing, upgrades, downgrades and termination of an Org.
+   * If the `OrgUser` currently has ownership of this `Org`. Ownership is required
+   * to manage billing, upgrades, downgrades and termination of an Org.
    */
   owner: boolean;
   can_create_tag_manager_trial: boolean;
@@ -89,11 +89,14 @@ export interface ProductSettings_getOrg {
    */
   manual_invoicing: boolean;
   /**
-   * A `TagManagerAccount` associated with this `Org`. A Scale8 Tag Manager account might not exist yet unless a trial has been requested or product has been subscribed to.
+   * A `TagManagerAccount` associated with this `Org`. A Scale8 Tag Manager account
+   * might not exist yet unless a trial has been requested or product has been subscribed to.
    */
   tag_manager_account: ProductSettings_getOrg_tag_manager_account | null;
   /**
-   * A `DataManagerAccount` associated with this `Org`. A Scale8 Data Manager account might not exist yet unless a trial has been requested or product has been subscribed to.
+   * A `DataManagerAccount` associated with this `Org`. A Scale8 Data Manager
+   * account might not exist yet unless a trial has been requested or product has
+   * been subscribed to.
    */
   data_manager_account: ProductSettings_getOrg_data_manager_account | null;
   /**
@@ -105,7 +108,8 @@ export interface ProductSettings_getOrg {
 export interface ProductSettings {
   /**
    * @bound=Org
-   * Given a valid `Org` ID, this function will return an `Org` provided the API `User` has been granted at least **view** access.
+   * Given a valid `Org` ID, this function will return an `Org` provided the API
+   * `User` has been granted at least **view** access.
    */
   getOrg: ProductSettings_getOrg;
 }

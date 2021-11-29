@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 import { ConditionRuleCreateInput } from "./globalTypes";
@@ -20,7 +19,8 @@ export interface CreateConditionRule_createConditionRule {
 export interface CreateConditionRule {
   /**
    * @bound=ConditionRule
-   * Create a new `ConditionRule`. `Trigger` ID is required here to ensure `ConditionRule` is placed inside the correct `Trigger`
+   * Create a new `ConditionRule`. `Trigger` ID is required here to ensure
+   * `ConditionRule` is placed inside the correct `Trigger`
    */
   createConditionRule: CreateConditionRule_createConditionRule;
 }

@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 import { ActionGroupDistributionDuplicateInput } from "./globalTypes";
@@ -20,7 +19,9 @@ export interface DuplicateActionGroupDistribution_duplicateActionGroupDistributi
 export interface DuplicateActionGroupDistribution {
   /**
    * @bound=ActionGroupDistribution
-   * Duplicate an existing `ActionGroupDistribution`. The duplicated will copy everything beneath `ActionGroupDistribution`, creating a new `ActionGroupDistribution` entity and linking it to the same `Rule`
+   * Duplicate an existing `ActionGroupDistribution`. The duplicated will copy
+   * everything beneath `ActionGroupDistribution`, creating a new
+   * `ActionGroupDistribution` entity and linking it to the same `Rule`
    */
   duplicateActionGroupDistribution: DuplicateActionGroupDistribution_duplicateActionGroupDistribution;
 }

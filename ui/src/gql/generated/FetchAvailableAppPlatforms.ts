@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 // ====================================================
@@ -34,7 +33,8 @@ export interface FetchAvailableAppPlatforms_getApp {
    */
   id: string;
   /**
-   * All the platforms that a user has connected to (installed on) the `App`. The is the master connected list that will appear in revised models.
+   * All the platforms that a user has connected to (installed on) the `App`. The
+   * is the master connected list that will appear in revised models.
    */
   app_platforms: FetchAvailableAppPlatforms_getApp_app_platforms[];
 }
