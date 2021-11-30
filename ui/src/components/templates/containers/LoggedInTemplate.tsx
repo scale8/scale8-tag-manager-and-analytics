@@ -128,16 +128,7 @@ const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
                         flexGrow: 1,
                     }}
                 >
-                    <Box
-                        flexShrink={0}
-                        sx={{
-                            '& .breadcrumb': {
-                                padding: (theme) => theme.spacing(3.5, 2, 1.5, 2),
-                            },
-                        }}
-                    >
-                        {props.breadcrumb}
-                    </Box>
+                    {props.breadcrumb}
                     <Box
                         sx={{
                             display: 'flex',

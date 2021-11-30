@@ -171,7 +171,7 @@ const DataMapsTable: FC<DataMapsTableProps> = (props: DataMapsTableProps) => {
                             </TableRow>
                         </TableHead>
                         {tableData.length === 0 ? (
-                            emptyTableBody(columns.length + (editable ? 1 : 0))
+                            emptyTableBody(columns.length + 1)
                         ) : (
                             <TableBody>
                                 {tableData.map((row, index) => (

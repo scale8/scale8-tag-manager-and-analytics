@@ -511,8 +511,6 @@ export const buildTabButtonProps = (
     menuEntries: PageMenuButtonProps[],
     forceCurrentEntry?: string,
 ): BreadcrumbButtonProps => {
-    console.log(forceCurrentEntry);
-    console.log(menuEntries);
     const actions: BreadcrumbAction[] = menuEntries
         .filter((_) => !_.disabled)
         .map((_) => ({
@@ -526,8 +524,6 @@ export const buildTabButtonProps = (
     const forcedCurrentEntry = menuEntries.find((_) => {
         return (forceCurrentEntry ?? '') === _.label;
     });
-
-    console.log(forcedCurrentEntry);
 
     return buildButtonPropsFromActions(
         actions,
