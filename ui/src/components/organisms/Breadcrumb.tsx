@@ -177,24 +177,26 @@ const Breadcrumb: FC<BreadcrumbProps> = (props: BreadcrumbProps) => {
                         </Box>
                     )}
                 </Box>
-                <Box
-                    marginTop="20px"
-                    display="flex"
-                    flex={1}
-                    sx={{
-                        marginLeft: (theme) => theme.spacing(1),
-                        marginRight: (theme) => theme.spacing(1),
-                        color: (theme) => theme.palette.primary.main,
-                    }}
-                    fontSize="1.5rem"
-                    flexWrap="nowrap"
-                    whiteSpace="nowrap"
-                >
-                    <BreadcrumbActions
-                        row={{ id: currentElementId ?? '' }}
-                        rowActions={props.breadcrumbActions}
-                    />
-                </Box>
+                {props.breadcrumbActions.length > 0 && (
+                    <Box
+                        marginTop="20px"
+                        display="flex"
+                        flex={1}
+                        sx={{
+                            marginLeft: (theme) => theme.spacing(1),
+                            marginRight: (theme) => theme.spacing(1),
+                            color: (theme) => theme.palette.primary.main,
+                        }}
+                        fontSize="1.5rem"
+                        flexWrap="nowrap"
+                        whiteSpace="nowrap"
+                    >
+                        <BreadcrumbActions
+                            row={{ id: currentElementId ?? '' }}
+                            rowActions={props.breadcrumbActions}
+                        />
+                    </Box>
+                )}
             </Box>
         </>
     );

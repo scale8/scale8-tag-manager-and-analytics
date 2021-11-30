@@ -4,6 +4,7 @@ import IconButton from '@mui/material/IconButton';
 
 import TableCell from '@mui/material/TableCell';
 import { RowAction, RowData } from './S8TableTypes';
+import { Box } from '@mui/system';
 
 interface S8TableRowActionsCellProps<T extends RowData> {
     index: number;
@@ -34,29 +35,31 @@ const S8TableRowActionsCell = <T extends RowData>(
                 padding: '0 5px',
             }}
         >
-            {rowActions.map((action, i) =>
-                action.hidden && action.hidden(row) ? null : (
-                    <Tooltip key={i} title={action.tooltip}>
-                        <span>
-                            <IconButton
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    action.onClick(row, () => toggleSelect(row.id), e);
-                                }}
-                                color="inherit"
-                                aria-label={action.tooltip}
-                                disabled={
-                                    (action.disabled && action.disabled(row)) ||
-                                    (actionsLocked && !action.unLockable)
-                                }
-                                size="large"
-                            >
-                                <action.icon />
-                            </IconButton>
-                        </span>
-                    </Tooltip>
-                ),
-            )}
+            <Box>
+                {rowActions.map((action, i) =>
+                    action.hidden && action.hidden(row) ? null : (
+                        <Tooltip key={i} title={action.tooltip} placement="bottom-end">
+                            <span>
+                                <IconButton
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        action.onClick(row, () => toggleSelect(row.id), e);
+                                    }}
+                                    color="inherit"
+                                    aria-label={action.tooltip}
+                                    disabled={
+                                        (action.disabled && action.disabled(row)) ||
+                                        (actionsLocked && !action.unLockable)
+                                    }
+                                    size="large"
+                                >
+                                    <action.icon />
+                                </IconButton>
+                            </span>
+                        </Tooltip>
+                    ),
+                )}
+            </Box>
         </TableCell>
     );
 };
