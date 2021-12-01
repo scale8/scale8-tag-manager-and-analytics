@@ -86,7 +86,12 @@ export const CodeBox: FC<{ fileUrl: string; errorRow: number; errorCol: number }
                     </Box>
                     {code !== null && (
                         <Box marginTop="-30px" height="100%">
-                            <LazyShiki language="js" code={code} errorPosition={{ row, col }} />
+                            <LazyShiki
+                                language="js"
+                                code={code}
+                                errorPosition={{ row, col }}
+                                lineNumbers
+                            />
                         </Box>
                     )}
                 </Paper>

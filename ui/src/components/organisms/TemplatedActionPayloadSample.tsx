@@ -5,7 +5,7 @@ import {
     buildPlatformDataMapSample,
 } from '../../utils/PlatformDataMapsUtils';
 import { Box } from '@mui/material';
-import LazyHighlight from '../atoms/LibraryLoaders/LazyHighlight';
+import LazyShiki from '../atoms/LibraryLoaders/LazyShiki';
 
 export type TemplatedActionDataMapPayloadSampleProps = {
     platformDataMaps: PlatformDataMapInput[];
@@ -51,7 +51,7 @@ const TemplatedActionPayloadSample: FC<TemplatedActionDataMapPayloadSampleProps>
                         },
                     }}
                 >
-                    <LazyHighlight
+                    <LazyShiki
                         language="json"
                         code={JSON.stringify(
                             buildPlatformDataMapSample(
@@ -60,6 +60,7 @@ const TemplatedActionPayloadSample: FC<TemplatedActionDataMapPayloadSampleProps>
                             null,
                             2,
                         )}
+                        smallText
                     />
                 </Box>
             </Box>

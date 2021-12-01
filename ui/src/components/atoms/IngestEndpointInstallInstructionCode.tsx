@@ -1,12 +1,14 @@
 import { FC } from 'react';
 import { IngestEndpointInstallInstructionCodeProps } from '../molecules/IngestEndpointInstallInstructions';
 import CopyBlock from './CopyBlock';
+import { ShikiLanguages } from './LibraryLoaders/LazyShiki';
+import { Box } from '@mui/material';
 
 export type IngestEndpointInstallSnippet = {
     id: string;
     text: string;
     snippet: string;
-    language: string;
+    language: ShikiLanguages;
     trailingNewline: boolean;
 };
 
@@ -49,7 +51,7 @@ fetch("[endpoint]", fetchOptions)
   .then(result => console.log(result))
   .catch(error => console.log(error));
 `.trim(),
-        language: 'javascript',
+        language: 'js',
         trailingNewline: false,
     },
     //
@@ -75,7 +77,7 @@ $.ajax(ajaxSettings).done(function (response) {
   console.log(JSON.stringify(response));
 });
         `.trim(),
-        language: 'javascript',
+        language: 'js',
         trailingNewline: false,
     },
     //
@@ -99,7 +101,7 @@ xhr.open("POST", "[endpoint]");
 xhr.setRequestHeader("Content-Type", "application/json");
 xhr.send(payload);
         `.trim(),
-        language: 'javascript',
+        language: 'js',
         trailingNewline: false,
     },
     //
@@ -129,7 +131,7 @@ axios(axiosConfig)
   console.log(error);
 });
         `.trim(),
-        language: 'javascript',
+        language: 'js',
         trailingNewline: true,
     },
     //
@@ -172,7 +174,7 @@ var req = https.request(reqOptions, function (res) {
 req.write(payload);
 req.end();
         `.trim(),
-        language: 'javascript',
+        language: 'js',
         trailingNewline: false,
     },
     //
@@ -278,10 +280,12 @@ const IngestEndpointInstallInstructionCode: FC<IngestEndpointInstallInstructionC
         .replace('[payloadJs]', payloadJs)
         .replace('[payloadShell]', payloadShell);
     return (
-        <CopyBlock
-            text={`${text}${props.snippet.trailingNewline ? '\n' : ''}`}
-            language={props.snippet.language}
-        />
+        <Box height="200px">
+            <CopyBlock
+                text={`${text}${props.snippet.trailingNewline ? '\n' : ''}`}
+                language={props.snippet.language}
+            />
+        </Box>
     );
 };
 

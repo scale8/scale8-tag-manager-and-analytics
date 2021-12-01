@@ -30,7 +30,7 @@ serverRequest("The glass is half ", getResults);
                 <meta name="description" content="Scale8 - Diff Test." />
             </Head>
 
-            <LazyShiki language="js" code={src} errorPosition={{ row: 9, col: 16 }} />
+            <LazyShiki language="js" code={src} errorPosition={{ row: 9, col: 16 }} lineNumbers />
         </>
     );
 };
