@@ -121,7 +121,7 @@ export default abstract class BaseConfig {
 
     public async getUiUrl(): Promise<string> {
         return await this.getConfigEntryOrElse(
-            'S8_ROOT_SERVER',
+            'S8_UI_SERVER',
             this.isProduction() ? 'https://scale8.com' : 'http://ui-dev.scale8.com:3000',
         );
     }

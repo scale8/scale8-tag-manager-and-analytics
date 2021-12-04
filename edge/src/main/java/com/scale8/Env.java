@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.scale8.extended.types.Tuple;
+import io.micronaut.runtime.server.EmbeddedServer;
 import software.amazon.awssdk.auth.credentials.AwsCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
@@ -19,9 +20,14 @@ import java.util.stream.Stream;
 
 @Singleton
 public class Env {
+  public final int SERVER_PORT;
 
   private HashMap<String, String> config;
   private final String serverId = UUID.randomUUID().toString();
+
+  public Env(EmbeddedServer embeddedServer) {
+    SERVER_PORT = embeddedServer.getPort();
+  }
 
   private SecretsManagerClient getSecretsManager() {
     if (!AWS_KEY_STORE_ID.equals("") && !AWS_KEY_STORE_SECRET.equals("")) {
@@ -85,9 +91,9 @@ public class Env {
     return config;
   }
 
-  private String getOrElseFromEnvOnly(String name, String orElse){
+  private String getOrElseFromEnvOnly(String name, String orElse) {
     String envVar = System.getenv(name);
-    return envVar == null? orElse : envVar;
+    return envVar == null ? orElse : envVar;
   }
 
   private String getOrElse(String name, String orElse) {
@@ -101,9 +107,10 @@ public class Env {
     }
   }
 
-  public final Boolean IS_COMMERICAL = getOrElseFromEnvOnly("SERVER_MODE", "SELF_HOSTED").equals("COMMERCIAL");
+  public final Boolean IS_COMMERICAL =
+      getOrElseFromEnvOnly("SERVER_MODE", "SELF_HOSTED").equals("COMMERCIAL");
 
-  public final String ENV = getOrElseFromEnvOnly("S8_ENV", "production");
+  public final String ENV = getOrElseFromEnvOnly("S8_ENV", "development");
 
   public final Boolean IS_PROD = ENV.equals("production");
 
@@ -138,7 +145,9 @@ public class Env {
 
   public final String S8_API_SERVER = getOrElse("S8_API_SERVER", "http://127.0.0.1:8082");
 
-  public final String S8_ROOT_SERVER = getOrElse("S8_ROOT_SERVER", null);
+  public final String S8_UI_SERVER = getOrElse("S8_UI_SERVER", "http://127.0.0.1:3000");
+
+  public final String S8_EDGE_SERVER = getOrElse("S8_EDGE_SERVER", null);
 
   public final String SERVER_ID = getOrElse("SERVER_ID", serverId);
 

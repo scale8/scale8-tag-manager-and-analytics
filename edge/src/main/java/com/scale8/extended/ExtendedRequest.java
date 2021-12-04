@@ -10,11 +10,8 @@ import com.scale8.mmdb.Geo;
 import com.scale8.util.HashUtil;
 import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.HttpRequest;
-import org.apache.commons.codec.binary.Hex;
 import ua_parser.Client;
 import ua_parser.Parser;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -189,10 +186,15 @@ public class ExtendedRequest {
   }
 
   public String getServer() {
-    String base = env.S8_ROOT_SERVER == null ? "https://" + getHost() : env.S8_ROOT_SERVER;
-    if (id != null) {
-      base += "/edge/" + id;
+    if (env.IS_COMMERICAL) {
+      return "https://" + getHost();
+    } else {
+      String protocol = request.isSecure()? "https" : "http";
+      return (env.S8_EDGE_SERVER == null
+              ? protocol + "://" + request.getServerName() + ":" + env.SERVER_PORT
+              : env.S8_EDGE_SERVER)
+          + "/edge/"
+          + id;
     }
-    return base;
   }
 }
