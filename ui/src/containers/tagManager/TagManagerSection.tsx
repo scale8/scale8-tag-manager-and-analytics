@@ -1,19 +1,56 @@
 import { FC } from 'react';
 import { useQuery } from '@apollo/client';
 import {
-    buildOrgButtonProps,
+    BreadcrumbButtonProps,
+    buildTabButtonProps,
     buildTagManagerButtonProps,
 } from '../../utils/BreadcrumbButtonsUtils';
 import NavTagManagerQuery from '../../gql/queries/NavTagManagerQuery';
 import { NavTagManager } from '../../gql/generated/NavTagManager';
 import AppIcon from '../../components/atoms/Icons/AppIcon';
 import PlatformIcon from '../../components/atoms/Icons/PlatformIcon';
-import { Section, SectionProps } from '../abstractions/Section';
+import { Section, SectionItem, SectionProps } from '../abstractions/Section';
 import { SectionKey } from '../SectionsDetails';
-import { useLoggedInState } from '../../context/AppContext';
-import { useRouter } from 'next/router';
+import { useConfigState, useLoggedInState } from '../../context/AppContext';
+import { NextRouter, useRouter } from 'next/router';
 import { ChildrenAndIdProps } from '../../types/props/ChildrenAndIdProps';
 import { toTagManager } from '../../utils/NavigationPaths';
+import { buildOrgButtons } from '../global/OrgSection';
+import { PageMenuButtonProps } from '../../components/molecules/SideMenuButton';
+import { CurrentOrgPermissions } from '../../context/OrgUserReducer';
+
+export const buildTagManagerTabsMenu = (id: string): PageMenuButtonProps[] => [
+    {
+        icon: () => <AppIcon />,
+        label: 'Applications',
+        link: toTagManager({ id }, 'apps'),
+    },
+    {
+        icon: () => <PlatformIcon />,
+        label: 'Platforms',
+        link: toTagManager({ id }, 'platforms'),
+    },
+];
+
+export const buildTagManagerButtons = (
+    orgs: SectionItem[],
+    currentOrg: SectionItem,
+    tagManagerId: string,
+    dataManagerId: string,
+    router: NextRouter,
+    orgPermissions: CurrentOrgPermissions,
+    useSignup: boolean,
+    forceCurrentEntry?: string,
+): BreadcrumbButtonProps[] => [
+    ...buildOrgButtons(orgs, currentOrg, router, orgPermissions, useSignup, 'Services'),
+    buildTagManagerButtonProps(
+        router,
+        tagManagerId,
+        dataManagerId,
+        forceCurrentEntry === undefined,
+    ),
+    buildTabButtonProps(router, buildTagManagerTabsMenu(tagManagerId), forceCurrentEntry),
+];
 
 const TagManagerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
     const router = useRouter();
@@ -21,6 +58,7 @@ const TagManagerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) =>
     const { id, children } = props;
 
     const { orgUserState } = useLoggedInState();
+    const { useSignup } = useConfigState();
 
     const sectionProps: SectionProps<NavTagManager> = {
         children,
@@ -29,32 +67,18 @@ const TagManagerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) =>
         queryResult: useQuery<NavTagManager>(NavTagManagerQuery, {
             variables: { id },
         }),
-        buildButtonsProps: (data) => [
-            buildOrgButtonProps(
-                router,
+        buildButtonsProps: (data, orgPermissions) => {
+            return buildTagManagerButtons(
                 data.me.orgs,
-                data.getTagManagerAccount.org.id,
-                data.getTagManagerAccount.org.name,
-            ),
-            buildTagManagerButtonProps(
-                router,
+                data.getTagManagerAccount.org,
                 id,
                 data.getTagManagerAccount.org.data_manager_account?.id ?? '',
-                true,
-            ),
-        ],
-        buildMenuItemsProps: () => [
-            {
-                icon: <AppIcon />,
-                label: 'Applications',
-                link: toTagManager({ id }, 'apps'),
-            },
-            {
-                icon: <PlatformIcon />,
-                label: 'Platforms',
-                link: toTagManager({ id }, 'platforms'),
-            },
-        ],
+                router,
+                orgPermissions,
+                useSignup,
+            );
+        },
+        buildMenuItemsProps: () => buildTagManagerTabsMenu(id),
         accountExpireIn: orgUserState?.tagManagerAccount?.trialExpiration ?? undefined,
         accountIsTrial: orgUserState?.tagManagerAccount?.isTrial ?? undefined,
     };

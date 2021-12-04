@@ -2,28 +2,25 @@ import { FC } from 'react';
 import { useQuery } from '@apollo/client';
 import NavIngestEndpointRevisionQuery from '../../gql/queries/NavIngestEndpointRevisionQuery';
 import { NavIngestEndpointRevision } from '../../gql/generated/NavIngestEndpointRevision';
-import {
-    buildDataManagerButtonProps,
-    buildIngestEndpointButtonProps,
-    buildIngestEndpointRevisionButtonProps,
-    buildOrgButtonProps,
-} from '../../utils/BreadcrumbButtonsUtils';
+import { buildIngestEndpointRevisionButtonProps } from '../../utils/BreadcrumbButtonsUtils';
 import { Section, SectionProps } from '../abstractions/Section';
 import { buildDuplicateAction } from '../../utils/TableActionsUtils';
 import { pageActions } from '../../actions/PageActions';
 import { extractPermissionsFromOrgUser } from '../../context/OrgUserReducer';
 import { SectionKey } from '../SectionsDetails';
-import { useLoggedInState } from '../../context/AppContext';
+import { useConfigState, useLoggedInState } from '../../context/AppContext';
 import { useRouter } from 'next/router';
 import { toIngestEndpointRevision } from '../../utils/NavigationPaths';
 import { ChildrenAndIdProps } from '../../types/props/ChildrenAndIdProps';
 import { analyticsEnabled } from '../../utils/AnalyticsUtils';
+import { buildIngestEndpointsButtons } from './IngestEndpointSection';
 
 const IngestEndpointRevisionSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
     const router = useRouter();
     const { id, children } = props;
 
     const { templateInteractions, orgUserState } = useLoggedInState();
+    const { useSignup } = useConfigState();
 
     const { dispatchDialogAction } = templateInteractions;
     const currentOrgPermissions = extractPermissionsFromOrgUser(orgUserState);
@@ -39,25 +36,21 @@ const IngestEndpointRevisionSection: FC<ChildrenAndIdProps> = (props: ChildrenAn
                 analyticsEnabled(data.getIngestEndpointRevision.ingest_endpoint),
             );
         },
-        buildButtonsProps: (data) => [
-            buildOrgButtonProps(
-                router,
+        buildButtonsProps: (data, orgPermissions) => [
+            ...buildIngestEndpointsButtons(
                 data.me.orgs,
-                data.getIngestEndpointRevision.ingest_endpoint.data_manager_account.org.id,
-                data.getIngestEndpointRevision.ingest_endpoint.data_manager_account.org.name,
-            ),
-            buildDataManagerButtonProps(
-                router,
-                data.getIngestEndpointRevision.ingest_endpoint.data_manager_account.id,
+                data.getIngestEndpointRevision.ingest_endpoint.data_manager_account.org,
                 data.getIngestEndpointRevision.ingest_endpoint.data_manager_account.org
                     .tag_manager_account?.id ?? '',
-            ),
-            buildIngestEndpointButtonProps(
-                router,
+                data.getIngestEndpointRevision.ingest_endpoint.data_manager_account.id,
                 data.getIngestEndpointRevision.ingest_endpoint.data_manager_account
                     .ingest_endpoints,
-                data.getIngestEndpointRevision.ingest_endpoint.id,
-                data.getIngestEndpointRevision.ingest_endpoint.name,
+                data.getIngestEndpointRevision.ingest_endpoint,
+                analyticsEnabled(data.getIngestEndpointRevision.ingest_endpoint),
+                router,
+                orgPermissions,
+                useSignup,
+                'Revisions',
             ),
             buildIngestEndpointRevisionButtonProps(
                 router,

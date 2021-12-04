@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 import { AppQueryOptions, IngestQueryOptions } from "./globalTypes";
@@ -164,11 +163,14 @@ export interface OrgDashboardPageData_getOrg {
    */
   name: string;
   /**
-   * A `TagManagerAccount` associated with this `Org`. A Scale8 Tag Manager account might not exist yet unless a trial has been requested or product has been subscribed to.
+   * A `TagManagerAccount` associated with this `Org`. A Scale8 Tag Manager account
+   * might not exist yet unless a trial has been requested or product has been subscribed to.
    */
   tag_manager_account: OrgDashboardPageData_getOrg_tag_manager_account | null;
   /**
-   * A `DataManagerAccount` associated with this `Org`. A Scale8 Data Manager account might not exist yet unless a trial has been requested or product has been subscribed to.
+   * A `DataManagerAccount` associated with this `Org`. A Scale8 Data Manager
+   * account might not exist yet unless a trial has been requested or product has
+   * been subscribed to.
    */
   data_manager_account: OrgDashboardPageData_getOrg_data_manager_account | null;
   /**
@@ -184,7 +186,8 @@ export interface OrgDashboardPageData_getOrg {
 export interface OrgDashboardPageData {
   /**
    * @bound=Org
-   * Given a valid `Org` ID, this function will return an `Org` provided the API `User` has been granted at least **view** access.
+   * Given a valid `Org` ID, this function will return an `Org` provided the API
+   * `User` has been granted at least **view** access.
    */
   getOrg: OrgDashboardPageData_getOrg;
 }

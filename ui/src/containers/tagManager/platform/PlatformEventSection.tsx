@@ -2,19 +2,14 @@ import { FC } from 'react';
 import { useQuery } from '@apollo/client';
 import NavPlatformRevisionEventQuery from '../../../gql/queries/NavPlatformRevisionEventQuery';
 import { NavPlatformRevisionEvent } from '../../../gql/generated/NavPlatformRevisionEvent';
-import {
-    buildCustomPlatformButtonProps,
-    buildOrgButtonProps,
-    buildPlatformRevisionButtonProps,
-    buildPlatformRevisionEventButtonProps,
-    buildTagManagerButtonProps,
-} from '../../../utils/BreadcrumbButtonsUtils';
+import { buildPlatformRevisionEventButtonProps } from '../../../utils/BreadcrumbButtonsUtils';
 import { Section, SectionProps } from '../../abstractions/Section';
 import { PlatformType } from '../../../gql/generated/globalTypes';
 import { SectionKey } from '../../SectionsDetails';
-import { useLoggedInState } from '../../../context/AppContext';
+import { useConfigState, useLoggedInState } from '../../../context/AppContext';
 import { useRouter } from 'next/router';
 import { ChildrenAndIdProps } from '../../../types/props/ChildrenAndIdProps';
+import { buildCustomPlatformRevisionButtons } from './CustomPlatformRevisionSection';
 
 const PlatformEventSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
     const router = useRouter();
@@ -22,6 +17,7 @@ const PlatformEventSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps)
     const { id, children } = props;
 
     const { orgUserState } = useLoggedInState();
+    const { useSignup } = useConfigState();
 
     const sectionProps: SectionProps<NavPlatformRevisionEvent> = {
         children,
@@ -29,32 +25,23 @@ const PlatformEventSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps)
         queryResult: useQuery<NavPlatformRevisionEvent>(NavPlatformRevisionEventQuery, {
             variables: { id },
         }),
-        buildButtonsProps: (data) => [
-            buildOrgButtonProps(
-                router,
+        buildButtonsProps: (data, orgPermissions) => [
+            ...buildCustomPlatformRevisionButtons(
                 data.me.orgs,
-                data.getPlatformEvent.platform_revision.platform.tag_manager_account.org.id,
-                data.getPlatformEvent.platform_revision.platform.tag_manager_account.org.name,
-            ),
-            buildTagManagerButtonProps(
-                router,
+                data.getPlatformEvent.platform_revision.platform.tag_manager_account.org,
                 data.getPlatformEvent.platform_revision.platform.tag_manager_account.id,
                 data.getPlatformEvent.platform_revision.platform.tag_manager_account.org
                     .data_manager_account?.id ?? '',
-            ),
-            buildCustomPlatformButtonProps(
-                router,
                 data.getPlatformEvent.platform_revision.platform.tag_manager_account.platforms.filter(
                     (_) => _.type === PlatformType.CUSTOM,
                 ),
-                data.getPlatformEvent.platform_revision.platform.id,
-                data.getPlatformEvent.platform_revision.platform.name,
-            ),
-            buildPlatformRevisionButtonProps(
-                router,
+                data.getPlatformEvent.platform_revision.platform,
                 data.getPlatformEvent.platform_revision.platform.platform_revisions,
-                data.getPlatformEvent.platform_revision.id,
-                data.getPlatformEvent.platform_revision.name,
+                data.getPlatformEvent.platform_revision,
+                router,
+                orgPermissions,
+                useSignup,
+                'Events',
             ),
             buildPlatformRevisionEventButtonProps(
                 router,

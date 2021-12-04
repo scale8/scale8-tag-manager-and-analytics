@@ -9,30 +9,16 @@ import { useLoggedInState } from '../../context/AppContext';
 import { SideBarProps } from '../../containers/global/LoggedInSection';
 import { useRouter } from 'next/router';
 import { toAdmin, toOrgList } from '../../utils/NavigationPaths';
-import { SxProps } from '@mui/system';
-import { Theme } from '@mui/material/styles';
 
 const SideBar: FC<SideBarProps> = (props: SideBarProps) => {
     const router = useRouter();
 
     const { templateInteractions } = useLoggedInState();
-    const { sectionHistory } = templateInteractions;
+    const { section } = templateInteractions;
 
-    const inAdmin = sectionHistory.current?.section === SectionKey.admin;
+    const inAdmin = section === SectionKey.admin;
 
-    const CurrentLogo = logoFromSectionLocator(sectionHistory.current);
-
-    const iconButton: SxProps<Theme> = {
-        display: 'flex',
-        width: '64px',
-        height: '48px',
-        color: 'white',
-        alignSelf: 'center',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 0,
-        marginBottom: '10px',
-    };
+    const CurrentLogo = logoFromSectionLocator(section);
 
     return (
         <Box
@@ -41,7 +27,7 @@ const SideBar: FC<SideBarProps> = (props: SideBarProps) => {
                 display: 'flex',
                 boxSizing: 'border-box',
                 flexDirection: 'column',
-                backgroundColor: (theme) => theme.palette.primary.main,
+                backgroundColor: '#e0e0e0',
                 flexGrow: 0,
                 width: '50px',
                 height: '100vh',
@@ -62,65 +48,73 @@ const SideBar: FC<SideBarProps> = (props: SideBarProps) => {
             >
                 <CurrentLogo width={27} />
             </Box>
+            <Box height={50} />
+            <Box>{props.children}</Box>
             <Box
                 sx={{
                     flexGrow: 1,
                     alignSelf: 'center',
                 }}
             />
-            {props.isAdmin && (
-                <Box
-                    sx={{
-                        display: 'flex',
-                        width: '64px',
-                        height: '48px',
-                        color: (theme) => (inAdmin ? theme.palette.adminColor.main : 'white'),
-                        alignSelf: 'center',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: 0,
-                        marginBottom: '10px',
-                    }}
-                >
-                    <Tooltip title="Admin Area" placement="right">
-                        <IconButton
-                            color="inherit"
-                            onClick={() => {
-                                if (inAdmin) {
-                                    router
-                                        .push(localStorage.getItem('adminAreaFrom') ?? toOrgList)
-                                        .then();
-                                } else {
-                                    localStorage.setItem('adminAreaFrom', location.href);
-                                    router.push(toAdmin).then();
-                                }
-                            }}
-                            size="large"
-                        >
-                            <SettingsApplicationsIcon />
-                        </IconButton>
-                    </Tooltip>
-                </Box>
-            )}
-            <Box sx={iconButton}>
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    width: '50px',
+                }}
+            >
+                {props.isAdmin && (
+                    <Box>
+                        <Tooltip title="Admin Area" placement="right">
+                            <IconButton
+                                sx={{
+                                    color: (theme) =>
+                                        inAdmin ? theme.palette.adminColor.main : 'grey.800',
+                                }}
+                                onClick={() => {
+                                    if (inAdmin) {
+                                        router
+                                            .push(
+                                                localStorage.getItem('adminAreaFrom') ?? toOrgList,
+                                            )
+                                            .then();
+                                    } else {
+                                        localStorage.setItem('adminAreaFrom', location.href);
+                                        router.push(toAdmin).then();
+                                    }
+                                }}
+                                size="large"
+                            >
+                                <SettingsApplicationsIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </Box>
+                )}
                 <Box>
                     <Tooltip title="Manage Organizations" placement="right">
-                        <IconButton
-                            color="inherit"
-                            onClick={() => {
-                                router.push(toOrgList).then();
-                            }}
-                            size="large"
-                        >
-                            <OrgIcon />
-                        </IconButton>
+                        <Box>
+                            <IconButton
+                                sx={{
+                                    color: 'grey.800',
+                                }}
+                                color="inherit"
+                                onClick={() => {
+                                    router.push(toOrgList).then();
+                                }}
+                                size="large"
+                            >
+                                <OrgIcon />
+                            </IconButton>
+                        </Box>
                     </Tooltip>
                 </Box>
-            </Box>
-            <Box sx={iconButton}>
-                <Tooltip title="Notifications" placement="right">
-                    <Box>
+                <Box>
+                    <Tooltip title="Notifications" placement="right">
                         <IconButton
+                            sx={{
+                                color: 'grey.800',
+                            }}
                             color="inherit"
                             onClick={props.handleNotificationClick}
                             size="large"
@@ -129,22 +123,11 @@ const SideBar: FC<SideBarProps> = (props: SideBarProps) => {
                                 <NotificationsIcon />
                             </Badge>
                         </IconButton>
-                    </Box>
-                </Tooltip>
-            </Box>
-            <Box
-                sx={{
-                    display: 'flex',
-                    width: '64px',
-                    height: '48px',
-                    alignSelf: 'center',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: 0,
-                    marginBottom: '10px',
-                }}
-            >
+                    </Tooltip>
+                </Box>
+                <Box height={20} />
                 <UserSelector {...props.userSelectorProps} />
+                <Box height={15} />
             </Box>
         </Box>
     );

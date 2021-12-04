@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 // ====================================================
@@ -58,7 +57,8 @@ export interface FetchAvailableGlobalActions_getRule {
    */
   id: string;
   /**
-   * All set of `ActionGroupDistribution`'s attached to this `Rule` and will be triggered once `Event` and `ConditionRule`'s are considered
+   * All set of `ActionGroupDistribution`'s attached to this `Rule` and will be
+   * triggered once `Event` and `ConditionRule`'s are considered
    */
   action_groups_distributions: FetchAvailableGlobalActions_getRule_action_groups_distributions[];
 }

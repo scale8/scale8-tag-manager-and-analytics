@@ -1,40 +1,18 @@
 import { FC } from 'react';
-import { Box, List } from '@mui/material';
-import { SideMenuButton, SideMenuButtonProps } from '../molecules/SideMenuButton';
-import { navigationColorFromSectionLocator } from '../../containers/SectionsDetails';
-import { useLoggedInState } from '../../context/AppContext';
+import { SideMenuButton, PageMenuButtonProps } from '../molecules/SideMenuButton';
 
 type SideMenuProps = {
-    menuItemsProps: SideMenuButtonProps[];
+    menuItemsProps: PageMenuButtonProps[];
 };
 
 const SideMenu: FC<SideMenuProps> = (props: SideMenuProps) => {
     const { menuItemsProps } = props;
-    const { templateInteractions } = useLoggedInState();
-    const { sectionHistory } = templateInteractions;
-    const navigationColor = navigationColorFromSectionLocator(sectionHistory.current);
 
     return (
         <div className="sideMenu">
-            <Box height={15} bgcolor={navigationColor} />
-            <Box
-                sx={{
-                    zIndex: (theme) => theme.zIndex.appBar,
-                    position: 'absolute',
-                    width: 0,
-                    height: 0,
-                    borderStyle: 'solid',
-                    borderWidth: '15px 15px 0 0',
-                    borderColor: `${navigationColor} transparent transparent transparent`,
-                }}
-            />
-            <Box height={25} />
-            <List disablePadding>
-                {menuItemsProps.map((menuItemProps, key) => (
-                    <SideMenuButton key={key} {...menuItemProps} />
-                ))}
-            </List>
-            <Box height={15} />
+            {menuItemsProps.map((menuItemProps, key) => (
+                <SideMenuButton key={key} {...menuItemProps} />
+            ))}
         </div>
     );
 };

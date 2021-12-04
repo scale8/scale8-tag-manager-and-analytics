@@ -28,6 +28,9 @@ const BreadcrumbButton: FC<BreadcrumbButtonProps> = (props: BreadcrumbButtonProp
                     padding: '0 0 0 5px',
                     color: 'inherit',
                     textTransform: 'none',
+                    minWidth: 25,
+                    height: '50px',
+                    fontWeight: 500,
                     '&.Mui-disabled': {
                         color: 'inherit',
                     },
@@ -38,22 +41,46 @@ const BreadcrumbButton: FC<BreadcrumbButtonProps> = (props: BreadcrumbButtonProp
                 disabled={props.isCurrentPage}
             >
                 <Box flexDirection="column" textAlign="left">
-                    <Box display="flex" alignItems="center" color="white" mr="5px">
-                        <props.elementIcon sx={{ fontSize: '1rem' }} />{' '}
+                    <Box display="flex" alignItems="center" color="inherit" height="20px" mr="5px">
+                        {props.elementIcon && (
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    overflow: 'hidden',
+                                    marginRight: '5px',
+                                    height: '20px',
+                                }}
+                            >
+                                <props.elementIcon sx={{ fontSize: '1rem' }} />
+                            </Box>
+                        )}
                         <Box
                             component="span"
                             sx={{
                                 fontSize: '0.75rem',
                                 lineHeight: '12px',
                                 marginTop: '2px',
-                                marginLeft: '5px',
                             }}
                         >
                             {props.elementText}
                         </Box>
                     </Box>
-                    <Box display="inline-flex" alignItems="center">
-                        <Box mt="2px" mr="5px" component="span" fontSize="1.125rem">
+                    <Box display="flex" alignItems="center" height="30px">
+                        {props.icon && (
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    overflow: 'hidden',
+                                    marginRight: '5px',
+                                    height: '30px',
+                                }}
+                            >
+                                <props.icon sx={{ fontSize: '1rem' }} />
+                            </Box>
+                        )}
+                        <Box mr="5px" fontSize="1.125rem">
                             {props.text}
                         </Box>
                     </Box>
@@ -65,10 +92,12 @@ const BreadcrumbButton: FC<BreadcrumbButtonProps> = (props: BreadcrumbButtonProp
                         color="inherit"
                         sx={{
                             marginTop: '-20px',
+                            height: '50px',
                             padding: '20px 0 0 0',
                             color: 'inherit',
                             textTransform: 'none',
                             minWidth: '24px',
+                            fontWeight: 500,
                         }}
                         aria-controls="simple-menu"
                         aria-haspopup="true"
@@ -105,6 +134,19 @@ const BreadcrumbButton: FC<BreadcrumbButtonProps> = (props: BreadcrumbButtonProp
                                 key={index}
                                 onClick={() => closeAndExecuteAction(item.action)}
                             >
+                                {item.icon && (
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            overflow: 'hidden',
+                                            marginRight: '5px',
+                                            height: '20px',
+                                        }}
+                                    >
+                                        <item.icon sx={{ fontSize: '1rem' }} />
+                                    </Box>
+                                )}
                                 {item.text}
                             </MenuItem>
                         ))}

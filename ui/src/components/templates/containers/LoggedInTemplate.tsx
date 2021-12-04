@@ -7,22 +7,13 @@ import { DialogBaseProps, DialogPageProps } from '../../../types/DialogTypes';
 import GQLError from '../../atoms/GqlError';
 import InfoDialog from '../../organisms/InfoDialog';
 import PageDialog from '../../organisms/PageDialog';
-import { navigationColorFromSectionLocator } from '../../../containers/SectionsDetails';
 import { useLoggedInState } from '../../../context/AppContext';
 import { LoggedInProps } from '../../../containers/global/LoggedInSection';
-import { grey } from '@mui/material/colors';
 
 const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
     const { templateInteractions } = useLoggedInState();
-    const {
-        ask,
-        dispatchDialogAction,
-        dialogState,
-        snackbarError,
-        setSnackbarError,
-        sectionHistory,
-    } = templateInteractions;
-    const navigationColor = navigationColorFromSectionLocator(sectionHistory.current);
+    const { ask, dispatchDialogAction, dialogState, snackbarError, setSnackbarError } =
+        templateInteractions;
 
     const handleDialogClose = (checkChanges: boolean) => {
         if (checkChanges && dialogState.pageHasChanges) {
@@ -94,7 +85,21 @@ const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
                 minHeight: '100vh',
             }}
         >
-            <SideBar {...props.sideBarProps} />
+            <SideBar {...props.sideBarProps}>
+                <Box
+                    flexShrink={0}
+                    sx={{
+                        '& .sideMenu': {
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            width: '50px',
+                        },
+                    }}
+                >
+                    {props.sideMenu}
+                </Box>
+            </SideBar>
             <Box
                 sx={{
                     marginLeft: '50px',
@@ -112,8 +117,7 @@ const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
                         height: 0,
                         borderStyle: 'solid',
                         borderWidth: '15px 15px 0 0',
-                        borderColor: (theme) =>
-                            `${theme.palette.primary.main} transparent transparent transparent`,
+                        borderColor: '#e0e0e0 transparent transparent transparent',
                     }}
                 />
                 <Box
@@ -124,17 +128,7 @@ const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
                         flexGrow: 1,
                     }}
                 >
-                    <Box
-                        flexShrink={0}
-                        bgcolor={navigationColor}
-                        sx={{
-                            '& .breadcrumb': {
-                                padding: (theme) => theme.spacing(3.5, 2, 1.5, 2),
-                            },
-                        }}
-                    >
-                        {props.breadcrumb}
-                    </Box>
+                    {props.breadcrumb}
                     <Box
                         sx={{
                             display: 'flex',
@@ -148,43 +142,14 @@ const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
                             height="100%"
                             position="absolute"
                             width="100%"
-                            overflow="hidden"
-                            display="flex"
+                            sx={{
+                                overflowX: 'auto',
+                            }}
+                            bgcolor="background.paper"
+                            flexShrink={1}
+                            flexGrow={1}
                         >
-                            <Box
-                                flexShrink={0}
-                                bgcolor={grey['50']}
-                                color="grey.800"
-                                sx={{
-                                    '& .sideMenu': {
-                                        width: '190px',
-                                    },
-                                }}
-                            >
-                                {props.sideMenu}
-                            </Box>
-                            <Box
-                                flexShrink={1}
-                                flexGrow={1}
-                                sx={{
-                                    height: '100%',
-                                    overflowX: 'auto',
-                                }}
-                                bgcolor="background.paper"
-                            >
-                                <Box
-                                    sx={{
-                                        zIndex: (theme) => theme.zIndex.appBar,
-                                        position: 'absolute',
-                                        width: 0,
-                                        height: 0,
-                                        borderStyle: 'solid',
-                                        borderWidth: '15px 15px 0 0',
-                                        borderColor: `${navigationColor} transparent transparent transparent`,
-                                    }}
-                                />
-                                {props.children}
-                            </Box>
+                            {props.children}
                         </Box>
                     </Box>
                 </Box>

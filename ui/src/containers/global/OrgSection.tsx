@@ -2,17 +2,83 @@ import { FC } from 'react';
 import { useQuery } from '@apollo/client';
 import NavOrgQuery from '../../gql/queries/NavOrgQuery';
 import { NavOrg } from '../../gql/generated/NavOrg';
-import { buildOrgButtonProps } from '../../utils/BreadcrumbButtonsUtils';
+import {
+    BreadcrumbButtonProps,
+    buildOrgButtonProps,
+    buildTabButtonProps,
+} from '../../utils/BreadcrumbButtonsUtils';
 import OrgDashboardIcon from '../../components/atoms/Icons/OrgDashboardIcon';
 import OrgUsersIcon from '../../components/atoms/Icons/OrgUsersIcon';
 import UserInviteIcon from '../../components/atoms/Icons/UserInviteIcon';
-import { Section, SectionProps } from '../abstractions/Section';
+import { Section, SectionItem, SectionProps } from '../abstractions/Section';
 import { SectionKey } from '../SectionsDetails';
 import OrgSettingsIcon from '../../components/atoms/Icons/OrgSettingsIcon';
 import { useConfigState } from '../../context/AppContext';
-import { useRouter } from 'next/router';
+import { NextRouter, useRouter } from 'next/router';
 import { ChildrenAndIdProps } from '../../types/props/ChildrenAndIdProps';
 import { toOrg } from '../../utils/NavigationPaths';
+import { PageMenuButtonProps } from '../../components/molecules/SideMenuButton';
+import { CurrentOrgPermissions } from '../../context/OrgUserReducer';
+
+export const buildOrgTabsMenu = (
+    orgPermissions: CurrentOrgPermissions,
+    id: string,
+    useSignup: boolean,
+): PageMenuButtonProps[] => {
+    return [
+        ...[
+            {
+                icon: () => <OrgDashboardIcon />,
+                label: 'Services',
+                link: toOrg({ id }, 'dashboard'),
+            },
+            {
+                icon: () => <OrgUsersIcon />,
+                label: 'Users',
+                link: toOrg({ id }, 'users'),
+                disabled: !orgPermissions.isAdmin,
+            },
+        ],
+        ...(useSignup
+            ? [
+                  {
+                      icon: () => <UserInviteIcon />,
+                      label: 'User Invites',
+                      link: toOrg({ id }, 'invites'),
+                      disabled: !orgPermissions.isAdmin,
+                  },
+              ]
+            : []),
+        {
+            icon: () => <OrgSettingsIcon />,
+            label: 'Settings',
+            link: toOrg({ id }, 'settings'),
+            disabled: !orgPermissions.isAdmin,
+        },
+    ];
+};
+
+export const buildOrgButtons = (
+    orgs: SectionItem[],
+    currentOrg: SectionItem,
+    router: NextRouter,
+    orgPermissions: CurrentOrgPermissions,
+    useSignup: boolean,
+    forceCurrentEntry?: string,
+): BreadcrumbButtonProps[] => [
+    buildOrgButtonProps(
+        router,
+        orgs,
+        currentOrg.id,
+        currentOrg.name,
+        forceCurrentEntry === undefined,
+    ),
+    buildTabButtonProps(
+        router,
+        buildOrgTabsMenu(orgPermissions, currentOrg.id, useSignup),
+        forceCurrentEntry,
+    ),
+];
 
 const OrgSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
     const router = useRouter();
@@ -28,41 +94,11 @@ const OrgSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
         queryResult: useQuery<NavOrg>(NavOrgQuery, {
             variables: { id },
         }),
-        buildButtonsProps: (data) => [
-            buildOrgButtonProps(router, data.me.orgs, id ?? '', data.getOrg.name, true),
-        ],
-        buildMenuItemsProps: (orgPermissions) => {
-            return [
-                ...[
-                    {
-                        icon: <OrgDashboardIcon />,
-                        label: 'Dashboard',
-                        link: toOrg({ id }, 'dashboard'),
-                    },
-                    {
-                        icon: <OrgUsersIcon />,
-                        label: 'Users',
-                        link: toOrg({ id }, 'users'),
-                        disabled: !orgPermissions.isAdmin,
-                    },
-                ],
-                ...(useSignup
-                    ? [
-                          {
-                              icon: <UserInviteIcon />,
-                              label: 'User Invites',
-                              link: toOrg({ id }, 'invites'),
-                              disabled: !orgPermissions.isAdmin,
-                          },
-                      ]
-                    : []),
-                {
-                    icon: <OrgSettingsIcon />,
-                    label: 'Settings',
-                    link: toOrg({ id }, 'settings'),
-                    disabled: !orgPermissions.isAdmin,
-                },
-            ];
+        buildButtonsProps: (data, orgPermissions) => {
+            return buildOrgButtons(data.me.orgs, data.getOrg, router, orgPermissions, useSignup);
+        },
+        buildMenuItemsProps: (_, orgPermissions) => {
+            return buildOrgTabsMenu(orgPermissions, id, useSignup);
         },
     };
 

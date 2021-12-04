@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 import { VarType, InputType, TypeIcon, ValidationType } from "./globalTypes";
@@ -60,7 +59,8 @@ export interface platformDatamapsFields {
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**

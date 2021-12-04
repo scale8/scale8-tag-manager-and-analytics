@@ -1,4 +1,3 @@
-import { SectionLocator } from '../context/SectionHistoryReducer';
 import { FC } from 'react';
 import DmLogo from '../components/atoms/DmLogo';
 import Logo, { LogoProps } from '../components/atoms/Logo';
@@ -57,6 +56,7 @@ export const getProductSection = (key: symbol): ProductSection => {
 };
 
 export const SectionKey = {
+    loggedOut: Symbol.for('loggedOut'),
     admin: Symbol.for('admin'),
     orgSelect: Symbol.for('orgSelect'),
     org: Symbol.for('org'),
@@ -83,6 +83,13 @@ export type SectionDetails = {
 };
 
 export const sectionDetailsMap = new Map<symbol, SectionDetails>([
+    [
+        SectionKey.loggedOut,
+        {
+            entityName: 'None',
+            productSectionKey: ProductSectionKey.global,
+        },
+    ],
     [
         SectionKey.admin,
         {
@@ -241,22 +248,20 @@ export const getSectionDetails = (key: symbol): SectionDetails => {
     return section;
 };
 
-export const navigationColorFromSectionLocator = (
-    sectionKey: SectionLocator | undefined,
-): string => {
+export const navigationColorFromSectionLocator = (sectionKey: symbol | undefined): string => {
     if (sectionKey === undefined) {
         return '#000000';
     }
-    const sectionDetails = getSectionDetails(sectionKey.section);
+    const sectionDetails = getSectionDetails(sectionKey);
     const productSection = getProductSection(sectionDetails.productSectionKey);
     return productSection.color;
 };
 
-export const logoFromSectionLocator = (sectionKey: SectionLocator | undefined): FC<LogoProps> => {
+export const logoFromSectionLocator = (sectionKey: symbol | undefined): FC<LogoProps> => {
     if (sectionKey === undefined) {
         return Logo;
     }
-    const sectionDetails = getSectionDetails(sectionKey.section);
+    const sectionDetails = getSectionDetails(sectionKey);
     if (sectionDetails.productSectionKey === ProductSectionKey.tagManager) {
         return TmLogo;
     }

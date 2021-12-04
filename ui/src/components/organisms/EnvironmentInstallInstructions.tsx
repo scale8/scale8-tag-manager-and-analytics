@@ -100,7 +100,6 @@ const EnvironmentInstallInstructions: FC<InstallInstructionsProps> = (
             )}
             Then install your environment by adding the following code in the head of your page:
             <Box fontSize={12} my={1}>
-                <pre>{environmentInstallCode}</pre>
                 <CopyBlock text={environmentInstallCode} language="html" />
             </Box>
             {type === 'Tag Manager' && (

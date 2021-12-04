@@ -19,6 +19,7 @@ const NavTagQuery = gql`
                     id
                     name
                     analytics_enabled
+                    error_tracking_enabled
                     storage_provider
                     revisions {
                         id

@@ -39,7 +39,7 @@ const SectionActionsSpeedDial: FC<SectionActionsSpeedDialProps> = (
                             color: (theme) => theme.palette.common.black,
                         },
                         '& > .MuiFab-root': {
-                            backgroundColor: 'transparent',
+                            backgroundColor: 'transparent !important',
                             boxShadow: 'none',
                         },
                     }}

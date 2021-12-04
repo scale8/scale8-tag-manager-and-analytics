@@ -51,8 +51,8 @@ const S8Table = <T extends RowData>(props: S8TableProps<T>): ReactElement => {
     } = tableStateManager;
 
     const { templateInteractions } = useLoggedInState();
-    const { sectionHistory } = templateInteractions;
-    const navigationColor = navigationColorFromSectionLocator(sectionHistory.current);
+    const { section } = templateInteractions;
+    const navigationColor = navigationColorFromSectionLocator(section);
 
     const visibleColumns = columns.filter((_) => !_.hidden);
 

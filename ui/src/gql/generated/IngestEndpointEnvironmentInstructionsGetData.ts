@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 // ====================================================
@@ -90,7 +89,8 @@ export interface IngestEndpointEnvironmentInstructionsGetData_getIngestEndpointE
    */
   default_value: IngestEndpointEnvironmentInstructionsGetData_getIngestEndpointEnvironment_ingest_endpoint_revision_ingest_endpoint_data_maps_child_ingest_endpoint_data_maps_default_value | null;
   /**
-   * If the variable type (see `VarType`) has been specified as an object or array of objects, then this contains the child property definitions
+   * If the variable type (see `VarType`) has been specified as an object or array
+   * of objects, then this contains the child property definitions
    */
   child_ingest_endpoint_data_maps: IngestEndpointEnvironmentInstructionsGetData_getIngestEndpointEnvironment_ingest_endpoint_revision_ingest_endpoint_data_maps_child_ingest_endpoint_data_maps_child_ingest_endpoint_data_maps[];
 }
@@ -118,7 +118,8 @@ export interface IngestEndpointEnvironmentInstructionsGetData_getIngestEndpointE
    */
   default_value: IngestEndpointEnvironmentInstructionsGetData_getIngestEndpointEnvironment_ingest_endpoint_revision_ingest_endpoint_data_maps_default_value | null;
   /**
-   * If the variable type (see `VarType`) has been specified as an object or array of objects, then this contains the child property definitions
+   * If the variable type (see `VarType`) has been specified as an object or array
+   * of objects, then this contains the child property definitions
    */
   child_ingest_endpoint_data_maps: IngestEndpointEnvironmentInstructionsGetData_getIngestEndpointEnvironment_ingest_endpoint_revision_ingest_endpoint_data_maps_child_ingest_endpoint_data_maps[];
 }

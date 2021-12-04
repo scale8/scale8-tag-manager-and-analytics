@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 // ====================================================
@@ -54,7 +53,8 @@ export interface OrgTransferOwnershipGetData_getOrg_users {
    */
   permissions: OrgTransferOwnershipGetData_getOrg_users_permissions;
   /**
-   * If the `OrgUser` currently has ownership of this `Org`. Ownership is required to manage billing, upgrades, downgrades and termination of an Org.
+   * If the `OrgUser` currently has ownership of this `Org`. Ownership is required
+   * to manage billing, upgrades, downgrades and termination of an Org.
    */
   owner: boolean;
 }
@@ -74,7 +74,8 @@ export interface OrgTransferOwnershipGetData_getOrg {
 export interface OrgTransferOwnershipGetData {
   /**
    * @bound=Org
-   * Given a valid `Org` ID, this function will return an `Org` provided the API `User` has been granted at least **view** access.
+   * Given a valid `Org` ID, this function will return an `Org` provided the API
+   * `User` has been granted at least **view** access.
    */
   getOrg: OrgTransferOwnershipGetData_getOrg;
 }

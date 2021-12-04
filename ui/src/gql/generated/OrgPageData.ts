@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 // ====================================================
@@ -39,11 +38,14 @@ export interface OrgPageData_me_orgs {
    */
   name: string;
   /**
-   * A `TagManagerAccount` associated with this `Org`. A Scale8 Tag Manager account might not exist yet unless a trial has been requested or product has been subscribed to.
+   * A `TagManagerAccount` associated with this `Org`. A Scale8 Tag Manager account
+   * might not exist yet unless a trial has been requested or product has been subscribed to.
    */
   tag_manager_account: OrgPageData_me_orgs_tag_manager_account | null;
   /**
-   * A `DataManagerAccount` associated with this `Org`. A Scale8 Data Manager account might not exist yet unless a trial has been requested or product has been subscribed to.
+   * A `DataManagerAccount` associated with this `Org`. A Scale8 Data Manager
+   * account might not exist yet unless a trial has been requested or product has
+   * been subscribed to.
    */
   data_manager_account: OrgPageData_me_orgs_data_manager_account | null;
   /**
