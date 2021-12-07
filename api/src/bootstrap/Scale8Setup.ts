@@ -47,8 +47,11 @@ export default class Scale8Setup {
         const user = new User(
             'Scale',
             '8',
-            Hash.randomHash(await this.config.getEncryptionSalt()),
-            'support@scale8.com',
+            Hash.hashString(
+                await this.config.getDefaultAdminPassword(),
+                await this.config.getEncryptionSalt(),
+            ),
+            'admin@scale8.com',
             Hash.randomHash(await this.config.getEncryptionSalt()),
             [],
             true,

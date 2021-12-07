@@ -134,6 +134,10 @@ export default abstract class BaseConfig {
         return await this.getConfigEntryOrElse('CERT_PATH', '');
     }
 
+    public async getDefaultAdminPassword(): Promise<string> {
+        return await this.getConfigEntryOrElse('DEFAULT_ADMIN_PASS', 'testing');
+    }
+
     public async getGCJson(): Promise<string> {
         return await this.getConfigEntryThrows('GC_JSON');
     }
@@ -261,6 +265,6 @@ export default abstract class BaseConfig {
     }
 
     public async getEncryptionSalt(): Promise<string> {
-        return await this.getConfigEntryOrElse('ENCRYPTION_SALT', 's8s4ltysug4r');
+        return await this.getConfigEntryOrElse('ENCRYPTION_SALT', 'replace_me');
     }
 }
