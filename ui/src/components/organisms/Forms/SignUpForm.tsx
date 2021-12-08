@@ -191,8 +191,12 @@ const SignUpForm: FC<SignUpFormProps> = (props: SignUpFormProps) => {
                 <FormControl error={errors['agree'] !== undefined}>
                     <FormGroup>
                         <FormControlLabel
-                            sx={{ color: (theme) => theme.palette.error.main }}
-                            // error={errors['agree']}
+                            sx={{
+                                color: (theme) =>
+                                    errors['agree'] === undefined
+                                        ? undefined
+                                        : theme.palette.error.main,
+                            }}
                             control={
                                 <Checkbox
                                     checked={values.agree}
