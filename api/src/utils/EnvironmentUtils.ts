@@ -294,10 +294,7 @@ export const createCname = async (environment: { id: ObjectId }) => {
         const route53 =
             awsId === null
                 ? route53Service.getRoute53Client()
-                : route53Service.getRoute53Client(
-                      await config.getAwsId(),
-                      await config.getAwsSecret(),
-                  );
+                : route53Service.getRoute53Client(awsId, await config.getAwsSecret());
         try {
             await route53Service.createNewCNAME(
                 route53,
