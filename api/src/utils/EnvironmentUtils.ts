@@ -277,10 +277,27 @@ export const createCname = async (environment: { id: ObjectId }) => {
 
     if (config.isCommercial()) {
         //create a domain alias...
-        const route53 = route53Service.getRoute53Client(
-            await config.getAwsId(),
-            await config.getAwsSecret(),
-        );
+        const getAwsIdOrNull = async () => {
+            try {
+                return await config.getAwsId();
+            } catch (e) {
+                if (e instanceof GenericError) {
+                    return null;
+                } else {
+                    throw e;
+                }
+            }
+        };
+
+        const awsId = await getAwsIdOrNull();
+
+        const route53 =
+            awsId === null
+                ? route53Service.getRoute53Client()
+                : route53Service.getRoute53Client(
+                      await config.getAwsId(),
+                      await config.getAwsSecret(),
+                  );
         try {
             await route53Service.createNewCNAME(
                 route53,
