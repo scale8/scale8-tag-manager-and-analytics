@@ -35,25 +35,26 @@ const AccountSectionAppTable: FC<AccountSectionAppTableProps> = (
 
     if (applications.length === 0) {
         return (
-            <Button
-                variant="contained"
-                onClick={() => {
-                    router.push(toTagManager({ id: tmId }, 'apps')).then();
-                }}
-                sx={{
-                    color: '#ffffff',
-                    backgroundColor: (theme) => theme.palette.tagManagerColor.main,
-                    width: '100%',
-                    '&:hover': {
+            <Box display="flex" alignItems="center">
+                <Box flex={1}>There are no applications in this organization</Box>
+                <Button
+                    variant="contained"
+                    onClick={() => {
+                        router.push(toTagManager({ id: tmId }, 'apps')).then();
+                    }}
+                    sx={{
                         color: '#ffffff',
                         backgroundColor: (theme) => theme.palette.tagManagerColor.main,
-                    },
-                }}
-                color="inherit"
-                disableElevation
-            >
-                Manage Applications
-            </Button>
+                        '&:hover': {
+                            color: '#ffffff',
+                            backgroundColor: (theme) => theme.palette.tagManagerColor.main,
+                        },
+                    }}
+                    color="inherit"
+                >
+                    Manage Applications
+                </Button>
+            </Box>
         );
     }
 

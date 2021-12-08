@@ -40,25 +40,26 @@ const AccountSectionEndpointTable: FC<AccountSectionAppTableProps> = (
 
     if (endpoints.length === 0) {
         return (
-            <Button
-                variant="contained"
-                onClick={() => {
-                    router.push(toDataManager({ id: dmId })).then();
-                }}
-                sx={{
-                    color: '#ffffff',
-                    backgroundColor: (theme) => theme.palette.dataManagerColor.main,
-                    width: '100%',
-                    '&:hover': {
+            <Box display="flex" alignItems="center">
+                <Box flex={1}>There are no endpoints this organization</Box>
+                <Button
+                    variant="contained"
+                    onClick={() => {
+                        router.push(toDataManager({ id: dmId })).then();
+                    }}
+                    sx={{
                         color: '#ffffff',
                         backgroundColor: (theme) => theme.palette.dataManagerColor.main,
-                    },
-                }}
-                color="inherit"
-                disableElevation
-            >
-                Manage Endpoints
-            </Button>
+                        '&:hover': {
+                            color: '#ffffff',
+                            backgroundColor: (theme) => theme.palette.dataManagerColor.main,
+                        },
+                    }}
+                    color="inherit"
+                >
+                    Manage Endpoints
+                </Button>
+            </Box>
         );
     }
 
