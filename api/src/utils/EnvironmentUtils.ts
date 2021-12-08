@@ -281,12 +281,11 @@ export const createCname = async (environment: { id: ObjectId }) => {
             try {
                 return await config.getAwsId();
             } catch (e) {
-                if (e instanceof GenericError) {
-                    return null;
-                } else {
+                if (!(e instanceof GenericError)) {
                     throw e;
                 }
             }
+            return null;
         };
 
         const awsId = await getAwsIdOrNull();
