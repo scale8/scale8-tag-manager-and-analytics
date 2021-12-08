@@ -7,7 +7,7 @@
     "license": "AGPL-3.0",
     "private": true,
     "scripts": {
-        "dev": "NEXT_PUBLIC_API_URL=http://127.0.0.1:8082 next dev",
+        "dev": "next dev",
         "dev:commercial": "yarn dev",
         "test": "jest",
         "test:watch": "jest --watch",
