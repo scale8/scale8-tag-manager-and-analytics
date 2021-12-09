@@ -134,7 +134,7 @@ const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
                             zIndex: 20,
                             top: 64,
                             display: 'flex',
-                            height: 20,
+                            height: 15,
                             backgroundImage: 'linear-gradient(to bottom, white, transparent)',
                             width: 'calc( 100% - 66px)',
                             position: 'absolute',
@@ -156,7 +156,7 @@ const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
                             sx={{
                                 overflowX: 'auto',
                             }}
-                            pt="20px"
+                            pt="15px"
                             bgcolor="background.paper"
                             flexShrink={1}
                             flexGrow={1}
