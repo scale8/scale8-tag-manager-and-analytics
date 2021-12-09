@@ -10,6 +10,7 @@ import { useParams } from '../../hooks/useParams';
 import Link from '../atoms/Next/Link';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { toOrg } from '../../utils/NavigationPaths';
 
 type BreadcrumbProps = {
     buttonsProps: BreadcrumbButtonProps[];
@@ -72,10 +73,7 @@ const Breadcrumb: FC<BreadcrumbProps> = (props: BreadcrumbProps) => {
                         You have <b>{accountExpireIn}</b> days left in your free trial. You can
                         upgrade to a paid plan in{' '}
                         <Link
-                            href={
-                                ''
-                                //toOrg(orgUserState.orgId, MainPages.OrgSettingsPage)
-                            }
+                            href={toOrg({ id: orgUserState.orgId }, 'settings')}
                             sx={{ color: '#ffffff' }}
                         >
                             organization settings
@@ -88,7 +86,7 @@ const Breadcrumb: FC<BreadcrumbProps> = (props: BreadcrumbProps) => {
                 <Box
                     sx={{
                         boxSizing: 'border-box',
-                        height: '76px',
+                        height: '64px',
                         width: '100%',
                         position: 'relative',
                     }}
@@ -127,7 +125,7 @@ const Breadcrumb: FC<BreadcrumbProps> = (props: BreadcrumbProps) => {
                         width="100%"
                         sx={{
                             '& .breadcrumb': {
-                                padding: (theme) => theme.spacing(3.5, 2, 1.5, 2),
+                                padding: (theme) => theme.spacing(3.5, 2, 0, 2),
                             },
                             overflowX: 'auto',
                             display: 'flex',

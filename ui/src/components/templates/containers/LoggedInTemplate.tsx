@@ -131,6 +131,17 @@ const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
                     {props.breadcrumb}
                     <Box
                         sx={{
+                            zIndex: 20,
+                            top: 64,
+                            display: 'flex',
+                            height: 20,
+                            backgroundImage: 'linear-gradient(to bottom, white, transparent)',
+                            width: 'calc( 100% - 66px)',
+                            position: 'absolute',
+                        }}
+                    />
+                    <Box
+                        sx={{
                             display: 'flex',
                             boxSizing: 'border-box',
                             flex: 1,
@@ -145,6 +156,7 @@ const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
                             sx={{
                                 overflowX: 'auto',
                             }}
+                            pt="20px"
                             bgcolor="background.paper"
                             flexShrink={1}
                             flexGrow={1}
