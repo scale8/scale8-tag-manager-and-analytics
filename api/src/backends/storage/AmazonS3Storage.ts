@@ -19,7 +19,7 @@ export default class AmazonS3Storage extends BaseStorage {
 
             if (awsId === null) {
                 throw new GenericError(
-                    `Failed to get value for environment variable 'AWS_ID'`,
+                    `Failed to get value for environment variable AWS_ID`,
                     LogPriority.ERROR,
                 );
             }
