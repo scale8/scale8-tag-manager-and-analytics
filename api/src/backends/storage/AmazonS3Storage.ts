@@ -15,8 +15,17 @@ export default class AmazonS3Storage extends BaseStorage {
 
     protected async getStorage() {
         if (this.storage === undefined) {
+            const awsId = await this.config.getAwsId();
+
+            if (awsId === null) {
+                throw new GenericError(
+                    `Failed to get value for environment variable 'AWS_ID'`,
+                    LogPriority.ERROR,
+                );
+            }
+
             this.storage = this.s3Service.getS3Client(
-                await this.config.getAwsId(),
+                awsId,
                 await this.config.getAwsSecret(),
                 await this.config.getAwsRegion(),
             );

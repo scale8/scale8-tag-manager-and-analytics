@@ -27,6 +27,11 @@ export default abstract class BaseConfig {
         return value === undefined ? orElse : value;
     }
 
+    private async getConfigEntryOrNull(key: string): Promise<string | null> {
+        const value = await this.getConfigEntry(key);
+        return value === undefined ? null : value;
+    }
+
     private async getConfigEntryThrows(key: string): Promise<string> {
         const value = await this.getConfigEntry(key);
         if (value === undefined) {
@@ -204,8 +209,8 @@ export default abstract class BaseConfig {
         return await this.getConfigEntryThrows('GITHUB_CLIENT_SECRET');
     }
 
-    public async getAwsId(): Promise<string> {
-        return await this.getConfigEntryThrows('AWS_ID');
+    public async getAwsId(): Promise<string | null> {
+        return await this.getConfigEntryOrNull('AWS_ID');
     }
 
     public async getAwsSecret(): Promise<string> {

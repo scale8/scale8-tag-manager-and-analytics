@@ -277,18 +277,7 @@ export const createCname = async (environment: { id: ObjectId }) => {
 
     if (config.isCommercial()) {
         //create a domain alias...
-        const getAwsIdOrNull = async () => {
-            try {
-                return await config.getAwsId();
-            } catch (e) {
-                if (!(e instanceof GenericError)) {
-                    throw e;
-                }
-            }
-            return null;
-        };
-
-        const awsId = await getAwsIdOrNull();
+        const awsId = await config.getAwsId();
 
         const route53 =
             awsId === null
