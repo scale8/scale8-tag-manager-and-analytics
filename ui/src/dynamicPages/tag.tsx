@@ -14,8 +14,8 @@ import { buildStandardMainInfo } from '../utils/InfoLabelsUtils';
 import RuleContainerDivider from '../components/atoms/RuleContainerDivider';
 import { RuleGroupPageSection } from '../components/organisms/Sections/RuleGroupPageSection';
 import { RuleGroup } from '../types/TagRulesTypes';
-import RulesAddButton from '../components/atoms/RulesAddButton';
 import { AlertRevisionFinal } from '../components/atoms/AlertRevisionFinal';
+import { SmallAddButton } from '../components/atoms/SmallAddButton';
 
 const RulesPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const tagId = props.params.id ?? '';
@@ -75,9 +75,11 @@ const RulesPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
                                 />
                             </Fragment>
                         ))}
-                        <RulesAddButton
-                            text="Add Rule Group"
-                            onClick={() => pageActions.createRuleGroup(pageActionProps, tagId)}
+                        <SmallAddButton
+                            addButtonText="Add Rule Group"
+                            addButtonClick={() =>
+                                pageActions.createRuleGroup(pageActionProps, tagId)
+                            }
                             disabled={data.getTag.revision.locked}
                         />
                     </NonTablePageContainer>

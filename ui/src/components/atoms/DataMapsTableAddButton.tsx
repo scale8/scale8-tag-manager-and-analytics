@@ -1,7 +1,7 @@
 import { MouseEventHandler } from 'react';
 import { FC } from 'react';
-import { Box, Button } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import { Box } from '@mui/material';
+import { SmallAddButton } from './SmallAddButton';
 
 type RulesButtonProps = {
     text: string;
@@ -16,15 +16,11 @@ const DataMapsTableAddButton: FC<RulesButtonProps> = (props: RulesButtonProps) =
                 width: '100%',
             }}
         >
-            <Button
-                size="small"
-                variant="outlined"
-                onClick={props.onClick}
-                startIcon={<AddIcon />}
+            <SmallAddButton
+                addButtonText={props.text}
+                addButtonClick={props.onClick}
                 disabled={props.disabled}
-            >
-                {props.text}
-            </Button>
+            />
         </Box>
     );
 };

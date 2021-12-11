@@ -65,7 +65,7 @@ const Breadcrumb: FC<BreadcrumbProps> = (props: BreadcrumbProps) => {
                 <Box display="flex" justifyContent="center">
                     <Box
                         color="#ffffff"
-                        bgcolor="#00000030"
+                        bgcolor="#00000060"
                         px={2}
                         py={0.25}
                         borderRadius="0px 0px 10px 10px"
@@ -74,7 +74,7 @@ const Breadcrumb: FC<BreadcrumbProps> = (props: BreadcrumbProps) => {
                         upgrade to a paid plan in{' '}
                         <Link
                             href={toOrg({ id: orgUserState.orgId }, 'settings')}
-                            sx={{ color: '#ffffff' }}
+                            sx={{ color: '#ffffff', textDecorationColor: '#ffffff' }}
                         >
                             organization settings
                         </Link>

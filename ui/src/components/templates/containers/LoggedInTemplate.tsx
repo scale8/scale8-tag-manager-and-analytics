@@ -131,15 +131,24 @@ const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
                     {props.breadcrumb}
                     <Box
                         sx={{
-                            zIndex: 20,
-                            top: 64,
                             display: 'flex',
-                            height: 15,
-                            backgroundImage: 'linear-gradient(to bottom, white, transparent)',
-                            width: 'calc( 100% - 66px)',
-                            position: 'absolute',
+                            boxSizing: 'border-box',
+                            width: '100%',
+                            position: 'relative',
                         }}
-                    />
+                    >
+                        <Box
+                            sx={{
+                                zIndex: 20,
+                                display: 'flex',
+                                height: 15,
+                                backgroundImage: 'linear-gradient(to bottom, white, transparent)',
+                                width: 'calc( 100% - 66px)',
+                                position: 'absolute',
+                            }}
+                        />
+                    </Box>
+
                     <Box
                         sx={{
                             display: 'flex',
