@@ -14,7 +14,7 @@
         "test:coverage": "jest --coverage",
         "platforms:build": "yarn --cwd ../platforms build && rsync -a --delete ../platforms/builds/ platform-builds",
         "start:prod:docker": "NODE_ENV=production node src/Main.js",
-        "start:prod:commerical": "NODE_ENV=production node src/Main.js",
+        "start:prod:commerical": "NODE_ENV=production SERVER_MODE=COMMERCIAL node src/Main.js",
         "dev:debug": "yarn platforms:build && TZ=UTC NODE_ENV=development TS_NODE_FILES=true node-dev --respawn --inspect=9229 -r ts-node/register ./src/Main.ts",
         "dev:db:connect": "mongo --username=s8-admin --password=s8-admin --host=127.0.0.1 --port=27017",
         "dev:job": "TZ=UTC NODE_ENV=development TS_NODE_FILES=true node -r ts-node/register ./src/JobManager.ts",
