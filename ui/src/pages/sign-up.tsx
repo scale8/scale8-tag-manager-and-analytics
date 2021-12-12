@@ -34,12 +34,9 @@ const SignUpContent: FC<SignUpContentProps> = (props: SignUpContentProps) => {
     const [signup, { loading, data, error: gqlError }] = useMutation(SignUpQuery);
 
     const submitSignUp = async (signUpValues: SignUpValues) => {
+        console.log(type);
         localStorage.removeItem('uid');
         localStorage.removeItem('token');
-
-        if (captcha.current !== null) {
-            captcha.current.resetCaptcha();
-        }
 
         const email = qsEmail ?? signUpValues.email;
 
@@ -156,8 +153,14 @@ const SignUpContent: FC<SignUpContentProps> = (props: SignUpContentProps) => {
             undefined,
             undefined,
             undefined,
-            {
-                CAPTCHAToken: '',
+            (values, setValues) => {
+                if (captcha.current !== null) {
+                    captcha.current.resetCaptcha();
+                    setValues({
+                        ...values,
+                        CAPTCHAToken: '',
+                    });
+                }
             },
         ),
         gqlError,

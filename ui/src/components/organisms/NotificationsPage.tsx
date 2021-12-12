@@ -14,7 +14,7 @@ import { styled } from '@mui/material/styles';
 const StyledBadge = styled(Badge)<BadgeProps>(() => ({
     '& .MuiBadge-badge': {
         right: -17,
-        top: 10,
+        top: 7,
     },
 }));
 

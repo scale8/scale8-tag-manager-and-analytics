@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useRef } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import Head from 'next/head';
 import SignUpContainer from '../components/molecules/SignUpContainer';
 import { useParams } from '../hooks/useParams';
@@ -6,7 +6,7 @@ import Loader from '../components/organisms/Loader';
 import { Box } from '@mui/material';
 import { TagManagerInstallInstructions } from '../lazyComponents/TagManagerInstallInstructions';
 import { useMutation } from '@apollo/client';
-import { CompleteSignUp } from '../gql/generated/CompleteSignUp';
+import { CompleteSignUp, CompleteSignUp_completeSignUp } from '../gql/generated/CompleteSignUp';
 import CompleteSignUpQuery from '../gql/mutations/CompleteSignUpQuery';
 import Link from '../components/atoms/Next/Link';
 import { useRouter } from 'next/router';
@@ -15,24 +15,30 @@ import { toSignUp } from '../utils/NavigationPaths';
 import { CompleteSignUpInput } from '../gql/generated/globalTypes';
 import { buildSignUpType } from '../utils/SignUpUtils';
 import { logError } from '../utils/logUtils';
+import { ApolloError } from '@apollo/client/errors';
 
 type AccountPrepareContentProps = {
     type: string;
     token: string;
+    setSignupStatus: Dispatch<SetStateAction<SignupStatus>>;
 };
 
-const AccountPrepareContent: FC<AccountPrepareContentProps> = (
+type SignupStatus = {
+    completed: boolean;
+    completeSignUp?: CompleteSignUp_completeSignUp;
+    error?: ApolloError;
+    type: string;
+    token: string;
+};
+
+const AccountPrepareInProgress: FC<AccountPrepareContentProps> = (
     props: AccountPrepareContentProps,
 ) => {
-    const { type, token } = props;
-
-    const router = useRouter();
+    const { type, token, setSignupStatus } = props;
 
     const [complete, { data, error: gqlError }] = useMutation<CompleteSignUp>(CompleteSignUpQuery);
 
-    const timer = useRef<NodeJS.Timeout | null>(null);
-
-    const doCompleteSignup = () => {
+    useEffect(() => {
         localStorage.removeItem('uid');
         localStorage.removeItem('token');
 
@@ -50,69 +56,30 @@ const AccountPrepareContent: FC<AccountPrepareContentProps> = (
                 logError(error);
             }
         })();
-    };
-
-    useEffect(() => {
-        timer.current = setTimeout(() => {
-            doCompleteSignup();
-        }, 2000);
-        return () => {
-            if (timer.current !== null) {
-                clearTimeout(timer.current);
-            }
-        };
     });
 
-    const completeSignUp = data?.completeSignUp;
-
-    const isTagManager = useMemo(() => type === 'tag-manager', [type]);
+    useEffect(() => {
+        if (gqlError) {
+            setSignupStatus({
+                completed: true,
+                error: gqlError,
+                type,
+                token,
+            });
+        }
+    }, [gqlError]);
 
     useEffect(() => {
-        if (completeSignUp !== undefined && !isTagManager) {
-            if (completeSignUp.uid !== '' && completeSignUp.token !== '') {
-                localStorage.setItem('uid', completeSignUp.uid);
-                localStorage.setItem('token', completeSignUp.token);
-            }
-
-            router.push(completeSignUp.url).then();
+        const completeSignUp = data?.completeSignUp;
+        if (completeSignUp !== undefined) {
+            setSignupStatus({
+                completed: true,
+                completeSignUp,
+                type,
+                token,
+            });
         }
-    }, [completeSignUp, isTagManager, router]);
-
-    if (gqlError) {
-        return (
-            <Box mb={2} width="100%">
-                <Box py={10}>
-                    <Box fontSize={18} width="100%" textAlign="center">
-                        Your sign up request was unsuccessful, please{' '}
-                        <Link
-                            href={toSignUp({ type: type === 'invite' ? 'tag-manager' : type })}
-                            sx={{ color: '#1b1b1b' }}
-                        >
-                            sign up again
-                        </Link>
-                        .
-                    </Box>
-                </Box>
-            </Box>
-        );
-    }
-
-    if (
-        completeSignUp !== undefined &&
-        type === 'tag-manager' &&
-        completeSignUp.environment_id !== null
-    ) {
-        localStorage.setItem('uid', completeSignUp.uid);
-        localStorage.setItem('token', completeSignUp.token);
-
-        return (
-            <TagManagerInstallInstructions
-                environmentId={completeSignUp.environment_id}
-                link={completeSignUp.url}
-                text="I have installed my Tags"
-            />
-        );
-    }
+    }, [data]);
 
     return (
         <>
@@ -132,8 +99,64 @@ const AccountPrepareContent: FC<AccountPrepareContentProps> = (
     );
 };
 
+const AccountPrepareCompleted: FC<{ signupStatus: SignupStatus }> = ({ signupStatus }) => {
+    const router = useRouter();
+
+    const completeSignUp = signupStatus.completeSignUp;
+    const type = signupStatus.type;
+
+    console.log(signupStatus);
+
+    if (
+        completeSignUp === undefined ||
+        signupStatus.error ||
+        (type === 'tag-manager' && !completeSignUp.environment_id)
+    ) {
+        return (
+            <Box mb={2} width="100%">
+                <Box py={10}>
+                    <Box fontSize={18} width="100%" textAlign="center">
+                        Your sign up request was unsuccessful, please{' '}
+                        <Link
+                            href={toSignUp({ type: type === 'invite' ? 'tag-manager' : type })}
+                            sx={{ color: '#1b1b1b' }}
+                        >
+                            sign up again
+                        </Link>
+                        .
+                    </Box>
+                </Box>
+            </Box>
+        );
+    }
+
+    localStorage.setItem('uid', completeSignUp.uid);
+    localStorage.setItem('token', completeSignUp.token);
+
+    if (type !== 'tag-manager') {
+        router.push(completeSignUp.url).then();
+        return null;
+    }
+
+    return (
+        <TagManagerInstallInstructions
+            environmentId={completeSignUp.environment_id ?? ''}
+            link={completeSignUp.url}
+            text="I have installed my Tags"
+        />
+    );
+};
+
 const AccountPrepare: FC = () => {
-    const { type, target, token } = useParams();
+    const { type: initialType, target, token: initialToken } = useParams();
+    const type = initialType ?? 'tag-manager';
+    const token = initialToken ?? '';
+
+    const [signupStatus, setSignupStatus] = useState<SignupStatus>({
+        completed: false,
+        type,
+        token,
+    });
 
     return (
         <>
@@ -142,13 +165,16 @@ const AccountPrepare: FC = () => {
                 <meta name="description" content="Scale8 - Sign Up page." />
             </Head>
             <LoggedOutSection>
-                <SignUpContainer
-                    type={type ?? 'tag-manager'}
-                    target={target}
-                    isCompleted={false}
-                    isPrepare={true}
-                >
-                    <AccountPrepareContent type={type ?? 'tag-manager'} token={token ?? ''} />
+                <SignUpContainer type={type} target={target} isCompleted={false} isPrepare={true}>
+                    {!signupStatus.completed ? (
+                        <AccountPrepareInProgress
+                            type={type}
+                            token={token}
+                            setSignupStatus={setSignupStatus}
+                        />
+                    ) : (
+                        <AccountPrepareCompleted signupStatus={signupStatus} />
+                    )}
                 </SignUpContainer>
             </LoggedOutSection>
         </>

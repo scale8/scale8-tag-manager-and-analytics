@@ -171,7 +171,7 @@ const useFormValidation = <T extends FormValues>(
         setValues: Dispatch<SetStateAction<T>>,
     ) => void,
     syncSubmit?: boolean,
-    resetValues?: Partial<T>,
+    resetValues?: (values: T, setValues: Dispatch<SetStateAction<T>>) => void,
 ): FormValidationResult<T> => {
     const [values, setValues] = useState(initialState);
     const [errors, setErrors] = useState({} as FormErrors<T>);
@@ -179,15 +179,6 @@ const useFormValidation = <T extends FormValues>(
     const [isSubmitting, setSubmitting] = useState(false);
 
     const submitCallback = useCallback(submit, []);
-
-    const resetValuesCallback = useCallback(() => {
-        if (resetValues) {
-            setValues({
-                ...values,
-                ...resetValues,
-            });
-        }
-    }, [resetValues]);
 
     useEffect(() => {
         verifySubmit(
@@ -202,8 +193,8 @@ const useFormValidation = <T extends FormValues>(
     }, [errors, values, isSubmitting, setSubmitting]);
 
     useEffect(() => {
-        if (!isSubmitting) {
-            resetValuesCallback();
+        if (!isSubmitting && resetValues !== undefined && Object.keys(errors).length === 0) {
+            resetValues(values, setValues);
         }
     }, [isSubmitting]);
 

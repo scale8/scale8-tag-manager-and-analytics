@@ -526,7 +526,7 @@ export default class UserManager extends Manager<User> {
                 throw new GenericError(userMessages.emailServerNotEnabled, LogPriority.ERROR, true);
             }
 
-            if (args.signUpInput.temp_access_code !== 'coal-king-low') {
+            if (args.signUpInput.temp_access_code !== (await this.config.getBetaAccessCode())) {
                 throw new ValidationError('Invalid access code.', true);
             }
 
@@ -616,11 +616,11 @@ export default class UserManager extends Manager<User> {
             };
 
             const buildCompleteSignUpLink = async () => {
-                return `${await this.config.getUiUrl()}/account-prepare/${buildUrlType()}/${
+                return `${await this.config.getUiUrl()}/account-prepare?type=${buildUrlType()}&token=${
                     signUpRequest.token
                 }${
                     signUpRequest.sign_up_type === SignUpType.INVITE
-                        ? `/${signUpRequest.org_name}`
+                        ? `&target=${signUpRequest.org_name}`
                         : ''
                 }`;
             };
@@ -812,7 +812,7 @@ export default class UserManager extends Manager<User> {
                 return {
                     uid: session.uid,
                     token: session.token,
-                    url: `/s8/app/${app.id}/analytics/realtime`,
+                    url: `/s8/app/analytics?id=${app.id}&period=realtime`,
                     environment_id: await getEnvironmentId(),
                 };
             } else if (isData) {
@@ -822,13 +822,13 @@ export default class UserManager extends Manager<User> {
                 return {
                     uid: session.uid,
                     token: session.token,
-                    url: `/s8/data-manager/${
+                    url: `/s8/data-manager?id=${
                         (
                             await this.repoFactory<DataManagerAccountRepo>(
                                 DataManagerAccount,
                             ).getFromOrg(org)
                         ).id
-                    }/ingest-endpoints`,
+                    }`,
                 };
             } else {
                 throw new ValidationError(userMessages.validationInvalidSignUp, true);

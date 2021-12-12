@@ -8,7 +8,7 @@
     "private": true,
     "scripts": {
         "dev": "next dev",
-        "dev:commercial": "yarn dev",
+        "dev:commercial": "NEXT_PUBLIC_IS_COMMERCIAL=true yarn dev",
         "test": "jest",
         "test:watch": "jest --watch",
         "analyze": "ANALYZE=true yarn build",

@@ -290,7 +290,10 @@ export const createCname = async (environment: { id: ObjectId }) => {
                 await config.getCdnDomain(),
             );
         } catch (e) {
-            await logger.warn('Failed to create CNAME for new environment, it might already exist');
+            await logger.warn(
+                'Failed to create CNAME for new environment, it might already exist',
+                { error: e },
+            );
         }
     }
 };

@@ -87,7 +87,7 @@ const SignUpForm: FC<SignUpFormProps> = (props: SignUpFormProps) => {
             isPrepare={false}
         >
             {props.gqlError && (
-                <Box mb={2} width="100%">
+                <Box my={2} width="100%">
                     <FormError error={props.gqlError.message} />
                 </Box>
             )}

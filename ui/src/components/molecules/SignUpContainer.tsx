@@ -75,6 +75,7 @@ const SignUpContainer: FC<SignUpContainerProps> = (props: SignUpContainerProps) 
             <Box pt={2} />
             <LoggedOutFormContainer large>
                 <SignUpProgress {...props} />
+                <Box mt={2} />
                 {children}
             </LoggedOutFormContainer>
         </div>
