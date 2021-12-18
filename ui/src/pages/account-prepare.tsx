@@ -1,7 +1,6 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import Head from 'next/head';
 import SignUpContainer from '../components/molecules/SignUpContainer';
-import { useParams } from '../hooks/useParams';
 import Loader from '../components/organisms/Loader';
 import { Box } from '@mui/material';
 import { TagManagerInstallInstructions } from '../lazyComponents/TagManagerInstallInstructions';
@@ -16,6 +15,7 @@ import { CompleteSignUpInput } from '../gql/generated/globalTypes';
 import { buildSignUpType } from '../utils/SignUpUtils';
 import { logError } from '../utils/logUtils';
 import { ApolloError } from '@apollo/client/errors';
+import { ComponentWithParams, ParamsLoader } from '../components/atoms/ParamsLoader';
 
 type AccountPrepareContentProps = {
     type: string;
@@ -147,8 +147,8 @@ const AccountPrepareCompleted: FC<{ signupStatus: SignupStatus }> = ({ signupSta
     );
 };
 
-const AccountPrepare: FC = () => {
-    const { type: initialType, target, token: initialToken } = useParams();
+const AccountPrepare: ComponentWithParams = ({ params }) => {
+    const { type: initialType, target, token: initialToken } = params;
     const type = initialType ?? 'tag-manager';
     const token = initialToken ?? '';
 
@@ -181,4 +181,5 @@ const AccountPrepare: FC = () => {
     );
 };
 
-export default AccountPrepare;
+const AccountPrepareLoader = () => <ParamsLoader Child={AccountPrepare} />;
+export default AccountPrepareLoader;

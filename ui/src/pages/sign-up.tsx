@@ -3,7 +3,6 @@ import Head from 'next/head';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { FormValues, useFormValidation } from '../hooks/form/useFormValidation';
 import { useMutation } from '@apollo/client';
-import { useParams } from '../hooks/useParams';
 import SignUpQuery from '../gql/mutations/SignUpQuery';
 import { SignUpInput, SignUpType } from '../gql/generated/globalTypes';
 import { buildSignUpType } from '../utils/SignUpUtils';
@@ -17,6 +16,7 @@ import SignUpForm from '../components/organisms/Forms/SignUpForm';
 import LoggedOutSection from '../containers/global/LoggedOutSection';
 import { SignUpValues } from '../types/props/forms/SignUpFormProps';
 import { logError } from '../utils/logUtils';
+import { ComponentWithParams, ParamsLoader } from '../components/atoms/ParamsLoader';
 
 type SignUpContentProps = {
     type?: string;
@@ -34,7 +34,6 @@ const SignUpContent: FC<SignUpContentProps> = (props: SignUpContentProps) => {
     const [signup, { loading, data, error: gqlError }] = useMutation(SignUpQuery);
 
     const submitSignUp = async (signUpValues: SignUpValues) => {
-        console.log(type);
         localStorage.removeItem('uid');
         localStorage.removeItem('token');
 
@@ -181,8 +180,8 @@ const SignUpContent: FC<SignUpContentProps> = (props: SignUpContentProps) => {
     return <SignUpForm {...signupFormProps} />;
 };
 
-const SignUp: FC = () => {
-    const { type, email, github_id: gitHubId, target, inviteId } = useParams();
+const SignUp: ComponentWithParams = ({ params }) => {
+    const { type, email, github_id: gitHubId, target, inviteId } = params;
 
     return (
         <>
@@ -203,4 +202,5 @@ const SignUp: FC = () => {
     );
 };
 
-export default SignUp;
+const SignUpLoader = () => <ParamsLoader Child={SignUp} />;
+export default SignUpLoader;

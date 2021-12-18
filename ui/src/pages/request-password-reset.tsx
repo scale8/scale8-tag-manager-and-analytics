@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import Head from 'next/head';
 import { useMutation } from '@apollo/client';
-import { useParams } from '../hooks/useParams';
 import RequestPasswordResetQuery from '../gql/mutations/RequestPasswordResetQuery';
 import { RequestPasswordResetValues } from '../types/props/forms/PasswordResetFormProps';
 import { SendPasswordResetInput } from '../gql/generated/globalTypes';
@@ -16,6 +15,7 @@ import Link from '../components/atoms/Next/Link';
 import LoggedOutSectionWithConfig from '../containers/global/LoggedOutSectionWithConfig';
 import { useConfigState } from '../context/AppContext';
 import { logError } from '../utils/logUtils';
+import { ComponentWithParams, ParamsLoader } from '../components/atoms/ParamsLoader';
 
 const RequestPasswordResetContent: FC<{ email: string | undefined }> = (props: {
     email: string | undefined;
@@ -105,8 +105,8 @@ const RequestPasswordResetContent: FC<{ email: string | undefined }> = (props: {
     );
 };
 
-const RequestPasswordReset: FC = () => {
-    const { email } = useParams();
+const RequestPasswordReset: ComponentWithParams = ({ params }) => {
+    const { email } = params;
 
     return (
         <>
@@ -121,4 +121,5 @@ const RequestPasswordReset: FC = () => {
     );
 };
 
-export default RequestPasswordReset;
+const RequestPasswordResetLoader = () => <ParamsLoader Child={RequestPasswordReset} />;
+export default RequestPasswordResetLoader;

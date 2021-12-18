@@ -22,7 +22,7 @@ type BreadcrumbProps = {
 };
 
 const Breadcrumb: FC<BreadcrumbProps> = (props: BreadcrumbProps) => {
-    const { id: currentElementId } = useParams();
+    const params = useParams();
     const { orgUserState } = useLoggedInState();
 
     const [scroller, setScroller] = useState<'left' | 'right' | 'none'>('none');
@@ -58,6 +58,10 @@ const Breadcrumb: FC<BreadcrumbProps> = (props: BreadcrumbProps) => {
     }, [breadcrumbScroll.current]);
 
     const { buttonsProps, accountExpireIn, accountIsTrial } = props;
+
+    if (params === null) return <></>;
+
+    const { id: currentElementId } = params;
 
     return (
         <>

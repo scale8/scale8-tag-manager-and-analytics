@@ -1,10 +1,10 @@
-import { FC, useEffect, useState } from 'react';
-import { useParams } from '../hooks/useParams';
+import { useEffect, useState } from 'react';
 import { frameEventFromMessage, messageFromFrameEvent } from '../utils/FrameEventUtils';
 import HighlighterLayout from '../components/templates/HighlighterLayout';
+import { ComponentWithParams, ParamsLoader } from '../components/atoms/ParamsLoader';
 
-const DebugHighlighter: FC = () => {
-    const { code, index } = useParams();
+const DebugHighlighter: ComponentWithParams = ({ params }) => {
+    const { code, index } = params;
     const [flashing, setFlashing] = useState<boolean>(false);
 
     useEffect(() => {
@@ -31,4 +31,5 @@ const DebugHighlighter: FC = () => {
     return <HighlighterLayout code={code} index={index} flashing={flashing} />;
 };
 
-export default DebugHighlighter;
+const DebugHighlighterLoader = () => <ParamsLoader Child={DebugHighlighter} />;
+export default DebugHighlighterLoader;
