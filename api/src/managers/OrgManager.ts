@@ -884,9 +884,9 @@ export default class OrgManager extends Manager<Org> {
                         'InviteEmail.twig',
                         {
                             orgName: org.name,
-                            uiUrl: `${await this.config.getUiUrl()}/sign-up/invite/${encodeURI(
+                            uiUrl: `${await this.config.getUiUrl()}/sign-up?type=invite&target=${encodeURI(
                                 org.name,
-                            )}/${invite.id}`,
+                            )}&invite_id=${invite.id}`,
                         },
                     );
                     return true;

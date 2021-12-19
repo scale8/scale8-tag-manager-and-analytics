@@ -20,6 +20,7 @@ import { ComponentWithParams, ParamsLoader } from '../components/atoms/ParamsLoa
 type AccountPrepareContentProps = {
     type: string;
     token: string;
+    signupStatus: SignupStatus;
     setSignupStatus: Dispatch<SetStateAction<SignupStatus>>;
 };
 
@@ -34,29 +35,32 @@ type SignupStatus = {
 const AccountPrepareInProgress: FC<AccountPrepareContentProps> = (
     props: AccountPrepareContentProps,
 ) => {
-    const { type, token, setSignupStatus } = props;
+    const { type, token, setSignupStatus, signupStatus } = props;
 
     const [complete, { data, error: gqlError }] = useMutation<CompleteSignUp>(CompleteSignUpQuery);
 
     useEffect(() => {
-        localStorage.removeItem('uid');
-        localStorage.removeItem('token');
+        if (!signupStatus.completed) {
+            localStorage.removeItem('uid');
+            localStorage.removeItem('token');
 
-        const completeSignUpInput: CompleteSignUpInput = {
-            sign_up_type: buildSignUpType(type),
-            token,
-        };
+            const completeSignUpInput: CompleteSignUpInput = {
+                sign_up_type: buildSignUpType(type),
+                token,
+            };
 
-        (async () => {
-            try {
-                await complete({
-                    variables: { completeSignUpInput },
-                });
-            } catch (error) {
-                logError(error);
-            }
-        })();
-    });
+            (async () => {
+                try {
+                    await new Promise((f) => setTimeout(f, 1000));
+                    await complete({
+                        variables: { completeSignUpInput },
+                    });
+                } catch (error) {
+                    logError(error);
+                }
+            })();
+        }
+    }, [signupStatus.completed]);
 
     useEffect(() => {
         if (gqlError) {
@@ -104,8 +108,6 @@ const AccountPrepareCompleted: FC<{ signupStatus: SignupStatus }> = ({ signupSta
 
     const completeSignUp = signupStatus.completeSignUp;
     const type = signupStatus.type;
-
-    console.log(signupStatus);
 
     if (
         completeSignUp === undefined ||
@@ -170,6 +172,7 @@ const AccountPrepare: ComponentWithParams = ({ params }) => {
                         <AccountPrepareInProgress
                             type={type}
                             token={token}
+                            signupStatus={signupStatus}
                             setSignupStatus={setSignupStatus}
                         />
                     ) : (

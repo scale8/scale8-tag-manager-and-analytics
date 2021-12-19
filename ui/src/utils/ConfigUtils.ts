@@ -15,13 +15,14 @@ export const getApiUrl = (): string => {
         const port = window.location.port;
         const path = window.location.pathname;
         const qs = window.location.search;
+        const protocol = window.location.protocol;
         const isDev = getNodeEnv() === 'development';
         const isCommercial = getIsCommercial();
         const isLocalHost = hostname === 'localhost' || hostname === '127.0.0.1';
         if (isDev && isCommercial && isLocalHost) {
             // noinspection HttpUrlsUsage
             location.replace(
-                `http://ui-dev.scale8.com${port === '' ? '' : `:${port}`}${path}${qs}`,
+                `${protocol}//ui-dev.scale8.com${port === '' ? '' : `:${port}`}${path}${qs}`,
             );
             return '';
         }
@@ -36,8 +37,7 @@ export const getApiUrl = (): string => {
             return 'http://127.0.0.1:8082';
         }
         if (port === '8443') {
-            // noinspection HttpUrlsUsage
-            return 'http://api-dev.scale8.com:8443';
+            return 'https://api-dev.scale8.com:8443';
         }
         // noinspection HttpUrlsUsage
         return 'http://api-dev.scale8.com:8082';

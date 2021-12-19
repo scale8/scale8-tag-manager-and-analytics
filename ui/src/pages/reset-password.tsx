@@ -15,11 +15,7 @@ import ResetPasswordForm from '../components/organisms/Forms/ResetPasswordForm';
 import { logError } from '../utils/logUtils';
 import { ComponentWithParams, ParamsLoader } from '../components/atoms/ParamsLoader';
 
-const ResetPasswordContent: FC<{ token: string | undefined }> = (props: {
-    token: string | undefined;
-}) => {
-    const { token } = props;
-
+const ResetPasswordContent: FC<{ token: string }> = ({ token }) => {
     const [resetPassword, { loading, data, error: gqlError }] = useMutation(ResetPasswordQuery);
 
     const submit = async (resetPasswordValues: ResetPasswordValues) => {
@@ -27,7 +23,7 @@ const ResetPasswordContent: FC<{ token: string | undefined }> = (props: {
         localStorage.removeItem('token');
 
         const resetPasswordInput: ResetPasswordInput = {
-            token: token ?? '',
+            token: token,
             new_password: resetPasswordValues.newPassword,
         };
         try {
@@ -98,7 +94,7 @@ const ResetPassword: ComponentWithParams = ({ params }) => {
                 <meta name="description" content="Scale8 - Password Reset." />
             </Head>
             <LoggedOutSection>
-                <ResetPasswordContent token={token} />
+                {token !== undefined && <ResetPasswordContent token={token} />}
             </LoggedOutSection>
         </>
     );

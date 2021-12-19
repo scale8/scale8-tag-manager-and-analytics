@@ -181,7 +181,7 @@ const SignUpContent: FC<SignUpContentProps> = (props: SignUpContentProps) => {
 };
 
 const SignUp: ComponentWithParams = ({ params }) => {
-    const { type, email, github_id: gitHubId, target, inviteId } = params;
+    const { type, email, github_id: gitHubId, target, invite_id: inviteId } = params;
 
     return (
         <>

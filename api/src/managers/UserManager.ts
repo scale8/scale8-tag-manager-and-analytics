@@ -676,7 +676,7 @@ export default class UserManager extends Manager<User> {
                 return {
                     uid: '',
                     token: '',
-                    url: '/login/duplicate',
+                    url: '/login?reason=duplicate',
                 };
             }
 
@@ -1049,7 +1049,7 @@ export default class UserManager extends Manager<User> {
                 //send email...
                 await this.mailer.sendEmail(user.email, 'Password Reset', 'PasswordReset.twig', {
                     firstName: user.firstName,
-                    uiUrl: `${await this.config.getUiUrl()}/reset-password/${reset.token}`,
+                    uiUrl: `${await this.config.getUiUrl()}/reset-password?token=${reset.token}`,
                 });
             } catch (e: any) {
                 await this.logger.logError(e, `Failed to send password reset email to ${email}`);
