@@ -31,7 +31,7 @@ export default class ConsoleLogger extends BaseLogger {
             color: (text: string) => {
                 return color(text).yellow;
             },
-            consoleFunction: console.log,
+            consoleFunction: console.warn,
             label: 'WARN',
         },
         2: {
@@ -39,7 +39,7 @@ export default class ConsoleLogger extends BaseLogger {
             color: (text: string) => {
                 return color(text).blue;
             },
-            consoleFunction: console.log,
+            consoleFunction: console.info,
             label: 'INFO',
         },
         3: {
@@ -47,7 +47,7 @@ export default class ConsoleLogger extends BaseLogger {
             color: (text: string) => {
                 return color(text).grey;
             },
-            consoleFunction: console.log,
+            consoleFunction: console.debug,
             label: 'DEBUG',
         },
         4: {
@@ -55,7 +55,7 @@ export default class ConsoleLogger extends BaseLogger {
             color: (text: string) => {
                 return color(text).cyan;
             },
-            consoleFunction: console.log,
+            consoleFunction: console.debug,
             label: 'DATABASE',
         },
         5: {
@@ -63,7 +63,7 @@ export default class ConsoleLogger extends BaseLogger {
             color: (text: string) => {
                 return color(text).magenta;
             },
-            consoleFunction: console.log,
+            consoleFunction: console.debug,
             label: 'GQL',
         },
     };
