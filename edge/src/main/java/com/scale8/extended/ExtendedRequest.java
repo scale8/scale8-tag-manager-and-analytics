@@ -61,7 +61,9 @@ public class ExtendedRequest {
   }
 
   public String getHost() {
-    if (id != null) {
+    if (env.IS_COMMERICAL) {
+      return request.getHeaders().get("Host");
+    } else if (id != null) {
       return (env.IS_PROD ? "p" : "d") + id + ".scale8.com";
     } else {
       return request.getServerName();
@@ -187,9 +189,9 @@ public class ExtendedRequest {
 
   public String getServer() {
     if (env.IS_COMMERICAL) {
-      return "https://" + getHost();
+      return env.IS_PROD? "https://" + getHost() : "https://" + getHost() + ":8443";
     } else {
-      String protocol = request.isSecure()? "https" : "http";
+      String protocol = request.isSecure() ? "https" : "http";
       return (env.S8_EDGE_SERVER == null
               ? protocol + "://" + request.getServerName() + ":" + env.SERVER_PORT
               : env.S8_EDGE_SERVER)

@@ -40,7 +40,7 @@ export const getCommercialStorageProviderConfig = async (): Promise<StorageProvi
 
     return {
         config: {
-            service_account_json: '',
+            service_account_json: {},
             data_set_name: await config.getAnalyticsDataSetName(),
             require_partition_filter_in_queries: true,
         },

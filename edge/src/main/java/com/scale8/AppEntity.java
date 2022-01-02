@@ -99,10 +99,8 @@ public class AppEntity {
   }
 
   private String publicPath(ExtendedRequest extendedRequest, String platformId, String revisionId) {
-    String base =
-        extendedRequest.usingHostRouting()
-            ? extendedRequest.getHost()
-            : extendedRequest.getServer();
+    String base = extendedRequest.getServer();
+
     if (revisionId != null) {
       return base + "/p/" + platformId + "/" + revisionId + "/";
     } else {

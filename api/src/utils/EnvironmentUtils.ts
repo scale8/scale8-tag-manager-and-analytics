@@ -275,7 +275,8 @@ export const createCname = async (environment: { id: ObjectId }) => {
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
     const logger = container.get<BaseLogger>(TYPES.BackendLogger);
 
-    if (config.isCommercial()) {
+    //todo. we'll eliminate the need for this in non-prod envs with a redirect service at a later point.
+    if (config.isCommercial() && !config.isProduction()) {
         //create a domain alias...
         const awsId = await config.getAwsId();
 

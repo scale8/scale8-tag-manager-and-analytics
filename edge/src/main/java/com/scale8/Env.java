@@ -3,6 +3,7 @@ package com.scale8;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.scale8.extended.types.Tuple;
 import io.micronaut.runtime.server.EmbeddedServer;
 import software.amazon.awssdk.auth.credentials.AwsCredentials;
@@ -75,9 +76,13 @@ public class Env {
                       .flatMap(
                           entry -> {
                             JsonElement value = entry.getValue();
-                            return value.isJsonPrimitive()
-                                ? Stream.of(new Tuple<>(entry.getKey(), value.toString()))
-                                : Stream.empty();
+                            if (value.isJsonPrimitive()) {
+                              JsonPrimitive jsonPrimitive = (JsonPrimitive) value;
+                              return Stream.of(
+                                  new Tuple<>(entry.getKey(), jsonPrimitive.getAsString()));
+                            } else {
+                              return Stream.empty();
+                            }
                           })
                       .collect(
                           Collectors.toMap(
@@ -143,9 +148,33 @@ public class Env {
 
   public final String PROXY_FOR = getOrElse("PROXY_FOR", "");
 
-  public final String S8_API_SERVER = getOrElse("S8_API_SERVER", "http://127.0.0.1:8082");
+  private String getApiServerDefault() {
+    if(IS_COMMERICAL){
+      if(IS_PROD){
+        return "https://api.scale8.com";
+      } else {
+        return "https://api-dev.scale8.com:8443";
+      }
+    } else {
+      return "http://127.0.0.1:8082";
+    }
+  }
 
-  public final String S8_UI_SERVER = getOrElse("S8_UI_SERVER", "http://127.0.0.1:3000");
+  public final String S8_API_SERVER = getOrElse("S8_API_SERVER", getApiServerDefault());
+
+  private String getUiServerDefault() {
+    if(IS_COMMERICAL){
+      if(IS_PROD){
+        return "https://ui.scale8.com";
+      } else {
+        return "https://ui-dev.scale8.com:8443";
+      }
+    } else {
+      return "http://127.0.0.1:3000";
+    }
+  }
+
+  public final String S8_UI_SERVER = getOrElse("S8_UI_SERVER", getUiServerDefault());
 
   public final String S8_EDGE_SERVER = getOrElse("S8_EDGE_SERVER", null);
 

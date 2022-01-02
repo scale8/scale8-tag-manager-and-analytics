@@ -59,11 +59,6 @@ public class RootController {
     return issues.isEmpty() ? OK_JSON : new Gson().toJson(issues);
   }
 
-  @Get(uri = "/test", produces = APPLICATION_JSON)
-  public String test(HttpRequest<String> request) throws Exception {
-    return storage.getClass().getName();
-  }
-
   @Get(produces = APPLICATION_JSON)
   public String ingestGetRequest(HttpRequest<String> request) throws Exception {
     return this.handleIngestRequest(request, null);
