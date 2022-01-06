@@ -22,7 +22,7 @@ const SideMenuButton: FC<PageMenuButtonProps> = (props: PageMenuButtonProps) => 
         <Tooltip title={props.label} placement="right">
             <IconButton
                 sx={{
-                    color: router.asPath === props.link ? navigationColor : 'grey.800',
+                    color: router.asPath === props.link ? navigationColor : 'white',
                 }}
                 color="inherit"
                 onClick={() => {

@@ -6,7 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import { getComparator, stableSort } from '../../../utils/ArrayUtils';
 import { FieldAction, FieldType, RowData, S8TableProps } from './S8TableTypes';
-import { Box, Button, TablePagination, Tooltip } from '@mui/material';
+import { Box, Button, darken, TablePagination, Tooltip } from '@mui/material';
 import S8TableToolbar from './S8TableToolBar';
 import S8TableHead from './S8TableHead';
 import S8TableRowActionsCell from './S8TableRowActionsCell';
@@ -161,6 +161,9 @@ const S8Table = <T extends RowData>(props: S8TableProps<T>): ReactElement => {
                                 sx={{
                                     color: '#ffffff',
                                     background: navigationColor,
+                                    '&:hover': {
+                                        backgroundColor: darken(navigationColor, 0.2),
+                                    },
                                 }}
                             >
                                 {emptyAction.text}

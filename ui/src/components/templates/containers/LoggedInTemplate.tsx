@@ -117,7 +117,8 @@ const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
                         height: 0,
                         borderStyle: 'solid',
                         borderWidth: '15px 15px 0 0',
-                        borderColor: '#e0e0e0 transparent transparent transparent',
+                        borderColor: (theme) =>
+                            `${theme.palette.primary.main} transparent transparent transparent`,
                     }}
                 />
                 <Box

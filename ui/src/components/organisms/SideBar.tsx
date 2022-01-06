@@ -27,7 +27,7 @@ const SideBar: FC<SideBarProps> = (props: SideBarProps) => {
                 display: 'flex',
                 boxSizing: 'border-box',
                 flexDirection: 'column',
-                backgroundColor: '#e0e0e0',
+                backgroundColor: (theme) => theme.palette.primary.main,
                 flexGrow: 0,
                 width: '50px',
                 height: '100vh',
@@ -70,7 +70,7 @@ const SideBar: FC<SideBarProps> = (props: SideBarProps) => {
                             <IconButton
                                 sx={{
                                     color: (theme) =>
-                                        inAdmin ? theme.palette.adminColor.main : 'grey.800',
+                                        inAdmin ? theme.palette.adminColor.main : 'white',
                                 }}
                                 onClick={() => {
                                     if (inAdmin) {
@@ -96,7 +96,7 @@ const SideBar: FC<SideBarProps> = (props: SideBarProps) => {
                         <Box>
                             <IconButton
                                 sx={{
-                                    color: 'grey.800',
+                                    color: 'white',
                                 }}
                                 color="inherit"
                                 onClick={() => {
@@ -113,7 +113,7 @@ const SideBar: FC<SideBarProps> = (props: SideBarProps) => {
                     <Tooltip title="Notifications" placement="right">
                         <IconButton
                             sx={{
-                                color: 'grey.800',
+                                color: 'white',
                             }}
                             color="inherit"
                             onClick={props.handleNotificationClick}
