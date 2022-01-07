@@ -10,6 +10,7 @@
         "dev": "next dev",
         "dev:commercial": "NEXT_PUBLIC_IS_COMMERCIAL=true yarn dev",
         "test": "jest",
+        "test:fix-snapshots": "jest -u",
         "test:watch": "jest --watch",
         "analyze": "ANALYZE=true yarn build",
         "build": "next build",
