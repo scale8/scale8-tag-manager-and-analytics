@@ -35,7 +35,7 @@ const EnvironmentInstallInstructions: FC<InstallInstructionsProps> = (
     const determinePort = () => {
         if (props.mode === Mode.COMMERCIAL) {
             if (getNodeEnv() === 'development') {
-                return '5443';
+                return '8443';
             }
             return undefined;
         }

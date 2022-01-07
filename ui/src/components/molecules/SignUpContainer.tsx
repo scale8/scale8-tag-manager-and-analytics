@@ -11,6 +11,7 @@ export type SignUpContainerProps = {
     children: ReactNode;
     isCompleted: boolean;
     isPrepare: boolean;
+    installTags?: boolean;
 };
 
 const SignUpContainer: FC<SignUpContainerProps> = (props: SignUpContainerProps) => {

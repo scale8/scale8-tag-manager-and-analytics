@@ -14,6 +14,7 @@ const AppAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const id = props.params.id ?? '';
     const router = useRouter();
     const periodParam = props.params.period;
+    const checkTags = props.params['check-tags'] === '1';
 
     const chartPeriodProps = useChartPeriod(periodParam);
 
@@ -91,6 +92,7 @@ const AppAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
             refreshAt={refreshAt}
             ticks={ticks}
             id={id}
+            checkTags={checkTags}
         >
             <AppAnalyticsPageContent
                 chartPeriodProps={chartPeriodProps}
@@ -103,6 +105,7 @@ const AppAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
                 appSummaryQueryOptionsCurrent={summaryQueryOptionsCurrent}
                 refreshAt={refreshAt}
                 id={id}
+                checkTags={checkTags}
             />
         </AppAnalyticsPageContainer>
     );

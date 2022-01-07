@@ -15,15 +15,12 @@ export const getApiUrl = (): string => {
         const port = window.location.port;
         const path = window.location.pathname;
         const qs = window.location.search;
-        const protocol = window.location.protocol;
         const isDev = getNodeEnv() === 'development';
         const isCommercial = getIsCommercial();
         const isLocalHost = hostname === 'localhost' || hostname === '127.0.0.1';
         if (isDev && isCommercial && isLocalHost) {
             // noinspection HttpUrlsUsage
-            location.replace(
-                `${protocol}//ui-dev.scale8.com${port === '' ? '' : `:${port}`}${path}${qs}`,
-            );
+            location.replace(`https://ui-dev.scale8.com:8443${path}${qs}`);
             return '';
         }
         if (isDev && hostname === 'localhost') {

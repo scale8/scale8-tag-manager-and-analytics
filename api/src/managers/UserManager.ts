@@ -812,7 +812,7 @@ export default class UserManager extends Manager<User> {
                 return {
                     uid: session.uid,
                     token: session.token,
-                    url: `/s8/app/analytics?id=${app.id}&period=realtime`,
+                    url: `/s8/app/analytics?id=${app.id}&period=realtime&check-tags=1`,
                     environment_id: await getEnvironmentId(),
                 };
             } else if (isData) {

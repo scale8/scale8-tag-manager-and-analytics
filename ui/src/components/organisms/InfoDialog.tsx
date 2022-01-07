@@ -1,8 +1,8 @@
 import { FC, ReactNode, useEffect } from 'react';
-import { Dialog, DialogActions } from '@mui/material';
+import { Dialog } from '@mui/material';
 import { DialogBaseProps } from '../../types/DialogTypes';
 import { useLoggedInState } from '../../context/AppContext';
-import { DialogCancelButton } from '../atoms/DialogCancelButton';
+import DialogActionsWithCancel from '../molecules/DialogActionsWithCancel';
 
 type InfoDialogProps = DialogBaseProps & {
     children: ReactNode;
@@ -18,14 +18,10 @@ const InfoDialog: FC<InfoDialogProps> = (props: InfoDialogProps) => {
         if (open) {
             teleport(
                 'dialogErrorClose',
-                <DialogActions sx={{ padding: 2, justifyContent: 'center' }}>
-                    <DialogCancelButton onClick={() => handleDialogClose(true)}>
-                        Cancel
-                    </DialogCancelButton>
-                </DialogActions>,
+                <DialogActionsWithCancel handleDialogClose={handleDialogClose} ignoreChanges />,
             );
         }
-    }, [open, handleDialogClose, teleport]);
+    }, [open]);
 
     return (
         <>

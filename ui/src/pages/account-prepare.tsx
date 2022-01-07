@@ -3,14 +3,13 @@ import Head from 'next/head';
 import SignUpContainer from '../components/molecules/SignUpContainer';
 import Loader from '../components/organisms/Loader';
 import { Box } from '@mui/material';
-import { TagManagerInstallInstructions } from '../lazyComponents/TagManagerInstallInstructions';
 import { useMutation } from '@apollo/client';
 import { CompleteSignUp, CompleteSignUp_completeSignUp } from '../gql/generated/CompleteSignUp';
 import CompleteSignUpQuery from '../gql/mutations/CompleteSignUpQuery';
 import Link from '../components/atoms/Next/Link';
 import { useRouter } from 'next/router';
 import LoggedOutSection from '../containers/global/LoggedOutSection';
-import { toSignUp } from '../utils/NavigationPaths';
+import { toInstallTags, toSignUp } from '../utils/NavigationPaths';
 import { CompleteSignUpInput } from '../gql/generated/globalTypes';
 import { buildSignUpType } from '../utils/SignUpUtils';
 import { logError } from '../utils/logUtils';
@@ -135,18 +134,17 @@ const AccountPrepareCompleted: FC<{ signupStatus: SignupStatus }> = ({ signupSta
     localStorage.setItem('uid', completeSignUp.uid);
     localStorage.setItem('token', completeSignUp.token);
 
-    if (type !== 'tag-manager') {
-        router.push(completeSignUp.url).then();
-        return null;
-    }
-
-    return (
-        <TagManagerInstallInstructions
-            environmentId={completeSignUp.environment_id ?? ''}
-            link={completeSignUp.url}
-            text="I have installed my Tags"
-        />
-    );
+    router
+        .push(
+            type === 'tag-manager'
+                ? toInstallTags({
+                      env: completeSignUp.environment_id ?? '',
+                      target: encodeURIComponent(completeSignUp.url),
+                  })
+                : completeSignUp.url,
+        )
+        .then();
+    return null;
 };
 
 const AccountPrepare: ComponentWithParams = ({ params }) => {
