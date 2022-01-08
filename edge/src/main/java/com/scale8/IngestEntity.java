@@ -35,9 +35,7 @@ public class IngestEntity {
 
   @Cacheable()
   protected IngestSettings getConfig(String uri) throws IOException {
-    System.out.println("Fetch config for: " + uri);
     String data = storage.get(env.CONFIG_BUCKET, uri);
-    System.out.println(data);
     return new Gson().fromJson(data, IngestSettings.class);
   }
 
