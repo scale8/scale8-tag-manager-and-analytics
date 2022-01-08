@@ -25,7 +25,7 @@ const CodeShiki: FC<ShikiProps> = ({ code, language, errorPosition, smallText, l
         if (errorRef.current && shikiRef.current) {
             shikiRef.current.scrollTop = errorRef.current.offsetTop - 5;
         }
-    });
+    }, []);
 
     useEffect(() => {
         (async () => {

@@ -12,7 +12,7 @@ const RedirectToDataManager: FC<{
 
     useEffect(() => {
         router.push(toDataManager({ id: props.data.startDataManagerTrial.id })).then();
-    });
+    }, []);
 
     return null;
 };

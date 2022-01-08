@@ -26,7 +26,7 @@ const DebugHighlighter: ComponentWithParams = ({ params }) => {
                 return () => clearTimeout(timer);
             }
         });
-    });
+    }, []);
 
     return <HighlighterLayout code={code} index={index} flashing={flashing} />;
 };
