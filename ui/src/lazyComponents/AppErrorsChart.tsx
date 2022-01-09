@@ -37,8 +37,7 @@ const AppErrorsChart: FC<AppErrorContentProps> = (props: AppErrorContentProps) =
                         data: chartData.map((_) => _.user_count),
                         fill: false,
                         backgroundColor: '#737373',
-                        borderColor: '#737373',
-                        borderWidth: 3,
+                        borderWidth: 0,
                         lineTension: 0,
                         yAxisID: 'yAxis1',
                     },
@@ -47,8 +46,7 @@ const AppErrorsChart: FC<AppErrorContentProps> = (props: AppErrorContentProps) =
                         data: chartData.map((_) => _.event_count),
                         fill: false,
                         backgroundColor: '#c63d51',
-                        borderColor: '#c63d51',
-                        borderWidth: 3,
+                        borderWidth: 0,
                         lineTension: 0,
                         yAxisID: 'yAxis2',
                     },
@@ -105,6 +103,7 @@ const AppErrorsChart: FC<AppErrorContentProps> = (props: AppErrorContentProps) =
                 },
             };
 
+            // noinspection RequiredAttributes
             return (
                 <Box height="300px" width="100%" overflow="auto">
                     <Bar data={data} options={options} />
