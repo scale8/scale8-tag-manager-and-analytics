@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { FormProps, FormValidationResult } from '../../../hooks/form/useFormValidation';
+import { FormValidationResult } from '../../../hooks/form/useFormValidation';
 import { ApolloError, useMutation, useQuery } from '@apollo/client';
 import UpdateEnvironmentQuery from '../../../gql/mutations/UpdateEnvironmentQuery';
 import { EnvironmentUpdateInput } from '../../../gql/generated/globalTypes';
@@ -8,16 +8,13 @@ import { DialogPageProps } from '../../../types/DialogTypes';
 import { DialogPreloadForm, DialogPreloadFormProps } from '../../abstractions/DialogPreloadForm';
 import { buildStandardFormInfo } from '../../../utils/InfoLabelsUtils';
 import {
+    CustomDomainFormProps,
     CustomDomainValidators,
     CustomDomainValues,
 } from '../../../utils/forms/CustomDomainFormUtils';
 import CustomDomainForm from '../../../components/organisms/Forms/CustomDomainForm';
 import UpdateCustomDomainGetQuery from '../../../gql/queries/UpdateCustomDomainGetQuery';
 import { UpdateCustomDomainGetQueryData } from '../../../gql/generated/UpdateCustomDomainGetQueryData';
-
-export type CustomDomainFormProps = FormProps<CustomDomainValues> & {
-    installDomain: string;
-};
 
 const EnvironmentEditCustomDomain: FC<DialogPageProps> = (props: DialogPageProps) => {
     const environmentUpdateProps: DialogPreloadFormProps<
@@ -60,7 +57,6 @@ const EnvironmentEditCustomDomain: FC<DialogPageProps> = (props: DialogPageProps
                 : 'Create Custom Domain',
             formInfoProps: buildStandardFormInfo('appEnvironments', 'EditCustomDomain'),
             handleDialogClose: props.handleDialogClose,
-            hasCustomDomain: formLoadedData.getEnvironment.custom_domain !== null,
             installDomain: formLoadedData.getEnvironment.install_domain,
         }),
         checkSuccessfullySubmitted: (formMutationData) => formMutationData?.updateEnvironment,

@@ -97,40 +97,50 @@ const AppEnvironmentsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
             }),
 
         buildRowActions: (pageActionProps) => [
-            buildHistoryAction(
-                ({ id, name }) => pageActions.showAppEnvironmentHistory(pageActionProps, id, name),
-                'Environment History',
-                () => !currentOrgPermissions.canView,
-                () => !isAuditEnabled,
-            ),
-            buildInstallInstructionsAction(
-                ({ id }) => pageActions.installAppEnvironment(pageActionProps, id),
-                'Install Environment',
-                () => !currentOrgPermissions.canView,
-            ),
-            buildEditCustomDomainAction(
-                ({ id }) => pageActions.editCustomDomainAppEnvironment(pageActionProps, id),
-                'Custom Domain',
-                () => !currentOrgPermissions.canEdit,
-            ),
-            buildEditVariablesAction(
-                ({ id }) => pageActions.editVariablesAppEnvironment(pageActionProps, id),
-                'Environment Variables',
-                () => !currentOrgPermissions.canEdit,
-            ),
-            buildEditAction(
-                ({ id }) => pageActions.updateAppEnvironment(pageActionProps, id, appId),
-                'Edit Environment',
-                () => !currentOrgPermissions.canEdit,
-            ),
-            buildDeleteAction(
-                ({ name, id }) =>
-                    ask(`Delete Environment: ${name}?`, () => {
-                        pageActions.deleteAppEnvironment(pageActionProps, id);
-                    }),
-                `Delete Environment`,
-                () => !currentOrgPermissions.canDelete,
-            ),
+            ...[
+                buildHistoryAction(
+                    ({ id, name }) =>
+                        pageActions.showAppEnvironmentHistory(pageActionProps, id, name),
+                    'Environment History',
+                    () => !currentOrgPermissions.canView,
+                    () => !isAuditEnabled,
+                ),
+                buildInstallInstructionsAction(
+                    ({ id }) => pageActions.installAppEnvironment(pageActionProps, id),
+                    'Install Environment',
+                    () => !currentOrgPermissions.canView,
+                ),
+            ],
+            ...(mode === Mode.COMMERCIAL
+                ? [
+                      buildEditCustomDomainAction(
+                          ({ id }) =>
+                              pageActions.editCustomDomainAppEnvironment(pageActionProps, id),
+                          'Custom Domain',
+                          () => !currentOrgPermissions.canEdit,
+                      ),
+                  ]
+                : []),
+            ...[
+                buildEditVariablesAction(
+                    ({ id }) => pageActions.editVariablesAppEnvironment(pageActionProps, id),
+                    'Environment Variables',
+                    () => !currentOrgPermissions.canEdit,
+                ),
+                buildEditAction(
+                    ({ id }) => pageActions.updateAppEnvironment(pageActionProps, id, appId),
+                    'Edit Environment',
+                    () => !currentOrgPermissions.canEdit,
+                ),
+                buildDeleteAction(
+                    ({ name, id }) =>
+                        ask(`Delete Environment: ${name}?`, () => {
+                            pageActions.deleteAppEnvironment(pageActionProps, id);
+                        }),
+                    `Delete Environment`,
+                    () => !currentOrgPermissions.canDelete,
+                ),
+            ],
         ],
         buildFieldActions: (pageActionProps) => [
             buildFieldAction(

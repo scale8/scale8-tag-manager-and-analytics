@@ -8,6 +8,7 @@ import {
     buildAddAction,
     buildDeleteAction,
     buildEditAction,
+    buildEditCustomDomainAction,
     buildFieldAction,
     buildHistoryAction,
     buildInstallInstructionsAction,
@@ -63,7 +64,7 @@ const IngestEndpointEnvironmentsPage: FC<DynamicPageProps> = (props: DynamicPage
                       { field: 'id' },
                       { field: 'requests', type: 'graph', hidden: true },
                       { field: 'bytes', type: 'graph', hidden: true },
-                      { field: 'customDomain', hidden: true },
+                      { field: 'customDomain' },
                       { field: 'installDomain' },
                       { field: 'revision' },
                       { field: 'storageProvider' },
@@ -104,7 +105,7 @@ const IngestEndpointEnvironmentsPage: FC<DynamicPageProps> = (props: DynamicPage
                             : '-',
                         customDomain: ingestEndpointEnvironment.custom_domain
                             ? ingestEndpointEnvironment.custom_domain
-                            : '-',
+                            : 'Create custom domain',
                         installDomain: ingestEndpointEnvironment.install_domain
                             ? ingestEndpointEnvironment.install_domain
                             : '-',
@@ -117,36 +118,53 @@ const IngestEndpointEnvironmentsPage: FC<DynamicPageProps> = (props: DynamicPage
             ),
 
         buildRowActions: (pageActionProps) => [
-            buildInstallInstructionsAction(
-                ({ id }) => pageActions.installIngestEndpointEnvironment(pageActionProps, id),
-                'Install Environment',
-                () => !currentOrgPermissions.canView,
-            ),
-            buildHistoryAction(
-                ({ id, name }) =>
-                    pageActions.showIngestEndpointEnvironmentHistory(pageActionProps, id, name),
-                'Environment History',
-                () => !currentOrgPermissions.canView,
-                () => !isAuditEnabled,
-            ),
-            buildEditAction(
-                ({ id }) =>
-                    pageActions.updateIngestEndpointEnvironment(
-                        pageActionProps,
-                        id,
-                        ingestEndpointId,
-                    ),
-                'Edit Environment',
-                () => !currentOrgPermissions.canEdit,
-            ),
-            buildDeleteAction(
-                ({ name, id }) =>
-                    ask(`Delete Environment: ${name}?`, () => {
-                        pageActions.deleteIngestEndpointEnvironment(pageActionProps, id);
-                    }),
-                `Delete Environment`,
-                () => !currentOrgPermissions.canDelete,
-            ),
+            ...[
+                buildInstallInstructionsAction(
+                    ({ id }) => pageActions.installIngestEndpointEnvironment(pageActionProps, id),
+                    'Install Environment',
+                    () => !currentOrgPermissions.canView,
+                ),
+                buildHistoryAction(
+                    ({ id, name }) =>
+                        pageActions.showIngestEndpointEnvironmentHistory(pageActionProps, id, name),
+                    'Environment History',
+                    () => !currentOrgPermissions.canView,
+                    () => !isAuditEnabled,
+                ),
+            ],
+            ...(mode === Mode.COMMERCIAL
+                ? [
+                      buildEditCustomDomainAction(
+                          ({ id }) =>
+                              pageActions.editCustomDomainIngestEndpointEnvironment(
+                                  pageActionProps,
+                                  id,
+                              ),
+                          'Custom Domain',
+                          () => !currentOrgPermissions.canEdit,
+                      ),
+                  ]
+                : []),
+            ...[
+                buildEditAction(
+                    ({ id }) =>
+                        pageActions.updateIngestEndpointEnvironment(
+                            pageActionProps,
+                            id,
+                            ingestEndpointId,
+                        ),
+                    'Edit Environment',
+                    () => !currentOrgPermissions.canEdit,
+                ),
+                buildDeleteAction(
+                    ({ name, id }) =>
+                        ask(`Delete Environment: ${name}?`, () => {
+                            pageActions.deleteIngestEndpointEnvironment(pageActionProps, id);
+                        }),
+                    `Delete Environment`,
+                    () => !currentOrgPermissions.canDelete,
+                ),
+            ],
         ],
         buildFieldActions: (pageActionProps) => [
             buildFieldAction(
@@ -158,6 +176,13 @@ const IngestEndpointEnvironmentsPage: FC<DynamicPageProps> = (props: DynamicPage
                         ingestEndpointId,
                     ),
                 'Edit Environment',
+                () => !currentOrgPermissions.canEdit,
+            ),
+            buildFieldAction(
+                'customDomain',
+                ({ id }) =>
+                    pageActions.editCustomDomainIngestEndpointEnvironment(pageActionProps, id),
+                '',
                 () => !currentOrgPermissions.canEdit,
             ),
         ],

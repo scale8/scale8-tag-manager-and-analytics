@@ -2,8 +2,8 @@ import { FC } from 'react';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import ControlledTextAreaInput from '../../atoms/ControlledInputs/ControlledTextAreaInput';
 import DrawerFormLayout from '../../molecules/DrawerFormLayout';
-import { CustomDomainFormProps } from '../../../dialogPages/tagManager/app/EnvironmentEditCustomDomain';
 import { Alert, Box } from '@mui/material';
+import { CustomDomainFormProps } from '../../../utils/forms/CustomDomainFormUtils';
 
 const CustomDomainForm: FC<CustomDomainFormProps> = (props: CustomDomainFormProps) => {
     return (

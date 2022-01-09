@@ -1,8 +1,15 @@
 import { FC, MouseEvent, useState } from 'react';
-import { Box, FormControl, InputLabel, Select, SelectChangeEvent } from '@mui/material';
+import {
+    Box,
+    FormControl,
+    InputLabel,
+    Select,
+    SelectChangeEvent,
+    ToggleButton,
+    ToggleButtonGroup,
+} from '@mui/material';
 import CopyBlock from '../atoms/CopyBlock';
 import { DataMapsPayload } from '../organisms/DataMapsPayloadBuilder';
-import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import {
     IngestEndpointInstallInstructionCode,
     IngestEndpointInstallSnippet,

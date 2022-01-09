@@ -1,5 +1,6 @@
 import { ValidateConfiguration } from '../validators/validateFormValues';
 import domainValidator from '../validators/domainValidator';
+import { FormProps } from '../../hooks/form/useFormValidation';
 
 export type CustomDomainValues = {
     domain: string;
@@ -15,3 +16,7 @@ export const CustomDomainValidators: ValidateConfiguration<CustomDomainValues>[]
         ignoreEmpty: true,
     },
 ];
+
+export type CustomDomainFormProps = FormProps<CustomDomainValues> & {
+    installDomain: string;
+};
