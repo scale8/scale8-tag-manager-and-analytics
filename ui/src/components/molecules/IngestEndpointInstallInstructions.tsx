@@ -3,7 +3,6 @@ import { Box, FormControl, InputLabel, Select, SelectChangeEvent } from '@mui/ma
 import CopyBlock from '../atoms/CopyBlock';
 import { DataMapsPayload } from '../organisms/DataMapsPayloadBuilder';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
-import Alert from '@mui/material/Alert';
 import {
     IngestEndpointInstallInstructionCode,
     IngestEndpointInstallSnippet,
@@ -14,7 +13,6 @@ import { getNodeEnv } from '../../utils/ConfigUtils';
 
 export type IngestEndpointInstallInstructionsDialogProps = {
     installDomain: string;
-    customDomain: string | null;
     cname: string;
     payload: DataMapsPayload;
     mode: Mode;
@@ -156,15 +154,6 @@ const IngestEndpointInstallInstructions: FC<IngestEndpointInstallInstructionsDia
                             snippet={currentSnippet}
                         />
                     )}
-                </Box>
-            )}
-
-            {props.customDomain !== null && (
-                <Box pb={2}>
-                    <Alert severity="info">
-                        After you have successfully installed your custom domain, please create a
-                        new CNAME record for “{props.customDomain}” with the value “{props.cname}”
-                    </Alert>
                 </Box>
             )}
         </>

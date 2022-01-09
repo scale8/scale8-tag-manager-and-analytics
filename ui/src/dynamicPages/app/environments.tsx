@@ -15,6 +15,7 @@ import {
     buildAddAction,
     buildDeleteAction,
     buildEditAction,
+    buildEditCustomDomainAction,
     buildEditVariablesAction,
     buildFieldAction,
     buildHistoryAction,
@@ -58,7 +59,7 @@ const AppEnvironmentsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
                       { field: 'id' },
                       { title: 'Page views', field: 'pageViews', type: 'graph' },
                       { title: 'URL', field: 'url', hidden: true },
-                      { field: 'customDomain', hidden: true },
+                      { field: 'customDomain' },
                       { field: 'installDomain' },
                       { field: 'revision' },
                       { field: 'updatedAt' },
@@ -86,7 +87,9 @@ const AppEnvironmentsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
                     ),
                     url: appEnvironment.url ? appEnvironment.url : '-',
                     revision: appEnvironment.revision ? appEnvironment.revision.name : '-',
-                    customDomain: appEnvironment.custom_domain ? appEnvironment.custom_domain : '-',
+                    customDomain: appEnvironment.custom_domain
+                        ? appEnvironment.custom_domain
+                        : 'Create custom domain',
                     installDomain: appEnvironment.install_domain
                         ? appEnvironment.install_domain
                         : '-',
@@ -105,9 +108,14 @@ const AppEnvironmentsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
                 'Install Environment',
                 () => !currentOrgPermissions.canView,
             ),
+            buildEditCustomDomainAction(
+                ({ id }) => pageActions.editCustomDomainAppEnvironment(pageActionProps, id),
+                'Custom Domain',
+                () => !currentOrgPermissions.canEdit,
+            ),
             buildEditVariablesAction(
                 ({ id }) => pageActions.editVariablesAppEnvironment(pageActionProps, id),
-                'Edit Environment Variables',
+                'Environment Variables',
                 () => !currentOrgPermissions.canEdit,
             ),
             buildEditAction(
@@ -129,6 +137,12 @@ const AppEnvironmentsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
                 'name',
                 ({ id }) => pageActions.updateAppEnvironment(pageActionProps, id, appId),
                 'Edit Environment',
+                () => !currentOrgPermissions.canEdit,
+            ),
+            buildFieldAction(
+                'customDomain',
+                ({ id }) => pageActions.editCustomDomainAppEnvironment(pageActionProps, id),
+                '',
                 () => !currentOrgPermissions.canEdit,
             ),
         ],

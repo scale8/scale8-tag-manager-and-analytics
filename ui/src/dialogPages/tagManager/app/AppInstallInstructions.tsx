@@ -25,7 +25,6 @@ const AppInstallInstructions: FC<DialogPageProps> = (props: DialogPageProps) => 
                     environmentId={environment.id}
                     title="Application Installation Instructions"
                     installDomain={environment.install_domain}
-                    customDomain={environment.custom_domain}
                     handleDialogClose={props.handleDialogClose}
                     cname={environment.cname}
                     mode={mode}

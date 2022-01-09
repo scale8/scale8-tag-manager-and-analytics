@@ -7,7 +7,7 @@
 //==============================================================
 
 /**
- * A set of supported AWS regions for use with `TrackeEnvironment`s
+ * A set of supported AWS regions for use with `TrackedEnvironment`s
  */
 export enum AWSRegion {
   AF_SOUTH_1 = "AF_SOUTH_1",
@@ -276,7 +276,7 @@ export enum SignUpType {
 }
 
 /**
- * A set of supported storage providers for use with `TrackeEnvironment`s
+ * A set of supported storage providers for use with `TrackedEnvironment`s
  */
 export enum StorageProvider {
   AWS_S3 = "AWS_S3",
@@ -669,9 +669,6 @@ export interface DuplicateRevisionInput {
 export interface EnvironmentCreateInput {
   app_id: string;
   revision_id: string;
-  custom_domain?: string | null;
-  cert_pem?: string | null;
-  key_pem?: string | null;
   name: string;
   url?: string | null;
   env_vars?: EnvironmentVariableInput[] | null;
@@ -687,9 +684,10 @@ export interface EnvironmentDeleteInput {
  */
 export interface EnvironmentUpdateInput {
   environment_id: string;
-  revision_id: string;
+  revision_id?: string | null;
   name?: string | null;
   url?: string | null;
+  custom_domain?: string | null;
   cert_pem?: string | null;
   key_pem?: string | null;
   comments?: string | null;
@@ -865,8 +863,9 @@ export interface IngestEndpointEnvironmentDeleteInput {
  */
 export interface IngestEndpointEnvironmentUpdateInput {
   ingest_endpoint_environment_id: string;
-  ingest_endpoint_revision_id: string;
+  ingest_endpoint_revision_id?: string | null;
   name?: string | null;
+  custom_domain?: string | null;
   cert_pem?: string | null;
   key_pem?: string | null;
   aws_storage_config?: AWSStorageConfig | null;

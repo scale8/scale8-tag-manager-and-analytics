@@ -32,7 +32,6 @@ const TagManagerInstallInstructions: FC<TagManagerInstallInstructionsProps> = (
                         environmentName={data.getEnvironment.name}
                         environmentId={data.getEnvironment.id}
                         installDomain={data.getEnvironment.install_domain}
-                        customDomain={data.getEnvironment.custom_domain}
                         mode={mode}
                         cname={data.getEnvironment.cname}
                         tags={dbTags

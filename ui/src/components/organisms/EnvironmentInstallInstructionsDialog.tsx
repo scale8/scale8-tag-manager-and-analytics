@@ -10,7 +10,6 @@ export type InstallInstructionsDialogProps = {
     installDomain: string;
     title: string;
     formInfoProps?: InfoProps;
-    customDomain: string | null;
     cname: string;
     environmentName: string;
     environmentId: string;
