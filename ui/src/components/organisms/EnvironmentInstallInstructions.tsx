@@ -78,7 +78,6 @@ const EnvironmentInstallInstructions: FC<InstallInstructionsProps> = (
             {type === 'Analytics Only' && (
                 <Box my={2} width="100%">
                     <CheckBoxInput
-                        sx={{ marginRight: 40 }}
                         name="spaSupport"
                         value={spaSupport}
                         setValue={(v) => {

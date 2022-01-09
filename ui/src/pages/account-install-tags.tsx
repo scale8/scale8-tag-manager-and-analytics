@@ -22,7 +22,7 @@ const AccountInstallTags: ComponentWithParams = ({ params }) => {
                     installTags={true}
                 >
                     <TagManagerInstallInstructions
-                        environmentId={env ?? ''}
+                        environments={env ? [{ id: env, name: '' }] : []}
                         link={target ?? ''}
                         text="I have installed my Tags"
                     />
