@@ -8,13 +8,12 @@ import ChartBaseFilterSelector from '../../../lazyComponents/ChartBaseFilterSele
 
 export type AppAnalyticsPageContainerProps = AppAnalyticsContentProps & {
     children: ReactNode;
-    ticks: number;
 };
 
 const AppAnalyticsPageContainer: FC<AppAnalyticsPageContainerProps> = (
     props: AppAnalyticsPageContainerProps,
 ) => {
-    const { children, ticks, ...appDashboardContentProps } = props;
+    const { children, ...appDashboardContentProps } = props;
     const { chartPeriodProps, appQueryOptions, setFilter } = appDashboardContentProps;
 
     const chartPageContainerProps: ChartPageContainerProps = {
@@ -24,7 +23,13 @@ const AppAnalyticsPageContainer: FC<AppAnalyticsPageContainerProps> = (
                 <ChartEventSelector {...appDashboardContentProps} />
             </>
         ),
-        rightHeaderBlock: <ChartPeriodSelector {...chartPeriodProps} ticks={ticks} type="app" />,
+        rightHeaderBlock: (
+            <ChartPeriodSelector
+                {...chartPeriodProps}
+                ticks={appDashboardContentProps.ticks}
+                type="app"
+            />
+        ),
         secondaryBlock: (
             <ChartFilterSelector
                 filters={extractFilters(appQueryOptions.filter_options)}

@@ -3,18 +3,16 @@ import { DynamicPageProps } from '../../pageLoader/DynamicPageLoader';
 import { AppQueryFilters } from '../../types/props/AppAnalyticsContentProps';
 import { useChartPeriod } from '../../hooks/chart/useChartPeriod';
 import { useAnalyticsTimer } from '../../hooks/timer/useAnalyticsTimer';
-import AppAnalyticsPageContainer from '../../components/molecules/ChartPageContainer/AppAnalyticsPageContainer';
 import Loader from '../../components/organisms/Loader';
-import AppAnalyticsPageContent from '../../components/molecules/ChartPageContent/AppAnalyticsPageContent';
 import { useQueryOptions } from '../../hooks/useQueryOptions';
 import { toApp } from '../../utils/NavigationPaths';
 import { useRouter } from 'next/router';
+import AppAnalyticsPageTagCheck from '../../lazyComponents/AppAnalyticsPageTagCheck';
 
 const AppAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const id = props.params.id ?? '';
     const router = useRouter();
     const periodParam = props.params.period;
-    const checkTags = props.params['check-tags'] === '1';
 
     const chartPeriodProps = useChartPeriod(periodParam);
 
@@ -80,7 +78,7 @@ const AppAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     }
 
     return (
-        <AppAnalyticsPageContainer
+        <AppAnalyticsPageTagCheck
             chartPeriodProps={chartPeriodProps}
             setFilter={setFilter}
             setEventGroup={setEventGroup}
@@ -92,22 +90,7 @@ const AppAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
             refreshAt={refreshAt}
             ticks={ticks}
             id={id}
-            checkTags={checkTags}
-        >
-            <AppAnalyticsPageContent
-                chartPeriodProps={chartPeriodProps}
-                setFilter={setFilter}
-                setEventGroup={setEventGroup}
-                referrerTLD={filters.referrer_tld ?? undefined}
-                appQueryOptions={queryOptions}
-                appSummaryQueryOptions={summaryQueryOptions}
-                appSummaryQueryOptionsPrev={summaryQueryOptionsPrev}
-                appSummaryQueryOptionsCurrent={summaryQueryOptionsCurrent}
-                refreshAt={refreshAt}
-                id={id}
-                checkTags={checkTags}
-            />
-        </AppAnalyticsPageContainer>
+        />
     );
 };
 

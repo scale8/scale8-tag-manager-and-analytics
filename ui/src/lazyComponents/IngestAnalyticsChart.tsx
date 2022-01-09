@@ -50,8 +50,7 @@ const IngestAnalyticsChart: FC<IngestEndpointAnalyticsContentProps> = (
                         ),
                         fill: false,
                         backgroundColor: getProductSection(ProductSectionKey.dataManager).color,
-                        borderColor: getProductSection(ProductSectionKey.dataManager).color,
-                        borderWidth: 3,
+                        borderWidth: 0,
                         lineTension: 0,
                         yAxisID: 'yAxis1',
                     },
@@ -64,8 +63,7 @@ const IngestAnalyticsChart: FC<IngestEndpointAnalyticsContentProps> = (
                         ),
                         fill: false,
                         backgroundColor: '#737373',
-                        borderColor: '#737373',
-                        borderWidth: 3,
+                        borderWidth: 0,
                         lineTension: 0,
                         yAxisID: 'yAxis2',
                     },
@@ -122,6 +120,7 @@ const IngestAnalyticsChart: FC<IngestEndpointAnalyticsContentProps> = (
                 },
             };
 
+            // noinspection RequiredAttributes
             return (
                 <Box height="400px" width="100%" overflow="auto">
                     <Bar data={data} options={options} />
