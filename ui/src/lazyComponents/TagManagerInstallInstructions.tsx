@@ -5,7 +5,6 @@ import { EnvironmentInstructionsGetData } from '../gql/generated/EnvironmentInst
 import { QueryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import EnvironmentInstallInstructions from '../components/organisms/EnvironmentInstallInstructions';
 import ExternalRedirectButton from '../components/atoms/ExternalRedirectButton';
-import { useConfigState } from '../context/AppContext';
 
 type TagManagerInstallInstructionsProps = {
     environmentId: string;
@@ -16,8 +15,6 @@ type TagManagerInstallInstructionsProps = {
 const TagManagerInstallInstructions: FC<TagManagerInstallInstructionsProps> = (
     props: TagManagerInstallInstructionsProps,
 ) => {
-    const { mode } = useConfigState();
-
     return QueryLoaderAndError<EnvironmentInstructionsGetData>(
         false,
         useQuery<EnvironmentInstructionsGetData>(EnvironmentInstructionsGetQuery, {
@@ -33,7 +30,7 @@ const TagManagerInstallInstructions: FC<TagManagerInstallInstructionsProps> = (
                         environmentId={data.getEnvironment.id}
                         installDomain={data.getEnvironment.install_domain}
                         customDomain={data.getEnvironment.custom_domain}
-                        mode={mode}
+                        mode={data.config.mode}
                         cname={data.getEnvironment.cname}
                         tags={dbTags
                             .filter((_) => !_.auto_load)
