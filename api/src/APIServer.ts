@@ -188,14 +188,14 @@ export default class APIServer {
                 return this.config.isProduction()
                     ? new ApolloError(
                           err.message,
-                          (err as GenericError).code !== undefined
-                              ? (err as GenericError).code
+                          (err as GenericError).extensions?.code !== undefined
+                              ? (err as GenericError).extensions.code
                               : 'UNCLASSIFIED',
                       )
                     : new ApolloError(
                           err.message,
-                          (err as GenericError).code !== undefined
-                              ? (err as GenericError).code
+                          (err as GenericError).extensions?.code !== undefined
+                              ? (err as GenericError).extensions.code
                               : 'UNCLASSIFIED',
                           err.extensions,
                       );
