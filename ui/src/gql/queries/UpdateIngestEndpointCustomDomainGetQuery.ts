@@ -6,7 +6,7 @@ const UpdateIngestEndpointCustomDomainGetQuery = gql`
             id
             name
             custom_domain
-            install_domain
+            cname
         }
     }
 `;

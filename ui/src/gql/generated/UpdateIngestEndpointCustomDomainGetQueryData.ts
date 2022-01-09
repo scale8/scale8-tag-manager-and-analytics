@@ -21,9 +21,9 @@ export interface UpdateIngestEndpointCustomDomainGetQueryData_getIngestEndpointE
    */
   custom_domain: string | null;
   /**
-   * `IngestEndpointEnvironment`'s install domain used to push data to
+   * `IngestEndpointEnvironment`'s CNAME
    */
-  install_domain: string;
+  cname: string;
 }
 
 export interface UpdateIngestEndpointCustomDomainGetQueryData {

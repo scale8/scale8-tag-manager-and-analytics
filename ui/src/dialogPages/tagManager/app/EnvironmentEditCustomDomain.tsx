@@ -57,7 +57,7 @@ const EnvironmentEditCustomDomain: FC<DialogPageProps> = (props: DialogPageProps
                 : 'Create Custom Domain',
             formInfoProps: buildStandardFormInfo('appEnvironments', 'EditCustomDomain'),
             handleDialogClose: props.handleDialogClose,
-            installDomain: formLoadedData.getEnvironment.install_domain,
+            cname: formLoadedData.getEnvironment.cname,
         }),
         checkSuccessfullySubmitted: (formMutationData) => formMutationData?.updateEnvironment,
         pageComponent: CustomDomainForm,

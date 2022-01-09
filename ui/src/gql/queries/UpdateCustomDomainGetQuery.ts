@@ -7,10 +7,7 @@ const UpdateCustomDomainGetQuery = gql`
             name
             url
             custom_domain
-            install_domain
-            revision {
-                id
-            }
+            cname
         }
     }
 `;

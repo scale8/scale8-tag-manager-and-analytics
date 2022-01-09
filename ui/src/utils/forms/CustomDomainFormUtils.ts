@@ -18,5 +18,5 @@ export const CustomDomainValidators: ValidateConfiguration<CustomDomainValues>[]
 ];
 
 export type CustomDomainFormProps = FormProps<CustomDomainValues> & {
-    installDomain: string;
+    cname: string;
 };

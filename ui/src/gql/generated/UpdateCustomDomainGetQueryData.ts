@@ -6,14 +6,6 @@
 // GraphQL query operation: UpdateCustomDomainGetQueryData
 // ====================================================
 
-export interface UpdateCustomDomainGetQueryData_getEnvironment_revision {
-  __typename: "Revision";
-  /**
-   * Revision ID
-   */
-  id: string;
-}
-
 export interface UpdateCustomDomainGetQueryData_getEnvironment {
   __typename: "Environment";
   /**
@@ -33,13 +25,9 @@ export interface UpdateCustomDomainGetQueryData_getEnvironment {
    */
   custom_domain: string | null;
   /**
-   * `Environment`'s install domain used to embed in web page
+   * `Environment`'s CNAME
    */
-  install_domain: string;
-  /**
-   * `Revision` currently attached to the `Environment`
-   */
-  revision: UpdateCustomDomainGetQueryData_getEnvironment_revision;
+  cname: string;
 }
 
 export interface UpdateCustomDomainGetQueryData {

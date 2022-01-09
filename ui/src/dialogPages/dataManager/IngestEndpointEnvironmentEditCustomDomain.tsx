@@ -68,7 +68,7 @@ const IngestEndpointEnvironmentEditCustomDomain: FC<DialogPageProps> = (props: D
                     'EditCustomDomain',
                 ),
                 handleDialogClose: props.handleDialogClose,
-                installDomain: formLoadedData.getIngestEndpointEnvironment.install_domain,
+                cname: formLoadedData.getIngestEndpointEnvironment.cname,
             };
         },
         checkSuccessfullySubmitted: (formMutationData) =>

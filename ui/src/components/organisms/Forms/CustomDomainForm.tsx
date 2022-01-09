@@ -11,7 +11,7 @@ const CustomDomainForm: FC<CustomDomainFormProps> = (props: CustomDomainFormProp
             <Box pb={2}>
                 <Alert severity="warning">
                     Please make sure you have created a CNAME record with your custom domain pointed
-                    at <strong>{props.installDomain}</strong> before proceeding.
+                    at <strong>{props.cname}</strong> before proceeding.
                 </Alert>
             </Box>
 
