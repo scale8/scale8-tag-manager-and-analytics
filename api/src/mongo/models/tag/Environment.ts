@@ -62,12 +62,10 @@ export default class Environment extends Model {
         revision: Revision,
         url?: string,
         environmentVariables: EnvironmentVariable[] = [],
-        customDomain?: string,
     ) {
         super();
         this._name = name;
         this._url = url;
-        this._custom_domain = customDomain;
         if (app !== undefined) {
             this._org_id = app.orgId;
             this._tag_manager_account_id = app.tagManagerAccountId;

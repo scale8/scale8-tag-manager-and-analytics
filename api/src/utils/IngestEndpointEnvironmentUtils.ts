@@ -6,7 +6,7 @@ import IngestEndpointRevision from '../mongo/models/data/IngestEndpointRevision'
 import container from '../container/IOC.config';
 import RepoFromModelFactory from '../container/factoryTypes/RepoFromModelFactory';
 import TYPES from '../container/IOC.types';
-import { uploadCertificate } from './CertificateUtils';
+import { createCname, getCNAME, updateCustomDomainForEnvironment } from './CertificateUtils';
 import GQLError from '../errors/GQLError';
 import userMessages from '../errors/UserMessages';
 import DataManagerAccount from '../mongo/models/data/DataManagerAccount';
@@ -23,17 +23,10 @@ import DataManagerAccountRepo from '../mongo/repos/data/DataManagerAccountRepo';
 import { StorageProvider } from '../enums/StorageProvider';
 import BaseStorage from '../backends/storage/abstractions/BaseStorage';
 import BaseConfig from '../backends/configuration/abstractions/BaseConfig';
-import { createCname } from './EnvironmentUtils';
 import { BigQuery } from '@google-cloud/bigquery';
 import Hash from '../core/Hash';
 import S3Service from '../aws/S3Service';
 import { AwsConfig, GCBigQueryStreamConfig, MongoDbPushConfig } from '../Types';
-
-export const getIngestEndpointCNAME = (ingestEndpointEnvironmentId: ObjectId | string): string => {
-    const config = container.get<BaseConfig>(TYPES.BackendConfig);
-
-    return `${config.getEnvironmentIdPrefix()}${ingestEndpointEnvironmentId.toString()}.scale8.com`;
-};
 
 export const getCommercialStorageProviderConfig = async (): Promise<StorageProviderConfig> => {
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
@@ -58,7 +51,7 @@ export const getIngestEndpointInstallDomain = (
     ingestEndpointEnvironment: IngestEndpointEnvironment,
 ): string => {
     if (ingestEndpointEnvironment.customDomain === undefined) {
-        return getIngestEndpointCNAME(ingestEndpointEnvironment.id);
+        return getCNAME(ingestEndpointEnvironment);
     } else {
         return ingestEndpointEnvironment.customDomain;
     }
@@ -147,7 +140,7 @@ export const buildIngestEndpointConfig = async (
             { contentType: 'application/json' },
         );
 
-    await uploadTo(`${getIngestEndpointCNAME(ingestEndpointEnvironment.id)}.json`);
+    await uploadTo(`${getCNAME(ingestEndpointEnvironment)}.json`);
 
     if (ingestEndpointEnvironment.customDomain !== undefined) {
         await uploadTo(`${ingestEndpointEnvironment.customDomain}.json`);
@@ -162,23 +155,26 @@ export const updateIngestEndpointEnvironment = async (
     providerConfig?: StorageProviderConfig,
     newName?: string,
     ingestEndpointRevisionId?: string,
+    customDomain?: string,
     customDomainCert?: string,
     customDomainKey?: string,
 ): Promise<IngestEndpointEnvironment> => {
     const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
 
-    if (config.isCommercial() && customDomainCert !== undefined && customDomainKey !== undefined) {
-        //trying to install a new certificate...
-        if (ingestEndpointEnvironment.customDomain === undefined) {
-            throw new GQLError(userMessages.noCustomDomain, true);
-        } else {
-            await uploadCertificate(
-                ingestEndpointEnvironment.customDomain,
-                customDomainCert,
-                customDomainKey,
-            );
-        }
+    if (
+        config.isCommercial() &&
+        customDomain !== undefined &&
+        customDomainCert !== undefined &&
+        customDomainKey !== undefined
+    ) {
+        await updateCustomDomainForEnvironment(
+            actor,
+            ingestEndpointEnvironment,
+            customDomain,
+            customDomainCert,
+            customDomainKey,
+        );
     }
 
     if (newName !== undefined) {
@@ -212,7 +208,6 @@ export const updateIngestEndpointEnvironment = async (
 
     if (providerConfig !== undefined) {
         ingestEndpointEnvironment.configHint = providerConfig.hint;
-
         await getStorageBackend().setAsString(
             await config.getConfigsBucket(),
             `ingest-endpoint/storage-provider-config-${ingestEndpointEnvironment.id}.json`,
@@ -236,37 +231,9 @@ export const createIngestEndpointEnvironment = async (
     providerConfig: StorageProviderConfig,
     ingestEndpointRevision: IngestEndpointRevision,
     fixedId?: ObjectId,
-    customDomain?: string,
-    customDomainCert?: string,
-    customDomainKey?: string,
 ): Promise<IngestEndpointEnvironment> => {
     const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
-
-    const getCustomDomain: () => Promise<string | undefined> = async () => {
-        if (customDomain === undefined) {
-            return undefined;
-        } else {
-            if (
-                (await repoFactory(IngestEndpointEnvironment).findOne({
-                    _custom_domain: customDomain,
-                })) === null
-            ) {
-                //we can safely proceed
-                if (customDomainCert !== undefined && customDomainKey !== undefined) {
-                    await uploadCertificate(customDomain, customDomainCert, customDomainKey);
-                    return customDomain;
-                } else {
-                    throw new GQLError(userMessages.noCertificate, true);
-                }
-            } else {
-                throw new GQLError(
-                    'Unable to create as it would override another configuration potentially',
-                    userMessages.unexpectedIssue,
-                );
-            }
-        }
-    };
 
     let ingestEndpointEnvironment = new IngestEndpointEnvironment(
         name,
@@ -274,7 +241,6 @@ export const createIngestEndpointEnvironment = async (
         provider,
         providerConfig.hint,
         ingestEndpointRevision,
-        await getCustomDomain(),
     );
     if (fixedId !== undefined) {
         ingestEndpointEnvironment['_id'] = fixedId;
