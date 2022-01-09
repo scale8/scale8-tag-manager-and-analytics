@@ -2,7 +2,7 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
-import { TagType } from "./globalTypes";
+import { TagType, Mode } from "./globalTypes";
 
 // ====================================================
 // GraphQL query operation: EnvironmentInstructionsGetData
@@ -73,12 +73,24 @@ export interface EnvironmentInstructionsGetData_getEnvironment {
   revision: EnvironmentInstructionsGetData_getEnvironment_revision;
 }
 
+export interface EnvironmentInstructionsGetData_config {
+  __typename: "Config";
+  /**
+   * The application mode currently in use
+   */
+  mode: Mode;
+}
+
 export interface EnvironmentInstructionsGetData {
   /**
    * @bound=Environment
    * Get an `Environment` model from `Environment` ID
    */
   getEnvironment: EnvironmentInstructionsGetData_getEnvironment;
+  /**
+   * The S8 `Config`. Contains all the common mappings for countries, time zones, condition types etc.
+   */
+  config: EnvironmentInstructionsGetData_config;
 }
 
 export interface EnvironmentInstructionsGetDataVariables {

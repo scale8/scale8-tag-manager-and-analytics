@@ -1,27 +1,30 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import EnvironmentInstructionsGetQuery from '../gql/queries/EnvironmentInstructionsGetQuery';
 import { EnvironmentInstructionsGetData } from '../gql/generated/EnvironmentInstructionsGetData';
 import { QueryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import EnvironmentInstallInstructions from '../components/organisms/EnvironmentInstallInstructions';
 import ExternalRedirectButton from '../components/atoms/ExternalRedirectButton';
-import { useConfigState } from '../context/AppContext';
+import { useRouter } from 'next/router';
+import { Box } from '@mui/material';
+import SelectInput from '../components/atoms/InputTypes/SelectInput';
 
 type TagManagerInstallInstructionsProps = {
-    environmentId: string;
-    link: string;
+    environments: { id: string; name: string }[];
+    onConfirm?: () => void;
+    link?: string;
     text: string;
 };
 
-const TagManagerInstallInstructions: FC<TagManagerInstallInstructionsProps> = (
-    props: TagManagerInstallInstructionsProps,
-) => {
-    const { mode } = useConfigState();
-
+const TagManagerInstallInstructionsIdSelected: FC<{
+    environmentId: string;
+    onConfirm: () => void;
+    text: string;
+}> = ({ environmentId, onConfirm, text }) => {
     return QueryLoaderAndError<EnvironmentInstructionsGetData>(
         false,
         useQuery<EnvironmentInstructionsGetData>(EnvironmentInstructionsGetQuery, {
-            variables: { id: props.environmentId },
+            variables: { id: environmentId },
         }),
         (data: EnvironmentInstructionsGetData) => {
             const dbTags = data.getEnvironment.revision?.tags ?? [];
@@ -32,7 +35,7 @@ const TagManagerInstallInstructions: FC<TagManagerInstallInstructionsProps> = (
                         environmentName={data.getEnvironment.name}
                         environmentId={data.getEnvironment.id}
                         installDomain={data.getEnvironment.install_domain}
-                        mode={mode}
+                        mode={data.config.mode}
                         cname={data.getEnvironment.cname}
                         tags={dbTags
                             .filter((_) => !_.auto_load)
@@ -42,11 +45,66 @@ const TagManagerInstallInstructions: FC<TagManagerInstallInstructionsProps> = (
                                 type: _.type,
                             }))}
                     />
-                    <ExternalRedirectButton link={props.link} text={props.text} />
+                    <ExternalRedirectButton onConfirm={onConfirm} text={text} />
                 </>
             );
         },
     );
 };
 
+const TagManagerInstallInstructions: FC<TagManagerInstallInstructionsProps> = (
+    props: TagManagerInstallInstructionsProps,
+) => {
+    const [environmentId, setEnvironmentId] = useState('');
+
+    useEffect(() => {
+        if (props.environments.length > 0) {
+            setEnvironmentId(props.environments[0].id);
+        }
+    }, [props.environments]);
+
+    const router = useRouter();
+
+    const onConfirm = props.onConfirm
+        ? props.onConfirm
+        : () => {
+              router.push(props.link ?? '').then();
+          };
+
+    if (environmentId === '') {
+        return null;
+    }
+
+    if (props.environments.length === 1) {
+        return (
+            <TagManagerInstallInstructionsIdSelected
+                environmentId={props.environments[0].id}
+                onConfirm={onConfirm}
+                text={props.text}
+            />
+        );
+    }
+
+    return (
+        <>
+            <Box>Please select the environment to install:</Box>
+            <Box my={2} width="100%">
+                <SelectInput
+                    sx={{ width: 200 }}
+                    value={environmentId}
+                    setValue={(v) => setEnvironmentId(v)}
+                    optionValues={[]}
+                    keyTextValues={props.environments.map((_) => ({ key: _.id, text: _.name }))}
+                    name="installation-type"
+                    required
+                />
+            </Box>
+            <TagManagerInstallInstructionsIdSelected
+                environmentId={environmentId}
+                onConfirm={onConfirm}
+                text={props.text}
+            />
+        </>
+    );
+};
 export { TagManagerInstallInstructions };

@@ -14,7 +14,7 @@ import { ChartOptions } from 'chart.js';
 import { buildAppChartVars } from '../utils/GraphUtils';
 
 const AppAnalyticsChart: FC<AppAnalyticsContentProps> = (props: AppAnalyticsContentProps) => {
-    const { appQueryOptions, chartPeriodProps, id, refreshAt, checkTags } = props;
+    const { appQueryOptions, chartPeriodProps, id, refreshAt } = props;
 
     const eventLabel = getEventLabel(appQueryOptions);
 
@@ -40,8 +40,7 @@ const AppAnalyticsChart: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCont
                         data: chartData.map((_) => _.user_count),
                         fill: false,
                         backgroundColor: '#39cce0',
-                        borderColor: '#39cce0',
-                        borderWidth: 3,
+                        borderWidth: 0,
                         lineTension: 0,
                         yAxisID: 'yAxis1',
                     },
@@ -50,8 +49,7 @@ const AppAnalyticsChart: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCont
                         data: chartData.map((_) => _.event_count),
                         fill: false,
                         backgroundColor: '#737373',
-                        borderColor: '#737373',
-                        borderWidth: 3,
+                        borderWidth: 0,
                         lineTension: 0,
                         yAxisID: 'yAxis2',
                     },
@@ -108,36 +106,10 @@ const AppAnalyticsChart: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCont
                 },
             };
 
-            const displayCheckTagsDialog =
-                checkTags && queryData.getApp.event_request_stats.result.length === 0;
-
             // noinspection RequiredAttributes
             return (
-                <Box height="400px" width="100%" overflow="auto" position="relative">
-                    {displayCheckTagsDialog && (
-                        <Box
-                            top={0}
-                            left={0}
-                            bottom={0}
-                            right={0}
-                            position="absolute"
-                            display="flex"
-                            alignItems="center"
-                            justifyContent="center"
-                            fontSize={15}
-                        >
-                            It looks like you have not installed your tags yet. Please make sure
-                            your tags are installed correctly. It can take a few minutes to start
-                            seeing data.
-                        </Box>
-                    )}
-                    <Box
-                        height="400px"
-                        width="100%"
-                        sx={{ filter: displayCheckTagsDialog ? 'blur(4px);' : 'none' }}
-                    >
-                        <Bar data={data} options={options} />
-                    </Box>
+                <Box height="400px" width="100%" overflow="auto">
+                    <Bar data={data} options={options} />
                 </Box>
             );
         },
