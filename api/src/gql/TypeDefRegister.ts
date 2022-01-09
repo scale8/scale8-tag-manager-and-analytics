@@ -359,13 +359,13 @@ export default class TypeDefRegister {
             ${TimeZones.timeZonesAsGQL()}
 
             """
-            A set of supported storage providers for use with \`TrackeEnvironment\`s
+            A set of supported storage providers for use with \`TrackedEnvironment\`s
             """
             enum StorageProvider
             ${TypeDefRegister.enumToGQL(StorageProvider)}
 
             """
-            A set of supported AWS regions for use with \`TrackeEnvironment\`s
+            A set of supported AWS regions for use with \`TrackedEnvironment\`s
             """
             enum AWSRegion
             ${TypeDefRegister.enumToGQL(AwsRegion)}

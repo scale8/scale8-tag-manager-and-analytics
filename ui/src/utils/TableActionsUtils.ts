@@ -19,6 +19,7 @@ import CodeIcon from '@mui/icons-material/Code';
 import HistoryIcon from '@mui/icons-material/History';
 import PublishIcon from '@mui/icons-material/Publish';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
+import VpnLockIcon from '@mui/icons-material/VpnLock';
 
 export const buildEditAction = (
     onClick: (data: RowData) => void,
@@ -189,6 +190,17 @@ export const buildEditVariablesAction = (
     disabled: (data: RowData) => boolean,
 ): RowAction<RowData> => ({
     icon: SettingsIcon,
+    tooltip,
+    onClick,
+    disabled,
+});
+
+export const buildEditCustomDomainAction = (
+    onClick: (data: RowData) => void,
+    tooltip: string,
+    disabled: (data: RowData) => boolean,
+): RowAction<RowData> => ({
+    icon: VpnLockIcon,
     tooltip,
     onClick,
     disabled,

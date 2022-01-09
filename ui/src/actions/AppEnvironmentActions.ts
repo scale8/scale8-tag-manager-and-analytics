@@ -23,6 +23,10 @@ const EnvironmentEditVariables = dynamic(
     () => import('../dialogPages/tagManager/app/EnvironmentEditVariables'),
 ) as FC<DialogPageProps>;
 
+const EnvironmentEditCustomDomain = dynamic(
+    () => import('../dialogPages/tagManager/app/EnvironmentEditCustomDomain'),
+) as FC<DialogPageProps>;
+
 const EnvironmentUpdate = dynamic(
     () => import('../dialogPages/tagManager/app/EnvironmentUpdate'),
 ) as FC<DialogPageProps>;
@@ -60,6 +64,9 @@ const appEnvironmentActions = {
     },
     editVariablesAppEnvironment: (pageActionProps: PageActionProps, id: string): void => {
         openNoRefreshDrawer(pageActionProps, EnvironmentEditVariables, id);
+    },
+    editCustomDomainAppEnvironment: (pageActionProps: PageActionProps, id: string): void => {
+        openDrawer(pageActionProps, EnvironmentEditCustomDomain, id);
     },
     updateAppEnvironment: (pageActionProps: PageActionProps, id: string, appId: string): void => {
         openDrawer(pageActionProps, EnvironmentUpdate, id, true, false, appId);

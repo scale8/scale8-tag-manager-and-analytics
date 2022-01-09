@@ -30,6 +30,10 @@ const IngestEndpointEnvironmentUpdate = dynamic(
     () => import('../dialogPages/dataManager/IngestEndpointEnvironmentUpdate'),
 ) as FC<DialogPageProps>;
 
+const IngestEndpointEnvironmentEditCustomDomain = dynamic(
+    () => import('../dialogPages/dataManager/IngestEndpointEnvironmentEditCustomDomain'),
+) as FC<DialogPageProps>;
+
 const ingestEndpointEnvironmentActions = {
     createIngestEndpointEnvironment: (
         pageActionProps: PageActionProps,
@@ -50,6 +54,12 @@ const ingestEndpointEnvironmentActions = {
             false,
             ingestEndpointId,
         );
+    },
+    editCustomDomainIngestEndpointEnvironment: (
+        pageActionProps: PageActionProps,
+        id: string,
+    ): void => {
+        openDrawer(pageActionProps, IngestEndpointEnvironmentEditCustomDomain, id);
     },
     installIngestEndpointEnvironment: (pageActionProps: PageActionProps, id: string): void => {
         openLightboxNoRefresh(pageActionProps, IngestEndpointEnvironmentsInstallInstructions, id);

@@ -118,6 +118,7 @@ const userMessages = {
     accountNotActive: 'Unable to update any account that is not in "active" state.',
     invalidCertificate: 'Certificate is not not valid with the key or domain provided.',
     noCertificate: 'Expecting a certificate and key to be provided with the custom domain.',
+    noCname: 'A CNAME record has not been properly configured for your custom domain.',
     dataMapParseError: 'Failed to parse value for DataMapValue.',
     dataMapSerialiseError: 'Failed to serialise value for DataMapValue.',
     iabListError: 'Failed to load IAB vendor list.',

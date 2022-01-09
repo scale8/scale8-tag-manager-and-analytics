@@ -85,7 +85,6 @@ const IngestEndpointEnvironmentUpdate: FC<DialogPageProps> = (props: DialogPageP
                     text: _.name,
                 })),
                 isCreate: false,
-                hasCustomDomain: formLoadedData.getIngestEndpointEnvironment.custom_domain !== null,
                 formInfoProps: buildStandardFormInfo('ingestEndpointEnvironments', 'Update'),
                 handleDialogClose: props.handleDialogClose,
             };

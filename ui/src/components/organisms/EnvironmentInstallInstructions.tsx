@@ -9,7 +9,6 @@ import { getNodeEnv } from '../../utils/ConfigUtils';
 
 export type InstallInstructionsProps = {
     installDomain: string;
-    customDomain: string | null;
     environmentName: string;
     environmentId: string;
     mode: Mode;
@@ -117,12 +116,6 @@ const EnvironmentInstallInstructions: FC<InstallInstructionsProps> = (
                         </Box>
                     ))}
                 </>
-            )}
-            {props.customDomain !== null && (
-                <span>
-                    After you have successfully installed your custom domain, please create a new
-                    CNAME record for “{props.customDomain}” with the value “{props.cname}”
-                </span>
             )}
         </>
     );

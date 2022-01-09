@@ -38,7 +38,6 @@ const IngestEndpointEnvironmentsInstallInstructions: FC<DialogPageProps> = (
                 >
                     <IngestEndpointInstallInstructions
                         installDomain={data.getIngestEndpointEnvironment.install_domain}
-                        customDomain={data.getIngestEndpointEnvironment.custom_domain}
                         cname={data.getIngestEndpointEnvironment.cname}
                         mode={mode}
                         environmentId={data.getIngestEndpointEnvironment.id}

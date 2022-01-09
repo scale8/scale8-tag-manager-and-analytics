@@ -5,7 +5,6 @@ import { autocompleteOff } from '../../../utils/BrowserUtils';
 const TextAreaInput: FC<TextInputProps> = (props: TextInputProps) => {
     return (
         <TextInput
-            {...props}
             minRows={3}
             maxRows={20}
             multiline
@@ -13,6 +12,7 @@ const TextAreaInput: FC<TextInputProps> = (props: TextInputProps) => {
                 autoComplete: autocompleteOff,
             }}
             variant="outlined"
+            {...props}
         />
     );
 };

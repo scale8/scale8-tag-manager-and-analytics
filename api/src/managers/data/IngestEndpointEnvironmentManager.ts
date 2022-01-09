@@ -10,7 +10,6 @@ import IngestEndpoint from '../../mongo/models/data/IngestEndpoint';
 import userMessages from '../../errors/UserMessages';
 import {
     createIngestEndpointEnvironment,
-    getIngestEndpointCNAME,
     getIngestEndpointInstallDomain,
     getProviderConfig,
     getUpdateProviderConfig,
@@ -19,6 +18,7 @@ import {
 import BaseDatabase from '../../backends/databases/abstractions/BaseDatabase';
 import { withUnManagedAccount } from '../../utils/DataManagerAccountUtils';
 import { StorageProvider } from '../../enums/StorageProvider';
+import { getCNAME } from '../../utils/CertificateUtils';
 
 @injectable()
 export default class IngestEndpointEnvironmentManager extends Manager<IngestEndpointEnvironment> {
@@ -149,11 +149,15 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
             """
             ID of the \`IngestEndpointRevision\` to attach to the \`IngestEndpointEnvironment\`
             """
-            ingest_endpoint_revision_id: ID!
+            ingest_endpoint_revision_id: ID
             """
             \`IngestEndpointEnvironment\` name
             """
             name: String
+            """
+            Optional custom domain name
+            """
+            custom_domain: String
             """
             If a custom domain is used a new certificate can be installed which will replace the exiting one
             """
@@ -248,19 +252,20 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
                     ctx,
                     ingestEndpointEnvironment.orgId,
                     async (me) => {
+                        //todo. this needs a tidy up.
                         const providerConfig = await getUpdateProviderConfig(
                             data,
                             ingestEndpointEnvironment,
                         );
-
                         await updateIngestEndpointEnvironment(
                             me,
                             ingestEndpointEnvironment,
                             providerConfig,
                             data.name,
                             data.ingest_endpoint_revision_id,
-                            this.config.isCommercial() ? data.cert_pem : undefined,
-                            this.config.isCommercial() ? data.key_pem : undefined,
+                            data.custom_domain,
+                            data.cert_pem,
+                            data.key_pem,
                         );
                         return true;
                     },
@@ -315,9 +320,6 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
                             providerConfig,
                             ingestEndpointRevision,
                             undefined,
-                            this.config.isCommercial() ? data.custom_domain : undefined,
-                            this.config.isCommercial() ? data.cert_pem : undefined,
-                            this.config.isCommercial() ? data.key_pem : undefined,
                         )
                     ).toGQLType();
                 }),
@@ -332,7 +334,13 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
      */
     protected gqlCustomResolvers = {
         IngestEndpointEnvironment: {
-            cname: async (parent: any) => getIngestEndpointCNAME(parent.id),
+            cname: async (parent: any) =>
+                getCNAME(
+                    await this.repoFactory(IngestEndpointEnvironment).findByIdThrows(
+                        new ObjectId(parent.id),
+                        userMessages.environmentFailed,
+                    ),
+                ),
             install_domain: async (parent: any, args: any, ctx: CTX) => {
                 const env = await this.repoFactory(IngestEndpointEnvironment).findByIdThrows(
                     new ObjectId(parent.id),
