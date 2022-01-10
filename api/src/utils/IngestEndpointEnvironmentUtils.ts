@@ -373,45 +373,41 @@ const getMongoDbProviderConfig = async (mongoPushConfig: MongoDbPushConfig) => {
     };
 };
 
-export const getProviderConfig = async (data: any): Promise<StorageProviderConfig> => {
-    if (data.storage_provider === StorageProvider.AWS_S3 && data.aws_storage_config !== undefined) {
-        return await getAwsS3ProviderConfig(data.aws_storage_config);
-    } else if (
-        data.storage_provider === StorageProvider.GC_BIGQUERY_STREAM &&
-        data.gc_bigquery_stream_config !== undefined
-    ) {
-        return await getBigQueryProviderConfig(data.gc_bigquery_stream_config);
-    } else if (
-        data.storage_provider === StorageProvider.MONGODB &&
-        data.mongo_push_config !== undefined
-    ) {
-        return await getMongoDbProviderConfig(data.mongo_push_config);
-    } else {
-        throw new GQLError(userMessages.noStorageProvider, true);
-    }
-};
-
-export const getUpdateProviderConfig = async (
+export const getProviderConfig = async (
     data: any,
-    ingestEndpointEnvironment: IngestEndpointEnvironment,
+    ingestEndpointEnvironment?: IngestEndpointEnvironment,
 ): Promise<StorageProviderConfig | undefined> => {
-    if (
-        ingestEndpointEnvironment.storageProvider === StorageProvider.AWS_S3 &&
-        data.aws_storage_config !== undefined
-    ) {
+    const config = container.get<BaseConfig>(TYPES.BackendConfig);
+
+    const storageProviderType =
+        ingestEndpointEnvironment !== undefined
+            ? ingestEndpointEnvironment.storageProvider
+            : data.storage_provider;
+
+    if (storageProviderType === StorageProvider.AWS_S3 && data.aws_storage_config !== undefined) {
         return await getAwsS3ProviderConfig(data.aws_storage_config);
     } else if (
-        ingestEndpointEnvironment.storageProvider === StorageProvider.GC_BIGQUERY_STREAM &&
+        storageProviderType === StorageProvider.GC_BIGQUERY_STREAM &&
         data.gc_bigquery_stream_config !== undefined
     ) {
         return await getBigQueryProviderConfig(data.gc_bigquery_stream_config);
     } else if (
-        ingestEndpointEnvironment.storageProvider === StorageProvider.MONGODB &&
-        data.mongo_push_config !== undefined
+        storageProviderType === StorageProvider.MONGODB &&
+        data.mongo_push_config !== undefined &&
+        config.isNotCommercial()
     ) {
         return await getMongoDbProviderConfig(data.mongo_push_config);
     } else {
         return undefined;
+    }
+};
+
+export const getProviderConfigThrows = async (data: any): Promise<StorageProviderConfig> => {
+    const value = await getProviderConfig(data);
+    if (value === undefined) {
+        throw new GQLError(userMessages.noStorageProvider, true);
+    } else {
+        return value;
     }
 };
 

@@ -16,8 +16,8 @@ import {
     createUsageEndpointEnvironment,
     getCommercialStorageProvider,
     getCommercialStorageProviderConfig,
+    getProviderConfigThrows,
     getProviderConfig,
-    getUpdateProviderConfig,
     updateIngestEndpointEnvironment,
 } from '../../utils/IngestEndpointEnvironmentUtils';
 import { VarType } from '../../enums/VarType';
@@ -255,7 +255,7 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                     userMessages.usageFailed,
                 );
 
-                const providerConfig = await getUpdateProviderConfig(
+                const providerConfig = await getProviderConfig(
                     data,
                     trackingIngestEndpointEnvironment,
                 );
@@ -363,7 +363,7 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                     ];
                 }
 
-                return [data.storage_provider, await getProviderConfig(data)];
+                return [data.storage_provider, await getProviderConfigThrows(data)];
             };
 
             const [storageProvider, providerConfig] = await getStorageProviderDetails();
