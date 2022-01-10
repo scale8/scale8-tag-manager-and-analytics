@@ -121,10 +121,10 @@ const SignUpForm: FC<SignUpFormProps> = (props: SignUpFormProps) => {
                         fullWidth
                     />
                 )}
-                {type === 'tag-manager' && (
+                {type !== 'invite' && (
                     <ControlledTextInput
-                        name="domain"
-                        label="Domain"
+                        name="orgName"
+                        label="Organization name"
                         formProps={props}
                         variant="outlined"
                         margin="normal"
@@ -132,10 +132,10 @@ const SignUpForm: FC<SignUpFormProps> = (props: SignUpFormProps) => {
                         fullWidth
                     />
                 )}
-                {type === 'data-manager' && (
+                {type === 'tag-manager' && (
                     <ControlledTextInput
-                        name="orgName"
-                        label="Organization name"
+                        name="domain"
+                        label="Domain"
                         formProps={props}
                         variant="outlined"
                         margin="normal"
