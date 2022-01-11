@@ -458,10 +458,7 @@ export default class AppManager extends Manager<App> {
                     'error_tracking_enabled',
                 ]); //only is a safety check against this function
 
-                app.storageProviderConfigHash = Hash.hashString(
-                    JSON.stringify(providerConfig),
-                    'c0nF1g',
-                );
+                app.storageProviderConfigHash = Hash.hashString(JSON.stringify(providerConfig));
 
                 await this.repoFactory(App).save(app, me);
                 return true;

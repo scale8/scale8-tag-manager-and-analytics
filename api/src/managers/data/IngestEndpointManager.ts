@@ -269,7 +269,6 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                 ingestEndpoint.bulkGQLSet(data, ['name', 'analytics_enabled']); //only is a safety check against this function
                 ingestEndpoint.storageProviderConfigHash = Hash.hashString(
                     JSON.stringify(providerConfig),
-                    'c0nF1g',
                 );
                 await this.repoFactory(IngestEndpoint).save(ingestEndpoint, me);
                 return true;
@@ -341,7 +340,6 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                 ingestEndpoint.usageIngestEndpointEnvironmentId = usageEndpointEnvironment.id;
                 ingestEndpoint.storageProviderConfigHash = Hash.hashString(
                     JSON.stringify(providerConfig),
-                    'c0nF1g',
                 );
                 ingestEndpoint = await this.repoFactory(IngestEndpoint).save(ingestEndpoint, actor);
                 await this.repoFactory(IngestEndpointRevision).save(
