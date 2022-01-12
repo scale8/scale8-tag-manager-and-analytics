@@ -558,7 +558,7 @@ export default class UserManager extends Manager<User> {
             const email = await getEmail();
 
             // Check if org name existing
-            const orgName = args.signUpInput.org_name ?? args.signUpInput.domain;
+            const orgName = args.signUpInput.org_name;
 
             if (orgName !== undefined && args.signUpInput.sign_up_type !== SignUpType.INVITE) {
                 const existingOrg = await this.repoFactory(Org).findOne({
@@ -566,11 +566,7 @@ export default class UserManager extends Manager<User> {
                 });
 
                 if (existingOrg !== null) {
-                    const errorMessage =
-                        args.signUpInput.org_name !== undefined
-                            ? userMessages.duplicateOrg(orgName)
-                            : userMessages.duplicateDomain(orgName);
-                    throw new ValidationError(errorMessage, true);
+                    throw new ValidationError(userMessages.duplicateOrg(orgName), true);
                 }
             }
 

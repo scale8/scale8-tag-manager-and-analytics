@@ -16,8 +16,8 @@ import {
     createUsageEndpointEnvironment,
     getCommercialStorageProvider,
     getCommercialStorageProviderConfig,
+    getProviderConfigThrows,
     getProviderConfig,
-    getUpdateProviderConfig,
     updateIngestEndpointEnvironment,
 } from '../../utils/IngestEndpointEnvironmentUtils';
 import { VarType } from '../../enums/VarType';
@@ -255,7 +255,7 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                     userMessages.usageFailed,
                 );
 
-                const providerConfig = await getUpdateProviderConfig(
+                const providerConfig = await getProviderConfig(
                     data,
                     trackingIngestEndpointEnvironment,
                 );
@@ -269,7 +269,6 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                 ingestEndpoint.bulkGQLSet(data, ['name', 'analytics_enabled']); //only is a safety check against this function
                 ingestEndpoint.storageProviderConfigHash = Hash.hashString(
                     JSON.stringify(providerConfig),
-                    'c0nF1g',
                 );
                 await this.repoFactory(IngestEndpoint).save(ingestEndpoint, me);
                 return true;
@@ -341,7 +340,6 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                 ingestEndpoint.usageIngestEndpointEnvironmentId = usageEndpointEnvironment.id;
                 ingestEndpoint.storageProviderConfigHash = Hash.hashString(
                     JSON.stringify(providerConfig),
-                    'c0nF1g',
                 );
                 ingestEndpoint = await this.repoFactory(IngestEndpoint).save(ingestEndpoint, actor);
                 await this.repoFactory(IngestEndpointRevision).save(
@@ -363,7 +361,7 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                     ];
                 }
 
-                return [data.storage_provider, await getProviderConfig(data)];
+                return [data.storage_provider, await getProviderConfigThrows(data)];
             };
 
             const [storageProvider, providerConfig] = await getStorageProviderDetails();

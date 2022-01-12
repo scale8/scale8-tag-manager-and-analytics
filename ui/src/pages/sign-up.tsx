@@ -46,15 +46,10 @@ const SignUpContent: FC<SignUpContentProps> = (props: SignUpContentProps) => {
             temp_access_code: signUpValues.tempAccessCode,
             captcha_token: signUpValues.CAPTCHAToken,
             sign_up_type: signUpType,
+            org_name: signUpType === SignUpType.INVITE ? target : signUpValues.orgName,
             ...(email !== undefined ? { email } : {}),
             ...(inviteId !== undefined ? { invite_id: inviteId } : {}),
             ...(gitHubId !== null ? { git_hub_user: gitHubId } : {}),
-            ...(signUpType === SignUpType.INVITE || signUpType === SignUpType.DATA_MANAGER
-                ? {
-                      org_name:
-                          signUpType === SignUpType.DATA_MANAGER ? signUpValues.orgName : target,
-                  }
-                : {}),
             ...(signUpType === SignUpType.TAG_MANAGER ? { domain: signUpValues.domain } : {}),
             ...(signUpValues.newPassword !== '' ? { password: signUpValues.newPassword } : {}),
         };

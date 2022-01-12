@@ -9,7 +9,7 @@ const IngestEndpointEnvironmentForm: FC<IngestEndpointEnvironmentFormProps> = (
     props: IngestEndpointEnvironmentFormProps,
 ) => {
     return (
-        <DrawerFormLayout {...props}>
+        <DrawerFormLayout {...props} submitDisable={props.availableRevisions.length < 1}>
             <ControlledTextInput
                 name="name"
                 label="Name"

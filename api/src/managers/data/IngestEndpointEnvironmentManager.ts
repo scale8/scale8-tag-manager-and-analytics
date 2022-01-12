@@ -11,8 +11,8 @@ import userMessages from '../../errors/UserMessages';
 import {
     createIngestEndpointEnvironment,
     getIngestEndpointInstallDomain,
+    getProviderConfigThrows,
     getProviderConfig,
-    getUpdateProviderConfig,
     updateIngestEndpointEnvironment,
 } from '../../utils/IngestEndpointEnvironmentUtils';
 import BaseDatabase from '../../backends/databases/abstractions/BaseDatabase';
@@ -253,7 +253,7 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
                     ingestEndpointEnvironment.orgId,
                     async (me) => {
                         //todo. this needs a tidy up.
-                        const providerConfig = await getUpdateProviderConfig(
+                        const providerConfig = await getProviderConfig(
                             data,
                             ingestEndpointEnvironment,
                         );
@@ -302,7 +302,7 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
             );
             return withUnManagedAccount(ingestEndpoint.dataManagerAccountId, async () =>
                 this.orgAuth.asUserWithCreateAccess(ctx, ingestEndpoint.orgId, async (me) => {
-                    const providerConfig = await getProviderConfig(data);
+                    const providerConfig = await getProviderConfigThrows(data);
 
                     const ingestEndpointRevision: IngestEndpointRevision = await this.repoFactory(
                         IngestEndpointRevision,

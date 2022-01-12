@@ -18,8 +18,8 @@ import BaseDatabase from '../../backends/databases/abstractions/BaseDatabase';
 import {
     getCommercialStorageProvider,
     getCommercialStorageProviderConfig,
+    getProviderConfigThrows,
     getProviderConfig,
-    getUpdateProviderConfig,
     updateIngestEndpointEnvironment,
 } from '../../utils/IngestEndpointEnvironmentUtils';
 import GenericError from '../../errors/GenericError';
@@ -440,7 +440,7 @@ export default class AppManager extends Manager<App> {
                     IngestEndpointEnvironment,
                 ).findByIdThrows(app.usageIngestEndpointEnvironmentId, userMessages.usageFailed);
 
-                const providerConfig = await getUpdateProviderConfig(
+                const providerConfig = await getProviderConfig(
                     data,
                     trackingIngestEndpointEnvironment,
                 );
@@ -458,10 +458,7 @@ export default class AppManager extends Manager<App> {
                     'error_tracking_enabled',
                 ]); //only is a safety check against this function
 
-                app.storageProviderConfigHash = Hash.hashString(
-                    JSON.stringify(providerConfig),
-                    'c0nF1g',
-                );
+                app.storageProviderConfigHash = Hash.hashString(JSON.stringify(providerConfig));
 
                 await this.repoFactory(App).save(app, me);
                 return true;
@@ -500,7 +497,7 @@ export default class AppManager extends Manager<App> {
                     ];
                 }
 
-                return [data.storage_provider, await getProviderConfig(data)];
+                return [data.storage_provider, await getProviderConfigThrows(data)];
             };
 
             const [storageProvider, providerConfig] = await getStorageProviderDetails();

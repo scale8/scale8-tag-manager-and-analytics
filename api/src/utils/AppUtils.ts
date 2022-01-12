@@ -286,7 +286,7 @@ export const createApp = async (
         providerConfig,
     );
     app.usageIngestEndpointEnvironmentId = usageEndpointEnvironment.id;
-    app.storageProviderConfigHash = Hash.hashString(JSON.stringify(providerConfig), 'c0nF1g');
+    app.storageProviderConfigHash = Hash.hashString(JSON.stringify(providerConfig));
     app = await repoFactory(App).save(app, actor, OperationOwner.USER);
 
     //create first revision...
