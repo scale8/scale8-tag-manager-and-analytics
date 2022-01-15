@@ -55,9 +55,13 @@ const IngestEndpointDataMapForm: FC<IngestEndpointDataMapFormProps> = (
         }
     };
 
+    const macroValueAddMarker = (l: string) => `%${l}%`;
+
+    const macroValuesAddMarker = (v: string[]) => v.map((_) => macroValueAddMarker(_));
+
     const getMacroSelectValues = (): SelectValueWithSub[] => {
         return getMacroValues().map((_) => ({
-            key: _,
+            key: macroValueAddMarker(_),
             text: _,
         }));
     };
@@ -79,7 +83,11 @@ const IngestEndpointDataMapForm: FC<IngestEndpointDataMapFormProps> = (
     const defaultValue = props.values.defaultValue;
 
     useEffect(() => {
-        setUseMacro(getMacroValues().includes(defaultValue.toString()) ? true : useMacro);
+        setUseMacro(
+            macroValuesAddMarker(getMacroValues()).includes(defaultValue.toString())
+                ? true
+                : useMacro,
+        );
     }, [defaultValue]);
 
     const varTypeRawValues = Object.keys(VarType)

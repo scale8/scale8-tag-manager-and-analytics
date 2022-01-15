@@ -144,7 +144,7 @@ const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
                                 display: 'flex',
                                 height: 15,
                                 backgroundImage: 'linear-gradient(to bottom, white, transparent)',
-                                width: 'calc( 100% - 66px)',
+                                width: 'calc( 100% - 32px)',
                                 position: 'absolute',
                             }}
                         />
