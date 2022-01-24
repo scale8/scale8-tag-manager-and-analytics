@@ -39,6 +39,7 @@ services:
         environment:
             # To connect to a local version of MongoDB, use mongodb://host.docker.internal .
             MONGO_CONNECT_STRING: "mongodb://mongodb"
+            SETUP_MODE: "true"
 
     router:
         image: scale8/router:latest

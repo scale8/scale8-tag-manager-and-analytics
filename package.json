@@ -10,6 +10,7 @@
         "test:all": "yarn --cwd api/ test && yarn --cwd ui/ test && mvn -f edge/pom.xml test",
         "run:all": "docker-compose up",
         "stop:all": "docker-compose stop",
+        "clean:all": "docker rm router edge api mongodb",
         "start:mongodb": "docker run --name mongodb-dev -p 27017:27017 -d mongo:4.4",
         "stop:mongodb": "docker stop mongodb-dev && docker rm mongodb-dev"
     }

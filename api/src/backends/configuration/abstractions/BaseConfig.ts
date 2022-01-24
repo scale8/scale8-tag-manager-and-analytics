@@ -53,6 +53,10 @@ export default abstract class BaseConfig {
         return mode === Mode.COMMERCIAL ? Mode.COMMERCIAL : Mode.SELF_HOSTED;
     }
 
+    public isSetupMode(): boolean {
+        return BaseConfig.getFromEnvVarOrElse('SETUP_MODE', 'false') === 'true';
+    }
+
     public isCommercial(): boolean {
         return this.getMode() === Mode.COMMERCIAL;
     }

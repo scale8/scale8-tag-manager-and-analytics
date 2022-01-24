@@ -13,6 +13,11 @@ export const getApiUrl = (): string => {
     if (typeof window !== 'undefined') {
         const hostname = window.location.hostname;
         const port = window.location.port;
+
+        if (process.env.NEXT_PUBLIC_IS_ROUTER_MODE !== undefined) {
+            return `${window.location.protocol}//${hostname}${port === '' ? '' : ':' + port}`;
+        }
+
         const path = window.location.pathname;
         const qs = window.location.search;
         const isDev = getNodeEnv() === 'development';
