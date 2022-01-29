@@ -1,5 +1,5 @@
 import { FC, Fragment } from 'react';
-import { Box, Button, Tooltip } from '@mui/material';
+import { Box, Tooltip } from '@mui/material';
 import { PlatformDataMapInput } from '../../types/DataMapsTypes';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
@@ -9,9 +9,9 @@ import { snakeToTitleCase } from '../../utils/TextUtils';
 import { Alert } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { grey } from '@mui/material/colors';
-import AddIcon from '@mui/icons-material/Add';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useLoggedInState } from '../../context/AppContext';
+import { SmallAddButton } from '../atoms/SmallAddButton';
 
 export type TemplatedActionDataMapSectionProps = {
     addDataMap: (parentsIndexes: number[]) => void;
@@ -171,15 +171,11 @@ const TemplatedActionDataMapSection: FC<TemplatedActionDataMapSectionProps> = (
             )}
             <Box p={1}>
                 {!disabled && (
-                    <Button
-                        size="small"
-                        variant="outlined"
-                        onClick={() => addDataMap(parentsIndexes)}
-                        startIcon={<AddIcon />}
+                    <SmallAddButton
+                        addButtonText="Add Form Component"
+                        addButtonClick={() => addDataMap(parentsIndexes)}
                         disabled={secondaryDialogOpen}
-                    >
-                        Add Form Component
-                    </Button>
+                    />
                 )}
             </Box>
         </>

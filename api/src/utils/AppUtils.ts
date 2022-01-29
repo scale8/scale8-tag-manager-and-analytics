@@ -286,7 +286,7 @@ export const createApp = async (
         providerConfig,
     );
     app.usageIngestEndpointEnvironmentId = usageEndpointEnvironment.id;
-    app.storageProviderConfigHash = Hash.hashString(JSON.stringify(providerConfig), 'c0nF1g');
+    app.storageProviderConfigHash = Hash.hashString(JSON.stringify(providerConfig));
     app = await repoFactory(App).save(app, actor, OperationOwner.USER);
 
     //create first revision...
@@ -350,17 +350,7 @@ export const createApp = async (
             'Automatically linking tags, core platform and finalizing the first revision so it can be attached to an environment and installed',
     });
 
-    await createEnvironment(
-        actor,
-        app,
-        'Production',
-        revision,
-        `https://${domain}`,
-        undefined,
-        undefined,
-        undefined,
-        [],
-    );
+    await createEnvironment(actor, app, 'Production', revision, `https://${domain}`);
 
     //finally clone first revision ready for editing...
     const newRevision = await duplicateRevision(actor, revision);

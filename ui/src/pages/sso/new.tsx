@@ -1,9 +1,9 @@
-import { FC, useEffect } from 'react';
+import { useEffect } from 'react';
 import Loader from '../../components/organisms/Loader';
-import { useParams } from '../../hooks/useParams';
+import { ComponentWithParams, ParamsLoader } from '../../components/atoms/ParamsLoader';
 
-const New: FC = () => {
-    const { username, email } = useParams();
+const SsoNew: ComponentWithParams = ({ params }) => {
+    const { username, email } = params;
     useEffect(() => {
         if (window.opener && username && email) {
             // send them to the opening window
@@ -25,4 +25,6 @@ const New: FC = () => {
     );
 };
 
-export default New;
+const SsoNewLoader = () => <ParamsLoader Child={SsoNew} />;
+
+export default SsoNewLoader;

@@ -82,4 +82,4 @@ const GlobalTriggerCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { GlobalTriggerCreate };
+export default GlobalTriggerCreate;

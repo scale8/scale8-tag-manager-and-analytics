@@ -2,7 +2,7 @@ import Manager from '../../abstractions/Manager';
 import { injectable } from 'inversify';
 import { gql } from 'apollo-server-express';
 import PlatformRevision from '../../mongo/models/tag/PlatformRevision';
-import { ObjectId, ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import PlatformDataContainer from '../../mongo/models/tag/PlatformDataContainer';
 import PlatformDataMap from '../../mongo/models/tag/PlatformDataMap';
 import PlatformAction from '../../mongo/models/tag/PlatformAction';
@@ -210,7 +210,7 @@ export default class PlatformRevisionManager extends Manager<PlatformRevision> {
     protected gqlExtendedQueryResolvers = {
         getPlatformRevision: async (parent: any, args: any, ctx: CTX) => {
             const platformRevision = await this.repoFactory(PlatformRevision).findByIdThrows(
-                new ObjectID(args.id),
+                new ObjectId(args.id),
                 userMessages.revisionFailed,
             );
             return await this.orgAuth.asUserWithViewAccessOnPlatformRevision(
@@ -221,11 +221,11 @@ export default class PlatformRevisionManager extends Manager<PlatformRevision> {
         },
         platformRevisionDifference: async (parent: any, args: any, ctx: CTX) => {
             const left = await this.repoFactory(PlatformRevision).findByIdThrows(
-                new ObjectID(args.leftRevisionId),
+                new ObjectId(args.leftRevisionId),
                 userMessages.revisionFailed,
             );
             const right = await this.repoFactory(PlatformRevision).findByIdThrows(
-                new ObjectID(args.rightRevisionId),
+                new ObjectId(args.rightRevisionId),
                 userMessages.revisionFailed,
             );
             if (left.tagManagerAccountId.toString() !== right.tagManagerAccountId.toString()) {
@@ -238,7 +238,7 @@ export default class PlatformRevisionManager extends Manager<PlatformRevision> {
         getPublishedPlatformRevisions: async (parent: any, args: any, ctx: CTX) => {
             const platform = await this.repoFactory(Platform).findOneThrows(
                 {
-                    _id: new ObjectID(args.platformId),
+                    _id: new ObjectId(args.platformId),
                     _is_public: true,
                 },
                 userMessages.platformFailed,
@@ -563,7 +563,7 @@ export default class PlatformRevisionManager extends Manager<PlatformRevision> {
         },
         duplicatePlatformRevision: async (parent: any, args: any, ctx: CTX) => {
             const platformRevision = await this.repoFactory(PlatformRevision).findByIdThrows(
-                new ObjectID(args.duplicatePlatformRevisionInput.platform_revision_id),
+                new ObjectId(args.duplicatePlatformRevisionInput.platform_revision_id),
                 userMessages.revisionFailed,
             );
             return this.orgAuth.asUserWithCreateAccess(ctx, platformRevision.orgId, async (me) => {
@@ -596,7 +596,7 @@ export default class PlatformRevisionManager extends Manager<PlatformRevision> {
         },
         publishPlatformRevision: async (parent: any, args: any, ctx: CTX) => {
             const platformRevision = await this.repoFactory(PlatformRevision).findByIdThrows(
-                new ObjectID(args.publishPlatformRevisionInput.platform_revision_id),
+                new ObjectId(args.publishPlatformRevisionInput.platform_revision_id),
                 userMessages.revisionFailed,
             );
             return this.orgAuth.asUserWithCreateAccess(ctx, platformRevision.orgId, async (me) => {
@@ -609,7 +609,7 @@ export default class PlatformRevisionManager extends Manager<PlatformRevision> {
         createNewPlatformRevision: async (parent: any, args: any, ctx: CTX) => {
             const data = args.newRevisionInput;
             const platform = await this.repoFactory(Platform).findByIdThrows(
-                new ObjectID(data.platform_id),
+                new ObjectId(data.platform_id),
                 userMessages.platformFailed,
             );
             return this.orgAuth.asUserWithCreateAccess(ctx, platform.orgId, async (me) => {
@@ -630,7 +630,7 @@ export default class PlatformRevisionManager extends Manager<PlatformRevision> {
         PlatformRevision: {
             platform: async (parent: any, args: any, ctx: CTX) => {
                 const platform = await this.repoFactory(Platform).findByIdThrows(
-                    new ObjectID(parent.platform_id),
+                    new ObjectId(parent.platform_id),
                     userMessages.platformFailed,
                 );
                 return this.orgAuth.asUserWithViewAccessOnPlatform(ctx, platform, async () =>
@@ -639,7 +639,7 @@ export default class PlatformRevisionManager extends Manager<PlatformRevision> {
             },
             platform_settings: async (parent: any, args: any, ctx: CTX) => {
                 const platformRevision = await this.repoFactory(PlatformRevision).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.revisionFailed,
                 );
                 return this.orgAuth.asUserWithViewAccessOnPlatformRevision(
@@ -654,27 +654,27 @@ export default class PlatformRevisionManager extends Manager<PlatformRevision> {
                 );
             },
             platform_actions: async (parent: any, args: any, ctx: CTX) => {
-                return this.getRevisionChildren(ctx, new ObjectID(parent.id), PlatformAction);
+                return this.getRevisionChildren(ctx, new ObjectId(parent.id), PlatformAction);
             },
             platform_data_containers: async (parent: any, args: any, ctx: CTX) => {
                 return this.getRevisionChildren(
                     ctx,
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     PlatformDataContainer,
                 );
             },
             platform_events: async (parent: any, args: any, ctx: CTX) => {
-                return this.getRevisionChildren(ctx, new ObjectID(parent.id), PlatformEvent);
+                return this.getRevisionChildren(ctx, new ObjectId(parent.id), PlatformEvent);
             },
             platform_assets: async (parent: any, args: any, ctx: CTX) => {
-                return this.getRevisionChildren(ctx, new ObjectID(parent.id), PlatformAsset);
+                return this.getRevisionChildren(ctx, new ObjectId(parent.id), PlatformAsset);
             },
         },
     };
 
     private async getRevisionChildren<T extends Model>(
         ctx: CTX,
-        platformRevisionId: ObjectID,
+        platformRevisionId: ObjectId,
         modelInstance: CT<T>,
     ): Promise<GQLType[]> {
         const platformRevision = await this.repoFactory(PlatformRevision).findByIdThrows(

@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 import { TypeIcon, VarType, InputType, ValidationType } from "./globalTypes";
@@ -120,7 +119,8 @@ export interface FetchAvailableDataContainers_getTrigger_revision_app_platform_r
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -164,7 +164,8 @@ export interface FetchAvailableDataContainers_getTrigger_revision_app_platform_r
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -180,7 +181,8 @@ export interface FetchAvailableDataContainers_getTrigger_revision_app_platform_r
    */
   default_value: FetchAvailableDataContainers_getTrigger_revision_app_platform_revisions_platform_revision_platform_data_containers_platform_data_maps_child_platform_data_maps_default_value | null;
   /**
-   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These contain nested `PlatformDataMap` in a document or array document structure respectivly
+   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These
+   * contain nested `PlatformDataMap` in a document or array document structure respectivly
    */
   child_platform_data_maps: FetchAvailableDataContainers_getTrigger_revision_app_platform_revisions_platform_revision_platform_data_containers_platform_data_maps_child_platform_data_maps_child_platform_data_maps[];
 }
@@ -212,7 +214,8 @@ export interface FetchAvailableDataContainers_getTrigger_revision_app_platform_r
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -228,7 +231,8 @@ export interface FetchAvailableDataContainers_getTrigger_revision_app_platform_r
    */
   default_value: FetchAvailableDataContainers_getTrigger_revision_app_platform_revisions_platform_revision_platform_data_containers_platform_data_maps_default_value | null;
   /**
-   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These contain nested `PlatformDataMap` in a document or array document structure respectivly
+   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These
+   * contain nested `PlatformDataMap` in a document or array document structure respectivly
    */
   child_platform_data_maps: FetchAvailableDataContainers_getTrigger_revision_app_platform_revisions_platform_revision_platform_data_containers_platform_data_maps_child_platform_data_maps[];
 }

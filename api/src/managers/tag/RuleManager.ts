@@ -3,7 +3,7 @@ import { injectable } from 'inversify';
 import { gql } from 'apollo-server-express';
 import Rule from '../../mongo/models/tag/Rule';
 import CTX from '../../gql/ctx/CTX';
-import { ObjectId, ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import ActionGroupDistribution from '../../mongo/models/tag/ActionGroupDistribution';
 import RuleGroup from '../../mongo/models/tag/RuleGroup';
 import Revision from '../../mongo/models/tag/Revision';
@@ -230,7 +230,7 @@ export default class RuleManager extends Manager<Rule> {
     protected gqlExtendedQueryResolvers = {
         getRule: async (parent: any, args: any, ctx: CTX) => {
             const rule = await this.repoFactory(Rule).findByIdThrows(
-                new ObjectID(args.id),
+                new ObjectId(args.id),
                 userMessages.ruleFailed,
             );
             return await this.orgAuth.asUserWithViewAccess(ctx, rule.orgId, async () =>
@@ -475,7 +475,7 @@ export default class RuleManager extends Manager<Rule> {
         Rule: {
             trigger: async (parent: any, args: any, ctx: CTX) => {
                 const rule = await this.repoFactory(Rule).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.ruleFailed,
                 );
                 return this.orgAuth.asUserWithViewAccess(ctx, rule.orgId, async () => {
@@ -502,7 +502,7 @@ export default class RuleManager extends Manager<Rule> {
             },
             action_groups_distributions: async (parent: any, args: any, ctx: CTX) => {
                 const rule = await this.repoFactory(Rule).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.ruleFailed,
                 );
                 return this.orgAuth.asUserWithViewAccess(ctx, rule.orgId, async () =>

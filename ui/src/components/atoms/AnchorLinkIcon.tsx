@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 export const AnchorLinkIcon: FC<{ href: string }> = (props: { href: string }) => {
     return (
-        <a target="_blank" aria-hidden="true" href={props.href}>
+        <a target="_blank" rel="noreferrer" aria-hidden="true" href={props.href}>
             <svg viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">
                 <path
                     fillRule="evenodd"

@@ -16,7 +16,7 @@ import { DataContainer } from '../../../../types/DataMapsTypes';
 import { DialogPageProps } from '../../../../types/DialogTypes';
 import { usePageDialogControls } from '../../../../hooks/dialog/usePageDialogControls';
 import { buildStandardFormInfo } from '../../../../utils/InfoLabelsUtils';
-import { queryLoaderAndError } from '../../../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../../../abstractions/QueryLoaderAndError';
 import { getDataContainersIcon } from '../../../../utils/TypeIconsUtils';
 import { useConfigState } from '../../../../context/AppContext';
 import { logError } from '../../../../utils/logUtils';
@@ -106,7 +106,7 @@ const ConditionRuleCreateAfterLoad: FC<ConditionRuleCreateAfterLoadProps> = (
 const ConditionRuleCreate: FC<ConditionRuleCreateProps> = (props: ConditionRuleCreateProps) => {
     const { consentPurposes, consentVendors } = useConfigState();
 
-    return queryLoaderAndError<FetchAvailableDataContainers>(
+    return QueryLoaderAndError<FetchAvailableDataContainers>(
         false,
         useQuery<FetchAvailableDataContainers>(FetchAvailableDataContainersQuery, {
             variables: { triggerId: props.id },

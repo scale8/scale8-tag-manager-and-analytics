@@ -526,7 +526,7 @@ export default class UserManager extends Manager<User> {
                 throw new GenericError(userMessages.emailServerNotEnabled, LogPriority.ERROR, true);
             }
 
-            if (args.signUpInput.temp_access_code !== 'coal-king-low') {
+            if (args.signUpInput.temp_access_code !== (await this.config.getBetaAccessCode())) {
                 throw new ValidationError('Invalid access code.', true);
             }
 
@@ -558,7 +558,7 @@ export default class UserManager extends Manager<User> {
             const email = await getEmail();
 
             // Check if org name existing
-            const orgName = args.signUpInput.org_name ?? args.signUpInput.domain;
+            const orgName = args.signUpInput.org_name;
 
             if (orgName !== undefined && args.signUpInput.sign_up_type !== SignUpType.INVITE) {
                 const existingOrg = await this.repoFactory(Org).findOne({
@@ -566,11 +566,7 @@ export default class UserManager extends Manager<User> {
                 });
 
                 if (existingOrg !== null) {
-                    const errorMessage =
-                        args.signUpInput.org_name !== undefined
-                            ? userMessages.duplicateOrg(orgName)
-                            : userMessages.duplicateDomain(orgName);
-                    throw new ValidationError(errorMessage, true);
+                    throw new ValidationError(userMessages.duplicateOrg(orgName), true);
                 }
             }
 
@@ -616,11 +612,11 @@ export default class UserManager extends Manager<User> {
             };
 
             const buildCompleteSignUpLink = async () => {
-                return `${await this.config.getUiUrl()}/account-prepare/${buildUrlType()}/${
+                return `${await this.config.getUiUrl()}/account-prepare?type=${buildUrlType()}&token=${
                     signUpRequest.token
                 }${
                     signUpRequest.sign_up_type === SignUpType.INVITE
-                        ? `/${signUpRequest.org_name}`
+                        ? `&target=${signUpRequest.org_name}`
                         : ''
                 }`;
             };
@@ -676,7 +672,7 @@ export default class UserManager extends Manager<User> {
                 return {
                     uid: '',
                     token: '',
-                    url: '/login/duplicate',
+                    url: '/login?reason=duplicate',
                 };
             }
 
@@ -812,7 +808,7 @@ export default class UserManager extends Manager<User> {
                 return {
                     uid: session.uid,
                     token: session.token,
-                    url: `/s8/app/${app.id}/analytics/realtime`,
+                    url: `/s8/app/analytics?id=${app.id}&period=realtime`,
                     environment_id: await getEnvironmentId(),
                 };
             } else if (isData) {
@@ -822,13 +818,13 @@ export default class UserManager extends Manager<User> {
                 return {
                     uid: session.uid,
                     token: session.token,
-                    url: `/s8/data-manager/${
+                    url: `/s8/data-manager?id=${
                         (
                             await this.repoFactory<DataManagerAccountRepo>(
                                 DataManagerAccount,
                             ).getFromOrg(org)
                         ).id
-                    }/ingest-endpoints`,
+                    }`,
                 };
             } else {
                 throw new ValidationError(userMessages.validationInvalidSignUp, true);
@@ -1049,9 +1045,9 @@ export default class UserManager extends Manager<User> {
                 //send email...
                 await this.mailer.sendEmail(user.email, 'Password Reset', 'PasswordReset.twig', {
                     firstName: user.firstName,
-                    uiUrl: `${await this.config.getUiUrl()}/reset-password/${reset.token}`,
+                    uiUrl: `${await this.config.getUiUrl()}/reset-password?token=${reset.token}`,
                 });
-            } catch (e) {
+            } catch (e: any) {
                 await this.logger.logError(e, `Failed to send password reset email to ${email}`);
             }
             return true;

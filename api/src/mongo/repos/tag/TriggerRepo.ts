@@ -1,13 +1,13 @@
 import { injectable } from 'inversify';
 import UnderRevisionControl from './abstractions/UnderRevisionControl';
 import Trigger from '../../models/tag/Trigger';
-import { IndexSpecification } from 'mongodb';
+import { IndexDescription } from 'mongodb';
 
 @injectable()
 export default class TriggerRepo extends UnderRevisionControl<Trigger> {
     protected readonly auditEnabled = true;
 
-    protected readonly indexes: IndexSpecification[] = [
+    protected readonly indexes: IndexDescription[] = [
         {
             background: false,
             key: {

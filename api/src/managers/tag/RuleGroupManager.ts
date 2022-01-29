@@ -3,7 +3,7 @@ import { injectable } from 'inversify';
 import { gql } from 'apollo-server-express';
 import RuleGroup from '../../mongo/models/tag/RuleGroup';
 import CTX from '../../gql/ctx/CTX';
-import { ObjectId, ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import Rule from '../../mongo/models/tag/Rule';
 import Tag from '../../mongo/models/tag/Tag';
 import GQLError from '../../errors/GQLError';
@@ -310,7 +310,7 @@ export default class RuleGroupManager extends Manager<RuleGroup> {
     protected gqlExtendedQueryResolvers = {
         getRuleGroup: async (parent: any, args: any, ctx: CTX) => {
             const ruleGroup = await this.repoFactory(RuleGroup).findByIdThrows(
-                new ObjectID(args.id),
+                new ObjectId(args.id),
                 userMessages.ruleGroupFailed,
             );
             return await this.orgAuth.asUserWithViewAccess(ctx, ruleGroup.orgId, async () =>
@@ -328,7 +328,7 @@ export default class RuleGroupManager extends Manager<RuleGroup> {
         RuleGroup: {
             rules: async (parent: any, args: any, ctx: CTX) => {
                 const ruleGroup = await this.repoFactory(RuleGroup).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.ruleGroupFailed,
                 );
                 return this.orgAuth.asUserWithViewAccess(ctx, ruleGroup.orgId, async () =>

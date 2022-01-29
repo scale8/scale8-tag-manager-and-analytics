@@ -1,12 +1,12 @@
 import IngestEndpointEnvironment from '../mongo/models/data/IngestEndpointEnvironment';
-import { MongoClient, ObjectID } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
 import User from '../mongo/models/User';
 import IngestEndpoint from '../mongo/models/data/IngestEndpoint';
 import IngestEndpointRevision from '../mongo/models/data/IngestEndpointRevision';
 import container from '../container/IOC.config';
 import RepoFromModelFactory from '../container/factoryTypes/RepoFromModelFactory';
 import TYPES from '../container/IOC.types';
-import { uploadCertificate } from './CertificateUtils';
+import { createCname, getCNAME, updateCustomDomainForEnvironment } from './CertificateUtils';
 import GQLError from '../errors/GQLError';
 import userMessages from '../errors/UserMessages';
 import DataManagerAccount from '../mongo/models/data/DataManagerAccount';
@@ -23,24 +23,17 @@ import DataManagerAccountRepo from '../mongo/repos/data/DataManagerAccountRepo';
 import { StorageProvider } from '../enums/StorageProvider';
 import BaseStorage from '../backends/storage/abstractions/BaseStorage';
 import BaseConfig from '../backends/configuration/abstractions/BaseConfig';
-import { createCname } from './EnvironmentUtils';
 import { BigQuery } from '@google-cloud/bigquery';
 import Hash from '../core/Hash';
 import S3Service from '../aws/S3Service';
 import { AwsConfig, GCBigQueryStreamConfig, MongoDbPushConfig } from '../Types';
-
-export const getIngestEndpointCNAME = (ingestEndpointEnvironmentId: ObjectID | string): string => {
-    const config = container.get<BaseConfig>(TYPES.BackendConfig);
-
-    return `${config.getEnvironmentIdPrefix()}${ingestEndpointEnvironmentId.toString()}.scale8.com`;
-};
 
 export const getCommercialStorageProviderConfig = async (): Promise<StorageProviderConfig> => {
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
 
     return {
         config: {
-            service_account_json: '',
+            service_account_json: {},
             data_set_name: await config.getAnalyticsDataSetName(),
             require_partition_filter_in_queries: true,
         },
@@ -58,7 +51,7 @@ export const getIngestEndpointInstallDomain = (
     ingestEndpointEnvironment: IngestEndpointEnvironment,
 ): string => {
     if (ingestEndpointEnvironment.customDomain === undefined) {
-        return getIngestEndpointCNAME(ingestEndpointEnvironment.id);
+        return getCNAME(ingestEndpointEnvironment);
     } else {
         return ingestEndpointEnvironment.customDomain;
     }
@@ -80,7 +73,7 @@ const getIngestUsageIngestEnvironmentId = async (
 };
 
 export const getStorageProviderConfig = async (
-    ingestEndpointEnvironmentId: ObjectID,
+    ingestEndpointEnvironmentId: ObjectId,
 ): Promise<GCBigQueryStreamConfig | AwsConfig | MongoDbPushConfig | Record<string, never>> => {
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
 
@@ -147,7 +140,7 @@ export const buildIngestEndpointConfig = async (
             { contentType: 'application/json' },
         );
 
-    await uploadTo(`${getIngestEndpointCNAME(ingestEndpointEnvironment.id)}.json`);
+    await uploadTo(`${getCNAME(ingestEndpointEnvironment)}.json`);
 
     if (ingestEndpointEnvironment.customDomain !== undefined) {
         await uploadTo(`${ingestEndpointEnvironment.customDomain}.json`);
@@ -162,23 +155,26 @@ export const updateIngestEndpointEnvironment = async (
     providerConfig?: StorageProviderConfig,
     newName?: string,
     ingestEndpointRevisionId?: string,
+    customDomain?: string,
     customDomainCert?: string,
     customDomainKey?: string,
 ): Promise<IngestEndpointEnvironment> => {
     const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
 
-    if (config.isCommercial() && customDomainCert !== undefined && customDomainKey !== undefined) {
-        //trying to install a new certificate...
-        if (ingestEndpointEnvironment.customDomain === undefined) {
-            throw new GQLError(userMessages.noCustomDomain, true);
-        } else {
-            await uploadCertificate(
-                ingestEndpointEnvironment.customDomain,
-                customDomainCert,
-                customDomainKey,
-            );
-        }
+    if (
+        config.isCommercial() &&
+        customDomain !== undefined &&
+        customDomainCert !== undefined &&
+        customDomainKey !== undefined
+    ) {
+        await updateCustomDomainForEnvironment(
+            actor,
+            ingestEndpointEnvironment,
+            customDomain,
+            customDomainCert,
+            customDomainKey,
+        );
     }
 
     if (newName !== undefined) {
@@ -190,7 +186,7 @@ export const updateIngestEndpointEnvironment = async (
         if (ingestEndpointRevisionId !== undefined) {
             return await repoFactory(IngestEndpointRevision).findOneThrows(
                 {
-                    _id: new ObjectID(ingestEndpointRevisionId),
+                    _id: new ObjectId(ingestEndpointRevisionId),
                     _ingest_endpoint_id: ingestEndpointEnvironment.ingestEndpointId,
                 },
                 userMessages.revisionFailed,
@@ -212,7 +208,6 @@ export const updateIngestEndpointEnvironment = async (
 
     if (providerConfig !== undefined) {
         ingestEndpointEnvironment.configHint = providerConfig.hint;
-
         await getStorageBackend().setAsString(
             await config.getConfigsBucket(),
             `ingest-endpoint/storage-provider-config-${ingestEndpointEnvironment.id}.json`,
@@ -235,38 +230,10 @@ export const createIngestEndpointEnvironment = async (
     provider: StorageProvider,
     providerConfig: StorageProviderConfig,
     ingestEndpointRevision: IngestEndpointRevision,
-    fixedId?: ObjectID,
-    customDomain?: string,
-    customDomainCert?: string,
-    customDomainKey?: string,
+    fixedId?: ObjectId,
 ): Promise<IngestEndpointEnvironment> => {
     const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
-
-    const getCustomDomain: () => Promise<string | undefined> = async () => {
-        if (customDomain === undefined) {
-            return undefined;
-        } else {
-            if (
-                (await repoFactory(IngestEndpointEnvironment).findOne({
-                    _custom_domain: customDomain,
-                })) === null
-            ) {
-                //we can safely proceed
-                if (customDomainCert !== undefined && customDomainKey !== undefined) {
-                    await uploadCertificate(customDomain, customDomainCert, customDomainKey);
-                    return customDomain;
-                } else {
-                    throw new GQLError(userMessages.noCertificate, true);
-                }
-            } else {
-                throw new GQLError(
-                    'Unable to create as it would override another configuration potentially',
-                    userMessages.unexpectedIssue,
-                );
-            }
-        }
-    };
 
     let ingestEndpointEnvironment = new IngestEndpointEnvironment(
         name,
@@ -274,7 +241,6 @@ export const createIngestEndpointEnvironment = async (
         provider,
         providerConfig.hint,
         ingestEndpointRevision,
-        await getCustomDomain(),
     );
     if (fixedId !== undefined) {
         ingestEndpointEnvironment['_id'] = fixedId;
@@ -376,9 +342,7 @@ const getMongoDbProviderConfig = async (mongoPushConfig: MongoDbPushConfig) => {
 
     const getMongoConnection = async () => {
         try {
-            const client = new MongoClient(connectionString, {
-                useNewUrlParser: true,
-            });
+            const client = new MongoClient(connectionString);
             return await client.connect();
         } catch (e) {
             throw new GQLError(
@@ -409,45 +373,41 @@ const getMongoDbProviderConfig = async (mongoPushConfig: MongoDbPushConfig) => {
     };
 };
 
-export const getProviderConfig = async (data: any): Promise<StorageProviderConfig> => {
-    if (data.storage_provider === StorageProvider.AWS_S3 && data.aws_storage_config !== undefined) {
-        return await getAwsS3ProviderConfig(data.aws_storage_config);
-    } else if (
-        data.storage_provider === StorageProvider.GC_BIGQUERY_STREAM &&
-        data.gc_bigquery_stream_config !== undefined
-    ) {
-        return await getBigQueryProviderConfig(data.gc_bigquery_stream_config);
-    } else if (
-        data.storage_provider === StorageProvider.MONGODB &&
-        data.mongo_push_config !== undefined
-    ) {
-        return await getMongoDbProviderConfig(data.mongo_push_config);
-    } else {
-        throw new GQLError(userMessages.noStorageProvider, true);
-    }
-};
-
-export const getUpdateProviderConfig = async (
+export const getProviderConfig = async (
     data: any,
-    ingestEndpointEnvironment: IngestEndpointEnvironment,
+    ingestEndpointEnvironment?: IngestEndpointEnvironment,
 ): Promise<StorageProviderConfig | undefined> => {
-    if (
-        ingestEndpointEnvironment.storageProvider === StorageProvider.AWS_S3 &&
-        data.aws_storage_config !== undefined
-    ) {
+    const config = container.get<BaseConfig>(TYPES.BackendConfig);
+
+    const storageProviderType =
+        ingestEndpointEnvironment !== undefined
+            ? ingestEndpointEnvironment.storageProvider
+            : data.storage_provider;
+
+    if (storageProviderType === StorageProvider.AWS_S3 && data.aws_storage_config !== undefined) {
         return await getAwsS3ProviderConfig(data.aws_storage_config);
     } else if (
-        ingestEndpointEnvironment.storageProvider === StorageProvider.GC_BIGQUERY_STREAM &&
+        storageProviderType === StorageProvider.GC_BIGQUERY_STREAM &&
         data.gc_bigquery_stream_config !== undefined
     ) {
         return await getBigQueryProviderConfig(data.gc_bigquery_stream_config);
     } else if (
-        ingestEndpointEnvironment.storageProvider === StorageProvider.MONGODB &&
-        data.mongo_push_config !== undefined
+        storageProviderType === StorageProvider.MONGODB &&
+        data.mongo_push_config !== undefined &&
+        config.isNotCommercial()
     ) {
         return await getMongoDbProviderConfig(data.mongo_push_config);
     } else {
         return undefined;
+    }
+};
+
+export const getProviderConfigThrows = async (data: any): Promise<StorageProviderConfig> => {
+    const value = await getProviderConfig(data);
+    if (value === undefined) {
+        throw new GQLError(userMessages.noStorageProvider, true);
+    } else {
+        return value;
     }
 };
 

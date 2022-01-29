@@ -4,7 +4,7 @@ import {
     IngestEndpointDataMapFormProps,
     IngestEndpointDataMapValues,
 } from './IngestEndpointDataMapCreate';
-import { queryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
 import { useMutation, useQuery } from '@apollo/client';
 import UpdateIngestEndpointDataMapGetQuery from '../../gql/queries/UpdateIngestEndpointDataMapGetQuery';
 import {
@@ -106,8 +106,8 @@ const IngestEndpointDataMapUpdateAfterLoad: FC<
     return <IngestEndpointDataMapForm {...formProps} />;
 };
 
-const IngestEndpointDataMapInspectOrEdit: FC<DialogPageProps> = (props: DialogPageProps) => {
-    return queryLoaderAndError<UpdateIngestEndpointDataMapGetData>(
+export const IngestEndpointDataMapInspectOrEdit: FC<DialogPageProps> = (props: DialogPageProps) => {
+    return QueryLoaderAndError<UpdateIngestEndpointDataMapGetData>(
         false,
         useQuery<UpdateIngestEndpointDataMapGetData>(UpdateIngestEndpointDataMapGetQuery, {
             variables: { id: props.id },
@@ -162,8 +162,4 @@ const IngestEndpointDataMapUpdate: FC<DialogPageProps> = (props: DialogPageProps
     return <IngestEndpointDataMapInspectOrEdit {...props} readOnly={false} />;
 };
 
-const IngestEndpointDataMapInspect: FC<DialogPageProps> = (props: DialogPageProps) => {
-    return <IngestEndpointDataMapInspectOrEdit {...props} readOnly={true} />;
-};
-
-export { IngestEndpointDataMapUpdate, IngestEndpointDataMapInspect };
+export default IngestEndpointDataMapUpdate;

@@ -8,6 +8,7 @@ import {
 import { ApolloError } from '@apollo/client/errors';
 import { DataMap } from '../../types/DataMapsTypes';
 import {
+    FormWithMappedPlatformValuesResult,
     ModelWithPlatformDataMaps,
     useFormWithMappedPlatformValues,
 } from '../../hooks/form/useFormWithMappedPlatformValues';
@@ -16,7 +17,7 @@ import { ReactElement } from 'react';
 import { ValidateConfiguration } from '../../utils/validators/validateFormValues';
 import GQLError from '../../components/atoms/GqlError';
 import { MainDrawerTitle } from '../../components/molecules/MainDrawerTitle';
-import { queryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
 
 export type DialogPreloadFormProps<
     T extends FormLoadedData,
@@ -48,6 +49,49 @@ export type DialogFormAfterLoadProps<
     formLoadedData: any;
 };
 
+const DialogFormWithPlatformDatMaps = <
+    T extends FormLoadedData,
+    Q extends FormValues,
+    F extends FormProps<Q>,
+    M extends FormMutationData,
+>(
+    props: DialogFormAfterLoadProps<T, Q, F, M>,
+) => {
+    const {
+        formLoadedData,
+        buildInitialStatePreload,
+        buildFormProps,
+        mappedPlatformValuesProps,
+        ...dialogFormProps
+    } = props;
+
+    const useBuildFormValidationValuesWithDataMaps = (
+        submitForm: (values: Q) => Promise<void>,
+        validators: ValidateConfiguration<Q>[],
+    ): FormWithMappedPlatformValuesResult<Q> => {
+        return useFormWithMappedPlatformValues<Q>(
+            buildInitialStatePreload(formLoadedData),
+            validators,
+            submitForm,
+            mappedPlatformValuesProps!.buildAvailableModelsWithPlatformDataMaps(formLoadedData),
+            mappedPlatformValuesProps!.idValueForModelWithPlatformDataMaps,
+            mappedPlatformValuesProps!.buildExistingModelData === undefined
+                ? undefined
+                : mappedPlatformValuesProps!.buildExistingModelData(formLoadedData),
+        );
+    };
+
+    return (
+        <DialogForm
+            formLoadedData={formLoadedData as FormLoadedData}
+            initialState={buildInitialStatePreload(formLoadedData)}
+            buildFormPreloadProps={buildFormProps}
+            buildFormValidationValuesWithDataMaps={useBuildFormValidationValuesWithDataMaps}
+            {...dialogFormProps}
+        />
+    );
+};
+
 const FormAfterLoad = <
     T extends FormLoadedData,
     Q extends FormValues,
@@ -64,36 +108,18 @@ const FormAfterLoad = <
         ...dialogFormProps
     } = props;
 
-    const buildFormValidationValuesWithDataMaps =
-        mappedPlatformValuesProps === undefined
-            ? undefined
-            : (
-                  submitForm: (values: Q) => Promise<void>,
-                  validators: ValidateConfiguration<Q>[],
-              ) => {
-                  return useFormWithMappedPlatformValues<Q>(
-                      buildInitialStatePreload(formLoadedData),
-                      validators,
-                      submitForm,
-                      mappedPlatformValuesProps.buildAvailableModelsWithPlatformDataMaps(
-                          formLoadedData,
-                      ),
-                      mappedPlatformValuesProps.idValueForModelWithPlatformDataMaps,
-                      mappedPlatformValuesProps.buildExistingModelData === undefined
-                          ? undefined
-                          : mappedPlatformValuesProps.buildExistingModelData(formLoadedData),
-                  );
-              };
+    if (mappedPlatformValuesProps === undefined) {
+        return (
+            <DialogForm
+                formLoadedData={formLoadedData as FormLoadedData}
+                initialState={buildInitialStatePreload(formLoadedData)}
+                buildFormPreloadProps={buildFormProps}
+                {...dialogFormProps}
+            />
+        );
+    }
 
-    return (
-        <DialogForm
-            formLoadedData={formLoadedData as FormLoadedData}
-            initialState={buildInitialStatePreload(formLoadedData)}
-            buildFormPreloadProps={buildFormProps}
-            buildFormValidationValuesWithDataMaps={buildFormValidationValuesWithDataMaps}
-            {...dialogFormProps}
-        />
-    );
+    return <DialogFormWithPlatformDatMaps {...props} />;
 };
 
 const DialogPreloadForm = <
@@ -104,7 +130,7 @@ const DialogPreloadForm = <
 >(
     props: DialogPreloadFormProps<T, Q, F, M>,
 ): ReactElement => {
-    return queryLoaderAndError<T>(
+    return QueryLoaderAndError<T>(
         false,
         props.loadQuery,
         (data: T) => <FormAfterLoad formLoadedData={data} {...props} />,

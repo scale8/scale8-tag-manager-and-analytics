@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEvent, ReactElement, ReactNode, useMemo } from 'react';
+import { ChangeEvent, MouseEvent, ReactElement, ReactNode } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -6,7 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import { getComparator, stableSort } from '../../../utils/ArrayUtils';
 import { FieldAction, FieldType, RowData, S8TableProps } from './S8TableTypes';
-import { Box, Button, TablePagination, Tooltip } from '@mui/material';
+import { Box, Button, darken, TablePagination, Tooltip } from '@mui/material';
 import S8TableToolbar from './S8TableToolBar';
 import S8TableHead from './S8TableHead';
 import S8TableRowActionsCell from './S8TableRowActionsCell';
@@ -15,6 +15,7 @@ import { Sparklines, SparklinesLine } from 'react-sparklines';
 import { timestampDisplay } from '../../../utils/DateTimeUtils';
 import { navigationColorFromSectionLocator } from '../../../containers/SectionsDetails';
 import { useLoggedInState } from '../../../context/AppContext';
+import { useSparkLineStyle } from '../../../hooks/useSparkLineStyle';
 
 const S8Table = <T extends RowData>(props: S8TableProps<T>): ReactElement => {
     const {
@@ -50,8 +51,8 @@ const S8Table = <T extends RowData>(props: S8TableProps<T>): ReactElement => {
     } = tableStateManager;
 
     const { templateInteractions } = useLoggedInState();
-    const { sectionHistory } = templateInteractions;
-    const navigationColor = navigationColorFromSectionLocator(sectionHistory.current);
+    const { section } = templateInteractions;
+    const navigationColor = navigationColorFromSectionLocator(section);
 
     const visibleColumns = columns.filter((_) => !_.hidden);
 
@@ -117,6 +118,8 @@ const S8Table = <T extends RowData>(props: S8TableProps<T>): ReactElement => {
 
     const isSelected = (id: string) => selected.indexOf(id) !== -1;
 
+    const sparkLineStyle = useSparkLineStyle();
+
     const renderValue = (type: FieldType, value: any): ReactNode => {
         switch (type) {
             case 'boolean':
@@ -125,7 +128,7 @@ const S8Table = <T extends RowData>(props: S8TableProps<T>): ReactElement => {
                 return (
                     <Box width={150}>
                         <Sparklines data={value} width={150} height={30}>
-                            <SparklinesLine style={useMemo(() => ({ fill: 'none' }), [])} />
+                            <SparklinesLine style={sparkLineStyle} />
                         </Sparklines>
                     </Box>
                 );
@@ -158,6 +161,9 @@ const S8Table = <T extends RowData>(props: S8TableProps<T>): ReactElement => {
                                 sx={{
                                     color: '#ffffff',
                                     background: navigationColor,
+                                    '&:hover': {
+                                        backgroundColor: darken(navigationColor, 0.2),
+                                    },
                                 }}
                             >
                                 {emptyAction.text}

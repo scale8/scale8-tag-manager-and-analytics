@@ -77,4 +77,4 @@ const IngestEndpointRevisionUpdate: FC<DialogPageProps> = (props: DialogPageProp
     );
 };
 
-export { IngestEndpointRevisionUpdate };
+export default IngestEndpointRevisionUpdate;

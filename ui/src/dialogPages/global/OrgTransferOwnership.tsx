@@ -69,4 +69,4 @@ const OrgTransferOwnership: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { OrgTransferOwnership };
+export default OrgTransferOwnership;

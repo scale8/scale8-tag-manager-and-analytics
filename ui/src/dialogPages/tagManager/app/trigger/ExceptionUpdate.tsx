@@ -15,4 +15,4 @@ const ExceptionUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { ExceptionUpdate };
+export default ExceptionUpdate;

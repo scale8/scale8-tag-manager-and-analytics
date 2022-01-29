@@ -1,6 +1,6 @@
 import Model from '../../abstractions/Model';
 import Field from '../../decorators/Field';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import RuleGroup from './RuleGroup';
 import Revision from './Revision';
 import RuleGroupRepo from '../../repos/tag/RuleGroupRepo';
@@ -8,15 +8,15 @@ import Hash from '../../../core/Hash';
 import { TagType } from '../../../enums/TagType';
 
 export default class Tag extends Model {
-    public getOrgEntityId(): ObjectID {
+    public getOrgEntityId(): ObjectId {
         return this.orgId;
     }
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'org_id',
     })
-    private readonly _org_id!: ObjectID;
+    private readonly _org_id!: ObjectId;
 
     @Field<string>({
         required: true,
@@ -25,11 +25,11 @@ export default class Tag extends Model {
     })
     private _name: string;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'tag_manager_account_id',
     })
-    private readonly _tag_manager_account_id!: ObjectID;
+    private readonly _tag_manager_account_id!: ObjectId;
 
     @Field<string>({
         required: true, //this will be auto populated on save...
@@ -39,17 +39,17 @@ export default class Tag extends Model {
     })
     private readonly _tag_code!: string;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'app_id',
     })
-    private readonly _app_id!: ObjectID;
+    private readonly _app_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'revision_id',
     })
-    private readonly _revision_id!: ObjectID;
+    private readonly _revision_id!: ObjectId;
 
     @Field<TagType>({
         required: true,
@@ -86,13 +86,13 @@ export default class Tag extends Model {
     })
     private _auto_load: boolean;
 
-    @Field<ObjectID[]>({
+    @Field<ObjectId[]>({
         repository: RuleGroupRepo,
         required: true,
         exposeToGQLAs: 'rule_group_id',
         exposeToConfig: true,
     })
-    private _rule_group_ids: ObjectID[];
+    private _rule_group_ids: ObjectId[];
 
     constructor(
         name: string,
@@ -119,7 +119,7 @@ export default class Tag extends Model {
         this._is_active = true;
     }
 
-    get orgId(): ObjectID {
+    get orgId(): ObjectId {
         return this._org_id;
     }
 
@@ -163,23 +163,23 @@ export default class Tag extends Model {
         this._auto_load = value;
     }
 
-    get revisionId(): ObjectID {
+    get revisionId(): ObjectId {
         return this._revision_id;
     }
 
-    get tagManagerAccountId(): ObjectID {
+    get tagManagerAccountId(): ObjectId {
         return this._tag_manager_account_id;
     }
 
-    get appId(): ObjectID {
+    get appId(): ObjectId {
         return this._app_id;
     }
 
-    get ruleGroupIds(): ObjectID[] {
+    get ruleGroupIds(): ObjectId[] {
         return this._rule_group_ids;
     }
 
-    set ruleGroupIds(value: ObjectID[]) {
+    set ruleGroupIds(value: ObjectId[]) {
         this._rule_group_ids = value;
     }
 }

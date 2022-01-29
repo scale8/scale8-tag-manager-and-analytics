@@ -1,21 +1,21 @@
 import Model from '../../abstractions/Model';
 import Field from '../../decorators/Field';
 import PlatformEvent from './PlatformEvent';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import Revision from './Revision';
 import DataMapRepo from '../../repos/tag/DataMapRepo';
 import DataMap from './DataMap';
 
 export default class Event extends Model {
-    public getOrgEntityId(): ObjectID {
+    public getOrgEntityId(): ObjectId {
         return this.orgId;
     }
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'org_id',
     })
-    private readonly _org_id!: ObjectID;
+    private readonly _org_id!: ObjectId;
 
     @Field<string>({
         required: true,
@@ -24,39 +24,39 @@ export default class Event extends Model {
     })
     private _name!: string;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'tag_manager_account_id',
     })
-    private readonly _tag_manager_account_id!: ObjectID;
+    private readonly _tag_manager_account_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'app_id',
     })
-    private readonly _app_id!: ObjectID;
+    private readonly _app_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'revision_id',
     })
-    private readonly _revision_id!: ObjectID;
+    private readonly _revision_id!: ObjectId;
 
-    @Field<ObjectID | string>({
+    @Field<ObjectId | string>({
         required: true,
         exposeToGQLAs: 'event',
-        platformInstance: (_) => (_ instanceof ObjectID ? PlatformEvent : null),
+        platformInstance: (_) => (_ instanceof ObjectId ? PlatformEvent : null),
         exposeToConfig: true,
     })
-    private _event!: ObjectID | string;
+    private _event!: ObjectId | string;
 
-    @Field<ObjectID[]>({
+    @Field<ObjectId[]>({
         repository: DataMapRepo,
         required: true,
         exposeToGQLAs: 'data_map_ids',
         exposeToConfig: true,
     })
-    private _data_map_ids: ObjectID[] = [];
+    private _data_map_ids: ObjectId[] = [];
 
     @Field<number>({
         required: true,
@@ -86,7 +86,7 @@ export default class Event extends Model {
         this._clear_state_ms = clearStateMs;
     }
 
-    get orgId(): ObjectID {
+    get orgId(): ObjectId {
         return this._org_id;
     }
 
@@ -98,31 +98,31 @@ export default class Event extends Model {
         this._name = value;
     }
 
-    get event(): ObjectID | string {
+    get event(): ObjectId | string {
         return this._event;
     }
 
-    set event(value: ObjectID | string) {
+    set event(value: ObjectId | string) {
         this._event = value;
     }
 
-    get tagManagerAccountId(): ObjectID {
+    get tagManagerAccountId(): ObjectId {
         return this._tag_manager_account_id;
     }
 
-    get appId(): ObjectID {
+    get appId(): ObjectId {
         return this._app_id;
     }
 
-    get revisionId(): ObjectID {
+    get revisionId(): ObjectId {
         return this._revision_id;
     }
 
-    get dataMapIds(): ObjectID[] {
+    get dataMapIds(): ObjectId[] {
         return this._data_map_ids;
     }
 
-    set dataMapIds(value: ObjectID[]) {
+    set dataMapIds(value: ObjectId[]) {
         this._data_map_ids = value;
     }
 

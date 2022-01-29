@@ -23,4 +23,4 @@ const AppDelete: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { AppDelete };
+export default AppDelete;

@@ -7,7 +7,6 @@ import FetchIngestEndpointRevisionsQuery from '../../gql/queries/FetchIngestEndp
 import { IngestEndpointRevisionsData } from '../../gql/generated/IngestEndpointRevisionsData';
 import {
     IngestEndpointEnvironmentCreateInput,
-    Mode,
     StorageProvider,
 } from '../../gql/generated/globalTypes';
 import nameValidator from '../../utils/validators/nameValidator';
@@ -15,7 +14,6 @@ import { CreateIngestEndpointEnvironmentResult } from '../../gql/generated/Creat
 import domainValidator from '../../utils/validators/domainValidator';
 import { buildStandardFormInfo } from '../../utils/InfoLabelsUtils';
 import { DialogPageProps } from '../../types/DialogTypes';
-import { useConfigState } from '../../context/AppContext';
 import { DialogPreloadForm, DialogPreloadFormProps } from '../abstractions/DialogPreloadForm';
 import {
     buildStorageProviderSaveProperties,
@@ -36,7 +34,6 @@ export type IngestEndpointEnvironmentValues = StorageProviderFieldsWithPartition
 export type IngestEndpointEnvironmentFormProps = FormProps<IngestEndpointEnvironmentValues> & {
     isCreate: boolean;
     availableRevisions: { key: string; text: string }[];
-    hasCustomDomain?: boolean;
 };
 
 const customValueSetter = (
@@ -65,7 +62,6 @@ const customValueSetter = (
 
 const IngestEndpointEnvironmentCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
     const ingestEndpointId = props.contextId;
-    const { mode } = useConfigState();
 
     const ingestEndpointEnvironmentCreateProps: DialogPreloadFormProps<
         IngestEndpointRevisionsData,
@@ -125,7 +121,6 @@ const IngestEndpointEnvironmentCreate: FC<DialogPageProps> = (props: DialogPageP
                 isCreate: true,
                 formInfoProps: buildStandardFormInfo('ingestEndpointEnvironments', 'Create'),
                 handleDialogClose: props.handleDialogClose,
-                hasCustomDomain: mode === Mode.COMMERCIAL ? undefined : false,
             };
         },
         checkSuccessfullySubmitted: (formMutationData) =>
@@ -161,4 +156,4 @@ const IngestEndpointEnvironmentCreate: FC<DialogPageProps> = (props: DialogPageP
     );
 };
 
-export { IngestEndpointEnvironmentCreate };
+export default IngestEndpointEnvironmentCreate;

@@ -4,7 +4,7 @@ import LoggedUserQuery from '../../gql/queries/LoggedUserQuery';
 import { LoggedUser, LoggedUser_me_invites } from '../../gql/generated/LoggedUser';
 import { InvitesList } from '../../components/organisms/InvitesList';
 import { DialogPageProps } from '../../types/DialogTypes';
-import { queryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
 import DeclineUserInviteQuery from '../../gql/mutations/DeclineUserInviteQuery';
 import AcceptUserInviteQuery from '../../gql/mutations/AcceptUserInviteQuery';
 import { InDialogMutation } from '../abstractions/InDialogMutation';
@@ -25,7 +25,7 @@ const NotificationsInvites: FC<DialogPageProps> = (props: DialogPageProps) => {
     const [orgId, setOrgId] = useState('');
     const router = useRouter();
 
-    return queryLoaderAndError<LoggedUser>(
+    return QueryLoaderAndError<LoggedUser>(
         false,
         useQuery(LoggedUserQuery, { notifyOnNetworkStatusChange: true }),
         (data: LoggedUser, valuesRefresh: (mustResetCache: boolean) => void) => {

@@ -7,7 +7,7 @@ import { UTCTimestamp } from '../utils/DateTimeUtils';
 import { useLoggedInState } from '../context/AppContext';
 import { useRefresh } from '../hooks/useRefresh';
 
-const lazyQueryLoaderAndError = <T extends any>(
+const LazyQueryLoaderAndError = <T,>(
     isPage: boolean,
     lazyQuery: QueryTuple<any, any>,
     lazyQueryVariables: OperationVariables,
@@ -66,4 +66,4 @@ const lazyQueryLoaderAndError = <T extends any>(
     );
 };
 
-export { lazyQueryLoaderAndError };
+export { LazyQueryLoaderAndError };

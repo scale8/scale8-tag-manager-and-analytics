@@ -1,6 +1,6 @@
 import Repo from '../abstractions/Repo';
 import { injectable } from 'inversify';
-import { IndexSpecification } from 'mongodb';
+import { IndexDescription } from 'mongodb';
 import Usage from '../models/Usage';
 import DataManagerAccount from '../models/data/DataManagerAccount';
 import TagManagerAccount from '../models/tag/TagManagerAccount';
@@ -8,7 +8,7 @@ import { endOfDay, startOfDay } from 'date-fns';
 
 @injectable()
 export default class UsageRepo extends Repo<Usage> {
-    protected readonly indexes: IndexSpecification[] = [
+    protected readonly indexes: IndexDescription[] = [
         {
             background: false,
             key: {

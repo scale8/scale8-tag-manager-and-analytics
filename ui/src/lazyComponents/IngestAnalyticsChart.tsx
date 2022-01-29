@@ -1,9 +1,8 @@
 import { FC } from 'react';
 import { Bar } from 'react-chartjs-2';
-import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import {
     chartDataFromGroupingCount,
-    ChartPeriodType,
     datesFromChartPeriod,
     labelsFromChartPeriod,
 } from '../hooks/chart/useChartPeriod';
@@ -15,28 +14,15 @@ import { IngestEndpointAnalyticsContentProps } from '../types/props/IngestEndpoi
 import IngestChartQuery from '../gql/queries/IngestChartQuery';
 import { IngestChartQueryData } from '../gql/generated/IngestChartQueryData';
 import { getProductSection, ProductSectionKey } from '../containers/SectionsDetails';
-
-const ticksLimitFromPeriodType = (type: ChartPeriodType): number | undefined => {
-    switch (type) {
-        case 'day':
-            return 6;
-        case 'realtime':
-        case 'custom':
-            return 8;
-        case '30d':
-        case 'month':
-            return 10;
-        default:
-            return undefined;
-    }
-};
+import { ChartOptions } from 'chart.js';
+import { ticksLimitFromPeriodType } from '../utils/GraphUtils';
 
 const IngestAnalyticsChart: FC<IngestEndpointAnalyticsContentProps> = (
     props: IngestEndpointAnalyticsContentProps,
 ) => {
     const { ingestQueryOptions, chartPeriodProps, id, refreshAt } = props;
 
-    return queryLoaderAndError<IngestChartQueryData>(
+    return QueryLoaderAndError<IngestChartQueryData>(
         false,
         useQuery<IngestChartQueryData>(IngestChartQuery, {
             variables: {
@@ -64,10 +50,9 @@ const IngestAnalyticsChart: FC<IngestEndpointAnalyticsContentProps> = (
                         ),
                         fill: false,
                         backgroundColor: getProductSection(ProductSectionKey.dataManager).color,
-                        borderColor: getProductSection(ProductSectionKey.dataManager).color,
-                        borderWidth: 3,
+                        borderWidth: 0,
                         lineTension: 0,
-                        yAxisID: 'y-axis-1',
+                        yAxisID: 'yAxis1',
                     },
                     {
                         label: 'Bytes transferred',
@@ -78,66 +63,64 @@ const IngestAnalyticsChart: FC<IngestEndpointAnalyticsContentProps> = (
                         ),
                         fill: false,
                         backgroundColor: '#737373',
-                        borderColor: '#737373',
-                        borderWidth: 3,
+                        borderWidth: 0,
                         lineTension: 0,
-                        yAxisID: 'y-axis-2',
+                        yAxisID: 'yAxis2',
                     },
                 ],
             };
 
-            const options = {
-                showAllTooltips: true,
+            const options: ChartOptions<'bar'> = {
+                // plugins: {
+                //     tooltip: {
+                //         enabled: true,
+                //     },
+                // },
                 maintainAspectRatio: false,
                 responsive: true,
                 scales: {
-                    xAxes: [
-                        {
-                            scaleLabel: {
-                                display: false,
-                            },
-                            ticks: {
-                                autoSkip: true,
-                                maxTicksLimit: ticksLimit,
-                            },
-                            gridLines: {
-                                display: false,
-                            },
+                    xAxes: {
+                        title: {
+                            display: false,
                         },
-                    ],
-                    yAxes: [
-                        {
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'Number of requests',
-                            },
-                            ticks: {
-                                beginAtZero: true,
-                                precision: 0,
-                            },
-                            type: 'linear',
+                        ticks: {
+                            autoSkip: true,
+                            maxTicksLimit: ticksLimit,
+                        },
+                        grid: {
+                            display: false,
+                        },
+                    },
+                    yAxis1: {
+                        type: 'linear',
+                        beginAtZero: true,
+                        title: {
                             display: true,
-                            position: 'left',
-                            id: 'y-axis-1',
+                            text: 'Number of requests',
                         },
-                        {
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'Bytes transferred',
-                            },
-                            ticks: {
-                                beginAtZero: true,
-                                precision: 0,
-                            },
-                            type: 'linear',
+                        ticks: {
+                            precision: 0,
+                        },
+                        display: true,
+                        position: 'left',
+                    },
+                    yAxis2: {
+                        type: 'linear',
+                        beginAtZero: true,
+                        title: {
                             display: true,
-                            position: 'right',
-                            id: 'y-axis-2',
+                            text: 'Bytes transferred',
                         },
-                    ],
+                        ticks: {
+                            precision: 0,
+                        },
+                        display: true,
+                        position: 'right',
+                    },
                 },
             };
 
+            // noinspection RequiredAttributes
             return (
                 <Box height="400px" width="100%" overflow="auto">
                     <Bar data={data} options={options} />

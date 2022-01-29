@@ -3,18 +3,15 @@ package com.scale8.mmdb;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.maxmind.db.Reader;
 import com.scale8.Env;
-import com.scale8.asset.Loader;
 import io.micronaut.cache.annotation.CacheConfig;
 import io.micronaut.cache.annotation.Cacheable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.inject.Singleton;
-import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.InetAddress;
-import java.util.Optional;
+import java.net.URL;
 
 @Singleton
 @CacheConfig("geo")
@@ -25,10 +22,13 @@ public class Geo {
 
   Reader GEO_DB;
 
-  public Geo(Env env, Loader loader) {
-    Optional<InputStream> db = loader.getResourceAsInputStream(env.MMDB_FILE);
+  public Geo(Env env) {
     try {
-      this.GEO_DB = db.isPresent() ? new Reader(db.get()) : new Reader(new File(env.MMDB_FILE));
+      this.GEO_DB =
+          new Reader(
+              env.MMDB_FILE.startsWith("http")
+                  ? new URL(env.MMDB_FILE).openStream()
+                  : new FileInputStream(env.MMDB_FILE));
     } catch (IOException e) {
       LOG.warn(
           "Geo-IP-Lookup: Failed to find "

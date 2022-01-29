@@ -20,9 +20,9 @@ import {
     TwoFactorLoginProps,
     TwoFactorLoginValues,
 } from '../types/props/forms/LoginFormProps';
-import { useParams } from '../hooks/useParams';
 import LoggedOutSectionWithConfig from '../containers/global/LoggedOutSectionWithConfig';
 import { logError } from '../utils/logUtils';
+import { ComponentWithParams, ParamsLoader } from '../components/atoms/ParamsLoader';
 
 const TwoFactorLogin: FC<TwoFactorLoginProps> = (props: TwoFactorLoginProps) => {
     const [login2fa, { loading, data, error: gqlError }] = useMutation(TwoFactorLoginQuery);
@@ -131,7 +131,7 @@ const LoginContent: FC<{ reason: string | undefined }> = (props: {
             } else {
                 setSsoError(`GitHub login failed`);
             }
-        } catch (e) {
+        } catch (e: any) {
             setSsoError(`GitHub login failed: ${e.message}`);
         }
     };
@@ -196,8 +196,8 @@ const LoginContent: FC<{ reason: string | undefined }> = (props: {
     );
 };
 
-const Login: FC = () => {
-    const { reason } = useParams();
+const Login: ComponentWithParams = ({ params }) => {
+    const { reason } = params;
 
     return (
         <>
@@ -212,4 +212,5 @@ const Login: FC = () => {
     );
 };
 
-export default Login;
+const LoginLoader = () => <ParamsLoader Child={Login} />;
+export default LoginLoader;

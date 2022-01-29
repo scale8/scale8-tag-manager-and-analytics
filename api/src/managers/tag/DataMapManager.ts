@@ -3,7 +3,7 @@ import { injectable } from 'inversify';
 import { gql } from 'apollo-server-express';
 import DataMap from '../../mongo/models/tag/DataMap';
 import CTX from '../../gql/ctx/CTX';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import ScalarContainer from '../../mongo/custom/ScalarContainer';
 import RepeatedDataMap from '../../mongo/models/tag/RepeatedDataMap';
 import userMessages from '../../errors/UserMessages';
@@ -121,7 +121,7 @@ export default class DataMapManager extends Manager<DataMap> {
         DataMap: {
             value: async (parent: any, args: any, ctx: CTX) => {
                 const dataMap = await this.repoFactory(DataMap).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.dataMapFailed,
                 );
                 return this.orgAuth.asUserWithViewAccess(ctx, dataMap.orgId, async () => {

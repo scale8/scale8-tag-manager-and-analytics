@@ -1,21 +1,21 @@
 import Model from '../../abstractions/Model';
 import Field from '../../decorators/Field';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import PlatformAction from './PlatformAction';
 import DataMap from './DataMap';
 import Revision from './Revision';
 import DataMapRepo from '../../repos/tag/DataMapRepo';
 
 export default class Action extends Model {
-    public getOrgEntityId(): ObjectID {
+    public getOrgEntityId(): ObjectId {
         return this.orgId;
     }
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'org_id',
     })
-    private readonly _org_id!: ObjectID;
+    private readonly _org_id!: ObjectId;
 
     @Field<string>({
         required: true,
@@ -24,39 +24,39 @@ export default class Action extends Model {
     })
     private _name: string;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'tag_manager_account_id',
     })
-    private readonly _tag_manager_account_id!: ObjectID;
+    private readonly _tag_manager_account_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'app_id',
     })
-    private readonly _app_id!: ObjectID;
+    private readonly _app_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'revision_id',
     })
-    private readonly _revision_id!: ObjectID;
+    private readonly _revision_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'platform_action_id',
         platformInstance: () => PlatformAction,
         exposeToConfig: true,
     })
-    private _platform_action_id!: ObjectID;
+    private _platform_action_id!: ObjectId;
 
-    @Field<ObjectID[]>({
+    @Field<ObjectId[]>({
         repository: DataMapRepo,
         required: true,
         exposeToGQLAs: 'data_map_ids',
         exposeToConfig: true,
     })
-    private _data_map_ids: ObjectID[] = [];
+    private _data_map_ids: ObjectId[] = [];
 
     constructor(
         name: string,
@@ -76,7 +76,7 @@ export default class Action extends Model {
         this._data_map_ids = dataMaps.map((_) => _.id);
     }
 
-    get orgId(): ObjectID {
+    get orgId(): ObjectId {
         return this._org_id;
     }
 
@@ -88,31 +88,31 @@ export default class Action extends Model {
         this._name = value;
     }
 
-    get tagManagerAccountId(): ObjectID {
+    get tagManagerAccountId(): ObjectId {
         return this._tag_manager_account_id;
     }
 
-    get appId(): ObjectID {
+    get appId(): ObjectId {
         return this._app_id;
     }
 
-    get revisionId(): ObjectID {
+    get revisionId(): ObjectId {
         return this._revision_id;
     }
 
-    get platformActionId(): ObjectID {
+    get platformActionId(): ObjectId {
         return this._platform_action_id;
     }
 
-    set platformActionId(value: ObjectID) {
+    set platformActionId(value: ObjectId) {
         this._platform_action_id = value;
     }
 
-    get dataMapIds(): ObjectID[] {
+    get dataMapIds(): ObjectId[] {
         return this._data_map_ids;
     }
 
-    set dataMapIds(value: ObjectID[]) {
+    set dataMapIds(value: ObjectId[]) {
         this._data_map_ids = value;
     }
 }

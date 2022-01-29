@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 import { VarType, InputType, TypeIcon, ValidationType } from "./globalTypes";
@@ -438,7 +437,8 @@ export interface FetchAppPlatformRevisionData_getAppPlatformRevision_platform_re
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -482,7 +482,8 @@ export interface FetchAppPlatformRevisionData_getAppPlatformRevision_platform_re
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -498,7 +499,8 @@ export interface FetchAppPlatformRevisionData_getAppPlatformRevision_platform_re
    */
   default_value: FetchAppPlatformRevisionData_getAppPlatformRevision_platform_revision_platform_platform_revisions_platform_settings_child_platform_data_maps_default_value | null;
   /**
-   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These contain nested `PlatformDataMap` in a document or array document structure respectivly
+   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These
+   * contain nested `PlatformDataMap` in a document or array document structure respectivly
    */
   child_platform_data_maps: FetchAppPlatformRevisionData_getAppPlatformRevision_platform_revision_platform_platform_revisions_platform_settings_child_platform_data_maps_child_platform_data_maps[];
 }
@@ -530,7 +532,8 @@ export interface FetchAppPlatformRevisionData_getAppPlatformRevision_platform_re
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -546,7 +549,8 @@ export interface FetchAppPlatformRevisionData_getAppPlatformRevision_platform_re
    */
   default_value: FetchAppPlatformRevisionData_getAppPlatformRevision_platform_revision_platform_platform_revisions_platform_settings_default_value | null;
   /**
-   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These contain nested `PlatformDataMap` in a document or array document structure respectivly
+   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These
+   * contain nested `PlatformDataMap` in a document or array document structure respectivly
    */
   child_platform_data_maps: FetchAppPlatformRevisionData_getAppPlatformRevision_platform_revision_platform_platform_revisions_platform_settings_child_platform_data_maps[];
 }
@@ -562,7 +566,8 @@ export interface FetchAppPlatformRevisionData_getAppPlatformRevision_platform_re
    */
   name: string;
   /**
-   * Whether or not the `PlatformRevision` has been locked or not. When locked no future changes can be made to the `PlatformRevision` or any of its connected entities
+   * Whether or not the `PlatformRevision` has been locked or not. When locked no
+   * future changes can be made to the `PlatformRevision` or any of its connected entities
    */
   locked: boolean;
   /**
@@ -582,7 +587,9 @@ export interface FetchAppPlatformRevisionData_getAppPlatformRevision_platform_re
    */
   name: string;
   /**
-   * `PlatformRevision`s the are linked to this `Platform`. Please note that if the `Platform` has been made public and `PlatformRevision` has been published, it will be avalible to ***any*** Scale8 Tag Manager User to install in their `App`
+   * `PlatformRevision`s the are linked to this `Platform`. Please note that if the
+   * `Platform` has been made public and `PlatformRevision` has been published, it
+   * will be avalible to ***any*** Scale8 Tag Manager User to install in their `App`
    */
   platform_revisions: FetchAppPlatformRevisionData_getAppPlatformRevision_platform_revision_platform_platform_revisions[];
 }

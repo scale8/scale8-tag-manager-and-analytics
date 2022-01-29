@@ -91,9 +91,7 @@ public class AppEntity {
     jsonObject.add("serverMode", new JsonPrimitive(env.ENV));
     jsonObject.add("distributionValue", new JsonPrimitive(request.getUserDistributionValue()));
     jsonObject.add("countryCode", new JsonPrimitive(countryCode == null ? "--" : countryCode));
-    jsonObject.add(
-        "uiServer",
-        new JsonPrimitive(env.S8_ROOT_SERVER == null ? "https://scale8.com" : env.S8_ROOT_SERVER));
+    jsonObject.add("uiServer", new JsonPrimitive(env.S8_UI_SERVER));
     if (revisionPreviewId != null) {
       jsonObject.add("preview", new JsonPrimitive(revisionPreviewId));
     }
@@ -101,10 +99,8 @@ public class AppEntity {
   }
 
   private String publicPath(ExtendedRequest extendedRequest, String platformId, String revisionId) {
-    String base =
-        extendedRequest.usingHostRouting()
-            ? extendedRequest.getHost()
-            : extendedRequest.getServer();
+    String base = extendedRequest.getServer();
+
     if (revisionId != null) {
       return base + "/p/" + platformId + "/" + revisionId + "/";
     } else {

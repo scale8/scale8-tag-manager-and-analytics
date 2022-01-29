@@ -1,6 +1,6 @@
 import Model from '../abstractions/Model';
 import Field from '../decorators/Field';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import TagManagerAccount from './tag/TagManagerAccount';
 import DataManagerAccount from './data/DataManagerAccount';
 import { startOfDay } from 'date-fns';
@@ -12,11 +12,11 @@ export default class Usage extends Model {
     })
     private readonly _usage_entity!: string;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'usage_entity_id',
     })
-    private readonly _usage_entity_id!: ObjectID;
+    private readonly _usage_entity_id!: ObjectId;
 
     @Field<Date>({
         required: true,
@@ -57,7 +57,7 @@ export default class Usage extends Model {
         return this._usage_entity;
     }
 
-    get usageEntityId(): ObjectID {
+    get usageEntityId(): ObjectId {
         return this._usage_entity_id;
     }
 

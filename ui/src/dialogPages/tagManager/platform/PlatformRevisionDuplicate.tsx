@@ -68,4 +68,4 @@ const PlatformRevisionDuplicate: FC<DialogPageProps> = (props: DialogPageProps) 
     );
 };
 
-export { PlatformRevisionDuplicate };
+export default PlatformRevisionDuplicate;

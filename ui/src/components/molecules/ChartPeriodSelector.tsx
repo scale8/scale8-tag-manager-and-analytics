@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect, useRef, useState } from 'react';
+import { FC, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import {
     Box,
     CircularProgress,
@@ -90,44 +90,47 @@ const ChartPeriodSelector: FC<ChartPeriodSelectorProps> = (props: ChartPeriodSel
         setSelectDisplay('');
     };
 
-    const selectValuePeriod: { v: string; p: ChartPeriodType }[] = [
-        {
-            v: 'Today',
-            p: 'day',
-        },
-        {
-            v: 'Realtime',
-            p: 'realtime',
-        },
-        {
-            v: 'Last 7 days',
-            p: '7d',
-        },
-        {
-            v: 'Last 30 days',
-            p: '30d',
-        },
-        {
-            v: 'Month to Date',
-            p: 'month',
-        },
-        {
-            v: 'Last month',
-            p: 'month',
-        },
-        {
-            v: 'Last 6 months',
-            p: '6mo',
-        },
-        {
-            v: 'Last 12 months',
-            p: '12mo',
-        },
-        {
-            v: 'Custom Range',
-            p: 'custom',
-        },
-    ];
+    const selectValuePeriod: { v: string; p: ChartPeriodType }[] = useMemo(
+        () => [
+            {
+                v: 'Today',
+                p: 'day',
+            },
+            {
+                v: 'Realtime',
+                p: 'realtime',
+            },
+            {
+                v: 'Last 7 days',
+                p: '7d',
+            },
+            {
+                v: 'Last 30 days',
+                p: '30d',
+            },
+            {
+                v: 'Month to Date',
+                p: 'month',
+            },
+            {
+                v: 'Last month',
+                p: 'month',
+            },
+            {
+                v: 'Last 6 months',
+                p: '6mo',
+            },
+            {
+                v: 'Last 12 months',
+                p: '12mo',
+            },
+            {
+                v: 'Custom Range',
+                p: 'custom',
+            },
+        ],
+        [],
+    );
 
     const handleChange = (event: SelectChangeEvent) => {
         const value = event.target.value as string;
@@ -192,7 +195,7 @@ const ChartPeriodSelector: FC<ChartPeriodSelectorProps> = (props: ChartPeriodSel
                 setSelectDisplay('');
             }
         }
-    }, [period, date, from, to]);
+    }, [period, date, from, to, selectValuePeriod]);
 
     return (
         <Box display="flex" alignItems="center">

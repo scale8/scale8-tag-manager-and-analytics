@@ -3,7 +3,7 @@ import Manager from '../../abstractions/Manager';
 import { gql } from 'apollo-server-express';
 import PlatformEvent from '../../mongo/models/tag/PlatformEvent';
 import CTX from '../../gql/ctx/CTX';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import PlatformRevision from '../../mongo/models/tag/PlatformRevision';
 import Platform from '../../mongo/models/tag/Platform';
 import PlatformDataMap from '../../mongo/models/tag/PlatformDataMap';
@@ -99,7 +99,7 @@ export default class PlatformEventManager extends Manager<PlatformEvent> {
     protected gqlExtendedQueryResolvers = {
         getPlatformEvent: async (parent: any, args: any, ctx: CTX) => {
             const platformEvent = await this.repoFactory(PlatformEvent).findByIdThrows(
-                new ObjectID(args.id),
+                new ObjectId(args.id),
                 userMessages.eventFailed,
             );
             const platformRevision = await this.repoFactory(PlatformRevision).findByIdThrows(
@@ -123,7 +123,7 @@ export default class PlatformEventManager extends Manager<PlatformEvent> {
         PlatformEvent: {
             platform: async (parent: any, args: any, ctx: CTX) => {
                 const platformEvent = await this.repoFactory(PlatformEvent).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.eventFailed,
                 );
                 const platform = await this.repoFactory(Platform).findByIdThrows(
@@ -136,7 +136,7 @@ export default class PlatformEventManager extends Manager<PlatformEvent> {
             },
             platform_revision: async (parent: any, args: any, ctx: CTX) => {
                 const platformEvent = await this.repoFactory(PlatformEvent).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.eventFailed,
                 );
                 const platformRevision = await this.repoFactory(PlatformRevision).findByIdThrows(
@@ -151,7 +151,7 @@ export default class PlatformEventManager extends Manager<PlatformEvent> {
             },
             platform_data_maps: async (parent: any, args: any, ctx: CTX) => {
                 const platformEvent = await this.repoFactory(PlatformEvent).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.eventFailed,
                 );
                 const platformRevision = await this.repoFactory(PlatformRevision).findByIdThrows(

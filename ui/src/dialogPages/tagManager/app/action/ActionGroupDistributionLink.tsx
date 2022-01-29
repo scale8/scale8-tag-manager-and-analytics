@@ -80,4 +80,4 @@ const ActionGroupDistributionLink: FC<DialogPageProps> = (props: DialogPageProps
     );
 };
 
-export { ActionGroupDistributionLink };
+export default ActionGroupDistributionLink;

@@ -7,7 +7,7 @@ rm -rf dist/
 yarn platforms:build
 
 # Compile...
-tsc
+yarn tsc
 
 # Include assets in dist/api - tsc doesn't pick these up automatically
 cp -R ./src/twig/views ./dist/api/src/twig/views

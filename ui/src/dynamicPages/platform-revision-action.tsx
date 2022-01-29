@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useQuery } from '@apollo/client';
 import { Box } from '@mui/material';
 import { DynamicPageProps } from '../pageLoader/DynamicPageLoader';
-import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import { PagePlatformActionDataMapsData } from '../gql/generated/PagePlatformActionDataMapsData';
 import PagePlatformActionDataMapsQuery from '../gql/queries/PagePlatformActionDataMapsQuery';
 import {
@@ -16,7 +16,7 @@ import { buildStandardMainInfo } from '../utils/InfoLabelsUtils';
 const PlatformRevisionAction: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const actionId = props.params.id ?? '';
 
-    return queryLoaderAndError<PagePlatformActionDataMapsData>(
+    return QueryLoaderAndError<PagePlatformActionDataMapsData>(
         true,
         useQuery<PagePlatformActionDataMapsData>(PagePlatformActionDataMapsQuery, {
             variables: { id: actionId },

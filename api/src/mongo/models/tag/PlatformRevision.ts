@@ -1,6 +1,6 @@
 import Model from '../../abstractions/Model';
 import Field from '../../decorators/Field';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import Platform from './Platform';
 import PlatformDataMapRepo from '../../repos/tag/PlatformDataMapRepo';
 import PlatformAssetRepo from '../../repos/tag/PlatformAssetRepo';
@@ -9,15 +9,15 @@ import PlatformActionRepo from '../../repos/tag/PlatformActionRepo';
 import PlatformEventRepo from '../../repos/tag/PlatformEventRepo';
 
 export default class PlatformRevision extends Model {
-    public getOrgEntityId(): ObjectID {
+    public getOrgEntityId(): ObjectId {
         return this.orgId;
     }
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'org_id',
     })
-    private readonly _org_id!: ObjectID;
+    private readonly _org_id!: ObjectId;
 
     @Field<string>({
         required: true,
@@ -27,63 +27,63 @@ export default class PlatformRevision extends Model {
     })
     private _name: string;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         exposeToGQLAs: 'parent_revision_id',
     })
-    private _parent_revision_id?: ObjectID;
+    private _parent_revision_id?: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'tag_manager_account_id',
     })
-    private readonly _tag_manager_account_id!: ObjectID;
+    private readonly _tag_manager_account_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'platform_id',
         exposeToConfig: true,
     })
-    private readonly _platform_id!: ObjectID;
+    private readonly _platform_id!: ObjectId;
 
-    @Field<ObjectID[]>({
+    @Field<ObjectId[]>({
         repository: PlatformDataMapRepo,
         required: true,
         exposeToGQLAs: 'platform_setting_ids',
         exposeToConfig: true,
     })
-    private _platform_setting_ids: ObjectID[] = [];
+    private _platform_setting_ids: ObjectId[] = [];
 
-    @Field<ObjectID[]>({
+    @Field<ObjectId[]>({
         repository: PlatformAssetRepo,
         required: true,
         exposeToGQLAs: 'platform_asset_ids',
         exposeToConfig: true,
     })
-    private _platform_asset_ids: ObjectID[] = [];
+    private _platform_asset_ids: ObjectId[] = [];
 
-    @Field<ObjectID[]>({
+    @Field<ObjectId[]>({
         repository: PlatformEventRepo,
         required: true,
         exposeToGQLAs: 'platform_event_ids',
         exposeToConfig: true,
     })
-    private _platform_event_ids: ObjectID[] = [];
+    private _platform_event_ids: ObjectId[] = [];
 
-    @Field<ObjectID[]>({
+    @Field<ObjectId[]>({
         repository: PlatformDataContainerRepo,
         required: true,
         exposeToGQLAs: 'platform_data_container_ids',
         exposeToConfig: true,
     })
-    private _platform_data_container_ids: ObjectID[] = [];
+    private _platform_data_container_ids: ObjectId[] = [];
 
-    @Field<ObjectID[]>({
+    @Field<ObjectId[]>({
         repository: PlatformActionRepo,
         required: true,
         exposeToGQLAs: 'platform_action_ids',
         exposeToConfig: true,
     })
-    private _platform_action_ids: ObjectID[] = [];
+    private _platform_action_ids: ObjectId[] = [];
 
     @Field<boolean>({
         required: true,
@@ -111,11 +111,11 @@ export default class PlatformRevision extends Model {
         this._is_published = false;
     }
 
-    get parentRevisionId(): ObjectID | undefined {
+    get parentRevisionId(): ObjectId | undefined {
         return this._parent_revision_id;
     }
 
-    get orgId(): ObjectID {
+    get orgId(): ObjectId {
         return this._org_id;
     }
 
@@ -127,51 +127,51 @@ export default class PlatformRevision extends Model {
         this._name = value;
     }
 
-    get tagManagerAccountId(): ObjectID {
+    get tagManagerAccountId(): ObjectId {
         return this._tag_manager_account_id;
     }
 
-    get platformId(): ObjectID {
+    get platformId(): ObjectId {
         return this._platform_id;
     }
 
-    get platformSettingsIds(): ObjectID[] {
+    get platformSettingsIds(): ObjectId[] {
         return this._platform_setting_ids;
     }
 
-    set platformSettingsIds(value: ObjectID[]) {
+    set platformSettingsIds(value: ObjectId[]) {
         this._platform_setting_ids = value;
     }
 
-    get platformAssetIds(): ObjectID[] {
+    get platformAssetIds(): ObjectId[] {
         return this._platform_asset_ids;
     }
 
-    set platformAssetIds(value: ObjectID[]) {
+    set platformAssetIds(value: ObjectId[]) {
         this._platform_asset_ids = value;
     }
 
-    get platformEventIds(): ObjectID[] {
+    get platformEventIds(): ObjectId[] {
         return this._platform_event_ids;
     }
 
-    set platformEventIds(value: ObjectID[]) {
+    set platformEventIds(value: ObjectId[]) {
         this._platform_event_ids = value;
     }
 
-    get platformDataContainerIds(): ObjectID[] {
+    get platformDataContainerIds(): ObjectId[] {
         return this._platform_data_container_ids;
     }
 
-    set platformDataContainerIds(value: ObjectID[]) {
+    set platformDataContainerIds(value: ObjectId[]) {
         this._platform_data_container_ids = value;
     }
 
-    get platformActionIds(): ObjectID[] {
+    get platformActionIds(): ObjectId[] {
         return this._platform_action_ids;
     }
 
-    set platformActionIds(value: ObjectID[]) {
+    set platformActionIds(value: ObjectId[]) {
         this._platform_action_ids = value;
     }
 

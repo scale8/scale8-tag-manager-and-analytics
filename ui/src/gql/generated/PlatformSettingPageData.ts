@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 import { VarType, InputType, TypeIcon, ValidationType } from "./globalTypes";
@@ -108,7 +107,8 @@ export interface PlatformSettingPageData_getPlatformRevision_platform_settings_c
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -152,7 +152,8 @@ export interface PlatformSettingPageData_getPlatformRevision_platform_settings_c
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -168,7 +169,8 @@ export interface PlatformSettingPageData_getPlatformRevision_platform_settings_c
    */
   default_value: PlatformSettingPageData_getPlatformRevision_platform_settings_child_platform_data_maps_default_value | null;
   /**
-   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These contain nested `PlatformDataMap` in a document or array document structure respectivly
+   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These
+   * contain nested `PlatformDataMap` in a document or array document structure respectivly
    */
   child_platform_data_maps: PlatformSettingPageData_getPlatformRevision_platform_settings_child_platform_data_maps_child_platform_data_maps[];
 }
@@ -200,7 +202,8 @@ export interface PlatformSettingPageData_getPlatformRevision_platform_settings {
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -216,7 +219,8 @@ export interface PlatformSettingPageData_getPlatformRevision_platform_settings {
    */
   default_value: PlatformSettingPageData_getPlatformRevision_platform_settings_default_value | null;
   /**
-   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These contain nested `PlatformDataMap` in a document or array document structure respectivly
+   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These
+   * contain nested `PlatformDataMap` in a document or array document structure respectivly
    */
   child_platform_data_maps: PlatformSettingPageData_getPlatformRevision_platform_settings_child_platform_data_maps[];
 }

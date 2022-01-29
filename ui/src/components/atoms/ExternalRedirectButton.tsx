@@ -1,34 +1,31 @@
 import { FC } from 'react';
-import { Button } from '@mui/material';
-import { useRouter } from 'next/router';
+import { Box, Button } from '@mui/material';
 
-const ExternalRedirectButton: FC<{ link: string; text: string }> = (props: {
-    link: string;
+const ExternalRedirectButton: FC<{ onConfirm: () => void; text: string }> = (props: {
+    onConfirm: () => void;
     text: string;
 }) => {
-    const { link, text } = props;
-    const router = useRouter();
+    const { onConfirm, text } = props;
 
     return (
-        <Button
-            type="button"
-            onClick={() => {
-                router.push(link).then();
-            }}
-            fullWidth
-            variant="contained"
-            sx={{
-                margin: (theme) => theme.spacing(3, 0, 2),
-                color: '#ffffff',
-                backgroundColor: (theme) => theme.palette.tagManagerColor.main,
-                '&:hover': {
+        <Box display="flex" justifyContent="center">
+            <Button
+                type="button"
+                onClick={onConfirm}
+                variant="contained"
+                sx={{
+                    margin: (theme) => theme.spacing(3, 0, 2),
                     color: '#ffffff',
                     backgroundColor: (theme) => theme.palette.tagManagerColor.main,
-                },
-            }}
-        >
-            {text}
-        </Button>
+                    '&:hover': {
+                        color: '#ffffff',
+                        backgroundColor: (theme) => theme.palette.tagManagerColor.main,
+                    },
+                }}
+            >
+                {text}
+            </Button>
+        </Box>
     );
 };
 

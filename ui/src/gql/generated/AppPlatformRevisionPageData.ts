@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 // ====================================================
@@ -34,7 +33,8 @@ export interface AppPlatformRevisionPageData_getRevision_app_platform_revisions_
    */
   platform: AppPlatformRevisionPageData_getRevision_app_platform_revisions_platform_revision_platform;
   /**
-   * Whether or not the `PlatformRevision` has been locked or not. When locked no future changes can be made to the `PlatformRevision` or any of its connected entities
+   * Whether or not the `PlatformRevision` has been locked or not. When locked no
+   * future changes can be made to the `PlatformRevision` or any of its connected entities
    */
   locked: boolean;
 }

@@ -2,7 +2,7 @@ import { FC, MouseEvent, SyntheticEvent, useState } from 'react';
 import { Box, Paper, Snackbar } from '@mui/material';
 import { Alert } from '@mui/material';
 import { CopyBlockProps } from '../../types/props/CopyBlockProps';
-import LazyHighlight from './LibraryLoaders/LazyHighlight';
+import LazyShiki from './LibraryLoaders/LazyShiki';
 
 const CopyBlock: FC<CopyBlockProps> = (props: CopyBlockProps) => {
     const [open, setOpen] = useState(false);
@@ -28,16 +28,17 @@ const CopyBlock: FC<CopyBlockProps> = (props: CopyBlockProps) => {
     };
 
     return (
-        <Paper elevation={props.flat !== undefined && props.flat ? 0 : 5}>
+        <Paper elevation={props.flat !== undefined && props.flat ? 0 : 5} sx={{ height: '100%' }}>
             <Box
+                height="100%"
                 my={props.flat !== undefined && props.flat ? 0 : 2}
                 pr="26px"
                 fontSize={12}
                 fontWeight="bold"
                 position="relative"
-                bgcolor="#002b36"
+                bgcolor="#2e3440"
                 border={1}
-                borderColor="#002b36"
+                borderColor="#2e3440"
                 sx={{
                     '& pre': {
                         margin: 0,
@@ -71,7 +72,9 @@ const CopyBlock: FC<CopyBlockProps> = (props: CopyBlockProps) => {
                         <path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" fill="currentColor" />
                     </svg>
                 </Box>
-                <LazyHighlight language={props.language} code={props.text} />
+                <Box height="100%">
+                    <LazyShiki language={props.language} code={props.text} smallText />
+                </Box>
                 <Snackbar
                     anchorOrigin={{
                         vertical: 'bottom',

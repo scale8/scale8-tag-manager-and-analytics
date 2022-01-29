@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 import { NotificationType, DataManagerStringMacros, DataManagerIntegerMacros, DataManagerDateTimeMacros, DataManagerTimestampMacros } from "./globalTypes";

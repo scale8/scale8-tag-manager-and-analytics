@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 import {
     Box,
     Button,
@@ -17,6 +17,7 @@ import { Sparklines, SparklinesLine } from 'react-sparklines';
 import { useRouter } from 'next/router';
 import { toApp, toTagManager } from '../../../utils/NavigationPaths';
 import { SxProps } from '@mui/system';
+import { useSparkLineStyle } from '../../../hooks/useSparkLineStyle';
 
 export type AccountSectionAppTableProps = {
     applications: { name: string; pageViews: number[]; id: string }[];
@@ -28,29 +29,32 @@ const AccountSectionAppTable: FC<AccountSectionAppTableProps> = (
 ) => {
     const router = useRouter();
 
+    const sparkLineStyle = useSparkLineStyle();
+
     const { applications, tmId } = props;
 
     if (applications.length === 0) {
         return (
-            <Button
-                variant="contained"
-                onClick={() => {
-                    router.push(toTagManager({ id: tmId }, 'apps')).then();
-                }}
-                sx={{
-                    color: '#ffffff',
-                    backgroundColor: (theme) => theme.palette.tagManagerColor.main,
-                    width: '100%',
-                    '&:hover': {
+            <Box display="flex" alignItems="center">
+                <Box flex={1}>There are no applications in this organization</Box>
+                <Button
+                    variant="contained"
+                    onClick={() => {
+                        router.push(toTagManager({ id: tmId }, 'apps')).then();
+                    }}
+                    sx={{
                         color: '#ffffff',
                         backgroundColor: (theme) => theme.palette.tagManagerColor.main,
-                    },
-                }}
-                color="inherit"
-                disableElevation
-            >
-                Manage Applications
-            </Button>
+                        '&:hover': {
+                            color: '#ffffff',
+                            backgroundColor: (theme) => theme.palette.tagManagerColor.main,
+                        },
+                    }}
+                    color="inherit"
+                >
+                    Manage Applications
+                </Button>
+            </Box>
         );
     }
 
@@ -84,9 +88,7 @@ const AccountSectionAppTable: FC<AccountSectionAppTableProps> = (
                             <TableCell sx={contentCell}>
                                 <Box width={150}>
                                     <Sparklines data={app.pageViews} width={150} height={20}>
-                                        <SparklinesLine
-                                            style={useMemo(() => ({ fill: 'none' }), [])}
-                                        />
+                                        <SparklinesLine style={sparkLineStyle} />
                                     </Sparklines>
                                 </Box>
                             </TableCell>

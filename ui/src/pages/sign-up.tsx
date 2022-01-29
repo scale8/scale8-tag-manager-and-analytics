@@ -3,7 +3,6 @@ import Head from 'next/head';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { FormValues, useFormValidation } from '../hooks/form/useFormValidation';
 import { useMutation } from '@apollo/client';
-import { useParams } from '../hooks/useParams';
 import SignUpQuery from '../gql/mutations/SignUpQuery';
 import { SignUpInput, SignUpType } from '../gql/generated/globalTypes';
 import { buildSignUpType } from '../utils/SignUpUtils';
@@ -17,6 +16,7 @@ import SignUpForm from '../components/organisms/Forms/SignUpForm';
 import LoggedOutSection from '../containers/global/LoggedOutSection';
 import { SignUpValues } from '../types/props/forms/SignUpFormProps';
 import { logError } from '../utils/logUtils';
+import { ComponentWithParams, ParamsLoader } from '../components/atoms/ParamsLoader';
 
 type SignUpContentProps = {
     type?: string;
@@ -37,10 +37,6 @@ const SignUpContent: FC<SignUpContentProps> = (props: SignUpContentProps) => {
         localStorage.removeItem('uid');
         localStorage.removeItem('token');
 
-        if (captcha.current !== null) {
-            captcha.current.resetCaptcha();
-        }
-
         const email = qsEmail ?? signUpValues.email;
 
         const signUpType = buildSignUpType(type);
@@ -50,15 +46,10 @@ const SignUpContent: FC<SignUpContentProps> = (props: SignUpContentProps) => {
             temp_access_code: signUpValues.tempAccessCode,
             captcha_token: signUpValues.CAPTCHAToken,
             sign_up_type: signUpType,
+            org_name: signUpType === SignUpType.INVITE ? target : signUpValues.orgName,
             ...(email !== undefined ? { email } : {}),
             ...(inviteId !== undefined ? { invite_id: inviteId } : {}),
             ...(gitHubId !== null ? { git_hub_user: gitHubId } : {}),
-            ...(signUpType === SignUpType.INVITE || signUpType === SignUpType.DATA_MANAGER
-                ? {
-                      org_name:
-                          signUpType === SignUpType.DATA_MANAGER ? signUpValues.orgName : target,
-                  }
-                : {}),
             ...(signUpType === SignUpType.TAG_MANAGER ? { domain: signUpValues.domain } : {}),
             ...(signUpValues.newPassword !== '' ? { password: signUpValues.newPassword } : {}),
         };
@@ -156,8 +147,14 @@ const SignUpContent: FC<SignUpContentProps> = (props: SignUpContentProps) => {
             undefined,
             undefined,
             undefined,
-            {
-                CAPTCHAToken: '',
+            (values, setValues) => {
+                if (captcha.current !== null) {
+                    captcha.current.resetCaptcha();
+                    setValues({
+                        ...values,
+                        CAPTCHAToken: '',
+                    });
+                }
             },
         ),
         gqlError,
@@ -178,8 +175,8 @@ const SignUpContent: FC<SignUpContentProps> = (props: SignUpContentProps) => {
     return <SignUpForm {...signupFormProps} />;
 };
 
-const SignUp: FC = () => {
-    const { type, email, github_id: gitHubId, target, inviteId } = useParams();
+const SignUp: ComponentWithParams = ({ params }) => {
+    const { type, email, github_id: gitHubId, target, invite_id: inviteId } = params;
 
     return (
         <>
@@ -200,4 +197,5 @@ const SignUp: FC = () => {
     );
 };
 
-export default SignUp;
+const SignUpLoader = () => <ParamsLoader Child={SignUp} />;
+export default SignUpLoader;

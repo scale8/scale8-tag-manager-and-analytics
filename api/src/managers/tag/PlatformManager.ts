@@ -2,7 +2,7 @@ import Manager from '../../abstractions/Manager';
 import { injectable } from 'inversify';
 import { gql } from 'apollo-server-express';
 import CTX from '../../gql/ctx/CTX';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import Platform from '../../mongo/models/tag/Platform';
 import PlatformRevision from '../../mongo/models/tag/PlatformRevision';
 import TagManagerAccount from '../../mongo/models/tag/TagManagerAccount';
@@ -145,7 +145,7 @@ export default class PlatformManager extends Manager<Platform> {
         createPlatform: async (parent: any, args: any, ctx: CTX) => {
             const data = args.platformCreateInput;
             const tagManagerAccount = await this.repoFactory(TagManagerAccount).findByIdThrows(
-                new ObjectID(data.tag_manager_account_id),
+                new ObjectId(data.tag_manager_account_id),
                 userMessages.accountFailed,
             );
             return await this.orgAuth.asUserWithCreateAccess(
@@ -184,7 +184,7 @@ export default class PlatformManager extends Manager<Platform> {
         updatePlatform: async (parent: any, args: any, ctx: CTX) => {
             const data = args.platformUpdateInput;
             const platform = await this.repoFactory(Platform).findByIdThrows(
-                new ObjectID(data.platform_id),
+                new ObjectId(data.platform_id),
                 userMessages.platformFailed,
             );
             return await this.orgAuth.asUserWithCreateAccess(ctx, platform.orgId, async (me) => {
@@ -198,7 +198,7 @@ export default class PlatformManager extends Manager<Platform> {
         publishPlatform: async (parent: any, args: any, ctx: CTX) => {
             const data = args.platformPublishInput;
             const platform = await this.repoFactory(Platform).findByIdThrows(
-                new ObjectID(data.platform_id),
+                new ObjectId(data.platform_id),
                 userMessages.platformFailed,
             );
             return await this.orgAuth.asUserWithCreateAccess(ctx, platform.orgId, async (me) => {
@@ -227,7 +227,7 @@ export default class PlatformManager extends Manager<Platform> {
     protected gqlExtendedQueryResolvers = {
         getPlatform: async (parent: any, args: any, ctx: CTX) => {
             const platform = await this.repoFactory(Platform).findByIdThrows(
-                new ObjectID(args.id),
+                new ObjectId(args.id),
                 userMessages.platformFailed,
             );
             return await this.orgAuth.asUserWithViewAccessOnPlatform(ctx, platform, () =>
@@ -251,7 +251,7 @@ export default class PlatformManager extends Manager<Platform> {
         Platform: {
             tag_manager_account: async (parent: any, args: any, ctx: CTX) => {
                 const tagManagerAccount = await this.repoFactory(TagManagerAccount).findByIdThrows(
-                    new ObjectID(parent.tag_manager_account_id),
+                    new ObjectId(parent.tag_manager_account_id),
                     userMessages.accountFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(
@@ -262,7 +262,7 @@ export default class PlatformManager extends Manager<Platform> {
             },
             platform_revisions: async (parent: any, args: any, ctx: CTX) => {
                 const platform = await this.repoFactory(Platform).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.platformFailed,
                 );
                 const platformRevisions = await this.repoFactory(PlatformRevision).find({

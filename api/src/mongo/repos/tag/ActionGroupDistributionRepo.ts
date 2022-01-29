@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 import ActionGroupDistribution from '../../models/tag/ActionGroupDistribution';
 import UnderRevisionControl from './abstractions/UnderRevisionControl';
-import { IndexSpecification } from 'mongodb';
+import { IndexDescription } from 'mongodb';
 import userMessages from '../../../errors/UserMessages';
 import Rule from '../../models/tag/Rule';
 
@@ -9,7 +9,7 @@ import Rule from '../../models/tag/Rule';
 export default class ActionGroupDistributionRepo extends UnderRevisionControl<ActionGroupDistribution> {
     protected readonly auditEnabled = true;
 
-    protected readonly indexes: IndexSpecification[] = [
+    protected readonly indexes: IndexDescription[] = [
         {
             background: false,
             key: {

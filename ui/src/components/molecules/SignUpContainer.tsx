@@ -11,6 +11,7 @@ export type SignUpContainerProps = {
     children: ReactNode;
     isCompleted: boolean;
     isPrepare: boolean;
+    installTags?: boolean;
 };
 
 const SignUpContainer: FC<SignUpContainerProps> = (props: SignUpContainerProps) => {
@@ -75,6 +76,7 @@ const SignUpContainer: FC<SignUpContainerProps> = (props: SignUpContainerProps) 
             <Box pt={2} />
             <LoggedOutFormContainer large>
                 <SignUpProgress {...props} />
+                <Box mt={2} />
                 {children}
             </LoggedOutFormContainer>
         </div>

@@ -4,10 +4,10 @@ import { useQuery } from '@apollo/client';
 import { DiffIngestEndpoint } from '../../gql/generated/DiffIngestEndpoint';
 import DiffIngestEndpointQuery from '../../gql/queries/DiffIngestEndpointQuery';
 import { DialogPageProps } from '../../types/DialogTypes';
-import { queryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
 
 const IngestEndpointDiff: FC<DialogPageProps> = (props: DialogPageProps) => {
-    return queryLoaderAndError<DiffIngestEndpoint>(
+    return QueryLoaderAndError<DiffIngestEndpoint>(
         false,
         useQuery<DiffIngestEndpoint>(DiffIngestEndpointQuery, {
             variables: {
@@ -36,4 +36,4 @@ const IngestEndpointDiff: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { IngestEndpointDiff };
+export default IngestEndpointDiff;

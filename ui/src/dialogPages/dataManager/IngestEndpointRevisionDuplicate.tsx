@@ -71,4 +71,4 @@ const IngestEndpointRevisionDuplicate: FC<DialogPageProps> = (props: DialogPageP
     );
 };
 
-export { IngestEndpointRevisionDuplicate };
+export default IngestEndpointRevisionDuplicate;

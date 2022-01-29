@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 // ====================================================
@@ -34,7 +33,8 @@ export interface PlatformEventPageData_getPlatformRevision_platform_events {
    */
   event: string;
   /**
-   * List of `PlatformDataMap`s that create a document style key => value map. This can be directly accessed by the event when called.
+   * List of `PlatformDataMap`s that create a document style key => value map. This
+   * can be directly accessed by the event when called.
    */
   platform_data_maps: PlatformEventPageData_getPlatformRevision_platform_events_platform_data_maps[];
 }

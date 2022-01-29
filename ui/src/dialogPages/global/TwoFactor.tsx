@@ -7,7 +7,7 @@ import LoggedUserQuery from '../../gql/queries/LoggedUserQuery';
 import { TwoFactorEnable } from './TwoFactorEnable';
 import { TwoFactorDisable } from './TwoFactorDisable';
 import { DialogPageProps } from '../../types/DialogTypes';
-import { queryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
 
 export type TwoFactorAfterLoadProps = DialogPageProps & {
     twoFactorEnabled: boolean;
@@ -38,7 +38,7 @@ const TwoFactorAfterLoad: FC<TwoFactorAfterLoadProps> = (props: TwoFactorAfterLo
 };
 
 const TwoFactor: FC<DialogPageProps> = (props: DialogPageProps) => {
-    return queryLoaderAndError<LoggedUser>(
+    return QueryLoaderAndError<LoggedUser>(
         false,
         useQuery<LoggedUser>(LoggedUserQuery),
         (data: LoggedUser) => {

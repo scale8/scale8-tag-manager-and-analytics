@@ -67,4 +67,4 @@ const ActionGroupDuplicate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { ActionGroupDuplicate };
+export default ActionGroupDuplicate;

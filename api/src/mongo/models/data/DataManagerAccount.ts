@@ -1,20 +1,20 @@
 import Field from '../../decorators/Field';
 import Model from '../../abstractions/Model';
 import Org from '../Org';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import { add, isBefore } from 'date-fns';
 import { AccountType } from '../../../enums/AccountType';
 
 export default class DataManagerAccount extends Model {
-    public getOrgEntityId(): ObjectID {
+    public getOrgEntityId(): ObjectId {
         return this.orgId;
     }
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'org_id',
     })
-    private readonly _org_id!: ObjectID;
+    private readonly _org_id!: ObjectId;
 
     @Field<AccountType>({
         required: true,
@@ -52,7 +52,7 @@ export default class DataManagerAccount extends Model {
         }
     }
 
-    get orgId(): ObjectID {
+    get orgId(): ObjectId {
         return this._org_id;
     }
 

@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import { useQuery } from '@apollo/client';
 import { Box, CircularProgress } from '@mui/material';
 import SummaryDetail from '../components/atoms/SummaryDetail';
@@ -15,7 +15,7 @@ const IngestAnalyticsSummary: FC<IngestEndpointAnalyticsContentProps> = (
 ) => {
     const { ingestSummaryQueryOptions, ingestSummaryQueryOptionsPrev, id, refreshAt } = props;
 
-    return queryLoaderAndError<IngestSummaryQueryData>(
+    return QueryLoaderAndError<IngestSummaryQueryData>(
         false,
         useQuery<IngestSummaryQueryData>(IngestSummaryQuery, {
             variables: {

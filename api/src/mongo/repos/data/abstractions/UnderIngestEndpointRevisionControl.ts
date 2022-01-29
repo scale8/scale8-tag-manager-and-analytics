@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 import { OperationActor, SaveOptions } from '../../../types/Types';
 import DataError from '../../../../errors/DataError';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import IngestEndpointDataMap from '../../../models/data/IngestEndpointDataMap';
 import IngestEndpointRevision from '../../../models/data/IngestEndpointRevision';
 import OperationOwner from '../../../../enums/OperationOwner';
@@ -14,7 +14,7 @@ export default class UnderIngestEndpointRevisionControl<
 > extends RepoUnderRevisionControl<T> {
     protected readonly auditEnabled = true;
 
-    protected async isRevisionFinal(ingestEndpointRevisionId: ObjectID): Promise<boolean> {
+    protected async isRevisionFinal(ingestEndpointRevisionId: ObjectId): Promise<boolean> {
         //revision could be null at this stage if we are cloning. this is because children are cloned first before creating the new revision entity and linking it all back and finally saving.
         const revision = await this.repoFactory(IngestEndpointRevision).findById(
             ingestEndpointRevisionId,

@@ -1,12 +1,14 @@
 // noinspection JSUnusedGlobalSymbols
 
-import { FC } from 'react';
+import { ReactElement } from 'react';
 import Head from 'next/head';
-import { LoggedInSection } from '../../containers/global/LoggedInSection';
 import { useRouter } from 'next/router';
 import DynamicPageLoader from '../../pageLoader/DynamicPageLoader';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { dynamicPages } from '../../pageLoader/DynamicPages';
+import dynamic from 'next/dynamic';
+
+const LoggedInSection = dynamic(() => import('../../containers/global/LoggedInSection'));
 
 export const getStaticPaths: GetStaticPaths = async () => {
     const paths = Object.values(dynamicPages).map((_) => {
@@ -23,7 +25,7 @@ export const getStaticProps: GetStaticProps = async () => {
     };
 };
 
-const LoggedInPage: FC = () => {
+const LoggedInPage = (): ReactElement => {
     const router = useRouter();
 
     const { path, ...params } = router.query;

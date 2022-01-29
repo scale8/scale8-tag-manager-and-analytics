@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { QueryTuple } from '@apollo/client/react/types/types';
 import { OperationVariables } from '@apollo/client/core';
-import { lazyQueryLoaderAndError } from '../../abstractions/LazyQueryLoaderAndError';
+import { LazyQueryLoaderAndError } from '../../abstractions/LazyQueryLoaderAndError';
 import { AppGroupingCount } from '../../utils/AnalyticsUtils';
 import { UTCTimestamp } from '../../utils/DateTimeUtils';
 import { NoRecordsMessage } from '../../components/atoms/NoRecordsMessage';
@@ -26,7 +26,7 @@ export type DashboardListProps = {
 };
 
 const AppDashboardList: FC<DashboardListProps> = (props: DashboardListProps) => {
-    return lazyQueryLoaderAndError(
+    return LazyQueryLoaderAndError(
         false,
         props.lazyQuery,
         props.lazyQueryVariables,

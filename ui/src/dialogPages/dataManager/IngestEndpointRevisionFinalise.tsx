@@ -24,4 +24,4 @@ const IngestEndpointRevisionFinalise: FC<DialogPageProps> = (props: DialogPagePr
     );
 };
 
-export { IngestEndpointRevisionFinalise };
+export default IngestEndpointRevisionFinalise;

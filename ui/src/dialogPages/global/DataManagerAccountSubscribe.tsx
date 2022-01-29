@@ -7,4 +7,4 @@ const DataManagerAccountSubscribe: FC<DialogPageProps> = (props: DialogPageProps
     return <AccountSubscribe {...props} product={AccountProduct.DATA_MANAGER} />;
 };
 
-export { DataManagerAccountSubscribe };
+export default DataManagerAccountSubscribe;

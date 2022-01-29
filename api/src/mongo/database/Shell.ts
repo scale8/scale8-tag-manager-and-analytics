@@ -1,5 +1,14 @@
 import { inject, injectable } from 'inversify';
-import { ClientSession, Collection, Db, MongoClient, TransactionOptions } from 'mongodb';
+import {
+    ClientSession,
+    Collection,
+    Db,
+    MongoClient,
+    ReadConcern,
+    ReadPreference,
+    TransactionOptions,
+    WriteConcern,
+} from 'mongodb';
 import TYPES from '../../container/IOC.types';
 import GenericError from '../../errors/GenericError';
 import DatabaseError from '../../errors/DatabaseError';
@@ -17,10 +26,7 @@ export default class Shell {
 
     public async connect(): Promise<MongoClient> {
         if (this.connection === null) {
-            const client = new MongoClient(await this.config.getDatabaseUrl(), {
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
-            });
+            const client = new MongoClient(await this.config.getDatabaseUrl());
             this.connection = await client.connect();
         }
         return this.connection;
@@ -30,9 +36,9 @@ export default class Shell {
         const connection = await this.connect();
         return connection.startSession({
             defaultTransactionOptions: {
-                readPreference: 'primary',
-                readConcern: { level: 'local' },
-                writeConcern: { w: 'majority' },
+                readPreference: ReadPreference.fromString('primary'),
+                readConcern: ReadConcern.fromOptions({ level: 'local' }),
+                writeConcern: WriteConcern.fromOptions({ w: 'majority' }),
             },
         });
     }

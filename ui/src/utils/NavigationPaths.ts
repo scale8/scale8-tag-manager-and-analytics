@@ -11,6 +11,8 @@ const buildQs = (params?: Record<string, string>) => {
 export const toLogin = '/login';
 export const toSignUp = (params?: { type?: string; email?: string; github_id?: string }) =>
     `/sign-up${buildQs(params)}`;
+export const toInstallTags = (params?: { env: string; target: string }) =>
+    `/account-install-tags${buildQs(params)}`;
 export const toRequestPasswordReset = (params?: { email: string }) =>
     `/request-password-reset${buildQs(params)}`;
 

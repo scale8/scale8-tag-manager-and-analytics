@@ -8,24 +8,81 @@ import {
     openLightboxWithName,
     openWideDrawer,
 } from '../utils/PageActionUtils';
-import { GlobalTriggerCreate } from '../dialogPages/tagManager/app/trigger/GlobalTriggerCreate';
-import { GlobalTriggerUpdate } from '../dialogPages/tagManager/app/trigger/GlobalTriggerUpdate';
-import { GlobalTriggerDuplicate } from '../dialogPages/tagManager/app/trigger/GlobalTriggerDuplicate';
-import { GlobalTriggerDelete } from '../dialogPages/tagManager/app/trigger/GlobalTriggerDelete';
-import { GlobalTriggerHistory } from '../dialogPages/tagManager/app/trigger/GlobalTriggerHistory';
-import { EventCreate } from '../dialogPages/tagManager/app/trigger/EventCreate';
-import { EventDelete } from '../dialogPages/tagManager/app/trigger/EventDelete';
-import { EventInspect } from '../dialogPages/tagManager/app/trigger/EventInspect';
-import { EventUpdate } from '../dialogPages/tagManager/app/trigger/EventUpdate';
-import { EventHistory } from '../dialogPages/tagManager/app/trigger/EventHistory';
-import { ConditionCreate } from '../dialogPages/tagManager/app/trigger/ConditionCreate';
-import { ConditionDelete } from '../dialogPages/tagManager/app/trigger/ConditionDelete';
-import { ConditionUpdate } from '../dialogPages/tagManager/app/trigger/ConditionUpdate';
-import { ConditionHistory } from '../dialogPages/tagManager/app/trigger/ConditionHistory';
-import { ExceptionCreate } from '../dialogPages/tagManager/app/trigger/ExceptionCreate';
-import { ExceptionDelete } from '../dialogPages/tagManager/app/trigger/ExceptionDelete';
-import { ExceptionUpdate } from '../dialogPages/tagManager/app/trigger/ExceptionUpdate';
-import { ExceptionHistory } from '../dialogPages/tagManager/app/trigger/ExceptionHistory';
+import dynamic from 'next/dynamic';
+import { FC } from 'react';
+import { DialogPageProps } from '../types/DialogTypes';
+
+const GlobalTriggerCreate = dynamic(
+    () => import('../dialogPages/tagManager/app/trigger/GlobalTriggerCreate'),
+) as FC<DialogPageProps>;
+
+const GlobalTriggerUpdate = dynamic(
+    () => import('../dialogPages/tagManager/app/trigger/GlobalTriggerUpdate'),
+) as FC<DialogPageProps>;
+
+const GlobalTriggerDuplicate = dynamic(
+    () => import('../dialogPages/tagManager/app/trigger/GlobalTriggerDuplicate'),
+) as FC<DialogPageProps>;
+
+const GlobalTriggerDelete = dynamic(
+    () => import('../dialogPages/tagManager/app/trigger/GlobalTriggerDelete'),
+) as FC<DialogPageProps>;
+
+const GlobalTriggerHistory = dynamic(
+    () => import('../dialogPages/tagManager/app/trigger/GlobalTriggerHistory'),
+) as FC<DialogPageProps>;
+
+const EventCreate = dynamic(
+    () => import('../dialogPages/tagManager/app/trigger/EventCreate'),
+) as FC<DialogPageProps>;
+
+const EventDelete = dynamic(
+    () => import('../dialogPages/tagManager/app/trigger/EventDelete'),
+) as FC<DialogPageProps>;
+
+const EventInspect = dynamic(
+    () => import('../dialogPages/tagManager/app/trigger/EventInspect'),
+) as FC<DialogPageProps>;
+
+const EventUpdate = dynamic(
+    () => import('../dialogPages/tagManager/app/trigger/EventUpdate'),
+) as FC<DialogPageProps>;
+
+const EventHistory = dynamic(
+    () => import('../dialogPages/tagManager/app/trigger/EventHistory'),
+) as FC<DialogPageProps>;
+
+const ConditionCreate = dynamic(
+    () => import('../dialogPages/tagManager/app/trigger/ConditionCreate'),
+) as FC<DialogPageProps>;
+
+const ConditionDelete = dynamic(
+    () => import('../dialogPages/tagManager/app/trigger/ConditionDelete'),
+) as FC<DialogPageProps>;
+
+const ConditionUpdate = dynamic(
+    () => import('../dialogPages/tagManager/app/trigger/ConditionUpdate'),
+) as FC<DialogPageProps>;
+
+const ConditionHistory = dynamic(
+    () => import('../dialogPages/tagManager/app/trigger/ConditionHistory'),
+) as FC<DialogPageProps>;
+
+const ExceptionCreate = dynamic(
+    () => import('../dialogPages/tagManager/app/trigger/ExceptionCreate'),
+) as FC<DialogPageProps>;
+
+const ExceptionDelete = dynamic(
+    () => import('../dialogPages/tagManager/app/trigger/ExceptionDelete'),
+) as FC<DialogPageProps>;
+
+const ExceptionUpdate = dynamic(
+    () => import('../dialogPages/tagManager/app/trigger/ExceptionUpdate'),
+) as FC<DialogPageProps>;
+
+const ExceptionHistory = dynamic(
+    () => import('../dialogPages/tagManager/app/trigger/ExceptionHistory'),
+) as FC<DialogPageProps>;
 
 const triggerActions = {
     createGlobalTrigger: (pageActionProps: PageActionProps, revisionId: string): void => {

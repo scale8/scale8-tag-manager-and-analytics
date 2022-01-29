@@ -13,6 +13,7 @@ export default class MyDocument extends Document {
                 <Head>
                     {/* PWA primary color */}
                     <meta name="theme-color" content={theme.palette.primary.main} />
+                    {/* eslint-disable-next-line @next/next/google-font-display */}
                     <link
                         rel="stylesheet"
                         href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Sans+Pro:wght@300;400;600;700&display=block"
@@ -64,6 +65,7 @@ MyDocument.getInitialProps = async (ctx) => {
 
     ctx.renderPage = () =>
         originalRenderPage({
+            // eslint-disable-next-line react/display-name
             enhanceApp: (App: any) => (props) => <App emotionCache={cache} {...props} />,
         });
 

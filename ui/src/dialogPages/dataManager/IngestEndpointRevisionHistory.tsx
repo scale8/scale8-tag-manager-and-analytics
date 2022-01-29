@@ -6,4 +6,4 @@ const IngestEndpointRevisionHistory: FC<DialogPageProps> = (props: DialogPagePro
     return <DialogEntityHistory infoKeyBase="ingestEndpointRevisions" {...props} />;
 };
 
-export { IngestEndpointRevisionHistory };
+export default IngestEndpointRevisionHistory;

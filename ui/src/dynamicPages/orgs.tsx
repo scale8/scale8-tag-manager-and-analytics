@@ -12,12 +12,12 @@ import {
 import { pageActions } from '../actions/PageActions';
 import { TableRowBase } from '../types/TableRow';
 import { extractBaseColumns } from '../utils/TableRowUtils';
-import { SectionKey } from '../containers/SectionsDetails';
 import { toOrg } from '../utils/NavigationPaths';
-import { useLoggedInState } from '../context/AppContext';
 import { useRouter } from 'next/router';
 import { TablePage, TablePageProps } from '../abstractions/TablePage';
 import { DynamicPageProps } from '../pageLoader/DynamicPageLoader';
+import { useLoggedInState } from '../context/AppContext';
+import { SectionKey } from '../containers/SectionsDetails';
 
 export type OrgTableRow = TableRowBase & {
     name: string;
@@ -25,17 +25,13 @@ export type OrgTableRow = TableRowBase & {
 };
 
 const OrgsPage: FC<DynamicPageProps> = () => {
-    const { templateInteractions } = useLoggedInState();
-
-    const { dispatchSectionAction } = templateInteractions;
-
     const router = useRouter();
 
+    const { templateInteractions } = useLoggedInState();
+    const { setSection } = templateInteractions;
+
     useEffect(() => {
-        dispatchSectionAction({
-            type: 'section',
-            payload: SectionKey.orgSelect,
-        });
+        setSection(SectionKey.orgSelect);
     }, []);
 
     // There is no current org, the user can do all actions

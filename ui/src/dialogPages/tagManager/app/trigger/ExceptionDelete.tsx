@@ -30,4 +30,4 @@ const ExceptionDelete: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { ExceptionDelete };
+export default ExceptionDelete;

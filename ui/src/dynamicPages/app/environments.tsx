@@ -15,6 +15,7 @@ import {
     buildAddAction,
     buildDeleteAction,
     buildEditAction,
+    buildEditCustomDomainAction,
     buildEditVariablesAction,
     buildFieldAction,
     buildHistoryAction,
@@ -58,7 +59,7 @@ const AppEnvironmentsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
                       { field: 'id' },
                       { title: 'Page views', field: 'pageViews', type: 'graph' },
                       { title: 'URL', field: 'url', hidden: true },
-                      { field: 'customDomain', hidden: true },
+                      { field: 'customDomain' },
                       { field: 'installDomain' },
                       { field: 'revision' },
                       { field: 'updatedAt' },
@@ -86,7 +87,9 @@ const AppEnvironmentsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
                     ),
                     url: appEnvironment.url ? appEnvironment.url : '-',
                     revision: appEnvironment.revision ? appEnvironment.revision.name : '-',
-                    customDomain: appEnvironment.custom_domain ? appEnvironment.custom_domain : '-',
+                    customDomain: appEnvironment.custom_domain
+                        ? appEnvironment.custom_domain
+                        : 'Create custom domain',
                     installDomain: appEnvironment.install_domain
                         ? appEnvironment.install_domain
                         : '-',
@@ -94,41 +97,62 @@ const AppEnvironmentsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
             }),
 
         buildRowActions: (pageActionProps) => [
-            buildHistoryAction(
-                ({ id, name }) => pageActions.showAppEnvironmentHistory(pageActionProps, id, name),
-                'Environment History',
-                () => !currentOrgPermissions.canView,
-                () => !isAuditEnabled,
-            ),
-            buildInstallInstructionsAction(
-                ({ id }) => pageActions.installAppEnvironment(pageActionProps, id),
-                'Install Environment',
-                () => !currentOrgPermissions.canView,
-            ),
-            buildEditVariablesAction(
-                ({ id }) => pageActions.editVariablesAppEnvironment(pageActionProps, id),
-                'Edit Environment Variables',
-                () => !currentOrgPermissions.canEdit,
-            ),
-            buildEditAction(
-                ({ id }) => pageActions.updateAppEnvironment(pageActionProps, id, appId),
-                'Edit Environment',
-                () => !currentOrgPermissions.canEdit,
-            ),
-            buildDeleteAction(
-                ({ name, id }) =>
-                    ask(`Delete Environment: ${name}?`, () => {
-                        pageActions.deleteAppEnvironment(pageActionProps, id);
-                    }),
-                `Delete Environment`,
-                () => !currentOrgPermissions.canDelete,
-            ),
+            ...[
+                buildHistoryAction(
+                    ({ id, name }) =>
+                        pageActions.showAppEnvironmentHistory(pageActionProps, id, name),
+                    'Environment History',
+                    () => !currentOrgPermissions.canView,
+                    () => !isAuditEnabled,
+                ),
+                buildInstallInstructionsAction(
+                    ({ id }) => pageActions.installAppEnvironment(pageActionProps, id),
+                    'Install Environment',
+                    () => !currentOrgPermissions.canView,
+                ),
+            ],
+            ...(mode === Mode.COMMERCIAL
+                ? [
+                      buildEditCustomDomainAction(
+                          ({ id }) =>
+                              pageActions.editCustomDomainAppEnvironment(pageActionProps, id),
+                          'Custom Domain',
+                          () => !currentOrgPermissions.canEdit,
+                      ),
+                  ]
+                : []),
+            ...[
+                buildEditVariablesAction(
+                    ({ id }) => pageActions.editVariablesAppEnvironment(pageActionProps, id),
+                    'Environment Variables',
+                    () => !currentOrgPermissions.canEdit,
+                ),
+                buildEditAction(
+                    ({ id }) => pageActions.updateAppEnvironment(pageActionProps, id, appId),
+                    'Edit Environment',
+                    () => !currentOrgPermissions.canEdit,
+                ),
+                buildDeleteAction(
+                    ({ name, id }) =>
+                        ask(`Delete Environment: ${name}?`, () => {
+                            pageActions.deleteAppEnvironment(pageActionProps, id);
+                        }),
+                    `Delete Environment`,
+                    () => !currentOrgPermissions.canDelete,
+                ),
+            ],
         ],
         buildFieldActions: (pageActionProps) => [
             buildFieldAction(
                 'name',
                 ({ id }) => pageActions.updateAppEnvironment(pageActionProps, id, appId),
                 'Edit Environment',
+                () => !currentOrgPermissions.canEdit,
+            ),
+            buildFieldAction(
+                'customDomain',
+                ({ id }) => pageActions.editCustomDomainAppEnvironment(pageActionProps, id),
+                '',
                 () => !currentOrgPermissions.canEdit,
             ),
         ],

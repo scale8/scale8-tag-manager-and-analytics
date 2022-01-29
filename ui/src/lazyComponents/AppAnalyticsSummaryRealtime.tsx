@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import { useQuery } from '@apollo/client';
 import { Box, CircularProgress } from '@mui/material';
 import { AppAnalyticsContentProps } from '../types/props/AppAnalyticsContentProps';
@@ -28,7 +28,7 @@ const AppAnalyticsSummaryRealtime: FC<AppAnalyticsContentProps> = (
 
     const eventLabel = getEventLabel(appSummaryQueryOptions);
 
-    return queryLoaderAndError<AppSummaryRealtimeQueryData>(
+    return QueryLoaderAndError<AppSummaryRealtimeQueryData>(
         false,
         useQuery<AppSummaryRealtimeQueryData>(AppSummaryRealtimeQuery, {
             variables: {

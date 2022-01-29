@@ -9,7 +9,7 @@ import Shell from '../../src/mongo/database/Shell';
 import UserAuth from '../../src/auth/UserAuth';
 import OrgAuth from '../../src/auth/OrgAuth';
 import CTX from '../../src/gql/ctx/CTX';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import User from '../../src/mongo/models/User';
 import PlatformRevision from '../../src/mongo/models/tag/PlatformRevision';
 import Platform from '../../src/mongo/models/tag/Platform';
@@ -46,7 +46,7 @@ export default class ManagerTestUtils {
     public static mockOrgUserWithViewAccess(): void {
         const mockOrgAuth = container.get<OrgAuth>(TYPES.OrgAuth);
         mockOrgAuth.asUserWithViewAccess = jest.fn(
-            async <U>(ctx: CTX, orgId: ObjectID, doThisWith: (user: User) => U) => {
+            async <U>(ctx: CTX, orgId: ObjectId, doThisWith: (user: User) => U) => {
                 return doThisWith({} as User);
             },
         );

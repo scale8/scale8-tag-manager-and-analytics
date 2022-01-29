@@ -31,7 +31,7 @@ const TransferOwnershipSection: FC<TransferOwnershipSectionProps> = (
 
     return (
         <>
-            <DangerBox>
+            <DangerBox dark>
                 Transferring the ownership of the organization you will{' '}
                 <b>loose access to settings{mode === Mode.COMMERCIAL && ' and billing'}</b>.
                 <Box py={3}>

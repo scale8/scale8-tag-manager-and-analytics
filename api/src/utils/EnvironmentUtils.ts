@@ -1,18 +1,15 @@
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import User from '../mongo/models/User';
 import App from '../mongo/models/tag/App';
 import Revision from '../mongo/models/tag/Revision';
 import EnvironmentVariable from '../mongo/models/EnvironmentVariable';
 import Environment from '../mongo/models/tag/Environment';
-import { uploadCertificate } from './CertificateUtils';
-import GQLError from '../errors/GQLError';
 import userMessages from '../errors/UserMessages';
 import OperationOwner from '../enums/OperationOwner';
 import GQLMethod from '../enums/GQLMethod';
 import container from '../container/IOC.config';
 import RepoFromModelFactory from '../container/factoryTypes/RepoFromModelFactory';
 import TYPES from '../container/IOC.types';
-import Route53Service from '../aws/Route53Service';
 import AppPlatformRevision from '../mongo/models/tag/AppPlatformRevision';
 import PlatformRevision from '../mongo/models/tag/PlatformRevision';
 import Platform from '../mongo/models/tag/Platform';
@@ -29,17 +26,11 @@ import { resolveRevision } from './RevisionUtils';
 import { getIngestEndpointInstallDomain } from './IngestEndpointEnvironmentUtils';
 import BaseStorage from '../backends/storage/abstractions/BaseStorage';
 import { LogPriority } from '../enums/LogPriority';
-import BaseLogger from '../backends/logging/abstractions/BaseLogger';
 import BaseConfig from '../backends/configuration/abstractions/BaseConfig';
+import { createCname, getCNAME } from './CertificateUtils';
 
 export const isEnvironmentVariableNameValid = (name: string): boolean => {
     return name.match(/^[A-Z_]+$/) !== null;
-};
-
-export const getCNAME = (environmentId: ObjectID | string): string => {
-    const config = container.get<BaseConfig>(TYPES.BackendConfig);
-
-    return `${config.getEnvironmentIdPrefix()}${environmentId.toString()}.scale8.com`;
 };
 
 const getConfigFromModels = (models: Model[]): ConfigType => {
@@ -53,7 +44,7 @@ const getConfigFromModels = (models: Model[]): ConfigType => {
     ).reduce((_, [k, v]) => ({ ..._, [k]: v }), {});
 };
 
-const generateConfig = async (revisionId: ObjectID | Revision): Promise<ConfigType> => {
+const generateConfig = async (revisionId: ObjectId | Revision): Promise<ConfigType> => {
     const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
 
     //generate a config to run the core (and other platforms) against...
@@ -263,33 +254,10 @@ export const buildConfig = async (environment: Environment): Promise<void> => {
             },
         );
 
-    await uploadTo(`${getCNAME(environment.id)}.json`);
+    await uploadTo(`${getCNAME(environment)}.json`);
 
     if (environment.customDomain !== undefined) {
         await uploadTo(`${environment.customDomain}.json`);
-    }
-};
-
-export const createCname = async (environment: { id: ObjectID }) => {
-    const route53Service = container.get<Route53Service>(TYPES.Route53Service);
-    const config = container.get<BaseConfig>(TYPES.BackendConfig);
-    const logger = container.get<BaseLogger>(TYPES.BackendLogger);
-
-    if (config.isCommercial()) {
-        //create a domain alias...
-        const route53 = route53Service.getRoute53Client(
-            await config.getAwsId(),
-            await config.getAwsSecret(),
-        );
-        try {
-            await route53Service.createNewCNAME(
-                route53,
-                `${config.getEnvironmentIdPrefix()}${environment.id.toString()}.scale8.com`,
-                await config.getCdnDomain(),
-            );
-        } catch (e) {
-            await logger.warn('Failed to create CNAME for new environment, it might already exist');
-        }
     }
 };
 
@@ -299,50 +267,19 @@ export const createEnvironment = async (
     name: string,
     revision: Revision,
     url?: string,
-    customDomain?: string,
-    customDomainCert?: string,
-    customDomainKey?: string,
     environmentVariables: EnvironmentVariable[] = [],
     comments?: string,
 ): Promise<Environment> => {
     const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
-
-    const getCustomDomain: () => Promise<string | undefined> = async () => {
-        if (customDomain === undefined) {
-            return undefined;
-        } else {
-            if (
-                (await repoFactory(Environment).findOne({
-                    _custom_domain: customDomain,
-                })) === null
-            ) {
-                //we can safely proceed
-                if (customDomainCert !== undefined && customDomainKey !== undefined) {
-                    await uploadCertificate(customDomain, customDomainCert, customDomainKey);
-                    return customDomain;
-                } else {
-                    throw new GQLError(userMessages.noCertificate, true);
-                }
-            } else {
-                throw new GQLError(
-                    'Unable to create as it would override another configuration potentially',
-                    userMessages.unexpectedIssue,
-                );
-            }
-        }
-    };
-    let environment = new Environment(
-        name,
-        app,
-        revision,
-        url,
-        environmentVariables,
-        await getCustomDomain(),
+    const environment = await repoFactory(Environment).save(
+        new Environment(name, app, revision, url, environmentVariables),
+        actor,
+        OperationOwner.USER,
+        {
+            gqlMethod: GQLMethod.CREATE,
+            userComments: comments,
+        },
     );
-    environment = await repoFactory(Environment).save(environment, actor, OperationOwner.USER, {
-        gqlMethod: GQLMethod.CREATE,
-        userComments: comments,
-    });
     await createCname(environment);
     await buildConfig(environment);
     return environment;

@@ -61,11 +61,13 @@ const PreviewFrameToolbar: FC = () => {
                                 setRevisionTab(1);
                             }}
                         >
-                            <Typography>
-                                {previewFrameData.getApp.name}
-                                {' - '}
-                                {previewFrameData.getRevision.name}
-                            </Typography>
+                            {previewFrameData !== null && (
+                                <Typography>
+                                    {previewFrameData.getApp.name}
+                                    {' - '}
+                                    {previewFrameData.getRevision.name}
+                                </Typography>
+                            )}
                         </Box>
                     )}
                     <Box textAlign="center" flexGrow={1}>

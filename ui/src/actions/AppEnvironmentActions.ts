@@ -6,12 +6,38 @@ import {
     openInfo,
     openNoRefreshDrawer,
 } from '../utils/PageActionUtils';
-import { EnvironmentCreate } from '../dialogPages/tagManager/app/EnvironmentCreate';
-import { AppEnvironmentsInstallInstructions } from '../dialogPages/tagManager/app/AppEnvironmentsInstallInstructions';
-import { EnvironmentEditVariables } from '../dialogPages/tagManager/app/EnvironmentEditVariables';
-import { EnvironmentUpdate } from '../dialogPages/tagManager/app/EnvironmentUpdate';
-import { EnvironmentHistory } from '../dialogPages/tagManager/app/EnvironmentHistory';
-import { EnvironmentDelete } from '../dialogPages/tagManager/app/EnvironmentDelete';
+
+import dynamic from 'next/dynamic';
+import { FC } from 'react';
+import { DialogPageProps } from '../types/DialogTypes';
+
+const EnvironmentCreate = dynamic(
+    () => import('../dialogPages/tagManager/app/EnvironmentCreate'),
+) as FC<DialogPageProps>;
+
+const AppEnvironmentsInstallInstructions = dynamic(
+    () => import('../dialogPages/tagManager/app/AppEnvironmentsInstallInstructions'),
+) as FC<DialogPageProps>;
+
+const EnvironmentEditVariables = dynamic(
+    () => import('../dialogPages/tagManager/app/EnvironmentEditVariables'),
+) as FC<DialogPageProps>;
+
+const EnvironmentEditCustomDomain = dynamic(
+    () => import('../dialogPages/tagManager/app/EnvironmentEditCustomDomain'),
+) as FC<DialogPageProps>;
+
+const EnvironmentUpdate = dynamic(
+    () => import('../dialogPages/tagManager/app/EnvironmentUpdate'),
+) as FC<DialogPageProps>;
+
+const EnvironmentHistory = dynamic(
+    () => import('../dialogPages/tagManager/app/EnvironmentHistory'),
+) as FC<DialogPageProps>;
+
+const EnvironmentDelete = dynamic(
+    () => import('../dialogPages/tagManager/app/EnvironmentDelete'),
+) as FC<DialogPageProps>;
 
 const appEnvironmentActions = {
     createAppEnvironment: (
@@ -38,6 +64,9 @@ const appEnvironmentActions = {
     },
     editVariablesAppEnvironment: (pageActionProps: PageActionProps, id: string): void => {
         openNoRefreshDrawer(pageActionProps, EnvironmentEditVariables, id);
+    },
+    editCustomDomainAppEnvironment: (pageActionProps: PageActionProps, id: string): void => {
+        openDrawer(pageActionProps, EnvironmentEditCustomDomain, id);
     },
     updateAppEnvironment: (pageActionProps: PageActionProps, id: string, appId: string): void => {
         openDrawer(pageActionProps, EnvironmentUpdate, id, true, false, appId);

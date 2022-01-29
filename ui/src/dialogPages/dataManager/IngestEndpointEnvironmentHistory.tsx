@@ -6,4 +6,4 @@ const IngestEndpointEnvironmentHistory: FC<DialogPageProps> = (props: DialogPage
     return <DialogEntityHistory infoKeyBase="ingestEndpointEnvironments" {...props} />;
 };
 
-export { IngestEndpointEnvironmentHistory };
+export default IngestEndpointEnvironmentHistory;

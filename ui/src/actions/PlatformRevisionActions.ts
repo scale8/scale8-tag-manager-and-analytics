@@ -5,10 +5,25 @@ import {
     openFullScreenNoRefresh,
     openLightbox,
 } from '../utils/PageActionUtils';
-import { PlatformDiff } from '../dialogPages/tagManager/platform/PlatformDiff';
-import { PlatformRevisionPublish } from '../dialogPages/tagManager/platform/PlatformRevisionPublish';
-import { PlatformRevisionUpdate } from '../dialogPages/tagManager/platform/PlatformRevisionUpdate';
-import { PlatformRevisionDuplicate } from '../dialogPages/tagManager/platform/PlatformRevisionDuplicate';
+import dynamic from 'next/dynamic';
+import { FC } from 'react';
+import { DialogPageProps } from '../types/DialogTypes';
+
+const PlatformDiff = dynamic(
+    () => import('../dialogPages/tagManager/platform/PlatformDiff'),
+) as FC<DialogPageProps>;
+
+const PlatformRevisionPublish = dynamic(
+    () => import('../dialogPages/tagManager/platform/PlatformRevisionPublish'),
+) as FC<DialogPageProps>;
+
+const PlatformRevisionUpdate = dynamic(
+    () => import('../dialogPages/tagManager/platform/PlatformRevisionUpdate'),
+) as FC<DialogPageProps>;
+
+const PlatformRevisionDuplicate = dynamic(
+    () => import('../dialogPages/tagManager/platform/PlatformRevisionDuplicate'),
+) as FC<DialogPageProps>;
 
 const platformRevisionActions = {
     comparePlatformRevisions: (

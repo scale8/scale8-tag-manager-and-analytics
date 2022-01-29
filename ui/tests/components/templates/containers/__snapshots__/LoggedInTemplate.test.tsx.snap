@@ -74,43 +74,29 @@ exports[`LoggedInTemplate renders LoggedInTemplate unchanged 1`] = `
         </svg>
       </div>
       <div
+        class="MuiBox-root css-16kb41"
+      />
+      <div
+        class="MuiBox-root css-0"
+      >
+        <div
+          class="MuiBox-root css-8ihzru"
+        >
+          <div />
+        </div>
+      </div>
+      <div
         class="MuiBox-root css-fthphr"
       />
       <div
-        class="MuiBox-root css-sivrza"
-      >
-        <button
-          aria-label="Admin Area"
-          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeLarge css-1pz7awu-MuiButtonBase-root-MuiIconButton-root"
-          data-mui-internal-clone-element="true"
-          tabindex="0"
-          type="button"
-        >
-          <svg
-            aria-hidden="true"
-            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-erxxaa-MuiSvgIcon-root"
-            data-testid="SettingsApplicationsIcon"
-            focusable="false"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm7-7H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-1.75 9c0 .23-.02.46-.05.68l1.48 1.16c.13.11.17.3.08.45l-1.4 2.42c-.09.15-.27.21-.43.15l-1.74-.7c-.36.28-.76.51-1.18.69l-.26 1.85c-.03.17-.18.3-.35.3h-2.8c-.17 0-.32-.13-.35-.29l-.26-1.85c-.43-.18-.82-.41-1.18-.69l-1.74.7c-.16.06-.34 0-.43-.15l-1.4-2.42c-.09-.15-.05-.34.08-.45l1.48-1.16c-.03-.23-.05-.46-.05-.69 0-.23.02-.46.05-.68l-1.48-1.16c-.13-.11-.17-.3-.08-.45l1.4-2.42c.09-.15.27-.21.43-.15l1.74.7c.36-.28.76-.51 1.18-.69l.26-1.85c.03-.17.18-.3.35-.3h2.8c.17 0 .32.13.35.29l.26 1.85c.43.18.82.41 1.18.69l1.74-.7c.16-.06.34 0 .43.15l1.4 2.42c.09.15.05.34-.08.45l-1.48 1.16c.03.23.05.46.05.69z"
-            />
-          </svg>
-          <span
-            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-          />
-        </button>
-      </div>
-      <div
-        class="MuiBox-root css-sivrza"
+        class="MuiBox-root css-11mekov"
       >
         <div
           class="MuiBox-root css-0"
         >
           <button
-            aria-label="Manage Organizations"
-            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeLarge css-1pz7awu-MuiButtonBase-root-MuiIconButton-root"
+            aria-label="Admin Area"
+            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-h27epy-MuiButtonBase-root-MuiIconButton-root"
             data-mui-internal-clone-element="true"
             tabindex="0"
             type="button"
@@ -118,12 +104,12 @@ exports[`LoggedInTemplate renders LoggedInTemplate unchanged 1`] = `
             <svg
               aria-hidden="true"
               class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-erxxaa-MuiSvgIcon-root"
-              data-testid="BusinessIcon"
+              data-testid="SettingsApplicationsIcon"
               focusable="false"
               viewBox="0 0 24 24"
             >
               <path
-                d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"
+                d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm7-7H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-1.75 9c0 .23-.02.46-.05.68l1.48 1.16c.13.11.17.3.08.45l-1.4 2.42c-.09.15-.27.21-.43.15l-1.74-.7c-.36.28-.76.51-1.18.69l-.26 1.85c-.03.17-.18.3-.35.3h-2.8c-.17 0-.32-.13-.35-.29l-.26-1.85c-.43-.18-.82-.41-1.18-.69l-1.74.7c-.16.06-.34 0-.43-.15l-1.4-2.42c-.09-.15-.05-.34.08-.45l1.48-1.16c-.03-.23-.05-.46-.05-.69 0-.23.02-.46.05-.68l-1.48-1.16c-.13-.11-.17-.3-.08-.45l1.4-2.42c.09-.15.27-.21.43-.15l1.74.7c.36-.28.76-.51 1.18-.69l.26-1.85c.03-.17.18-.3.35-.3h2.8c.17 0 .32.13.35.29l.26 1.85c.43.18.82.41 1.18.69l1.74-.7c.16-.06.34 0 .43.15l1.4 2.42c.09.15.05.34-.08.45l-1.48 1.16c.03.23.05.46.05.69z"
               />
             </svg>
             <span
@@ -131,17 +117,43 @@ exports[`LoggedInTemplate renders LoggedInTemplate unchanged 1`] = `
             />
           </button>
         </div>
-      </div>
-      <div
-        class="MuiBox-root css-sivrza"
-      >
         <div
-          aria-label="Notifications"
           class="MuiBox-root css-0"
-          data-mui-internal-clone-element="true"
+        >
+          <div
+            aria-label="Manage Organizations"
+            class="MuiBox-root css-0"
+            data-mui-internal-clone-element="true"
+          >
+            <button
+              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeLarge css-x6ov7r-MuiButtonBase-root-MuiIconButton-root"
+              tabindex="0"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-erxxaa-MuiSvgIcon-root"
+                data-testid="BusinessIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"
+                />
+              </svg>
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </button>
+          </div>
+        </div>
+        <div
+          class="MuiBox-root css-0"
         >
           <button
-            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeLarge css-1pz7awu-MuiButtonBase-root-MuiIconButton-root"
+            aria-label="Notifications"
+            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeLarge css-x6ov7r-MuiButtonBase-root-MuiIconButton-root"
+            data-mui-internal-clone-element="true"
             tabindex="0"
             type="button"
           >
@@ -170,10 +182,9 @@ exports[`LoggedInTemplate renders LoggedInTemplate unchanged 1`] = `
             />
           </button>
         </div>
-      </div>
-      <div
-        class="MuiBox-root css-jzbn0a"
-      >
+        <div
+          class="MuiBox-root css-1pg8bi"
+        />
         <button
           aria-controls="simple-menu"
           aria-haspopup="true"
@@ -200,6 +211,9 @@ exports[`LoggedInTemplate renders LoggedInTemplate unchanged 1`] = `
             class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
           />
         </button>
+        <div
+          class="MuiBox-root css-uanaa8"
+        />
       </div>
     </div>
     <div
@@ -211,31 +225,22 @@ exports[`LoggedInTemplate renders LoggedInTemplate unchanged 1`] = `
       <div
         class="MuiBox-root css-1qy9df7"
       >
+        <div />
         <div
-          class="MuiBox-root css-1oacyt4"
+          class="MuiBox-root css-19b5z3n"
         >
-          <div />
+          <div
+            class="MuiBox-root css-yzu9ne"
+          />
         </div>
         <div
           class="MuiBox-root css-rvm16z"
         >
           <div
-            class="MuiBox-root css-1bmanj9"
+            class="MuiBox-root css-a744pu"
           >
-            <div
-              class="MuiBox-root css-11wlul6"
-            >
+            <div>
               <div />
-            </div>
-            <div
-              class="MuiBox-root css-1flurnk"
-            >
-              <div
-                class="MuiBox-root css-ly6kot"
-              />
-              <div>
-                <div />
-              </div>
             </div>
           </div>
         </div>

@@ -4,4 +4,4 @@ const AdminSignUpApprove: FC = () => {
     return null;
 };
 
-export { AdminSignUpApprove };
+export default AdminSignUpApprove;

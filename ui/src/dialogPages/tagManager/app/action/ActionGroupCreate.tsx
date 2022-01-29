@@ -69,4 +69,4 @@ const ActionGroupCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { ActionGroupCreate };
+export default ActionGroupCreate;

@@ -3,7 +3,7 @@ import { inject, injectable } from 'inversify';
 import { gql } from 'apollo-server-express';
 import App from '../../mongo/models/tag/App';
 import CTX from '../../gql/ctx/CTX';
-import { ObjectId, ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import Revision from '../../mongo/models/tag/Revision';
 import Platform from '../../mongo/models/tag/Platform';
 import Environment from '../../mongo/models/tag/Environment';
@@ -18,8 +18,8 @@ import BaseDatabase from '../../backends/databases/abstractions/BaseDatabase';
 import {
     getCommercialStorageProvider,
     getCommercialStorageProviderConfig,
+    getProviderConfigThrows,
     getProviderConfig,
-    getUpdateProviderConfig,
     updateIngestEndpointEnvironment,
 } from '../../utils/IngestEndpointEnvironmentUtils';
 import GenericError from '../../errors/GenericError';
@@ -440,7 +440,7 @@ export default class AppManager extends Manager<App> {
                     IngestEndpointEnvironment,
                 ).findByIdThrows(app.usageIngestEndpointEnvironmentId, userMessages.usageFailed);
 
-                const providerConfig = await getUpdateProviderConfig(
+                const providerConfig = await getProviderConfig(
                     data,
                     trackingIngestEndpointEnvironment,
                 );
@@ -458,10 +458,7 @@ export default class AppManager extends Manager<App> {
                     'error_tracking_enabled',
                 ]); //only is a safety check against this function
 
-                app.storageProviderConfigHash = Hash.hashString(
-                    JSON.stringify(providerConfig),
-                    'c0nF1g',
-                );
+                app.storageProviderConfigHash = Hash.hashString(JSON.stringify(providerConfig));
 
                 await this.repoFactory(App).save(app, me);
                 return true;
@@ -500,7 +497,7 @@ export default class AppManager extends Manager<App> {
                     ];
                 }
 
-                return [data.storage_provider, await getProviderConfig(data)];
+                return [data.storage_provider, await getProviderConfigThrows(data)];
             };
 
             const [storageProvider, providerConfig] = await getStorageProviderDetails();
@@ -542,7 +539,7 @@ export default class AppManager extends Manager<App> {
     protected gqlExtendedQueryResolvers = {
         getApp: async (parent: any, args: any, ctx: CTX) => {
             const app = await this.repoFactory(App).findByIdThrows(
-                new ObjectID(args.id),
+                new ObjectId(args.id),
                 userMessages.appFailed,
             );
             return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
@@ -560,7 +557,7 @@ export default class AppManager extends Manager<App> {
         AppPlatform: {
             platform: async (parent: any, args: any, ctx: CTX) => {
                 const app = await this.repoFactory(App).findByIdThrows(
-                    new ObjectID(parent.app_id),
+                    new ObjectId(parent.app_id),
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () => {
@@ -583,7 +580,7 @@ export default class AppManager extends Manager<App> {
         App: {
             event_group_stats: async (parent: any, args: any, ctx: CTX) => {
                 const app = await this.repoFactory(App).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
@@ -595,7 +592,7 @@ export default class AppManager extends Manager<App> {
             },
             event_stats: async (parent: any, args: any, ctx: CTX) => {
                 const app = await this.repoFactory(App).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
@@ -607,7 +604,7 @@ export default class AppManager extends Manager<App> {
             },
             device_stats: async (parent: any, args: any, ctx: CTX) => {
                 const app = await this.repoFactory(App).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
@@ -619,7 +616,7 @@ export default class AppManager extends Manager<App> {
             },
             browser_stats: async (parent: any, args: any, ctx: CTX) => {
                 const app = await this.repoFactory(App).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
@@ -631,7 +628,7 @@ export default class AppManager extends Manager<App> {
             },
             operating_system_stats: async (parent: any, args: any, ctx: CTX) => {
                 const app = await this.repoFactory(App).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
@@ -643,7 +640,7 @@ export default class AppManager extends Manager<App> {
             },
             country_stats: async (parent: any, args: any, ctx: CTX) => {
                 const app = await this.repoFactory(App).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
@@ -655,7 +652,7 @@ export default class AppManager extends Manager<App> {
             },
             page_stats: async (parent: any, args: any, ctx: CTX) => {
                 const app = await this.repoFactory(App).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
@@ -664,7 +661,7 @@ export default class AppManager extends Manager<App> {
             },
             entry_page_stats: async (parent: any, args: any, ctx: CTX) => {
                 const app = await this.repoFactory(App).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
@@ -677,7 +674,7 @@ export default class AppManager extends Manager<App> {
             },
             exit_page_stats: async (parent: any, args: any, ctx: CTX) => {
                 const app = await this.repoFactory(App).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
@@ -690,7 +687,7 @@ export default class AppManager extends Manager<App> {
             },
             utm_medium_stats: async (parent: any, args: any, ctx: CTX) => {
                 const app = await this.repoFactory(App).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
@@ -703,7 +700,7 @@ export default class AppManager extends Manager<App> {
             },
             utm_source_stats: async (parent: any, args: any, ctx: CTX) => {
                 const app = await this.repoFactory(App).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
@@ -716,7 +713,7 @@ export default class AppManager extends Manager<App> {
             },
             utm_campaign_stats: async (parent: any, args: any, ctx: CTX) => {
                 const app = await this.repoFactory(App).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
@@ -729,7 +726,7 @@ export default class AppManager extends Manager<App> {
             },
             referrer_stats: async (parent: any, args: any, ctx: CTX) => {
                 const app = await this.repoFactory(App).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
@@ -741,7 +738,7 @@ export default class AppManager extends Manager<App> {
             },
             referrer_tld_stats: async (parent: any, args: any, ctx: CTX) => {
                 const app = await this.repoFactory(App).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
@@ -753,7 +750,7 @@ export default class AppManager extends Manager<App> {
             },
             event_request_stats: async (parent: any, args: any, ctx: CTX) => {
                 const app = await this.repoFactory(App).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.appFailed,
                 );
                 if (app.storageProvider === StorageProvider.AWS_S3) {
@@ -772,7 +769,7 @@ export default class AppManager extends Manager<App> {
             },
             average_session_duration_stats: async (parent: any, args: any, ctx: CTX) => {
                 const app = await this.repoFactory(App).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
@@ -784,7 +781,7 @@ export default class AppManager extends Manager<App> {
             },
             bounce_ratio_stats: async (parent: any, args: any, ctx: CTX) => {
                 const app = await this.repoFactory(App).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
@@ -796,7 +793,7 @@ export default class AppManager extends Manager<App> {
             },
             error_stats: async (parent: any, args: any, ctx: CTX) => {
                 const app = await this.repoFactory(App).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
@@ -808,7 +805,7 @@ export default class AppManager extends Manager<App> {
             },
             tag_manager_account: async (parent: any, args: any, ctx: CTX) => {
                 const tagManagerAccount = await this.repoFactory(TagManagerAccount).findByIdThrows(
-                    new ObjectID(parent.tag_manager_account_id),
+                    new ObjectId(parent.tag_manager_account_id),
                     userMessages.accountFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(
@@ -819,7 +816,7 @@ export default class AppManager extends Manager<App> {
             },
             revisions: async (parent: any, args: any, ctx: CTX) => {
                 const app = await this.repoFactory(App).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () => {
@@ -832,7 +829,7 @@ export default class AppManager extends Manager<App> {
             },
             app_platforms: async (parent: any, args: any, ctx: CTX) => {
                 const app = await this.repoFactory(App).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
@@ -841,7 +838,7 @@ export default class AppManager extends Manager<App> {
             },
             environments: async (parent: any, args: any, ctx: CTX) => {
                 const app = await this.repoFactory(App).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () => {

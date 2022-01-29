@@ -3,7 +3,7 @@ import { ApolloError } from '@apollo/client';
 import { DialogPageProps } from '../types/DialogTypes';
 import { DialogAction } from './DialogReducer';
 import { OrgUserAction, OrgUserState } from './OrgUserReducer';
-import { SectionHistory, SectionHistoryAction } from './SectionHistoryReducer';
+import { SectionKey } from '../containers/SectionsDetails';
 
 export type AskInteraction = (text: string, confirmHandler: () => void) => void;
 
@@ -41,8 +41,8 @@ export type LoggedInTemplateInteractions = {
     setRefreshCurrentPage: Dispatch<SetStateAction<boolean>>;
     refreshCurrentSection: boolean;
     setRefreshCurrentSection: Dispatch<SetStateAction<boolean>>;
-    sectionHistory: SectionHistory;
-    dispatchSectionAction: Dispatch<SectionHistoryAction>;
+    section: symbol;
+    setSection: Dispatch<SetStateAction<symbol>>;
     sectionHasAnalytics: boolean;
     setSectionHasAnalytics: Dispatch<SetStateAction<boolean>>;
 };
@@ -82,11 +82,8 @@ export const initialTemplateInteractions = {
     setRefreshCurrentPage: idleFunction,
     refreshCurrentSection: false,
     setRefreshCurrentSection: idleFunction,
-    sectionHistory: {
-        current: undefined,
-        previous: undefined,
-    },
-    dispatchSectionAction: idleFunction,
+    section: SectionKey.loggedOut,
+    setSection: idleFunction,
     sectionHasAnalytics: false,
     setSectionHasAnalytics: idleFunction,
 };

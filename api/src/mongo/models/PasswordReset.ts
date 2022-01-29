@@ -1,15 +1,15 @@
 import Model from '../abstractions/Model';
 import Field from '../decorators/Field';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import User from './User';
 import Hash from '../../core/Hash';
 
 export default class PasswordReset extends Model {
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'user_id',
     })
-    private readonly _user_id!: ObjectID;
+    private readonly _user_id!: ObjectId;
 
     @Field<string>({
         required: true,
@@ -24,7 +24,7 @@ export default class PasswordReset extends Model {
         this._token = Hash.simpleRandomHash();
     }
 
-    get userId(): ObjectID {
+    get userId(): ObjectId {
         return this._user_id;
     }
 

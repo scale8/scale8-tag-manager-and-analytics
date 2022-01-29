@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 //==============================================================
@@ -8,7 +7,7 @@
 //==============================================================
 
 /**
- * A set of supported AWS regions for use with `TrackeEnvironment`s
+ * A set of supported AWS regions for use with `TrackedEnvironment`s
  */
 export enum AWSRegion {
   AF_SOUTH_1 = "AF_SOUTH_1",
@@ -277,7 +276,7 @@ export enum SignUpType {
 }
 
 /**
- * A set of supported storage providers for use with `TrackeEnvironment`s
+ * A set of supported storage providers for use with `TrackedEnvironment`s
  */
 export enum StorageProvider {
   AWS_S3 = "AWS_S3",
@@ -286,7 +285,8 @@ export enum StorageProvider {
 }
 
 /**
- * A tag can either be a `HEAD` tag or `PLACEMENT` tag, but can't be both. Please take a look at the descriptions of each below and select the one that fits your use case.
+ * A tag can either be a `HEAD` tag or `PLACEMENT` tag, but can't be both. Please
+ * take a look at the descriptions of each below and select the one that fits your use case.
  */
 export enum TagType {
   HEAD = "HEAD",
@@ -373,7 +373,9 @@ export enum VarType {
 }
 
 /**
- * In order to use AWS as your storage engine, you will need to create an AWS account and create a new service account for Scale8. Please see our documentation on how to configure this.
+ * In order to use AWS as your storage engine, you will need to create an AWS
+ * account and create a new service account for Scale8. Please see our
+ * documentation on how to configure this.
  */
 export interface AWSStorageConfig {
   access_key_id: string;
@@ -509,7 +511,8 @@ export interface AppInstallPlatformInput {
 }
 
 /**
- * Parameters required to link a `PlatformRevision` with a `Revision`. The 'data_maps' provided are used to implement the `Platform` settings of the `Platform`.
+ * Parameters required to link a `PlatformRevision` with a `Revision`. The
+ * 'data_maps' provided are used to implement the `Platform` settings of the `Platform`.
  */
 export interface AppPlatformRevisionLinkInput {
   revision_id: string;
@@ -645,7 +648,8 @@ export interface DismissNotificationInput {
 }
 
 /**
- * Data structure for duplicating an existing revision. This will clone the entire structure and change the name if 'new_name' is provided.
+ * Data structure for duplicating an existing revision. This will clone the entire
+ * structure and change the name if 'new_name' is provided.
  */
 export interface DuplicateIngestEndpointRevisionInput {
   ingest_endpoint_revision_id: string;
@@ -665,9 +669,6 @@ export interface DuplicateRevisionInput {
 export interface EnvironmentCreateInput {
   app_id: string;
   revision_id: string;
-  custom_domain?: string | null;
-  cert_pem?: string | null;
-  key_pem?: string | null;
   name: string;
   url?: string | null;
   env_vars?: EnvironmentVariableInput[] | null;
@@ -683,9 +684,10 @@ export interface EnvironmentDeleteInput {
  */
 export interface EnvironmentUpdateInput {
   environment_id: string;
-  revision_id: string;
+  revision_id?: string | null;
   name?: string | null;
   url?: string | null;
+  custom_domain?: string | null;
   cert_pem?: string | null;
   key_pem?: string | null;
   comments?: string | null;
@@ -734,7 +736,8 @@ export interface EventUpdateInput {
 }
 
 /**
- * Data structure for finalising a revision. This action is final and can't be undone. Once locked the revision can be attached to an environment.
+ * Data structure for finalising a revision. This action is final and can't be
+ * undone. Once locked the revision can be attached to an environment.
  */
 export interface FinaliseIngestEndpointRevisionInput {
   ingest_endpoint_revision_id: string;
@@ -745,7 +748,9 @@ export interface FinaliseRevisionInput {
 }
 
 /**
- * BigQuery stream configuration required a Google Cloud Services account to be setup and configured. PLease follow our guide and configure this properly before attempting to use this service.
+ * BigQuery stream configuration required a Google Cloud Services account to be
+ * setup and configured. PLease follow our guide and configure this properly before
+ * attempting to use this service.
  */
 export interface GCBigQueryStreamConfig {
   service_account_json: S8JSON;
@@ -767,7 +772,9 @@ export interface GlobalActionGroupDistributionUnlinkInput {
 }
 
 /**
- * Data structure for creating new data maps and linking this directly the the revision. To add a child data map, this will need to be attached directly to the parent. Please see `IngestEndpointDataMap`.
+ * Data structure for creating new data maps and linking this directly the the
+ * revision. To add a child data map, this will need to be attached directly to the
+ * parent. Please see `IngestEndpointDataMap`.
  */
 export interface IngestEndpointAddIngestEndpointDataMapsInput {
   ingest_endpoint_revision_id: string;
@@ -812,14 +819,20 @@ export interface IngestEndpointDataMapValidationInput {
 }
 
 /**
- * Data structure for deleting an existing `IngestEndpoint`. It will remove all child entities, however no attempt will be made to clean any data from your storage engines / streams that are linked at the environment level. There is no flag supposed to clean up data in your services.
+ * Data structure for deleting an existing `IngestEndpoint`. It will remove all
+ * child entities, however no attempt will be made to clean any data from your
+ * storage engines / streams that are linked at the environment level. There is no
+ * flag supposed to clean up data in your services.
  */
 export interface IngestEndpointDeleteInput {
   ingest_endpoint_id: string;
 }
 
 /**
- * Multiple deployments can be configured here, the same `IngestEndpoint` can be configured to work with different engines and adapted to your own specific use cases. A storage engine must be provided however to successfully create and configure and new environment.
+ * Multiple deployments can be configured here, the same `IngestEndpoint` can be
+ * configured to work with different engines and adapted to your own specific use
+ * cases. A storage engine must be provided however to successfully create and
+ * configure and new environment.
  */
 export interface IngestEndpointEnvironmentCreateInput {
   ingest_endpoint_id: string;
@@ -835,19 +848,24 @@ export interface IngestEndpointEnvironmentCreateInput {
 }
 
 /**
- * Deleting an environment will remove the deployment permanently. It will not delete the information from your storage/stream engines however. We will make no attempt to clean and data from your cloud services.
+ * Deleting an environment will remove the deployment permanently. It will not
+ * delete the information from your storage/stream engines however. We will make no
+ * attempt to clean and data from your cloud services.
  */
 export interface IngestEndpointEnvironmentDeleteInput {
   ingest_endpoint_environment_id: string;
 }
 
 /**
- * We do not currently allow changes to a storage engine to be made, doing so could cause a number of potential issues. If you find yourself requiring any assistance, please contact us and we'll do our best to support your setup issues.
+ * We do not currently allow changes to a storage engine to be made, doing so could
+ * cause a number of potential issues. If you find yourself requiring any
+ * assistance, please contact us and we'll do our best to support your setup issues.
  */
 export interface IngestEndpointEnvironmentUpdateInput {
   ingest_endpoint_environment_id: string;
-  ingest_endpoint_revision_id: string;
+  ingest_endpoint_revision_id?: string | null;
   name?: string | null;
+  custom_domain?: string | null;
   cert_pem?: string | null;
   key_pem?: string | null;
   aws_storage_config?: AWSStorageConfig | null;

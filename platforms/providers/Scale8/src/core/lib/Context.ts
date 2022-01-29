@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 declare const S8_UI_SERVER_REPLACE: string | undefined;
 
 export default class Context {

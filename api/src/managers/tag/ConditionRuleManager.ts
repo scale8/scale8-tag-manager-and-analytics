@@ -3,7 +3,7 @@ import { injectable } from 'inversify';
 import { gql } from 'apollo-server-express';
 import ConditionRule from '../../mongo/models/tag/ConditionRule';
 import CTX from '../../gql/ctx/CTX';
-import { ObjectId, ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import PlatformDataMap from '../../mongo/models/tag/PlatformDataMap';
 import PlatformDataContainer from '../../mongo/models/tag/PlatformDataContainer';
 import Revision from '../../mongo/models/tag/Revision';
@@ -218,7 +218,7 @@ export default class ConditionRuleManager extends Manager<ConditionRule> {
     protected gqlExtendedQueryResolvers = {
         getConditionRule: async (parent: any, args: any, ctx: CTX) => {
             const conditionRule = await this.repoFactory(ConditionRule).findByIdThrows(
-                new ObjectID(args.id),
+                new ObjectId(args.id),
                 userMessages.conditionFailed,
             );
             return await this.orgAuth.asUserWithViewAccess(ctx, conditionRule.orgId, async () =>
@@ -323,7 +323,7 @@ export default class ConditionRuleManager extends Manager<ConditionRule> {
                 const platformDataContainer = await this.repoFactory(
                     PlatformDataContainer,
                 ).findByIdThrows(
-                    new ObjectID(data.platform_data_container_id),
+                    new ObjectId(data.platform_data_container_id),
                     userMessages.dataMapFailed,
                 );
 
@@ -384,7 +384,7 @@ export default class ConditionRuleManager extends Manager<ConditionRule> {
         ConditionRule: {
             match: async (parent: any, args: any, ctx: CTX) => {
                 const conditionRule = await this.repoFactory(ConditionRule).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.conditionFailed,
                 );
                 return this.orgAuth.asUserWithViewAccess(ctx, conditionRule.orgId, async () => {
@@ -402,7 +402,7 @@ export default class ConditionRuleManager extends Manager<ConditionRule> {
             },
             platform_data_container: async (parent: any, args: any, ctx: CTX) => {
                 const conditionRule = await this.repoFactory(ConditionRule).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.conditionFailed,
                 );
                 const platformDataContainer = await this.repoFactory(
@@ -434,7 +434,7 @@ export default class ConditionRuleManager extends Manager<ConditionRule> {
     private async getMatch(matchId?: string, match?: string): Promise<string | PlatformDataMap> {
         if (matchId !== undefined) {
             return await this.repoFactory(PlatformDataMap).findByIdThrows(
-                new ObjectID(matchId),
+                new ObjectId(matchId),
                 userMessages.dataMapFailed,
             );
         } else if (typeof match === 'string') {
@@ -446,7 +446,7 @@ export default class ConditionRuleManager extends Manager<ConditionRule> {
 
     private async getValidPlatformDataMapIdsFromPlatformDataContainer(
         platformDataContainer: PlatformDataContainer,
-    ): Promise<ObjectID[]> {
+    ): Promise<ObjectId[]> {
         const getAllPlatformDataMaps = async (
             parent: PlatformDataMap,
         ): Promise<PlatformDataMap[]> => {

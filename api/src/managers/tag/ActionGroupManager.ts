@@ -3,7 +3,7 @@ import { injectable } from 'inversify';
 import { gql } from 'apollo-server-express';
 import ActionGroup from '../../mongo/models/tag/ActionGroup';
 import CTX from '../../gql/ctx/CTX';
-import { ObjectId, ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import Action from '../../mongo/models/tag/Action';
 import ActionGroupDistribution from '../../mongo/models/tag/ActionGroupDistribution';
 import Revision from '../../mongo/models/tag/Revision';
@@ -186,7 +186,7 @@ export default class ActionGroupManager extends Manager<ActionGroup> {
     protected gqlExtendedQueryResolvers = {
         getActionGroup: async (parent: any, args: any, ctx: CTX) => {
             const actionGroup = await this.repoFactory(ActionGroup).findByIdThrows(
-                new ObjectID(args.id),
+                new ObjectId(args.id),
                 userMessages.actionGroupFailed,
             );
             return await this.orgAuth.asUserWithViewAccess(ctx, actionGroup.orgId, async () =>
@@ -399,7 +399,7 @@ export default class ActionGroupManager extends Manager<ActionGroup> {
         ActionGroup: {
             actions: async (parent: any, args: any, ctx: CTX) => {
                 const actionGroup = await this.repoFactory(ActionGroup).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.actionGroupFailed,
                 );
                 return this.orgAuth.asUserWithViewAccess(ctx, actionGroup.orgId, async () =>

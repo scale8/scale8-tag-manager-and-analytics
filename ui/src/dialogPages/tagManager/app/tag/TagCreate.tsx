@@ -99,4 +99,4 @@ const TagCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
     return <DialogForm<TagValues, TagFormProps, CreateTagResult> {...tagCreateProps} />;
 };
 
-export { TagCreate };
+export default TagCreate;

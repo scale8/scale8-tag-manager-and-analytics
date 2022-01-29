@@ -15,8 +15,8 @@ export type InfoProps = {
 
 const InfoButton: FC<InfoProps> = (props: InfoProps) => {
     const { templateInteractions } = useLoggedInState();
-    const { sectionHistory } = templateInteractions;
-    const navigationColor = navigationColorFromSectionLocator(sectionHistory.current);
+    const { section } = templateInteractions;
+    const navigationColor = navigationColorFromSectionLocator(section);
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 

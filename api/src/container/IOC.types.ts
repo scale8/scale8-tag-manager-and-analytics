@@ -7,6 +7,10 @@ const TYPES = {
     BackendEmail: Symbol.for("<BackendEmail>"),
     BackendConfig: Symbol.for("<BackendConfig>"),
 
+    // specific environment classes
+    EnvironmentConfig: Symbol.for("<EnvironmentConfig>"),
+    AwsKeyStoreConfig: Symbol.for("<AwsKeyStoreConfig>"),
+
     // specific storage classes
     AmazonS3Storage: Symbol.for("<AmazonS3Storage>"),
     GoogleCloudStorage: Symbol.for("<GoogleCloudStorage>"),
@@ -114,8 +118,6 @@ const TYPES = {
     TypeDefRegister: Symbol.for("<TypeDefRegister>"),
     // logger
     ConsoleLogger: Symbol.for("<ConsoleLogger>"),
-    // configuration
-    EnvironmentConfig: Symbol.for("<EnvironmentConfig>"),
     // factories
     RepoFromRepoNameFactory: Symbol.for("<RepoFromRepoNameFactory>"),
     ModelFromRepoFactory: Symbol.for("<ModelFromRepoFactory>"),

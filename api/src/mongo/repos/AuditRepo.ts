@@ -3,14 +3,14 @@ import { injectable } from 'inversify';
 import Audit from '../models/Audit';
 
 import DataError from '../../errors/DataError';
-import { IndexSpecification } from 'mongodb';
+import { IndexDescription } from 'mongodb';
 import userMessages from '../../errors/UserMessages';
 
 @injectable()
 export default class AuditRepo extends Repo<Audit> {
     protected readonly EXPIRES_AFTER = 86400 * 365;
 
-    protected readonly indexes: IndexSpecification[] = [
+    protected readonly indexes: IndexDescription[] = [
         {
             background: false,
             key: {

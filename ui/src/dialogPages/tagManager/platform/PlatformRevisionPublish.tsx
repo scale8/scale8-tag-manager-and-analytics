@@ -27,4 +27,4 @@ const PlatformRevisionPublish: FC<DialogPageProps> = (props: DialogPageProps) =>
     );
 };
 
-export { PlatformRevisionPublish };
+export default PlatformRevisionPublish;

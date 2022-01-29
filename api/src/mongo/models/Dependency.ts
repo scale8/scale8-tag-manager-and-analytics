@@ -1,22 +1,22 @@
 import Model from '../abstractions/Model';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import Field from '../decorators/Field';
 
 export default class Dependency extends Model {
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
     })
-    private readonly _model_id!: ObjectID;
+    private readonly _model_id!: ObjectId;
 
     @Field<string>({
         required: true,
     })
     private readonly _model_name: string;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
     })
-    private readonly _depends_on_model_id: ObjectID;
+    private readonly _depends_on_model_id: ObjectId;
 
     @Field<string>({
         required: true,
@@ -24,9 +24,9 @@ export default class Dependency extends Model {
     private readonly _depends_on_model_name: string;
 
     constructor(
-        modelId: ObjectID,
+        modelId: ObjectId,
         modelName: string,
-        dependsOnModelId: ObjectID,
+        dependsOnModelId: ObjectId,
         dependsOnModelName: string,
     ) {
         super();
@@ -36,7 +36,7 @@ export default class Dependency extends Model {
         this._depends_on_model_name = dependsOnModelName;
     }
 
-    get modelId(): ObjectID {
+    get modelId(): ObjectId {
         return this._model_id;
     }
 
@@ -44,7 +44,7 @@ export default class Dependency extends Model {
         return this._model_name;
     }
 
-    get dependsOnModelId(): ObjectID {
+    get dependsOnModelId(): ObjectId {
         return this._depends_on_model_id;
     }
 

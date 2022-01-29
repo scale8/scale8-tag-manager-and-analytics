@@ -6,7 +6,7 @@ import LoggedUserQuery from '../../gql/queries/LoggedUserQuery';
 import ResetAPITokenQuery from '../../gql/mutations/ResetAPITokenQuery';
 import { ResetAPITokenValues } from '../../gql/generated/ResetAPITokenValues';
 import { DialogPageProps } from '../../types/DialogTypes';
-import { queryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
 import { logError } from '../../utils/logUtils';
 
 type APITokenAfterLoadProps = DialogPageProps & {
@@ -57,7 +57,7 @@ const APITokenAfterLoad: FC<APITokenAfterLoadProps> = (props: APITokenAfterLoadP
 };
 
 const APIToken: FC<DialogPageProps> = (props: DialogPageProps) => {
-    return queryLoaderAndError<LoggedUser>(
+    return QueryLoaderAndError<LoggedUser>(
         false,
         useQuery<LoggedUser>(LoggedUserQuery),
         (data: LoggedUser, valuesRefresh: (mustResetCache: boolean) => void) => {

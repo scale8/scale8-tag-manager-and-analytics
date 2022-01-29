@@ -1,7 +1,7 @@
 import { ReactElement, ReactNode, useEffect } from 'react';
 import { BreadcrumbButtonProps } from '../../utils/BreadcrumbButtonsUtils';
 import { QueryResult } from '@apollo/client/react/types/types';
-import { SideMenuButtonProps } from '../../components/molecules/SideMenuButton';
+import { PageMenuButtonProps } from '../../components/molecules/SideMenuButton';
 import { RowAction } from '../../components/molecules/S8Table/S8TableTypes';
 import {
     CurrentOrgPermissions,
@@ -19,13 +19,18 @@ import SideMenu from '../../components/organisms/SideMenu';
 import Loader from '../../components/organisms/Loader';
 import GQLError from '../../components/atoms/GqlError';
 
+export type SectionItem = {
+    id: string;
+    name: string;
+};
+
 export type SectionProps<Q> = {
     children?: ReactNode;
     sectionKey: symbol;
     queryResult: QueryResult<Q>;
     initContext?: (data: Q) => void;
-    buildButtonsProps: (data: Q) => BreadcrumbButtonProps[];
-    buildMenuItemsProps: (orgPermissions: CurrentOrgPermissions, data: Q) => SideMenuButtonProps[];
+    buildButtonsProps: (data: Q, orgPermissions: CurrentOrgPermissions) => BreadcrumbButtonProps[];
+    buildMenuItemsProps: (data: Q, orgPermissions: CurrentOrgPermissions) => PageMenuButtonProps[];
     extractOrgUserDetails: (data: Q) => GqlOrgUserState;
     buildBreadcrumbActions?: (data: Q) => RowAction<any>[];
     requireValidTagManagerAccount?: boolean;
@@ -53,12 +58,8 @@ const Section = <Q extends { [key: string]: any }>(props: SectionProps<Q>): Reac
 
     const { templateInteractions, orgUserState, dispatchOrgUserAction, teleport } =
         useLoggedInState();
-    const {
-        setSnackbarError,
-        refreshCurrentSection,
-        setRefreshCurrentSection,
-        dispatchSectionAction,
-    } = templateInteractions;
+    const { setSnackbarError, refreshCurrentSection, setRefreshCurrentSection, setSection } =
+        templateInteractions;
 
     const { loading, error, data } = queryResult;
 
@@ -72,10 +73,7 @@ const Section = <Q extends { [key: string]: any }>(props: SectionProps<Q>): Reac
     };
 
     useEffect(() => {
-        dispatchSectionAction({
-            type: 'section',
-            payload: sectionKey,
-        });
+        setSection(sectionKey);
     }, [sectionKey]);
 
     useEffect(() => {
@@ -138,10 +136,9 @@ const Section = <Q extends { [key: string]: any }>(props: SectionProps<Q>): Reac
         }
     }, [initContext, data]);
 
-    const buttonsProps = data ? buildButtonsProps(data) : [];
-    const menuItemsProps = data
-        ? buildMenuItemsProps(extractPermissionsFromOrgUser(orgUserState), data)
-        : [];
+    const orgPermissions = extractPermissionsFromOrgUser(orgUserState);
+    const buttonsProps = data ? buildButtonsProps(data, orgPermissions) : [];
+    const menuItemsProps = data ? buildMenuItemsProps(data, orgPermissions) : [];
     const breadcrumbActions =
         !data || buildBreadcrumbActions === undefined ? [] : buildBreadcrumbActions(data);
 

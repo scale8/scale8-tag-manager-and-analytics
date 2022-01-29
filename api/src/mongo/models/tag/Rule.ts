@@ -1,6 +1,6 @@
 import Model from '../../abstractions/Model';
 import Field from '../../decorators/Field';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import Revision from './Revision';
 import TriggerRepo from '../../repos/tag/TriggerRepo';
 import Trigger from './Trigger';
@@ -11,15 +11,15 @@ import ScalarContainer from '../../custom/ScalarContainer';
 import userMessages from '../../../errors/UserMessages';
 
 export default class Rule extends Model {
-    public getOrgEntityId(): ObjectID {
+    public getOrgEntityId(): ObjectId {
         return this.orgId;
     }
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'org_id',
     })
-    private readonly _org_id!: ObjectID;
+    private readonly _org_id!: ObjectId;
 
     @Field<string>({
         required: true,
@@ -28,44 +28,44 @@ export default class Rule extends Model {
     })
     private _name: string;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'tag_manager_account_id',
     })
-    private readonly _tag_manager_account_id!: ObjectID;
+    private readonly _tag_manager_account_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'app_id',
     })
-    private readonly _app_id!: ObjectID;
+    private readonly _app_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'revision_id',
     })
-    private readonly _revision_id!: ObjectID;
+    private readonly _revision_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         repository: TriggerRepo, //we want custom triggers to clone
         exposeToGQLAs: 'custom_trigger_id',
         exposeToConfig: true,
     })
-    private readonly _custom_trigger_id?: ObjectID;
+    private readonly _custom_trigger_id?: ObjectId;
 
     //we don't want global triggers to clone except on a revision...
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         exposeToGQLAs: 'global_trigger_id',
         exposeToConfig: true,
     })
     private readonly _global_trigger_id?: string; //we have to use the persisting id here
 
-    @Field<ObjectID[]>({
+    @Field<ObjectId[]>({
         repository: ActionGroupDistributionRepo, //we want custom action group distributions to clone
         exposeToGQLAs: 'custom_action_group_distribution_ids',
         exposeToConfig: true,
     })
-    private _custom_action_group_distribution_ids: ObjectID[] = [];
+    private _custom_action_group_distribution_ids: ObjectId[] = [];
 
     //we don't want global action group distributions to clone except on a revision...
     @Field<ScalarContainer<string>>({
@@ -123,7 +123,7 @@ export default class Rule extends Model {
         this._min_repeat_interval = minRepeatInterval;
     }
 
-    get orgId(): ObjectID {
+    get orgId(): ObjectId {
         return this._org_id;
     }
 
@@ -143,19 +143,19 @@ export default class Rule extends Model {
         this._min_repeat_interval = value;
     }
 
-    get tagManagerAccountId(): ObjectID {
+    get tagManagerAccountId(): ObjectId {
         return this._tag_manager_account_id;
     }
 
-    get appId(): ObjectID {
+    get appId(): ObjectId {
         return this._app_id;
     }
 
-    get revisionId(): ObjectID {
+    get revisionId(): ObjectId {
         return this._revision_id;
     }
 
-    get triggerId(): ObjectID | string {
+    get triggerId(): ObjectId | string {
         if (this._global_trigger_id !== undefined) {
             return this._global_trigger_id;
         } else if (this._custom_trigger_id !== undefined) {
@@ -165,7 +165,7 @@ export default class Rule extends Model {
         }
     }
 
-    get actionGroupDistributionIds(): (ObjectID | string)[] {
+    get actionGroupDistributionIds(): (ObjectId | string)[] {
         //return preserving insertion order...
         const global = this._global_action_group_distribution_ids.arr;
         const custom = this._custom_action_group_distribution_ids;

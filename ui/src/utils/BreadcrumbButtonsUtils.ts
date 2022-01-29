@@ -32,15 +32,18 @@ import ServiceIcon from '../components/atoms/Icons/ServiceIcon';
 import AdminIcon from '../components/atoms/Icons/AdminIcon';
 import TriggerIcon from '../components/atoms/Icons/TriggerIcon';
 import { NextRouter } from 'next/router';
+import { PageMenuButtonProps } from '../components/molecules/SideMenuButton';
 
 export type BreadcrumbAction = {
     text: string;
+    icon?: FC<SvgIconProps>;
     action: () => void;
 };
 
 export type BreadcrumbButtonProps = {
-    elementIcon: FC<SvgIconProps>;
+    elementIcon?: FC<SvgIconProps>;
     elementText: string;
+    icon?: FC<SvgIconProps>;
     text: string;
     changeText: string;
     list: BreadcrumbAction[];
@@ -61,7 +64,8 @@ const buildButtonPropsFromActions = (
     navigateTo: (id: string) => void,
     elementText: string,
     changeText: string,
-    elementIcon: FC<SvgIconProps>,
+    elementIcon?: FC<SvgIconProps>,
+    icon?: FC<SvgIconProps>,
 ): BreadcrumbButtonProps => {
     return {
         text: name,
@@ -71,6 +75,7 @@ const buildButtonPropsFromActions = (
         elementText,
         changeText,
         elementIcon,
+        icon,
     };
 };
 
@@ -85,7 +90,8 @@ const buildButtonProps = (
     navigateTo: (id: string) => void,
     elementText: string,
     changeText: string,
-    elementIcon: FC<SvgIconProps>,
+    elementIcon?: FC<SvgIconProps>,
+    icon?: FC<SvgIconProps>,
 ): BreadcrumbButtonProps => {
     const other = all.filter((_) => _.id !== id);
     const actions = other.map((_) => ({
@@ -102,6 +108,7 @@ const buildButtonProps = (
         elementText,
         changeText,
         elementIcon,
+        icon,
     );
 };
 
@@ -496,5 +503,39 @@ export const buildIngestEndpointRevisionButtonProps = (
         'Revision',
         'Change Revision',
         RevisionIcon,
+    );
+};
+
+export const buildTabButtonProps = (
+    router: NextRouter,
+    menuEntries: PageMenuButtonProps[],
+    forceCurrentEntry?: string,
+): BreadcrumbButtonProps => {
+    const actions: BreadcrumbAction[] = menuEntries
+        .filter((_) => !_.disabled)
+        .map((_) => ({
+            text: _.label,
+            action: () => router.push(_.link).then(),
+            icon: _.icon,
+        }));
+
+    const routerEntry = menuEntries.find((_) => router.asPath === _.link);
+
+    const forcedCurrentEntry = menuEntries.find((_) => {
+        return (forceCurrentEntry ?? '') === _.label;
+    });
+
+    return buildButtonPropsFromActions(
+        actions,
+        '',
+        forcedCurrentEntry?.label ?? routerEntry?.label ?? '...',
+        forceCurrentEntry === undefined,
+        () => {
+            if (forcedCurrentEntry !== undefined) router.push(forcedCurrentEntry.link).then();
+        },
+        'Tab',
+        'Change Tab',
+        undefined,
+        forcedCurrentEntry?.icon ?? routerEntry?.icon,
     );
 };

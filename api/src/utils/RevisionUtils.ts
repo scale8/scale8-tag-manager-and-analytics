@@ -8,7 +8,7 @@ import IngestEndpointRevisionRepo from '../mongo/repos/data/IngestEndpointRevisi
 import DataError from '../errors/DataError';
 import userMessages from '../errors/UserMessages';
 import { duplicateModelWithSession } from './DuplicateUtils';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import container from '../container/IOC.config';
 import RepoFromModelFactory from '../container/factoryTypes/RepoFromModelFactory';
 import TYPES from '../container/IOC.types';
@@ -41,10 +41,10 @@ export const duplicateRevision = async <
     return duplicateModelWithSession(actor, oldModel, getRepository());
 };
 
-export const resolveRevision = async (revision: ObjectID | Revision): Promise<Revision> => {
+export const resolveRevision = async (revision: ObjectId | Revision): Promise<Revision> => {
     const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
 
-    return revision instanceof ObjectID
+    return revision instanceof ObjectId
         ? await repoFactory(Revision).findByIdThrows(revision, userMessages.revisionFailed)
         : revision;
 };

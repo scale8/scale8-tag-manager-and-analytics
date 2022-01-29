@@ -142,4 +142,4 @@ const AppCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
     return <DialogForm<AppValues, AppFormProps, CreateApp> {...appCreateProps} />;
 };
 
-export { AppCreate };
+export default AppCreate;

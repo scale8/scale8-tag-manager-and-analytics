@@ -87,7 +87,7 @@ const SignUpForm: FC<SignUpFormProps> = (props: SignUpFormProps) => {
             isPrepare={false}
         >
             {props.gqlError && (
-                <Box mb={2} width="100%">
+                <Box my={2} width="100%">
                     <FormError error={props.gqlError.message} />
                 </Box>
             )}
@@ -121,10 +121,10 @@ const SignUpForm: FC<SignUpFormProps> = (props: SignUpFormProps) => {
                         fullWidth
                     />
                 )}
-                {type === 'tag-manager' && (
+                {type !== 'invite' && (
                     <ControlledTextInput
-                        name="domain"
-                        label="Domain"
+                        name="orgName"
+                        label="Organization name"
                         formProps={props}
                         variant="outlined"
                         margin="normal"
@@ -132,10 +132,10 @@ const SignUpForm: FC<SignUpFormProps> = (props: SignUpFormProps) => {
                         fullWidth
                     />
                 )}
-                {type === 'data-manager' && (
+                {type === 'tag-manager' && (
                     <ControlledTextInput
-                        name="orgName"
-                        label="Organization name"
+                        name="domain"
+                        label="Domain"
                         formProps={props}
                         variant="outlined"
                         margin="normal"
@@ -191,8 +191,12 @@ const SignUpForm: FC<SignUpFormProps> = (props: SignUpFormProps) => {
                 <FormControl error={errors['agree'] !== undefined}>
                     <FormGroup>
                         <FormControlLabel
-                            sx={{ color: (theme) => theme.palette.error.main }}
-                            // error={errors['agree']}
+                            sx={{
+                                color: (theme) =>
+                                    errors['agree'] === undefined
+                                        ? undefined
+                                        : theme.palette.error.main,
+                            }}
                             control={
                                 <Checkbox
                                     checked={values.agree}

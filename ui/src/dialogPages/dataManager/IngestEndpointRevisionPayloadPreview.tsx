@@ -7,12 +7,12 @@ import { DataMapsPayload } from '../../components/organisms/DataMapsPayloadBuild
 import CopyBlock from '../../components/atoms/CopyBlock';
 import { IngestEndpointDataMap } from '../../types/IngestEndpointsTypes';
 import { DialogPageProps } from '../../types/DialogTypes';
-import { queryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
 
 const IngestEndpointRevisionPayloadPreview: FC<DialogPageProps> = (props: DialogPageProps) => {
     const [payload, setPayload] = useState<DataMapsPayload>(null);
 
-    return queryLoaderAndError<IngestEndpointRevisionPayloadPreviewGetData>(
+    return QueryLoaderAndError<IngestEndpointRevisionPayloadPreviewGetData>(
         false,
         useQuery<IngestEndpointRevisionPayloadPreviewGetData>(
             IngestEndpointRevisionPayloadPreviewGetQuery,
@@ -39,4 +39,4 @@ const IngestEndpointRevisionPayloadPreview: FC<DialogPageProps> = (props: Dialog
     );
 };
 
-export { IngestEndpointRevisionPayloadPreview };
+export default IngestEndpointRevisionPayloadPreview;

@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 import {
     Box,
     Button,
@@ -17,6 +17,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useRouter } from 'next/router';
 import { toDataManager, toIngestEndpoint } from '../../../utils/NavigationPaths';
 import { SxProps } from '@mui/system';
+import { useSparkLineStyle } from '../../../hooks/useSparkLineStyle';
 
 export type AccountSectionAppTableProps = {
     endpoints: {
@@ -33,29 +34,32 @@ const AccountSectionEndpointTable: FC<AccountSectionAppTableProps> = (
 ) => {
     const router = useRouter();
 
+    const sparkLineStyle = useSparkLineStyle();
+
     const { endpoints, dmId } = props;
 
     if (endpoints.length === 0) {
         return (
-            <Button
-                variant="contained"
-                onClick={() => {
-                    router.push(toDataManager({ id: dmId })).then();
-                }}
-                sx={{
-                    color: '#ffffff',
-                    backgroundColor: (theme) => theme.palette.tagManagerColor.main,
-                    width: '100%',
-                    '&:hover': {
+            <Box display="flex" alignItems="center">
+                <Box flex={1}>There are no endpoints this organization</Box>
+                <Button
+                    variant="contained"
+                    onClick={() => {
+                        router.push(toDataManager({ id: dmId })).then();
+                    }}
+                    sx={{
                         color: '#ffffff',
-                        backgroundColor: (theme) => theme.palette.tagManagerColor.main,
-                    },
-                }}
-                color="inherit"
-                disableElevation
-            >
-                Manage Endpoints
-            </Button>
+                        backgroundColor: (theme) => theme.palette.dataManagerColor.main,
+                        '&:hover': {
+                            color: '#ffffff',
+                            backgroundColor: (theme) => theme.palette.dataManagerColor.main,
+                        },
+                    }}
+                    color="inherit"
+                >
+                    Manage Endpoints
+                </Button>
+            </Box>
         );
     }
 
@@ -90,18 +94,14 @@ const AccountSectionEndpointTable: FC<AccountSectionAppTableProps> = (
                             <TableCell sx={contentCell}>
                                 <Box width={70}>
                                     <Sparklines data={endpoint.requests} width={70} height={20}>
-                                        <SparklinesLine
-                                            style={useMemo(() => ({ fill: 'none' }), [])}
-                                        />
+                                        <SparklinesLine style={sparkLineStyle} />
                                     </Sparklines>
                                 </Box>
                             </TableCell>
                             <TableCell sx={contentCell}>
                                 <Box width={70}>
                                     <Sparklines data={endpoint.bytes} width={70} height={20}>
-                                        <SparklinesLine
-                                            style={useMemo(() => ({ fill: 'none' }), [])}
-                                        />
+                                        <SparklinesLine style={sparkLineStyle} />
                                     </Sparklines>
                                 </Box>
                             </TableCell>

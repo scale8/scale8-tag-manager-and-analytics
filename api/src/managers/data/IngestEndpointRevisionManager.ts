@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 import Manager from '../../abstractions/Manager';
 import { gql } from 'apollo-server-express';
 import CTX from '../../gql/ctx/CTX';
-import { ObjectId, ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import GQLError from '../../errors/GQLError';
 import IngestEndpointRevision from '../../mongo/models/data/IngestEndpointRevision';
 import IngestEndpointDataMap from '../../mongo/models/data/IngestEndpointDataMap';
@@ -268,7 +268,7 @@ export default class IngestEndpointRevisionManager extends Manager<IngestEndpoin
      */
     protected gqlExtendedQueryResolvers = {
         getIngestEndpointRevision: async (parent: any, args: any, ctx: CTX) => {
-            const id = new ObjectID(args.id);
+            const id = new ObjectId(args.id);
             const revision = await this.repoFactory(IngestEndpointRevision).findByIdThrows(
                 id,
                 userMessages.revisionFailed,
@@ -279,11 +279,11 @@ export default class IngestEndpointRevisionManager extends Manager<IngestEndpoin
         },
         ingestEndpointRevisionDifference: async (parent: any, args: any, ctx: CTX) => {
             const left = await this.repoFactory(IngestEndpointRevision).findByIdThrows(
-                new ObjectID(args.leftRevisionId),
+                new ObjectId(args.leftRevisionId),
                 userMessages.revisionFailed,
             );
             const right = await this.repoFactory(IngestEndpointRevision).findByIdThrows(
-                new ObjectID(args.rightRevisionId),
+                new ObjectId(args.rightRevisionId),
                 userMessages.revisionFailed,
             );
             if (left.dataManagerAccountId.toString() !== right.dataManagerAccountId.toString()) {
@@ -304,7 +304,7 @@ export default class IngestEndpointRevisionManager extends Manager<IngestEndpoin
         IngestEndpointRevision: {
             ingest_endpoint_data_maps: async (parent: any, args: any, ctx: CTX) => {
                 const revision = await this.repoFactory(IngestEndpointRevision).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.revisionFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, revision.orgId, async () =>
@@ -317,7 +317,7 @@ export default class IngestEndpointRevisionManager extends Manager<IngestEndpoin
             },
             ingest_endpoint: async (parent: any, args: any, ctx: CTX) => {
                 const ingestEndpoint = await this.repoFactory(IngestEndpoint).findByIdThrows(
-                    new ObjectID(parent.ingest_endpoint_id),
+                    new ObjectId(parent.ingest_endpoint_id),
                     userMessages.ingestEndpointFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(
@@ -328,7 +328,7 @@ export default class IngestEndpointRevisionManager extends Manager<IngestEndpoin
             },
             request_stats: async (parent: any, args: any, ctx: CTX) => {
                 const revision = await this.repoFactory(IngestEndpointRevision).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.revisionFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, revision.orgId, async () => {
@@ -352,7 +352,7 @@ export default class IngestEndpointRevisionManager extends Manager<IngestEndpoin
             },
             byte_stats: async (parent: any, args: any, ctx: CTX) => {
                 const revision = await this.repoFactory(IngestEndpointRevision).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.revisionFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, revision.orgId, async () => {

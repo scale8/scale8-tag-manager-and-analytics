@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 import { VarType, InputType, TypeIcon, ValidationType, StorageProvider } from "./globalTypes";
@@ -116,7 +115,8 @@ export interface UpdateActionGetData_getAction_platform_action_platform_data_map
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -160,7 +160,8 @@ export interface UpdateActionGetData_getAction_platform_action_platform_data_map
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -176,7 +177,8 @@ export interface UpdateActionGetData_getAction_platform_action_platform_data_map
    */
   default_value: UpdateActionGetData_getAction_platform_action_platform_data_maps_child_platform_data_maps_default_value | null;
   /**
-   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These contain nested `PlatformDataMap` in a document or array document structure respectivly
+   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These
+   * contain nested `PlatformDataMap` in a document or array document structure respectivly
    */
   child_platform_data_maps: UpdateActionGetData_getAction_platform_action_platform_data_maps_child_platform_data_maps_child_platform_data_maps[];
 }
@@ -208,7 +210,8 @@ export interface UpdateActionGetData_getAction_platform_action_platform_data_map
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -224,7 +227,8 @@ export interface UpdateActionGetData_getAction_platform_action_platform_data_map
    */
   default_value: UpdateActionGetData_getAction_platform_action_platform_data_maps_default_value | null;
   /**
-   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These contain nested `PlatformDataMap` in a document or array document structure respectivly
+   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These
+   * contain nested `PlatformDataMap` in a document or array document structure respectivly
    */
   child_platform_data_maps: UpdateActionGetData_getAction_platform_action_platform_data_maps_child_platform_data_maps[];
 }
@@ -248,7 +252,8 @@ export interface UpdateActionGetData_getAction_platform_action {
    */
   platform: UpdateActionGetData_getAction_platform_action_platform;
   /**
-   * List of `PlatformDataMap`s that create a document style key => value map. This can be directly accessed by the action when called.
+   * List of `PlatformDataMap`s that create a document style key => value map. This
+   * can be directly accessed by the action when called.
    */
   platform_data_maps: UpdateActionGetData_getAction_platform_action_platform_data_maps[];
 }
@@ -710,7 +715,8 @@ export interface UpdateActionGetData_getActionGroupDistribution_revision_app_pla
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -754,7 +760,8 @@ export interface UpdateActionGetData_getActionGroupDistribution_revision_app_pla
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -770,7 +777,8 @@ export interface UpdateActionGetData_getActionGroupDistribution_revision_app_pla
    */
   default_value: UpdateActionGetData_getActionGroupDistribution_revision_app_platform_revisions_platform_revision_platform_data_containers_platform_data_maps_child_platform_data_maps_default_value | null;
   /**
-   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These contain nested `PlatformDataMap` in a document or array document structure respectivly
+   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These
+   * contain nested `PlatformDataMap` in a document or array document structure respectivly
    */
   child_platform_data_maps: UpdateActionGetData_getActionGroupDistribution_revision_app_platform_revisions_platform_revision_platform_data_containers_platform_data_maps_child_platform_data_maps_child_platform_data_maps[];
 }
@@ -802,7 +810,8 @@ export interface UpdateActionGetData_getActionGroupDistribution_revision_app_pla
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -818,7 +827,8 @@ export interface UpdateActionGetData_getActionGroupDistribution_revision_app_pla
    */
   default_value: UpdateActionGetData_getActionGroupDistribution_revision_app_platform_revisions_platform_revision_platform_data_containers_platform_data_maps_default_value | null;
   /**
-   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These contain nested `PlatformDataMap` in a document or array document structure respectivly
+   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These
+   * contain nested `PlatformDataMap` in a document or array document structure respectivly
    */
   child_platform_data_maps: UpdateActionGetData_getActionGroupDistribution_revision_app_platform_revisions_platform_revision_platform_data_containers_platform_data_maps_child_platform_data_maps[];
 }
@@ -950,7 +960,8 @@ export interface UpdateActionGetData_getActionGroupDistribution_revision_app_pla
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -994,7 +1005,8 @@ export interface UpdateActionGetData_getActionGroupDistribution_revision_app_pla
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -1010,7 +1022,8 @@ export interface UpdateActionGetData_getActionGroupDistribution_revision_app_pla
    */
   default_value: UpdateActionGetData_getActionGroupDistribution_revision_app_platform_revisions_platform_revision_platform_actions_platform_data_maps_child_platform_data_maps_default_value | null;
   /**
-   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These contain nested `PlatformDataMap` in a document or array document structure respectivly
+   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These
+   * contain nested `PlatformDataMap` in a document or array document structure respectivly
    */
   child_platform_data_maps: UpdateActionGetData_getActionGroupDistribution_revision_app_platform_revisions_platform_revision_platform_actions_platform_data_maps_child_platform_data_maps_child_platform_data_maps[];
 }
@@ -1042,7 +1055,8 @@ export interface UpdateActionGetData_getActionGroupDistribution_revision_app_pla
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -1058,7 +1072,8 @@ export interface UpdateActionGetData_getActionGroupDistribution_revision_app_pla
    */
   default_value: UpdateActionGetData_getActionGroupDistribution_revision_app_platform_revisions_platform_revision_platform_actions_platform_data_maps_default_value | null;
   /**
-   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These contain nested `PlatformDataMap` in a document or array document structure respectivly
+   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These
+   * contain nested `PlatformDataMap` in a document or array document structure respectivly
    */
   child_platform_data_maps: UpdateActionGetData_getActionGroupDistribution_revision_app_platform_revisions_platform_revision_platform_actions_platform_data_maps_child_platform_data_maps[];
 }
@@ -1082,7 +1097,8 @@ export interface UpdateActionGetData_getActionGroupDistribution_revision_app_pla
    */
   description: string;
   /**
-   * List of `PlatformDataMap`s that create a document style key => value map. This can be directly accessed by the action when called.
+   * List of `PlatformDataMap`s that create a document style key => value map. This
+   * can be directly accessed by the action when called.
    */
   platform_data_maps: UpdateActionGetData_getActionGroupDistribution_revision_app_platform_revisions_platform_revision_platform_actions_platform_data_maps[];
 }
@@ -1226,7 +1242,8 @@ export interface UpdateActionGetData_getActionGroupDistribution_revision_app_tag
    */
   default_value: UpdateActionGetData_getActionGroupDistribution_revision_app_tag_manager_account_org_data_manager_account_ingest_endpoints_ingest_endpoint_environments_ingest_endpoint_revision_ingest_endpoint_data_maps_child_ingest_endpoint_data_maps_default_value | null;
   /**
-   * If the variable type (see `VarType`) has been specified as an object or array of objects, then this contains the child property definitions
+   * If the variable type (see `VarType`) has been specified as an object or array
+   * of objects, then this contains the child property definitions
    */
   child_ingest_endpoint_data_maps: UpdateActionGetData_getActionGroupDistribution_revision_app_tag_manager_account_org_data_manager_account_ingest_endpoints_ingest_endpoint_environments_ingest_endpoint_revision_ingest_endpoint_data_maps_child_ingest_endpoint_data_maps_child_ingest_endpoint_data_maps[];
 }
@@ -1254,7 +1271,8 @@ export interface UpdateActionGetData_getActionGroupDistribution_revision_app_tag
    */
   default_value: UpdateActionGetData_getActionGroupDistribution_revision_app_tag_manager_account_org_data_manager_account_ingest_endpoints_ingest_endpoint_environments_ingest_endpoint_revision_ingest_endpoint_data_maps_default_value | null;
   /**
-   * If the variable type (see `VarType`) has been specified as an object or array of objects, then this contains the child property definitions
+   * If the variable type (see `VarType`) has been specified as an object or array
+   * of objects, then this contains the child property definitions
    */
   child_ingest_endpoint_data_maps: UpdateActionGetData_getActionGroupDistribution_revision_app_tag_manager_account_org_data_manager_account_ingest_endpoints_ingest_endpoint_environments_ingest_endpoint_revision_ingest_endpoint_data_maps_child_ingest_endpoint_data_maps[];
 }
@@ -1294,7 +1312,9 @@ export interface UpdateActionGetData_getActionGroupDistribution_revision_app_tag
    */
   install_domain: string;
   /**
-   * A hint of the credentials currently in use by the `IngestEndpointEnvironment`. For security reasons we don't enable to full retrival of this information via the API. It does not persist in our database or servers and remains in our vault.
+   * A hint of the credentials currently in use by the `IngestEndpointEnvironment`.
+   * For security reasons we don't enable to full retrival of this information via
+   * the API. It does not persist in our database or servers and remains in our vault.
    */
   config_hint: string;
   /**
@@ -1350,7 +1370,9 @@ export interface UpdateActionGetData_getActionGroupDistribution_revision_app_tag
    */
   id: string;
   /**
-   * A `DataManagerAccount` associated with this `Org`. A Scale8 Data Manager account might not exist yet unless a trial has been requested or product has been subscribed to.
+   * A `DataManagerAccount` associated with this `Org`. A Scale8 Data Manager
+   * account might not exist yet unless a trial has been requested or product has
+   * been subscribed to.
    */
   data_manager_account: UpdateActionGetData_getActionGroupDistribution_revision_app_tag_manager_account_org_data_manager_account | null;
 }

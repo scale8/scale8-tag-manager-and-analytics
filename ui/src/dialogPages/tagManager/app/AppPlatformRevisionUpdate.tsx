@@ -221,4 +221,4 @@ const AppPlatformRevisionUpdate: FC<DialogPageProps> = (props: DialogPageProps) 
     );
 };
 
-export { AppPlatformRevisionUpdate };
+export default AppPlatformRevisionUpdate;

@@ -76,4 +76,4 @@ const GlobalTriggerUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { GlobalTriggerUpdate };
+export default GlobalTriggerUpdate;

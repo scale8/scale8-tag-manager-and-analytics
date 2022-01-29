@@ -21,10 +21,10 @@ const AppAnalyticsPageContent: FC<AppAnalyticsContentProps> = (props: AppAnalyti
             ),
         chartBlock: <AppAnalyticsChart {...props} />,
         listsBlock: [
-            <AppAnalyticsSources {...props} />,
-            <AppAnalyticsPages {...props} />,
-            <AppAnalyticsCountries {...props} />,
-            <AppAnalyticsDevices {...props} />,
+            <AppAnalyticsSources key="AppAnalyticsSources" {...props} />,
+            <AppAnalyticsPages key="AppAnalyticsPages" {...props} />,
+            <AppAnalyticsCountries key="AppAnalyticsCountries" {...props} />,
+            <AppAnalyticsDevices key="AppAnalyticsDevices" {...props} />,
         ],
     };
 

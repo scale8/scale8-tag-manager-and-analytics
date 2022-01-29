@@ -17,4 +17,4 @@ const ExceptionCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { ExceptionCreate };
+export default ExceptionCreate;

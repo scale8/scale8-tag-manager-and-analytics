@@ -1,13 +1,13 @@
+// noinspection JSUnusedLocalSymbols
+
 import 'reflect-metadata';
 import { inject, injectable } from 'inversify';
 import ResolverRegister from './gql/ResolverRegister';
 import TypeDefRegister from './gql/TypeDefRegister';
 import TYPES from './container/IOC.types';
 import { ApolloError, ApolloServer } from 'apollo-server-express';
-import AuthDirective from './gql/directives/AuthDirective';
 import CTX from './gql/ctx/CTX';
 import fs from 'fs';
-import container from './container/IOC.config';
 import Shell from './mongo/database/Shell';
 import express, { Express } from 'express';
 import https from 'https';
@@ -19,12 +19,9 @@ import bodyParser from 'body-parser';
 import { GraphQLError } from 'graphql';
 import { getSessionUser } from './utils/SessionUtils';
 import BaseLogger from './backends/logging/abstractions/BaseLogger';
-import Scale8Setup from './bootstrap/Scale8Setup';
 import BaseConfig from './backends/configuration/abstractions/BaseConfig';
 import { Mode } from './enums/Mode';
-import BaseStorage from './backends/storage/abstractions/BaseStorage';
 
-// noinspection JSUnusedLocalSymbols
 @injectable()
 export default class APIServer {
     protected readonly resolverRegister: ResolverRegister;
@@ -35,7 +32,6 @@ export default class APIServer {
     protected readonly gqlServer: ApolloServer;
     protected readonly routing: Routing;
     protected readonly config: BaseConfig;
-    protected readonly storage: BaseStorage;
 
     protected httpsServer?: https.Server;
     protected httpServer?: http.Server;
@@ -47,7 +43,6 @@ export default class APIServer {
         @inject(TYPES.Shell) shell: Shell,
         @inject(TYPES.Routing) routing: Routing,
         @inject(TYPES.BackendConfig) config: BaseConfig,
-        @inject(TYPES.BackendStorage) storage: BaseStorage,
     ) {
         this.resolverRegister = resolverRegister;
         this.typeDefRegister = typeDefRegister;
@@ -55,7 +50,6 @@ export default class APIServer {
         this.shell = shell;
         this.routing = routing;
         this.config = config;
-        this.storage = storage;
         this.gqlServer = this.getGQLServer();
         this.app = this.getApp();
     }
@@ -101,7 +95,11 @@ export default class APIServer {
         this.routing.fetchPostHandlers().forEach((route) => {
             app.post(route.path, route.handling);
         });
-        this.gqlServer.applyMiddleware({ app });
+
+        (async () => {
+            await this.gqlServer.start();
+            this.gqlServer.applyMiddleware({ app });
+        })();
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         app.use((err: any, req: express.Request, res: express.Response, next: any) => {
@@ -177,9 +175,6 @@ export default class APIServer {
 
         return new ApolloServer({
             typeDefs,
-            schemaDirectives: {
-                auth: AuthDirective,
-            },
             resolvers,
             formatError: (err: GraphQLError) => {
                 const path =
@@ -193,14 +188,14 @@ export default class APIServer {
                 return this.config.isProduction()
                     ? new ApolloError(
                           err.message,
-                          (err as GenericError).code !== undefined
-                              ? (err as GenericError).code
+                          (err as GenericError).extensions?.code !== undefined
+                              ? (err as GenericError).extensions.code
                               : 'UNCLASSIFIED',
                       )
                     : new ApolloError(
                           err.message,
-                          (err as GenericError).code !== undefined
-                              ? (err as GenericError).code
+                          (err as GenericError).extensions?.code !== undefined
+                              ? (err as GenericError).extensions.code
                               : 'UNCLASSIFIED',
                           err.extensions,
                       );
@@ -222,10 +217,10 @@ export default class APIServer {
     }
 
     public async startServer(): Promise<void> {
-        await this.storage.configure(); //we need to make sure our storage backend is properly configured
+        //await this.config.dump();
+
         this.logger.info(`Connecting to MongoDB...`).then();
         await this.shell.connect();
-        await container.resolve(Scale8Setup).setup();
 
         if (this.config.getMode() === Mode.COMMERCIAL) {
             const port = await this.config.getApiHttpsPort();

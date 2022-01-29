@@ -10,7 +10,7 @@ import nameValidator from '../../../../utils/validators/nameValidator';
 import { DialogPageProps } from '../../../../types/DialogTypes';
 import { usePageDialogControls } from '../../../../hooks/dialog/usePageDialogControls';
 import { buildStandardFormInfo } from '../../../../utils/InfoLabelsUtils';
-import { queryLoaderAndError } from '../../../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../../../abstractions/QueryLoaderAndError';
 import {
     ActionGroupDistributionFormProps,
     ActionGroupDistributionValues,
@@ -88,7 +88,7 @@ const ActionGroupDistributionUpdateFormAfterLoad: FC<ActionGroupDistributionUpda
     };
 
 const ActionGroupDistributionUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
-    return queryLoaderAndError<UpdateActionGroupDistributionGetData>(
+    return QueryLoaderAndError<UpdateActionGroupDistributionGetData>(
         false,
         useQuery<UpdateActionGroupDistributionGetData>(UpdateActionGroupDistributionGetQuery, {
             variables: { id: props.id },
@@ -109,4 +109,4 @@ const ActionGroupDistributionUpdate: FC<DialogPageProps> = (props: DialogPagePro
     );
 };
 
-export { ActionGroupDistributionUpdate };
+export default ActionGroupDistributionUpdate;

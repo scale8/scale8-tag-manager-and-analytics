@@ -13,7 +13,7 @@ import { DataContainer, PlatformDataMap } from '../../../../types/DataMapsTypes'
 import { DialogPageProps } from '../../../../types/DialogTypes';
 import { usePageDialogControls } from '../../../../hooks/dialog/usePageDialogControls';
 import { buildStandardFormInfo } from '../../../../utils/InfoLabelsUtils';
-import { queryLoaderAndError } from '../../../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../../../abstractions/QueryLoaderAndError';
 import UpdateConditionRuleGetQuery from '../../../../gql/queries/UpdateConditionRuleGetQuery';
 import {
     UpdateConditionRuleGetData,
@@ -145,7 +145,7 @@ const ConditionRuleUpdateAfterLoad: FC<ConditionRuleUpdateAfterLoadProps> = (
 const ConditionRuleUpdate: FC<ConditionRuleUpdateProps> = (props: ConditionRuleUpdateProps) => {
     const { consentPurposes, consentVendors } = useConfigState();
 
-    return queryLoaderAndError<UpdateConditionRuleGetData>(
+    return QueryLoaderAndError<UpdateConditionRuleGetData>(
         false,
         useQuery<UpdateConditionRuleGetData>(UpdateConditionRuleGetQuery, {
             variables: { conditionId: props.id, triggerId: props.contextId },

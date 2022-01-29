@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 // ====================================================
@@ -70,7 +69,8 @@ export interface UserInvitePageData_getOrg {
 export interface UserInvitePageData {
   /**
    * @bound=Org
-   * Given a valid `Org` ID, this function will return an `Org` provided the API `User` has been granted at least **view** access.
+   * Given a valid `Org` ID, this function will return an `Org` provided the API
+   * `User` has been granted at least **view** access.
    */
   getOrg: UserInvitePageData_getOrg;
 }

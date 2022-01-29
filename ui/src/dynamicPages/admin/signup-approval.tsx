@@ -1,8 +1,5 @@
 import { FC } from 'react';
 import { useQuery } from '@apollo/client';
-import Head from 'next/head';
-import { LoggedInSection } from '../../containers/global/LoggedInSection';
-import AdminSection from '../../containers/global/AdminSection';
 import { TablePage, TablePageProps } from '../../abstractions/TablePage';
 import { AdminPageData } from '../../gql/generated/AdminPageData';
 import { UTCTimestamp } from '../../utils/DateTimeUtils';

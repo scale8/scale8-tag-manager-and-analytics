@@ -30,4 +30,4 @@ const ActionGroupDistributionOrderUpdate: FC<DialogPageProps> = (props: DialogPa
     );
 };
 
-export { ActionGroupDistributionOrderUpdate };
+export default ActionGroupDistributionOrderUpdate;

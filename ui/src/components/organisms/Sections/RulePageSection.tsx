@@ -15,10 +15,10 @@ import RuleSection from '../../atoms/RuleSection';
 import { toGlobalTrigger } from '../../../utils/NavigationPaths';
 import Link from '../../atoms/Next/Link';
 import { TriggerSection } from './TriggerSection';
-import RulesAddButton from '../../atoms/RulesAddButton';
 import { ActionGroupDistributionPageSection } from './ActionGroupDistributionPageSection';
 import { SectionAction } from '../../molecules/SectionActionsSpeedDial';
 import { useConfigState } from '../../../context/AppContext';
+import { SmallAddButton } from '../../atoms/SmallAddButton';
 
 type RuleSectionProps = {
     tagId: string;
@@ -170,13 +170,12 @@ const RulePageSection: FC<RuleSectionProps> = (props: RuleSectionProps) => {
                         />
                     ),
                 )}
-
-                <RulesAddButton
-                    disabled={revisionLocked}
-                    text="Add Action Group Distribution"
-                    onClick={() =>
+                <SmallAddButton
+                    addButtonText="Add Action Group Distribution"
+                    addButtonClick={() =>
                         pageActions.addActionGroupDistribution(pageActionProps, rule.id, tagId)
                     }
+                    disabled={revisionLocked}
                 />
             </RuleSection>
         </TagElementContainer>

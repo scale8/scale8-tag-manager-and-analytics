@@ -13,9 +13,9 @@ import { TagElementContainer } from '../../molecules/TagElementContainer';
 import { moveDownId, moveUpId } from '../../../utils/ArrayUtils';
 import RuleContainerDivider from '../../atoms/RuleContainerDivider';
 import { RulePageSection } from './RulePageSection';
-import RulesAddButton from '../../atoms/RulesAddButton';
 import { SectionAction } from '../../molecules/SectionActionsSpeedDial';
 import { useConfigState } from '../../../context/AppContext';
+import { SmallAddButton } from '../../atoms/SmallAddButton';
 
 type RuleGroupSectionProps = {
     ruleGroup: RuleGroup;
@@ -135,9 +135,9 @@ const RuleGroupPageSection: FC<RuleGroupSectionProps> = (props: RuleGroupSection
                     />
                 </Fragment>
             ))}
-            <RulesAddButton
-                text="Add Rule"
-                onClick={() => pageActions.createRule(pageActionProps, ruleGroup.id, tagId)}
+            <SmallAddButton
+                addButtonText="Add Rule"
+                addButtonClick={() => pageActions.createRule(pageActionProps, ruleGroup.id, tagId)}
                 disabled={revisionLocked}
             />
         </TagElementContainer>

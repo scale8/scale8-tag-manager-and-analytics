@@ -12,7 +12,7 @@ import {
 import { Line } from 'react-chartjs-2';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { InfoButton, InfoProps } from '../components/molecules/InfoButton';
-import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import InfoDialogTitle from '../components/molecules/InfoDialogTitle';
 import {
     labelsFromRange,
@@ -22,6 +22,7 @@ import {
     zoomMaxAggregateMinutes,
     zoomMinAggregateMinutes,
 } from '../utils/UsageUtils';
+import { ChartOptions } from 'chart.js';
 
 export type UsagePageProps = { sourceId: string };
 
@@ -56,7 +57,7 @@ const Usage = <UsageData extends Record<string, any>>(
         setAggregateMinutes(zoomDefaultAggregateMinutes(zoom));
     }, [zoom]);
 
-    return queryLoaderAndError<UsageData>(false, mainQuery, (queryData: UsageData) => {
+    return QueryLoaderAndError<UsageData>(false, mainQuery, (queryData: UsageData) => {
         const usageRange = prepareUsageRange(extractUsage(queryData), zoom, aggregateMinutes);
 
         const data = {
@@ -68,7 +69,7 @@ const Usage = <UsageData extends Record<string, any>>(
                     fill: false,
                     backgroundColor: 'rgb(54, 162, 235)',
                     borderColor: 'rgba(54, 162, 235, 0.2)',
-                    yAxisID: 'y-axis-1',
+                    yAxisID: 'yAxis1',
                 },
                 ...(label2 === undefined
                     ? []
@@ -79,52 +80,44 @@ const Usage = <UsageData extends Record<string, any>>(
                               fill: false,
                               backgroundColor: 'rgb(150, 200, 150)',
                               borderColor: 'rgba(150, 200, 150, 0.2)',
-                              yAxisID: 'y-axis-2',
+                              yAxisID: 'yAxis2',
                           },
                       ]),
             ],
         };
 
-        const options = {
+        const options: ChartOptions<'line'> = {
             maintainAspectRatio: false,
             scales: {
-                xAxes: [
-                    {
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Time',
-                        },
-                    },
-                ],
-                yAxes: [
-                    {
-                        scaleLabel: {
-                            display: true,
-                            labelString: label1,
-                        },
-                        type: 'linear',
+                xAxis: {
+                    title: {
                         display: true,
-                        position: 'left',
-                        id: 'y-axis-1',
+                        text: 'Time',
                     },
-                    ...(label2 === undefined
-                        ? []
-                        : [
-                              {
-                                  scaleLabel: {
-                                      display: true,
-                                      labelString: label2,
-                                  },
-                                  type: 'linear',
+                },
+
+                yAxis1: {
+                    type: 'linear',
+                    title: {
+                        display: true,
+                        text: label1,
+                    },
+                    display: true,
+                    position: 'left',
+                },
+                ...(label2 === undefined
+                    ? {}
+                    : {
+                          yAxis2: {
+                              type: 'linear',
+                              title: {
                                   display: true,
-                                  position: 'right',
-                                  id: 'y-axis-2',
-                                  gridLines: {
-                                      drawOnArea: false,
-                                  },
+                                  text: label2,
                               },
-                          ]),
-                ],
+                              display: true,
+                              position: 'right',
+                          },
+                      }),
             },
         };
 

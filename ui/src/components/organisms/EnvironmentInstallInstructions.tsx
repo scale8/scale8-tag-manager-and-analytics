@@ -9,7 +9,6 @@ import { getNodeEnv } from '../../utils/ConfigUtils';
 
 export type InstallInstructionsProps = {
     installDomain: string;
-    customDomain: string | null;
     environmentName: string;
     environmentId: string;
     mode: Mode;
@@ -35,7 +34,7 @@ const EnvironmentInstallInstructions: FC<InstallInstructionsProps> = (
     const determinePort = () => {
         if (props.mode === Mode.COMMERCIAL) {
             if (getNodeEnv() === 'development') {
-                return '5443';
+                return '8443';
             }
             return undefined;
         }
@@ -78,7 +77,6 @@ const EnvironmentInstallInstructions: FC<InstallInstructionsProps> = (
             {type === 'Analytics Only' && (
                 <Box my={2} width="100%">
                     <CheckBoxInput
-                        sx={{ marginRight: 40 }}
                         name="spaSupport"
                         value={spaSupport}
                         setValue={(v) => {
@@ -118,12 +116,6 @@ const EnvironmentInstallInstructions: FC<InstallInstructionsProps> = (
                         </Box>
                     ))}
                 </>
-            )}
-            {props.customDomain !== null && (
-                <span>
-                    After you have successfully installed your custom domain, please create a new
-                    CNAME record for “{props.customDomain}” with the value “{props.cname}”
-                </span>
             )}
         </>
     );

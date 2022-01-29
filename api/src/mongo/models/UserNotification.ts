@@ -1,15 +1,15 @@
 import Model from '../abstractions/Model';
 import Field from '../decorators/Field';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import User from './User';
 import { NotificationType } from '../../enums/NotificationType';
 
 export default class UserNotification extends Model {
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'user_id',
     })
-    private readonly _user_id!: ObjectID;
+    private readonly _user_id!: ObjectId;
 
     @Field<NotificationType>({
         required: true,
@@ -17,10 +17,10 @@ export default class UserNotification extends Model {
     })
     private readonly _type: NotificationType;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         exposeToGQLAs: 'entity_id',
     })
-    private readonly _entity_id?: ObjectID;
+    private readonly _entity_id?: ObjectId;
 
     @Field<boolean>({
         required: true,
@@ -28,7 +28,7 @@ export default class UserNotification extends Model {
     })
     private _is_viewed: boolean;
 
-    constructor(user: User, type: NotificationType, entityId?: ObjectID) {
+    constructor(user: User, type: NotificationType, entityId?: ObjectId) {
         super();
         if (user !== undefined) {
             this._user_id = user.id;
@@ -38,7 +38,7 @@ export default class UserNotification extends Model {
         this._is_viewed = false;
     }
 
-    get userId(): ObjectID {
+    get userId(): ObjectId {
         return this._user_id;
     }
 
@@ -46,7 +46,7 @@ export default class UserNotification extends Model {
         return this._type;
     }
 
-    get entityId(): ObjectID | undefined {
+    get entityId(): ObjectId | undefined {
         return this._entity_id;
     }
 

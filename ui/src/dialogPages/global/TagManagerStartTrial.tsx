@@ -5,7 +5,7 @@ import StartTagManagerTrialQuery from '../../gql/mutations/StartTagManagerTrialQ
 import { useRouter } from 'next/router';
 import { toTagManager } from '../../utils/NavigationPaths';
 
-const redirectToTagManager: FC<{
+const RedirectToTagManager: FC<{
     data: any;
 }> = (props: { data: any }) => {
     const router = useRouter();
@@ -31,7 +31,7 @@ const TagManagerStartTrial: FC<DialogPageProps> = (props: DialogPageProps) => {
                 });
             }}
             mutation={StartTagManagerTrialQuery}
-            renderData={redirectToTagManager}
+            renderData={RedirectToTagManager}
             {...props}
             pageRefresh={() => {
                 //no need to refresh
@@ -40,4 +40,4 @@ const TagManagerStartTrial: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { TagManagerStartTrial };
+export default TagManagerStartTrial;

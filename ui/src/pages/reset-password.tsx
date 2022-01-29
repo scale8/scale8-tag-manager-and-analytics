@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import Head from 'next/head';
 import { useMutation } from '@apollo/client';
-import { useParams } from '../hooks/useParams';
 import LoggedOutSection from '../containers/global/LoggedOutSection';
 import ResetPasswordQuery from '../gql/mutations/ResetPasswordQuery';
 import { ResetPasswordValues } from '../types/props/forms/ResetPasswordFormProps';
@@ -14,12 +13,9 @@ import Navigate from '../components/atoms/Next/Navigate';
 import { toOrgSelect } from '../utils/NavigationPaths';
 import ResetPasswordForm from '../components/organisms/Forms/ResetPasswordForm';
 import { logError } from '../utils/logUtils';
+import { ComponentWithParams, ParamsLoader } from '../components/atoms/ParamsLoader';
 
-const ResetPasswordContent: FC<{ token: string | undefined }> = (props: {
-    token: string | undefined;
-}) => {
-    const { token } = props;
-
+const ResetPasswordContent: FC<{ token: string }> = ({ token }) => {
     const [resetPassword, { loading, data, error: gqlError }] = useMutation(ResetPasswordQuery);
 
     const submit = async (resetPasswordValues: ResetPasswordValues) => {
@@ -27,7 +23,7 @@ const ResetPasswordContent: FC<{ token: string | undefined }> = (props: {
         localStorage.removeItem('token');
 
         const resetPasswordInput: ResetPasswordInput = {
-            token: token ?? '',
+            token: token,
             new_password: resetPasswordValues.newPassword,
         };
         try {
@@ -88,8 +84,8 @@ const ResetPasswordContent: FC<{ token: string | undefined }> = (props: {
     );
 };
 
-const ResetPassword: FC = () => {
-    const { token } = useParams();
+const ResetPassword: ComponentWithParams = ({ params }) => {
+    const { token } = params;
 
     return (
         <>
@@ -98,10 +94,11 @@ const ResetPassword: FC = () => {
                 <meta name="description" content="Scale8 - Password Reset." />
             </Head>
             <LoggedOutSection>
-                <ResetPasswordContent token={token} />
+                {token !== undefined && <ResetPasswordContent token={token} />}
             </LoggedOutSection>
         </>
     );
 };
 
-export default ResetPassword;
+const ResetPasswordLoader = () => <ParamsLoader Child={ResetPassword} />;
+export default ResetPasswordLoader;

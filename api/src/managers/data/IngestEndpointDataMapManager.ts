@@ -2,7 +2,7 @@ import { injectable } from 'inversify';
 import Manager from '../../abstractions/Manager';
 import { gql } from 'apollo-server-express';
 import CTX from '../../gql/ctx/CTX';
-import { ObjectId, ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import ScalarContainer from '../../mongo/custom/ScalarContainer';
 import GQLError from '../../errors/GQLError';
 import IngestEndpointDataMap from '../../mongo/models/data/IngestEndpointDataMap';
@@ -199,7 +199,7 @@ export default class IngestEndpointDataMapManager extends Manager<IngestEndpoint
         getIngestEndpointDataMap: async (parent: any, args: any, ctx: CTX) => {
             const ingestEndpointDataMap = await this.repoFactory(
                 IngestEndpointDataMap,
-            ).findByIdThrows(new ObjectID(args.id), userMessages.dataMapFailed);
+            ).findByIdThrows(new ObjectId(args.id), userMessages.dataMapFailed);
             return await this.orgAuth.asUserWithViewAccess(
                 ctx,
                 ingestEndpointDataMap.orgId,
@@ -335,7 +335,7 @@ export default class IngestEndpointDataMapManager extends Manager<IngestEndpoint
             default_value: async (parent: any, args: any, ctx: CTX) => {
                 const ingestEndpointDataMap = await this.repoFactory(
                     IngestEndpointDataMap,
-                ).findByIdThrows(new ObjectID(parent.id), userMessages.dataMapFailed);
+                ).findByIdThrows(new ObjectId(parent.id), userMessages.dataMapFailed);
                 return this.orgAuth.asUserWithViewAccess(
                     ctx,
                     ingestEndpointDataMap.orgId,
@@ -354,7 +354,7 @@ export default class IngestEndpointDataMapManager extends Manager<IngestEndpoint
             child_ingest_endpoint_data_maps: async (parent: any, args: any, ctx: CTX) => {
                 const ingestEndpointDataMap = await this.repoFactory(
                     IngestEndpointDataMap,
-                ).findByIdThrows(new ObjectID(parent.id), userMessages.dataMapFailed);
+                ).findByIdThrows(new ObjectId(parent.id), userMessages.dataMapFailed);
                 return this.orgAuth.asUserWithViewAccess(
                     ctx,
                     ingestEndpointDataMap.orgId,
@@ -370,7 +370,7 @@ export default class IngestEndpointDataMapManager extends Manager<IngestEndpoint
             validation_rules: async (parent: any, args: any, ctx: CTX) => {
                 const ingestEndpointDataMap = await this.repoFactory(
                     IngestEndpointDataMap,
-                ).findByIdThrows(new ObjectID(parent.id), userMessages.dataMapFailed);
+                ).findByIdThrows(new ObjectId(parent.id), userMessages.dataMapFailed);
                 return this.orgAuth.asUserWithViewAccess(
                     ctx,
                     ingestEndpointDataMap.orgId,

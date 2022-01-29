@@ -136,17 +136,19 @@ const DialogForm = <Q extends FormValues, F extends FormProps<Q>, M extends Form
 
     const hasPreview = previewForm !== undefined;
 
+    const formValidationResults = useFormValidation<Q>(
+        eventuallyBuildInitialState(),
+        validators,
+        submitForm,
+        false,
+        customValueSetter,
+    );
+
     const buildFormValidationValues = () => {
         if (buildFormValidationValuesWithDataMaps !== undefined) {
             return buildFormValidationValuesWithDataMaps(submitForm, validators);
         }
-        return useFormValidation<Q>(
-            eventuallyBuildInitialState(),
-            validators,
-            submitForm,
-            false,
-            customValueSetter,
-        );
+        return formValidationResults;
     };
 
     const successfullySubmitted = hasPreview
@@ -164,16 +166,18 @@ const DialogForm = <Q extends FormValues, F extends FormProps<Q>, M extends Form
         throw Error('buildFormProps is not defined');
     };
 
+    const formValidationConfirmResults = useFormValidation<Q>(
+        eventuallyBuildInitialState(),
+        validators,
+        submitConfirmForm,
+        false,
+        customValueSetter,
+    );
+
     const confirmFormProps =
         previewForm !== undefined
             ? previewForm.buildPreviewFormProps(
-                  useFormValidation<Q>(
-                      eventuallyBuildInitialState(),
-                      validators,
-                      submitConfirmForm,
-                      false,
-                      customValueSetter,
-                  ),
+                  formValidationConfirmResults,
                   data,
                   confirmGqlError,
                   formLoadedData,

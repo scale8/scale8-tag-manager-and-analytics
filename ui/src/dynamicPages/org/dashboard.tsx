@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useQuery } from '@apollo/client';
 import { Box, Grid } from '@mui/material';
 import DashboardAccountSection from '../../components/organisms/DashboardAccountSection';
-import { queryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
 import { OrgDashboardPageData } from '../../gql/generated/OrgDashboardPageData';
 import PageOrgDashboardQuery from '../../gql/queries/PageOrgDashboardQuery';
 import { buildSparkQueryOptions } from '../../utils/SparkDataUtils';
@@ -18,7 +18,7 @@ const OrgDashboardPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
 
     const router = useRouter();
 
-    return queryLoaderAndError<OrgDashboardPageData>(
+    return QueryLoaderAndError<OrgDashboardPageData>(
         true,
         useQuery<OrgDashboardPageData>(PageOrgDashboardQuery, {
             variables: {

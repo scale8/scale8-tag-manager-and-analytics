@@ -9,16 +9,27 @@ dotenv.config();
 
 @injectable()
 export default abstract class BaseConfig {
+    public abstract dump(): Promise<void>;
+
     public abstract getConfigEntry(key: string): Promise<string | undefined>;
 
+    private static getFromEnvVar(key: string): string | undefined {
+        return process.env[key];
+    }
+
     private static getFromEnvVarOrElse(key: string, orElse: string): string {
-        const value = process.env[key];
+        const value = BaseConfig.getFromEnvVar(key);
         return value === undefined ? orElse : value;
     }
 
     private async getConfigEntryOrElse(key: string, orElse: string): Promise<string> {
         const value = await this.getConfigEntry(key);
         return value === undefined ? orElse : value;
+    }
+
+    private async getConfigEntryOrNull(key: string): Promise<string | null> {
+        const value = await this.getConfigEntry(key);
+        return value === undefined ? null : value;
     }
 
     private async getConfigEntryThrows(key: string): Promise<string> {
@@ -40,6 +51,10 @@ export default abstract class BaseConfig {
     public getMode(): Mode {
         const mode = BaseConfig.getFromEnvVarOrElse('SERVER_MODE', Mode.SELF_HOSTED);
         return mode === Mode.COMMERCIAL ? Mode.COMMERCIAL : Mode.SELF_HOSTED;
+    }
+
+    public isSetupMode(): boolean {
+        return BaseConfig.getFromEnvVarOrElse('SETUP_MODE', 'false') === 'true';
     }
 
     public isCommercial(): boolean {
@@ -108,15 +123,15 @@ export default abstract class BaseConfig {
 
     public async getCdnDomain(): Promise<string> {
         return await this.getConfigEntryOrElse(
-            'CDN_DOMAIN',
+            'S8_EDGE_SERVER',
             this.isProduction() ? 'cdn.scale8.com' : 'cdn-dev.scale8.com',
         );
     }
 
     public async getUiUrl(): Promise<string> {
         return await this.getConfigEntryOrElse(
-            'UI_URL',
-            this.isProduction() ? 'https://scale8.com' : 'http://ui-dev.scale8.com:3000',
+            'S8_UI_SERVER',
+            this.isProduction() ? 'https://scale8.com' : 'https://ui-dev.scale8.com:8443',
         );
     }
 
@@ -126,6 +141,14 @@ export default abstract class BaseConfig {
 
     public async getCertPath(): Promise<string> {
         return await this.getConfigEntryOrElse('CERT_PATH', '');
+    }
+
+    public async getDefaultAdminPassword(): Promise<string> {
+        return await this.getConfigEntryOrElse('DEFAULT_ADMIN_PASS', 'testing');
+    }
+
+    public async getGCJson(): Promise<string> {
+        return await this.getConfigEntryThrows('GC_JSON');
     }
 
     public async getGCKeyFile(): Promise<string> {
@@ -162,16 +185,16 @@ export default abstract class BaseConfig {
         return Number(await this.getConfigEntryOrElse('MAX_REVISION_ELEMENTS', '750'));
     }
 
-    public async getAwsKeyStoreId(): Promise<string | undefined> {
-        return await this.getConfigEntry('AWS_KEY_STORE_ID');
+    public getAwsKeyStoreId(): string | undefined {
+        return BaseConfig.getFromEnvVar('AWS_KEY_STORE_ID');
     }
 
-    public async getAwsKeyStoreSecret(): Promise<string | undefined> {
-        return await this.getConfigEntry('AWS_KEY_STORE_SECRET');
+    public getAwsKeyStoreSecret(): string | undefined {
+        return BaseConfig.getFromEnvVar('AWS_KEY_STORE_SECRET');
     }
 
-    public async getAwsKeyStoreRegion(): Promise<string> {
-        return await this.getConfigEntryOrElse('AWS_KEY_STORE_REGION', 'eu-central-1');
+    public getAwsKeyStoreRegion(): string {
+        return BaseConfig.getFromEnvVarOrElse('AWS_KEY_STORE_REGION', 'eu-central-1');
     }
 
     public async getDefaultDatabase(): Promise<string> {
@@ -190,8 +213,8 @@ export default abstract class BaseConfig {
         return await this.getConfigEntryThrows('GITHUB_CLIENT_SECRET');
     }
 
-    public async getAwsId(): Promise<string> {
-        return await this.getConfigEntryThrows('AWS_ID');
+    public async getAwsId(): Promise<string | null> {
+        return await this.getConfigEntryOrNull('AWS_ID');
     }
 
     public async getAwsSecret(): Promise<string> {
@@ -230,6 +253,10 @@ export default abstract class BaseConfig {
         return await this.getConfigEntryThrows('SMTP_PASSWORD');
     }
 
+    public async isCaptchaEnabled(): Promise<boolean> {
+        return (await this.getConfigEntryOrElse('CAPTCHA_ENABLED', 'true')) === 'true';
+    }
+
     public async getCaptchaSecret(): Promise<string> {
         return await this.getConfigEntryThrows('CAPTCHA_SECRET');
     }
@@ -251,6 +278,10 @@ export default abstract class BaseConfig {
     }
 
     public async getEncryptionSalt(): Promise<string> {
-        return await this.getConfigEntryOrElse('ENCRYPTION_SALT', 's8s4ltysug4r');
+        return await this.getConfigEntryOrElse('ENCRYPTION_SALT', 'replace_me');
+    }
+
+    public async getBetaAccessCode(): Promise<string> {
+        return await this.getConfigEntryOrElse('BETA_ACCESS_CODE', 'test');
     }
 }

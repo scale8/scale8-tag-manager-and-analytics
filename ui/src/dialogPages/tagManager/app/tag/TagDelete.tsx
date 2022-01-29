@@ -102,4 +102,4 @@ const TagDelete: FC<DialogPageProps> = (props: DialogPageProps) => {
     return <DialogDeletePreview {...dialogDeletePreviewProps} />;
 };
 
-export { TagDelete };
+export default TagDelete;

@@ -13,7 +13,7 @@ import DataMap from '../../../models/tag/DataMap';
 import RepeatedDataMap from '../../../models/tag/RepeatedDataMap';
 import Revision from '../../../models/tag/Revision';
 import DataError from '../../../../errors/DataError';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import Trigger from '../../../models/tag/Trigger';
 import OperationOwner from '../../../../enums/OperationOwner';
 import userMessages from '../../../../errors/UserMessages';
@@ -37,7 +37,7 @@ export default class UnderRevisionControl<
 > extends RepoUnderRevisionControl<T> {
     protected readonly auditEnabled = true;
 
-    protected async isRevisionFinal(revisionId: ObjectID): Promise<boolean> {
+    protected async isRevisionFinal(revisionId: ObjectId): Promise<boolean> {
         //revision could be null at this stage if we are cloning. this is because children are cloned first before creating the new revision entity and linking it all back and finally saving.
         const revision = await this.repoFactory(Revision).findById(revisionId);
         //check to make sure revision is not in a final state, if it is, then nothing else can happen. final state is removed when cloning automatically.

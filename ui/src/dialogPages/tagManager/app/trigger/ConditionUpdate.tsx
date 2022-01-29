@@ -15,4 +15,4 @@ const ConditionUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { ConditionUpdate };
+export default ConditionUpdate;

@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useQuery } from '@apollo/client';
 import EnvironmentInstallInstructionsDialog from '../../../components/organisms/EnvironmentInstallInstructionsDialog';
 import { DialogPageProps } from '../../../types/DialogTypes';
-import { queryLoaderAndError } from '../../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../../abstractions/QueryLoaderAndError';
 import { AppInstructionsGetData } from '../../../gql/generated/AppInstructionsGetData';
 import AppInstructionsGetQuery from '../../../gql/queries/AppInstructionsGetQuery';
 import { useConfigState } from '../../../context/AppContext';
@@ -10,7 +10,7 @@ import { useConfigState } from '../../../context/AppContext';
 const AppInstallInstructions: FC<DialogPageProps> = (props: DialogPageProps) => {
     const { mode } = useConfigState();
 
-    return queryLoaderAndError<AppInstructionsGetData>(
+    return QueryLoaderAndError<AppInstructionsGetData>(
         false,
         useQuery<AppInstructionsGetData>(AppInstructionsGetQuery, {
             variables: { id: props.id },
@@ -25,7 +25,6 @@ const AppInstallInstructions: FC<DialogPageProps> = (props: DialogPageProps) => 
                     environmentId={environment.id}
                     title="Application Installation Instructions"
                     installDomain={environment.install_domain}
-                    customDomain={environment.custom_domain}
                     handleDialogClose={props.handleDialogClose}
                     cname={environment.cname}
                     mode={mode}
@@ -42,4 +41,4 @@ const AppInstallInstructions: FC<DialogPageProps> = (props: DialogPageProps) => 
     );
 };
 
-export { AppInstallInstructions };
+export default AppInstallInstructions;

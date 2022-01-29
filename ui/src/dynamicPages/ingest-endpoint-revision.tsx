@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { DynamicPageProps } from '../pageLoader/DynamicPageLoader';
 import { useLoggedInState } from '../context/AppContext';
-import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import { IngestEndpointDataMapPageData } from '../gql/generated/IngestEndpointDataMapPageData';
 import PageIngestEndpointDataMapQuery from '../gql/queries/PageIngestEndpointDataMapQuery';
 import {
@@ -25,7 +25,7 @@ const IngestEndpointDataMapsPage: FC<DynamicPageProps> = (props: DynamicPageProp
     const { templateInteractions } = useLoggedInState();
     const { ask, dispatchDialogAction } = templateInteractions;
 
-    return queryLoaderAndError<IngestEndpointDataMapPageData>(
+    return QueryLoaderAndError<IngestEndpointDataMapPageData>(
         true,
         useQuery(PageIngestEndpointDataMapQuery, {
             variables: { id: revisionId },

@@ -15,4 +15,5 @@ export type AppAnalyticsContentProps = {
     appSummaryQueryOptionsCurrent: AppQueryOptions;
     id: string;
     refreshAt?: UTCTimestamp;
+    ticks: number;
 };

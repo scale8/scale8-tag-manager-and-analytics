@@ -1,4 +1,4 @@
-import { Box, Button, InputAdornment, Popover, TextField } from '@mui/material';
+import { Box, InputAdornment, Popover, TextField } from '@mui/material';
 import { ChangeEvent, FC, MouseEvent, useState } from 'react';
 import { TextFieldProps } from '@mui/material/TextField/TextField';
 import { autocompleteOff } from '../../../utils/BrowserUtils';
@@ -6,9 +6,9 @@ import { AppPlatformRevision } from '../../../types/TagRulesTypes';
 import { PlatformValueEdit } from '../PlatformValueEdit';
 import { buildDataContainersFilteredPlatforms } from '../../../utils/DataContainersUtils';
 import { DataContainersFilteredPlatform } from '../../molecules/DataMapsValueEdit';
-import AddIcon from '@mui/icons-material/Add';
 import AdornmentButton from '../AdornamentButton';
 import { VarType } from '../../../gql/generated/globalTypes';
+import { SmallAddButton } from '../SmallAddButton';
 
 export type TextInputWithMacrosProps = TextFieldProps & {
     name: string;
@@ -109,18 +109,15 @@ const TextInputWithMacros: FC<TextInputWithMacrosProps> = (props: TextInputWithM
                         />
                     </Box>
                     <Box textAlign="center">
-                        <Button
-                            size="small"
-                            variant="outlined"
-                            onClick={() => {
+                        <SmallAddButton
+                            addButtonText={dataContainerValue === '' ? 'Cancel' : 'Add'}
+                            addButtonClick={() => {
                                 setValue(`${value}${dataContainerValue}`);
                                 handleClose();
                             }}
-                            startIcon={dataContainerValue !== '' ? <AddIcon /> : null}
                             disabled={props.disabled}
-                        >
-                            {dataContainerValue === '' ? 'Cancel' : 'Add'}
-                        </Button>
+                            hideIcon={dataContainerValue === ''}
+                        />
                     </Box>
                 </Box>
             </Popover>

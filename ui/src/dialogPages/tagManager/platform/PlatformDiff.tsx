@@ -4,10 +4,10 @@ import DiffPlatformQuery from '../../../gql/queries/DiffPlatformQuery';
 import { DiffPlatform } from '../../../gql/generated/DiffPlatform';
 import { RevisionDiff } from '../../../components/molecules/Diff/RevisionDiff';
 import { DialogPageProps } from '../../../types/DialogTypes';
-import { queryLoaderAndError } from '../../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../../abstractions/QueryLoaderAndError';
 
 const PlatformDiff: FC<DialogPageProps> = (props: DialogPageProps) => {
-    return queryLoaderAndError<DiffPlatform>(
+    return QueryLoaderAndError<DiffPlatform>(
         false,
         useQuery<DiffPlatform>(DiffPlatformQuery, {
             variables: {
@@ -36,4 +36,4 @@ const PlatformDiff: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { PlatformDiff };
+export default PlatformDiff;

@@ -30,4 +30,4 @@ const ActionDelete: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { ActionDelete };
+export default ActionDelete;

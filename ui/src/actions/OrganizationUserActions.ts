@@ -1,17 +1,39 @@
+import { PageActionProps } from './PageActions';
 import {
     launchHidden,
     openDrawer,
     openDrawerContextOnly,
     openLightboxWithName,
 } from '../utils/PageActionUtils';
-import { PageActionProps } from './PageActions';
-import { OrgUserInvite } from '../dialogPages/global/OrgUserInvite';
-import { OrgUserAdd } from '../dialogPages/global/OrgUserAdd';
-import { RegenerateOrgUserPassword } from '../dialogPages/global/RegenerateOrgUserPassword';
-import { OrgUserCancelInvitation } from '../dialogPages/global/OrgUserCancelInvitation';
-import { OrgUserUpdate } from '../dialogPages/global/OrgUserUpdate';
-import { OrgUserDelete } from '../dialogPages/global/OrgUserDelete';
-import { OrgMeDelete } from '../dialogPages/global/OrgMeDelete';
+import dynamic from 'next/dynamic';
+import { FC } from 'react';
+import { DialogPageProps } from '../types/DialogTypes';
+
+const OrgUserInvite = dynamic(
+    () => import('../dialogPages/global/OrgUserInvite'),
+) as FC<DialogPageProps>;
+
+const OrgUserAdd = dynamic(() => import('../dialogPages/global/OrgUserAdd')) as FC<DialogPageProps>;
+
+const RegenerateOrgUserPassword = dynamic(
+    () => import('../dialogPages/global/RegenerateOrgUserPassword'),
+) as FC<DialogPageProps>;
+
+const OrgUserCancelInvitation = dynamic(
+    () => import('../dialogPages/global/OrgUserCancelInvitation'),
+) as FC<DialogPageProps>;
+
+const OrgUserUpdate = dynamic(
+    () => import('../dialogPages/global/OrgUserUpdate'),
+) as FC<DialogPageProps>;
+
+const OrgUserDelete = dynamic(
+    () => import('../dialogPages/global/OrgUserDelete'),
+) as FC<DialogPageProps>;
+
+const OrgMeDelete = dynamic(
+    () => import('../dialogPages/global/OrgMeDelete'),
+) as FC<DialogPageProps>;
 
 const organizationUserActions = {
     inviteUser: (pageActionProps: PageActionProps, orgId: string): void => {

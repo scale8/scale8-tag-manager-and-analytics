@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 import { RuleDuplicateInput } from "./globalTypes";
@@ -20,7 +19,8 @@ export interface DuplicateRule_duplicateRule {
 export interface DuplicateRule {
   /**
    * @bound=Rule
-   * Duplicate a new `Rule`. The duplicated will copy everything beneath `Rule`, creating a new `Rule` entity and linking it to the same `RuleGroup`
+   * Duplicate a new `Rule`. The duplicated will copy everything beneath `Rule`,
+   * creating a new `Rule` entity and linking it to the same `RuleGroup`
    */
   duplicateRule: DuplicateRule_duplicateRule;
 }

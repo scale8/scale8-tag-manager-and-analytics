@@ -1,13 +1,13 @@
 import { injectable } from 'inversify';
 import PlatformAction from '../../models/tag/PlatformAction';
 import UnderPlatformRevisionControl from './abstractions/UnderPlatformRevisionControl';
-import { IndexSpecification } from 'mongodb';
+import { IndexDescription } from 'mongodb';
 
 @injectable()
 export default class PlatformActionRepo extends UnderPlatformRevisionControl<PlatformAction> {
     protected readonly auditEnabled = true;
 
-    protected readonly indexes: IndexSpecification[] = [
+    protected readonly indexes: IndexDescription[] = [
         {
             background: false,
             key: {

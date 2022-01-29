@@ -1,14 +1,14 @@
 import Model from '../../abstractions/Model';
 import Field from '../../decorators/Field';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import Platform from './Platform';
 
 export default class AppPlatform extends Model {
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'platform_id',
     })
-    private _platform_id!: ObjectID;
+    private _platform_id!: ObjectId;
 
     constructor(platform: Platform) {
         super();
@@ -17,11 +17,11 @@ export default class AppPlatform extends Model {
         }
     }
 
-    get platformId(): ObjectID {
+    get platformId(): ObjectId {
         return this._platform_id;
     }
 
-    set platformId(value: ObjectID) {
+    set platformId(value: ObjectId) {
         this._platform_id = value;
     }
 }

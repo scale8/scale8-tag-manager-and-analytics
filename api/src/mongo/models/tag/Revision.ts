@@ -1,6 +1,6 @@
 import Model from '../../abstractions/Model';
 import Field from '../../decorators/Field';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import App from './App';
 import AppPlatformRevisionRepo from '../../repos/tag/AppPlatformRevisionRepo';
 import TagRepo from '../../repos/tag/TagRepo';
@@ -8,15 +8,15 @@ import TriggerRepo from '../../repos/tag/TriggerRepo';
 import ActionGroupDistributionRepo from '../../repos/tag/ActionGroupDistributionRepo';
 
 export default class Revision extends Model {
-    public getOrgEntityId(): ObjectID {
+    public getOrgEntityId(): ObjectId {
         return this.orgId;
     }
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'org_id',
     })
-    private readonly _org_id!: ObjectID;
+    private readonly _org_id!: ObjectId;
 
     @Field<string>({
         required: true,
@@ -25,54 +25,54 @@ export default class Revision extends Model {
     })
     private _name: string;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         exposeToGQLAs: 'parent_revision_id',
     })
-    private _parent_revision_id?: ObjectID;
+    private _parent_revision_id?: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'tag_manager_account_id',
     })
-    private readonly _tag_manager_account_id!: ObjectID;
+    private readonly _tag_manager_account_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'app_id',
     })
-    private _app_id!: ObjectID;
+    private _app_id!: ObjectId;
 
-    @Field<ObjectID[]>({
+    @Field<ObjectId[]>({
         repository: AppPlatformRevisionRepo,
         required: true,
         exposeToGQLAs: 'app_platform_revision_ids',
         exposeToConfig: true,
     })
-    private _app_platform_revision_ids: ObjectID[] = [];
+    private _app_platform_revision_ids: ObjectId[] = [];
 
-    @Field<ObjectID[]>({
+    @Field<ObjectId[]>({
         repository: TagRepo,
         required: true,
         exposeToGQLAs: 'tag_ids',
         exposeToConfig: true,
     })
-    private _tag_ids: ObjectID[] = [];
+    private _tag_ids: ObjectId[] = [];
 
-    @Field<ObjectID[]>({
+    @Field<ObjectId[]>({
         repository: TriggerRepo,
         required: true,
         exposeToGQLAs: 'global_trigger_ids',
         exposeToConfig: true,
     })
-    private _global_trigger_ids: ObjectID[] = [];
+    private _global_trigger_ids: ObjectId[] = [];
 
-    @Field<ObjectID[]>({
+    @Field<ObjectId[]>({
         repository: ActionGroupDistributionRepo,
         required: true,
         exposeToGQLAs: 'global_action_group_distribution_ids',
         exposeToConfig: true,
     })
-    private _global_action_group_distribution_ids: ObjectID[] = [];
+    private _global_action_group_distribution_ids: ObjectId[] = [];
 
     @Field<boolean>({
         required: true,
@@ -91,11 +91,11 @@ export default class Revision extends Model {
         }
     }
 
-    get parentRevisionId(): ObjectID | undefined {
+    get parentRevisionId(): ObjectId | undefined {
         return this._parent_revision_id;
     }
 
-    get orgId(): ObjectID {
+    get orgId(): ObjectId {
         return this._org_id;
     }
 
@@ -107,47 +107,47 @@ export default class Revision extends Model {
         this._name = value;
     }
 
-    get tagManagerAccountId(): ObjectID {
+    get tagManagerAccountId(): ObjectId {
         return this._tag_manager_account_id;
     }
 
-    get appPlatformRevisionIds(): ObjectID[] {
+    get appPlatformRevisionIds(): ObjectId[] {
         return this._app_platform_revision_ids;
     }
 
-    set appPlatformRevisionIds(value: ObjectID[]) {
+    set appPlatformRevisionIds(value: ObjectId[]) {
         this._app_platform_revision_ids = value;
     }
 
-    get appId(): ObjectID {
+    get appId(): ObjectId {
         return this._app_id;
     }
 
-    set appId(value: ObjectID) {
+    set appId(value: ObjectId) {
         this._app_id = value;
     }
 
-    get tagIds(): ObjectID[] {
+    get tagIds(): ObjectId[] {
         return this._tag_ids;
     }
 
-    set tagIds(value: ObjectID[]) {
+    set tagIds(value: ObjectId[]) {
         this._tag_ids = value;
     }
 
-    get globalTriggerIds(): ObjectID[] {
+    get globalTriggerIds(): ObjectId[] {
         return this._global_trigger_ids;
     }
 
-    set globalTriggerIds(value: ObjectID[]) {
+    set globalTriggerIds(value: ObjectId[]) {
         this._global_trigger_ids = value;
     }
 
-    get globalActionGroupDistributionIds(): ObjectID[] {
+    get globalActionGroupDistributionIds(): ObjectId[] {
         return this._global_action_group_distribution_ids;
     }
 
-    set globalActionGroupDistributionIds(value: ObjectID[]) {
+    set globalActionGroupDistributionIds(value: ObjectId[]) {
         this._global_action_group_distribution_ids = value;
     }
 

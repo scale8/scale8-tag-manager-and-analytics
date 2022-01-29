@@ -1,6 +1,7 @@
 package com.scale8.backends.storage;
 
 import com.scale8.Env;
+import com.scale8.extended.conditions.RequiresAmazonS3StorageCondition;
 import io.micronaut.context.annotation.Replaces;
 import io.micronaut.context.annotation.Requires;
 import software.amazon.awssdk.auth.credentials.AwsCredentials;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Replaces(StorageInterface.class)
 @Singleton
-@Requires(property = "backend-storage", value = "s3")
+@Requires(condition = RequiresAmazonS3StorageCondition.class)
 public class AmazonS3 implements StorageInterface {
 
   final Env env;

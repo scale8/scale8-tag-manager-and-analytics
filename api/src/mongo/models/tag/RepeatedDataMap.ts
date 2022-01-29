@@ -1,20 +1,20 @@
 import Model from '../../abstractions/Model';
 import Field from '../../decorators/Field';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import Revision from './Revision';
 import DataMap from './DataMap';
 import DataMapRepo from '../../repos/tag/DataMapRepo';
 
 export default class RepeatedDataMap extends Model {
-    public getOrgEntityId(): ObjectID {
+    public getOrgEntityId(): ObjectId {
         return this.orgId;
     }
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'org_id',
     })
-    private readonly _org_id!: ObjectID;
+    private readonly _org_id!: ObjectId;
 
     @Field<string>({
         required: true,
@@ -23,31 +23,31 @@ export default class RepeatedDataMap extends Model {
     })
     private readonly _name: string;
 
-    @Field<ObjectID[]>({
+    @Field<ObjectId[]>({
         repository: DataMapRepo,
         required: true,
         exposeToGQLAs: 'repeated_child_data_map_ids',
         exposeToConfig: true,
     })
-    private readonly _repeated_child_data_map_ids: ObjectID[];
+    private readonly _repeated_child_data_map_ids: ObjectId[];
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'tag_manager_account_id',
     })
-    private readonly _tag_manager_account_id!: ObjectID;
+    private readonly _tag_manager_account_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'app_id',
     })
-    private readonly _app_id!: ObjectID;
+    private readonly _app_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'revision_id',
     })
-    private readonly _revision_id!: ObjectID;
+    private readonly _revision_id!: ObjectId;
 
     constructor(name: string, revision: Revision, repeatedChildDataMaps: DataMap[] = []) {
         super();
@@ -61,15 +61,15 @@ export default class RepeatedDataMap extends Model {
         this._repeated_child_data_map_ids = repeatedChildDataMaps.map((_) => _.id);
     }
 
-    get orgId(): ObjectID {
+    get orgId(): ObjectId {
         return this._org_id;
     }
 
-    get repeatedChildDataMapIds(): ObjectID[] {
+    get repeatedChildDataMapIds(): ObjectId[] {
         return this._repeated_child_data_map_ids;
     }
 
-    get revisionId(): ObjectID {
+    get revisionId(): ObjectId {
         return this._revision_id;
     }
 }

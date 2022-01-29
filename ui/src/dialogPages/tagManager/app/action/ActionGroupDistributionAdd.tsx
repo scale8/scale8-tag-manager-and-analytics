@@ -1,7 +1,7 @@
 import { FC, useState, ChangeEvent } from 'react';
 import { DialogPageProps } from '../../../../types/DialogTypes';
-import { ActionGroupDistributionCreate } from './ActionGroupDistributionCreate';
-import { ActionGroupDistributionLink } from './ActionGroupDistributionLink';
+import ActionGroupDistributionCreate from './ActionGroupDistributionCreate';
+import ActionGroupDistributionLink from './ActionGroupDistributionLink';
 import { InfoButton } from '../../../../components/molecules/InfoButton';
 import { buildStandardFormInfo } from '../../../../utils/InfoLabelsUtils';
 import AppBar from '@mui/material/AppBar';
@@ -51,4 +51,4 @@ const ActionGroupDistributionAdd: FC<DialogPageProps> = (props: DialogPageProps)
     );
 };
 
-export { ActionGroupDistributionAdd };
+export default ActionGroupDistributionAdd;

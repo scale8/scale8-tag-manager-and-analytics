@@ -6,11 +6,33 @@ import {
     openInfo,
     openLightboxNoRefresh,
 } from '../utils/PageActionUtils';
-import { IngestEndpointEnvironmentsInstallInstructions } from '../dialogPages/dataManager/IngestEndpointEnvironmentsInstallInstructions';
-import { IngestEndpointEnvironmentDelete } from '../dialogPages/dataManager/IngestEndpointEnvironmentDelete';
-import { IngestEndpointEnvironmentHistory } from '../dialogPages/dataManager/IngestEndpointEnvironmentHistory';
-import { IngestEndpointEnvironmentCreate } from '../dialogPages/dataManager/IngestEndpointEnvironmentCreate';
-import { IngestEndpointEnvironmentUpdate } from '../dialogPages/dataManager/IngestEndpointEnvironmentUpdate';
+import dynamic from 'next/dynamic';
+import { FC } from 'react';
+import { DialogPageProps } from '../types/DialogTypes';
+
+const IngestEndpointEnvironmentsInstallInstructions = dynamic(
+    () => import('../dialogPages/dataManager/IngestEndpointEnvironmentsInstallInstructions'),
+) as FC<DialogPageProps>;
+
+const IngestEndpointEnvironmentDelete = dynamic(
+    () => import('../dialogPages/dataManager/IngestEndpointEnvironmentDelete'),
+) as FC<DialogPageProps>;
+
+const IngestEndpointEnvironmentHistory = dynamic(
+    () => import('../dialogPages/dataManager/IngestEndpointEnvironmentHistory'),
+) as FC<DialogPageProps>;
+
+const IngestEndpointEnvironmentCreate = dynamic(
+    () => import('../dialogPages/dataManager/IngestEndpointEnvironmentCreate'),
+) as FC<DialogPageProps>;
+
+const IngestEndpointEnvironmentUpdate = dynamic(
+    () => import('../dialogPages/dataManager/IngestEndpointEnvironmentUpdate'),
+) as FC<DialogPageProps>;
+
+const IngestEndpointEnvironmentEditCustomDomain = dynamic(
+    () => import('../dialogPages/dataManager/IngestEndpointEnvironmentEditCustomDomain'),
+) as FC<DialogPageProps>;
 
 const ingestEndpointEnvironmentActions = {
     createIngestEndpointEnvironment: (
@@ -32,6 +54,12 @@ const ingestEndpointEnvironmentActions = {
             false,
             ingestEndpointId,
         );
+    },
+    editCustomDomainIngestEndpointEnvironment: (
+        pageActionProps: PageActionProps,
+        id: string,
+    ): void => {
+        openDrawer(pageActionProps, IngestEndpointEnvironmentEditCustomDomain, id);
     },
     installIngestEndpointEnvironment: (pageActionProps: PageActionProps, id: string): void => {
         openLightboxNoRefresh(pageActionProps, IngestEndpointEnvironmentsInstallInstructions, id);

@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 import { OperationActor, SaveOptions } from '../types/Types';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import DataError from '../../errors/DataError';
 import OperationOwner from '../../enums/OperationOwner';
 import userMessages from '../../errors/UserMessages';
@@ -10,7 +10,7 @@ import Model from './Model';
 @injectable()
 export default class RepoUnderRevisionControl<T extends Model> extends Repo<T> {
     protected async saveUnderRevisionControl(
-        revisionId: ObjectID,
+        revisionId: ObjectId,
         isRevisionFinal: boolean,
         model: T,
         actor: OperationActor,

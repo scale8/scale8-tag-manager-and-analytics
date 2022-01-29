@@ -7,7 +7,7 @@ import RepoFromModelFactory from '../container/factoryTypes/RepoFromModelFactory
 import TYPES from '../container/IOC.types';
 import { DataMapSchema, DataMapSchemaCheck } from '../mongo/types/Types';
 import IngestEndpointEnvironment from '../mongo/models/data/IngestEndpointEnvironment';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import userMessages from '../errors/UserMessages';
 import S8DateTime from '../core/S8DateTime';
 import ScalarContainer from '../mongo/custom/ScalarContainer';
@@ -128,7 +128,7 @@ const dataMapSchemaImplementsPlatformDataMap = async (
                     const ingestEndpoint = await repoFactory(
                         IngestEndpointEnvironment,
                     ).findByIdThrows(
-                        new ObjectID(data.ingest_environment_id),
+                        new ObjectId(data.ingest_environment_id),
                         userMessages.ingestEndpointFailed,
                     );
                     return {

@@ -1,17 +1,47 @@
 import { PageActionProps } from './PageActions';
 import { launchHidden, openDrawer, openLightbox } from '../utils/PageActionUtils';
-import { OrgCreate } from '../dialogPages/global/OrgCreate';
-import { OrgUpdate } from '../dialogPages/global/OrgUpdate';
-import { OrgDelete } from '../dialogPages/global/OrgDelete';
-import { TagManagerStartTrial } from '../dialogPages/global/TagManagerStartTrial';
-import { DataManagerStartTrial } from '../dialogPages/global/DataManagerStartTrial';
 import { AccountProduct } from '../gql/generated/globalTypes';
-import { TagManagerAccountSubscribe } from '../dialogPages/global/TagManagerAccountSubscribe';
-import { DataManagerAccountSubscribe } from '../dialogPages/global/DataManagerAccountSubscribe';
-import { TagManagerAccountUnsubscribe } from '../dialogPages/global/TagManagerAccountUnsubscribe';
-import { DataManagerAccountUnsubscribe } from '../dialogPages/global/DataManagerAccountUnsubscribe';
-import { OpenOrgBillingPage } from '../dialogPages/global/OpenOrgBillingPage';
-import { OrgTransferOwnership } from '../dialogPages/global/OrgTransferOwnership';
+import dynamic from 'next/dynamic';
+import { FC } from 'react';
+import { DialogPageProps } from '../types/DialogTypes';
+
+const OrgCreate = dynamic(() => import('../dialogPages/global/OrgCreate')) as FC<DialogPageProps>;
+
+const OrgUpdate = dynamic(() => import('../dialogPages/global/OrgUpdate')) as FC<DialogPageProps>;
+
+const OrgDelete = dynamic(() => import('../dialogPages/global/OrgDelete')) as FC<DialogPageProps>;
+
+const TagManagerStartTrial = dynamic(
+    () => import('../dialogPages/global/TagManagerStartTrial'),
+) as FC<DialogPageProps>;
+
+const DataManagerStartTrial = dynamic(
+    () => import('../dialogPages/global/DataManagerStartTrial'),
+) as FC<DialogPageProps>;
+
+const TagManagerAccountSubscribe = dynamic(
+    () => import('../dialogPages/global/TagManagerAccountSubscribe'),
+) as FC<DialogPageProps>;
+
+const DataManagerAccountSubscribe = dynamic(
+    () => import('../dialogPages/global/DataManagerAccountSubscribe'),
+) as FC<DialogPageProps>;
+
+const TagManagerAccountUnsubscribe = dynamic(
+    () => import('../dialogPages/global/TagManagerAccountUnsubscribe'),
+) as FC<DialogPageProps>;
+
+const DataManagerAccountUnsubscribe = dynamic(
+    () => import('../dialogPages/global/DataManagerAccountUnsubscribe'),
+) as FC<DialogPageProps>;
+
+const OpenOrgBillingPage = dynamic(
+    () => import('../dialogPages/global/OpenOrgBillingPage'),
+) as FC<DialogPageProps>;
+
+const OrgTransferOwnership = dynamic(
+    () => import('../dialogPages/global/OrgTransferOwnership'),
+) as FC<DialogPageProps>;
 
 const organizationActions = {
     createOrganization: (pageActionProps: PageActionProps): void => {

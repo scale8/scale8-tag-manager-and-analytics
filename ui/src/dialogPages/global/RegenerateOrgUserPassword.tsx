@@ -72,4 +72,4 @@ const RegenerateOrgUserPassword: FC<DialogPageProps> = (props: DialogPageProps) 
     );
 };
 
-export { RegenerateOrgUserPassword };
+export default RegenerateOrgUserPassword;

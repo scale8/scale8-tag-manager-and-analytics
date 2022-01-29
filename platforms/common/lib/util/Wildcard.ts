@@ -4,7 +4,7 @@ export default class Wildcard {
             '^' +
                 pattern
                     .split('*')
-                    .map((_) => _.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, '\\$1'))
+                    .map((_) => _.replace(/([.*+?^=!:${}()|[\]/\\])/g, '\\$1'))
                     .join('.*') +
                 '$',
         ).test(str);

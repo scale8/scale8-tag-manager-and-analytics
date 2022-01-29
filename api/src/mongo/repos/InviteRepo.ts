@@ -1,13 +1,13 @@
 import Repo from '../abstractions/Repo';
 import { injectable } from 'inversify';
 import Invite from '../models/Invite';
-import { IndexSpecification } from 'mongodb';
+import { IndexDescription } from 'mongodb';
 
 @injectable()
 export default class InviteRepo extends Repo<Invite> {
     protected readonly EXPIRES_AFTER = 86400 * 3;
 
-    protected readonly indexes: IndexSpecification[] = [
+    protected readonly indexes: IndexDescription[] = [
         {
             background: false,
             key: {

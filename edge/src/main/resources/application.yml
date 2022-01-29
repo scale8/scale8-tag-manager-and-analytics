@@ -15,5 +15,3 @@ micronaut:
     geo:
       expire-after-write: "600s"
       expire-after-access: "600s"
-
-backend-storage: "mongodb"

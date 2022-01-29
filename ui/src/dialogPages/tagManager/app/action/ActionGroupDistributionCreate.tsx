@@ -134,4 +134,4 @@ const ActionGroupDistributionCreate: FC<ActionGroupDistributionCreateProps> = (
     return <ActionGroupDistributionForm {...formProps} />;
 };
 
-export { ActionGroupDistributionCreate };
+export default ActionGroupDistributionCreate;

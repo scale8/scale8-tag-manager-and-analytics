@@ -53,14 +53,6 @@ const EnvironmentUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
                 environmentUpdateInput.url = environmentValues.url;
             }
 
-            if (environmentValues.certificate !== '') {
-                environmentUpdateInput.cert_pem = environmentValues.certificate;
-            }
-
-            if (environmentValues.key !== '') {
-                environmentUpdateInput.key_pem = environmentValues.key;
-            }
-
             return { environmentUpdateInput };
         },
         buildFormProps: (
@@ -80,7 +72,6 @@ const EnvironmentUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
                     key: _.id,
                     text: _.name,
                 })),
-            hasCustomDomain: formLoadedData.getEnvironment.custom_domain !== null,
         }),
         checkSuccessfullySubmitted: (formMutationData) => formMutationData?.updateEnvironment,
         pageComponent: EnvironmentForm,
@@ -100,4 +91,4 @@ const EnvironmentUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { EnvironmentUpdate };
+export default EnvironmentUpdate;

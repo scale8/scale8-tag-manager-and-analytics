@@ -15,7 +15,7 @@ const SsoFailure: FC = () => {
             // close the popup
             window.close();
         }
-    });
+    }, []);
     return (
         <>
             <Loader />

@@ -4,13 +4,13 @@ import EnvironmentInstallInstructionsDialog from '../../../components/organisms/
 import EnvironmentInstructionsGetQuery from '../../../gql/queries/EnvironmentInstructionsGetQuery';
 import { EnvironmentInstructionsGetData } from '../../../gql/generated/EnvironmentInstructionsGetData';
 import { DialogPageProps } from '../../../types/DialogTypes';
-import { queryLoaderAndError } from '../../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../../abstractions/QueryLoaderAndError';
 import { useConfigState } from '../../../context/AppContext';
 
 const AppEnvironmentsInstallInstructions: FC<DialogPageProps> = (props: DialogPageProps) => {
     const { mode } = useConfigState();
 
-    return queryLoaderAndError<EnvironmentInstructionsGetData>(
+    return QueryLoaderAndError<EnvironmentInstructionsGetData>(
         false,
         useQuery<EnvironmentInstructionsGetData>(EnvironmentInstructionsGetQuery, {
             variables: { id: props.id },
@@ -24,7 +24,6 @@ const AppEnvironmentsInstallInstructions: FC<DialogPageProps> = (props: DialogPa
                     environmentId={data.getEnvironment.id}
                     title="Environment Installation Instructions"
                     installDomain={data.getEnvironment.install_domain}
-                    customDomain={data.getEnvironment.custom_domain}
                     handleDialogClose={props.handleDialogClose}
                     cname={data.getEnvironment.cname}
                     mode={mode}
@@ -41,4 +40,4 @@ const AppEnvironmentsInstallInstructions: FC<DialogPageProps> = (props: DialogPa
     );
 };
 
-export { AppEnvironmentsInstallInstructions };
+export default AppEnvironmentsInstallInstructions;

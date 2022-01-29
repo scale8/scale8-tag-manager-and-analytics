@@ -70,11 +70,9 @@ import RuleManager from '../managers/tag/RuleManager';
 import RuleGroupManager from '../managers/tag/RuleGroupManager';
 import EventManager from '../managers/tag/EventManager';
 import Routing from '../express/Routing';
-import GitHubAuth from '../express/handlers/GitHubAuth';
 import PlatformAsset from '../mongo/models/tag/PlatformAsset';
 import PlatformAssetManager from '../managers/tag/PlatformAssetManager';
 import PlatformAssetRepo from '../mongo/repos/tag/PlatformAssetRepo';
-import RevisionPreview from '../express/handlers/RevisionPreview';
 import OrgRoleRepo from '../mongo/repos/OrgRoleRepo';
 import OrgRole from '../mongo/models/OrgRole';
 import UserNotification from '../mongo/models/UserNotification';
@@ -127,7 +125,6 @@ import EnvironmentVariableRepo from '../mongo/repos/EnvironmentVariableRepo';
 import Route53Service from '../aws/Route53Service';
 import Dependency from '../mongo/models/Dependency';
 import DependencyRepo from '../mongo/repos/DependencyRepo';
-import Ping from '../express/handlers/Ping';
 import Trigger from '../mongo/models/tag/Trigger';
 import TriggerRepo from '../mongo/repos/tag/TriggerRepo';
 import TriggerManager from '../managers/tag/TriggerManager';
@@ -135,7 +132,6 @@ import PlatformActionPermission from '../mongo/models/tag/PlatformActionPermissi
 import PlatformActionPermissionRepo from '../mongo/repos/tag/PlatformActionPermissionRepo';
 import PlatformActionPermissionManager from '../managers/tag/PlatformActionPermissionManager';
 import StripeService from '../payments/providers/StripeService';
-import StripeWebhook from '../express/handlers/StripeWebhook';
 import Usage from '../mongo/models/Usage';
 import UsageRepo from '../mongo/repos/UsageRepo';
 import UsageManager from '../managers/UsageManager';
@@ -154,6 +150,8 @@ import MongoDb from '../backends/databases/MongoDb';
 import { StorageProvider } from '../enums/StorageProvider';
 import GenericError from '../errors/GenericError';
 import { LogPriority } from '../enums/LogPriority';
+import { Mode } from '../enums/Mode';
+import AwsKeyStoreConfig from '../backends/configuration/AwsKeyStoreConfig';
 import Context = interfaces.Context;
 import Factory = interfaces.Factory;
 
@@ -180,20 +178,24 @@ container
     .bind<BaseStorage>(TYPES.BackendStorage)
     .toDynamicValue((context: Context) => {
         const config = context.container.get<BaseConfig>(TYPES.BackendConfig);
-        const storageBackend = config.getStorageBackend();
-        if (storageBackend === 's3') {
-            return context.container.get<AmazonS3Storage>(TYPES.AmazonS3Storage);
-        } else if (storageBackend === 'google') {
+        if (config.getMode() === Mode.COMMERCIAL) {
             return context.container.get<GoogleCloudStorage>(TYPES.GoogleCloudStorage);
         } else {
-            return context.container.get<MongoDBStorage>(TYPES.MongoDBStorage);
+            const storageBackend = config.getStorageBackend();
+            if (storageBackend === 's3') {
+                return context.container.get<AmazonS3Storage>(TYPES.AmazonS3Storage);
+            } else if (storageBackend === 'google') {
+                return context.container.get<GoogleCloudStorage>(TYPES.GoogleCloudStorage);
+            } else {
+                return context.container.get<MongoDBStorage>(TYPES.MongoDBStorage);
+            }
         }
     })
     .inSingletonScope();
 
 container
     .bind<Factory<BaseDatabase>>(TYPES.BackendDatabaseFactory)
-    .toFactory<BaseDatabase>((context) => {
+    .toFactory<BaseDatabase, [StorageProvider]>((context) => {
         return (storage_provider: StorageProvider) => {
             if (storage_provider === StorageProvider.MONGODB) {
                 return context.container.get<MongoDb>(TYPES.MongoDb);
@@ -210,7 +212,19 @@ container
 
 container.bind<BaseLogger>(TYPES.BackendLogger).to(ConsoleLogger).inSingletonScope();
 container.bind<BaseEmail>(TYPES.BackendEmail).to(Mailer).inSingletonScope();
-container.bind<BaseConfig>(TYPES.BackendConfig).to(EnvironmentConfig).inSingletonScope();
+
+container.bind<EnvironmentConfig>(TYPES.EnvironmentConfig).to(EnvironmentConfig).inSingletonScope();
+container.bind<AwsKeyStoreConfig>(TYPES.AwsKeyStoreConfig).to(AwsKeyStoreConfig).inSingletonScope();
+//pluggable
+container
+    .bind<BaseConfig>(TYPES.BackendConfig)
+    .toDynamicValue((context: Context) => {
+        const environmentConfig = context.container.get<EnvironmentConfig>(TYPES.EnvironmentConfig);
+        return environmentConfig.getMode() === Mode.COMMERCIAL
+            ? context.container.get<AwsKeyStoreConfig>(TYPES.AwsKeyStoreConfig)
+            : environmentConfig;
+    })
+    .inSingletonScope();
 
 container.bind<Render>(TYPES.Render).to(Render).inSingletonScope();
 container.bind<Routing>(TYPES.Routing).to(Routing).inSingletonScope();
@@ -218,7 +232,6 @@ container.bind<S3Service>(TYPES.S3Service).to(S3Service).inSingletonScope();
 container.bind<Route53Service>(TYPES.Route53Service).to(Route53Service).inSingletonScope();
 container.bind<StripeService>(TYPES.StripeService).to(StripeService).inSingletonScope();
 container.bind<ConsoleLogger>(TYPES.ConsoleLogger).to(ConsoleLogger).inSingletonScope();
-container.bind<EnvironmentConfig>(TYPES.EnvironmentConfig).to(EnvironmentConfig).inSingletonScope();
 
 [
     //gql

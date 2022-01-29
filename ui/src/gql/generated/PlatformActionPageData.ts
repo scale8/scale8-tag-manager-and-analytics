@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 // ====================================================
@@ -30,11 +29,14 @@ export interface PlatformActionPageData_getPlatformRevision_platform_actions {
    */
   description: string;
   /**
-   * [Optional]. This will force the `PlatformAction` server side and direct the payload described in 'platform_data_maps' as JSON POST request at the provided server-to-server endpoint.
+   * [Optional]. This will force the `PlatformAction` server side and direct the
+   * payload described in 'platform_data_maps' as JSON POST request at the provided
+   * server-to-server endpoint.
    */
   s2s_endpoint: string | null;
   /**
-   * List of `PlatformDataMap`s that create a document style key => value map. This can be directly accessed by the action when called.
+   * List of `PlatformDataMap`s that create a document style key => value map. This
+   * can be directly accessed by the action when called.
    */
   platform_data_maps: PlatformActionPageData_getPlatformRevision_platform_actions_platform_data_maps[];
 }

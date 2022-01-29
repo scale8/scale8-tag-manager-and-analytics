@@ -1,23 +1,23 @@
 import Model from '../abstractions/Model';
 import Field from '../decorators/Field';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import PermissionGroup from './PermissionGroup';
 import Org from './Org';
 import User from './User';
 import PermissionGroupRepo from '../repos/PermissionGroupRepo';
 
 export default class OrgRole extends Model {
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'user_id',
     })
-    private _user_id!: ObjectID;
+    private _user_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'org_id',
     })
-    private _org_id!: ObjectID;
+    private _org_id!: ObjectId;
 
     @Field<PermissionGroup>({
         repository: PermissionGroupRepo,
@@ -35,19 +35,19 @@ export default class OrgRole extends Model {
         this._permission_group = permissionGroup;
     }
 
-    get userId(): ObjectID {
+    get userId(): ObjectId {
         return this._user_id;
     }
 
-    set userId(value: ObjectID) {
+    set userId(value: ObjectId) {
         this._user_id = value;
     }
 
-    get orgId(): ObjectID {
+    get orgId(): ObjectId {
         return this._org_id;
     }
 
-    set orgId(value: ObjectID) {
+    set orgId(value: ObjectId) {
         this._org_id = value;
     }
 

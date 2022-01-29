@@ -78,4 +78,4 @@ const RuleUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { RuleUpdate };
+export default RuleUpdate;

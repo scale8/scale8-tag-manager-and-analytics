@@ -1,14 +1,17 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import dynamic from 'next/dynamic';
 
+export type ShikiLanguages = 'js' | 'json' | 'html' | 'sh' | 'php' | 'python' | 'ruby';
+
 export type ShikiProps = {
-    language: string;
+    language: ShikiLanguages;
     code: string;
     errorPosition?: {
         row: number;
         col: number;
     };
-    setLoaded?: () => void;
+    smallText?: boolean;
+    lineNumbers?: boolean;
 };
 
 const LazyShiki: FC<ShikiProps> = (props: ShikiProps) => {
@@ -16,4 +19,4 @@ const LazyShiki: FC<ShikiProps> = (props: ShikiProps) => {
 
     return <DynamicComponent {...props} />;
 };
-export default LazyShiki;
+export default memo(LazyShiki);

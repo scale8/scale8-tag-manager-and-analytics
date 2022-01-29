@@ -10,8 +10,8 @@ import {
     ActionGroupDistributionType,
     ActionGroupUpdateInput,
 } from '../../../gql/generated/globalTypes';
-import RulesAddButton from '../../atoms/RulesAddButton';
 import { logError } from '../../../utils/logUtils';
+import { SmallAddButton } from '../../atoms/SmallAddButton';
 
 export type ActionGroupDistributionSectionProps = {
     actionGroupsDistribution: ActionGroupDistribution;
@@ -262,12 +262,12 @@ const ActionGroupDistributionSection: FC<ActionGroupDistributionSectionProps> = 
                     pageActionProps={pageActionProps}
                 />
             ))}
-            <RulesAddButton
-                disabled={readOnly}
-                text="Add Action Group"
-                onClick={() =>
+            <SmallAddButton
+                addButtonText="Add Action Group"
+                addButtonClick={() =>
                     pageActions.createActionGroup(pageActionProps, actionGroupsDistribution.id)
                 }
+                disabled={readOnly}
             />
         </>
     );

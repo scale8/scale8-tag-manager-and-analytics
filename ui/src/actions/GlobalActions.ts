@@ -1,7 +1,16 @@
 import { PageActionProps } from './PageActions';
-import NotificationsPage from '../components/organisms/NotificationsPage';
 import { openLightbox, openLightboxNoRefresh } from '../utils/PageActionUtils';
-import ManageAccountPage from '../dialogPages/global/ManageAccountPage';
+import dynamic from 'next/dynamic';
+import { FC } from 'react';
+import { DialogPageProps } from '../types/DialogTypes';
+
+const NotificationsPage = dynamic(
+    () => import('../components/organisms/NotificationsPage'),
+) as FC<DialogPageProps>;
+
+const ManageAccountPage = dynamic(
+    () => import('../dialogPages/global/ManageAccountPage'),
+) as FC<DialogPageProps>;
 
 const globalActions = {
     manageAccount: (pageActionProps: PageActionProps): void => {

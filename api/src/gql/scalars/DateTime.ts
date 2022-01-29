@@ -27,8 +27,8 @@ const DateTime: ScalarType = {
     def: new GraphQLScalarType({
         name: 'DateTime',
         description: 'Handles date-time',
-        serialize: (value: Date) => value.getTime(), //to client
-        parseValue: (value) => new Date(parseValue(value)), //from client
+        serialize: (value: any) => value.getTime(), //to client
+        parseValue: (value: any) => new Date(parseValue(value)), //from client
         //from literal
         parseLiteral: (ast) => {
             if (ast.kind === Kind.STRING) {

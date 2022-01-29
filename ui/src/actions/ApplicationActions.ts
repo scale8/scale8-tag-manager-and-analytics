@@ -5,10 +5,25 @@ import {
     openDrawerContextOnly,
     openLightboxNoRefresh,
 } from '../utils/PageActionUtils';
-import { AppCreate } from '../dialogPages/tagManager/app/AppCreate';
-import { AppDelete } from '../dialogPages/tagManager/app/AppDelete';
-import { AppUpdate } from '../dialogPages/tagManager/app/AppUpdate';
-import { AppInstallInstructions } from '../dialogPages/tagManager/app/AppInstallInstructions';
+import dynamic from 'next/dynamic';
+import { FC } from 'react';
+import { DialogPageProps } from '../types/DialogTypes';
+
+const AppCreate = dynamic(
+    () => import('../dialogPages/tagManager/app/AppCreate'),
+) as FC<DialogPageProps>;
+
+const AppDelete = dynamic(
+    () => import('../dialogPages/tagManager/app/AppDelete'),
+) as FC<DialogPageProps>;
+
+const AppUpdate = dynamic(
+    () => import('../dialogPages/tagManager/app/AppUpdate'),
+) as FC<DialogPageProps>;
+
+const AppInstallInstructions = dynamic(
+    () => import('../dialogPages/tagManager/app/AppInstallInstructions'),
+) as FC<DialogPageProps>;
 
 const applicationActions = {
     createApplication: (

@@ -3,6 +3,7 @@ package com.scale8;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.scale8.asset.Loader;
+import com.scale8.backends.storage.StorageInterface;
 import com.scale8.extended.ExtendedRequest;
 import com.scale8.mmdb.Geo;
 import io.micronaut.http.HttpRequest;
@@ -38,6 +39,9 @@ public class RootController {
   @Inject Env env;
 
   @Inject Geo geo;
+
+  @Inject
+  StorageInterface storage;
 
   private ExtendedRequest createExtendedRequest(
       HttpRequest<String> request, String id, Map<String, String> extraParameters) {

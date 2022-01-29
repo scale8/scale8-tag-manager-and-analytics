@@ -7,13 +7,16 @@ import BaseConfig from '../backends/configuration/abstractions/BaseConfig';
 export default class Route53Service {
     @inject(TYPES.BackendConfig) private readonly config!: BaseConfig;
 
-    public getRoute53Client(accessKeyId: string, secretAccessKey: string): Route53 {
-        return new Route53({
-            credentials: {
-                accessKeyId: accessKeyId,
-                secretAccessKey: secretAccessKey,
-            },
-        });
+    public getRoute53Client(accessKeyId?: string, secretAccessKey?: string): Route53 {
+        if (accessKeyId !== undefined && secretAccessKey !== undefined) {
+            return new Route53({
+                credentials: {
+                    accessKeyId: accessKeyId,
+                    secretAccessKey: secretAccessKey,
+                },
+            });
+        }
+        return new Route53();
     }
 
     public async createNewCNAME(

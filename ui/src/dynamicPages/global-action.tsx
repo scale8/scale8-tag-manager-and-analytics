@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { DynamicPageProps } from '../pageLoader/DynamicPageLoader';
 import { useLoggedInState } from '../context/AppContext';
-import { queryLoaderAndError } from '../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import { GlobalActionPageData } from '../gql/generated/GlobalActionPageData';
 import PageGlobalActionContentQuery from '../gql/queries/PageGlobalActionContentQuery';
 import { PageActionProps, pageActions } from '../actions/PageActions';
@@ -22,7 +22,7 @@ const GlobalActionPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const { templateInteractions } = useLoggedInState();
     const { dispatchDialogAction } = templateInteractions;
 
-    return queryLoaderAndError<GlobalActionPageData>(
+    return QueryLoaderAndError<GlobalActionPageData>(
         false,
         useQuery(PageGlobalActionContentQuery, {
             variables: { id },

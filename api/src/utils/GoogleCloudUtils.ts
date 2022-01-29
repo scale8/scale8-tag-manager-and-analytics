@@ -1,7 +1,5 @@
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import { JWTInput } from 'google-auth-library/build/src/auth/credentials';
-import fs from 'fs';
-import path from 'path';
 import { getStorageProviderConfig } from './IngestEndpointEnvironmentUtils';
 import { GCBigQueryStreamConfig } from '../Types';
 import container from '../container/IOC.config';
@@ -10,14 +8,15 @@ import TYPES from '../container/IOC.types';
 
 export const getServiceAccountJsonFromConfig = async (): Promise<JWTInput> => {
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
-
-    return JSON.parse(
-        fs.readFileSync(path.resolve(process.cwd(), await config.getGCKeyFile()), 'utf8'),
-    ) as JWTInput;
+    return JSON.parse(await config.getGCJson());
+    // todo - should we support file loading?
+    // return JSON.parse(
+    //     fs.readFileSync(path.resolve(process.cwd(), await config.getGCKeyFile()), 'utf8'),
+    // ) as JWTInput;
 };
 
 export const getBigQueryConfig = async (
-    entityUsageIngestEndpointEnvironmentId: ObjectID,
+    entityUsageIngestEndpointEnvironmentId: ObjectId,
 ): Promise<GCBigQueryStreamConfig> => {
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
 
@@ -36,7 +35,7 @@ export const getBigQueryConfig = async (
 };
 
 export const getServiceAccountJson = async (
-    entityUsageIngestEndpointEnvironmentId: ObjectID,
+    entityUsageIngestEndpointEnvironmentId: ObjectId,
 ): Promise<JWTInput> => {
     return (await getBigQueryConfig(entityUsageIngestEndpointEnvironmentId)).service_account_json;
 };

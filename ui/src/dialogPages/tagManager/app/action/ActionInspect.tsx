@@ -9,7 +9,7 @@ import { mappedPlatformValuesFromDataMapsWithValues } from '../../../../utils/Ma
 import { AppPlatformRevision } from '../../../../types/TagRulesTypes';
 import { IngestEndpointForEnvironmentSelection } from '../../../../types/IngestEndpointsTypes';
 import { DialogPageProps } from '../../../../types/DialogTypes';
-import { queryLoaderAndError } from '../../../../abstractions/QueryLoaderAndError';
+import { QueryLoaderAndError } from '../../../../abstractions/QueryLoaderAndError';
 import { useConfigState } from '../../../../context/AppContext';
 
 const ActionInspect: FC<DialogPageProps> = (props: DialogPageProps) => {
@@ -21,7 +21,7 @@ const ActionInspect: FC<DialogPageProps> = (props: DialogPageProps) => {
         props.handleDialogClose(false);
     };
 
-    return queryLoaderAndError<InspectActionData>(
+    return QueryLoaderAndError<InspectActionData>(
         false,
         useQuery<InspectActionData>(InspectActionQuery, {
             variables: { id, agdId: props.contextId },
@@ -59,4 +59,4 @@ const ActionInspect: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { ActionInspect };
+export default ActionInspect;

@@ -31,7 +31,7 @@ const RemoveOrganizationSection: FC<RemoveOrganizationSectionProps> = (
 
     return (
         <>
-            <DangerBox>
+            <DangerBox dark>
                 Organization removal cannot be undone. Please be certain.
                 <br />
                 All data{mode === Mode.COMMERCIAL && ' and subscriptions'} will be removed.

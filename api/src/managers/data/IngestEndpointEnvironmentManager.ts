@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify';
 import Manager from '../../abstractions/Manager';
 import { gql } from 'apollo-server-express';
 import CTX from '../../gql/ctx/CTX';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import TYPES from '../../container/IOC.types';
 import IngestEndpointEnvironment from '../../mongo/models/data/IngestEndpointEnvironment';
 import IngestEndpointRevision from '../../mongo/models/data/IngestEndpointRevision';
@@ -10,15 +10,15 @@ import IngestEndpoint from '../../mongo/models/data/IngestEndpoint';
 import userMessages from '../../errors/UserMessages';
 import {
     createIngestEndpointEnvironment,
-    getIngestEndpointCNAME,
     getIngestEndpointInstallDomain,
+    getProviderConfigThrows,
     getProviderConfig,
-    getUpdateProviderConfig,
     updateIngestEndpointEnvironment,
 } from '../../utils/IngestEndpointEnvironmentUtils';
 import BaseDatabase from '../../backends/databases/abstractions/BaseDatabase';
 import { withUnManagedAccount } from '../../utils/DataManagerAccountUtils';
 import { StorageProvider } from '../../enums/StorageProvider';
+import { getCNAME } from '../../utils/CertificateUtils';
 
 @injectable()
 export default class IngestEndpointEnvironmentManager extends Manager<IngestEndpointEnvironment> {
@@ -149,11 +149,15 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
             """
             ID of the \`IngestEndpointRevision\` to attach to the \`IngestEndpointEnvironment\`
             """
-            ingest_endpoint_revision_id: ID!
+            ingest_endpoint_revision_id: ID
             """
             \`IngestEndpointEnvironment\` name
             """
             name: String
+            """
+            Optional custom domain name
+            """
+            custom_domain: String
             """
             If a custom domain is used a new certificate can be installed which will replace the exiting one
             """
@@ -220,7 +224,7 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
         getIngestEndpointEnvironment: async (parent: any, args: any, ctx: CTX) => {
             const ingestEndpointEnvironment = await this.repoFactory(
                 IngestEndpointEnvironment,
-            ).findByIdThrows(new ObjectID(args.id), userMessages.environmentFailed);
+            ).findByIdThrows(new ObjectId(args.id), userMessages.environmentFailed);
             return await this.orgAuth.asUserWithViewAccess(
                 ctx,
                 ingestEndpointEnvironment.orgId,
@@ -240,7 +244,7 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
             const ingestEndpointEnvironment = await this.repoFactory(
                 IngestEndpointEnvironment,
             ).findByIdThrows(
-                new ObjectID(data.ingest_endpoint_environment_id),
+                new ObjectId(data.ingest_endpoint_environment_id),
                 userMessages.environmentFailed,
             );
             return withUnManagedAccount(ingestEndpointEnvironment.dataManagerAccountId, async () =>
@@ -248,19 +252,20 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
                     ctx,
                     ingestEndpointEnvironment.orgId,
                     async (me) => {
-                        const providerConfig = await getUpdateProviderConfig(
+                        //todo. this needs a tidy up.
+                        const providerConfig = await getProviderConfig(
                             data,
                             ingestEndpointEnvironment,
                         );
-
                         await updateIngestEndpointEnvironment(
                             me,
                             ingestEndpointEnvironment,
                             providerConfig,
                             data.name,
                             data.ingest_endpoint_revision_id,
-                            this.config.isCommercial() ? data.cert_pem : undefined,
-                            this.config.isCommercial() ? data.key_pem : undefined,
+                            data.custom_domain,
+                            data.cert_pem,
+                            data.key_pem,
                         );
                         return true;
                     },
@@ -272,7 +277,7 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
             const ingestEndpointEnvironment = await this.repoFactory(
                 IngestEndpointEnvironment,
             ).findByIdThrows(
-                new ObjectID(data.ingest_endpoint_environment_id),
+                new ObjectId(data.ingest_endpoint_environment_id),
                 userMessages.environmentFailed,
             );
             return withUnManagedAccount(ingestEndpointEnvironment.dataManagerAccountId, async () =>
@@ -292,17 +297,17 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
         createIngestEndpointEnvironment: async (parent: any, args: any, ctx: CTX) => {
             const data = args.ingestEndpointEnvironmentCreateInput;
             const ingestEndpoint = await this.repoFactory(IngestEndpoint).findByIdThrows(
-                new ObjectID(data.ingest_endpoint_id),
+                new ObjectId(data.ingest_endpoint_id),
                 userMessages.ingestEndpointFailed,
             );
             return withUnManagedAccount(ingestEndpoint.dataManagerAccountId, async () =>
                 this.orgAuth.asUserWithCreateAccess(ctx, ingestEndpoint.orgId, async (me) => {
-                    const providerConfig = await getProviderConfig(data);
+                    const providerConfig = await getProviderConfigThrows(data);
 
                     const ingestEndpointRevision: IngestEndpointRevision = await this.repoFactory(
                         IngestEndpointRevision,
                     ).findByIdThrows(
-                        new ObjectID(data.ingest_endpoint_revision_id),
+                        new ObjectId(data.ingest_endpoint_revision_id),
                         userMessages.revisionFailed,
                     );
 
@@ -315,9 +320,6 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
                             providerConfig,
                             ingestEndpointRevision,
                             undefined,
-                            this.config.isCommercial() ? data.custom_domain : undefined,
-                            this.config.isCommercial() ? data.cert_pem : undefined,
-                            this.config.isCommercial() ? data.key_pem : undefined,
                         )
                     ).toGQLType();
                 }),
@@ -332,10 +334,16 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
      */
     protected gqlCustomResolvers = {
         IngestEndpointEnvironment: {
-            cname: async (parent: any) => getIngestEndpointCNAME(parent.id),
+            cname: async (parent: any) =>
+                getCNAME(
+                    await this.repoFactory(IngestEndpointEnvironment).findByIdThrows(
+                        new ObjectId(parent.id),
+                        userMessages.environmentFailed,
+                    ),
+                ),
             install_domain: async (parent: any, args: any, ctx: CTX) => {
                 const env = await this.repoFactory(IngestEndpointEnvironment).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.environmentFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, env.orgId, async () =>
@@ -344,7 +352,7 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
             },
             ingest_endpoint_revision: async (parent: any, args: any, ctx: CTX) => {
                 const env = await this.repoFactory(IngestEndpointEnvironment).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.environmentFailed,
                 );
                 return this.orgAuth.asUserWithViewAccess(ctx, env.orgId, async () => {
@@ -360,7 +368,7 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
             },
             request_stats: async (parent: any, args: any, ctx: CTX) => {
                 const env = await this.repoFactory(IngestEndpointEnvironment).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.environmentFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, env.orgId, async () => {
@@ -384,7 +392,7 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
             },
             byte_stats: async (parent: any, args: any, ctx: CTX) => {
                 const env = await this.repoFactory(IngestEndpointEnvironment).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.environmentFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, env.orgId, async () => {

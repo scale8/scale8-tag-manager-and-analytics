@@ -1,9 +1,9 @@
-import { FC, useEffect } from 'react';
+import { useEffect } from 'react';
 import Loader from '../../components/organisms/Loader';
-import { useParams } from '../../hooks/useParams';
+import { ComponentWithParams, ParamsLoader } from '../../components/atoms/ParamsLoader';
 
-const SsoSuccess: FC = () => {
-    const { uid, token } = useParams();
+const SsoSuccess: ComponentWithParams = ({ params }) => {
+    const { uid, token } = params;
     useEffect(() => {
         if (window.opener && uid && token) {
             // send them to the opening window
@@ -24,11 +24,9 @@ const SsoSuccess: FC = () => {
             window.close();
         }
     }, [uid, token]);
-    return (
-        <>
-            <Loader />
-        </>
-    );
+    return <Loader />;
 };
 
-export default SsoSuccess;
+const SsoSuccessLoader = () => <ParamsLoader Child={SsoSuccess} />;
+
+export default SsoSuccessLoader;

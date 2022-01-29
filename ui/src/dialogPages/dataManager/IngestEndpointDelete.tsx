@@ -24,4 +24,4 @@ const IngestEndpointDelete: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { IngestEndpointDelete };
+export default IngestEndpointDelete;

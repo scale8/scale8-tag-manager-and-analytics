@@ -1,6 +1,6 @@
 import Model from '../../abstractions/Model';
 import Field from '../../decorators/Field';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import Revision from './Revision';
 import ScalarContainer from '../../custom/ScalarContainer';
 import RepeatedDataMap from './RepeatedDataMap';
@@ -13,15 +13,15 @@ import { VarType } from '../../../enums/VarType';
 import { DataMapValue } from '../../../../../common/types/Types';
 
 export default class DataMap extends Model {
-    public getOrgEntityId(): ObjectID {
+    public getOrgEntityId(): ObjectId {
         return this.orgId;
     }
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'org_id',
     })
-    private readonly _org_id!: ObjectID;
+    private readonly _org_id!: ObjectId;
 
     @Field<string>({
         required: true,
@@ -51,39 +51,39 @@ export default class DataMap extends Model {
     })
     private readonly _var_type: VarType;
 
-    @Field<ObjectID[]>({
+    @Field<ObjectId[]>({
         repository: DataMapRepo,
         required: true,
         exposeToGQLAs: 'child_data_map_ids',
         exposeToConfig: true,
     })
-    private readonly _child_data_map_ids: ObjectID[] = [];
+    private readonly _child_data_map_ids: ObjectId[] = [];
 
-    @Field<ObjectID[]>({
+    @Field<ObjectId[]>({
         repository: RepeatedDataMapRepo,
         required: true,
         exposeToGQLAs: 'repeated_data_map_ids',
         exposeToConfig: true,
     })
-    private readonly _repeated_data_map_ids: ObjectID[] = [];
+    private readonly _repeated_data_map_ids: ObjectId[] = [];
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'tag_manager_account_id',
     })
-    private _tag_manager_account_id!: ObjectID;
+    private _tag_manager_account_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'app_id',
     })
-    private readonly _app_id!: ObjectID;
+    private readonly _app_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'revision_id',
     })
-    private readonly _revision_id!: ObjectID;
+    private readonly _revision_id!: ObjectId;
 
     constructor(
         key: string,
@@ -176,7 +176,7 @@ export default class DataMap extends Model {
         }
     }
 
-    get orgId(): ObjectID {
+    get orgId(): ObjectId {
         return this._org_id;
     }
 
@@ -196,15 +196,15 @@ export default class DataMap extends Model {
         return this._value;
     }
 
-    get childDataMapIds(): ObjectID[] {
+    get childDataMapIds(): ObjectId[] {
         return this._child_data_map_ids;
     }
 
-    get repeatedDataMapIds(): ObjectID[] {
+    get repeatedDataMapIds(): ObjectId[] {
         return this._repeated_data_map_ids;
     }
 
-    get revisionId(): ObjectID {
+    get revisionId(): ObjectId {
         return this._revision_id;
     }
 }

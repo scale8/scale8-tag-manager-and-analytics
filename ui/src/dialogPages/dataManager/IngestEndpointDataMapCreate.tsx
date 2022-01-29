@@ -34,7 +34,7 @@ export type IngestEndpointDataMapFormProps = FormProps<IngestEndpointDataMapValu
     readOnly: boolean;
 };
 
-const IngestEndpointDataMapCreateWithLevel: FC<DialogPageProps & { lastLevel: boolean }> = (
+export const IngestEndpointDataMapCreateWithLevel: FC<DialogPageProps & { lastLevel: boolean }> = (
     props: DialogPageProps & { lastLevel: boolean },
 ) => {
     const { id: parentId, contextId: ingest_endpoint_revision_id, name: parentName } = props;
@@ -186,12 +186,9 @@ const IngestEndpointDataMapCreateWithLevel: FC<DialogPageProps & { lastLevel: bo
 
     return <IngestEndpointDataMapForm {...formProps} />;
 };
-const IngestEndpointDataMapCreateLastLevel: FC<DialogPageProps> = (props: DialogPageProps) => {
-    return <IngestEndpointDataMapCreateWithLevel lastLevel={true} {...props} />;
-};
 
 const IngestEndpointDataMapCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
     return <IngestEndpointDataMapCreateWithLevel lastLevel={false} {...props} />;
 };
 
-export { IngestEndpointDataMapCreate, IngestEndpointDataMapCreateLastLevel };
+export default IngestEndpointDataMapCreate;

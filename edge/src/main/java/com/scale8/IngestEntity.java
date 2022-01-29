@@ -35,7 +35,8 @@ public class IngestEntity {
 
   @Cacheable()
   protected IngestSettings getConfig(String uri) throws IOException {
-    return new Gson().fromJson(storage.get(env.CONFIG_BUCKET, uri), IngestSettings.class);
+    String data = storage.get(env.CONFIG_BUCKET, uri);
+    return new Gson().fromJson(data, IngestSettings.class);
   }
 
   public IngestSettings getConfigByHost(String host) throws IOException {
@@ -44,7 +45,8 @@ public class IngestEntity {
 
   public IngestSettings getConfigById(String id) throws IOException {
     String name = id.contains(".") ? id : (env.IS_PROD ? "p" : "d") + id + ".scale8.com";
-    return this.getConfig("ingest-domain/" + name + ".json");
+    String configLocation = "ingest-domain/" + name + ".json";
+    return this.getConfig(configLocation);
   }
 
   protected void trackUsage(
@@ -66,7 +68,8 @@ public class IngestEntity {
                 new Replacements(extendedRequest, ingestSettings, null));
 
         List<String> trackingIssues =
-            payload.validateSchemaAgainstPayload(trackingPayload, usageIngestSettings.getSchemaAsMap());
+            payload.validateSchemaAgainstPayload(
+                trackingPayload, usageIngestSettings.getSchemaAsMap());
 
         if (trackingIssues.isEmpty()) {
           // go ahead and log this...

@@ -1,7 +1,6 @@
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import {
     Box,
-    Button,
     Checkbox,
     IconButton,
     Table,
@@ -16,11 +15,11 @@ import CheckIcon from '@mui/icons-material/Check';
 import EditIcon from '@mui/icons-material/Edit';
 import { UpdateActionPermissionProps } from '../ActionPermissions/ActionPermissionSection';
 import { ApolloError } from '@apollo/client/errors';
-import AddIcon from '@mui/icons-material/Add';
 import { VariableReadWriteExecuteScopeInput } from '../../../types/ActionPermissionsTypes';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { useLoggedInState } from '../../../context/AppContext';
+import { SmallAddButton } from '../../atoms/SmallAddButton';
 
 export type ActionPermissionTableRowProps = {
     eventName?: string;
@@ -455,18 +454,13 @@ const ActionPermissionTable: FC<ActionPermissionTableProps> = (
                 </Table>
             )}
             {!props.readOnly && (
-                <Button
-                    size="small"
-                    variant="outlined"
-                    onClick={() => {
+                <SmallAddButton
+                    addButtonText={submitText}
+                    addButtonClick={() => {
                         setEditIndex(-1);
                     }}
-                    startIcon={<AddIcon />}
-                    sx={{ marginTop: 1 }}
                     disabled={editIndex !== -2}
-                >
-                    {submitText}
-                </Button>
+                />
             )}
         </>
     );

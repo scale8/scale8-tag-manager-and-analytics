@@ -1,7 +1,7 @@
 import Manager from '../../abstractions/Manager';
 import { injectable } from 'inversify';
 import Revision from '../../mongo/models/tag/Revision';
-import { ObjectId, ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import { gql } from 'apollo-server-express';
 import CTX from '../../gql/ctx/CTX';
 import Tag from '../../mongo/models/tag/Tag';
@@ -176,7 +176,7 @@ export default class RevisionManager extends Manager<Revision> {
         Revision: {
             app: async (parent: any, args: any, ctx: CTX) => {
                 const app = await this.repoFactory(App).findByIdThrows(
-                    new ObjectID(parent.app_id),
+                    new ObjectId(parent.app_id),
                     userMessages.appFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
@@ -185,7 +185,7 @@ export default class RevisionManager extends Manager<Revision> {
             },
             app_platform_revisions: async (parent: any, args: any, ctx: CTX) => {
                 const revision = await this.repoFactory(Revision).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.revisionFailed,
                 );
                 return this.orgAuth.asUserWithViewAccess(ctx, revision.orgId, async () =>
@@ -198,7 +198,7 @@ export default class RevisionManager extends Manager<Revision> {
             },
             tags: async (parent: any, args: any, ctx: CTX) => {
                 const revision = await this.repoFactory(Revision).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.revisionFailed,
                 );
                 return this.orgAuth.asUserWithViewAccess(ctx, revision.orgId, async () =>
@@ -209,7 +209,7 @@ export default class RevisionManager extends Manager<Revision> {
             },
             global_triggers: async (parent: any, args: any, ctx: CTX) => {
                 const revision = await this.repoFactory(Revision).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.revisionFailed,
                 );
                 return this.orgAuth.asUserWithViewAccess(ctx, revision.orgId, async () =>
@@ -220,7 +220,7 @@ export default class RevisionManager extends Manager<Revision> {
             },
             global_action_group_distributions: async (parent: any, args: any, ctx: CTX) => {
                 const revision = await this.repoFactory(Revision).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.revisionFailed,
                 );
                 return this.orgAuth.asUserWithViewAccess(ctx, revision.orgId, async () =>
@@ -233,7 +233,7 @@ export default class RevisionManager extends Manager<Revision> {
             },
             event_request_stats: async (parent: any, args: any, ctx: CTX) => {
                 const revision = await this.repoFactory(Revision).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.revisionFailed,
                 );
                 return fetchEventRequests('revision', revision, args, ctx);
@@ -249,7 +249,7 @@ export default class RevisionManager extends Manager<Revision> {
     protected gqlExtendedQueryResolvers = {
         getRevision: async (parent: any, args: any, ctx: CTX) => {
             const revision = await this.repoFactory(Revision).findByIdThrows(
-                new ObjectID(args.id),
+                new ObjectId(args.id),
                 userMessages.revisionFailed,
             );
             return await this.orgAuth.asUserWithViewAccess(ctx, revision.orgId, async () =>
@@ -258,11 +258,11 @@ export default class RevisionManager extends Manager<Revision> {
         },
         revisionDifference: async (parent: any, args: any, ctx: CTX) => {
             const left = await this.repoFactory(Revision).findByIdThrows(
-                new ObjectID(args.leftRevisionId),
+                new ObjectId(args.leftRevisionId),
                 userMessages.revisionFailed,
             );
             const right = await this.repoFactory(Revision).findByIdThrows(
-                new ObjectID(args.rightRevisionId),
+                new ObjectId(args.rightRevisionId),
                 userMessages.revisionFailed,
             );
             if (left.tagManagerAccountId.toString() !== right.tagManagerAccountId.toString()) {
@@ -299,7 +299,7 @@ export default class RevisionManager extends Manager<Revision> {
         },
         duplicateRevision: async (parent: any, args: any, ctx: CTX) => {
             const revision = await this.repoFactory(Revision).findById(
-                new ObjectID(args.duplicateRevisionInput.revision_id),
+                new ObjectId(args.duplicateRevisionInput.revision_id),
             );
             if (revision === null) {
                 throw new GQLError(userMessages.revisionFailed, true);
@@ -344,7 +344,7 @@ export default class RevisionManager extends Manager<Revision> {
             };
 
             const checkRevision = async (
-                revisionId: ObjectID | Revision,
+                revisionId: ObjectId | Revision,
             ): Promise<RevisionIssue[]> => {
                 //first check are platforms merged correctly
                 const revision = await resolveRevision(revisionId);
@@ -449,7 +449,7 @@ export default class RevisionManager extends Manager<Revision> {
             };
 
             const revision = await this.repoFactory(Revision).findByIdThrows(
-                new ObjectID(args.finaliseRevisionInput.revision_id),
+                new ObjectId(args.finaliseRevisionInput.revision_id),
                 userMessages.revisionFailed,
             );
             return this.orgAuth.asUserWithEditAccess(ctx, revision.orgId, async (me) => {

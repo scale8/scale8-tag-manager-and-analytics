@@ -1,7 +1,7 @@
 import Model from '../../abstractions/Model';
 import Field from '../../decorators/Field';
 import PlatformDataMap from './PlatformDataMap';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import PlatformRevision from './PlatformRevision';
 import PlatformDataMapRepo from '../../repos/tag/PlatformDataMapRepo';
 import PlatformActionPermissionRepo from '../../repos/tag/PlatformActionPermissionRepo';
@@ -9,15 +9,15 @@ import PlatformActionPermission from './PlatformActionPermission';
 import { TypeIcon } from '../../../../../common/enums/TypeIcon';
 
 export default class PlatformAction extends Model {
-    public getOrgEntityId(): ObjectID {
+    public getOrgEntityId(): ObjectId {
         return this.orgId;
     }
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'org_id',
     })
-    private readonly _org_id!: ObjectID;
+    private readonly _org_id!: ObjectId;
 
     @Field<string>({
         required: true,
@@ -27,25 +27,25 @@ export default class PlatformAction extends Model {
     })
     private _name: string;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'tag_manager_account_id',
     })
-    private readonly _tag_manager_account_id!: ObjectID;
+    private readonly _tag_manager_account_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'platform_id',
         exposeToConfig: true,
     })
-    private readonly _platform_id!: ObjectID;
+    private readonly _platform_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'platform_revision_id',
         exposeToConfig: true,
     })
-    private readonly _revision_id!: ObjectID;
+    private readonly _revision_id!: ObjectId;
 
     @Field<string>({
         exposeToGQLAs: 's2s_endpoint',
@@ -68,21 +68,21 @@ export default class PlatformAction extends Model {
     })
     private _code?: string;
 
-    @Field<ObjectID[]>({
+    @Field<ObjectId[]>({
         repository: PlatformDataMapRepo,
         required: true,
         exposeToGQLAs: 'platform_data_map_ids',
         exposeToConfig: true,
     })
-    private _platform_data_map_ids: ObjectID[] = [];
+    private _platform_data_map_ids: ObjectId[] = [];
 
-    @Field<ObjectID[]>({
+    @Field<ObjectId[]>({
         repository: PlatformActionPermissionRepo,
         required: true,
         exposeToGQLAs: 'platform_action_permission_ids',
         exposeToConfig: true,
     })
-    private _platform_action_permission_ids: ObjectID[] = [];
+    private _platform_action_permission_ids: ObjectId[] = [];
 
     @Field<TypeIcon>({
         required: false,
@@ -129,7 +129,7 @@ export default class PlatformAction extends Model {
         this._exec_raw_in_iframe = execRawInIframe === true;
     }
 
-    get orgId(): ObjectID {
+    get orgId(): ObjectId {
         return this._org_id;
     }
 
@@ -157,15 +157,15 @@ export default class PlatformAction extends Model {
         this._icon = value;
     }
 
-    get tagManagerAccountId(): ObjectID {
+    get tagManagerAccountId(): ObjectId {
         return this._tag_manager_account_id;
     }
 
-    get platformId(): ObjectID {
+    get platformId(): ObjectId {
         return this._platform_id;
     }
 
-    get platformRevisionId(): ObjectID {
+    get platformRevisionId(): ObjectId {
         return this._revision_id;
     }
 
@@ -177,19 +177,19 @@ export default class PlatformAction extends Model {
         this._description = value;
     }
 
-    get platformDataMapIds(): ObjectID[] {
+    get platformDataMapIds(): ObjectId[] {
         return this._platform_data_map_ids;
     }
 
-    set platformDataMapIds(value: ObjectID[]) {
+    set platformDataMapIds(value: ObjectId[]) {
         this._platform_data_map_ids = value;
     }
 
-    get platformActionPermissionIds(): ObjectID[] {
+    get platformActionPermissionIds(): ObjectId[] {
         return this._platform_action_permission_ids;
     }
 
-    set platformActionPermissionIds(value: ObjectID[]) {
+    set platformActionPermissionIds(value: ObjectId[]) {
         this._platform_action_permission_ids = value;
     }
 

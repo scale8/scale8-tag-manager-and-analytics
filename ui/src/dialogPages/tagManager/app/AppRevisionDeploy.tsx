@@ -68,4 +68,4 @@ const AppRevisionDeploy: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { AppRevisionDeploy };
+export default AppRevisionDeploy;

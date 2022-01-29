@@ -14,6 +14,11 @@ export type AppGroupingCount = {
     event_count: number;
 };
 
+export type EntityWithAnalytics = {
+    analytics_enabled: boolean;
+    storage_provider: StorageProvider;
+};
+
 export const buildSummaryDetailPropsFromValue = (
     title: string,
     value: number,
@@ -73,9 +78,6 @@ export const calculateEventsPerUser = (eventCount: number, userCount: number): n
     return eventCount / userCount;
 };
 
-export const analyticsEnabled = (entity: {
-    analytics_enabled: boolean;
-    storage_provider: StorageProvider;
-}) => {
+export const analyticsEnabled = (entity: EntityWithAnalytics) => {
     return entity.analytics_enabled && entity.storage_provider !== StorageProvider.AWS_S3;
 };

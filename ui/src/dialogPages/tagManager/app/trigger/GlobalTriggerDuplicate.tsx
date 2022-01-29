@@ -67,4 +67,4 @@ const GlobalTriggerDuplicate: FC<DialogPageProps> = (props: DialogPageProps) => 
     );
 };
 
-export { GlobalTriggerDuplicate };
+export default GlobalTriggerDuplicate;

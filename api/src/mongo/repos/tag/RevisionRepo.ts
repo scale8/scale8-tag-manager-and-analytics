@@ -1,7 +1,7 @@
 import Repo from '../../abstractions/Repo';
 import { injectable } from 'inversify';
 import Revision from '../../models/tag/Revision';
-import { IndexSpecification } from 'mongodb';
+import { IndexDescription } from 'mongodb';
 import PlatformRevision from '../../models/tag/PlatformRevision';
 import AppPlatformRevision from '../../models/tag/AppPlatformRevision';
 
@@ -9,7 +9,7 @@ import AppPlatformRevision from '../../models/tag/AppPlatformRevision';
 export default class RevisionRepo extends Repo<Revision> {
     protected readonly auditEnabled = true;
 
-    protected readonly indexes: IndexSpecification[] = [
+    protected readonly indexes: IndexDescription[] = [
         {
             background: false,
             key: {

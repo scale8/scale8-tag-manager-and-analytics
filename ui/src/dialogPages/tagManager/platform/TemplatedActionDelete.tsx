@@ -27,4 +27,4 @@ const TemplatedActionDelete: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { TemplatedActionDelete };
+export default TemplatedActionDelete;

@@ -7,4 +7,4 @@ const TagManagerAccountSubscribe: FC<DialogPageProps> = (props: DialogPageProps)
     return <AccountSubscribe {...props} product={AccountProduct.TAG_MANAGER} />;
 };
 
-export { TagManagerAccountSubscribe };
+export default TagManagerAccountSubscribe;

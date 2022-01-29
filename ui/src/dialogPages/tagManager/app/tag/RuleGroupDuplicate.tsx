@@ -67,4 +67,4 @@ const RuleGroupDuplicate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { RuleGroupDuplicate };
+export default RuleGroupDuplicate;

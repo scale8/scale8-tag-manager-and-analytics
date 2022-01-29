@@ -72,4 +72,4 @@ const ActionGroupDistributionDuplicate: FC<DialogPageProps> = (props: DialogPage
     );
 };
 
-export { ActionGroupDistributionDuplicate };
+export default ActionGroupDistributionDuplicate;

@@ -1,9 +1,24 @@
 import { PageActionProps } from './PageActions';
 import { openDrawer, openInfo, openLightboxWithName } from '../utils/PageActionUtils';
-import { LinkPlatformRevision } from '../dialogPages/tagManager/app/LinkPlatformRevision';
-import { AppPlatformRevisionDelete } from '../dialogPages/tagManager/app/AppPlatformRevisionDelete';
-import { AppPlatformRevisionUpdate } from '../dialogPages/tagManager/app/AppPlatformRevisionUpdate';
-import { AppPlatformRevisionHistory } from '../dialogPages/tagManager/app/AppPlatformRevisionHistory';
+import dynamic from 'next/dynamic';
+import { FC } from 'react';
+import { DialogPageProps } from '../types/DialogTypes';
+
+const LinkPlatformRevision = dynamic(
+    () => import('../dialogPages/tagManager/app/LinkPlatformRevision'),
+) as FC<DialogPageProps>;
+
+const AppPlatformRevisionDelete = dynamic(
+    () => import('../dialogPages/tagManager/app/AppPlatformRevisionDelete'),
+) as FC<DialogPageProps>;
+
+const AppPlatformRevisionUpdate = dynamic(
+    () => import('../dialogPages/tagManager/app/AppPlatformRevisionUpdate'),
+) as FC<DialogPageProps>;
+
+const AppPlatformRevisionHistory = dynamic(
+    () => import('../dialogPages/tagManager/app/AppPlatformRevisionHistory'),
+) as FC<DialogPageProps>;
 
 const appPlatformRevisionActions = {
     linkAppPlatformRevision: (pageActionProps: PageActionProps, revisionID: string): void => {

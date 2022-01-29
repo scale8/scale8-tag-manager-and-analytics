@@ -1,7 +1,6 @@
 import { FC, Fragment, MouseEventHandler } from 'react';
 import {
     Box,
-    Button,
     Divider,
     IconButton,
     List,
@@ -10,7 +9,6 @@ import {
     ListItemSecondaryAction,
     ListItemText,
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
@@ -19,6 +17,7 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import HistoryIcon from '@mui/icons-material/History';
 import { TagElementListItem } from '../../utils/ElementListUtils';
 import { useConfigState } from '../../context/AppContext';
+import { SmallAddButton } from '../atoms/SmallAddButton';
 
 type TagElementListProps = {
     title: string;
@@ -152,15 +151,11 @@ const TagElementList: FC<TagElementListProps> = (props: TagElementListProps) => 
                 ))}
             </List>
             <Box sx={{ width: '100%' }}>
-                <Button
-                    size="small"
-                    variant="outlined"
-                    startIcon={<AddIcon />}
-                    onClick={props.addButtonClick}
+                <SmallAddButton
+                    addButtonText={props.addButtonText}
+                    addButtonClick={props.addButtonClick}
                     disabled={props.disabled}
-                >
-                    {props.addButtonText}
-                </Button>
+                />
             </Box>
         </Box>
     );

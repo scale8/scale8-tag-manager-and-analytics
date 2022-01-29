@@ -1,5 +1,5 @@
-import { FC, useState } from 'react';
-import { Box, Checkbox, FormControlLabel } from '@mui/material';
+import { FC } from 'react';
+import { Box } from '@mui/material';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import ControlledSelect from '../../atoms/ControlledInputs/ControlledSelect';
 import EnvironmentVariablesInput from '../../atoms/EnvironmentVariablesInput';
@@ -8,12 +8,8 @@ import DrawerFormLayout from '../../molecules/DrawerFormLayout';
 import { EnvironmentFormProps } from '../../../dialogPages/tagManager/app/EnvironmentCreate';
 
 const EnvironmentForm: FC<EnvironmentFormProps> = (props: EnvironmentFormProps) => {
-    const [customDomain, setCustomDomain] = useState(
-        (props.gqlError?.message ?? '').indexOf('Certificate') !== -1,
-    );
-
     return (
-        <DrawerFormLayout {...props}>
+        <DrawerFormLayout {...props} submitDisable={props.availableRevisions.length < 1}>
             <ControlledTextInput
                 name="name"
                 label="Name"
@@ -46,58 +42,6 @@ const EnvironmentForm: FC<EnvironmentFormProps> = (props: EnvironmentFormProps) 
                 disabled={props.availableRevisions.length < 1}
                 required
             />
-
-            {props.hasCustomDomain === undefined && (
-                <FormControlLabel
-                    sx={{
-                        marginBottom: (theme) => theme.spacing(1),
-                    }}
-                    control={
-                        <Checkbox
-                            name="customDomain"
-                            checked={customDomain}
-                            onChange={(event) => {
-                                if (!event.target.checked) {
-                                    props.handleChange('domain', '');
-                                }
-                                setCustomDomain(event.target.checked);
-                            }}
-                            color="primary"
-                        />
-                    }
-                    label="Custom Domain"
-                />
-            )}
-
-            {customDomain && (
-                <ControlledTextInput
-                    name="domain"
-                    label="Domain"
-                    formProps={props}
-                    className="DrawerFormField"
-                    required
-                />
-            )}
-
-            {(props.hasCustomDomain || customDomain) && (
-                <>
-                    <ControlledTextAreaInput
-                        name="certificate"
-                        label="Certificate (pem)"
-                        formProps={props}
-                        className="DrawerFormField"
-                        required={!props.hasCustomDomain}
-                    />
-
-                    <ControlledTextAreaInput
-                        name="key"
-                        label="Key (pem)"
-                        formProps={props}
-                        className="DrawerFormField"
-                        required={!props.hasCustomDomain}
-                    />
-                </>
-            )}
 
             {props.values.variables !== undefined && (
                 <Box mb={3}>

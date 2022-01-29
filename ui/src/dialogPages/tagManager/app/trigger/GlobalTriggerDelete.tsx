@@ -92,4 +92,4 @@ const GlobalTriggerDelete: FC<DialogPageProps> = (props: DialogPageProps) => {
     return <DialogDeletePreview {...dialogDeletePreviewProps} />;
 };
 
-export { GlobalTriggerDelete };
+export default GlobalTriggerDelete;

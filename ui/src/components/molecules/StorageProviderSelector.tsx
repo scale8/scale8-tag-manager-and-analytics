@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 import ControlledSelect from '../atoms/ControlledInputs/ControlledSelect';
-import { AWSRegion, StorageProvider } from '../../gql/generated/globalTypes';
+import { AWSRegion, Mode, StorageProvider } from '../../gql/generated/globalTypes';
 import BoxedInputs from '../atoms/BoxedInputs';
 import ControlledTextInput from '../atoms/ControlledInputs/ControlledTextInput';
 import ControlledCodeInput from '../atoms/ControlledInputs/ControlledCodeInput';
@@ -12,6 +12,7 @@ import {
     initialStorageProviderFields,
 } from '../../utils/StorageProviderUtils';
 import CheckBoxInput from '../atoms/InputTypes/CheckBoxInput';
+import { useConfigState } from '../../context/AppContext';
 
 const StorageProviderSelector = <T extends { [key: string]: any }>(
     props: FormProps<T> & {
@@ -21,15 +22,19 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
         infoText?: string;
     },
 ): ReactElement => {
+    const { mode } = useConfigState();
+
     const awsRegionValues = Object.keys(AWSRegion).map((key) => ({
         key,
         text: AWSRegion[key as unknown as keyof typeof AWSRegion].toLowerCase().replace(/_/g, '-'),
     }));
 
-    const storageProviderValues = Object.keys(StorageProvider).map((key) => ({
-        key,
-        text: getStorageProviderLabel(key),
-    }));
+    const storageProviderValues = Object.keys(StorageProvider)
+        .filter((key) => key !== StorageProvider.MONGODB || mode !== Mode.COMMERCIAL)
+        .map((key) => ({
+            key,
+            text: getStorageProviderLabel(key),
+        }));
 
     const dataSetLocationValues = [
         {

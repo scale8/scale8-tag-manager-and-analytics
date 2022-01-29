@@ -98,4 +98,4 @@ const RuleCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { RuleCreate };
+export default RuleCreate;

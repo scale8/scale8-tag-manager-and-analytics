@@ -1,9 +1,15 @@
 import { FC, MouseEvent, useState } from 'react';
-import { Box, FormControl, InputLabel, Select, SelectChangeEvent } from '@mui/material';
+import {
+    Box,
+    FormControl,
+    InputLabel,
+    Select,
+    SelectChangeEvent,
+    ToggleButton,
+    ToggleButtonGroup,
+} from '@mui/material';
 import CopyBlock from '../atoms/CopyBlock';
 import { DataMapsPayload } from '../organisms/DataMapsPayloadBuilder';
-import { ToggleButton, ToggleButtonGroup } from '@mui/material';
-import Alert from '@mui/material/Alert';
 import {
     IngestEndpointInstallInstructionCode,
     IngestEndpointInstallSnippet,
@@ -14,7 +20,6 @@ import { getNodeEnv } from '../../utils/ConfigUtils';
 
 export type IngestEndpointInstallInstructionsDialogProps = {
     installDomain: string;
-    customDomain: string | null;
     cname: string;
     payload: DataMapsPayload;
     mode: Mode;
@@ -56,7 +61,7 @@ const IngestEndpointInstallInstructions: FC<IngestEndpointInstallInstructionsDia
     const determinePort = () => {
         if (props.mode === Mode.COMMERCIAL) {
             if (getNodeEnv() === 'development') {
-                return '5443';
+                return '8443';
             }
             return undefined;
         }
@@ -156,15 +161,6 @@ const IngestEndpointInstallInstructions: FC<IngestEndpointInstallInstructionsDia
                             snippet={currentSnippet}
                         />
                     )}
-                </Box>
-            )}
-
-            {props.customDomain !== null && (
-                <Box pb={2}>
-                    <Alert severity="info">
-                        After you have successfully installed your custom domain, please create a
-                        new CNAME record for “{props.customDomain}” with the value “{props.cname}”
-                    </Alert>
                 </Box>
             )}
         </>

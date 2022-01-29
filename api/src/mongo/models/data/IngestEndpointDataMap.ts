@@ -1,7 +1,7 @@
 import Model from '../../abstractions/Model';
 import Field from '../../decorators/Field';
 import { IngestEndpointDataMapValidation } from '../../types/Types';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import ScalarContainer from '../../custom/ScalarContainer';
 import S8VarTypeValidation from '../../../core/S8VarTypeValidation';
 import IngestEndpointRevision from './IngestEndpointRevision';
@@ -13,15 +13,15 @@ import { LogPriority } from '../../../enums/LogPriority';
 import { DataMapValue } from '../../../../../common/types/Types';
 
 export default class IngestEndpointDataMap extends Model {
-    public getOrgEntityId(): ObjectID {
+    public getOrgEntityId(): ObjectId {
         return this.orgId;
     }
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'org_id',
     })
-    private readonly _org_id!: ObjectID;
+    private readonly _org_id!: ObjectId;
 
     @Field<string>({
         required: true,
@@ -30,25 +30,25 @@ export default class IngestEndpointDataMap extends Model {
     })
     private _name: string;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'data_manager_account_id',
     })
-    private readonly _data_manager_account_id!: ObjectID;
+    private readonly _data_manager_account_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'ingest_endpoint_id',
         exposeToConfig: true,
     })
-    private readonly _ingest_endpoint_id!: ObjectID;
+    private readonly _ingest_endpoint_id!: ObjectId;
 
-    @Field<ObjectID>({
+    @Field<ObjectId>({
         required: true,
         exposeToGQLAs: 'ingest_endpoint_revision_id',
         exposeToConfig: true,
     })
-    private readonly _revision_id!: ObjectID;
+    private readonly _revision_id!: ObjectId;
 
     @Field<string>({
         required: true,
@@ -71,13 +71,13 @@ export default class IngestEndpointDataMap extends Model {
     })
     private _default_value?: DataMapValue | ScalarContainer<DataMapValue>;
 
-    @Field<ObjectID[]>({
+    @Field<ObjectId[]>({
         repository: IngestEndpointDataMapRepo,
         required: true,
         exposeToGQLAs: 'child_ingest_endpoint_data_map_ids',
         exposeToConfig: true,
     })
-    private _child_ingest_endpoint_data_map_ids: ObjectID[] = [];
+    private _child_ingest_endpoint_data_map_ids: ObjectId[] = [];
 
     @Field<boolean>({
         required: true,
@@ -121,7 +121,7 @@ export default class IngestEndpointDataMap extends Model {
         this.validations = validations;
     }
 
-    get orgId(): ObjectID {
+    get orgId(): ObjectId {
         return this._org_id;
     }
 
@@ -133,15 +133,15 @@ export default class IngestEndpointDataMap extends Model {
         this._key = value;
     }
 
-    get dataManagerAccountId(): ObjectID {
+    get dataManagerAccountId(): ObjectId {
         return this._data_manager_account_id;
     }
 
-    get ingestEndpointId(): ObjectID {
+    get ingestEndpointId(): ObjectId {
         return this._ingest_endpoint_id;
     }
 
-    get ingestEndpointRevisionId(): ObjectID {
+    get ingestEndpointRevisionId(): ObjectId {
         return this._revision_id;
     }
 
@@ -153,11 +153,11 @@ export default class IngestEndpointDataMap extends Model {
         this._var_type = value;
     }
 
-    get childIngestEndpointDataMapIds(): ObjectID[] {
+    get childIngestEndpointDataMapIds(): ObjectId[] {
         return this._child_ingest_endpoint_data_map_ids;
     }
 
-    set childIngestEndpointDataMapIds(value: ObjectID[]) {
+    set childIngestEndpointDataMapIds(value: ObjectId[]) {
         this._child_ingest_endpoint_data_map_ids = value;
     }
 

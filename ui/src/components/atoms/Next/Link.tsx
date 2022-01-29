@@ -8,6 +8,7 @@ import MuiLink, { LinkProps as MuiLinkProps } from '@mui/material/Link';
 type NextComposedProps = Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> &
     NextLinkProps;
 
+// eslint-disable-next-line react/display-name
 const NextComposed = forwardRef<HTMLAnchorElement, NextComposedProps>((props, ref) => {
     const { as, href, replace, scroll, passHref, shallow, prefetch, ...other } = props;
 
@@ -67,6 +68,7 @@ function Link(props: LinkProps) {
     );
 }
 
+// eslint-disable-next-line react/display-name
 export default forwardRef<HTMLAnchorElement, LinkProps>((props, ref) => (
     <Link
         sx={{

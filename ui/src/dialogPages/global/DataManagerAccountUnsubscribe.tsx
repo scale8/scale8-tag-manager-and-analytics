@@ -7,4 +7,4 @@ const DataManagerAccountUnsubscribe: FC<DialogPageProps> = (props: DialogPagePro
     return <AccountUnsubscribe {...props} product={AccountProduct.DATA_MANAGER} />;
 };
 
-export { DataManagerAccountUnsubscribe };
+export default DataManagerAccountUnsubscribe;

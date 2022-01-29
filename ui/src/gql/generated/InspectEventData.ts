@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 import { VarType, InputType, TypeIcon, ValidationType } from "./globalTypes";
@@ -128,7 +127,8 @@ export interface InspectEventData_getEvent_event_PlatformEvent_platform_data_map
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -172,7 +172,8 @@ export interface InspectEventData_getEvent_event_PlatformEvent_platform_data_map
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -188,7 +189,8 @@ export interface InspectEventData_getEvent_event_PlatformEvent_platform_data_map
    */
   default_value: InspectEventData_getEvent_event_PlatformEvent_platform_data_maps_child_platform_data_maps_default_value | null;
   /**
-   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These contain nested `PlatformDataMap` in a document or array document structure respectivly
+   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These
+   * contain nested `PlatformDataMap` in a document or array document structure respectivly
    */
   child_platform_data_maps: InspectEventData_getEvent_event_PlatformEvent_platform_data_maps_child_platform_data_maps_child_platform_data_maps[];
 }
@@ -220,7 +222,8 @@ export interface InspectEventData_getEvent_event_PlatformEvent_platform_data_map
    */
   icon: TypeIcon | null;
   /**
-   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to provide a complete list of values to choose from
+   * Option value - used when `PlatformDataMap` is a SELECT or RADIO `InputType` to
+   * provide a complete list of values to choose from
    */
   option_values: S8DataMapValue[] | null;
   /**
@@ -236,7 +239,8 @@ export interface InspectEventData_getEvent_event_PlatformEvent_platform_data_map
    */
   default_value: InspectEventData_getEvent_event_PlatformEvent_platform_data_maps_default_value | null;
   /**
-   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These contain nested `PlatformDataMap` in a document or array document structure respectivly
+   * Child platform data maps are used with OBJECT and ARRAY_OBJECT types. These
+   * contain nested `PlatformDataMap` in a document or array document structure respectivly
    */
   child_platform_data_maps: InspectEventData_getEvent_event_PlatformEvent_platform_data_maps_child_platform_data_maps[];
 }
@@ -260,7 +264,8 @@ export interface InspectEventData_getEvent_event_PlatformEvent {
    */
   platform: InspectEventData_getEvent_event_PlatformEvent_platform;
   /**
-   * List of `PlatformDataMap`s that create a document style key => value map. This can be directly accessed by the event when called.
+   * List of `PlatformDataMap`s that create a document style key => value map. This
+   * can be directly accessed by the event when called.
    */
   platform_data_maps: InspectEventData_getEvent_event_PlatformEvent_platform_data_maps[];
 }
@@ -604,7 +609,9 @@ export interface InspectEventData_getEvent {
    */
   name: string;
   /**
-   * The period after which the event state should be cleared. -1 = Inactive, 0 = Immidately, > 0, after some time specified in milliseconds. This useful for events that need to be re-triggered within some period of time to pass the check stage.
+   * The period after which the event state should be cleared. -1 = Inactive, 0 =
+   * Immidately, > 0, after some time specified in milliseconds. This useful for
+   * events that need to be re-triggered within some period of time to pass the check stage.
    */
   clear_state_ms: number;
   /**

@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 import { ActionGroupDistributionCreateInput, ActionGroupDistributionType } from "./globalTypes";
@@ -28,7 +27,8 @@ export interface CreateActionGroupDistribution_createActionGroupDistribution {
 export interface CreateActionGroupDistribution {
   /**
    * @bound=ActionGroupDistribution
-   * Create a new `ActionGroupDistribution`. `Rule` ID is required here to ensure `ActionGroupDistribution` is placed inside the correct version
+   * Create a new `ActionGroupDistribution`. `Rule` ID is required here to ensure
+   * `ActionGroupDistribution` is placed inside the correct version
    */
   createActionGroupDistribution: CreateActionGroupDistribution_createActionGroupDistribution;
 }

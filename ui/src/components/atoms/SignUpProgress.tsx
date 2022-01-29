@@ -7,16 +7,20 @@ import { Theme } from '@mui/material/styles';
 const SignUpProgress: FC<Omit<SignUpContainerProps, 'children'>> = (
     props: Omit<SignUpContainerProps, 'children'>,
 ) => {
-    const { type, isCompleted, isPrepare } = props;
+    const { type, isCompleted, isPrepare, installTags } = props;
 
     const selectActiveStep = () => {
+        if (installTags) return 3;
         if (isPrepare) return 2;
         if (isCompleted) return 1;
         return 0;
     };
 
     const stepLabelStyle: SxProps<Theme> = {
-        '& .MuiStepLabel-active, & .MuiStepLabel-completed': {
+        '& .MuiStepLabel-label': {
+            fontSize: type === 'tag-manager' ? '0.700rem' : 'inherit',
+        },
+        '& .MuiSvgIcon-root.Mui-active, & .MuiSvgIcon-root.Mui-completed': {
             color: (theme) => {
                 if (type === 'tag-manager') {
                     return `${theme.palette.tagManagerColor.main} !important`;
@@ -41,10 +45,13 @@ const SignUpProgress: FC<Omit<SignUpContainerProps, 'children'>> = (
                     <StepLabel sx={stepLabelStyle}>Confirm Email</StepLabel>
                 </Step>
                 <Step>
-                    <StepLabel sx={stepLabelStyle}>
-                        {type === 'tag-manager' ? 'Install Tags' : 'Prepare Account'}
-                    </StepLabel>
+                    <StepLabel sx={stepLabelStyle}>Prepare Account</StepLabel>
                 </Step>
+                {type === 'tag-manager' && (
+                    <Step>
+                        <StepLabel sx={stepLabelStyle}>Install Tags</StepLabel>
+                    </Step>
+                )}
             </Stepper>
         </div>
     );

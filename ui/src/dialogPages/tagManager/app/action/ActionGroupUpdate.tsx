@@ -74,4 +74,4 @@ const ActionGroupUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { ActionGroupUpdate };
+export default ActionGroupUpdate;

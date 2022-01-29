@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { DialogPageProps } from '../../../types/DialogTypes';
 import { useMutation } from '@apollo/client';
 import FinaliseRevisionQuery from '../../../gql/mutations/FinaliseRevisionQuery';
@@ -16,10 +16,6 @@ const AppRevisionFinalise: FC<DialogPageProps> = (props: DialogPageProps) => {
 
     const [mutationFunction, { data, loading, error: gqlError }] =
         useMutation(FinaliseRevisionQuery);
-
-    const followUpCallback = followUp !== undefined ? useCallback(followUp, []) : undefined;
-
-    const pageRefreshCallback = useCallback(pageRefresh, []);
 
     useEffect(() => {
         (async () => {
@@ -46,8 +42,8 @@ const AppRevisionFinalise: FC<DialogPageProps> = (props: DialogPageProps) => {
             data !== null &&
             (data.finaliseRevision === undefined || data.finaliseRevision.length === 0)
         ) {
-            if (followUpCallback) {
-                followUpCallback(id, pageRefreshCallback, handleDialogClose);
+            if (followUp) {
+                followUp(id, pageRefresh, handleDialogClose);
             } else {
                 pageRefresh();
                 handleDialogClose(false);
@@ -75,4 +71,4 @@ const AppRevisionFinalise: FC<DialogPageProps> = (props: DialogPageProps) => {
     );
 };
 
-export { AppRevisionFinalise };
+export default AppRevisionFinalise;

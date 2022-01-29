@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 // ====================================================
@@ -18,7 +17,8 @@ export interface UpdateRuleGetData_getRule {
    */
   name: string;
   /**
-   * The minimum refresh interval. -1 = the rule can't repeat. 0 = the rule can repeat. > 0 the rule must wait this many milliseconds before being allowed to repeat again.
+   * The minimum refresh interval. -1 = the rule can't repeat. 0 = the rule can
+   * repeat. > 0 the rule must wait this many milliseconds before being allowed to repeat again.
    */
   min_repeat_interval: number;
 }

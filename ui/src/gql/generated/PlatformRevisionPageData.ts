@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-// @generated
 // This file was automatically generated and should not be edited.
 
 // ====================================================
@@ -18,11 +17,13 @@ export interface PlatformRevisionPageData_getPlatform_platform_revisions {
    */
   name: string;
   /**
-   * Whether or not the `PlatformRevision` has been locked or not. When locked no future changes can be made to the `PlatformRevision` or any of its connected entities
+   * Whether or not the `PlatformRevision` has been locked or not. When locked no
+   * future changes can be made to the `PlatformRevision` or any of its connected entities
    */
   locked: boolean;
   /**
-   * Whether or not the `PlatformRevision` has been published. Once published the `PlatformRevision` can be installed by publishers in to their `App`s.
+   * Whether or not the `PlatformRevision` has been published. Once published the
+   * `PlatformRevision` can be installed by publishers in to their `App`s.
    */
   is_published: boolean;
   /**
@@ -42,7 +43,9 @@ export interface PlatformRevisionPageData_getPlatform {
    */
   id: string;
   /**
-   * `PlatformRevision`s the are linked to this `Platform`. Please note that if the `Platform` has been made public and `PlatformRevision` has been published, it will be avalible to ***any*** Scale8 Tag Manager User to install in their `App`
+   * `PlatformRevision`s the are linked to this `Platform`. Please note that if the
+   * `Platform` has been made public and `PlatformRevision` has been published, it
+   * will be avalible to ***any*** Scale8 Tag Manager User to install in their `App`
    */
   platform_revisions: PlatformRevisionPageData_getPlatform_platform_revisions[];
 }

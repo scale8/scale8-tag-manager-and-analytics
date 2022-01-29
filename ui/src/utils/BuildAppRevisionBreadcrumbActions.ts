@@ -9,8 +9,6 @@ import { RowAction } from '../components/molecules/S8Table/S8TableTypes';
 import { Dispatch, SetStateAction } from 'react';
 import { DialogAction } from '../context/DialogReducer';
 import { CurrentOrgPermissions } from '../context/OrgUserReducer';
-import { SectionKey } from '../containers/SectionsDetails';
-import { SectionHistory } from '../context/SectionHistoryReducer';
 import { appRevisionFromPath, toAppRevision } from './NavigationPaths';
 import { NextRouter } from 'next/router';
 
@@ -23,7 +21,6 @@ export const buildAppRevisionBreadcrumbActions = (
     setRefreshCurrentPage: Dispatch<SetStateAction<boolean>>,
     ask: (text: string, confirmHandler: () => void) => void,
     revisionLocked: boolean,
-    sectionHistory: SectionHistory,
 ): RowAction<any>[] => {
     const pageActionProps: PageActionProps = {
         dispatchDialogAction,
@@ -38,11 +35,6 @@ export const buildAppRevisionBreadcrumbActions = (
             setRefreshCurrentPage(true);
         },
     };
-
-    const revisionPath =
-        sectionHistory.current?.section === SectionKey.appRevision
-            ? sectionHistory.current?.page
-            : undefined;
 
     return [
         buildPreviewAction(
@@ -62,7 +54,7 @@ export const buildAppRevisionBreadcrumbActions = (
                     ) => {
                         handleDialogClose(false);
                         router
-                            .push(toAppRevision({ id }, appRevisionFromPath(revisionPath)))
+                            .push(toAppRevision({ id }, appRevisionFromPath(router.asPath)))
                             .then();
                     },
                 ),

@@ -3,7 +3,7 @@ import { injectable } from 'inversify';
 import { gql } from 'apollo-server-express';
 import Action from '../../mongo/models/tag/Action';
 import CTX from '../../gql/ctx/CTX';
-import { ObjectId, ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import PlatformAction from '../../mongo/models/tag/PlatformAction';
 import DataMap from '../../mongo/models/tag/DataMap';
 import PlatformDataMap from '../../mongo/models/tag/PlatformDataMap';
@@ -143,7 +143,7 @@ export default class ActionManager extends Manager<Action> {
     protected gqlExtendedQueryResolvers = {
         getAction: async (parent: any, args: any, ctx: CTX) => {
             const action = await this.repoFactory(Action).findByIdThrows(
-                new ObjectID(args.id),
+                new ObjectId(args.id),
                 userMessages.actionFailed,
             );
             return await this.orgAuth.asUserWithViewAccess(ctx, action.orgId, async () =>
@@ -326,7 +326,7 @@ export default class ActionManager extends Manager<Action> {
         Action: {
             platform_action: async (parent: any, args: any, ctx: CTX) => {
                 const action = await this.repoFactory(Action).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.actionFailed,
                 );
                 const platformAction = await this.repoFactory(PlatformAction).findByIdThrows(
@@ -345,7 +345,7 @@ export default class ActionManager extends Manager<Action> {
             },
             data_maps: async (parent: any, args: any, ctx: CTX) => {
                 const action = await this.repoFactory(Action).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.actionFailed,
                 );
                 return this.orgAuth.asUserWithViewAccess(ctx, action.orgId, async () =>

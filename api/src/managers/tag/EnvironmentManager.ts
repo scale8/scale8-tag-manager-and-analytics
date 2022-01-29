@@ -3,7 +3,7 @@ import { inject, injectable } from 'inversify';
 import { gql } from 'apollo-server-express';
 import Environment from '../../mongo/models/tag/Environment';
 import CTX from '../../gql/ctx/CTX';
-import { ObjectId, ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import Revision from '../../mongo/models/tag/Revision';
 import App from '../../mongo/models/tag/App';
 import GQLError from '../../errors/GQLError';
@@ -13,11 +13,10 @@ import Route53Service from '../../aws/Route53Service';
 import OperationOwner from '../../enums/OperationOwner';
 import GQLMethod from '../../enums/GQLMethod';
 import userMessages from '../../errors/UserMessages';
-import { uploadCertificate } from '../../utils/CertificateUtils';
+import { getCNAME, updateCustomDomainForEnvironment } from '../../utils/CertificateUtils';
 import {
     buildConfig,
     createEnvironment,
-    getCNAME,
     isEnvironmentVariableNameValid,
 } from '../../utils/EnvironmentUtils';
 import { fetchEventRequests } from '../../utils/EventRequestsUtils';
@@ -98,18 +97,6 @@ export default class EnvironmentManager extends Manager<Environment> {
             """
             revision_id: ID!
             """
-            A custom domain name to be associated with this \`Environment\`
-            """
-            custom_domain: String
-            """
-            If a custom domain is provided, a certificate is required to handle secure web traffic
-            """
-            cert_pem: String
-            """
-            If a custom domain is provided, a key is required to handle secure web traffic
-            """
-            key_pem: String
-            """
             The name of the new \`Environment\` being created
             """
             name: String!
@@ -145,7 +132,7 @@ export default class EnvironmentManager extends Manager<Environment> {
             """
             \`Revision\` ID to be connected with the \`Environment\`
             """
-            revision_id: ID!
+            revision_id: ID
             """
             \`Environment\` name
             """
@@ -154,6 +141,10 @@ export default class EnvironmentManager extends Manager<Environment> {
             The base URL of the \`Environment\`
             """
             url: String
+            """
+            A custom domain name for the environment
+            """
+            custom_domain: String
             """
             If a custom domain is used a new certificate can be installed which will replace the exiting one
             """
@@ -245,7 +236,7 @@ export default class EnvironmentManager extends Manager<Environment> {
     protected gqlExtendedQueryResolvers = {
         getEnvironment: async (parent: any, args: any, ctx: CTX) => {
             const environment = await this.repoFactory(Environment).findByIdThrows(
-                new ObjectID(args.id),
+                new ObjectId(args.id),
                 userMessages.environmentFailed,
             );
             return await this.orgAuth.asUserWithViewAccess(ctx, environment.orgId, async () =>
@@ -314,35 +305,36 @@ export default class EnvironmentManager extends Manager<Environment> {
             );
             return this.orgAuth.asUserWithEditAccess(ctx, environment.orgId, async (me) => {
                 //we are trying to attach a new revision to this environment
-                const revision = await this.repoFactory(Revision).findOneThrows(
-                    {
-                        _id: new ObjectID(data.revision_id),
-                        _tag_manager_account_id: environment.tagManagerAccountId,
-                    },
-                    userMessages.revisionFailed,
-                );
-                //we need to check this revision is ok to attach...
-                if (revision.isFinal) {
-                    environment.revisionId = revision.id;
-                } else {
-                    throw new GQLError(userMessages.revisionNotFinalAttaching, true);
+                if (data.revision_id !== undefined) {
+                    //we are updating revision...
+                    const revision = await this.repoFactory(Revision).findOneThrows(
+                        {
+                            _id: new ObjectId(data.revision_id),
+                            _tag_manager_account_id: environment.tagManagerAccountId,
+                        },
+                        userMessages.revisionFailed,
+                    );
+                    //we need to check this revision is ok to attach...
+                    if (revision.isFinal) {
+                        environment.revisionId = revision.id;
+                    } else {
+                        throw new GQLError(userMessages.revisionNotFinalAttaching, true);
+                    }
                 }
 
                 if (
                     this.config.isCommercial() &&
+                    data.custom_domain !== undefined &&
                     data.cert_pem !== undefined &&
                     data.key_pem !== undefined
                 ) {
-                    //trying to install a new certificate...
-                    if (environment.customDomain === undefined) {
-                        throw new GQLError(userMessages.envNoCustomDomain, true);
-                    } else {
-                        await uploadCertificate(
-                            environment.customDomain,
-                            data.cert_pem,
-                            data.key_pem,
-                        );
-                    }
+                    await updateCustomDomainForEnvironment(
+                        me,
+                        environment,
+                        data.custom_domain,
+                        data.cert_pem,
+                        data.key_pem,
+                    );
                 }
                 environment.bulkGQLSet(data, ['name', 'url']); //only is a safety check against this function
                 await buildConfig(
@@ -376,7 +368,7 @@ export default class EnvironmentManager extends Manager<Environment> {
                     //we are trying to attach a new revision to this environment
                     const revision = await this.repoFactory(Revision).findOneThrows(
                         {
-                            _id: new ObjectID(data.revision_id),
+                            _id: new ObjectId(data.revision_id),
                             _tag_manager_account_id: app.tagManagerAccountId,
                         },
                         userMessages.revisionFailed,
@@ -396,9 +388,6 @@ export default class EnvironmentManager extends Manager<Environment> {
                     data.name,
                     revision,
                     data.url,
-                    this.config.isCommercial() ? data.custom_domain : undefined,
-                    this.config.isCommercial() ? data.cert_pem : undefined,
-                    this.config.isCommercial() ? data.key_pem : undefined,
                     environmentVariables,
                     data.comments,
                 );
@@ -414,15 +403,21 @@ export default class EnvironmentManager extends Manager<Environment> {
      */
     protected gqlCustomResolvers = {
         Environment: {
-            cname: async (parent: any) => getCNAME(parent.id),
+            cname: async (parent: any) =>
+                getCNAME(
+                    await this.repoFactory(Environment).findByIdThrows(
+                        new ObjectId(parent.id),
+                        userMessages.environmentFailed,
+                    ),
+                ),
             install_domain: async (parent: any, args: any, ctx: CTX) => {
                 const env = await this.repoFactory(Environment).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.environmentFailed,
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, env.orgId, async () => {
                     if (env.customDomain === undefined) {
-                        return getCNAME(env.id);
+                        return getCNAME(env);
                     } else {
                         return env.customDomain;
                     }
@@ -430,7 +425,7 @@ export default class EnvironmentManager extends Manager<Environment> {
             },
             revision: async (parent: any, args: any, ctx: CTX) => {
                 const env = await this.repoFactory(Environment).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.environmentFailed,
                 );
                 return this.orgAuth.asUserWithViewAccess(ctx, env.orgId, async () => {
@@ -444,7 +439,7 @@ export default class EnvironmentManager extends Manager<Environment> {
             },
             environment_variables: async (parent: any, args: any, ctx: CTX) => {
                 const env = await this.repoFactory(Environment).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.environmentFailed,
                 );
                 return this.orgAuth.asUserWithViewAccess(ctx, env.orgId, async () => {
@@ -456,7 +451,7 @@ export default class EnvironmentManager extends Manager<Environment> {
             },
             event_request_stats: async (parent: any, args: any, ctx: CTX) => {
                 const env = await this.repoFactory(Environment).findByIdThrows(
-                    new ObjectID(parent.id),
+                    new ObjectId(parent.id),
                     userMessages.environmentFailed,
                 );
                 return fetchEventRequests('environment', env, args, ctx);

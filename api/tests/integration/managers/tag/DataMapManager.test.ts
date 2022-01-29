@@ -2,7 +2,7 @@ import ManagerTestUtils from '../../../utils/ManagerTestUtils';
 import TestUtils from '../../../utils/TestUtils';
 import EventRepo from '../../../../src/mongo/repos/tag/EventRepo';
 import DataMapRepo from '../../../../src/mongo/repos/tag/DataMapRepo';
-import { ObjectID } from 'mongodb';
+import { ObjectId } from 'mongodb';
 import Mock = jest.Mock;
 
 describe('DataMapManager', () => {
@@ -109,7 +109,7 @@ describe('DataMapManager', () => {
         const res = await server.executeOperation({ query: Q });
         expect(res).toMatchSnapshot();
         expect(mockSutRepo.findByIds).toHaveBeenCalledWith([
-            new ObjectID('5edf4c48e9615d9a1c66cccc'),
+            new ObjectId('5edf4c48e9615d9a1c66cccc'),
         ]);
     });
 });
