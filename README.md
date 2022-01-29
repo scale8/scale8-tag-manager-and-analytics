@@ -13,11 +13,13 @@
 </p>
 
 <p align="center">
-    <a href="https://www.gnu.org/licenses/agpl-3.0"><img src="https://img.shields.io/badge/License-AGPL%20v3-blue.svg" height="20"/></a>
+    <a href="https://www.gnu.org/licenses/agpl-3.0"><img src="https://img.shields.io/badge/License-AGPL%20v3%20%26%20MIT*-blue.svg" height="20"/></a>
     <a href="#"><img src="https://github.com/scale8/tag-manager/actions/workflows/main.yml/badge.svg" height="20"/></a>
 </p>
 
 <br />
+
+> :eyes: \*MIT Licence is applied to **Platforms** to enable network distribution. The rest of the project remains under AGPL v3.
 
 > :warning: &nbsp;**Pre-launch**: We're currently in the final stage of testing before publishing the first stable release. :rocket:
 
