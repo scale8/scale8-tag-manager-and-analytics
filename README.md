@@ -19,7 +19,7 @@
 
 <br />
 
-> :eyes: \*MIT Licence is applied to **Platforms** to enable network distribution. The rest of the project remains under AGPL v3.
+> :eyes: \*MIT License is applied to **Platforms** to enable network distribution. The rest of the project remains under AGPL v3.
 
 > :warning: &nbsp;**Pre-launch**: We're currently in the final stage of testing before publishing the first stable release. :rocket:
 
