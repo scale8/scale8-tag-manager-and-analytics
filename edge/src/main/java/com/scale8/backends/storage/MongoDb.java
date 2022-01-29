@@ -6,6 +6,9 @@ import com.scale8.extended.conditions.RequiresMongoDBStorageCondition;
 import io.micronaut.context.annotation.Replaces;
 import io.micronaut.context.annotation.Requires;
 import org.bson.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.inject.Singleton;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -14,6 +17,8 @@ import java.io.IOException;
 @Singleton
 @Requires(condition = RequiresMongoDBStorageCondition.class)
 public class MongoDb implements StorageInterface {
+
+  private static final Logger LOG = LoggerFactory.getLogger(MongoDb.class);
 
   final Env env;
   MongoClient mongoClient;
@@ -24,6 +29,7 @@ public class MongoDb implements StorageInterface {
 
   private MongoClient getClient() {
     if (mongoClient == null) {
+      LOG.info("Connecting to MongoDB: " + env.MONGO_CONNECT_STRING);
       mongoClient = MongoClients.create(env.MONGO_CONNECT_STRING);
     }
     return mongoClient;

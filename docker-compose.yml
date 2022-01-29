@@ -10,6 +10,8 @@ services:
         container_name: mongodb
         expose:
             - "27017"
+#        ports:
+#            - "27017:27017"
 
     edge:
         image: scale8/edge:latest
@@ -19,12 +21,14 @@ services:
         expose:
             - "6080"
         environment:
+            # Run in production
+            S8_ENV: "production"
             # To connect to a local version of MongoDB, use mongodb://host.docker.internal .
             MONGO_CONNECT_STRING: "mongodb://mongodb"
             # The API server - required for generating live previews. Here we refer to the 'api' server as defined below.
             S8_API_SERVER: "http://api:8082"
             # The root server refers to the entry point of the network. In this example, we are using the 'route' defined below.
-            S8_ROOT_SERVER: "http://127.0.0.1:8080"
+            S8_EDGE_SERVER: "http://127.0.0.1:8080"
             # Proxy a platform's live build in. PROXY_FOR can be either be 'core' or the platform id associated with the platform.
             # PROXY_FOR: "core"
             # PROXY_LOCATION: "http://host.docker.internal:3124/main.js"
@@ -39,6 +43,7 @@ services:
         environment:
             # To connect to a local version of MongoDB, use mongodb://host.docker.internal .
             MONGO_CONNECT_STRING: "mongodb://mongodb"
+            # When booting, we want the server to run the setup job (this will race if multiple API servers are booted at the same time)
             SETUP_MODE: "true"
 
     router:
