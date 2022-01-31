@@ -9,12 +9,16 @@ export default class ActionGroupRepo extends UnderRevisionControl<ActionGroup> {
 
     protected readonly indexes: IndexDescription[] = [
         {
-            background: false,
             key: {
                 ___persisting_id: 1,
                 _revision_id: 1,
             },
             unique: true,
+        },
+        {
+            key: {
+                _action_ids: 1,
+            },
         },
     ];
 }

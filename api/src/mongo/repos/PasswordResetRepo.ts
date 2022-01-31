@@ -9,11 +9,15 @@ export default class PasswordResetRepo extends Repo<PasswordReset> {
 
     protected readonly indexes: IndexDescription[] = [
         {
-            background: false,
             key: {
                 _created_at: 1,
             },
             expireAfterSeconds: this.EXPIRES_AFTER,
+        },
+        {
+            key: {
+                _token: 1,
+            },
         },
     ];
 }

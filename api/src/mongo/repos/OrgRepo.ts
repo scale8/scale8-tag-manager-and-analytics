@@ -9,11 +9,20 @@ export default class OrgRepo extends Repo<Org> {
 
     protected readonly indexes: IndexDescription[] = [
         {
-            background: false,
             key: {
                 _name: 1,
             },
             unique: true,
+        },
+        {
+            key: {
+                _stripe_subscription_id: 1,
+            },
+        },
+        {
+            key: {
+                _stripe_customer_id: 1,
+            },
         },
     ];
 }

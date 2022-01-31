@@ -9,13 +9,11 @@ export default class IngestEndpointRevisionRepo extends Repo<IngestEndpointRevis
 
     protected readonly indexes: IndexDescription[] = [
         {
-            background: false,
             key: {
                 _ingest_endpoint_id: 1,
             },
         },
         {
-            background: false,
             key: {
                 ___persisting_id: 1,
                 _id: 1,

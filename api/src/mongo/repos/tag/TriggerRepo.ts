@@ -9,12 +9,26 @@ export default class TriggerRepo extends UnderRevisionControl<Trigger> {
 
     protected readonly indexes: IndexDescription[] = [
         {
-            background: false,
             key: {
                 ___persisting_id: 1,
                 _revision_id: 1,
             },
             unique: true,
+        },
+        {
+            key: {
+                _event_ids: 1,
+            },
+        },
+        {
+            key: {
+                _condition_rule_ids: 1,
+            },
+        },
+        {
+            key: {
+                _exception_rule_ids: 1,
+            },
         },
     ];
 }

@@ -9,11 +9,20 @@ export default class UserNotificationRepo extends Repo<UserNotification> {
 
     protected readonly indexes: IndexDescription[] = [
         {
-            background: false,
             key: {
                 _created_at: 1,
             },
             expireAfterSeconds: this.EXPIRES_AFTER,
+        },
+        {
+            key: {
+                _user_id: 1,
+            },
+        },
+        {
+            key: {
+                _is_viewed: 1,
+            },
         },
     ];
 }

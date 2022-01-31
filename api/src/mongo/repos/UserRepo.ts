@@ -13,19 +13,37 @@ import { fetchOrg } from '../../utils/OrgUtils';
 export default class UserRepo extends Repo<User> {
     protected readonly indexes: IndexDescription[] = [
         {
-            background: false,
             key: {
                 _email: 1,
             },
             unique: true,
         },
         {
-            background: false,
             key: {
                 _github_user: 1,
             },
             unique: true,
             sparse: true,
+        },
+        {
+            key: {
+                _password: 1,
+            },
+        },
+        {
+            key: {
+                '_github._user_id': 1,
+            },
+        },
+        {
+            key: {
+                '_sessions._token': 1,
+            },
+        },
+        {
+            key: {
+                '_temp_sessions._token': 1,
+            },
         },
     ];
 

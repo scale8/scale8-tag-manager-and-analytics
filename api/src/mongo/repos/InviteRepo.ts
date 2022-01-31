@@ -9,7 +9,6 @@ export default class InviteRepo extends Repo<Invite> {
 
     protected readonly indexes: IndexDescription[] = [
         {
-            background: false,
             key: {
                 _email: 1,
                 _org_id: 1,
@@ -17,11 +16,15 @@ export default class InviteRepo extends Repo<Invite> {
             unique: true,
         },
         {
-            background: false,
             key: {
                 _created_at: 1,
             },
             expireAfterSeconds: this.EXPIRES_AFTER,
+        },
+        {
+            key: {
+                _org_id: 1,
+            },
         },
     ];
 }
