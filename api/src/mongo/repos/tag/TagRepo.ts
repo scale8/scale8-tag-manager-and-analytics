@@ -17,6 +17,11 @@ export default class TagRepo extends UnderRevisionControl<Tag> {
         },
         {
             key: {
+                _revision_id: 1,
+            },
+        },
+        {
+            key: {
                 _rule_group_ids: 1,
             },
         },

@@ -15,5 +15,10 @@ export default class DataMapRepo extends UnderRevisionControl<DataMap> {
             },
             unique: true,
         },
+        {
+            key: {
+                _revision_id: 1,
+            },
+        },
     ];
 }

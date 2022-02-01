@@ -15,5 +15,10 @@ export default class AppPlatformRevisionRepo extends UnderRevisionControl<AppPla
             },
             unique: true,
         },
+        {
+            key: {
+                _revision_id: 1,
+            },
+        },
     ];
 }

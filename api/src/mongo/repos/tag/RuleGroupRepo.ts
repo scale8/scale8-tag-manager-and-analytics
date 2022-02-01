@@ -17,6 +17,11 @@ export default class RuleGroupRepo extends UnderRevisionControl<RuleGroup> {
         },
         {
             key: {
+                _revision_id: 1,
+            },
+        },
+        {
+            key: {
                 _rule_ids: 1,
             },
         },

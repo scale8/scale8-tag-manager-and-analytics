@@ -17,6 +17,11 @@ export default class TriggerRepo extends UnderRevisionControl<Trigger> {
         },
         {
             key: {
+                _revision_id: 1,
+            },
+        },
+        {
+            key: {
                 _event_ids: 1,
             },
         },

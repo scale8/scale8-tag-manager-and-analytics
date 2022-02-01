@@ -17,6 +17,11 @@ export default class ActionGroupDistributionRepo extends UnderRevisionControl<Ac
             },
             unique: true,
         },
+        {
+            key: {
+                _revision_id: 1,
+            },
+        },
     ];
 
     public async getAllFromRule(rule: Rule): Promise<ActionGroupDistribution[]> {

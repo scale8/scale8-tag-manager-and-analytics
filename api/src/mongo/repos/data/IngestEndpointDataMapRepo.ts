@@ -15,5 +15,10 @@ export default class IngestEndpointDataMapRepo extends UnderIngestEndpointRevisi
             },
             unique: true,
         },
+        {
+            key: {
+                _revision_id: 1,
+            },
+        },
     ];
 }

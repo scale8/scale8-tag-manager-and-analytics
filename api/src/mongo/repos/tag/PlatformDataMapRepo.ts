@@ -15,5 +15,10 @@ export default class PlatformDataMapRepo extends UnderPlatformRevisionControl<Pl
             },
             unique: true,
         },
+        {
+            key: {
+                _revision_id: 1,
+            },
+        },
     ];
 }

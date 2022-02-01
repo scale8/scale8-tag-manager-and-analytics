@@ -17,6 +17,11 @@ export default class PlatformAssetRepo extends UnderPlatformRevisionControl<Plat
         },
         {
             key: {
+                _revision_id: 1,
+            },
+        },
+        {
+            key: {
                 _platform_id: 1,
             },
         },

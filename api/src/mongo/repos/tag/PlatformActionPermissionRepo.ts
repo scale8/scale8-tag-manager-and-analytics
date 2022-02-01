@@ -15,5 +15,10 @@ export default class PlatformActionPermissionRepo extends UnderPlatformRevisionC
             },
             unique: true,
         },
+        {
+            key: {
+                _revision_id: 1,
+            },
+        },
     ];
 }

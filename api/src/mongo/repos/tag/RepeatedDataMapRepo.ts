@@ -15,5 +15,10 @@ export default class RepeatedDataMapRepo extends UnderRevisionControl<RepeatedDa
             },
             unique: true,
         },
+        {
+            key: {
+                _revision_id: 1,
+            },
+        },
     ];
 }

@@ -17,6 +17,11 @@ export default class EventRepo extends UnderRevisionControl<Event> {
         },
         {
             key: {
+                _revision_id: 1,
+            },
+        },
+        {
+            key: {
                 _event: 1,
             },
         },

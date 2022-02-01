@@ -17,6 +17,11 @@ export default class ActionGroupRepo extends UnderRevisionControl<ActionGroup> {
         },
         {
             key: {
+                _revision_id: 1,
+            },
+        },
+        {
+            key: {
                 _action_ids: 1,
             },
         },

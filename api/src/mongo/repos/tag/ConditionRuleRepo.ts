@@ -17,6 +17,11 @@ export default class ConditionRuleRepo extends UnderRevisionControl<ConditionRul
         },
         {
             key: {
+                _revision_id: 1,
+            },
+        },
+        {
+            key: {
                 _platform_data_container_id: 1,
             },
         },

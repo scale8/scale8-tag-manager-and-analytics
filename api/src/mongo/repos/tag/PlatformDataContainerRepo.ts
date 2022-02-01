@@ -17,6 +17,11 @@ export default class PlatformDataContainerRepo extends UnderPlatformRevisionCont
         },
         {
             key: {
+                _revision_id: 1,
+            },
+        },
+        {
+            key: {
                 _platform_id: 1,
             },
         },
