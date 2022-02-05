@@ -11,6 +11,7 @@ coverage
 
 # Transpiled files
 dist/
+layers-dist/
 
 # VS Code
 .vscode
