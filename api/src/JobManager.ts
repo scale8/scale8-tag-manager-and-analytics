@@ -5,16 +5,10 @@ import TYPES from './container/IOC.types';
 import Shell from './mongo/database/Shell';
 import GenericError from './errors/GenericError';
 import { LogPriority } from './enums/LogPriority';
-import { updateUsageJob } from './jobs/UpdateUsage';
-import { setupChecks } from './jobs/SetupChecks';
+import { findJob, getJobs, Job } from './jobs/Job';
 
 //register .env as soon as possible...
 dotenv.config();
-
-export interface Job {
-    name: string;
-    job: () => void | Promise<void>;
-}
 
 const exit = async (success: boolean) => {
     //kill connections...
@@ -23,13 +17,12 @@ const exit = async (success: boolean) => {
     process.exit(success ? 0 : 1);
 };
 
-const jobs: Job[] = [updateUsageJob, setupChecks];
-
 const runJobArg = process.argv.find((value) => value.startsWith('--run-job='));
 
 if (runJobArg !== undefined) {
     const jobName = runJobArg.split('=')[1].trim();
-    const job = jobs.find((_) => _.name === jobName);
+    const jobs = getJobs();
+    const job = findJob(jobs, jobName);
     if (job !== undefined) {
         const logger = container.get<BaseLogger>(TYPES.BackendLogger);
 
