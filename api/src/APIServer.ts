@@ -7,7 +7,6 @@ import TypeDefRegister from './gql/TypeDefRegister';
 import TYPES from './container/IOC.types';
 import { ApolloError, ApolloServer } from 'apollo-server-express';
 import CTX from './gql/ctx/CTX';
-import fs from 'fs';
 import Shell from './mongo/database/Shell';
 import express, { Express } from 'express';
 import https from 'https';
@@ -20,7 +19,6 @@ import { GraphQLError } from 'graphql';
 import { getSessionUser } from './utils/SessionUtils';
 import BaseLogger from './backends/logging/abstractions/BaseLogger';
 import BaseConfig from './backends/configuration/abstractions/BaseConfig';
-import { Mode } from './enums/Mode';
 
 @injectable()
 export default class APIServer {
@@ -33,7 +31,6 @@ export default class APIServer {
     protected readonly routing: Routing;
     protected readonly config: BaseConfig;
 
-    protected httpsServer?: https.Server;
     protected httpServer?: http.Server;
 
     public constructor(
@@ -222,53 +219,14 @@ export default class APIServer {
         this.logger.info(`Connecting to MongoDB...`).then();
         await this.shell.connect();
 
-        if (this.config.getMode() === Mode.COMMERCIAL) {
-            const port = await this.config.getApiHttpsPort();
-            const certKeyPath = await this.config.getCertKeyPath();
-            const certPath = await this.config.getCertPath();
-            if (certKeyPath !== '' && certPath !== '') {
-                const startHttpsServer = (): Promise<https.Server> =>
-                    new Promise((resolve) => {
-                        const svr = https
-                            .createServer(
-                                {
-                                    key: fs.readFileSync(certKeyPath),
-                                    cert: fs.readFileSync(certPath),
-                                },
-                                this.app,
-                            )
-                            .listen(port, () => {
-                                this.logger.info(`🚀 Server ready on :${port}`);
-                                this.logger.info(`Environment => ${this.config.getEnvironment()}`);
-                                this.logger.info(`Logs available at: file://${process.cwd()}/logs`);
-                                resolve(svr);
-                            });
-                    });
-                this.httpsServer = await startHttpsServer();
-            }
-        }
-
         const httpPort = await this.config.getApiHttpPort();
 
         const startHttpServer = (): Promise<http.Server> =>
             new Promise((resolve) => {
-                if (this.config.isProduction() && this.config.getMode() === Mode.COMMERCIAL) {
-                    const svr = http
-                        .createServer((req, res) => {
-                            res.statusCode = 200;
-                            res.setHeader('Content-Type', 'application/json');
-                            res.end('{"o":"k"}');
-                        })
-                        .listen(httpPort, () => {
-                            this.logger.info(`Probe server ready on :${httpPort}`);
-                            resolve(svr);
-                        });
-                } else {
-                    const svr = http.createServer(this.app).listen(httpPort, () => {
-                        this.logger.info(`HTTP server ready on :${httpPort}`);
-                        resolve(svr);
-                    });
-                }
+                const svr = http.createServer(this.app).listen(httpPort, () => {
+                    this.logger.info(`HTTP server ready on :${httpPort}`);
+                    resolve(svr);
+                });
             });
 
         this.httpServer = await startHttpServer();
@@ -283,7 +241,7 @@ export default class APIServer {
                     server.close(() => resolve());
                 }
             });
-        await Promise.all([stop(this.httpsServer), stop(this.httpServer)]);
+        await Promise.all([stop(this.httpServer)]);
         await this.shell.disconnect();
     }
 }
