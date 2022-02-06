@@ -13,8 +13,5 @@
         "clean:all": "docker rm router edge api mongodb",
         "start:mongodb": "docker run --name mongodb-dev -p 27017:27017 -d mongo:4.4",
         "stop:mongodb": "docker stop mongodb-dev && docker rm mongodb-dev"
-    },
-    "dependencies": {
-        "@types/aws-lambda": "^8.10.92"
     }
 }
