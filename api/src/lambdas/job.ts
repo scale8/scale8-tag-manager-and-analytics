@@ -38,6 +38,6 @@ export const lambdaHandler = async (
 
     return {
         statusCode: 200,
-        body: `Ev: ${ev}, configEntry: ${config.getEnvironment()} , Date: ${date}, Secrets: ${s}`,
+        body: `Ev: ${ev}, ce: ${config.getEnvironment()} , Date: ${date}, Secrets: ${s}`,
     };
 };
