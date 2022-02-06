@@ -1,43 +1,36 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { SecretsManager } from 'aws-sdk';
-import container from '../container/IOC.config';
-import BaseConfig from '../backends/configuration/abstractions/BaseConfig';
-import TYPES from '../container/IOC.types';
-import { add, format } from 'date-fns';
+import { APIGatewayProxyResult } from 'aws-lambda';
+import { findJob, getJobs } from '../jobs/Job';
 
-// Create a Secrets Manager client
-const client = new SecretsManager({
-    region: 'eu-central-1',
-});
-
-async function getSecret() {
-    return new Promise((resolve, reject) => {
-        client.getSecretValue({ SecretId: 'SCALE8_DEVELOPMENT' }, function (err, data) {
-            if (err) {
-                // handle all exceptions and take appropriate actions
-                reject(err);
-            } else {
-                resolve(data.SecretString);
-            }
-        });
-    });
-}
-
-export const lambdaHandler = async (
-    event: APIGatewayProxyEvent,
-): Promise<APIGatewayProxyResult> => {
-    const ev = JSON.stringify(event);
-    const s = await getSecret();
-    const config = container.get<BaseConfig>(TYPES.BackendConfig);
-    const date = format(
-        add(new Date(), {
-            days: 30,
-        }),
-        'MM-dd-yy',
-    );
-
-    return {
-        statusCode: 200,
-        body: `Ev: ${ev}, ce: ${config.getEnvironment()} , Date: ${date}, Secrets: ${s}`,
+const runJob = async (name: string): Promise<APIGatewayProxyResult> => {
+    const success = (payload: Record<string, any> = { success: true }) => {
+        return {
+            statusCode: 200,
+            body: JSON.stringify(payload),
+        };
     };
+    const failure = (payload: Record<string, any> = { success: false }) => {
+        return {
+            statusCode: 500,
+            body: JSON.stringify(payload),
+        };
+    };
+
+    const jobs = getJobs();
+    const job = findJob(jobs, name);
+    if (job !== undefined) {
+        try {
+            const result = job.job();
+            if (result instanceof Promise) {
+                await result;
+            }
+            return success();
+        } catch (e: any) {
+            return failure({ error: e.message });
+        }
+    } else {
+        return failure({ error: 'Job not found' });
+    }
 };
+
+export const lambdaHandler = async (event: { job_name: string }): Promise<APIGatewayProxyResult> =>
+    runJob(event.job_name);
