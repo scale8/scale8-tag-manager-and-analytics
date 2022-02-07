@@ -180,7 +180,8 @@ export default class ResolverRegister {
             config: async () => {
                 // noinspection JSUnusedGlobalSymbols
                 return {
-                    is_configured: (await this.repoFactory(Org).count({})) > 1,
+                    is_configured:
+                        this.config.isCommercial() || (await this.repoFactory(Org).count({})) > 1,
                     tag_manager_products: StripeProducts.getTagManagerProductConfig().plans.map(
                         (_) => {
                             return {
