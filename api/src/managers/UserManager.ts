@@ -672,7 +672,7 @@ export default class UserManager extends Manager<User> {
                 return {
                     uid: '',
                     token: '',
-                    url: '/login?reason=duplicate',
+                    url: '/login?reason=duplicate', //todo. no routes should be here.
                 };
             }
 
@@ -787,7 +787,7 @@ export default class UserManager extends Manager<User> {
                 return {
                     uid: session.uid,
                     token: session.token,
-                    url: '/s8/select-org',
+                    url: '/s8/select-org', //todo. no routes should be here.
                 };
             } else if (isTag) {
                 if (app === null) {
@@ -808,7 +808,7 @@ export default class UserManager extends Manager<User> {
                 return {
                     uid: session.uid,
                     token: session.token,
-                    url: `/s8/app/analytics?id=${app.id}&period=realtime`,
+                    url: `/s8/app/analytics?id=${app.id}&period=realtime`, //todo. no routes should be here.
                     environment_id: await getEnvironmentId(),
                 };
             } else if (isData) {
@@ -824,7 +824,7 @@ export default class UserManager extends Manager<User> {
                                 DataManagerAccount,
                             ).getFromOrg(org)
                         ).id
-                    }`,
+                    }`, //todo. no routes should be here.
                 };
             } else {
                 throw new ValidationError(userMessages.validationInvalidSignUp, true);
