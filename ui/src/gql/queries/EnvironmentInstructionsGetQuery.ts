@@ -19,9 +19,6 @@ const EnvironmentInstructionsGetQuery = gql`
                 }
             }
         }
-        config {
-            mode
-        }
     }
 `;
 

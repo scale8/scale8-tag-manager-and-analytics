@@ -53,7 +53,6 @@ export const buildOrgTabsMenu = (
             icon: () => <OrgSettingsIcon />,
             label: 'Settings',
             link: toOrg({ id }, 'settings'),
-            disabled: !orgPermissions.isAdmin,
         },
     ];
 };
