@@ -6,7 +6,7 @@ exports[`LoggedInTemplate renders LoggedInTemplate unchanged 1`] = `
     class="MuiBox-root css-jq8mvv"
   >
     <div
-      class="MuiBox-root css-7xm6n4"
+      class="MuiBox-root css-kkt0s7"
     >
       <div
         class="MuiBox-root css-tmox93"
@@ -220,8 +220,12 @@ exports[`LoggedInTemplate renders LoggedInTemplate unchanged 1`] = `
       class="MuiBox-root css-fq0scu"
     >
       <div
-        class="MuiBox-root css-15i9l62"
-      />
+        class="MuiBox-root css-1jih2zm"
+      >
+        <div
+          class="MuiBox-root css-m55cw0"
+        />
+      </div>
       <div
         class="MuiBox-root css-1qy9df7"
       >
