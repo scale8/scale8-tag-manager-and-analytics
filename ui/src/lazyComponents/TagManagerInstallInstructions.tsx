@@ -8,6 +8,7 @@ import ExternalRedirectButton from '../components/atoms/ExternalRedirectButton';
 import { useRouter } from 'next/router';
 import { Box } from '@mui/material';
 import SelectInput from '../components/atoms/InputTypes/SelectInput';
+import { useConfigState } from '../context/AppContext';
 
 type TagManagerInstallInstructionsProps = {
     environments: { id: string; name: string }[];
@@ -21,6 +22,7 @@ const TagManagerInstallInstructionsIdSelected: FC<{
     onConfirm: () => void;
     text: string;
 }> = ({ environmentId, onConfirm, text }) => {
+    const { mode } = useConfigState();
     return QueryLoaderAndError<EnvironmentInstructionsGetData>(
         false,
         useQuery<EnvironmentInstructionsGetData>(EnvironmentInstructionsGetQuery, {
@@ -35,7 +37,7 @@ const TagManagerInstallInstructionsIdSelected: FC<{
                         environmentName={data.getEnvironment.name}
                         environmentId={data.getEnvironment.id}
                         installDomain={data.getEnvironment.install_domain}
-                        mode={data.config.mode}
+                        mode={mode}
                         cname={data.getEnvironment.cname}
                         tags={dbTags
                             .filter((_) => !_.auto_load)

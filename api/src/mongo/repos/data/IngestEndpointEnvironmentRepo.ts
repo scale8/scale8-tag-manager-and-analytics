@@ -9,13 +9,11 @@ export default class IngestEndpointEnvironmentRepo extends Repo<IngestEndpointEn
 
     protected readonly indexes: IndexDescription[] = [
         {
-            background: false,
             key: {
                 _ingest_endpoint_id: 1,
             },
         },
         {
-            background: false,
             key: {
                 _system_name: 1,
             },

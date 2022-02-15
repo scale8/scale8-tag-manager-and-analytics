@@ -5,10 +5,20 @@ import Org from '../../models/Org';
 import userMessages from '../../../errors/UserMessages';
 import GQLError from '../../../errors/GQLError';
 import { AccountType } from '../../../enums/AccountType';
+import { IndexDescription } from 'mongodb';
 
 @injectable()
 export default class DataManagerAccountRepo extends Repo<DataManagerAccount> {
     protected readonly auditEnabled = true;
+
+    protected readonly indexes: IndexDescription[] = [
+        {
+            key: {
+                _org_id: 1,
+                _account_type: 1,
+            },
+        },
+    ];
 
     public async getFromOrg(org: Org): Promise<DataManagerAccount> {
         const account = await this.findOne({

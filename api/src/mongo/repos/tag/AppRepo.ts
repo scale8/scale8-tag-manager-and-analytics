@@ -9,7 +9,6 @@ export default class AppRepo extends Repo<App> {
 
     protected readonly indexes: IndexDescription[] = [
         {
-            background: false,
             key: {
                 _tag_manager_account_id: 1,
             },

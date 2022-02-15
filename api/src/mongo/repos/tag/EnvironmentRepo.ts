@@ -9,7 +9,6 @@ export default class EnvironmentRepo extends Repo<Environment> {
 
     protected readonly indexes: IndexDescription[] = [
         {
-            background: false,
             key: {
                 _app_id: 1,
             },
