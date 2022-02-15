@@ -10,7 +10,6 @@ import { endOfDay, startOfDay } from 'date-fns';
 export default class UsageRepo extends Repo<Usage> {
     protected readonly indexes: IndexDescription[] = [
         {
-            background: false,
             key: {
                 _usage_entity_id: 1,
                 _day: 1,

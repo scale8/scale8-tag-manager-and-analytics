@@ -7,15 +7,23 @@ import Dependency from '../models/Dependency';
 export default class DependencyRepo extends Repo<Dependency> {
     protected readonly indexes: IndexDescription[] = [
         {
-            background: false,
             key: {
                 _model_id: 1,
             },
         },
         {
-            background: false,
+            key: {
+                _model_name: 1,
+            },
+        },
+        {
             key: {
                 _depends_on_model_id: 1,
+            },
+        },
+        {
+            key: {
+                _depends_on_model_name: 1,
             },
         },
     ];

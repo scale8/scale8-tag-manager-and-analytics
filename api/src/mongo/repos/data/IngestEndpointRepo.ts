@@ -9,7 +9,6 @@ export default class IngestEndpointRepo extends Repo<IngestEndpoint> {
 
     protected readonly indexes: IndexDescription[] = [
         {
-            background: false,
             key: {
                 _data_manager_account_id: 1,
             },

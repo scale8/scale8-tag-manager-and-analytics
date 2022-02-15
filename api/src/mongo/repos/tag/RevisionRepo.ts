@@ -11,9 +11,13 @@ export default class RevisionRepo extends Repo<Revision> {
 
     protected readonly indexes: IndexDescription[] = [
         {
-            background: false,
             key: {
                 _app_id: 1,
+            },
+        },
+        {
+            key: {
+                _tag_manager_account_id: 1,
             },
         },
     ];

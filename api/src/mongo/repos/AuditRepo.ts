@@ -12,11 +12,15 @@ export default class AuditRepo extends Repo<Audit> {
 
     protected readonly indexes: IndexDescription[] = [
         {
-            background: false,
             key: {
                 _created_at: 1,
             },
             expireAfterSeconds: this.EXPIRES_AFTER,
+        },
+        {
+            key: {
+                _model_id: 1,
+            },
         },
     ];
 

@@ -9,12 +9,16 @@ export default class PlatformDataMapRepo extends UnderPlatformRevisionControl<Pl
 
     protected readonly indexes: IndexDescription[] = [
         {
-            background: false,
             key: {
                 ___persisting_id: 1,
                 _revision_id: 1,
             },
             unique: true,
+        },
+        {
+            key: {
+                _revision_id: 1,
+            },
         },
     ];
 }
