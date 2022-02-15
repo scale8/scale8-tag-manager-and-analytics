@@ -112,15 +112,21 @@ const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
                 <Box
                     sx={{
                         zIndex: (theme) => theme.zIndex.appBar + 1,
+                        backgroundColor: 'black',
                         position: 'absolute',
-                        width: 0,
-                        height: 0,
-                        borderStyle: 'solid',
-                        borderWidth: '15px 15px 0 0',
-                        borderColor: (theme) =>
-                            `${theme.palette.primary.main} transparent transparent transparent`,
+                        width: '15px',
+                        height: '15px',
                     }}
-                />
+                >
+                    <Box
+                        sx={{
+                            backgroundColor: 'white',
+                            width: '15px',
+                            height: '15px',
+                            borderTopLeftRadius: '15px',
+                        }}
+                    />
+                </Box>
                 <Box
                     sx={{
                         display: 'flex',

@@ -27,7 +27,9 @@ const SideBar: FC<SideBarProps> = (props: SideBarProps) => {
                 display: 'flex',
                 boxSizing: 'border-box',
                 flexDirection: 'column',
-                backgroundColor: (theme) => theme.palette.primary.main,
+                minHeight: '500px',
+                background:
+                    'conic-gradient(at 0% 60%, black 2%, #39cce0 30%, #ff0084 35%, #9042e7 40%, black 55%)',
                 flexGrow: 0,
                 width: '50px',
                 height: '100vh',
