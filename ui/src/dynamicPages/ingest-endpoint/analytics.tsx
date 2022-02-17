@@ -4,14 +4,14 @@ import Loader from '../../components/organisms/Loader';
 import IngestAnalyticsPageContainer from '../../components/molecules/ChartPageContainer/IngestAnalyticsPageContainer';
 import { useAnalyticsTimer } from '../../hooks/timer/useAnalyticsTimer';
 import { DynamicPageProps } from '../../pageLoader/DynamicPageLoader';
-import { useQueryOptions } from '../../hooks/useQueryOptions';
+import { useQueryOptions } from '../../hooks/chart/useQueryOptions';
 import IngestAnalyticsPageContent from '../../components/molecules/ChartPageContent/IngestAnalyticsPageContent';
 
 const IngestEndpointAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const id = props.params.id ?? '';
     const periodParam = props.params.period;
 
-    const chartPeriodProps = useChartPeriod(periodParam);
+    const chartPeriodProps = useChartPeriod('endpoint', periodParam);
 
     const { period } = chartPeriodProps;
 

@@ -50,7 +50,10 @@ export type ChartPeriodSetters = {
 
 export type ChartPeriodProps = ChartPeriod & ChartPeriodSetters;
 
-const useChartPeriod = (initialPeriod = 'day'): ChartPeriodProps => {
+const useChartPeriod = (
+    graphName: 'analytics' | 'errors' | 'endpoint',
+    initialPeriod = 'day',
+): ChartPeriodProps => {
     const [period, setPeriod] = useState<ChartPeriodType>(initialPeriod as ChartPeriodType);
     const [date, setDate] = useState<UTCTimestamp | undefined>(startOfTodayUTC);
     const [from, setFrom] = useState<UTCTimestamp | undefined>(undefined);
