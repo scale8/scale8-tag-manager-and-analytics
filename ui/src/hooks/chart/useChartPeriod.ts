@@ -87,7 +87,7 @@ const datesFromChartPeriod = (
                 .fill(from)
                 .map((_, i) => addHoursUTC(_, i));
         case 'realtime':
-            return Array(30)
+            return Array(31)
                 .fill(from)
                 .map((_, i) => addMinutesUTC(_, i));
         case '7d':
