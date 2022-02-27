@@ -1,13 +1,13 @@
 import { FC, useEffect } from 'react';
 import { DynamicPageProps } from '../../pageLoader/DynamicPageLoader';
-import { useChartPeriod } from '../../hooks/chart/useChartPeriod';
+import { transferPeriodSessionParams, useChartPeriod } from '../../hooks/chart/useChartPeriod';
 import { useAnalyticsTimer } from '../../hooks/timer/useAnalyticsTimer';
 import Loader from '../../components/organisms/Loader';
 import { useQueryOptions } from '../../hooks/chart/useQueryOptions';
 import { toApp } from '../../utils/NavigationPaths';
 import { useRouter } from 'next/router';
 import AppAnalyticsPageTagCheck from '../../lazyComponents/AppAnalyticsPageTagCheck';
-import { useFilters } from '../../hooks/chart/useFilters';
+import { transferFilterSessionParamToErrors, useFilters } from '../../hooks/chart/useFilters';
 
 const AppAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const id = props.params.id ?? '';
@@ -56,6 +56,8 @@ const AppAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
 
     useEffect(() => {
         if (filters.event === 'error') {
+            transferFilterSessionParamToErrors();
+            transferPeriodSessionParams('analytics', 'errors');
             router.push(toApp({ id }, 'errors')).then();
         }
     }, [filters]);

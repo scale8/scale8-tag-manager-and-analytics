@@ -1,6 +1,7 @@
 import { FC, useEffect } from 'react';
 import LoggedOutTemplate from '../../components/templates/containers/LoggedOutTemplate';
 import { ChildrenOnlyProps } from '../../types/props/ChildrenOnlyProps';
+import { clearAuthSession } from '../../utils/authUtils';
 
 const LoggedOutSection: FC<ChildrenOnlyProps & { stayLogged?: boolean }> = ({
     children,
@@ -8,8 +9,7 @@ const LoggedOutSection: FC<ChildrenOnlyProps & { stayLogged?: boolean }> = ({
 }) => {
     useEffect(() => {
         if (!stayLogged) {
-            localStorage.removeItem('uid');
-            localStorage.removeItem('token');
+            clearAuthSession();
         }
     }, [stayLogged]);
 

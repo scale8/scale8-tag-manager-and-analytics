@@ -14,13 +14,13 @@ import { toOrgSelect } from '../utils/NavigationPaths';
 import ResetPasswordForm from '../components/organisms/Forms/ResetPasswordForm';
 import { logError } from '../utils/logUtils';
 import { ComponentWithParams, ParamsLoader } from '../components/atoms/ParamsLoader';
+import { clearAuthSession } from '../utils/authUtils';
 
 const ResetPasswordContent: FC<{ token: string }> = ({ token }) => {
     const [resetPassword, { loading, data, error: gqlError }] = useMutation(ResetPasswordQuery);
 
     const submit = async (resetPasswordValues: ResetPasswordValues) => {
-        localStorage.removeItem('uid');
-        localStorage.removeItem('token');
+        clearAuthSession();
 
         const resetPasswordInput: ResetPasswordInput = {
             token: token,

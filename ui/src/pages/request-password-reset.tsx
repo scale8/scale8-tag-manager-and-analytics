@@ -16,6 +16,7 @@ import LoggedOutSectionWithConfig from '../containers/global/LoggedOutSectionWit
 import { useConfigState } from '../context/AppContext';
 import { logError } from '../utils/logUtils';
 import { ComponentWithParams, ParamsLoader } from '../components/atoms/ParamsLoader';
+import { clearAuthSession } from '../utils/authUtils';
 
 const RequestPasswordResetContent: FC<{ email: string | undefined }> = (props: {
     email: string | undefined;
@@ -27,8 +28,7 @@ const RequestPasswordResetContent: FC<{ email: string | undefined }> = (props: {
         useMutation(RequestPasswordResetQuery);
 
     const submit = async (requestPasswordResetValues: RequestPasswordResetValues) => {
-        localStorage.removeItem('uid');
-        localStorage.removeItem('token');
+        clearAuthSession();
 
         const sendPasswordResetInput: SendPasswordResetInput = {
             email: requestPasswordResetValues.email,

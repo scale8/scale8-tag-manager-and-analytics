@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { AppQueryFilters } from '../../types/props/AppAnalyticsContentProps';
 
 export type ChartFiltersProps = {
@@ -7,11 +7,43 @@ export type ChartFiltersProps = {
     setFilter: (key: string, value: string | boolean | undefined) => void;
 };
 
+type GraphName = 'analytics' | 'errors';
+
+const buildSessionStorageKey = (graphName: GraphName) => `${graphName}-chart-filter-params`;
+
+const getChartFilterSessionParams = (
+    graphName: GraphName,
+    defaultFilters: AppQueryFilters,
+): AppQueryFilters => {
+    const storedFilters = sessionStorage.getItem(buildSessionStorageKey(graphName));
+    return storedFilters ? JSON.parse(storedFilters) : defaultFilters;
+};
+
+const setChartFilterSessionParams = (graphName: GraphName, filters: AppQueryFilters): void =>
+    sessionStorage.setItem(buildSessionStorageKey(graphName), JSON.stringify(filters));
+
+export const transferFilterSessionParamToErrors = () => {
+    const errorsFilterSessionParams: AppQueryFilters = {
+        ...getChartFilterSessionParams('analytics', {}),
+        event_group: undefined,
+        event: 'error',
+    };
+    setChartFilterSessionParams('errors', errorsFilterSessionParams);
+};
+
 export const useFilters = (
     graphName: 'analytics' | 'errors',
     initialFilter: AppQueryFilters,
 ): ChartFiltersProps => {
-    const [filters, setFilters] = useState<AppQueryFilters>(initialFilter);
+    const [filters, setFilters] = useState<AppQueryFilters>(
+        getChartFilterSessionParams(graphName, initialFilter),
+    );
+
+    useEffect(() => {
+        if (graphName !== 'analytics' || filters.event !== 'error') {
+            setChartFilterSessionParams(graphName, filters);
+        }
+    }, [filters]);
 
     const setFilter = (key: string, value: string | boolean | undefined) => {
         setFilters({
