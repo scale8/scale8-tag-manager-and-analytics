@@ -131,16 +131,8 @@ export default abstract class BaseConfig {
     public async getUiUrl(): Promise<string> {
         return await this.getConfigEntryOrElse(
             'S8_UI_SERVER',
-            this.isProduction() ? 'https://scale8.com' : 'https://ui-dev.scale8.com:8443',
+            this.isProduction() ? 'https://ui.scale8.com' : 'https://ui-dev.scale8.com:8443',
         );
-    }
-
-    public async getCertKeyPath(): Promise<string> {
-        return await this.getConfigEntryOrElse('CERT_KEY_PATH', '');
-    }
-
-    public async getCertPath(): Promise<string> {
-        return await this.getConfigEntryOrElse('CERT_PATH', '');
     }
 
     public async getDefaultAdminPassword(): Promise<string> {
@@ -149,10 +141,6 @@ export default abstract class BaseConfig {
 
     public async getGCJson(): Promise<string> {
         return await this.getConfigEntryThrows('GC_JSON');
-    }
-
-    public async getGCKeyFile(): Promise<string> {
-        return await this.getConfigEntryThrows('GC_KEY_FILE');
     }
 
     public async getAssetBucket(): Promise<string> {
@@ -233,6 +221,7 @@ export default abstract class BaseConfig {
         return (await this.getConfigEntryOrElse('DATABASE_TRANSACTIONS', 'false')) === 'true';
     }
 
+    //todo. test this enabled.
     public async isAuditEnabled(): Promise<boolean> {
         return (await this.getConfigEntryOrElse('AUDIT_ENABLED', 'false')) === 'true';
     }

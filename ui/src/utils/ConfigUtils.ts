@@ -14,6 +14,11 @@ export const getApiUrl = (): string => {
         const hostname = window.location.hostname;
         const port = window.location.port;
 
+        //we are running in commercial production, the api should always point to api.scale8.com
+        if (hostname === 'ui.scale8.com') {
+            return 'https://api.scale8.com';
+        }
+
         if (process.env.NEXT_PUBLIC_IS_ROUTER_MODE !== undefined) {
             return `${window.location.protocol}//${hostname}${port === '' ? '' : ':' + port}`;
         }

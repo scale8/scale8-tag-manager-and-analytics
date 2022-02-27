@@ -665,7 +665,9 @@ export default class OrgManager extends Manager<Org> {
     protected gqlExtendedMutationResolvers = {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         createFirstOrg: async (parent: any, args: any, ctx: CTX) => {
-            if ((await this.repoFactory(Org).count({})) > 1) {
+            if (this.config.isCommercial()) {
+                throw new GQLError('Operation is not allowed in the commercial version', true);
+            } else if ((await this.repoFactory(Org).count({})) > 1) {
                 throw new GQLError('It looks like everything has been configured already', true);
             } else {
                 const data = args.createFirstOrgInput;
