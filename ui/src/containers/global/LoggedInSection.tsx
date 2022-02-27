@@ -18,6 +18,7 @@ import { useAppContext } from '../../context/AppContext';
 import Loader from '../../components/organisms/Loader';
 import { configStateFromData } from '../../context/ConfigState';
 import { SectionKey } from '../SectionsDetails';
+import { clearAuthSession } from '../../utils/authUtils';
 
 export type UserSelectorProps = {
     loading: boolean;
@@ -150,8 +151,7 @@ const LoggedInSection: FC<ChildrenOnlyProps> = (props: ChildrenOnlyProps) => {
             });
         },
         handleLogoutClick: () => {
-            localStorage.removeItem('uid');
-            localStorage.removeItem('token');
+            clearAuthSession();
             setLogOut(true);
         },
     };

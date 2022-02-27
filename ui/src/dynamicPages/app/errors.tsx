@@ -1,29 +1,22 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { DynamicPageProps } from '../../pageLoader/DynamicPageLoader';
-import { AppQueryFilters } from '../../types/props/AppAnalyticsContentProps';
 import { useChartPeriod } from '../../hooks/chart/useChartPeriod';
 import { useAnalyticsTimer } from '../../hooks/timer/useAnalyticsTimer';
 import Loader from '../../components/organisms/Loader';
 import AppErrorsPageContainer from '../../components/molecules/ChartPageContainer/AppErrorsPageContainer';
 import AppErrorsPageContent from '../../components/molecules/ChartPageContent/AppErrorsPageContent';
-import { useQueryOptions } from '../../hooks/useQueryOptions';
+import { useQueryOptions } from '../../hooks/chart/useQueryOptions';
+import { useFilters } from '../../hooks/chart/useFilters';
 
 const AppErrorsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const id = props.params.id ?? '';
     const periodParam = props.params.period;
 
-    const chartPeriodProps = useChartPeriod(periodParam);
+    const chartPeriodProps = useChartPeriod('errors', periodParam);
 
-    const [filters, setFilters] = useState<AppQueryFilters>({
+    const { filters, setFilter } = useFilters('errors', {
         event: 'error',
     });
-
-    const setFilter = (key: string, value: string | boolean | undefined) => {
-        setFilters({
-            ...filters,
-            [key]: value,
-        });
-    };
 
     const { period } = chartPeriodProps;
 

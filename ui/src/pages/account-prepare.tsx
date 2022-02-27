@@ -15,6 +15,7 @@ import { buildSignUpType } from '../utils/SignUpUtils';
 import { logError } from '../utils/logUtils';
 import { ApolloError } from '@apollo/client/errors';
 import { ComponentWithParams, ParamsLoader } from '../components/atoms/ParamsLoader';
+import { clearAuthSession } from '../utils/authUtils';
 
 type AccountPrepareContentProps = {
     type: string;
@@ -40,8 +41,7 @@ const AccountPrepareInProgress: FC<AccountPrepareContentProps> = (
 
     useEffect(() => {
         if (!signupStatus.completed) {
-            localStorage.removeItem('uid');
-            localStorage.removeItem('token');
+            clearAuthSession();
 
             const completeSignUpInput: CompleteSignUpInput = {
                 sign_up_type: buildSignUpType(type),

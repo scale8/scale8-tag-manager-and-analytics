@@ -10,6 +10,7 @@ import FormGqlError from '../../components/atoms/FormGqlError';
 import { useLoggedInState } from '../../context/AppContext';
 import Navigate from '../../components/atoms/Next/Navigate';
 import { toLogin } from '../../utils/NavigationPaths';
+import { clearAuthSession } from '../../utils/authUtils';
 
 const AccountDelete: FC<DialogPageProps> = (props: DialogPageProps) => {
     const { templateInteractions } = useLoggedInState();
@@ -22,9 +23,7 @@ const AccountDelete: FC<DialogPageProps> = (props: DialogPageProps) => {
     const successfullySubmitted = data?.deleteMe;
 
     if (successfullySubmitted) {
-        localStorage.removeItem('uid');
-        localStorage.removeItem('token');
-
+        clearAuthSession();
         handleDialogClose(false);
         return <Navigate to={toLogin} />;
     }

@@ -1,31 +1,24 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { DynamicPageProps } from '../../pageLoader/DynamicPageLoader';
-import { AppQueryFilters } from '../../types/props/AppAnalyticsContentProps';
-import { useChartPeriod } from '../../hooks/chart/useChartPeriod';
+import { transferPeriodSessionParams, useChartPeriod } from '../../hooks/chart/useChartPeriod';
 import { useAnalyticsTimer } from '../../hooks/timer/useAnalyticsTimer';
 import Loader from '../../components/organisms/Loader';
-import { useQueryOptions } from '../../hooks/useQueryOptions';
+import { useQueryOptions } from '../../hooks/chart/useQueryOptions';
 import { toApp } from '../../utils/NavigationPaths';
 import { useRouter } from 'next/router';
 import AppAnalyticsPageTagCheck from '../../lazyComponents/AppAnalyticsPageTagCheck';
+import { transferFilterSessionParamToErrors, useFilters } from '../../hooks/chart/useFilters';
 
 const AppAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const id = props.params.id ?? '';
     const router = useRouter();
     const periodParam = props.params.period;
 
-    const chartPeriodProps = useChartPeriod(periodParam);
+    const chartPeriodProps = useChartPeriod('analytics', periodParam);
 
-    const [filters, setFilters] = useState<AppQueryFilters>({
+    const { filters, setFilters, setFilter } = useFilters('analytics', {
         event: 'page-view',
     });
-
-    const setFilter = (key: string, value: string | boolean | undefined) => {
-        setFilters({
-            ...filters,
-            [key]: value,
-        });
-    };
 
     const setEventGroup = (value: string | undefined) => {
         if (value === undefined) {
@@ -63,6 +56,8 @@ const AppAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
 
     useEffect(() => {
         if (filters.event === 'error') {
+            transferFilterSessionParamToErrors();
+            transferPeriodSessionParams('analytics', 'errors');
             router.push(toApp({ id }, 'errors')).then();
         }
     }, [filters]);

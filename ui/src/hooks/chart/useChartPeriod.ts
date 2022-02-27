@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { TimeSlice } from '../../gql/generated/globalTypes';
 import {
     addDaysUTC,
@@ -50,11 +50,66 @@ export type ChartPeriodSetters = {
 
 export type ChartPeriodProps = ChartPeriod & ChartPeriodSetters;
 
-const useChartPeriod = (initialPeriod = 'day'): ChartPeriodProps => {
-    const [period, setPeriod] = useState<ChartPeriodType>(initialPeriod as ChartPeriodType);
-    const [date, setDate] = useState<UTCTimestamp | undefined>(startOfTodayUTC);
-    const [from, setFrom] = useState<UTCTimestamp | undefined>(undefined);
-    const [to, setTo] = useState<UTCTimestamp | undefined>(undefined);
+type GraphName = 'analytics' | 'errors' | 'endpoint';
+
+const buildSessionStorageKey = (graphName: GraphName) => `${graphName}-chart-period-params`;
+
+const getChartPeriodSessionParams = (
+    graphName: GraphName,
+):
+    | {
+          period: ChartPeriodType;
+          date?: UTCTimestamp;
+          from?: UTCTimestamp;
+          to?: UTCTimestamp;
+      }
+    | Record<string, never> =>
+    JSON.parse(sessionStorage.getItem(buildSessionStorageKey(graphName)) ?? '{}');
+
+const setChartPeriodSessionParams = (
+    graphName: GraphName,
+    chartPeriodSessionParams:
+        | {
+              period: ChartPeriodType;
+              date?: UTCTimestamp;
+              from?: UTCTimestamp;
+              to?: UTCTimestamp;
+          }
+        | Record<string, never>,
+): void =>
+    sessionStorage.setItem(
+        buildSessionStorageKey(graphName),
+        JSON.stringify(chartPeriodSessionParams),
+    );
+
+export const transferPeriodSessionParams = (source: GraphName, target: GraphName) => {
+    setChartPeriodSessionParams(target, getChartPeriodSessionParams(source));
+};
+
+export const useChartPeriod = (graphName: GraphName, initialPeriod?: string): ChartPeriodProps => {
+    const chartPeriodSessionParams = getChartPeriodSessionParams(graphName);
+
+    const [period, setPeriod] = useState<ChartPeriodType>(
+        initialPeriod === undefined
+            ? chartPeriodSessionParams.period ?? 'day'
+            : (initialPeriod as ChartPeriodType),
+    );
+    const [date, setDate] = useState<UTCTimestamp | undefined>(
+        chartPeriodSessionParams.from
+            ? undefined
+            : chartPeriodSessionParams.date ?? startOfTodayUTC,
+    );
+    const [from, setFrom] = useState<UTCTimestamp | undefined>(chartPeriodSessionParams.from);
+    const [to, setTo] = useState<UTCTimestamp | undefined>(chartPeriodSessionParams.to);
+
+    useEffect(() => {
+        setChartPeriodSessionParams(graphName, {
+            period,
+            date,
+            from,
+            to,
+        });
+    }, [period, date, from, to]);
 
     return {
         period,
@@ -73,7 +128,7 @@ export type FilterRange = {
     to: S8DateTime;
 };
 
-const datesFromChartPeriod = (
+export const datesFromChartPeriod = (
     from: UTCTimestamp,
     to: UTCTimestamp,
     period: ChartPeriodType,
@@ -84,7 +139,7 @@ const datesFromChartPeriod = (
                 .fill(from)
                 .map((_, i) => addHoursUTC(_, i));
         case 'realtime':
-            return Array(30)
+            return Array(31)
                 .fill(from)
                 .map((_, i) => addMinutesUTC(_, i));
         case '7d':
@@ -116,7 +171,7 @@ const datesFromChartPeriod = (
     }
 };
 
-const labelsFromChartPeriod = (
+export const labelsFromChartPeriod = (
     from: UTCTimestamp,
     to: UTCTimestamp,
     period: ChartPeriodType,
@@ -136,7 +191,7 @@ const labelsFromChartPeriod = (
     }
 };
 
-const timeSliceFromPeriodType = (type: ChartPeriodType): TimeSlice => {
+export const timeSliceFromPeriodType = (type: ChartPeriodType): TimeSlice => {
     switch (type) {
         case 'day':
             return TimeSlice.HOUR;
@@ -150,7 +205,7 @@ const timeSliceFromPeriodType = (type: ChartPeriodType): TimeSlice => {
     }
 };
 
-const stringFormatFromPeriodType = (type: ChartPeriodType): string => {
+export const stringFormatFromPeriodType = (type: ChartPeriodType): string => {
     switch (type) {
         case 'day':
         case 'realtime':
@@ -163,7 +218,7 @@ const stringFormatFromPeriodType = (type: ChartPeriodType): string => {
     }
 };
 
-const chartPeriodToFilterRange = (chartPeriod: ChartPeriod): FilterRange => {
+export const chartPeriodToFilterRange = (chartPeriod: ChartPeriod): FilterRange => {
     const date = chartPeriod.date ?? UTCNow;
 
     const from = chartPeriod.from ?? UTCNow;
@@ -218,7 +273,7 @@ const chartPeriodToFilterRange = (chartPeriod: ChartPeriod): FilterRange => {
     }
 };
 
-const chartPeriodToFilterRangePrev = (chartPeriod: ChartPeriod): FilterRange => {
+export const chartPeriodToFilterRangePrev = (chartPeriod: ChartPeriod): FilterRange => {
     const currFilterRange = chartPeriodToFilterRange(chartPeriod);
 
     const diff = differenceDaysUTC(
@@ -275,7 +330,7 @@ const chartPeriodToFilterRangePrev = (chartPeriod: ChartPeriod): FilterRange => 
     }
 };
 
-const chartDataFromAppGroupingCount = (
+export const chartDataFromAppGroupingCount = (
     dates: UTCTimestamp[],
     groupingCountsResult: AppGroupingCount[],
     period: ChartPeriodType,
@@ -296,7 +351,7 @@ const chartDataFromAppGroupingCount = (
     });
 };
 
-const chartDataFromGroupingCount = (
+export const chartDataFromGroupingCount = (
     dates: UTCTimestamp[],
     groupingCountsResult: GroupingCount[],
     period: ChartPeriodType,
@@ -312,16 +367,4 @@ const chartDataFromGroupingCount = (
         });
         return matchingValues === undefined ? 0 : matchingValues.count;
     });
-};
-
-export {
-    useChartPeriod,
-    chartPeriodToFilterRange,
-    chartPeriodToFilterRangePrev,
-    datesFromChartPeriod,
-    labelsFromChartPeriod,
-    timeSliceFromPeriodType,
-    stringFormatFromPeriodType,
-    chartDataFromGroupingCount,
-    chartDataFromAppGroupingCount,
 };

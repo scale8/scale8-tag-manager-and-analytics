@@ -17,6 +17,7 @@ import LoggedOutSection from '../containers/global/LoggedOutSection';
 import { SignUpValues } from '../types/props/forms/SignUpFormProps';
 import { logError } from '../utils/logUtils';
 import { ComponentWithParams, ParamsLoader } from '../components/atoms/ParamsLoader';
+import { clearAuthSession } from '../utils/authUtils';
 
 type SignUpContentProps = {
     type?: string;
@@ -34,8 +35,7 @@ const SignUpContent: FC<SignUpContentProps> = (props: SignUpContentProps) => {
     const [signup, { loading, data, error: gqlError }] = useMutation(SignUpQuery);
 
     const submitSignUp = async (signUpValues: SignUpValues) => {
-        localStorage.removeItem('uid');
-        localStorage.removeItem('token');
+        clearAuthSession();
 
         const email = qsEmail ?? signUpValues.email;
 

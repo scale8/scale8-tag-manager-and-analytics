@@ -23,6 +23,7 @@ import {
 import LoggedOutSectionWithConfig from '../containers/global/LoggedOutSectionWithConfig';
 import { logError } from '../utils/logUtils';
 import { ComponentWithParams, ParamsLoader } from '../components/atoms/ParamsLoader';
+import { clearAuthSession } from '../utils/authUtils';
 
 const TwoFactorLogin: FC<TwoFactorLoginProps> = (props: TwoFactorLoginProps) => {
     const [login2fa, { loading, data, error: gqlError }] = useMutation(TwoFactorLoginQuery);
@@ -91,8 +92,7 @@ const LoginContent: FC<{ reason: string | undefined }> = (props: {
     const [login, { loading, data, error: gqlError }] = useMutation(LoginQuery);
 
     const submitLogin = async (loginValues: LoginValues) => {
-        localStorage.removeItem('uid');
-        localStorage.removeItem('token');
+        clearAuthSession();
 
         const loginInput: LoginInput = {
             email: loginValues.email,

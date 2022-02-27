@@ -1,11 +1,11 @@
-import { TimeSlice } from '../gql/generated/globalTypes';
+import { TimeSlice } from '../../gql/generated/globalTypes';
 import { useEffect, useState } from 'react';
 import {
     ChartPeriodProps,
     chartPeriodToFilterRange,
     chartPeriodToFilterRangePrev,
     timeSliceFromPeriodType,
-} from './chart/useChartPeriod';
+} from './useChartPeriod';
 
 export interface QueryFilterOptions {
     from: S8DateTime;
