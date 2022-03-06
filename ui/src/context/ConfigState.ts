@@ -1,6 +1,6 @@
 import { Mode } from '../gql/generated/globalTypes';
 import { ConfigQueryData } from '../gql/generated/ConfigQueryData';
-import { ListProductData } from '../dialogPages/global/orgSettings/ProductList';
+import { ListProductData } from '../types/ProductTypes';
 
 export type ConfigState = {
     mode: Mode;
