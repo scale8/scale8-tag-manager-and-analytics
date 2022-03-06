@@ -15,22 +15,11 @@ import PaymentInformationSection from '../../dialogPages/global/orgSettings/Paym
 import TransferOwnershipSection from '../../dialogPages/global/orgSettings/TransferOwnershipSection';
 import RemoveOrganizationSection from '../../dialogPages/global/orgSettings/RemoveOrganizationSection';
 import { DynamicPageProps } from '../../pageLoader/DynamicPageLoader';
-import { PageActionProps } from '../../actions/PageActions';
 import AccountPlans from '../../components/organisms/AccountPlans';
 
 const OrgSettings: FC<{ id: string }> = (props: { id: string }) => {
     const { id } = props;
     const { mode } = useConfigState();
-
-    const { templateInteractions } = useLoggedInState();
-    const { dispatchDialogAction } = templateInteractions;
-
-    const pageActionProps: PageActionProps = {
-        dispatchDialogAction,
-        refresh: () => {
-            // no need to refresh
-        },
-    };
 
     return QueryLoaderAndError<ProductSettings>(
         true,
@@ -41,13 +30,6 @@ const OrgSettings: FC<{ id: string }> = (props: { id: string }) => {
             },
         }),
         (data: ProductSettings, valuesRefresh: (mustResetCache: boolean) => void) => {
-            const tagManagerAccount = data.getOrg.tag_manager_account;
-            const tagManagerProductId =
-                tagManagerAccount === null ? null : tagManagerAccount.stripe_product_id;
-            const dataManagerAccount = data.getOrg.data_manager_account;
-            const dataManagerProductId =
-                dataManagerAccount === null ? null : dataManagerAccount.stripe_product_id;
-
             return (
                 <Box px={2} pt={0} pb={4}>
                     {mode === Mode.COMMERCIAL && (
@@ -55,27 +37,14 @@ const OrgSettings: FC<{ id: string }> = (props: { id: string }) => {
                             <PageTitle title="Plans" {...buildStandardMainInfo('Plans')} />
                             <OrgSettingsContainer dark>
                                 <AccountPlans data={data} />
-                            </OrgSettingsContainer>
-                            <PageTitle
-                                title="Tag Manager Plans"
-                                {...buildStandardMainInfo('tagManagerPlans')}
-                            />
-                            <OrgSettingsContainer dark>
-                                <UnsubscribeSection
-                                    data={data}
-                                    accountProduct={AccountProduct.TAG_MANAGER}
-                                    valuesRefresh={valuesRefresh}
-                                />
-                            </OrgSettingsContainer>
-                            <Box height={16} />
-                            <PageTitle
-                                title="Data Manager Plans"
-                                {...buildStandardMainInfo('tagManagerPlans')}
-                            />
-                            <OrgSettingsContainer dark>
                                 <UnsubscribeSection
                                     data={data}
                                     accountProduct={AccountProduct.DATA_MANAGER}
+                                    valuesRefresh={valuesRefresh}
+                                />
+                                <UnsubscribeSection
+                                    data={data}
+                                    accountProduct={AccountProduct.TAG_MANAGER}
                                     valuesRefresh={valuesRefresh}
                                 />
                             </OrgSettingsContainer>

@@ -1,4 +1,3 @@
-import { AccountProduct } from '../gql/generated/globalTypes';
 import { PageActionProps } from '../actions/PageActions';
 
 export type ListProductData = {
@@ -11,9 +10,10 @@ export type ListProductData = {
 };
 
 export type ProductButtonProps = {
-    accountProduct: AccountProduct;
-    valuesRefresh: (mustResetCache: boolean) => void;
-    product: ListProductData;
+    type: 'tag' | 'data';
+    orgId: string;
+    product?: ListProductData;
     pageActionProps: PageActionProps;
     currentProductId: string | null;
+    subscriptionType: 'free' | 'paid';
 };

@@ -12,14 +12,41 @@ const ChangeDataManagerPlan = dynamic(
 ) as FC<DialogPageProps>;
 
 const settingsActions = {
-    tagManagerPlanSelector: (pageActionProps: PageActionProps, currentProductId?: string): void => {
-        openDrawer(pageActionProps, ChangeTagManagerPlan, currentProductId, false, false, undefined, 550);
+    tagManagerPlanSelector: (
+        pageActionProps: PageActionProps,
+        orgId: string,
+        subscriptionType: 'free' | 'paid',
+        currentProductId?: string,
+    ): void => {
+        openDrawer(
+            pageActionProps,
+            ChangeTagManagerPlan,
+            currentProductId,
+            false,
+            false,
+            orgId,
+            550,
+            undefined,
+            subscriptionType,
+        );
     },
     dataManagerPlanSelector: (
         pageActionProps: PageActionProps,
+        orgId: string,
+        subscriptionType: 'free' | 'paid',
         currentProductId?: string,
     ): void => {
-        openDrawer(pageActionProps, ChangeDataManagerPlan, currentProductId, false, false, undefined, 550);
+        openDrawer(
+            pageActionProps,
+            ChangeDataManagerPlan,
+            currentProductId,
+            false,
+            false,
+            orgId,
+            550,
+            undefined,
+            subscriptionType,
+        );
     },
 };
 

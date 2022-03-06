@@ -91,6 +91,8 @@ const AccountPlans: FC<{ data: ProductSettings }> = (props: { data: ProductSetti
                     onClick={() => {
                         pageActions.tagManagerPlanSelector(
                             pageActionProps,
+                            data.getOrg.id,
+                            data.getOrg.is_paid ? 'paid' : 'free',
                             tagManagerProductId ?? undefined,
                         );
                     }}
@@ -148,6 +150,8 @@ const AccountPlans: FC<{ data: ProductSettings }> = (props: { data: ProductSetti
                     onClick={() => {
                         pageActions.dataManagerPlanSelector(
                             pageActionProps,
+                            data.getOrg.id,
+                            data.getOrg.is_paid ? 'paid' : 'free',
                             dataManagerProductId ?? undefined,
                         );
                     }}

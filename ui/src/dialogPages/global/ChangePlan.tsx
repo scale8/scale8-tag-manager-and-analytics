@@ -1,13 +1,12 @@
 import { FC, useState } from 'react';
 import { DialogPageProps } from '../../types/DialogTypes';
 import { PricingSlider } from '../../components/molecules/PricingSlider';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import { MainDrawerTitle } from '../../components/molecules/MainDrawerTitle';
-import { useConfigState } from '../../context/AppContext';
-import { SwitchPlanButton } from '../../components/molecules/ProductSelection/SwitchPlanButton';
-import { pageActions } from '../../actions/PageActions';
-import { buildThankYouPath } from '../../utils/NavigationPaths';
-import { AccountProduct } from '../../gql/generated/globalTypes';
+import { useConfigState, useLoggedInState } from '../../context/AppContext';
+import { ButtonSelector } from '../../components/molecules/ProductSelection/ButtonSelector';
+import { PageActionProps } from '../../actions/PageActions';
+import { PricingInclude } from '../../components/molecules/PricingInclude';
 
 type ChangePlanProps = DialogPageProps & { type: 'tag' | 'data' };
 
@@ -37,7 +36,9 @@ const getPlanGbs = (plans: any[], index: number): string => {
 
 const ChangePlan: FC<ChangePlanProps> = ({ type, ...dialogProps }) => {
     const { tagManagerProducts, dataManagerProducts } = useConfigState();
-    //dialogProps.id
+    const { templateInteractions } = useLoggedInState();
+    const { dispatchDialogAction, setRefreshCurrentPage } = templateInteractions;
+
     const buildPlans = () => {
         if (type === 'tag') {
             return [...tagManagerProducts].sort((a, b) => a.page_views! - b.page_views!);
@@ -54,10 +55,58 @@ const ChangePlan: FC<ChangePlanProps> = ({ type, ...dialogProps }) => {
     const custom = planIndex >= plans.length;
     const price = planIndex >= plans.length ? 0 : plans[planIndex].amount / 100;
 
+    const pageActionProps: PageActionProps = {
+        dispatchDialogAction,
+        refresh: () => {
+            setRefreshCurrentPage(true);
+        },
+    };
+
+    const accountDetails =
+        type === 'tag'
+            ? [
+                  `Up to <strong>${
+                      custom ? 'unlimited' : getPlanPageViews(plans, planIndex)
+                  } requests</strong> (page views) per month`,
+                  'Up to 5 applications',
+                  'Revision versioning & difference tools',
+                  '<strong>Multiple</strong> environments and deployments',
+                  'Access to our integration ecosystem',
+                  'Ability to create action distributions',
+                  'Server-to-server support*',
+                  'Custom domain (bring your own cert)',
+                  'Super fast tag delivery network',
+                  'Data layer management',
+                  'Access to all events, conditions and exceptions',
+                  'Create multiple rule groups and rules',
+                  'Preview revisions on any browser, on any device',
+                  'Full developer API access',
+                  'Setup assistance',
+                  'Technical support',
+              ]
+            : [
+                  `Up to <strong>${
+                      custom ? 'unlimited' : getPlanRequests(plans, planIndex)
+                  } requests</strong> per month`,
+                  `Up to <strong>${
+                      custom ? 'unlimited' : getPlanGbs(plans, planIndex)
+                  } GB</strong> of ingest data per month`,
+                  'Up to 5 ingest endpoints',
+                  'Revision versioning & difference tools',
+                  '<strong>Multiple</strong> environments and deployments',
+                  'Macro support',
+                  'Custom domain (bring your own cert)',
+                  'Super fast data network',
+                  'Access to all cloud integrations',
+                  'Full developer API access',
+                  'Setup assistance',
+                  'Technical support',
+              ];
+
     return (
         <Box display="flex" flexDirection="column" height="100vh">
             <MainDrawerTitle handleDialogClose={dialogProps.handleDialogClose}>
-                Change Plan
+                {dialogProps.id === null || dialogProps.id === '' ? 'Select' : 'Change'} Plan
             </MainDrawerTitle>
             <Box flex={1} position="relative" width="100%">
                 <Box p={3} height="100%" width="100%" position="absolute" overflow="auto">
@@ -114,33 +163,16 @@ const ChangePlan: FC<ChangePlanProps> = ({ type, ...dialogProps }) => {
                     <Box fontSize="40px" fontWeight={600} color="#434343" pb="19px">
                         {custom ? 'Custom Pricing' : `$${price}/mo `}
                     </Box>
-                {/*    {custom ? (*/}
-                {/*            <Button*/}
-                {/*                variant="contained"*/}
-                {/*                onClick={() => {*/}
-                {/*                }}*/}
-                {/*                sx={{*/}
-                {/*                    color: '#ffffff',*/}
-                {/*                    backgroundColor: (theme) =>*/}
-                {/*                        type === 'data'*/}
-                {/*                            ? theme.palette.tagManagerColor.main*/}
-                {/*                            : theme.palette.dataManagerColor.main,*/}
-                {/*                    width: '100%',*/}
-                {/*                }}*/}
-                {/*                color="inherit"*/}
-                {/*                disableElevation*/}
-                {/*            >*/}
-                {/*                Contact Us*/}
-                {/*            </Button>*/}
-                {/*    ) : (*/}
-                {/*    if (currentProductId === null) {*/}
-                {/*    return <SelectPlanButton {...props} />;*/}
-                {/*}*/}
-                {/*    if (currentProductId !== product.id) {*/}
-                {/*    return <SwitchPlanButton {...props} />;*/}
-                {/*}*/}
-
-                {/*    /!*)}*!/*/}
+                    <ButtonSelector
+                        type={type}
+                        product={custom ? undefined : plans[planIndex]}
+                        currentProductId={dialogProps.id ?? null}
+                        pageActionProps={pageActionProps}
+                        orgId={dialogProps.contextId}
+                        subscriptionType={dialogProps.name === 'paid' ? 'paid' : 'free'}
+                    />
+                    <Box height={32} />
+                    <PricingInclude elements={accountDetails} />
                 </Box>
             </Box>
         </Box>

@@ -1,5 +1,3 @@
-import { AccountProduct } from '../gql/generated/globalTypes';
-
 const buildQs = (params?: Record<string, string>) => {
     const qsDefinitions =
         params === undefined ? [] : Object.entries(params).map((_) => `${_[0]}=${_[1]}`);
@@ -51,13 +49,13 @@ export const toOrg = (
 export const buildThankYouPath = (
     orgId: string,
     productId: string,
-    accountProduct: AccountProduct,
+    type: 'tag' | 'data',
 ): string => {
     return toOrg(
         {
             id: orgId,
             next_id: productId,
-            product: accountProduct === AccountProduct.TAG_MANAGER ? 'tag-manager' : 'data-manger',
+            product: type === 'tag' ? 'tag-manager' : 'data-manger',
         },
         'thanks',
     );

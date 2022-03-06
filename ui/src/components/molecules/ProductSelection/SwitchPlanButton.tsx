@@ -4,14 +4,17 @@ import { Button } from '@mui/material';
 import { useRouter } from 'next/router';
 import { pageActions } from '../../../actions/PageActions';
 import { buildThankYouPath } from '../../../utils/NavigationPaths';
+import { ProductButtonProps } from '../../../types/ProductTypes';
+import { buildProductButtonStyle } from './ButtonSelector';
 import { AccountProduct } from '../../../gql/generated/globalTypes';
-import { ProductListButtonProps } from '../../../dialogPages/global/orgSettings/ProductList';
 
-export const SwitchPlanButton: FC<ProductListButtonProps> = (props: ProductListButtonProps) => {
+export const SwitchPlanButton: FC<ProductButtonProps> = (props: ProductButtonProps) => {
     const { templateInteractions } = useLoggedInState();
     const { ask } = templateInteractions;
-    const { data, product, pageActionProps } = props;
+    const { type, orgId, product, pageActionProps } = props;
     const router = useRouter();
+
+    if (product === undefined) return null;
 
     return (
         <Button
@@ -20,31 +23,16 @@ export const SwitchPlanButton: FC<ProductListButtonProps> = (props: ProductListB
                 ask(`Do you want to switch to ${product.name}?`, () => {
                     pageActions.accountSubscribe(
                         pageActionProps,
-                        data.getOrg.id,
+                        orgId,
                         product.id,
-                        props.accountProduct,
+                        type === 'tag' ? AccountProduct.TAG_MANAGER : AccountProduct.DATA_MANAGER,
                         () => {
-                            router
-                                .push(
-                                    buildThankYouPath(
-                                        data.getOrg.id,
-                                        product.id,
-                                        props.accountProduct,
-                                    ),
-                                )
-                                .then();
+                            router.push(buildThankYouPath(orgId, product.id, type)).then();
                         },
                     );
                 });
             }}
-            sx={{
-                color: '#ffffff',
-                backgroundColor: (theme) =>
-                    props.accountProduct === AccountProduct.TAG_MANAGER
-                        ? theme.palette.tagManagerColor.main
-                        : theme.palette.dataManagerColor.main,
-                width: '100%',
-            }}
+            sx={buildProductButtonStyle(type)}
             color="inherit"
             disableElevation
         >
