@@ -45,13 +45,11 @@ export const PricingSlider: FC<HomePagePricingSliderProps> = (
 
     return (
         <>
-            <Box fontSize="20px" color="#666666" pb={2}>
-                {question}
-            </Box>
-            <Box fontSize="40px" fontWeight={600} color="#434343">
+            <Box pb={1}>{question}</Box>
+            <Box fontSize="20px" fontWeight={600} color="#434343">
                 {displayValue}
             </Box>
-            <Box px="10px" width="100%">
+            <Box width="100%" height="34px" px="5px">
                 <PriceSlider
                     sx={{
                         color: (theme) =>
@@ -68,7 +66,17 @@ export const PricingSlider: FC<HomePagePricingSliderProps> = (
                     defaultValue={0}
                 />
             </Box>
-            <Box width="100%" textAlign="center" pt={1}>
+            <Box
+                width="100%"
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                sx={{
+                    '& svg': {
+                        display: 'block',
+                    },
+                }}
+            >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 11.750005 1.2519075"
@@ -107,8 +115,8 @@ export const PricingSlider: FC<HomePagePricingSliderProps> = (
                         />
                     </g>
                 </svg>
-                <Box color="#333333" pt={2}>
-                    {adjustText}
+                <Box color="#333333" pt="5px">
+                    <small>{adjustText}</small>
                 </Box>
             </Box>
         </>
