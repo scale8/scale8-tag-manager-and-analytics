@@ -598,7 +598,30 @@ export default class OrgManager extends Manager<Org> {
                     const account = await this.repoFactory<TagManagerAccountRepo>(
                         TagManagerAccount,
                     ).getFromOrg(org);
-                    return !account.enabled ? undefined : account.toGQLType();
+
+                    if (!account.enabled) {
+                        const stripeProductId = await this.stripeService.getStripeProductId(
+                            org,
+                            'TagManagerAccount',
+                        );
+                        // ensure the account is in the right state
+                        if (stripeProductId !== undefined) {
+                            const accountRepo = this.repoFactory(TagManagerAccount);
+                            const account = await accountRepo.findByIdThrows(
+                                new ObjectId(parent.id),
+                                userMessages.accountFailed,
+                            );
+                            account.enabled = true;
+                            account.cancelTrial();
+                            return (
+                                await accountRepo.save(account, 'SYSTEM', OperationOwner.SYSTEM)
+                            ).toGQLType();
+                        } else {
+                            return undefined;
+                        }
+                    } else {
+                        return account.toGQLType();
+                    }
                 });
             },
             data_manager_account: async (parent: any, args: any, ctx: CTX) => {
@@ -607,7 +630,30 @@ export default class OrgManager extends Manager<Org> {
                     const account = await this.repoFactory<DataManagerAccountRepo>(
                         DataManagerAccount,
                     ).getFromOrg(org);
-                    return !account.enabled ? undefined : account.toGQLType();
+
+                    if (!account.enabled) {
+                        const stripeProductId = await this.stripeService.getStripeProductId(
+                            org,
+                            'DataManagerAccount',
+                        );
+                        // ensure the account is in the right state
+                        if (stripeProductId !== undefined) {
+                            const accountRepo = this.repoFactory(DataManagerAccount);
+                            const account = await accountRepo.findByIdThrows(
+                                new ObjectId(parent.id),
+                                userMessages.accountFailed,
+                            );
+                            account.enabled = true;
+                            account.cancelTrial();
+                            return (
+                                await accountRepo.save(account, 'SYSTEM', OperationOwner.SYSTEM)
+                            ).toGQLType();
+                        } else {
+                            return undefined;
+                        }
+                    } else {
+                        return account.toGQLType();
+                    }
                 });
             },
             users: async (parent: any, args: any, ctx: CTX) => {
