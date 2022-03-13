@@ -20,7 +20,8 @@
         "dev:job": "TZ=UTC NODE_ENV=development TS_NODE_FILES=true node -r ts-node/register ./src/JobManager.ts",
         "dev:job:commercial": "TZ=UTC NODE_ENV=development SERVER_MODE=COMMERCIAL TS_NODE_FILES=true node -r ts-node/register ./src/JobManager.ts",
         "dev": "yarn platforms:build && yarn dev:job --run-job=SetupChecks && TZ=UTC NODE_ENV=development TS_NODE_FILES=true node-dev --respawn -r ts-node/register ./src/Main.ts",
-        "dev:commercial": "yarn platforms:build && yarn dev:job:commercial --run-job=SetupChecks && TZ=UTC NODE_ENV=development SERVER_MODE=COMMERCIAL TS_NODE_FILES=true node-dev --respawn -r ts-node/register ./src/Main.ts"
+        "dev:commercial": "yarn platforms:build && yarn dev:job:commercial --run-job=SetupChecks && TZ=UTC NODE_ENV=development SERVER_MODE=COMMERCIAL TS_NODE_FILES=true node-dev --respawn -r ts-node/register ./src/Main.ts",
+        "dev:commercial:stripe": "stripe listen --forward-to https://api-dev.scale8.com:8443/stripe/webhook/v1"
     },
     "devDependencies": {
         "@types/aws-lambda": "^8.10.92",
@@ -74,7 +75,7 @@
         "otplib": "^12.0.1",
         "reflect-metadata": "^0.1.13",
         "ssl-validator": "^1.0.7",
-        "stripe": "^8.188.0",
+        "stripe": "^8.207.0",
         "twing": "^5.1.0"
     }
 }

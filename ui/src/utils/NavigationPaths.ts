@@ -25,7 +25,7 @@ export const toOrgSelect = `/s8/select-org`;
 export const toOrgList = '/s8/orgs';
 
 export const toOrg = (
-    params: { id: string; next_id?: string; product?: string },
+    params: { id: string; plan_id?: string; product?: string },
     page?: string,
 ) => {
     localStorage.setItem('orgid', params.id);
@@ -54,7 +54,7 @@ export const buildThankYouPath = (
     return toOrg(
         {
             id: orgId,
-            next_id: productId,
+            plan_id: productId,
             product: type === 'tag' ? 'tag-manager' : 'data-manger',
         },
         'thanks',
