@@ -1086,9 +1086,9 @@ export default class OrgManager extends Manager<Org> {
             );
         },
         accountSubscribe: async (parent: any, args: any, ctx: CTX) => {
+            //validate product id exists...
             const getProductIdFromUserInput = (productId: string): string => {
                 const stripeService = container.get<StripeService>(TYPES.StripeService);
-
                 const getProductId = () => {
                     const productData = stripeService
                         .getAccountConfigFromProductId(productId)
@@ -1182,6 +1182,7 @@ export default class OrgManager extends Manager<Org> {
                     const deleteAccount = async () => {
                         await accountRepository.delete(account, 'SYSTEM', OperationOwner.SYSTEM);
                         // generate a new inactive account
+                        // todo... this is bad.... FIX IT. Data manager is breaking here for obvious reasons.
                         const buildNewAccount = () => {
                             if (accountType === 'TagManagerAccount') {
                                 return new TagManagerAccount(org, org.manualInvoicing);
