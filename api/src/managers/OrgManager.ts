@@ -607,10 +607,6 @@ export default class OrgManager extends Manager<Org> {
                         // ensure the account is in the right state
                         if (stripeProductId !== undefined) {
                             const accountRepo = this.repoFactory(TagManagerAccount);
-                            const account = await accountRepo.findByIdThrows(
-                                new ObjectId(parent.id),
-                                userMessages.accountFailed,
-                            );
                             account.enabled = true;
                             account.cancelTrial();
                             return (
@@ -639,10 +635,6 @@ export default class OrgManager extends Manager<Org> {
                         // ensure the account is in the right state
                         if (stripeProductId !== undefined) {
                             const accountRepo = this.repoFactory(DataManagerAccount);
-                            const account = await accountRepo.findByIdThrows(
-                                new ObjectId(parent.id),
-                                userMessages.accountFailed,
-                            );
                             account.enabled = true;
                             account.cancelTrial();
                             return (
