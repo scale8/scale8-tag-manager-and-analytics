@@ -1259,10 +1259,11 @@ export default class OrgManager extends Manager<Org> {
     ): Promise<DataManagerAccount | TagManagerAccount> {
         if (product === AccountProduct.TAG_MANAGER)
             return await this.repoFactory<TagManagerAccountRepo>(TagManagerAccount).getFromOrg(org);
-        if (product === AccountProduct.DATA_MANAGER)
+        if (product === AccountProduct.DATA_MANAGER) {
             return await this.repoFactory<DataManagerAccountRepo>(DataManagerAccount).getFromOrg(
                 org,
             );
+        }
         throw new GenericError(
             `Account for product ${product} not implemented.`,
             LogPriority.ERROR,
