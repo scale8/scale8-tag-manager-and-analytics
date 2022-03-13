@@ -41,10 +41,7 @@ const OrgAccountSection: FC<OrgAccountSectionProps> = (props: OrgAccountSectionP
     const account = isTag ? data.getOrg.tag_manager_account : data.getOrg.data_manager_account;
 
     if (account === null) {
-        const canCreate = isTag
-            ? data.getOrg.me.can_create_tag_manager_trial
-            : data.getOrg.me.can_create_data_manager_trial;
-        if (canCreate && isOwner) {
+        if (isOwner) {
             return (
                 <AccountSectionButton
                     clickAction={

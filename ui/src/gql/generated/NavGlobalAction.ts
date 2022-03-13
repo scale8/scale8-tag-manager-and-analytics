@@ -112,8 +112,6 @@ export interface NavGlobalAction_getActionGroupDistribution_revision_app_tag_man
    * to manage billing, upgrades, downgrades and termination of an Org.
    */
   owner: boolean;
-  can_create_tag_manager_trial: boolean;
-  can_create_data_manager_trial: boolean;
 }
 
 export interface NavGlobalAction_getActionGroupDistribution_revision_app_tag_manager_account_org {

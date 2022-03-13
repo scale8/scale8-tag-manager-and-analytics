@@ -24,8 +24,6 @@ export const OrgUserDetails = gql`
                 is_admin
             }
             owner
-            can_create_tag_manager_trial
-            can_create_data_manager_trial
         }
     }
 `;
