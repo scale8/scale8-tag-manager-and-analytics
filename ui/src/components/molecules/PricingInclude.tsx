@@ -1,25 +1,34 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { Box } from '@mui/system';
+import { Button } from '@mui/material';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import ExpandLess from '@mui/icons-material/ExpandLess';
 
-const PricingInclude: FC<{ elements: string[] }> = (props: { elements: string[] }) => {
+const PricingInclude: FC<{ elements: string[]; moreAfter: number }> = (props: {
+    elements: string[];
+    moreAfter: number;
+}) => {
+    const [showAll, setShowAll] = useState(false);
+
+    const elements = showAll ? props.elements : props.elements.slice(0, props.moreAfter);
+
     return (
         <>
-            <Box fontSize="20px" color="#666666" pb={2}>
+            <Box fontWeight="bold" pb={2}>
                 This plan includes:
             </Box>
             <Box
                 component="ul"
                 sx={{
-                    margin: 0,
+                    margin: (theme) => theme.spacing(0, 0, 1, 0),
                     paddingLeft: (theme) => theme.spacing(2),
                     columnCount: 1,
                     '& li': {
-                        fontSize: '16px',
-                        lineHeight: '2em',
+                        lineHeight: '1.5em',
                     },
                 }}
             >
-                {props.elements.map((el, index) => (
+                {elements.map((el, index) => (
                     <li key={index}>
                         <span
                             dangerouslySetInnerHTML={{
@@ -29,6 +38,13 @@ const PricingInclude: FC<{ elements: string[] }> = (props: { elements: string[] 
                     </li>
                 ))}
             </Box>
+            <Button
+                onClick={() => setShowAll(!showAll)}
+                startIcon={showAll ? <ExpandLess /> : <ExpandMore />}
+                size="small"
+            >
+                {showAll ? 'Show Less' : 'Show More'}
+            </Button>
         </>
     );
 };

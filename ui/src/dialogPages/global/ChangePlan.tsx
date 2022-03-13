@@ -140,7 +140,7 @@ const ChangePlan: FC<ChangePlanProps> = ({ type, ...dialogProps }) => {
                                         : `>${getPlanRequests(plans, plans.length - 1)}`
                                 }
                             />
-                            <Box height="0" width="100%" mt={8} />
+                            <Box height="0" width="100%" mt={4} />
                             <PricingSlider
                                 max={plans.length}
                                 type={type}
@@ -157,10 +157,10 @@ const ChangePlan: FC<ChangePlanProps> = ({ type, ...dialogProps }) => {
                         </>
                     )}
 
-                    <Box fontSize="20px" color="#666666" pb={2}>
+                    <Box fontWeight="bold" py={2}>
                         Your price
                     </Box>
-                    <Box fontSize="40px" fontWeight={600} color="#434343" pb="19px">
+                    <Box fontSize="25px" fontWeight={600} pb="19px">
                         {custom ? 'Custom Pricing' : `$${price}/mo `}
                     </Box>
                     <ButtonSelector
@@ -172,7 +172,7 @@ const ChangePlan: FC<ChangePlanProps> = ({ type, ...dialogProps }) => {
                         subscriptionType={dialogProps.name === 'paid' ? 'paid' : 'free'}
                     />
                     <Box height={32} />
-                    <PricingInclude elements={accountDetails} />
+                    <PricingInclude elements={accountDetails} moreAfter={type === 'tag' ? 2 : 3} />
                 </Box>
             </Box>
         </Box>
