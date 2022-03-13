@@ -113,11 +113,6 @@ describe('StripeService', () => {
         );
 
         expect(mockUserRepo.findByIdThrows).toBeCalled();
-        expect(mockUserRepo.save).toBeCalledWith(
-            { canCreateDataManagerTrial: false, canCreateTagManagerTrial: false },
-            'SYSTEM',
-            OperationOwner.SYSTEM,
-        );
 
         expect(mockTagManagerAccountRepo.findOne).toBeCalled();
         expect(mockTagManagerAccount.cancelTrial).toBeCalled();
