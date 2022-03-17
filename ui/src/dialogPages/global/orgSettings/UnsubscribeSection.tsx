@@ -1,79 +1,68 @@
 import { FC } from 'react';
-import { Box, Button } from '@mui/material';
-import DangerBox from '../../../components/molecules/DangerBox';
-import { PageActionProps, pageActions } from '../../../actions/PageActions';
+import { Box, Button, lighten } from '@mui/material';
 import { AccountProduct } from '../../../gql/generated/globalTypes';
+import { DialogPageProps } from '../../../types/DialogTypes';
+import { MainDrawerTitle } from '../../../components/molecules/MainDrawerTitle';
+import { PageActionProps, pageActions } from '../../../actions/PageActions';
 import { useLoggedInState } from '../../../context/AppContext';
-import { OrgSettingsSectionProps } from '../../../types/props/OrgSettingsSectionProps';
 
-export type UnsubscribeSectionProps = OrgSettingsSectionProps & {
+export type UnsubscribeSectionProps = DialogPageProps & {
     accountProduct: AccountProduct;
-    valuesRefresh: (mustResetCache: boolean) => void;
 };
 
-const UnsubscribeSection: FC<UnsubscribeSectionProps> = (props: UnsubscribeSectionProps) => {
-    const { data, valuesRefresh } = props;
+const UnsubscribeSection: FC<UnsubscribeSectionProps> = ({ accountProduct, ...dialogProps }) => {
     const { templateInteractions } = useLoggedInState();
     const { ask, dispatchDialogAction } = templateInteractions;
 
     const pageActionProps: PageActionProps = {
         dispatchDialogAction,
-        refresh: () => {
-            valuesRefresh(true);
-        },
+        refresh: dialogProps.pageRefresh,
     };
 
     const accountProductName =
-        props.accountProduct === AccountProduct.TAG_MANAGER ? 'Tag Manager' : 'Data Manager';
-
-    if (
-        props.accountProduct === AccountProduct.TAG_MANAGER &&
-        (data.getOrg.tag_manager_account === null ||
-            (data.getOrg.tag_manager_account.stripe_product_id === null &&
-                !data.getOrg.manual_invoicing))
-    ) {
-        return null;
-    }
-
-    if (
-        props.accountProduct === AccountProduct.DATA_MANAGER &&
-        (data.getOrg.data_manager_account === null ||
-            (data.getOrg.data_manager_account.stripe_product_id === null &&
-                !data.getOrg.manual_invoicing))
-    ) {
-        return null;
-    }
-
+        accountProduct === AccountProduct.TAG_MANAGER ? 'Tag Manager' : 'Data Manager';
     return (
-        <>
-            <Box height={32} />
-            <DangerBox dark>
-                Account reset cannot be undone. Please be certain.
+        <Box display="flex" flexDirection="column" height="100vh">
+            <MainDrawerTitle handleDialogClose={dialogProps.handleDialogClose}>
+                Cancel Plan
+            </MainDrawerTitle>
+            <Box p={3}>
+                Unsubscribing from {accountProductName} Account will reset you account.
+                <br />
+                Account reset cannot be undone.
                 <br />
                 All data and subscriptions will be removed.
+                <br />
+                <b>Please be certain.</b>
                 <Box py={3}>
                     <Button
                         variant="contained"
                         onClick={() => {
-                            ask(`Do you want to unsubscribe from ${accountProductName}?`, () => {
-                                pageActions.accountUnsubscribe(
-                                    pageActionProps,
-                                    data.getOrg.id,
-                                    props.accountProduct,
-                                );
-                            });
+                            ask(
+                                `Are you sure you want to unsubscribe from ${accountProductName}?`,
+                                () => {
+                                    pageActions.accountUnsubscribe(
+                                        pageActionProps,
+                                        dialogProps.id,
+                                        accountProduct,
+                                    );
+                                },
+                            );
                         }}
                         sx={{
                             color: '#ffffff',
-                            backgroundColor: (theme) => theme.palette.error.main,
+                            backgroundColor: (theme) => lighten(theme.palette.error.main, 0.2),
+                            '&:hover': {
+                                backgroundColor: (theme) => theme.palette.error.main,
+                            },
                         }}
                         disableElevation
                     >
-                        Reset {accountProductName} Account
+                        Unsubscribe from {accountProductName} Account
                     </Button>
                 </Box>
-            </DangerBox>
-        </>
+            </Box>
+        </Box>
     );
 };
 

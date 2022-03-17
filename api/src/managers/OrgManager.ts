@@ -599,7 +599,7 @@ export default class OrgManager extends Manager<Org> {
                         TagManagerAccount,
                     ).getFromOrg(org);
 
-                    if (!account.enabled) {
+                    if (!account.enabled || account.isOnFreeTrial() || account.trialExpired()) {
                         const stripeProductId = await this.stripeService.getStripeProductId(
                             org,
                             'TagManagerAccount',
@@ -612,12 +612,12 @@ export default class OrgManager extends Manager<Org> {
                             return (
                                 await accountRepo.save(account, 'SYSTEM', OperationOwner.SYSTEM)
                             ).toGQLType();
-                        } else {
-                            return undefined;
                         }
-                    } else {
-                        return account.toGQLType();
                     }
+                    if (!account.enabled) {
+                        return undefined;
+                    }
+                    return account.toGQLType();
                 });
             },
             data_manager_account: async (parent: any, args: any, ctx: CTX) => {
@@ -627,7 +627,7 @@ export default class OrgManager extends Manager<Org> {
                         DataManagerAccount,
                     ).getFromOrg(org);
 
-                    if (!account.enabled) {
+                    if (!account.enabled || account.isOnFreeTrial() || account.trialExpired()) {
                         const stripeProductId = await this.stripeService.getStripeProductId(
                             org,
                             'DataManagerAccount',
@@ -640,12 +640,12 @@ export default class OrgManager extends Manager<Org> {
                             return (
                                 await accountRepo.save(account, 'SYSTEM', OperationOwner.SYSTEM)
                             ).toGQLType();
-                        } else {
-                            return undefined;
                         }
-                    } else {
-                        return account.toGQLType();
                     }
+                    if (!account.enabled) {
+                        return undefined;
+                    }
+                    return account.toGQLType();
                 });
             },
             users: async (parent: any, args: any, ctx: CTX) => {

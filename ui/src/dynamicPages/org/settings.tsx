@@ -9,16 +9,15 @@ import { QueryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
 import { ProductSettings } from '../../gql/generated/ProductSettings';
 import { useQuery } from '@apollo/client';
 import ProductSettingsQuery from '../../gql/queries/ProductSettingsQuery';
-import { AccountProduct, Mode } from '../../gql/generated/globalTypes';
-import UnsubscribeSection from '../../dialogPages/global/orgSettings/UnsubscribeSection';
+import { Mode } from '../../gql/generated/globalTypes';
 import PaymentInformationSection from '../../dialogPages/global/orgSettings/PaymentInformatonSection';
 import TransferOwnershipSection from '../../dialogPages/global/orgSettings/TransferOwnershipSection';
 import RemoveOrganizationSection from '../../dialogPages/global/orgSettings/RemoveOrganizationSection';
 import { DynamicPageProps } from '../../pageLoader/DynamicPageLoader';
 import AccountPlans from '../../components/organisms/AccountPlans';
 
-const OrgSettings: FC<{ id: string }> = (props: { id: string }) => {
-    const { id } = props;
+const OrgSettings: FC<{ id: string; plan?: string }> = (props: { id: string; plan?: string }) => {
+    const { id, plan } = props;
     const { mode } = useConfigState();
 
     return QueryLoaderAndError<ProductSettings>(
@@ -36,17 +35,7 @@ const OrgSettings: FC<{ id: string }> = (props: { id: string }) => {
                         <>
                             <PageTitle title="Plans" {...buildStandardMainInfo('Plans')} />
                             <OrgSettingsContainer dark>
-                                <AccountPlans data={data} />
-                                <UnsubscribeSection
-                                    data={data}
-                                    accountProduct={AccountProduct.DATA_MANAGER}
-                                    valuesRefresh={valuesRefresh}
-                                />
-                                <UnsubscribeSection
-                                    data={data}
-                                    accountProduct={AccountProduct.TAG_MANAGER}
-                                    valuesRefresh={valuesRefresh}
-                                />
+                                <AccountPlans data={data} plan={plan} />
                             </OrgSettingsContainer>
                             <Box height={16} />
                         </>
@@ -68,10 +57,11 @@ const OrgSettings: FC<{ id: string }> = (props: { id: string }) => {
 
 const OrgSettingsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const orgId = props.params.id ?? '';
+    const plan = props.params.plan;
 
     const { orgUserState } = useLoggedInState();
 
-    if (orgUserState && orgUserState.isOwner) return <OrgSettings id={orgId} />;
+    if (orgUserState && orgUserState.isOwner) return <OrgSettings id={orgId} plan={plan} />;
     return (
         <Box px={2} pt={0} pb={4}>
             <PageTitle title="Leave Organization" {...buildStandardMainInfo('tagManagerPlans')} />

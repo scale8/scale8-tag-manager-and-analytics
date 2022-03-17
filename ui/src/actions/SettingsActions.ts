@@ -10,6 +10,12 @@ const ChangeTagManagerPlan = dynamic(
 const ChangeDataManagerPlan = dynamic(
     () => import('../dialogPages/global/ChangeDataManagerPlan'),
 ) as FC<DialogPageProps>;
+const CancelTagManagerPlan = dynamic(
+    () => import('../dialogPages/global/CancelTagManagerPlan'),
+) as FC<DialogPageProps>;
+const CancelDataManagerPlan = dynamic(
+    () => import('../dialogPages/global/CancelDataManagerPlan'),
+) as FC<DialogPageProps>;
 
 const settingsActions = {
     tagManagerPlanSelector: (
@@ -47,6 +53,12 @@ const settingsActions = {
             undefined,
             subscriptionType,
         );
+    },
+    cancelTagManagerPlan: (pageActionProps: PageActionProps, orgId: string): void => {
+        openDrawer(pageActionProps, CancelTagManagerPlan, orgId);
+    },
+    cancelDataManagerPlan: (pageActionProps: PageActionProps, orgId: string): void => {
+        openDrawer(pageActionProps, CancelDataManagerPlan, orgId);
     },
 };
 
