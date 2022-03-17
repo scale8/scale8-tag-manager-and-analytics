@@ -39,7 +39,13 @@ const AccountSubscribe: FC<AccountSubscribeProps> = (props: AccountSubscribeProp
                         accountSubscribeInput: {
                             org_id: contextId,
                             product_id: id,
-                            success_url: basePath + buildThankYouPath(contextId, id, product),
+                            success_url:
+                                basePath +
+                                buildThankYouPath(
+                                    contextId,
+                                    id,
+                                    product === AccountProduct.TAG_MANAGER ? 'tag' : 'data',
+                                ),
                             cancel_url: currentPath,
                             product,
                         },

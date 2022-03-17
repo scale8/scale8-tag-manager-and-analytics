@@ -23,12 +23,14 @@ export default class DataManagerAccountRepo extends Repo<DataManagerAccount> {
     public async getFromOrg(org: Org): Promise<DataManagerAccount> {
         const account = await this.findOne({
             _org_id: org.id,
+            _account_type: AccountType.USER,
         });
         if (account === null) {
             throw new GQLError(userMessages.noDMAccount, true);
         }
         return account;
     }
+
     public async getSystemAccountFromOrg(org: Org): Promise<DataManagerAccount> {
         return this.findOneThrows(
             {

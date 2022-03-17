@@ -100,8 +100,6 @@ export interface NavIngestEndpointRevision_getIngestEndpointRevision_ingest_endp
    * to manage billing, upgrades, downgrades and termination of an Org.
    */
   owner: boolean;
-  can_create_tag_manager_trial: boolean;
-  can_create_data_manager_trial: boolean;
 }
 
 export interface NavIngestEndpointRevision_getIngestEndpointRevision_ingest_endpoint_data_manager_account_org {

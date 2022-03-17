@@ -11,6 +11,8 @@ import Link from '../atoms/Next/Link';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { toOrg } from '../../utils/NavigationPaths';
+import { getSectionDetails, ProductSectionKey } from '../../containers/SectionsDetails';
+import { OrgUserState } from '../../context/OrgUserReducer';
 
 type BreadcrumbProps = {
     buttonsProps: BreadcrumbButtonProps[];
@@ -23,7 +25,9 @@ type BreadcrumbProps = {
 
 const Breadcrumb: FC<BreadcrumbProps> = (props: BreadcrumbProps) => {
     const params = useParams();
-    const { orgUserState } = useLoggedInState();
+    const { orgUserState, templateInteractions } = useLoggedInState();
+    const { section } = templateInteractions;
+    const sectionDetails = getSectionDetails(section);
 
     const [scroller, setScroller] = useState<'left' | 'right' | 'none'>('none');
 
@@ -63,6 +67,17 @@ const Breadcrumb: FC<BreadcrumbProps> = (props: BreadcrumbProps) => {
 
     const { id: currentElementId } = params;
 
+    const buildSettingsLink = (orgUserState: OrgUserState) => {
+        if (sectionDetails.productSectionKey === ProductSectionKey.tagManager) {
+            return toOrg({ id: orgUserState.orgId, plan: 'tag' }, 'settings');
+        }
+
+        if (sectionDetails.productSectionKey === ProductSectionKey.dataManager) {
+            return toOrg({ id: orgUserState.orgId, plan: 'data' }, 'settings');
+        }
+        return toOrg({ id: orgUserState.orgId }, 'settings');
+    };
+
     return (
         <>
             {orgUserState !== null && accountIsTrial && (
@@ -77,7 +92,7 @@ const Breadcrumb: FC<BreadcrumbProps> = (props: BreadcrumbProps) => {
                         You have <b>{accountExpireIn}</b> days left in your free trial. You can
                         upgrade to a paid plan in{' '}
                         <Link
-                            href={toOrg({ id: orgUserState.orgId }, 'settings')}
+                            href={buildSettingsLink(orgUserState)}
                             sx={{ color: '#ffffff', textDecorationColor: '#ffffff' }}
                         >
                             organization settings

@@ -46,8 +46,6 @@ const AdminSection: FC<ChildrenOnlyProps> = (props: ChildrenOnlyProps) => {
                     can_delete: true,
                     is_admin: true,
                 },
-                can_create_tag_manager_trial: true,
-                can_create_data_manager_trial: true,
             },
         }),
         sectionKey: SectionKey.admin,

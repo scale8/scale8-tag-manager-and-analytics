@@ -24,7 +24,6 @@ export default class Mailer extends BaseEmail {
                 pass: await this.config.getSMTPPassword(),
             },
         };
-        await this.logger.info('transport details', transportDetails);
         return nodemailer.createTransport(transportDetails);
     }
 

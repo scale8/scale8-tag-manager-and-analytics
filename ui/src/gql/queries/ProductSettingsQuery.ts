@@ -25,8 +25,6 @@ const ProductSettingsQuery = gql`
             me {
                 id
                 owner
-                can_create_tag_manager_trial
-                can_create_data_manager_trial
             }
         }
     }

@@ -6,7 +6,6 @@ import { ObjectId } from 'mongodb';
 import DataManagerAccount from '../../mongo/models/data/DataManagerAccount';
 import IngestEndpoint from '../../mongo/models/data/IngestEndpoint';
 import { differenceInDays } from 'date-fns';
-import OperationOwner from '../../enums/OperationOwner';
 import userMessages from '../../errors/UserMessages';
 import { fetchOrg } from '../../utils/OrgUtils';
 import { usageFromAccount } from '../../utils/UsageUtils';
@@ -163,26 +162,7 @@ export default class DataManagerAccountManager extends Manager<DataManagerAccoun
             stripe_product_id: async (parent: any, args: any, ctx: CTX) => {
                 const org = await fetchOrg(new ObjectId(parent.org_id));
                 return await this.orgAuth.asUserWithViewAccess(ctx, org.id, async () => {
-                    const stripeProductId = await this.stripeService.getStripeProductId(
-                        org,
-                        'DataManagerAccount',
-                    );
-
-                    // ensure the account is in the right state
-                    if (stripeProductId !== undefined) {
-                        const accountRepo = this.repoFactory(DataManagerAccount);
-                        const account = await accountRepo.findByIdThrows(
-                            new ObjectId(parent.id),
-                            userMessages.accountFailed,
-                        );
-
-                        account.enabled = true;
-                        account.cancelTrial();
-
-                        await accountRepo.save(account, 'SYSTEM', OperationOwner.SYSTEM);
-                    }
-
-                    return stripeProductId;
+                    return this.stripeService.getStripeProductId(org, 'DataManagerAccount');
                 });
             },
             usage: async (parent: any, args: any, ctx: CTX) => {
