@@ -134,17 +134,6 @@ export default class StripeService {
                         'SYSTEM',
                         OperationOwner.SYSTEM,
                     );
-
-                    const owner = await this.repoFactory(User).findByIdThrows(
-                        org.orgOwnerUser,
-                        userMessages.missingOwner,
-                    );
-                    if (accountType === 'TagManagerAccount') {
-                        owner.canCreateTagManagerTrial = false;
-                    } else if (accountType === 'DataManagerAccount') {
-                        owner.canCreateDataManagerTrial = false;
-                    }
-                    await this.repoFactory(User).save(owner, 'SYSTEM', OperationOwner.SYSTEM);
                 }),
             );
         }

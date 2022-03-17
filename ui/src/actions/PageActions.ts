@@ -19,6 +19,7 @@ import { triggerActions } from './TriggerActions';
 import { actionActions } from './ActionActions';
 import { globalActions } from './GlobalActions';
 import { templatedActionActions } from './TemplatedActionActions';
+import { settingsActions } from './SettingsActions';
 import { DialogAction } from '../context/DialogReducer';
 
 export type TableRefresh = (mustResetTable: boolean, mustResetCache: boolean) => void;
@@ -29,6 +30,7 @@ export type PageActionProps = {
 };
 
 const pageActions = {
+    ...settingsActions,
     ...organizationActions,
     ...organizationUserActions,
     ...ingestEndpointActions,

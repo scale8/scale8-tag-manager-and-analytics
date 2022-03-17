@@ -35,8 +35,6 @@ export type GqlOrgUserState = {
         id: string;
         owner: boolean;
         permissions: GqlOrgPermissions;
-        can_create_tag_manager_trial: boolean;
-        can_create_data_manager_trial: boolean;
     };
 };
 
@@ -47,8 +45,6 @@ export type OrgUserState = {
     isOwner: boolean;
     dataManagerAccount: OrgUserAccount;
     tagManagerAccount: OrgUserAccount;
-    canCreateTagManagerTrial: boolean;
-    canCreateDataManagerTrial: boolean;
 };
 
 export type OrgUserAction = {
@@ -76,8 +72,6 @@ export const OrgUserStateFromGql = (orgUserDetails: GqlOrgUserState): OrgUserSta
             isAdmin: orgUserDetails.me.permissions.is_admin,
         },
         isOwner: orgUserDetails.me.owner,
-        canCreateTagManagerTrial: orgUserDetails.me.can_create_tag_manager_trial,
-        canCreateDataManagerTrial: orgUserDetails.me.can_create_data_manager_trial,
         dataManagerAccount:
             orgUserDetails.data_manager_account === null
                 ? null

@@ -103,8 +103,6 @@ export default class OrgManager extends Manager<Org> {
             If the \`OrgUser\` currently has ownership of this \`Org\`. Ownership is required to manage billing, upgrades, downgrades and termination of an Org.
             """
             owner: Boolean!
-            can_create_tag_manager_trial: Boolean!
-            can_create_data_manager_trial: Boolean!
         }
         """
         @model
@@ -592,8 +590,6 @@ export default class OrgManager extends Manager<Org> {
                     created_at: me.created_at,
                     updated_at: me.updated_at,
                     owner: org.orgOwnerUser.equals(me.id),
-                    can_create_tag_manager_trial: me.canCreateTagManagerTrial,
-                    can_create_data_manager_trial: me.canCreateDataManagerTrial,
                 }));
             },
             tag_manager_account: async (parent: any, args: any, ctx: CTX) => {
@@ -602,7 +598,26 @@ export default class OrgManager extends Manager<Org> {
                     const account = await this.repoFactory<TagManagerAccountRepo>(
                         TagManagerAccount,
                     ).getFromOrg(org);
-                    return !account.enabled ? undefined : account.toGQLType();
+
+                    if (!account.enabled || account.isOnFreeTrial() || account.trialExpired()) {
+                        const stripeProductId = await this.stripeService.getStripeProductId(
+                            org,
+                            'TagManagerAccount',
+                        );
+                        // ensure the account is in the right state
+                        if (stripeProductId !== undefined) {
+                            const accountRepo = this.repoFactory(TagManagerAccount);
+                            account.enabled = true;
+                            account.cancelTrial();
+                            return (
+                                await accountRepo.save(account, 'SYSTEM', OperationOwner.SYSTEM)
+                            ).toGQLType();
+                        }
+                    }
+                    if (!account.enabled) {
+                        return undefined;
+                    }
+                    return account.toGQLType();
                 });
             },
             data_manager_account: async (parent: any, args: any, ctx: CTX) => {
@@ -611,7 +626,26 @@ export default class OrgManager extends Manager<Org> {
                     const account = await this.repoFactory<DataManagerAccountRepo>(
                         DataManagerAccount,
                     ).getFromOrg(org);
-                    return !account.enabled ? undefined : account.toGQLType();
+
+                    if (!account.enabled || account.isOnFreeTrial() || account.trialExpired()) {
+                        const stripeProductId = await this.stripeService.getStripeProductId(
+                            org,
+                            'DataManagerAccount',
+                        );
+                        // ensure the account is in the right state
+                        if (stripeProductId !== undefined) {
+                            const accountRepo = this.repoFactory(DataManagerAccount);
+                            account.enabled = true;
+                            account.cancelTrial();
+                            return (
+                                await accountRepo.save(account, 'SYSTEM', OperationOwner.SYSTEM)
+                            ).toGQLType();
+                        }
+                    }
+                    if (!account.enabled) {
+                        return undefined;
+                    }
+                    return account.toGQLType();
                 });
             },
             users: async (parent: any, args: any, ctx: CTX) => {
@@ -704,27 +738,12 @@ export default class OrgManager extends Manager<Org> {
                 const account = await this.repoFactory<TagManagerAccountRepo>(
                     TagManagerAccount,
                 ).getFromOrg(org);
-
-                if (me.canCreateTagManagerTrial) {
-                    //we can create a free trail...
-                    account.enabled = true;
-                    account.startTrial();
-                    await this.repoFactory(TagManagerAccount).save(
-                        account,
-                        me,
-                        OperationOwner.USER,
-                        {
-                            gqlMethod: GQLMethod.CREATE,
-                        },
-                    );
-                    //now we need to remove that flag from the user...
-                    me.canCreateTagManagerTrial = false;
-                    await this.repoFactory(User).save(me, 'SYSTEM', OperationOwner.SYSTEM);
-                    return account.toGQLType();
-                } else {
-                    //user can't create a free trial... (have done so once in the past already)
-                    throw new GQLError(userMessages.noFreeTrial, true);
-                }
+                account.enabled = true;
+                account.startTrial();
+                await this.repoFactory(TagManagerAccount).save(account, me, OperationOwner.USER, {
+                    gqlMethod: GQLMethod.CREATE,
+                });
+                return account.toGQLType();
             });
         },
         startDataManagerTrial: async (parent: any, args: any, ctx: CTX) => {
@@ -736,26 +755,12 @@ export default class OrgManager extends Manager<Org> {
                 const account = await this.repoFactory<DataManagerAccountRepo>(
                     DataManagerAccount,
                 ).getFromOrg(org);
-                if (me.canCreateDataManagerTrial) {
-                    //we can create a free trail...
-                    account.enabled = true;
-                    account.startTrial();
-                    await this.repoFactory(DataManagerAccount).save(
-                        account,
-                        me,
-                        OperationOwner.USER,
-                        {
-                            gqlMethod: GQLMethod.CREATE,
-                        },
-                    );
-                    //now we need to remove that flag from the user...
-                    me.canCreateDataManagerTrial = false;
-                    await this.repoFactory(User).save(me, 'SYSTEM', OperationOwner.SYSTEM);
-                    return account.toGQLType();
-                } else {
-                    //user can't create a free trial... (have done so once in the past already)
-                    throw new GQLError(userMessages.noFreeDMTrial, true);
-                }
+                account.enabled = true;
+                account.startTrial();
+                await this.repoFactory(DataManagerAccount).save(account, me, OperationOwner.USER, {
+                    gqlMethod: GQLMethod.CREATE,
+                });
+                return account.toGQLType();
             });
         },
         regenerateUserPassword: async (parent: any, args: any, ctx: CTX) => {
@@ -1086,9 +1091,9 @@ export default class OrgManager extends Manager<Org> {
             );
         },
         accountSubscribe: async (parent: any, args: any, ctx: CTX) => {
+            //validate product id exists...
             const getProductIdFromUserInput = (productId: string): string => {
                 const stripeService = container.get<StripeService>(TYPES.StripeService);
-
                 const getProductId = () => {
                     const productData = stripeService
                         .getAccountConfigFromProductId(productId)
@@ -1182,6 +1187,7 @@ export default class OrgManager extends Manager<Org> {
                     const deleteAccount = async () => {
                         await accountRepository.delete(account, 'SYSTEM', OperationOwner.SYSTEM);
                         // generate a new inactive account
+                        // todo... this is bad.... FIX IT. Data manager is breaking here for obvious reasons.
                         const buildNewAccount = () => {
                             if (accountType === 'TagManagerAccount') {
                                 return new TagManagerAccount(org, org.manualInvoicing);
@@ -1258,10 +1264,11 @@ export default class OrgManager extends Manager<Org> {
     ): Promise<DataManagerAccount | TagManagerAccount> {
         if (product === AccountProduct.TAG_MANAGER)
             return await this.repoFactory<TagManagerAccountRepo>(TagManagerAccount).getFromOrg(org);
-        if (product === AccountProduct.DATA_MANAGER)
+        if (product === AccountProduct.DATA_MANAGER) {
             return await this.repoFactory<DataManagerAccountRepo>(DataManagerAccount).getFromOrg(
                 org,
             );
+        }
         throw new GenericError(
             `Account for product ${product} not implemented.`,
             LogPriority.ERROR,

@@ -58,8 +58,6 @@ const PageOrgDashboardQuery = gql`
             }
             me {
                 id
-                can_create_tag_manager_trial
-                can_create_data_manager_trial
             }
             users {
                 id

@@ -5,55 +5,45 @@ import { useRouter } from 'next/router';
 import { pageActions } from '../../../actions/PageActions';
 import { buildThankYouPath } from '../../../utils/NavigationPaths';
 import { AccountProduct } from '../../../gql/generated/globalTypes';
-import { ProductListButtonProps } from '../../../dialogPages/global/orgSettings/ProductList';
+import { ProductButtonProps } from '../../../types/ProductTypes';
+import { buildProductButtonStyle } from './ButtonSelector';
 
-export const SelectPlanButton: FC<ProductListButtonProps> = (props: ProductListButtonProps) => {
+export const SelectPlanButton: FC<ProductButtonProps> = (props: ProductButtonProps) => {
     const { templateInteractions } = useLoggedInState();
     const { ask } = templateInteractions;
-    const { data, product, pageActionProps } = props;
+    const { subscriptionType, orgId, type, product, pageActionProps } = props;
     const router = useRouter();
+
+    if (product === undefined) return null;
 
     return (
         <Button
             variant="contained"
             onClick={() => {
-                if (data.getOrg.is_paid) {
+                if (subscriptionType === 'paid') {
                     ask(`Do you want to add ${product.name} to your subscription?`, () => {
                         pageActions.accountSubscribe(
                             pageActionProps,
-                            data.getOrg.id,
+                            orgId,
                             product.id,
-                            props.accountProduct,
+                            type === 'tag'
+                                ? AccountProduct.TAG_MANAGER
+                                : AccountProduct.DATA_MANAGER,
                             () => {
-                                router
-                                    .push(
-                                        buildThankYouPath(
-                                            data.getOrg.id,
-                                            product.id,
-                                            props.accountProduct,
-                                        ),
-                                    )
-                                    .then();
+                                router.push(buildThankYouPath(orgId, product.id, type)).then();
                             },
                         );
                     });
                 } else {
                     pageActions.accountSubscribe(
                         pageActionProps,
-                        data.getOrg.id,
+                        orgId,
                         product.id,
-                        props.accountProduct,
+                        type === 'tag' ? AccountProduct.TAG_MANAGER : AccountProduct.DATA_MANAGER,
                     );
                 }
             }}
-            sx={{
-                color: '#ffffff',
-                backgroundColor: (theme) =>
-                    props.accountProduct === AccountProduct.TAG_MANAGER
-                        ? theme.palette.tagManagerColor.main
-                        : theme.palette.dataManagerColor.main,
-                width: '100%',
-            }}
+            sx={buildProductButtonStyle(type)}
             color="inherit"
             disableElevation
         >

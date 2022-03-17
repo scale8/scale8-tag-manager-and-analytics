@@ -41,10 +41,7 @@ const OrgAccountSection: FC<OrgAccountSectionProps> = (props: OrgAccountSectionP
     const account = isTag ? data.getOrg.tag_manager_account : data.getOrg.data_manager_account;
 
     if (account === null) {
-        const canCreate = isTag
-            ? data.getOrg.me.can_create_tag_manager_trial
-            : data.getOrg.me.can_create_data_manager_trial;
-        if (canCreate && isOwner) {
+        if (isOwner) {
             return (
                 <AccountSectionButton
                     clickAction={
@@ -105,7 +102,14 @@ const OrgAccountSection: FC<OrgAccountSectionProps> = (props: OrgAccountSectionP
         <Box width="100%" mb={2}>
             <Alert severity="info">
                 You have <b>{account.trial_expires_in}</b> days left in your free trial.{' '}
-                <Link href={toOrg({ id: data.getOrg.id }, 'settings')} sx={{ color: '#1b1b1b' }}>
+                <Link
+                    href={
+                        isTag
+                            ? toOrg({ id: data.getOrg.id, plan: 'tag' }, 'settings')
+                            : toOrg({ id: data.getOrg.id, plan: 'data' }, 'settings')
+                    }
+                    sx={{ color: '#1b1b1b' }}
+                >
                     Upgrade to a paid plan
                 </Link>
                 .

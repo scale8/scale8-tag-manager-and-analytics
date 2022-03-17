@@ -120,14 +120,6 @@ export default class UserManager extends Manager<User> {
             The date the \`User\` was last updated
             """
             updated_at: DateTime!
-            """
-            Whether the \`User\` can create a Tag Manager trial
-            """
-            can_create_tag_manager_trial: Boolean!
-            """
-            Whether the \`User\` can create a Data Manager trial
-            """
-            can_create_data_manager_trial: Boolean!
         }
 
         """

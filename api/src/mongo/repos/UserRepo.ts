@@ -94,8 +94,6 @@ export default class UserRepo extends Repo<User> {
         two_factor_auth: boolean;
         email: string;
         owner: boolean;
-        can_create_tag_manager_trial: boolean;
-        can_create_data_manager_trial: boolean;
     }> {
         const org = await fetchOrg(orgId);
         return {
@@ -108,8 +106,6 @@ export default class UserRepo extends Repo<User> {
             created_at: user.created_at,
             updated_at: user.updated_at,
             owner: org.orgOwnerUser.equals(user.id),
-            can_create_tag_manager_trial: user.canCreateTagManagerTrial,
-            can_create_data_manager_trial: user.canCreateDataManagerTrial,
         };
     }
 }

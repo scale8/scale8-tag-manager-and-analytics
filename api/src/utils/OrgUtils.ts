@@ -119,6 +119,7 @@ export const createOrg = async (
     );
 
     //create the system data manager...
+    //this needs to persist as it tracks usage... it should never be deleted. without this we can't bill.
     await repoFactory(DataManagerAccount).save(
         new DataManagerAccount(org, AccountType.SYSTEM, true),
         actor,

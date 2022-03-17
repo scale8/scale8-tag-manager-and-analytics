@@ -140,8 +140,6 @@ export interface OrgDashboardPageData_getOrg_me {
    * `OrgUser` ID
    */
   id: string;
-  can_create_tag_manager_trial: boolean;
-  can_create_data_manager_trial: boolean;
 }
 
 export interface OrgDashboardPageData_getOrg_users {

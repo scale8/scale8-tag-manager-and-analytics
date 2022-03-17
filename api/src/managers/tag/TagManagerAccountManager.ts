@@ -7,7 +7,6 @@ import { ObjectId } from 'mongodb';
 import App from '../../mongo/models/tag/App';
 import Platform from '../../mongo/models/tag/Platform';
 import { differenceInDays } from 'date-fns';
-import OperationOwner from '../../enums/OperationOwner';
 import userMessages from '../../errors/UserMessages';
 import { fetchOrg } from '../../utils/OrgUtils';
 import { usageFromAccount } from '../../utils/UsageUtils';
@@ -161,22 +160,7 @@ export default class TagManagerAccountManager extends Manager<TagManagerAccount>
             stripe_product_id: async (parent: any, args: any, ctx: CTX) => {
                 const org = await fetchOrg(new ObjectId(parent.org_id));
                 return await this.orgAuth.asUserWithViewAccess(ctx, org.id, async () => {
-                    const stripeProductId = await this.stripeService.getStripeProductId(
-                        org,
-                        'TagManagerAccount',
-                    );
-                    // ensure the account is in the right state
-                    if (stripeProductId !== undefined) {
-                        const accountRepo = this.repoFactory(TagManagerAccount);
-                        const account = await accountRepo.findByIdThrows(
-                            new ObjectId(parent.id),
-                            userMessages.accountFailed,
-                        );
-                        account.enabled = true;
-                        account.cancelTrial();
-                        await accountRepo.save(account, 'SYSTEM', OperationOwner.SYSTEM);
-                    }
-                    return stripeProductId;
+                    return this.stripeService.getStripeProductId(org, 'TagManagerAccount');
                 });
             },
             usage: async (parent: any, args: any, ctx: CTX) => {
