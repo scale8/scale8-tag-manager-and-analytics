@@ -95,17 +95,19 @@ export default class GitHubAuth extends Handler {
                                 ...requestingUser.sessions,
                             ];
                             res.redirect(
-                                `${uiUrl}/sso/success/${(
+                                `${uiUrl}/sso/success?uid=${(
                                     await this.userRepo.save(
                                         requestingUser,
                                         'SYSTEM',
                                         OperationOwner.SYSTEM,
                                     )
-                                ).id.toString()}/${encodeURIComponent(sessionToken)}`,
+                                ).id.toString()}&token=${encodeURIComponent(sessionToken)}`,
                             );
                         } else if ((await this.userRepo.findOne({ _email: email })) === null) {
                             // There is no user in our system with this email, this is effectively a new 'sign up'.
-                            res.redirect(`${uiUrl}/sso/new/${username}/${encodeURI(email)}`);
+                            res.redirect(
+                                `${uiUrl}/sso/new?username=${username}&email=${encodeURI(email)}`,
+                            );
                         } else {
                             res.redirect(`${uiUrl}/sso/duplicate`);
                         }
@@ -113,9 +115,9 @@ export default class GitHubAuth extends Handler {
                         //this is a new login...
                         user.sessions = [new Session(sessionToken), ...user.sessions];
                         res.redirect(
-                            `${uiUrl}/sso/success/${(
+                            `${uiUrl}/sso/success?uid=${(
                                 await this.userRepo.save(user, 'SYSTEM', OperationOwner.SYSTEM)
-                            ).id.toString()}/${encodeURIComponent(sessionToken)}`,
+                            ).id.toString()}&token=${encodeURIComponent(sessionToken)}`,
                         );
                     }
                 } catch (e: any) {
