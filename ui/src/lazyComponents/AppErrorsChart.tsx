@@ -9,7 +9,7 @@ import { AppChartQueryData } from '../gql/generated/AppChartQueryData';
 import { ApolloError } from '@apollo/client/errors';
 import GQLError from '../components/atoms/GqlError';
 import { AppErrorContentProps } from '../types/props/AppErrorContentProps';
-import { ChartOptions } from 'chart.js';
+import { ChartData, ChartOptions, ScriptableContext } from 'chart.js';
 import { buildAppChartVars } from '../utils/GraphUtils';
 
 const AppErrorsChart: FC<AppErrorContentProps> = (props: AppErrorContentProps) => {
@@ -29,25 +29,49 @@ const AppErrorsChart: FC<AppErrorContentProps> = (props: AppErrorContentProps) =
                 chartPeriodProps,
             );
 
-            const data = {
+            const data: ChartData<'bar'> = {
                 labels,
                 datasets: [
                     {
                         label: 'Users with errors',
                         data: chartData.map((_) => _.user_count),
-                        fill: false,
-                        backgroundColor: '#737373',
+                        backgroundColor: (context: ScriptableContext<'bar'>) => {
+                            const chart = context.chart;
+                            const { ctx, chartArea } = chart;
+
+                            if (!chartArea) {
+                                // This case happens on initial chart load
+                                return;
+                            }
+
+                            const background = ctx.createLinearGradient(0, 0, 0, 600);
+                            background.addColorStop(0, '#bbbbbb');
+                            background.addColorStop(1, 'black');
+
+                            return background;
+                        },
                         borderWidth: 0,
-                        lineTension: 0,
                         yAxisID: 'yAxis1',
                     },
                     {
                         label: 'Total errors',
                         data: chartData.map((_) => _.event_count),
-                        fill: false,
-                        backgroundColor: '#c63d51',
+                        backgroundColor: (context: ScriptableContext<'bar'>) => {
+                            const chart = context.chart;
+                            const { ctx, chartArea } = chart;
+
+                            if (!chartArea) {
+                                // This case happens on initial chart load
+                                return;
+                            }
+
+                            const background = ctx.createLinearGradient(0, 0, 0, 600);
+                            background.addColorStop(0, '#c63d51');
+                            background.addColorStop(1, 'black');
+
+                            return background;
+                        },
                         borderWidth: 0,
-                        lineTension: 0,
                         yAxisID: 'yAxis2',
                     },
                 ],

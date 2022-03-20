@@ -14,7 +14,7 @@ import { IngestEndpointAnalyticsContentProps } from '../types/props/IngestEndpoi
 import IngestChartQuery from '../gql/queries/IngestChartQuery';
 import { IngestChartQueryData } from '../gql/generated/IngestChartQueryData';
 import { getProductSection, ProductSectionKey } from '../containers/SectionsDetails';
-import { ChartOptions } from 'chart.js';
+import { ChartData, ChartOptions, ScriptableContext } from 'chart.js';
 import { ticksLimitFromPeriodType } from '../utils/GraphUtils';
 
 const IngestAnalyticsChart: FC<IngestEndpointAnalyticsContentProps> = (
@@ -38,7 +38,7 @@ const IngestAnalyticsChart: FC<IngestEndpointAnalyticsContentProps> = (
             const dates = datesFromChartPeriod(rangeFrom, rangeTo, chartPeriodProps.period);
             const ticksLimit = ticksLimitFromPeriodType(chartPeriodProps.period);
 
-            const data = {
+            const data: ChartData<'bar'> = {
                 labels,
                 datasets: [
                     {
@@ -48,10 +48,25 @@ const IngestAnalyticsChart: FC<IngestEndpointAnalyticsContentProps> = (
                             queryData.getIngestEndpoint.request_stats.result,
                             chartPeriodProps.period,
                         ),
-                        fill: false,
-                        backgroundColor: getProductSection(ProductSectionKey.dataManager).color,
+                        backgroundColor: (context: ScriptableContext<'bar'>) => {
+                            const chart = context.chart;
+                            const { ctx, chartArea } = chart;
+
+                            if (!chartArea) {
+                                // This case happens on initial chart load
+                                return;
+                            }
+
+                            const background = ctx.createLinearGradient(0, 0, 0, 600);
+                            background.addColorStop(
+                                0,
+                                getProductSection(ProductSectionKey.dataManager).color,
+                            );
+                            background.addColorStop(1, 'black');
+
+                            return background;
+                        },
                         borderWidth: 0,
-                        lineTension: 0,
                         yAxisID: 'yAxis1',
                     },
                     {
@@ -61,21 +76,28 @@ const IngestAnalyticsChart: FC<IngestEndpointAnalyticsContentProps> = (
                             queryData.getIngestEndpoint.byte_stats.result,
                             chartPeriodProps.period,
                         ),
-                        fill: false,
-                        backgroundColor: '#737373',
+                        backgroundColor: (context: ScriptableContext<'bar'>) => {
+                            const chart = context.chart;
+                            const { ctx, chartArea } = chart;
+
+                            if (!chartArea) {
+                                // This case happens on initial chart load
+                                return;
+                            }
+
+                            const background = ctx.createLinearGradient(0, 0, 0, 600);
+                            background.addColorStop(0, '#bbbbbb');
+                            background.addColorStop(1, 'black');
+
+                            return background;
+                        },
                         borderWidth: 0,
-                        lineTension: 0,
                         yAxisID: 'yAxis2',
                     },
                 ],
             };
 
             const options: ChartOptions<'bar'> = {
-                // plugins: {
-                //     tooltip: {
-                //         enabled: true,
-                //     },
-                // },
                 maintainAspectRatio: false,
                 responsive: true,
                 scales: {

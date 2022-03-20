@@ -33,7 +33,7 @@ export const productSectionMap = new Map<symbol, ProductSection>([
     [
         ProductSectionKey.dataManager,
         {
-            product: 'Tag Manager',
+            product: 'Data Manager',
             color: '#ff0084',
         },
     ],
@@ -271,4 +271,22 @@ export const logoFromSectionLocator = (sectionKey: symbol | undefined): FC<LogoP
     }
 
     return Logo;
+};
+
+export const gradientFromSectionLocator = (sectionKey: symbol | undefined): string => {
+    const globalGradient = 'conic-gradient(at 0% 60%, black 5%, #9042e7 35%, black 55%)';
+
+    if (sectionKey === undefined) {
+        return globalGradient;
+    }
+    const sectionDetails = getSectionDetails(sectionKey);
+    if (sectionDetails.productSectionKey === ProductSectionKey.tagManager) {
+        return 'conic-gradient(at 0% 60%, black 5%, #39cce0 35%, black 55%)';
+    }
+
+    if (sectionDetails.productSectionKey === ProductSectionKey.dataManager) {
+        return 'conic-gradient(at 0% 60%, black 5%, #ff0084 35%, black 55%)';
+    }
+
+    return globalGradient;
 };

@@ -4,7 +4,11 @@ import { Badge, Box, IconButton, Tooltip } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 import OrgIcon from '../atoms/Icons/OrgIcon';
-import { logoFromSectionLocator, SectionKey } from '../../containers/SectionsDetails';
+import {
+    gradientFromSectionLocator,
+    logoFromSectionLocator,
+    SectionKey,
+} from '../../containers/SectionsDetails';
 import { useLoggedInState } from '../../context/AppContext';
 import { SideBarProps } from '../../containers/global/LoggedInSection';
 import { useRouter } from 'next/router';
@@ -19,6 +23,7 @@ const SideBar: FC<SideBarProps> = (props: SideBarProps) => {
     const inAdmin = section === SectionKey.admin;
 
     const CurrentLogo = logoFromSectionLocator(section);
+    const gradient = gradientFromSectionLocator(section);
 
     return (
         <Box
@@ -28,8 +33,8 @@ const SideBar: FC<SideBarProps> = (props: SideBarProps) => {
                 boxSizing: 'border-box',
                 flexDirection: 'column',
                 minHeight: '500px',
-                background:
-                    'conic-gradient(at 0% 60%, black 2%, #39cce0 30%, #ff0084 35%, #9042e7 40%, black 55%)',
+                backgroundColor: 'black',
+                background: gradient,
                 flexGrow: 0,
                 width: '50px',
                 height: '100vh',

@@ -48,7 +48,9 @@ const AppPlatformRevisionForm: FC<AppPlatformRevisionFormProps> = (
         <DrawerFormLayout
             {...props}
             noSubmit={notAvailable || (isEdit && onlyOne)}
-            submitDisable={props.values.platformRevisionId === props.initialId}
+            submitDisable={
+                props.isSubmitting || props.values.platformRevisionId === props.initialId
+            }
         >
             <PlatformRevisionSelect {...props} />
             {props.values.mappedPlatformValues !== undefined && (

@@ -9,7 +9,10 @@ import { EnvironmentFormProps } from '../../../dialogPages/tagManager/app/Enviro
 
 const EnvironmentForm: FC<EnvironmentFormProps> = (props: EnvironmentFormProps) => {
     return (
-        <DrawerFormLayout {...props} submitDisable={props.availableRevisions.length < 1}>
+        <DrawerFormLayout
+            {...props}
+            submitDisable={props.isSubmitting || props.availableRevisions.length < 1}
+        >
             <ControlledTextInput
                 name="name"
                 label="Name"
