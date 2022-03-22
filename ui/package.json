@@ -50,7 +50,7 @@
         "apollo": "^3.0.0-alpha.2",
         "arraybuffer-loader": "^1.0.8",
         "babel-jest": "^27.3.1",
-        "chart.js": "^3.6.0",
+        "chart.js": "^3.7.1",
         "clsx": "^1.1.1",
         "date-fns": "^2.23.0",
         "eslint": "^7.23.0",
