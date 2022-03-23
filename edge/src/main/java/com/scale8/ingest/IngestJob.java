@@ -3,9 +3,7 @@ package com.scale8.ingest;
 import io.micronaut.scheduling.annotation.Scheduled;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.inject.Singleton;
-import java.util.concurrent.ExecutionException;
 
 @Singleton
 public class IngestJob {
@@ -17,7 +15,7 @@ public class IngestJob {
     this.ingestor = ingestor;
   }
 
-  @Scheduled(fixedDelay = "3s")
+  @Scheduled(fixedDelay = "1s")
   void exec() throws Exception {
     ingestor.push();
   }
