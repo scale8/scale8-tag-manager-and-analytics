@@ -127,6 +127,12 @@ public class Env {
 
   public final String AWS_ID = getOrElse("AWS_ID", "");
 
+  public final int INGEST_WINDOW_SIZE_SECONDS = Integer.parseInt(getOrElse("INGEST_WINDOW_SIZE_SECONDS", "10"));
+
+  public final int INGEST_TIMEOUT_JOBS_SECONDS = Integer.parseInt(getOrElse("INGEST_TIMEOUT_JOBS_SECONDS", "60"));
+
+  public final int INGEST_MAX_THREADS = Integer.parseInt(getOrElse("INGEST_MAX_THREADS", "10"));
+
   public final String AWS_SECRET = getOrElse("AWS_SECRET", "");
 
   public final String AWS_REGION = getOrElse("AWS_REGION", "");
