@@ -929,18 +929,11 @@ export default class UserManager extends Manager<User> {
                 const user = await this.repo.findOne({
                     _github_user: args.prepareGitHubLinkInput.github_user,
                 });
-                if (user !== null) {
-                    // If a user already requested to be prepared but never completed the registration
-                    // remove the request from that user
-                    if (user.github === undefined) {
-                        user.github_user = undefined;
-                        await this.repoFactory(User).save(user, 'SYSTEM', OperationOwner.SYSTEM);
-                    } else {
-                        throw new DataError(
-                            userMessages.gitHubDuplicate(args.prepareGitHubLinkInput.github_user),
-                            true,
-                        );
-                    }
+                if (user !== null && user.github !== undefined) {
+                    throw new DataError(
+                        userMessages.gitHubDuplicate(args.prepareGitHubLinkInput.github_user),
+                        true,
+                    );
                 }
                 me.bulkGQLSet(args.prepareGitHubLinkInput);
                 return (

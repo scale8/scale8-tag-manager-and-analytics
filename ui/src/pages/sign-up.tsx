@@ -166,6 +166,7 @@ const SignUpContent: FC<SignUpContentProps> = (props: SignUpContentProps) => {
         qsEmail,
         captcha,
         success: data?.signUp !== undefined,
+        withGitHub: gitHubId !== null,
         email: data?.signUp.email,
         handleDialogClose: () => {
             // not in dialog

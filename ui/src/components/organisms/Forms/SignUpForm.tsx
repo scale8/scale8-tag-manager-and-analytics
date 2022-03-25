@@ -18,7 +18,7 @@ import Link from '../../atoms/Next/Link';
 import FormFull from '../../atoms/FormFull';
 
 const SignUpForm: FC<SignUpFormProps> = (props: SignUpFormProps) => {
-    const { type, values, handleChange, errors, qsEmail } = props;
+    const { type, values, handleChange, errors, qsEmail, withGitHub } = props;
 
     const setCaptchaToken = (token: string) => handleChange('CAPTCHAToken', token);
 
@@ -56,6 +56,9 @@ const SignUpForm: FC<SignUpFormProps> = (props: SignUpFormProps) => {
     }
 
     if (props.success) {
+        if (withGitHub) {
+            localStorage.setItem('gitHubSignUp', '1');
+        }
         return (
             <SignUpContainer
                 type={props.type}

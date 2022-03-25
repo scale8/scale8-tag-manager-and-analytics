@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { ApolloError, useMutation } from '@apollo/client';
 import { openSignInWindow } from '../../utils/SignInUtils';
 import GithubAccountRemoveQuery from '../../gql/mutations/GithubAccountRemoveQuery';
@@ -17,6 +17,8 @@ const GithubCheck: FC<GithubCheckProps> = (props: GithubCheckProps) => {
     const { setSnackbarError } = templateInteractions;
     const { githubUser, githubConnected } = props;
 
+    const [showError, setShowError] = useState(false);
+
     const [GithubAccountRemove, { data, error: gqlError }] =
         useMutation<GithubAccountRemoveValues>(GithubAccountRemoveQuery);
 
@@ -25,34 +27,49 @@ const GithubCheck: FC<GithubCheckProps> = (props: GithubCheckProps) => {
     }
 
     useEffect(() => {
-        if (data?.removeGitHubLink) {
+        if (data?.removeGitHubLink && showError) {
             setSnackbarError({
                 message: `GitHub login failed`,
             } as ApolloError);
+            setShowError(false);
         }
     }, [data]);
 
     useEffect(() => {
         if (githubUser !== null && !githubConnected) {
-            (async () => {
-                try {
-                    const ssoResult: {
-                        uid: string;
-                        token: string;
-                    } = await openSignInWindow(`${getApiUrl()}/auth/github?login=${githubUser}`);
+            if (localStorage.getItem('gitHubSignUp') === '1') {
+                (async () => {
+                    try {
+                        const ssoResult: {
+                            uid: string;
+                            token: string;
+                        } = await openSignInWindow(
+                            `${getApiUrl()}/auth/github?login=${githubUser}`,
+                        );
 
-                    if (ssoResult !== null) {
-                        localStorage.setItem('uid', ssoResult.uid);
-                        localStorage.setItem('token', ssoResult.token);
+                        if (ssoResult !== null) {
+                            localStorage.setItem('uid', ssoResult.uid);
+                            localStorage.setItem('token', ssoResult.token);
+                        }
+                    } catch (e) {
+                        try {
+                            setShowError(true);
+                            await GithubAccountRemove();
+                        } catch (error) {
+                            logError(error);
+                        }
                     }
-                } catch (e) {
+                    localStorage.removeItem('gitHubSignUp');
+                })();
+            } else {
+                (async () => {
                     try {
                         await GithubAccountRemove();
                     } catch (error) {
                         logError(error);
                     }
-                }
-            })();
+                })();
+            }
         }
     }, [githubUser, githubConnected]);
 
