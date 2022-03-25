@@ -2,7 +2,7 @@ import { FC, useEffect } from 'react';
 import { ProductSettings } from '../../gql/generated/ProductSettings';
 import { useConfigState, useLoggedInState } from '../../context/AppContext';
 import { PageActionProps, pageActions } from '../../actions/PageActions';
-import { Box, Button, Card, darken, lighten } from '@mui/material';
+import { Box, Button, Card, darken, Grid, lighten } from '@mui/material';
 import TmLogo from '../atoms/TmLogo';
 import DmLogo from '../atoms/DmLogo';
 
@@ -301,10 +301,14 @@ const AccountPlans: FC<{ data: ProductSettings; plan?: string }> = (props: {
     }
 
     return (
-        <Box display="flex" gap={2}>
-            <AccountPlanCard data={data} type="tag" />
-            <AccountPlanCard data={data} type="data" />
-        </Box>
+        <Grid container spacing={2}>
+            <Grid item xs={12} sm={12} md={12} lg={6}>
+                <AccountPlanCard data={data} type="tag" />
+            </Grid>
+            <Grid item xs={12} sm={12} md={12} lg={6}>
+                <AccountPlanCard data={data} type="data" />
+            </Grid>
+        </Grid>
     );
 };
 
