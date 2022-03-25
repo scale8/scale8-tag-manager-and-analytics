@@ -1,6 +1,7 @@
 package com.scale8.ingest;
 
 import com.google.gson.JsonObject;
+import com.scale8.Env;
 import com.scale8.config.structures.IngestSettings;
 import com.scale8.extended.types.Tuple;
 import com.scale8.ingest.storage.LogProvider;
@@ -22,6 +23,8 @@ import java.util.stream.Collectors;
 @Singleton
 public class Ingestor {
 
+  @Inject Env env;
+
   @Inject StreamToBigQuery streamToBigQuery;
 
   @Inject PushToMongoDb pushToMongoDb;
@@ -31,9 +34,6 @@ public class Ingestor {
   @Inject LogProvider logProvider;
 
   private static final Logger LOG = LoggerFactory.getLogger(Ingestor.class);
-  private static final int MAX_THREADS = 10;
-  private static final int WINDOW_SIZE_SECONDS = 100;
-  private static final int TIMEOUT_JOBS_SECONDS = 60;
 
   private static final ConcurrentHashMap<
           String, ConcurrentHashMap<Long, ConcurrentLinkedQueue<JsonObject>>>
@@ -43,7 +43,7 @@ public class Ingestor {
   private static final HashMap<String, IngestSettings> environmentIngestSettings = new HashMap<>();
 
   private long getCurrentWritableWindow() {
-    return System.currentTimeMillis() / 1000 / WINDOW_SIZE_SECONDS;
+    return System.currentTimeMillis() / 1000 / env.INGEST_WINDOW_SIZE_SECONDS;
   }
 
   public void add(JsonObject payload, IngestSettings ingestSettings) {
@@ -66,7 +66,7 @@ public class Ingestor {
   }
 
   public void push() throws Exception {
-    ExecutorService executorService = Executors.newFixedThreadPool(MAX_THREADS);
+    ExecutorService executorService = Executors.newFixedThreadPool(env.INGEST_MAX_THREADS);
     long currentWindow = getCurrentWritableWindow();
 
     ArrayList<Tuple<IngestSettings, ConcurrentLinkedQueue<JsonObject>>> qJobs = new ArrayList<>();
@@ -133,7 +133,7 @@ public class Ingestor {
             .collect(Collectors.toList());
 
     executorService.shutdown();
-    if (!executorService.awaitTermination(TIMEOUT_JOBS_SECONDS, TimeUnit.SECONDS)) {
+    if (!executorService.awaitTermination(env.INGEST_TIMEOUT_JOBS_SECONDS, TimeUnit.SECONDS)) {
       LOG.error("Failed to execute within timeframe...");
       executorService.shutdownNow();
     }
