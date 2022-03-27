@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { ApolloError, useMutation } from '@apollo/client';
 import { openSignInWindow } from '../../utils/SignInUtils';
 import GithubAccountRemoveQuery from '../../gql/mutations/GithubAccountRemoveQuery';
@@ -17,7 +17,7 @@ const GithubCheck: FC<GithubCheckProps> = (props: GithubCheckProps) => {
     const { setSnackbarError } = templateInteractions;
     const { githubUser, githubConnected } = props;
 
-    const [showError, setShowError] = useState(false);
+    // const [showError, setShowError] = useState(false);
 
     const [GithubAccountRemove, { data, error: gqlError }] =
         useMutation<GithubAccountRemoveValues>(GithubAccountRemoveQuery);
@@ -27,11 +27,12 @@ const GithubCheck: FC<GithubCheckProps> = (props: GithubCheckProps) => {
     }
 
     useEffect(() => {
-        if (data?.removeGitHubLink && showError) {
+        // if (data?.removeGitHubLink && showError) {
+        if (data?.removeGitHubLink) {
             setSnackbarError({
                 message: `GitHub login failed`,
             } as ApolloError);
-            setShowError(false);
+            // setShowError(false);
         }
     }, [data]);
 
@@ -53,7 +54,7 @@ const GithubCheck: FC<GithubCheckProps> = (props: GithubCheckProps) => {
                         }
                     } catch (e) {
                         try {
-                            setShowError(true);
+                            // setShowError(true);
                             await GithubAccountRemove();
                         } catch (error) {
                             logError(error);
@@ -61,14 +62,15 @@ const GithubCheck: FC<GithubCheckProps> = (props: GithubCheckProps) => {
                     }
                     localStorage.removeItem('gitHubSignUp');
                 })();
-            } else {
-                (async () => {
-                    try {
-                        await GithubAccountRemove();
-                    } catch (error) {
-                        logError(error);
-                    }
-                })();
+                // } else {
+                //     (async () => {
+                //         try {
+                //             await GithubAccountRemove();
+                //         } catch (error) {
+                //             logError(error);
+                //         }
+                //     })();
+                // }
             }
         }
     }, [githubUser, githubConnected]);

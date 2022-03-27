@@ -921,19 +921,33 @@ export default class UserManager extends Manager<User> {
             });
         },
         prepareGitHubLink: async (parent: any, args: any, ctx: CTX) => {
+            console.log('here');
+            console.debug(args);
             if (!(await this.config.gitHubSsoEnabled())) {
                 throw new GenericError(userMessages.gitHubSsoDisabled, LogPriority.ERROR, true);
             }
 
             return await this.userAuth.asUser(ctx, async (me) => {
                 const user = await this.repo.findOne({
+                    _id: { $ne: me.id },
                     _github_user: args.prepareGitHubLinkInput.github_user,
                 });
-                if (user !== null && user.github !== undefined) {
-                    throw new DataError(
-                        userMessages.gitHubDuplicate(args.prepareGitHubLinkInput.github_user),
-                        true,
-                    );
+                console.debug(user);
+                if (user !== null) {
+                    console.debug(user);
+
+                    // If another user already requested to be prepared but never completed the registration
+                    // remove the request from that user
+                    if (user.github === undefined) {
+                        user.github_user = undefined;
+                        await this.repoFactory(User).save(user, 'SYSTEM', OperationOwner.SYSTEM);
+                    } else {
+                        // Otherwise, notify we have a duplicate
+                        throw new DataError(
+                            userMessages.gitHubDuplicate(args.prepareGitHubLinkInput.github_user),
+                            true,
+                        );
+                    }
                 }
                 me.bulkGQLSet(args.prepareGitHubLinkInput);
                 return (
