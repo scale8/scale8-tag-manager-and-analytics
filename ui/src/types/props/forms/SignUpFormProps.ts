@@ -19,7 +19,6 @@ export type SignUpFormProps = FormProps<SignUpValues> & {
     gqlError?: ApolloError;
     success: boolean;
     email?: string;
-    withGitHub: boolean;
     type: string;
     target: string | undefined;
     loading: boolean;

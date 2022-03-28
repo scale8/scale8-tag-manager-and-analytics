@@ -58,6 +58,10 @@ export default class GitHub extends Model {
         this._scope = value;
     }
 
+    get username(): string {
+        return this._username;
+    }
+
     get authToken(): string {
         return this._auth_token;
     }

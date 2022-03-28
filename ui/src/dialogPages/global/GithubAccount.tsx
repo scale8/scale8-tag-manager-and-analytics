@@ -1,24 +1,23 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import Loader from '../../components/organisms/Loader';
 import { FormProps, useFormValidation } from '../../hooks/form/useFormValidation';
 import { useMutation, useQuery } from '@apollo/client';
 import LoggedUserQuery from '../../gql/queries/LoggedUserQuery';
 import { LoggedUser } from '../../gql/generated/LoggedUser';
-import GithubPreparationQuery from '../../gql/mutations/GithubPreparationQuery';
 import GithubPreparationForm from '../../components/organisms/Forms/GithubPreparationForm';
-import { PrepareGitHubLinkInput } from '../../gql/generated/globalTypes';
-import { GithubPreparationValues } from '../../gql/generated/GithubPreparationValues';
-import nameValidator from '../../utils/validators/nameValidator';
 import { DialogPageProps } from '../../types/DialogTypes';
 import { QueryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
 import { Box, DialogActions, DialogContent } from '@mui/material';
 import FormGqlError from '../../components/atoms/FormGqlError';
 import GithubAccountRemoveQuery from '../../gql/mutations/GithubAccountRemoveQuery';
 import { GithubAccountRemoveValues } from '../../gql/generated/GithubAccountRemoveValues';
-import GithubLoginForUser from './GithubLoginForUser';
 import { logError } from '../../utils/logUtils';
 import { DialogConfirmButton } from '../../components/atoms/DialogConfirmButton';
 import { DialogCancelButton } from '../../components/atoms/DialogCancelButton';
+import { openSignInWindow } from '../../utils/SignInUtils';
+import { getApiUrl } from '../../utils/ConfigUtils';
+import nameValidator from '../../utils/validators/nameValidator';
+import { useLoggedInState } from '../../context/AppContext';
 
 type GithubAccountAfterLoadProps = DialogPageProps & {
     hasLinkedSSO: boolean;
@@ -31,24 +30,38 @@ export type GitHubPreparationValues = {
 
 export type GitHubPreparationFormProps = FormProps<GitHubPreparationValues> & {
     handleDialogClose: (checkChanges: boolean) => void;
+    ssoError: string;
 };
 
 const GithubAccountUseForm: FC<GithubAccountAfterLoadProps> = (
     props: GithubAccountAfterLoadProps,
 ) => {
-    const [GithubPreparation, { loading, data, error: gqlError }] =
-        useMutation<GithubPreparationValues>(GithubPreparationQuery);
+    const [ssoError, setSsoError] = useState('');
+
+    const { loggedInUserState } = useLoggedInState();
+    const userId = loggedInUserState.loggedUserId;
 
     const submitForm = async (gitHubPreparationValues: GitHubPreparationValues) => {
-        const prepareGitHubLinkInput: PrepareGitHubLinkInput = {
-            github_user: gitHubPreparationValues.githubUser,
-        };
         try {
-            await GithubPreparation({
-                variables: { prepareGitHubLinkInput },
-            });
-        } catch (error) {
-            logError(error);
+            const ssoResult: {
+                uid: string;
+                token: string;
+            } = await openSignInWindow(
+                `${getApiUrl()}/auth/github?login=${
+                    gitHubPreparationValues.githubUser
+                }&user_id=${userId}`,
+            );
+
+            if (ssoResult !== null) {
+                localStorage.setItem('uid', ssoResult.uid);
+                localStorage.setItem('token', ssoResult.token);
+            }
+
+            props.handleDialogClose(false);
+            props.pageRefresh();
+        } catch (e: any) {
+            props.handleDialogClose(false);
+            setSsoError(`GitHub login failed: ${e.message}`);
         }
     };
 
@@ -68,17 +81,9 @@ const GithubAccountUseForm: FC<GithubAccountAfterLoadProps> = (
         submitForm,
     );
 
-    if (loading) {
-        return <Loader />;
-    }
-
-    if (data?.prepareGitHubLink.id !== undefined) {
-        return <GithubLoginForUser {...props} />;
-    }
-
     const formProps: GitHubPreparationFormProps = {
         ...formValidationValues,
-        gqlError,
+        ssoError,
         submitText: 'Connect Github Account',
         title: 'Connect Github Account',
         handleDialogClose: props.handleDialogClose,

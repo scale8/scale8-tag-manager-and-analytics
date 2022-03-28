@@ -29,13 +29,6 @@ export default class User extends Model {
     private _email: string;
 
     @Field<string>({
-        required: false,
-        exposeToGQLAs: 'github_user',
-        validation: (value) => value.match(/.+/) !== null,
-    })
-    private _github_user?: string;
-
-    @Field<string>({
         required: true,
         exposeToGQLAs: 'api_token',
     })
@@ -168,14 +161,6 @@ export default class User extends Model {
 
     get apiToken(): string {
         return this._api_token;
-    }
-
-    get github_user(): string | undefined {
-        return this._github_user;
-    }
-
-    set github_user(value: string | undefined) {
-        this._github_user = value;
     }
 
     get github(): GitHub | undefined {

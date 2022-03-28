@@ -14,6 +14,7 @@ import GenericError from '../../errors/GenericError';
 import userMessages from '../../errors/UserMessages';
 import { LogPriority } from '../../enums/LogPriority';
 import { generateSessionToken } from '../../utils/SessionUtils';
+import { ObjectId } from 'mongodb';
 
 @injectable()
 export default class GitHubAuth extends Handler {
@@ -29,6 +30,9 @@ export default class GitHubAuth extends Handler {
 
             const uiUrl = await this.config.getUiUrl();
             const code = req.query.code;
+            const state = req.query.state;
+            const requestingUserId =
+                typeof state === 'string' && state !== '' ? new ObjectId(state) : null;
             if (typeof code === 'string') {
                 try {
                     const { body } = await got.post('https://github.com/login/oauth/access_token', {
@@ -78,9 +82,9 @@ export default class GitHubAuth extends Handler {
                     const sessionToken = await generateSessionToken();
 
                     if (user === null) {
-                        const requestingUser = await this.userRepo.findOne({
-                            _github_user: username,
-                        });
+                        const requestingUser = requestingUserId
+                            ? await this.userRepo.findById(new ObjectId(requestingUserId))
+                            : null;
                         if (requestingUser !== null) {
                             // the user exists and he requested to link with github
                             requestingUser.github = new GitHub(
@@ -103,13 +107,11 @@ export default class GitHubAuth extends Handler {
                                     )
                                 ).id.toString()}&token=${encodeURIComponent(sessionToken)}`,
                             );
-                        } else if ((await this.userRepo.findOne({ _email: email })) === null) {
-                            // There is no user in our system with this email, this is effectively a new 'sign up'.
+                        } else {
+                            // The request was done with an invalid user id, consider it a new signup
                             res.redirect(
                                 `${uiUrl}/sso/new?username=${username}&email=${encodeURI(email)}`,
                             );
-                        } else {
-                            res.redirect(`${uiUrl}/sso/duplicate`);
                         }
                     } else {
                         //this is a new login...

@@ -11,7 +11,6 @@ import Invite from '../mongo/models/Invite';
 import UserNotification from '../mongo/models/UserNotification';
 import PasswordReset from '../mongo/models/PasswordReset';
 import TYPES from '../container/IOC.types';
-import DataError from '../errors/DataError';
 import GenericError from '../errors/GenericError';
 import { authenticator } from 'otplib';
 import OperationOwner from '../enums/OperationOwner';
@@ -181,7 +180,7 @@ export default class UserManager extends Manager<User> {
             """
             uid: String!
             """
-            Temporary token to povide on next step of 2-factor auth (see Login2FAInput)
+            Temporary token to provide on next step of 2-factor auth (see Login2FAInput)
             """
             temp_token: String!
         }
@@ -312,13 +311,6 @@ export default class UserManager extends Manager<User> {
             new_password: String
         }
 
-        input PrepareGitHubLinkInput {
-            """
-            \`Logged in User\` github username to link
-            """
-            github_user: String
-        }
-
         # noinspection GraphQLMemberRedefinition
         extend type Mutation {
             """
@@ -352,11 +344,6 @@ export default class UserManager extends Manager<User> {
             Change currently logged \`User\`'s password
             """
             changePassword(changePasswordInput: ChangePasswordInput!): Boolean!
-            """
-            @bound=User
-            Prepare currently logged \`User\` be linked with GitHub
-            """
-            prepareGitHubLink(prepareGitHubLinkInput: PrepareGitHubLinkInput!): User!
             """
             @bound=User
             Remove currently logged \`User\`'s link to GitHub
@@ -421,6 +408,11 @@ export default class UserManager extends Manager<User> {
      */
     protected gqlCustomResolvers = {
         User: {
+            github_user: async (parent: any, args: any, ctx: CTX) => {
+                return await this.userAuth.asUser(ctx, async (me) => {
+                    return me.github?.username;
+                });
+            },
             github_connected: async (parent: any, args: any, ctx: CTX) => {
                 return await this.userAuth.asUser(ctx, async (me) => {
                     return me.github !== undefined;
@@ -686,10 +678,6 @@ export default class UserManager extends Manager<User> {
                     true,
                 );
 
-                if (signUpRequest.git_hub_user !== undefined) {
-                    user.github_user = signUpRequest.git_hub_user;
-                }
-
                 return this.repoFactory(User).save(user, 'SYSTEM', OperationOwner.SYSTEM);
             };
 
@@ -802,6 +790,7 @@ export default class UserManager extends Manager<User> {
                     token: session.token,
                     url: `/s8/app/analytics?id=${app.id}&period=realtime`, //todo. no routes should be here.
                     environment_id: await getEnvironmentId(),
+                    gitHubUser: signUpRequest.git_hub_user,
                 };
             } else if (isData) {
                 if (org === null) {
@@ -920,45 +909,9 @@ export default class UserManager extends Manager<User> {
                 return true;
             });
         },
-        prepareGitHubLink: async (parent: any, args: any, ctx: CTX) => {
-            console.log('here');
-            console.debug(args);
-            if (!(await this.config.gitHubSsoEnabled())) {
-                throw new GenericError(userMessages.gitHubSsoDisabled, LogPriority.ERROR, true);
-            }
-
-            return await this.userAuth.asUser(ctx, async (me) => {
-                const user = await this.repo.findOne({
-                    _id: { $ne: me.id },
-                    _github_user: args.prepareGitHubLinkInput.github_user,
-                });
-                console.debug(user);
-                if (user !== null) {
-                    console.debug(user);
-
-                    // If another user already requested to be prepared but never completed the registration
-                    // remove the request from that user
-                    if (user.github === undefined) {
-                        user.github_user = undefined;
-                        await this.repoFactory(User).save(user, 'SYSTEM', OperationOwner.SYSTEM);
-                    } else {
-                        // Otherwise, notify we have a duplicate
-                        throw new DataError(
-                            userMessages.gitHubDuplicate(args.prepareGitHubLinkInput.github_user),
-                            true,
-                        );
-                    }
-                }
-                me.bulkGQLSet(args.prepareGitHubLinkInput);
-                return (
-                    await this.repoFactory(User).save(me, 'SYSTEM', OperationOwner.SYSTEM)
-                ).toGQLType();
-            });
-        },
         removeGitHubLink: async (parent: any, args: any, ctx: CTX) => {
             return await this.userAuth.asUser(ctx, async (me) => {
                 me.github = undefined;
-                me.github_user = undefined;
                 await this.repoFactory(User).save(me, 'SYSTEM', OperationOwner.SYSTEM);
 
                 return true;
@@ -1014,7 +967,6 @@ export default class UserManager extends Manager<User> {
 
                 // Remove github link
                 me.github = undefined;
-                me.github_user = undefined;
 
                 await this.repoFactory(User).save(me, 'SYSTEM', OperationOwner.SYSTEM);
 

@@ -14,7 +14,7 @@ import confirmPasswordValidator from '../utils/validators/confirmPasswordValidat
 import requiredStringValidator from '../utils/validators/requiredStringValidator';
 import SignUpForm from '../components/organisms/Forms/SignUpForm';
 import LoggedOutSection from '../containers/global/LoggedOutSection';
-import { SignUpValues } from '../types/props/forms/SignUpFormProps';
+import { SignUpFormProps, SignUpValues } from '../types/props/forms/SignUpFormProps';
 import { logError } from '../utils/logUtils';
 import { ComponentWithParams, ParamsLoader } from '../components/atoms/ParamsLoader';
 import { clearAuthSession } from '../utils/authUtils';
@@ -74,7 +74,7 @@ const SignUpContent: FC<SignUpContentProps> = (props: SignUpContentProps) => {
         agree: false,
     };
 
-    const signupFormProps = {
+    const signupFormProps: SignUpFormProps = {
         ...useFormValidation<SignUpValues>(
             initialState,
             [
@@ -166,7 +166,6 @@ const SignUpContent: FC<SignUpContentProps> = (props: SignUpContentProps) => {
         qsEmail,
         captcha,
         success: data?.signUp !== undefined,
-        withGitHub: gitHubId !== null,
         email: data?.signUp.email,
         handleDialogClose: () => {
             // not in dialog

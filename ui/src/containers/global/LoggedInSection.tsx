@@ -10,7 +10,6 @@ import { CancelConfirmDialogProps } from '../../types/props/CancelConfirmDialogP
 import { pageActions } from '../../actions/PageActions';
 import { dialogReducer } from '../../context/DialogReducer';
 import { orgUserReducer } from '../../context/OrgUserReducer';
-import GithubCheck from '../../dialogPages/global/GithubCheck';
 import { ChildrenOnlyProps } from '../../types/props/ChildrenOnlyProps';
 import Navigate from '../../components/atoms/Next/Navigate';
 import { dialogInit } from '../../context/LoggedInState';
@@ -169,10 +168,6 @@ const LoggedInSection: FC<ChildrenOnlyProps> = (props: ChildrenOnlyProps) => {
 
     return (
         <>
-            <GithubCheck
-                githubUser={data?.me.github_user ?? null}
-                githubConnected={data?.me.github_connected ?? false}
-            />
             <LoggedInTemplate
                 sideBarProps={sideBarProps}
                 breadcrumb={gates['breadcrumb'] ?? <></>}
