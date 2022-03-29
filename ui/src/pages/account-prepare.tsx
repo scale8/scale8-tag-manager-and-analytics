@@ -201,6 +201,15 @@ const AccountPrepareCompleted: FC<{ signupStatus: SignupStatus }> = ({ signupSta
 
                         <Grid container spacing={2} justifyContent="center">
                             <Grid item>
+                                <DialogCancelButton
+                                    onClick={() => {
+                                        setGitHubLiked(true);
+                                    }}
+                                >
+                                    Skip
+                                </DialogCancelButton>
+                            </Grid>
+                            <Grid item>
                                 <DialogConfirmButton
                                     onClick={() => {
                                         (async () => {
@@ -223,15 +232,6 @@ const AccountPrepareCompleted: FC<{ signupStatus: SignupStatus }> = ({ signupSta
                                 >
                                     Connect Github Account
                                 </DialogConfirmButton>
-                            </Grid>
-                            <Grid item>
-                                <DialogCancelButton
-                                    onClick={() => {
-                                        setGitHubLiked(true);
-                                    }}
-                                >
-                                    Continue
-                                </DialogCancelButton>
                             </Grid>
                         </Grid>
                     </Box>
