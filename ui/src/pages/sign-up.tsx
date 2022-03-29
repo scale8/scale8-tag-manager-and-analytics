@@ -18,6 +18,7 @@ import { SignUpFormProps, SignUpValues } from '../types/props/forms/SignUpFormPr
 import { logError } from '../utils/logUtils';
 import { ComponentWithParams, ParamsLoader } from '../components/atoms/ParamsLoader';
 import { clearAuthSession } from '../utils/authUtils';
+import { SignUpUrlType } from '../types/props/SignUpTypes';
 
 type SignUpContentProps = {
     type?: string;
@@ -161,7 +162,7 @@ const SignUpContent: FC<SignUpContentProps> = (props: SignUpContentProps) => {
         loading,
         submitText: 'Create Account',
         title: 'Sign Up',
-        type: type ?? 'tag-manager',
+        type: (type ?? 'tag-manager') as SignUpUrlType,
         target,
         qsEmail,
         captcha,

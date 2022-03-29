@@ -1182,6 +1182,7 @@ export interface SignUpInput {
   org_name?: string | null;
   password?: string | null;
   invite_id?: string | null;
+  git_hub_user?: string | null;
 }
 
 export interface StartDataManagerTrialInput {

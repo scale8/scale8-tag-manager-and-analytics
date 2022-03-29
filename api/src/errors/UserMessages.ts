@@ -29,6 +29,7 @@ const userMessages = {
     triggerFailed: 'Cannot find trigger details.',
     tagFailed: 'Cannot find tag details.',
     appFailed: 'Cannot find application details.',
+    envFailed: 'Cannot find environment details.',
     dataMapFailed: 'Cannot find data map details.',
     orgFailed: 'Cannot find organization details.',
     paymentProviderIssue: 'There was a problem with the payment service.',

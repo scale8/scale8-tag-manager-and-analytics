@@ -5,8 +5,15 @@ const CompleteSignUpQuery = gql`
         completeSignUp(completeSignUpInput: $completeSignUpInput) {
             uid
             token
-            url
-            environment_id
+            is_duplicate
+            tag_manager {
+                app_id
+                environment_id
+            }
+            data_manager {
+                data_manager_account_id
+            }
+            git_hub_user
         }
     }
 `;

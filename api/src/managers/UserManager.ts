@@ -138,9 +138,26 @@ export default class UserManager extends Manager<User> {
 
         """
         @model
+        DataManagerSignUpData
+        """
+        type DataManagerSignUpCompleted {
+            data_manager_account_id: String!
+        }
+
+        """
+        @model
+        TagManagerSignUpData
+        """
+        type TagManagerSignUpCompleted {
+            app_id: String!
+            environment_id: String!
+        }
+
+        """
+        @model
         The value returned the sign up is completed.
         """
-        type UserSessionLink {
+        type SignUpCompleted {
             """
             \`User\` ID
             """
@@ -150,13 +167,21 @@ export default class UserManager extends Manager<User> {
             """
             token: String!
             """
-            The target url after the signup process
+            The github user initiating the signup process (null if not from github)
             """
-            url: String!
+            git_hub_user: String
             """
-            The id of the \`environment\` created during the signup
+            True if the user is already existing
             """
-            environment_id: String
+            is_duplicate: Boolean
+            """
+            Data required for data manager
+            """
+            data_manager: DataManagerSignUpCompleted
+            """
+            Data required for tag manager
+            """
+            tag_manager: TagManagerSignUpCompleted
         }
 
         """
@@ -320,7 +345,7 @@ export default class UserManager extends Manager<User> {
             """
             @bound=User
             """
-            completeSignUp(completeSignUpInput: CompleteSignUpInput!): UserSessionLink!
+            completeSignUp(completeSignUpInput: CompleteSignUpInput!): SignUpCompleted!
             """
             @bound=User
             """
@@ -619,7 +644,23 @@ export default class UserManager extends Manager<User> {
                 email,
             };
         },
-        completeSignUp: async (parent: any, args: any) => {
+
+        completeSignUp: async (
+            parent: any,
+            args: any,
+        ): Promise<{
+            uid: string;
+            token: string;
+            git_hub_user?: string;
+            is_duplicate?: boolean;
+            data_manager?: {
+                data_manager_account_id: string;
+            };
+            tag_manager?: {
+                app_id: string;
+                environment_id: string;
+            };
+        }> => {
             if (!(await this.config.useSignup())) {
                 throw new GenericError(userMessages.signupDisabled, LogPriority.ERROR, true);
             }
@@ -639,7 +680,6 @@ export default class UserManager extends Manager<User> {
             };
 
             // args.completeSignUpInput.sign_up_type
-
             const signUpRequest = await this.repoFactory(SignUpRequest).findOneThrows(
                 {
                     _token: args.completeSignUpInput.token,
@@ -656,7 +696,7 @@ export default class UserManager extends Manager<User> {
                 return {
                     uid: '',
                     token: '',
-                    url: '/login?reason=duplicate', //todo. no routes should be here.
+                    is_duplicate: true,
                 };
             }
 
@@ -767,7 +807,6 @@ export default class UserManager extends Manager<User> {
                 return {
                     uid: session.uid,
                     token: session.token,
-                    url: '/s8/select-org', //todo. no routes should be here.
                 };
             } else if (isTag) {
                 if (app === null) {
@@ -780,17 +819,23 @@ export default class UserManager extends Manager<User> {
                     });
 
                     if (environments.length > 0) {
-                        return environments[0].id;
+                        return environments[0].id.toString();
+                    } else {
+                        throw new ValidationError(
+                            'Cannot find environment',
+                            userMessages.envFailed,
+                        );
                     }
-                    return null;
                 };
 
                 return {
                     uid: session.uid,
                     token: session.token,
-                    url: `/s8/app/analytics?id=${app.id}&period=realtime`, //todo. no routes should be here.
-                    environment_id: await getEnvironmentId(),
-                    gitHubUser: signUpRequest.git_hub_user,
+                    tag_manager: {
+                        app_id: app.id.toString(),
+                        environment_id: await getEnvironmentId(),
+                    },
+                    git_hub_user: signUpRequest.git_hub_user,
                 };
             } else if (isData) {
                 if (org === null) {
@@ -799,13 +844,14 @@ export default class UserManager extends Manager<User> {
                 return {
                     uid: session.uid,
                     token: session.token,
-                    url: `/s8/data-manager?id=${
-                        (
+                    data_manager: {
+                        data_manager_account_id: (
                             await this.repoFactory<DataManagerAccountRepo>(
                                 DataManagerAccount,
                             ).getFromOrg(org)
-                        ).id
-                    }`, //todo. no routes should be here.
+                        ).id.toString(),
+                    },
+                    git_hub_user: signUpRequest.git_hub_user,
                 };
             } else {
                 throw new ValidationError(userMessages.validationInvalidSignUp, true);
