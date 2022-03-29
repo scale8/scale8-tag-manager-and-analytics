@@ -7,6 +7,7 @@
         "lint": "yarn --cwd api/ lint && yarn --cwd common/ lint && yarn --cwd platforms/ lint && yarn --cwd ui/ lint",
         "install:all": "yarn install && yarn --cwd api/ install && yarn --cwd common/ install  && yarn --cwd platforms/ install && yarn --cwd ui/ install && mvn -q -f edge/pom.xml clean install",
         "build:all": "(cd router && exec ./build.sh) && (cd edge && exec ./build.sh) && (cd api && exec ./build.sh)",
+        "dockerize:all": "(cd router && exec ./dockerize.sh) && (cd edge && exec ./dockerize.sh) && (cd api && exec ./dockerize.sh)",
         "test:all": "yarn --cwd api/ test && yarn --cwd ui/ test && mvn -f edge/pom.xml test",
         "run:all": "docker-compose up",
         "stop:all": "docker-compose stop",
