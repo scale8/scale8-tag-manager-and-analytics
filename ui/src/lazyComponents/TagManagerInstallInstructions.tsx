@@ -4,7 +4,7 @@ import EnvironmentInstructionsGetQuery from '../gql/queries/EnvironmentInstructi
 import { EnvironmentInstructionsGetData } from '../gql/generated/EnvironmentInstructionsGetData';
 import { QueryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import EnvironmentInstallInstructions from '../components/organisms/EnvironmentInstallInstructions';
-import ExternalRedirectButton from '../components/atoms/ExternalRedirectButton';
+import ConfirmationButton from '../components/atoms/ConfirmationButton';
 import { useRouter } from 'next/router';
 import { Box } from '@mui/material';
 import SelectInput from '../components/atoms/InputTypes/SelectInput';
@@ -47,7 +47,7 @@ const TagManagerInstallInstructionsIdSelected: FC<{
                                 type: _.type,
                             }))}
                     />
-                    <ExternalRedirectButton onConfirm={onConfirm} text={text} />
+                    <ConfirmationButton onConfirm={onConfirm} text={text} />
                 </>
             );
         },

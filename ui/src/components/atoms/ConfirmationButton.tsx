@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Box, Button } from '@mui/material';
 
-const ExternalRedirectButton: FC<{ onConfirm: () => void; text: string }> = (props: {
+const ConfirmationButton: FC<{ onConfirm: () => void; text: string }> = (props: {
     onConfirm: () => void;
     text: string;
 }) => {
@@ -29,4 +29,4 @@ const ExternalRedirectButton: FC<{ onConfirm: () => void; text: string }> = (pro
     );
 };
 
-export default ExternalRedirectButton;
+export default ConfirmationButton;
