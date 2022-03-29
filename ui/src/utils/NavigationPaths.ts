@@ -8,7 +8,7 @@ const buildQs = (params?: Record<string, string>) => {
 // Root
 export const toLogin = '/login';
 export const toLoginDuplicate = '/login?reason=duplicate';
-export const toSignUp = (params?: { type?: string; email?: string; github_id?: string }) =>
+export const toSignUp = (params?: { type?: string; email?: string }) =>
     `/sign-up${buildQs(params)}`;
 export const toInstallTags = (params?: { env: string; target: string }) =>
     `/account-install-tags${buildQs(params)}`;

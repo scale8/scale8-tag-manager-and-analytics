@@ -11,7 +11,7 @@ import { CompleteSignUpInput } from "./globalTypes";
 export interface CompleteSignUp_completeSignUp_tag_manager {
   __typename: "TagManagerSignUpCompleted";
   app_id: string;
-  environment_id: string | null;
+  environment_id: string;
 }
 
 export interface CompleteSignUp_completeSignUp_data_manager {
@@ -41,10 +41,6 @@ export interface CompleteSignUp_completeSignUp {
    * Data required for data manager
    */
   data_manager: CompleteSignUp_completeSignUp_data_manager | null;
-  /**
-   * The github user initiating the signup process (null if not from github)
-   */
-  git_hub_user: string | null;
 }
 
 export interface CompleteSignUp {

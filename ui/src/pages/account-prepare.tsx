@@ -2,7 +2,7 @@ import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import Head from 'next/head';
 import SignUpContainer from '../components/molecules/SignUpContainer';
 import Loader from '../components/organisms/Loader';
-import { Box, Grid } from '@mui/material';
+import { Box } from '@mui/material';
 import { useMutation } from '@apollo/client';
 import { CompleteSignUp, CompleteSignUp_completeSignUp } from '../gql/generated/CompleteSignUp';
 import CompleteSignUpQuery from '../gql/mutations/CompleteSignUpQuery';
@@ -24,10 +24,6 @@ import { ComponentWithParams, ParamsLoader } from '../components/atoms/ParamsLoa
 import { clearAuthSession } from '../utils/authUtils';
 import Navigate from '../components/atoms/Next/Navigate';
 import { SignUpUrlType } from '../types/props/SignUpTypes';
-import { openSignInWindow } from '../utils/SignInUtils';
-import { getApiUrl } from '../utils/ConfigUtils';
-import { DialogCancelButton } from '../components/atoms/DialogCancelButton';
-import { DialogConfirmButton } from '../components/atoms/DialogConfirmButton';
 
 type AccountPrepareContentProps = {
     type: SignUpUrlType;
@@ -118,8 +114,6 @@ const AccountPrepareRedirect: FC<{ signupStatus: SignupStatus }> = ({ signupStat
     const completeSignUp = signupStatus.completeSignUp;
     const type = signupStatus.type;
 
-    sessionStorage.removeItem('signup-status');
-
     if (completeSignUp) {
         if (type === 'invite') {
             return <Navigate to={toOrgSelect} />;
@@ -159,7 +153,6 @@ const AccountPrepareRedirect: FC<{ signupStatus: SignupStatus }> = ({ signupStat
 };
 
 const AccountPrepareCompleted: FC<{ signupStatus: SignupStatus }> = ({ signupStatus }) => {
-    const [gitHubLiked, setGitHubLiked] = useState(false);
     const completeSignUp = signupStatus.completeSignUp;
     const type = signupStatus.type;
 
@@ -189,57 +182,6 @@ const AccountPrepareCompleted: FC<{ signupStatus: SignupStatus }> = ({ signupSta
     localStorage.setItem('uid', completeSignUp.uid);
     localStorage.setItem('token', completeSignUp.token);
 
-    if (completeSignUp.git_hub_user && !gitHubLiked) {
-        return (
-            <Box mb={2} width="100%">
-                <Box py={10}>
-                    <Box fontSize={18} width="100%" textAlign="center">
-                        <Box mb={2}>
-                            You requested to connect your GitHub account:{' '}
-                            <b>{completeSignUp.git_hub_user}</b>
-                        </Box>
-
-                        <Grid container spacing={2} justifyContent="center">
-                            <Grid item>
-                                <DialogCancelButton
-                                    onClick={() => {
-                                        setGitHubLiked(true);
-                                    }}
-                                >
-                                    Skip
-                                </DialogCancelButton>
-                            </Grid>
-                            <Grid item>
-                                <DialogConfirmButton
-                                    onClick={() => {
-                                        (async () => {
-                                            const ssoResult: {
-                                                uid: string;
-                                                token: string;
-                                            } = await openSignInWindow(
-                                                `${getApiUrl()}/auth/github?login=${
-                                                    completeSignUp.git_hub_user
-                                                }&user_id=${completeSignUp.uid}`,
-                                            );
-
-                                            if (ssoResult !== null) {
-                                                localStorage.setItem('uid', ssoResult.uid);
-                                                localStorage.setItem('token', ssoResult.token);
-                                                setGitHubLiked(true);
-                                            }
-                                        })();
-                                    }}
-                                >
-                                    Connect Github Account
-                                </DialogConfirmButton>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </Box>
-            </Box>
-        );
-    }
-
     return <AccountPrepareRedirect signupStatus={signupStatus} />;
 };
 
@@ -248,27 +190,11 @@ const AccountPrepare: ComponentWithParams = ({ params }) => {
     const type = (initialType ?? 'tag-manager') as SignUpUrlType;
     const token = initialToken ?? '';
 
-    const initialStatus = () => {
-        const sessionStatusString = sessionStorage.getItem('signup-status');
-        if (sessionStatusString) {
-            const sessionStatus = JSON.parse(sessionStatusString);
-            if (sessionStatus.token === initialToken) {
-                return sessionStatus;
-            }
-        }
-        return {
-            completed: false,
-            type,
-            token,
-        };
-    };
-
-    const [signupStatus, setSignupStatus] = useState<SignupStatus>(initialStatus());
-
-    // Give some resilience to the signup journey using a sessionStorage
-    useEffect(() => {
-        sessionStorage.setItem('signup-status', JSON.stringify(signupStatus));
-    }, [signupStatus]);
+    const [signupStatus, setSignupStatus] = useState<SignupStatus>({
+        completed: false,
+        type,
+        token,
+    });
 
     return (
         <>

@@ -7,7 +7,7 @@ import LoginQuery from '../gql/mutations/LoginQuery';
 import { Login2FAInput, LoginInput } from '../gql/generated/globalTypes';
 import { useFormValidation } from '../hooks/form/useFormValidation';
 import LoginForm from '../components/organisms/Forms/LoginForm';
-import { toOrgSelect, toSignUp } from '../utils/NavigationPaths';
+import { toOrgSelect } from '../utils/NavigationPaths';
 import TwoFactorLoginForm from '../components/organisms/Forms/TwoFactorLoginForm';
 import TwoFactorLoginQuery from '../gql/mutations/TwoFactorLoginQuery';
 import emailValidator from '../utils/validators/emailValidator';
@@ -84,10 +84,6 @@ const LoginContent: FC<{ reason: string | undefined }> = (props: {
     const { reason } = props;
 
     const [loggedInSso, setLoggedInSso] = useState(false);
-    const [ssoNew, setSsoNew] = useState<{
-        username: string;
-        email: string;
-    } | null>(null);
     const [ssoError, setSsoError] = useState('');
     const [login, { loading, data, error: gqlError }] = useMutation(LoginQuery);
 
@@ -119,10 +115,7 @@ const LoginContent: FC<{ reason: string | undefined }> = (props: {
 
             if (ssoResult !== null) {
                 if (ssoResult.is_new) {
-                    setSsoNew({
-                        username: ssoResult.username,
-                        email: ssoResult.email,
-                    });
+                    setSsoError('There is no registered user connected to this github account.');
                 } else {
                     localStorage.setItem('uid', ssoResult.uid);
                     localStorage.setItem('token', ssoResult.token);
@@ -179,10 +172,6 @@ const LoginContent: FC<{ reason: string | undefined }> = (props: {
             localStorage.setItem('token', data.login.token);
             return <Navigate to={toOrgSelect} />;
         }
-    }
-
-    if (ssoNew !== null) {
-        return <Navigate to={toSignUp({ email: ssoNew.email, github_id: ssoNew.username })} />;
     }
 
     if (loggedInSso) {

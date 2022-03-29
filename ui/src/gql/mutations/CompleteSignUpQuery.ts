@@ -13,7 +13,6 @@ const CompleteSignUpQuery = gql`
             data_manager {
                 data_manager_account_id
             }
-            git_hub_user
         }
     }
 `;

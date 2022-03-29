@@ -167,10 +167,6 @@ export default class UserManager extends Manager<User> {
             """
             token: String!
             """
-            The github user initiating the signup process (null if not from github)
-            """
-            git_hub_user: String
-            """
             True if the user is already existing
             """
             is_duplicate: Boolean
@@ -240,7 +236,6 @@ export default class UserManager extends Manager<User> {
             org_name: String
             password: String
             invite_id: String
-            git_hub_user: String
         }
 
         input CompleteSignUpInput {
@@ -604,7 +599,6 @@ export default class UserManager extends Manager<User> {
                     args.signUpInput.domain,
                     args.signUpInput.org_name,
                     args.signUpInput.password,
-                    args.signUpInput.git_hub_user,
                 ),
                 'SYSTEM',
                 OperationOwner.SYSTEM,
@@ -651,7 +645,6 @@ export default class UserManager extends Manager<User> {
         ): Promise<{
             uid: string;
             token: string;
-            git_hub_user?: string;
             is_duplicate?: boolean;
             data_manager?: {
                 data_manager_account_id: string;
@@ -835,7 +828,6 @@ export default class UserManager extends Manager<User> {
                         app_id: app.id.toString(),
                         environment_id: await getEnvironmentId(),
                     },
-                    git_hub_user: signUpRequest.git_hub_user,
                 };
             } else if (isData) {
                 if (org === null) {
@@ -851,7 +843,6 @@ export default class UserManager extends Manager<User> {
                             ).getFromOrg(org)
                         ).id.toString(),
                     },
-                    git_hub_user: signUpRequest.git_hub_user,
                 };
             } else {
                 throw new ValidationError(userMessages.validationInvalidSignUp, true);

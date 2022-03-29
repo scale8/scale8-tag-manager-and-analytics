@@ -57,11 +57,6 @@ export default class SignUpRequest extends Model {
     })
     private readonly _email: string;
 
-    @Field<string>({
-        required: false,
-    })
-    private readonly _git_hub_user: string | undefined;
-
     constructor(
         signUpType: SignUpType,
         passwordSalt: string,
@@ -70,7 +65,6 @@ export default class SignUpRequest extends Model {
         domain?: string,
         orgName?: string,
         password?: string,
-        gitHubId?: string,
     ) {
         super();
         if (typeof fullName === 'string') {
@@ -89,8 +83,6 @@ export default class SignUpRequest extends Model {
 
         this._password =
             password !== undefined ? Hash.hashString(password, passwordSalt) : undefined;
-
-        this._git_hub_user = gitHubId !== undefined ? gitHubId : undefined;
 
         this._sign_up_type = signUpType;
 
@@ -148,9 +140,5 @@ export default class SignUpRequest extends Model {
 
     get password(): string | undefined {
         return this._password;
-    }
-
-    get git_hub_user(): string | undefined {
-        return this._git_hub_user;
     }
 }
