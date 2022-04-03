@@ -4,9 +4,10 @@ import TmLogo from '../atoms/TmLogo';
 import DmLogo from '../atoms/DmLogo';
 import LoggedOutFormContainer from './LoggedOutFormContainer';
 import SignUpProgress from '../atoms/SignUpProgress';
+import { SignUpUrlType } from '../../types/props/SignUpTypes';
 
 export type SignUpContainerProps = {
-    type: string;
+    type: SignUpUrlType;
     target: string | undefined;
     children: ReactNode;
     isCompleted: boolean;
@@ -56,7 +57,7 @@ const SignUpContainer: FC<SignUpContainerProps> = (props: SignUpContainerProps) 
                     <DmLogo height={151} />
                 </Box>
             )}
-            {type === 'invitation' && <Box pt={1} />}
+            {type === 'invite' && <Box pt={1} />}
 
             <Box
                 fontWeight={600}

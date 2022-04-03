@@ -53,10 +53,10 @@ const UserInvitesPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
         buildRowActions: (pageActionProps) => [
             buildDeleteAction(
                 ({ email, id }) =>
-                    ask(`Cancel Invitation: ${email}?`, () => {
+                    ask(`Cancel Invite: ${email}?`, () => {
                         pageActions.cancelInvitation(pageActionProps, id, orgId);
                     }),
-                'Cancel Invitation',
+                'Cancel Invite',
                 () => false,
             ),
         ],

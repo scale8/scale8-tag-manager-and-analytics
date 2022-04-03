@@ -1075,10 +1075,6 @@ export interface PlatformUpdateInput {
   description?: string | null;
 }
 
-export interface PrepareGitHubLinkInput {
-  github_user?: string | null;
-}
-
 export interface PublishPlatformRevisionInput {
   platform_revision_id: string;
 }
@@ -1186,7 +1182,6 @@ export interface SignUpInput {
   org_name?: string | null;
   password?: string | null;
   invite_id?: string | null;
-  git_hub_user?: string | null;
 }
 
 export interface StartDataManagerTrialInput {

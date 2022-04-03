@@ -11,7 +11,6 @@ import Invite from '../mongo/models/Invite';
 import UserNotification from '../mongo/models/UserNotification';
 import PasswordReset from '../mongo/models/PasswordReset';
 import TYPES from '../container/IOC.types';
-import DataError from '../errors/DataError';
 import GenericError from '../errors/GenericError';
 import { authenticator } from 'otplib';
 import OperationOwner from '../enums/OperationOwner';
@@ -139,9 +138,26 @@ export default class UserManager extends Manager<User> {
 
         """
         @model
+        DataManagerSignUpData
+        """
+        type DataManagerSignUpCompleted {
+            data_manager_account_id: String!
+        }
+
+        """
+        @model
+        TagManagerSignUpData
+        """
+        type TagManagerSignUpCompleted {
+            app_id: String!
+            environment_id: String!
+        }
+
+        """
+        @model
         The value returned the sign up is completed.
         """
-        type UserSessionLink {
+        type SignUpCompleted {
             """
             \`User\` ID
             """
@@ -151,13 +167,17 @@ export default class UserManager extends Manager<User> {
             """
             token: String!
             """
-            The target url after the signup process
+            True if the user is already existing
             """
-            url: String!
+            is_duplicate: Boolean
             """
-            The id of the \`environment\` created during the signup
+            Data required for data manager
             """
-            environment_id: String
+            data_manager: DataManagerSignUpCompleted
+            """
+            Data required for tag manager
+            """
+            tag_manager: TagManagerSignUpCompleted
         }
 
         """
@@ -181,7 +201,7 @@ export default class UserManager extends Manager<User> {
             """
             uid: String!
             """
-            Temporary token to povide on next step of 2-factor auth (see Login2FAInput)
+            Temporary token to provide on next step of 2-factor auth (see Login2FAInput)
             """
             temp_token: String!
         }
@@ -216,7 +236,6 @@ export default class UserManager extends Manager<User> {
             org_name: String
             password: String
             invite_id: String
-            git_hub_user: String
         }
 
         input CompleteSignUpInput {
@@ -312,13 +331,6 @@ export default class UserManager extends Manager<User> {
             new_password: String
         }
 
-        input PrepareGitHubLinkInput {
-            """
-            \`Logged in User\` github username to link
-            """
-            github_user: String
-        }
-
         # noinspection GraphQLMemberRedefinition
         extend type Mutation {
             """
@@ -328,7 +340,7 @@ export default class UserManager extends Manager<User> {
             """
             @bound=User
             """
-            completeSignUp(completeSignUpInput: CompleteSignUpInput!): UserSessionLink!
+            completeSignUp(completeSignUpInput: CompleteSignUpInput!): SignUpCompleted!
             """
             @bound=User
             """
@@ -352,11 +364,6 @@ export default class UserManager extends Manager<User> {
             Change currently logged \`User\`'s password
             """
             changePassword(changePasswordInput: ChangePasswordInput!): Boolean!
-            """
-            @bound=User
-            Prepare currently logged \`User\` be linked with GitHub
-            """
-            prepareGitHubLink(prepareGitHubLinkInput: PrepareGitHubLinkInput!): User!
             """
             @bound=User
             Remove currently logged \`User\`'s link to GitHub
@@ -421,6 +428,11 @@ export default class UserManager extends Manager<User> {
      */
     protected gqlCustomResolvers = {
         User: {
+            github_user: async (parent: any, args: any, ctx: CTX) => {
+                return await this.userAuth.asUser(ctx, async (me) => {
+                    return me.github?.username;
+                });
+            },
             github_connected: async (parent: any, args: any, ctx: CTX) => {
                 return await this.userAuth.asUser(ctx, async (me) => {
                     return me.github !== undefined;
@@ -587,7 +599,6 @@ export default class UserManager extends Manager<User> {
                     args.signUpInput.domain,
                     args.signUpInput.org_name,
                     args.signUpInput.password,
-                    args.signUpInput.git_hub_user,
                 ),
                 'SYSTEM',
                 OperationOwner.SYSTEM,
@@ -627,7 +638,22 @@ export default class UserManager extends Manager<User> {
                 email,
             };
         },
-        completeSignUp: async (parent: any, args: any) => {
+
+        completeSignUp: async (
+            parent: any,
+            args: any,
+        ): Promise<{
+            uid: string;
+            token: string;
+            is_duplicate?: boolean;
+            data_manager?: {
+                data_manager_account_id: string;
+            };
+            tag_manager?: {
+                app_id: string;
+                environment_id: string;
+            };
+        }> => {
             if (!(await this.config.useSignup())) {
                 throw new GenericError(userMessages.signupDisabled, LogPriority.ERROR, true);
             }
@@ -647,7 +673,6 @@ export default class UserManager extends Manager<User> {
             };
 
             // args.completeSignUpInput.sign_up_type
-
             const signUpRequest = await this.repoFactory(SignUpRequest).findOneThrows(
                 {
                     _token: args.completeSignUpInput.token,
@@ -664,7 +689,7 @@ export default class UserManager extends Manager<User> {
                 return {
                     uid: '',
                     token: '',
-                    url: '/login?reason=duplicate', //todo. no routes should be here.
+                    is_duplicate: true,
                 };
             }
 
@@ -685,10 +710,6 @@ export default class UserManager extends Manager<User> {
                     [],
                     true,
                 );
-
-                if (signUpRequest.git_hub_user !== undefined) {
-                    user.github_user = signUpRequest.git_hub_user;
-                }
 
                 return this.repoFactory(User).save(user, 'SYSTEM', OperationOwner.SYSTEM);
             };
@@ -779,7 +800,6 @@ export default class UserManager extends Manager<User> {
                 return {
                     uid: session.uid,
                     token: session.token,
-                    url: '/s8/select-org', //todo. no routes should be here.
                 };
             } else if (isTag) {
                 if (app === null) {
@@ -792,16 +812,22 @@ export default class UserManager extends Manager<User> {
                     });
 
                     if (environments.length > 0) {
-                        return environments[0].id;
+                        return environments[0].id.toString();
+                    } else {
+                        throw new ValidationError(
+                            'Cannot find environment',
+                            userMessages.envFailed,
+                        );
                     }
-                    return null;
                 };
 
                 return {
                     uid: session.uid,
                     token: session.token,
-                    url: `/s8/app/analytics?id=${app.id}&period=realtime`, //todo. no routes should be here.
-                    environment_id: await getEnvironmentId(),
+                    tag_manager: {
+                        app_id: app.id.toString(),
+                        environment_id: await getEnvironmentId(),
+                    },
                 };
             } else if (isData) {
                 if (org === null) {
@@ -810,13 +836,13 @@ export default class UserManager extends Manager<User> {
                 return {
                     uid: session.uid,
                     token: session.token,
-                    url: `/s8/data-manager?id=${
-                        (
+                    data_manager: {
+                        data_manager_account_id: (
                             await this.repoFactory<DataManagerAccountRepo>(
                                 DataManagerAccount,
                             ).getFromOrg(org)
-                        ).id
-                    }`, //todo. no routes should be here.
+                        ).id.toString(),
+                    },
                 };
             } else {
                 throw new ValidationError(userMessages.validationInvalidSignUp, true);
@@ -920,38 +946,9 @@ export default class UserManager extends Manager<User> {
                 return true;
             });
         },
-        prepareGitHubLink: async (parent: any, args: any, ctx: CTX) => {
-            if (!(await this.config.gitHubSsoEnabled())) {
-                throw new GenericError(userMessages.gitHubSsoDisabled, LogPriority.ERROR, true);
-            }
-
-            return await this.userAuth.asUser(ctx, async (me) => {
-                const user = await this.repo.findOne({
-                    _github_user: args.prepareGitHubLinkInput.github_user,
-                });
-                if (user !== null) {
-                    // If a user already requested to be prepared but never completed the registration
-                    // remove the request from that user
-                    if (user.github === undefined) {
-                        user.github_user = undefined;
-                        await this.repoFactory(User).save(user, 'SYSTEM', OperationOwner.SYSTEM);
-                    } else {
-                        throw new DataError(
-                            userMessages.gitHubDuplicate(args.prepareGitHubLinkInput.github_user),
-                            true,
-                        );
-                    }
-                }
-                me.bulkGQLSet(args.prepareGitHubLinkInput);
-                return (
-                    await this.repoFactory(User).save(me, 'SYSTEM', OperationOwner.SYSTEM)
-                ).toGQLType();
-            });
-        },
         removeGitHubLink: async (parent: any, args: any, ctx: CTX) => {
             return await this.userAuth.asUser(ctx, async (me) => {
                 me.github = undefined;
-                me.github_user = undefined;
                 await this.repoFactory(User).save(me, 'SYSTEM', OperationOwner.SYSTEM);
 
                 return true;
@@ -1007,7 +1004,6 @@ export default class UserManager extends Manager<User> {
 
                 // Remove github link
                 me.github = undefined;
-                me.github_user = undefined;
 
                 await this.repoFactory(User).save(me, 'SYSTEM', OperationOwner.SYSTEM);
 

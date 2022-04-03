@@ -14,21 +14,21 @@ import confirmPasswordValidator from '../utils/validators/confirmPasswordValidat
 import requiredStringValidator from '../utils/validators/requiredStringValidator';
 import SignUpForm from '../components/organisms/Forms/SignUpForm';
 import LoggedOutSection from '../containers/global/LoggedOutSection';
-import { SignUpValues } from '../types/props/forms/SignUpFormProps';
+import { SignUpFormProps, SignUpValues } from '../types/props/forms/SignUpFormProps';
 import { logError } from '../utils/logUtils';
 import { ComponentWithParams, ParamsLoader } from '../components/atoms/ParamsLoader';
 import { clearAuthSession } from '../utils/authUtils';
+import { SignUpUrlType } from '../types/props/SignUpTypes';
 
 type SignUpContentProps = {
     type?: string;
     email?: string;
-    gitHubId?: string;
     target?: string;
     inviteId?: string;
 };
 
 const SignUpContent: FC<SignUpContentProps> = (props: SignUpContentProps) => {
-    const { type, target, inviteId, email: qsEmail, gitHubId } = props;
+    const { type, target, inviteId, email: qsEmail } = props;
 
     const captcha = createRef<HCaptcha>();
 
@@ -49,7 +49,6 @@ const SignUpContent: FC<SignUpContentProps> = (props: SignUpContentProps) => {
             org_name: signUpType === SignUpType.INVITE ? target : signUpValues.orgName,
             ...(email !== undefined ? { email } : {}),
             ...(inviteId !== undefined ? { invite_id: inviteId } : {}),
-            ...(gitHubId !== null ? { git_hub_user: gitHubId } : {}),
             ...(signUpType === SignUpType.TAG_MANAGER ? { domain: signUpValues.domain } : {}),
             ...(signUpValues.newPassword !== '' ? { password: signUpValues.newPassword } : {}),
         };
@@ -74,7 +73,7 @@ const SignUpContent: FC<SignUpContentProps> = (props: SignUpContentProps) => {
         agree: false,
     };
 
-    const signupFormProps = {
+    const signupFormProps: SignUpFormProps = {
         ...useFormValidation<SignUpValues>(
             initialState,
             [
@@ -161,7 +160,7 @@ const SignUpContent: FC<SignUpContentProps> = (props: SignUpContentProps) => {
         loading,
         submitText: 'Create Account',
         title: 'Sign Up',
-        type: type ?? 'tag-manager',
+        type: (type ?? 'tag-manager') as SignUpUrlType,
         target,
         qsEmail,
         captcha,
@@ -176,7 +175,7 @@ const SignUpContent: FC<SignUpContentProps> = (props: SignUpContentProps) => {
 };
 
 const SignUp: ComponentWithParams = ({ params }) => {
-    const { type, email, github_id: gitHubId, target, invite_id: inviteId } = params;
+    const { type, email, target, invite_id: inviteId } = params;
 
     return (
         <>
@@ -185,13 +184,7 @@ const SignUp: ComponentWithParams = ({ params }) => {
                 <meta name="description" content="Scale8 - Sign Up page." />
             </Head>
             <LoggedOutSection>
-                <SignUpContent
-                    type={type}
-                    email={email}
-                    gitHubId={gitHubId}
-                    target={target}
-                    inviteId={inviteId}
-                />
+                <SignUpContent type={type} email={email} target={target} inviteId={inviteId} />
             </LoggedOutSection>
         </>
     );

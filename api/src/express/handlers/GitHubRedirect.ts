@@ -13,9 +13,10 @@ export default async (req: express.Request, res: express.Response) => {
     }
 
     const login = req.query.login;
+    const userId = req.query.user_id;
     res.redirect(
-        `https://github.com/login/oauth/authorize?client_id=${await config.getGitHubClientId()}&scope=${await config.getGitHubLoginScope()}${
-            login ? `&login=${login}` : ''
-        }`,
+        `https://github.com/login/oauth/authorize?client_id=${await config.getGitHubClientId()}&state=${
+            userId ?? ''
+        }&scope=${await config.getGitHubLoginScope()}${login ? `&login=${login}` : ''}`,
     );
 };

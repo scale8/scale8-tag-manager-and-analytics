@@ -8,8 +8,19 @@ import { CompleteSignUpInput } from "./globalTypes";
 // GraphQL mutation operation: CompleteSignUp
 // ====================================================
 
+export interface CompleteSignUp_completeSignUp_tag_manager {
+  __typename: "TagManagerSignUpCompleted";
+  app_id: string;
+  environment_id: string;
+}
+
+export interface CompleteSignUp_completeSignUp_data_manager {
+  __typename: "DataManagerSignUpCompleted";
+  data_manager_account_id: string;
+}
+
 export interface CompleteSignUp_completeSignUp {
-  __typename: "UserSessionLink";
+  __typename: "SignUpCompleted";
   /**
    * `User` ID
    */
@@ -19,13 +30,17 @@ export interface CompleteSignUp_completeSignUp {
    */
   token: string;
   /**
-   * The target url after the signup process
+   * True if the user is already existing
    */
-  url: string;
+  is_duplicate: boolean | null;
   /**
-   * The id of the `environment` created during the signup
+   * Data required for tag manager
    */
-  environment_id: string | null;
+  tag_manager: CompleteSignUp_completeSignUp_tag_manager | null;
+  /**
+   * Data required for data manager
+   */
+  data_manager: CompleteSignUp_completeSignUp_data_manager | null;
 }
 
 export interface CompleteSignUp {

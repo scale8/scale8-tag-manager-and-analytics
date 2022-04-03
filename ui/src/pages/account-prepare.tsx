@@ -7,18 +7,26 @@ import { useMutation } from '@apollo/client';
 import { CompleteSignUp, CompleteSignUp_completeSignUp } from '../gql/generated/CompleteSignUp';
 import CompleteSignUpQuery from '../gql/mutations/CompleteSignUpQuery';
 import Link from '../components/atoms/Next/Link';
-import { useRouter } from 'next/router';
 import LoggedOutSection from '../containers/global/LoggedOutSection';
-import { toInstallTags, toSignUp } from '../utils/NavigationPaths';
+import {
+    toApp,
+    toDataManager,
+    toInstallTags,
+    toLoginDuplicate,
+    toOrgSelect,
+    toSignUp,
+} from '../utils/NavigationPaths';
 import { CompleteSignUpInput } from '../gql/generated/globalTypes';
 import { buildSignUpType } from '../utils/SignUpUtils';
 import { logError } from '../utils/logUtils';
 import { ApolloError } from '@apollo/client/errors';
 import { ComponentWithParams, ParamsLoader } from '../components/atoms/ParamsLoader';
 import { clearAuthSession } from '../utils/authUtils';
+import Navigate from '../components/atoms/Next/Navigate';
+import { SignUpUrlType } from '../types/props/SignUpTypes';
 
 type AccountPrepareContentProps = {
-    type: string;
+    type: SignUpUrlType;
     token: string;
     signupStatus: SignupStatus;
     setSignupStatus: Dispatch<SetStateAction<SignupStatus>>;
@@ -28,7 +36,7 @@ type SignupStatus = {
     completed: boolean;
     completeSignUp?: CompleteSignUp_completeSignUp;
     error?: ApolloError;
-    type: string;
+    type: SignUpUrlType;
     token: string;
 };
 
@@ -102,17 +110,53 @@ const AccountPrepareInProgress: FC<AccountPrepareContentProps> = (
     );
 };
 
-const AccountPrepareCompleted: FC<{ signupStatus: SignupStatus }> = ({ signupStatus }) => {
-    const router = useRouter();
-
+const AccountPrepareRedirect: FC<{ signupStatus: SignupStatus }> = ({ signupStatus }) => {
     const completeSignUp = signupStatus.completeSignUp;
     const type = signupStatus.type;
 
-    if (
-        completeSignUp === undefined ||
-        signupStatus.error ||
-        (type === 'tag-manager' && !completeSignUp.environment_id)
-    ) {
+    if (completeSignUp) {
+        if (type === 'invite') {
+            return <Navigate to={toOrgSelect} />;
+        }
+
+        if (type === 'tag-manager') {
+            return (
+                <Navigate
+                    to={toInstallTags({
+                        env: completeSignUp.tag_manager?.environment_id ?? '',
+                        target: encodeURIComponent(
+                            toApp(
+                                {
+                                    id: completeSignUp.tag_manager?.app_id ?? '',
+                                    period: 'realtime',
+                                },
+                                'analytics',
+                            ),
+                        ),
+                    })}
+                />
+            );
+        }
+
+        if (type === 'data-manager') {
+            return (
+                <Navigate
+                    to={toDataManager({
+                        id: completeSignUp.data_manager?.data_manager_account_id ?? '',
+                    })}
+                />
+            );
+        }
+    }
+
+    return null;
+};
+
+const AccountPrepareCompleted: FC<{ signupStatus: SignupStatus }> = ({ signupStatus }) => {
+    const completeSignUp = signupStatus.completeSignUp;
+    const type = signupStatus.type;
+
+    if (completeSignUp === undefined || signupStatus.error) {
         return (
             <Box mb={2} width="100%">
                 <Box py={10}>
@@ -131,25 +175,19 @@ const AccountPrepareCompleted: FC<{ signupStatus: SignupStatus }> = ({ signupSta
         );
     }
 
+    if (completeSignUp.is_duplicate) {
+        return <Navigate to={toLoginDuplicate} />;
+    }
+
     localStorage.setItem('uid', completeSignUp.uid);
     localStorage.setItem('token', completeSignUp.token);
 
-    router
-        .push(
-            type === 'tag-manager'
-                ? toInstallTags({
-                      env: completeSignUp.environment_id ?? '',
-                      target: encodeURIComponent(completeSignUp.url),
-                  })
-                : completeSignUp.url,
-        )
-        .then();
-    return null;
+    return <AccountPrepareRedirect signupStatus={signupStatus} />;
 };
 
 const AccountPrepare: ComponentWithParams = ({ params }) => {
     const { type: initialType, target, token: initialToken } = params;
-    const type = initialType ?? 'tag-manager';
+    const type = (initialType ?? 'tag-manager') as SignUpUrlType;
     const token = initialToken ?? '';
 
     const [signupStatus, setSignupStatus] = useState<SignupStatus>({

@@ -29,6 +29,7 @@ const userMessages = {
     triggerFailed: 'Cannot find trigger details.',
     tagFailed: 'Cannot find tag details.',
     appFailed: 'Cannot find application details.',
+    envFailed: 'Cannot find environment details.',
     dataMapFailed: 'Cannot find data map details.',
     orgFailed: 'Cannot find organization details.',
     paymentProviderIssue: 'There was a problem with the payment service.',
@@ -67,8 +68,6 @@ const userMessages = {
         `${permission} requires at least one host match to be defined.`,
     permissionMissingEventName: (permission: PlatformActionPermissionRequest) =>
         `${permission} requires at least one event name to be defined.`,
-    gitHubDuplicate: (gitHubId: string) =>
-        `A user with the github username "${gitHubId}" is already in the system.`,
     dataMapKeyDuplicate: (key: string) =>
         `Duplicate key '${key}' found, unable to create new data map.`,
     varTypeMismatch: (varType: VarType, value: string) =>
