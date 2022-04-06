@@ -146,8 +146,7 @@ const Breadcrumb: FC<BreadcrumbProps> = (props: BreadcrumbProps) => {
                             '& .breadcrumb': {
                                 padding: (theme) => theme.spacing(3.5, 2, 0, 2),
                             },
-                            overflowX: 'auto',
-                            overflowY: 'hidden',
+                            overflow: 'hidden',
                             display: 'flex',
                             flexDirection: 'row-reverse',
                         }}

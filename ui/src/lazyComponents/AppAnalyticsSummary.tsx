@@ -29,21 +29,63 @@ const AppAnalyticsSummary: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCo
             },
         }),
         (queryData: AppSummaryQueryData) => {
-            const eventRequestResult =
-                queryData.getApp.event_request_stats.result.length === 0
-                    ? {
-                          event_count: 0,
-                          user_count: 0,
-                      }
-                    : queryData.getApp.event_request_stats.result[0];
+            const eventRequestResult = (() => {
+                if (process.env.demo) {
+                    return {
+                        event_count: 57869,
+                        user_count: 30465,
+                    };
+                }
+                if (queryData.getApp.event_request_stats.result.length === 0) {
+                    return {
+                        event_count: 0,
+                        user_count: 0,
+                    };
+                }
+                return queryData.getApp.event_request_stats.result[0];
+            })();
 
-            const prevEventRequestResult =
-                queryData.getApp.prev_request_stats.result.length === 0
-                    ? {
-                          event_count: 0,
-                          user_count: 0,
-                      }
-                    : queryData.getApp.prev_request_stats.result[0];
+            const prevEventRequestResult = (() => {
+                if (process.env.demo) {
+                    return {
+                        event_count: 47678,
+                        user_count: 27568,
+                    };
+                }
+                if (queryData.getApp.prev_request_stats.result.length === 0) {
+                    return {
+                        event_count: 0,
+                        user_count: 0,
+                    };
+                }
+                return queryData.getApp.prev_request_stats.result[0];
+            })();
+
+            const bounceRateResults = (() => {
+                if (process.env.demo) {
+                    return {
+                        current: 14,
+                        prev: 12,
+                    };
+                }
+                return {
+                    current: queryData.getApp.bounce_ratio_stats.result,
+                    prev: queryData.getApp.prev_bounce_ratio.result,
+                };
+            })();
+
+            const visitDuration = (() => {
+                if (process.env.demo) {
+                    return {
+                        current: 67,
+                        prev: 45,
+                    };
+                }
+                return {
+                    current: queryData.getApp.average_session_duration_stats.result,
+                    prev: queryData.getApp.prev_average_session_duration.result,
+                };
+            })();
 
             return (
                 <Box display="flex" flexWrap="wrap" width="100%">
@@ -77,8 +119,8 @@ const AppAnalyticsSummary: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCo
                     <SummaryDetail
                         {...buildSummaryDetailPropsFromValue(
                             'Bounce rate',
-                            queryData.getApp.bounce_ratio_stats.result,
-                            queryData.getApp.prev_bounce_ratio.result,
+                            bounceRateResults.current,
+                            bounceRateResults.prev,
                             'percentage',
                             true,
                         )}
@@ -86,8 +128,8 @@ const AppAnalyticsSummary: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCo
                     <SummaryDetail
                         {...buildSummaryDetailPropsFromValue(
                             'Visit duration',
-                            queryData.getApp.average_session_duration_stats.result,
-                            queryData.getApp.prev_average_session_duration.result,
+                            visitDuration.current,
+                            visitDuration.prev,
                             'time',
                         )}
                     />

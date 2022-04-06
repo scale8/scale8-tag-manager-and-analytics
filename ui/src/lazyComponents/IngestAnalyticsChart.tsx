@@ -1,11 +1,6 @@
 import { FC } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { QueryLoaderAndError } from '../abstractions/QueryLoaderAndError';
-import {
-    chartDataFromGroupingCount,
-    datesFromChartPeriod,
-    labelsFromChartPeriod,
-} from '../hooks/chart/useChartPeriod';
 import { useQuery } from '@apollo/client';
 import { Box } from '@mui/material';
 import { ApolloError } from '@apollo/client/errors';
@@ -15,7 +10,7 @@ import IngestChartQuery from '../gql/queries/IngestChartQuery';
 import { IngestChartQueryData } from '../gql/generated/IngestChartQueryData';
 import { getProductSection, ProductSectionKey } from '../containers/SectionsDetails';
 import { ChartData, ChartOptions, ScriptableContext } from 'chart.js';
-import { ticksLimitFromPeriodType } from '../utils/GraphUtils';
+import { buildDemoEndpointChartVars, buildEndpointChartVars } from '../utils/GraphUtils';
 
 const IngestAnalyticsChart: FC<IngestEndpointAnalyticsContentProps> = (
     props: IngestEndpointAnalyticsContentProps,
@@ -31,69 +26,65 @@ const IngestAnalyticsChart: FC<IngestEndpointAnalyticsContentProps> = (
             },
         }),
         (queryData: IngestChartQueryData) => {
-            const rangeFrom = queryData.getIngestEndpoint.request_stats.from as number;
-            const rangeTo = queryData.getIngestEndpoint.request_stats.to as number;
-
-            const labels = labelsFromChartPeriod(rangeFrom, rangeTo, chartPeriodProps.period);
-            const dates = datesFromChartPeriod(rangeFrom, rangeTo, chartPeriodProps.period);
-            const ticksLimit = ticksLimitFromPeriodType(chartPeriodProps.period);
+            const { labels, ticksLimit, requestsChartData, bytesChartData } = process.env.demo
+                ? buildDemoEndpointChartVars(queryData, chartPeriodProps)
+                : buildEndpointChartVars(queryData, chartPeriodProps);
 
             const data: ChartData<'bar'> = {
                 labels,
                 datasets: [
                     {
                         label: 'Number of requests',
-                        data: chartDataFromGroupingCount(
-                            dates,
-                            queryData.getIngestEndpoint.request_stats.result,
-                            chartPeriodProps.period,
-                        ),
-                        backgroundColor: (context: ScriptableContext<'bar'>) => {
-                            const chart = context.chart;
-                            const { ctx, chartArea } = chart;
+                        data: requestsChartData,
 
-                            if (!chartArea) {
-                                // This case happens on initial chart load
-                                return;
-                            }
+                        backgroundColor: process.env.demo
+                            ? getProductSection(ProductSectionKey.dataManager).color
+                            : (context: ScriptableContext<'bar'>) => {
+                                  const chart = context.chart;
+                                  const { ctx, chartArea } = chart;
 
-                            const background = ctx.createLinearGradient(0, 0, 0, 600);
-                            background.addColorStop(
-                                0,
-                                getProductSection(ProductSectionKey.dataManager).color,
-                            );
-                            background.addColorStop(1, 'black');
+                                  if (!chartArea) {
+                                      // This case happens on initial chart load
+                                      return;
+                                  }
 
-                            return background;
-                        },
+                                  const background = ctx.createLinearGradient(0, 0, 0, 600);
+                                  background.addColorStop(
+                                      0,
+                                      getProductSection(ProductSectionKey.dataManager).color,
+                                  );
+                                  background.addColorStop(1, 'black');
+
+                                  return background;
+                              },
                         borderWidth: 0,
                         yAxisID: 'yAxis1',
                     },
-                    {
-                        label: 'Bytes transferred',
-                        data: chartDataFromGroupingCount(
-                            dates,
-                            queryData.getIngestEndpoint.byte_stats.result,
-                            chartPeriodProps.period,
-                        ),
-                        backgroundColor: (context: ScriptableContext<'bar'>) => {
-                            const chart = context.chart;
-                            const { ctx, chartArea } = chart;
+                    ...(process.env.demo
+                        ? []
+                        : [
+                              {
+                                  label: 'Bytes transferred',
+                                  data: bytesChartData,
+                                  backgroundColor: (context: ScriptableContext<'bar'>) => {
+                                      const chart = context.chart;
+                                      const { ctx, chartArea } = chart;
 
-                            if (!chartArea) {
-                                // This case happens on initial chart load
-                                return;
-                            }
+                                      if (!chartArea) {
+                                          // This case happens on initial chart load
+                                          return;
+                                      }
 
-                            const background = ctx.createLinearGradient(0, 0, 0, 600);
-                            background.addColorStop(0, '#bbbbbb');
-                            background.addColorStop(1, 'black');
+                                      const background = ctx.createLinearGradient(0, 0, 0, 600);
+                                      background.addColorStop(0, '#bbbbbb');
+                                      background.addColorStop(1, 'black');
 
-                            return background;
-                        },
-                        borderWidth: 0,
-                        yAxisID: 'yAxis2',
-                    },
+                                      return background;
+                                  },
+                                  borderWidth: 0,
+                                  yAxisID: 'yAxis2',
+                              },
+                          ]),
                 ],
             };
 

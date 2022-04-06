@@ -25,37 +25,61 @@ const IngestAnalyticsSummary: FC<IngestEndpointAnalyticsContentProps> = (
             },
         }),
         (queryData: IngestSummaryQueryData) => {
-            const requests =
-                queryData.getIngestEndpoint.request_stats.result.length === 0
-                    ? 0
-                    : queryData.getIngestEndpoint.request_stats.result[0].count;
+            const requestsResult = (() => {
+                if (process.env.demo) {
+                    return {
+                        requests: 37869,
+                        prevRequests: 20465,
+                    };
+                }
 
-            const prevRequests =
-                queryData.getIngestEndpoint.prev_request_stats.result.length === 0
-                    ? 0
-                    : queryData.getIngestEndpoint.prev_request_stats.result[0].count;
+                return {
+                    requests:
+                        queryData.getIngestEndpoint.request_stats.result.length === 0
+                            ? 0
+                            : queryData.getIngestEndpoint.request_stats.result[0].count,
+                    prevRequests:
+                        queryData.getIngestEndpoint.prev_request_stats.result.length === 0
+                            ? 0
+                            : queryData.getIngestEndpoint.prev_request_stats.result[0].count,
+                };
+            })();
 
-            const bytes =
-                queryData.getIngestEndpoint.byte_stats.result.length === 0
-                    ? 0
-                    : queryData.getIngestEndpoint.byte_stats.result[0].count;
+            const bytesResult = (() => {
+                if (process.env.demo) {
+                    return {
+                        bytes: 256000,
+                        prevBytes: 127000,
+                    };
+                }
 
-            const prevBytes =
-                queryData.getIngestEndpoint.prev_byte_stats.result.length === 0
-                    ? 0
-                    : queryData.getIngestEndpoint.prev_byte_stats.result[0].count;
+                return {
+                    bytes:
+                        queryData.getIngestEndpoint.byte_stats.result.length === 0
+                            ? 0
+                            : queryData.getIngestEndpoint.byte_stats.result[0].count,
+                    prevBytes:
+                        queryData.getIngestEndpoint.prev_byte_stats.result.length === 0
+                            ? 0
+                            : queryData.getIngestEndpoint.prev_byte_stats.result[0].count,
+                };
+            })();
 
             return (
                 <Box display="flex" flexWrap="wrap" width="100%">
                     <SummaryDetail
                         {...buildSummaryDetailPropsFromValue(
                             'Number of requests',
-                            requests,
-                            prevRequests,
+                            requestsResult.requests,
+                            requestsResult.prevRequests,
                         )}
                     />
                     <SummaryDetail
-                        {...buildSummaryDetailPropsFromValue('Bytes transferred', bytes, prevBytes)}
+                        {...buildSummaryDetailPropsFromValue(
+                            'Bytes transferred',
+                            bytesResult.bytes,
+                            bytesResult.prevBytes,
+                        )}
                     />
                 </Box>
             );

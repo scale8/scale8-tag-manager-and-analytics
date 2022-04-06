@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import { kebabToTitleCase } from '../../utils/TextUtils';
+import { abbreviateNumber, kebabToTitleCase } from '../../utils/TextUtils';
 
 export const ChartEventSelectorContent: FC<{
     items: { key: string; count: number }[];
@@ -77,7 +77,7 @@ export const ChartEventSelectorContent: FC<{
                         .filter((item) => !isGroupFiltered || item.count !== 0)
                         .map((item) => (
                             <MenuItem key={item.key} value={item.key}>
-                                {kebabToTitleCase(item.key)} ({item.count})
+                                {kebabToTitleCase(item.key)} ({abbreviateNumber(item.count)})
                             </MenuItem>
                         ))}
                 </Select>

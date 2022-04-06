@@ -132,13 +132,18 @@ const ChartPeriodSelector: FC<ChartPeriodSelectorProps> = (props: ChartPeriodSel
         [],
     );
 
+    const rangeRef = useRef<Element>();
+    const rangeOpen = Boolean(rangeAnchorEl);
+
     const handleChange = (event: SelectChangeEvent) => {
         const value = event.target.value as string;
         const m = selectValuePeriod.find((_) => value === _.v);
         if (m === undefined) {
             setSelectValue(value);
         } else {
-            if (value === 'Today') {
+            if (value === 'Custom Range') {
+                setRangeAnchorEl(rangeRef.current as Element);
+            } else if (value === 'Today') {
                 setPeriodValues(m.p, startOfTodayUTC);
             } else if (value === 'Month to Date') {
                 setPeriodValues(m.p, startOfThisMonthUTC);
@@ -149,9 +154,6 @@ const ChartPeriodSelector: FC<ChartPeriodSelectorProps> = (props: ChartPeriodSel
             }
         }
     };
-
-    const rangeRef = useRef<Element>();
-    const rangeOpen = Boolean(rangeAnchorEl);
 
     function handleRangeClose() {
         setRangeAnchorEl(null);
@@ -182,9 +184,7 @@ const ChartPeriodSelector: FC<ChartPeriodSelectorProps> = (props: ChartPeriodSel
                 }
             }
         } else if (period === 'custom') {
-            if (from === undefined || to === undefined) {
-                setRangeAnchorEl(rangeRef.current as Element);
-            } else {
+            if (from !== undefined && to !== undefined) {
                 setSelectDisplay(`${displayDayMonth(from)} - ${displayDayMonth(to)}`);
             }
         } else {
@@ -298,10 +298,14 @@ const ChartPeriodSelector: FC<ChartPeriodSelectorProps> = (props: ChartPeriodSel
                 <DateRangePicker
                     definedRanges={[]}
                     open={true}
-                    toggle={handleRangeClose}
-                    closeOnClickOutside={false}
+                    toggle={() => {
+                        console.log(close);
+                        handleRangeClose();
+                    }}
+                    closeOnClickOutside={true}
                     onChange={({ endDate, startDate }) => {
                         if (endDate !== undefined && startDate !== undefined) {
+                            setPeriod('custom');
                             setDate(undefined);
                             setFrom(dateToUTCTimestamp(startDate, true));
                             setTo(dateToUTCTimestamp(endDate, true));
