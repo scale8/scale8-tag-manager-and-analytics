@@ -120,7 +120,7 @@ const AppUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
                 validator: domainValidator,
                 error: () => 'Invalid domain',
             },
-            ...storageProviderValidators,
+            ...(mode === Mode.COMMERCIAL ? [] : storageProviderValidators),
         ],
         customValueSetter,
         ...props,

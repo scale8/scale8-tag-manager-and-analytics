@@ -64,7 +64,11 @@ const ChartEventSelector: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCon
             }));
 
             if (!items.some((_) => _.key === 'page-view')) {
-                items.push({ key: 'page-view', count: 0 });
+                items.push(
+                    process.env.demo
+                        ? { key: 'page-view', count: 57869 }
+                        : { key: 'page-view', count: 0 },
+                );
             }
 
             if (!items.some((_) => _.key === currentItemKey)) {

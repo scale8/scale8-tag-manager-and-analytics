@@ -34,7 +34,7 @@ const SideBar: FC<SideBarProps> = (props: SideBarProps) => {
                 flexDirection: 'column',
                 minHeight: '500px',
                 backgroundColor: 'black',
-                background: gradient,
+                background: process.env.demo ? undefined : gradient,
                 flexGrow: 0,
                 width: '50px',
                 height: '100vh',

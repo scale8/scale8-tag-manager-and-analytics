@@ -11,7 +11,8 @@ import { ApolloError } from '@apollo/client/errors';
 import GQLError from '../components/atoms/GqlError';
 import { getEventLabel } from '../utils/AnalyticsUtils';
 import { ChartData, ChartOptions, ScriptableContext } from 'chart.js';
-import { buildAppChartVars } from '../utils/GraphUtils';
+import { buildAppChartVars, buildDemoAppChartVars } from '../utils/GraphUtils';
+import { getProductSection, ProductSectionKey } from '../containers/SectionsDetails';
 
 const AppAnalyticsChart: FC<AppAnalyticsContentProps> = (props: AppAnalyticsContentProps) => {
     const { appQueryOptions, chartPeriodProps, id, refreshAt } = props;
@@ -27,10 +28,9 @@ const AppAnalyticsChart: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCont
             },
         }),
         (queryData: AppChartQueryData) => {
-            const { labels, ticksLimit, chartData } = buildAppChartVars(
-                queryData,
-                chartPeriodProps,
-            );
+            const { labels, ticksLimit, chartData } = process.env.demo
+                ? buildDemoAppChartVars(queryData, chartPeriodProps)
+                : buildAppChartVars(queryData, chartPeriodProps);
 
             const data: ChartData<'bar'> = {
                 labels,
@@ -38,44 +38,52 @@ const AppAnalyticsChart: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCont
                     {
                         label: 'Unique visitors',
                         data: chartData.map((_) => _.user_count),
-                        // backgroundColor: '#39cce0',
-                        backgroundColor: (context: ScriptableContext<'bar'>) => {
-                            const chart = context.chart;
-                            const { ctx, chartArea } = chart;
+                        backgroundColor: process.env.demo
+                            ? getProductSection(ProductSectionKey.tagManager).color
+                            : (context: ScriptableContext<'bar'>) => {
+                                  const chart = context.chart;
+                                  const { ctx, chartArea } = chart;
 
-                            if (!chartArea) {
-                                // This case happens on initial chart load
-                                return;
-                            }
+                                  if (!chartArea) {
+                                      // This case happens on initial chart load
+                                      return;
+                                  }
 
-                            const background = ctx.createLinearGradient(0, 0, 0, 600);
-                            background.addColorStop(0, '#39cce0');
-                            background.addColorStop(1, 'black');
+                                  const background = ctx.createLinearGradient(0, 0, 0, 600);
+                                  background.addColorStop(
+                                      0,
+                                      getProductSection(ProductSectionKey.tagManager).color,
+                                  );
+                                  background.addColorStop(1, 'black');
 
-                            return background;
-                        },
+                                  return background;
+                              },
                     },
-                    {
-                        label: `${eventLabel} Events`,
-                        data: chartData.map((_) => _.event_count),
-                        backgroundColor: (context: ScriptableContext<'bar'>) => {
-                            const chart = context.chart;
-                            const { ctx, chartArea } = chart;
+                    ...(process.env.demo
+                        ? []
+                        : [
+                              {
+                                  label: `${eventLabel} Events`,
+                                  data: chartData.map((_) => _.event_count),
+                                  backgroundColor: (context: ScriptableContext<'bar'>) => {
+                                      const chart = context.chart;
+                                      const { ctx, chartArea } = chart;
 
-                            if (!chartArea) {
-                                // This case happens on initial chart load
-                                return;
-                            }
+                                      if (!chartArea) {
+                                          // This case happens on initial chart load
+                                          return;
+                                      }
 
-                            const background = ctx.createLinearGradient(0, 0, 0, 600);
-                            background.addColorStop(0, '#bbbbbb');
-                            background.addColorStop(1, 'black');
+                                      const background = ctx.createLinearGradient(0, 0, 0, 600);
+                                      background.addColorStop(0, '#bbbbbb');
+                                      background.addColorStop(1, 'black');
 
-                            return background;
-                        },
-                        borderWidth: 0,
-                        yAxisID: 'yAxis2',
-                    },
+                                      return background;
+                                  },
+                                  borderWidth: 0,
+                                  yAxisID: 'yAxis2',
+                              },
+                          ]),
                 ],
             };
 
