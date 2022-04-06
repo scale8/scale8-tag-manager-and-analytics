@@ -74,7 +74,7 @@ We're scripting hard to provide complete one-click production ready setups for b
 
 As not everyone has the requirement to use a full Tag Manager, we've also provided an option to generate an extremely light version that only requires a few lines of JavaScript.
 
-<p align="center"><a href="https://scale8.github.io/docs/creating-application"><img src="https://scale8.github.io/img/tag-manager/tag-manager-analytics.png" width="100%"/></a><a href="#"><img src="https://scale8.com/img/shadow.png" width="100%"/></a></p>
+<p align="center"><a href="https://scale8.github.io/docs/creating-application"><img src="https://scale8.com/img/screenshot.png" width="100%"/></a><a href="#"><img src="https://scale8.com/img/shadow.png" width="100%"/></a></p>
 
 We have also provided full support for tracking Single Page Applications (SPAs) and hash-routing. These can be enabled when you install your application.
 
@@ -120,8 +120,6 @@ The Tag Manager is based on an **event-driven**, **rule-based** engine whereby a
 
 A triggered event within the browser can be easily managed by our simple interface.
 A clicked link, a page coming into focus, or a submitted form are all examples of events you may wish to listen to.
-
-<p align="center"><a href="https://scale8.github.io/docs/events"><img src="https://scale8.github.io/img/tag-manager/tag-manager-add-event.png" width="100%"/></a><a href="#"><img src="https://scale8.com/img/shadow.png" width="100%"/></a></p>
 
 ### Conditions & Exceptions
 
