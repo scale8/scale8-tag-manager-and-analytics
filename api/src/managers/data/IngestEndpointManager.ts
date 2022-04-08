@@ -16,8 +16,8 @@ import {
     createUsageEndpointEnvironment,
     getCommercialStorageProvider,
     getCommercialStorageProviderConfig,
-    getProviderConfigThrows,
     getProviderConfig,
+    getProviderConfigThrows,
     updateIngestEndpointEnvironment,
 } from '../../utils/IngestEndpointEnvironmentUtils';
 import { VarType } from '../../enums/VarType';
@@ -25,10 +25,13 @@ import TYPES from '../../container/IOC.types';
 import BaseDatabase from '../../backends/databases/abstractions/BaseDatabase';
 import { withUnManagedAccount } from '../../utils/DataManagerAccountUtils';
 import { StorageProvider } from '../../enums/StorageProvider';
-import { StorageProviderConfig } from '../../mongo/types/Types';
+import { IngestEndpointDataMapSchema, StorageProviderConfig } from '../../mongo/types/Types';
 import GenericError from '../../errors/GenericError';
 import { LogPriority } from '../../enums/LogPriority';
 import Hash from '../../core/Hash';
+import { createIngestEndpointDataMapFromSchemas } from '../../utils/IngestEndpointDataMapUtils';
+import { IngestSchemaWizard } from '../../enums/IngestSchemaWizard';
+import { errorTrackingSchema, userTrackingSchema } from '../../utils/AppUtils';
 
 @injectable()
 export default class IngestEndpointManager extends Manager<IngestEndpoint> {
@@ -133,6 +136,10 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
             The name of the new \`IngestEndpoint\` being created
             """
             name: String!
+            """
+            The wizard to be applied when creating the new endpoint
+            """
+            ingest_schema_wizard: IngestSchemaWizard
             """
             The storage provider to be used by the \`App\` to store analytics data
             """
@@ -317,6 +324,17 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                 );
             };
 
+            const getSchemaForWizard = (
+                wizard?: IngestSchemaWizard,
+            ): IngestEndpointDataMapSchema[] | undefined => {
+                if (wizard === IngestSchemaWizard.USER_TRACKING) {
+                    return [...userTrackingSchema];
+                } else if (wizard === IngestSchemaWizard.ERROR_TRACKING) {
+                    return [...userTrackingSchema, ...errorTrackingSchema];
+                }
+                return undefined;
+            };
+
             const createIngestEndpoint = async (
                 actor: User,
                 dataManagerAccount: DataManagerAccount,
@@ -324,6 +342,7 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                 provider: StorageProvider,
                 providerConfig: StorageProviderConfig,
                 analyticsEnabled: boolean,
+                wizard?: IngestSchemaWizard,
             ): Promise<IngestEndpoint> => {
                 let ingestEndpoint = await this.repoFactory(IngestEndpoint).save(
                     new IngestEndpoint(name, dataManagerAccount, analyticsEnabled, provider),
@@ -342,10 +361,22 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                     JSON.stringify(providerConfig),
                 );
                 ingestEndpoint = await this.repoFactory(IngestEndpoint).save(ingestEndpoint, actor);
-                await this.repoFactory(IngestEndpointRevision).save(
+                const ingestEndpointRevision = await this.repoFactory(IngestEndpointRevision).save(
                     new IngestEndpointRevision('Revision 1', ingestEndpoint),
                     actor,
                 );
+
+                const schema = getSchemaForWizard(wizard);
+                if (schema !== undefined) {
+                    ingestEndpointRevision.ingestEndpointDataMapIds = (
+                        await createIngestEndpointDataMapFromSchemas(
+                            actor,
+                            schema,
+                            ingestEndpointRevision,
+                        )
+                    ).map((_) => _.id);
+                }
+
                 return ingestEndpoint;
             };
 
@@ -389,6 +420,7 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                             storageProvider,
                             providerConfig,
                             data.analytics_enabled,
+                            data.ingest_schema_wizard,
                         )
                     ).toGQLType();
                 },

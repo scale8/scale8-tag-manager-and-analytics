@@ -38,6 +38,7 @@ import {
 import { Mode } from '../enums/Mode';
 import { InputType } from '../../../common/enums/InputType';
 import { TypeIcon } from '../../../common/enums/TypeIcon';
+import { IngestSchemaWizard } from '../enums/IngestSchemaWizard';
 
 @injectable()
 export default class TypeDefRegister {
@@ -231,6 +232,12 @@ export default class TypeDefRegister {
                 key: String!
                 value: String!
             }
+
+            """
+            A set of supported \`IngestSchemaWizard\` types.
+            """
+            enum IngestSchemaWizard
+            ${TypeDefRegister.enumToGQL(IngestSchemaWizard)}
 
             """
             A set of supported \`Notification\` types.

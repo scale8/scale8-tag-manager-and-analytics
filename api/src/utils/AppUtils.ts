@@ -31,6 +31,218 @@ import { StorageProvider } from '../enums/StorageProvider';
 import { StorageProviderConfig } from '../mongo/types/Types';
 import Hash from '../core/Hash';
 
+export const userTrackingSchema = [
+    {
+        varType: VarType.STRING,
+        key: 'uiid',
+        defaultValue: '%S8_UIID%',
+    },
+    {
+        varType: VarType.DATETIME,
+        key: 'dt',
+        defaultValue: '%S8_DATE_TIME_UTC%',
+    },
+    {
+        varType: VarType.STRING,
+        key: 'user_hash',
+        defaultValue: '%S8_USER_HASH%',
+    },
+    {
+        varType: VarType.STRING,
+        key: 'user_country',
+        defaultValue: '%S8_USER_COUNTRY_CODE%',
+        optional: true,
+    },
+    {
+        varType: VarType.STRING,
+        key: 'page_url',
+        defaultValue: '%S8_PAGE_URL%',
+        optional: true,
+    },
+    {
+        varType: VarType.STRING,
+        key: 'page_tld',
+        defaultValue: '%S8_PAGE_TLD%',
+        optional: true,
+    },
+    {
+        varType: VarType.STRING,
+        key: 'referrer_url',
+        defaultValue: '%S8_REFERRER_URL%',
+        optional: true,
+    },
+    {
+        varType: VarType.STRING,
+        key: 'referrer_tld',
+        defaultValue: '%S8_REFERRER_TLD%',
+        optional: true,
+    },
+    {
+        varType: VarType.STRING,
+        key: 'browser_name',
+        defaultValue: '%S8_BROWSER_NAME%',
+        optional: true,
+    },
+    {
+        varType: VarType.STRING,
+        key: 'browser_version',
+        defaultValue: '%S8_BROWSER_VERSION%',
+        optional: true,
+    },
+    {
+        varType: VarType.STRING,
+        key: 'os_name',
+        defaultValue: '%S8_OS_NAME%',
+        optional: true,
+    },
+    {
+        varType: VarType.STRING,
+        key: 'os_version',
+        defaultValue: '%S8_OS_VERSION%',
+        optional: true,
+    },
+    {
+        varType: VarType.STRING,
+        key: 'device_name',
+        defaultValue: '%S8_DEVICE_NAME%',
+        optional: true,
+    },
+    {
+        varType: VarType.STRING,
+        key: 'device_model',
+        defaultValue: '%S8_DEVICE_MODEL%',
+        optional: true,
+    },
+    {
+        varType: VarType.STRING,
+        key: 'device_brand',
+        defaultValue: '%S8_DEVICE_BRAND%',
+        optional: true,
+    },
+    {
+        varType: VarType.STRING,
+        key: 'utm_source',
+        defaultValue: '%S8_UTM_SOURCE%',
+        optional: true,
+    },
+    {
+        varType: VarType.STRING,
+        key: 'utm_medium',
+        defaultValue: '%S8_UTM_MEDIUM%',
+        optional: true,
+    },
+    {
+        varType: VarType.STRING,
+        key: 'utm_campaign',
+        defaultValue: '%S8_UTM_CAMPAIGN%',
+        optional: true,
+    },
+    {
+        varType: VarType.STRING,
+        key: 'utm_term',
+        defaultValue: '%S8_UTM_TERM%',
+        optional: true,
+    },
+    {
+        varType: VarType.STRING,
+        key: 'utm_content',
+        defaultValue: '%S8_UTM_CONTENT%',
+        optional: true,
+    },
+];
+
+export const eventTrackingSchema = [
+    {
+        varType: VarType.STRING,
+        key: 'event',
+        defaultValue: 'page-view',
+        validations: [
+            {
+                type: ValidationType.VALID_REGEX,
+                input_value: '^[a-z]{1,}(-[a-z]+){0,}$',
+            },
+        ],
+    },
+    {
+        varType: VarType.STRING,
+        key: 'event_group',
+        optional: true,
+        validations: [
+            {
+                type: ValidationType.VALID_REGEX,
+                input_value: '^[a-z]{1,}(-[a-z]+){0,}$',
+            },
+        ],
+    },
+    {
+        varType: VarType.STRING,
+        key: 'event_json',
+        optional: true,
+    },
+];
+
+export const errorTrackingSchema = [
+    {
+        varType: VarType.STRING,
+        key: 'error_id',
+        optional: true,
+    },
+    {
+        varType: VarType.STRING,
+        key: 'error_file',
+        optional: true,
+    },
+    {
+        varType: VarType.STRING,
+        key: 'error_message',
+        optional: true,
+    },
+    {
+        varType: VarType.INT,
+        key: 'error_column',
+        optional: true,
+    },
+    {
+        varType: VarType.INT,
+        key: 'error_row',
+        optional: true,
+    },
+    {
+        varType: VarType.STRING,
+        key: 'error_trace',
+        optional: true,
+    },
+];
+
+export const appTrackingSchema = [
+    {
+        varType: VarType.STRING,
+        key: 'custom_release_id',
+        optional: true,
+    },
+    {
+        varType: VarType.STRING,
+        key: 'org_id',
+        defaultValue: '%S8_ORG_ID%',
+    },
+    {
+        varType: VarType.STRING,
+        key: 'app_id',
+        defaultValue: '%S8_APP_ID%',
+    },
+    {
+        varType: VarType.STRING,
+        key: 'env_id',
+        defaultValue: '%S8_APP_ENV_ID%',
+        optional: true,
+    },
+    {
+        varType: VarType.STRING,
+        key: 'revision_id',
+        defaultValue: '%S8_APP_REVISION_ID%',
+    },
+];
+
 const createAppUsageEndpointEnvironment = async (
     org: Org,
     trackingEntity: App,
@@ -39,206 +251,10 @@ const createAppUsageEndpointEnvironment = async (
     providerConfig: StorageProviderConfig,
 ): Promise<IngestEndpointEnvironment> => {
     return createUsageEndpointEnvironment(org, trackingEntity, actor, provider, providerConfig, [
-        {
-            varType: VarType.STRING,
-            key: 'custom_release_id',
-            optional: true,
-        },
-        {
-            varType: VarType.STRING,
-            key: 'uiid',
-            defaultValue: '%S8_UIID%',
-        },
-        {
-            varType: VarType.DATETIME,
-            key: 'dt',
-            defaultValue: '%S8_DATE_TIME_UTC%',
-        },
-        {
-            varType: VarType.STRING,
-            key: 'event',
-            defaultValue: 'page-view',
-            validations: [
-                {
-                    type: ValidationType.VALID_REGEX,
-                    input_value: '^[a-z]{1,}(-[a-z]+){0,}$',
-                },
-            ],
-        },
-        {
-            varType: VarType.STRING,
-            key: 'event_group',
-            optional: true,
-            validations: [
-                {
-                    type: ValidationType.VALID_REGEX,
-                    input_value: '^[a-z]{1,}(-[a-z]+){0,}$',
-                },
-            ],
-        },
-        {
-            varType: VarType.STRING,
-            key: 'event_json',
-            optional: true,
-        },
-        {
-            varType: VarType.STRING,
-            key: 'error_id',
-            optional: true,
-        },
-        {
-            varType: VarType.STRING,
-            key: 'error_file',
-            optional: true,
-        },
-        {
-            varType: VarType.STRING,
-            key: 'error_message',
-            optional: true,
-        },
-        {
-            varType: VarType.INT,
-            key: 'error_column',
-            optional: true,
-        },
-        {
-            varType: VarType.INT,
-            key: 'error_row',
-            optional: true,
-        },
-        {
-            varType: VarType.STRING,
-            key: 'error_trace',
-            optional: true,
-        },
-        {
-            varType: VarType.STRING,
-            key: 'utm_source',
-            defaultValue: '%S8_UTM_SOURCE%',
-            optional: true,
-        },
-        {
-            varType: VarType.STRING,
-            key: 'utm_medium',
-            defaultValue: '%S8_UTM_MEDIUM%',
-            optional: true,
-        },
-        {
-            varType: VarType.STRING,
-            key: 'utm_campaign',
-            defaultValue: '%S8_UTM_CAMPAIGN%',
-            optional: true,
-        },
-        {
-            varType: VarType.STRING,
-            key: 'utm_term',
-            defaultValue: '%S8_UTM_TERM%',
-            optional: true,
-        },
-        {
-            varType: VarType.STRING,
-            key: 'utm_content',
-            defaultValue: '%S8_UTM_CONTENT%',
-            optional: true,
-        },
-        {
-            varType: VarType.STRING,
-            key: 'user_hash',
-            defaultValue: '%S8_USER_HASH%',
-        },
-        {
-            varType: VarType.STRING,
-            key: 'user_country',
-            defaultValue: '%S8_USER_COUNTRY_CODE%',
-            optional: true,
-        },
-        {
-            varType: VarType.STRING,
-            key: 'org_id',
-            defaultValue: '%S8_ORG_ID%',
-        },
-        {
-            varType: VarType.STRING,
-            key: 'app_id',
-            defaultValue: '%S8_APP_ID%',
-        },
-        {
-            varType: VarType.STRING,
-            key: 'env_id',
-            defaultValue: '%S8_APP_ENV_ID%',
-            optional: true,
-        },
-        {
-            varType: VarType.STRING,
-            key: 'revision_id',
-            defaultValue: '%S8_APP_REVISION_ID%',
-        },
-        {
-            varType: VarType.STRING,
-            key: 'page_url',
-            defaultValue: '%S8_PAGE_URL%',
-            optional: true,
-        },
-        {
-            varType: VarType.STRING,
-            key: 'page_tld',
-            defaultValue: '%S8_PAGE_TLD%',
-            optional: true,
-        },
-        {
-            varType: VarType.STRING,
-            key: 'referrer_url',
-            defaultValue: '%S8_REFERRER_URL%',
-            optional: true,
-        },
-        {
-            varType: VarType.STRING,
-            key: 'referrer_tld',
-            defaultValue: '%S8_REFERRER_TLD%',
-            optional: true,
-        },
-        {
-            varType: VarType.STRING,
-            key: 'browser_name',
-            defaultValue: '%S8_BROWSER_NAME%',
-            optional: true,
-        },
-        {
-            varType: VarType.STRING,
-            key: 'browser_version',
-            defaultValue: '%S8_BROWSER_VERSION%',
-            optional: true,
-        },
-        {
-            varType: VarType.STRING,
-            key: 'os_name',
-            defaultValue: '%S8_OS_NAME%',
-            optional: true,
-        },
-        {
-            varType: VarType.STRING,
-            key: 'os_version',
-            defaultValue: '%S8_OS_VERSION%',
-            optional: true,
-        },
-        {
-            varType: VarType.STRING,
-            key: 'device_name',
-            defaultValue: '%S8_DEVICE_NAME%',
-            optional: true,
-        },
-        {
-            varType: VarType.STRING,
-            key: 'device_model',
-            defaultValue: '%S8_DEVICE_MODEL%',
-            optional: true,
-        },
-        {
-            varType: VarType.STRING,
-            key: 'device_brand',
-            defaultValue: '%S8_DEVICE_BRAND%',
-            optional: true,
-        },
+        ...appTrackingSchema,
+        ...userTrackingSchema,
+        ...eventTrackingSchema,
+        ...errorTrackingSchema,
     ]);
 };
 
