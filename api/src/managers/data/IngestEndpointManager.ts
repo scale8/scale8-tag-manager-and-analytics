@@ -331,8 +331,9 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                     return [...userTrackingSchema];
                 } else if (wizard === IngestSchemaWizard.ERROR_TRACKING) {
                     return [...userTrackingSchema, ...errorTrackingSchema];
+                } else {
+                    return undefined;
                 }
-                return undefined;
             };
 
             const createIngestEndpoint = async (
