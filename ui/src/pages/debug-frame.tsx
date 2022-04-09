@@ -8,7 +8,7 @@ import { frameEventFromMessage, messageFromFrameEvent } from '../utils/FrameEven
 import PreviewLayout from '../components/templates/PreviewLayout';
 
 const DebugFrame: FC = () => {
-    const [revisionStatus, setRevisionStatus] = useState<RevisionStatus | undefined>(undefined);
+    const [revisionStatusString, setRevisionStatusString] = useState<string | undefined>(undefined);
 
     const [currentTagCode, setCurrentTagCode] = useState<TagCode | undefined>(undefined);
 
@@ -17,6 +17,8 @@ const DebugFrame: FC = () => {
     const [highlightEnabled, setHighlightEnabled] = useState<boolean>(false);
 
     const [revisionTab, setRevisionTab] = useState(0);
+
+    const revisionStatus = revisionStatusString ? JSON.parse(revisionStatusString) : undefined;
 
     const [loadPreview, { data, loading, error }] = useLazyQuery<PreviewFrameData>(
         PreviewFrameQuery,
@@ -35,8 +37,8 @@ const DebugFrame: FC = () => {
             if (frameEvent !== null) {
                 if (frameEvent.event === 'statusUpdate') {
                     const receivedRevisionStatus = frameEvent.payload as RevisionStatus;
-                    setRevisionStatus(receivedRevisionStatus);
-
+                    const receivedRevisionStatusString = JSON.stringify(receivedRevisionStatus);
+                    setRevisionStatusString(receivedRevisionStatusString);
                     if (receivedRevisionStatus.refreshTarget) {
                         loadPreview();
                     }

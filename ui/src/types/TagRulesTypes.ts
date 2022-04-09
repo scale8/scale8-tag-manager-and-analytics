@@ -69,6 +69,7 @@ export type Rule = {
     id: string;
     name: string;
     trigger: Trigger;
+    min_repeat_interval: number;
     action_groups_distributions: ActionGroupDistribution[];
     is_active: boolean;
 };
