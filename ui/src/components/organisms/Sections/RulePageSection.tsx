@@ -51,7 +51,9 @@ const RulePageSection: FC<RuleSectionProps> = (props: RuleSectionProps) => {
             readonly={revisionLocked}
             key={rule.id}
             id={rule.id}
-            title={rule.name}
+            title={`${rule.name} (${
+                rule.min_repeat_interval > -1 ? 'Repeatable' : 'Non-repeatable'
+            })`}
             actions={[
                 ...([
                     {
