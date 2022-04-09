@@ -43,6 +43,10 @@ export default class EnvironmentManager extends Manager<Environment> {
             """
             url: String
             """
+            \`Environment\`'s install endpoint
+            """
+            install_endpoint: String!
+            """
             \`Environment\`'s custom domain name if configured
             """
             custom_domain: String
@@ -401,8 +405,33 @@ export default class EnvironmentManager extends Manager<Environment> {
      * Custom Resolvers
      * @protected
      */
+
+    private async getInstallDomain(environmentId: ObjectId, ctx: CTX): Promise<string> {
+        const env = await this.repoFactory(Environment).findByIdThrows(
+            environmentId,
+            userMessages.environmentFailed,
+        );
+        return await this.orgAuth.asUserWithViewAccess(ctx, env.orgId, async () => {
+            if (env.customDomain === undefined) {
+                return getCNAME(env);
+            } else {
+                return env.customDomain;
+            }
+        });
+    }
+
     protected gqlCustomResolvers = {
         Environment: {
+            install_endpoint: async (parent: any, args: any, ctx: CTX) => {
+                if (this.config.isCommercial()) {
+                    return `https://${await this.getInstallDomain(new ObjectId(parent.id), ctx)}`;
+                } else if (this.config.isDevelopment()) {
+                    //todo. remove hard coded port...
+                    return `http://localhost:6080/edge/${parent.id}`;
+                } else {
+                    return `${await this.config.getUiUrl()}/edge/${parent.id}`;
+                }
+            },
             cname: async (parent: any) =>
                 getCNAME(
                     await this.repoFactory(Environment).findByIdThrows(
@@ -410,19 +439,8 @@ export default class EnvironmentManager extends Manager<Environment> {
                         userMessages.environmentFailed,
                     ),
                 ),
-            install_domain: async (parent: any, args: any, ctx: CTX) => {
-                const env = await this.repoFactory(Environment).findByIdThrows(
-                    new ObjectId(parent.id),
-                    userMessages.environmentFailed,
-                );
-                return await this.orgAuth.asUserWithViewAccess(ctx, env.orgId, async () => {
-                    if (env.customDomain === undefined) {
-                        return getCNAME(env);
-                    } else {
-                        return env.customDomain;
-                    }
-                });
-            },
+            install_domain: async (parent: any, args: any, ctx: CTX) =>
+                this.getInstallDomain(new ObjectId(parent.id), ctx),
             revision: async (parent: any, args: any, ctx: CTX) => {
                 const env = await this.repoFactory(Environment).findByIdThrows(
                     new ObjectId(parent.id),
