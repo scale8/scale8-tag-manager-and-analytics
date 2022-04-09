@@ -1,15 +1,27 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import DrawerFormLayout from '../../molecules/DrawerFormLayout';
 import { IngestEndpointFormProps } from '../../../dialogPages/dataManager/IngestEndpointCreate';
 import StorageProviderSelector from '../../molecules/StorageProviderSelector';
 import CheckBoxInput from '../../atoms/InputTypes/CheckBoxInput';
-import { Mode } from '../../../gql/generated/globalTypes';
+import { IngestSchemaWizard, Mode } from '../../../gql/generated/globalTypes';
 import { useConfigState } from '../../../context/AppContext';
-import { Box } from '@mui/material';
+import { Box, Checkbox, FormControlLabel } from '@mui/material';
+import ControlledSelect from '../../atoms/ControlledInputs/ControlledSelect';
+import { snakeToTitleCase } from '../../../utils/TextUtils';
 
 const IngestEndpointForm: FC<IngestEndpointFormProps> = (props: IngestEndpointFormProps) => {
     const { mode } = useConfigState();
+
+    const [useWizard, setUseWizard] = useState(false);
+
+    const { values, handleChange } = props;
+
+    useEffect(() => {
+        if (values.wizard !== '' && !useWizard) {
+            handleChange('wizard', '');
+        }
+    }, [values, handleChange, useWizard]);
 
     return (
         <DrawerFormLayout {...props}>
@@ -21,6 +33,35 @@ const IngestEndpointForm: FC<IngestEndpointFormProps> = (props: IngestEndpointFo
                 required
                 autoFocus
             />
+            {props.isCreate && (
+                <FormControlLabel
+                    sx={{ marginBottom: (theme) => theme.spacing(3) }}
+                    control={
+                        <Checkbox
+                            name="useWizard"
+                            checked={useWizard}
+                            onChange={(event) => {
+                                setUseWizard(event.target.checked);
+                            }}
+                            color="primary"
+                        />
+                    }
+                    label="Use Wizard"
+                />
+            )}
+            {useWizard && (
+                <ControlledSelect
+                    className="DrawerFormField"
+                    label="Wizard"
+                    name="wizard"
+                    values={Object.values(IngestSchemaWizard).map((_) => ({
+                        key: _,
+                        text: snakeToTitleCase(_),
+                    }))}
+                    formProps={props}
+                    required
+                />
+            )}
             {mode !== Mode.COMMERCIAL && (
                 <>
                     <CheckBoxInput
