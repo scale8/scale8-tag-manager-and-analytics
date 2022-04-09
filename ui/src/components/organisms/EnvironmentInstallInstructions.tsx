@@ -27,21 +27,25 @@ const EnvironmentInstallInstructions: FC<InstallInstructionsProps> = (
     const domain =
         props.mode === Mode.COMMERCIAL
             ? `https://${props.installDomain}`
-            : `${window.location.protocol}//${window.location.host}`;
+            : `${window.location.protocol}//${window.location.hostname}`;
 
     const path = props.mode === Mode.COMMERCIAL ? undefined : `/edge/${props.environmentId}`;
 
-    const determinePort = () => {
-        if (props.mode === Mode.COMMERCIAL) {
-            if (getNodeEnv() === 'development') {
-                return '8443';
-            }
+    const getPort = (): number | undefined => {
+        if (window.location.port === '80' || window.location.port === '443') {
+            return undefined;
+        } else if (props.mode === Mode.COMMERCIAL && getNodeEnv() === 'development') {
+            return 8443;
+        } else if (getNodeEnv() === 'development') {
+            return 6080;
+        } else if (props.mode === Mode.SELF_HOSTED && getNodeEnv() === 'production') {
+            return +window.location.port;
+        } else {
             return undefined;
         }
-        return undefined;
     };
 
-    const port = determinePort();
+    const port = getPort();
 
     const environmentInstallSrc = `${domain}${port === undefined ? '' : `:${port}`}${path ?? ''}`;
 

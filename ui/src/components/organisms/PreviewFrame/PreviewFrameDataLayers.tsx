@@ -4,6 +4,7 @@ import { TabularData } from '../../molecules/TabularData';
 import { kebabToTitleCase } from '../../../utils/TextUtils';
 import { previewFrameContext } from '../../../context/PreviewFrameContext';
 import { RuleVarStatus } from '../../../types/PreviewFrameTypes';
+import { Segment } from '@mui/icons-material';
 
 const PreviewFrameDataLayers: FC = () => {
     const { revisionStatus, previewFrameData } = useContext(previewFrameContext);
@@ -57,7 +58,7 @@ const PreviewFrameDataLayers: FC = () => {
             />
             {Object.entries(ruleVarsByRuleId).map(([ruleId, ruleVars]) => {
                 return (
-                    <>
+                    <Segment key={ruleId}>
                         <Box mt={3} />
                         <TabularData
                             title={ruleTitlesMap.get(ruleId)}
@@ -66,7 +67,7 @@ const PreviewFrameDataLayers: FC = () => {
                                 _.values,
                             ])}
                         />
-                    </>
+                    </Segment>
                 );
             })}
             <Box mt={3} />

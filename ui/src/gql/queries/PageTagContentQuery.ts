@@ -15,6 +15,7 @@ const PageTagContentQuery = gql`
                 rules {
                     id
                     name
+                    min_repeat_interval
                     trigger {
                         id
                         name
