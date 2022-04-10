@@ -68,6 +68,10 @@ export interface EnvironmentInstructionsGetData_getEnvironment {
    */
   custom_domain: string | null;
   /**
+   * `Environment`'s install endpoint
+   */
+  install_endpoint: string;
+  /**
    * `Revision` currently attached to the `Environment`
    */
   revision: EnvironmentInstructionsGetData_getEnvironment_revision;

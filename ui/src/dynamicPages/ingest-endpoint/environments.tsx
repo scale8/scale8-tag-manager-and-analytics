@@ -77,6 +77,7 @@ const IngestEndpointEnvironmentsPage: FC<DynamicPageProps> = (props: DynamicPage
                       { field: 'id' },
                       { field: 'requests', type: 'graph', hidden: true },
                       { field: 'bytes', type: 'graph', hidden: true },
+                      { field: 'installDomain' },
                       { field: 'revision' },
                       { field: 'storageProvider' },
                       { title: 'Config', field: 'configHint', type: 'string' },

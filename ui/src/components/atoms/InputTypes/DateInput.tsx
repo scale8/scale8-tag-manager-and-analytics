@@ -97,6 +97,7 @@ const DateInput: FC<DateInputProps> = ({
                     minWidth: '200px',
                     ...(sx ?? {}),
                 }}
+                variant="standard"
                 name={name}
             />
         ),

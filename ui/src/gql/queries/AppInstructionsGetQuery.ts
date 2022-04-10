@@ -9,6 +9,7 @@ const AppInstructionsGetQuery = gql`
                 name
                 cname
                 install_domain
+                install_endpoint
                 custom_domain
                 revision {
                     id

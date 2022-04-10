@@ -153,6 +153,14 @@ export enum GQLMethod {
 }
 
 /**
+ * A set of supported `IngestSchemaWizard` types.
+ */
+export enum IngestSchemaWizard {
+  ERROR_TRACKING = "ERROR_TRACKING",
+  USER_TRACKING = "USER_TRACKING",
+}
+
+/**
  * A set of supported `InputType`s for use with `PlatformDataMap`s
  */
 export enum InputType {
@@ -787,6 +795,7 @@ export interface IngestEndpointAddIngestEndpointDataMapsInput {
 export interface IngestEndpointCreateInput {
   data_manager_account_id: string;
   name: string;
+  ingest_schema_wizard?: IngestSchemaWizard | null;
   storage_provider?: StorageProvider | null;
   aws_storage_config?: AWSStorageConfig | null;
   gc_bigquery_stream_config?: GCBigQueryStreamConfig | null;

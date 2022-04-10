@@ -2,21 +2,15 @@ import { FC } from 'react';
 import { Box, DialogContent, DialogContentText } from '@mui/material';
 import { InfoButton, InfoProps } from '../molecules/InfoButton';
 import InfoDialogTitle from '../molecules/InfoDialogTitle';
-import EnvironmentInstallInstructions from './EnvironmentInstallInstructions';
-import { Mode } from '../../gql/generated/globalTypes';
+import EnvironmentInstallInstructions, {
+    InstallInstructionsProps,
+} from './EnvironmentInstallInstructions';
 
-export type InstallInstructionsDialogProps = {
+export type InstallInstructionsDialogProps = InstallInstructionsProps & {
     handleDialogClose: (checkChanges: boolean) => void;
-    installDomain: string;
     title: string;
     formInfoProps?: InfoProps;
-    cname: string;
-    environmentName: string;
-    environmentId: string;
-    mode: Mode;
-    tags: { name: string; code: string; type: string }[];
 };
-
 const EnvironmentInstallInstructionsDialog: FC<InstallInstructionsDialogProps> = (
     props: InstallInstructionsDialogProps,
 ) => {
