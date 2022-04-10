@@ -5,12 +5,12 @@ import CheckBoxInput from '../atoms/InputTypes/CheckBoxInput';
 import CopyBlock from '../atoms/CopyBlock';
 import { buildTagInstallMarkup } from '../../utils/TextUtils';
 import { Mode } from '../../gql/generated/globalTypes';
-import { getNodeEnv } from '../../utils/ConfigUtils';
 
 export type InstallInstructionsProps = {
     installDomain: string;
     environmentName: string;
     environmentId: string;
+    installEndpoint: string;
     mode: Mode;
     cname: string;
     tags: { name: string; code: string; type: string }[];
@@ -23,31 +23,6 @@ const EnvironmentInstallInstructions: FC<InstallInstructionsProps> = (
 
     const [spaSupport, setSpaSupport] = useState(false);
     const [hashSupport, setHashSupport] = useState(false);
-
-    const domain =
-        props.mode === Mode.COMMERCIAL
-            ? `https://${props.installDomain}`
-            : `${window.location.protocol}//${window.location.hostname}`;
-
-    const path = props.mode === Mode.COMMERCIAL ? undefined : `/edge/${props.environmentId}`;
-
-    const getPort = (): number | undefined => {
-        if (window.location.port === '80' || window.location.port === '443') {
-            return undefined;
-        } else if (props.mode === Mode.COMMERCIAL && getNodeEnv() === 'development') {
-            return 8443;
-        } else if (getNodeEnv() === 'development') {
-            return 6080;
-        } else if (props.mode === Mode.SELF_HOSTED && getNodeEnv() === 'production') {
-            return +window.location.port;
-        } else {
-            return undefined;
-        }
-    };
-
-    const port = getPort();
-
-    const environmentInstallSrc = `${domain}${port === undefined ? '' : `:${port}`}${path ?? ''}`;
 
     const script = type === 'Tag Manager' ? 'tm.js' : 'analytics.js';
 
@@ -63,7 +38,7 @@ const EnvironmentInstallInstructions: FC<InstallInstructionsProps> = (
     const commentOpen = `<!-- Scale8 Tag Manager${commentAnalytics}${commentEnvironment} -->\n`;
     const commentClose = `\n<!-- / Scale8 Tag Manager -->`;
 
-    const environmentInstallCode = `${commentOpen}<script src="${environmentInstallSrc}/${script}${opts}" async></script>${commentClose}`;
+    const environmentInstallCode = `${commentOpen}<script src="${props.installEndpoint}/${script}${opts}" async></script>${commentClose}`;
 
     return (
         <>

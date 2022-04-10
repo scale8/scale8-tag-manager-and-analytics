@@ -9,6 +9,7 @@ const IngestEndpointEnvironmentInstructionsGetQuery = gql`
             cname
             install_domain
             custom_domain
+            install_endpoint
             ingest_endpoint_revision {
                 id
                 ingest_endpoint_data_maps {

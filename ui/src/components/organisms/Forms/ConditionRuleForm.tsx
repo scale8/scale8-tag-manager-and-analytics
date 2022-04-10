@@ -16,7 +16,7 @@ import { getDataMapsIcon } from '../../../utils/TypeIconsUtils';
 import { platformDataMapsToSubAndDeeper } from '../../../utils/PlatformDataMapsUtils';
 import { buildConditionName } from '../../../dialogPages/tagManager/app/trigger/ConditionRuleUpdate';
 
-const platformDataMapsToSelectValues = (
+export const platformDataMapsToSelectValues = (
     platformDataMaps: PlatformDataMap[],
 ): SelectValueWithSub[] => {
     return platformDataMapsToSubAndDeeper(platformDataMaps).map((subAndDeeper) => {

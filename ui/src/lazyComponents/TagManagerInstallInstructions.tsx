@@ -37,6 +37,7 @@ const TagManagerInstallInstructionsIdSelected: FC<{
                         environmentName={data.getEnvironment.name}
                         environmentId={data.getEnvironment.id}
                         installDomain={data.getEnvironment.install_domain}
+                        installEndpoint={data.getEnvironment.install_endpoint}
                         mode={mode}
                         cname={data.getEnvironment.cname}
                         tags={dbTags

@@ -9,6 +9,7 @@ import {
 import { AppPlatformRevision } from '../../types/TagRulesTypes';
 import { Box } from '@mui/material';
 import { SelectValueWithSub } from '../../hooks/form/useFormValidation';
+import FormWarning from '../atoms/FormWarning';
 
 type SelectIngestEndpointProps = {
     ingestEndpointId: string;
@@ -85,14 +86,7 @@ const SelectIngestEndpointEnvironment: FC<SelectIngestEndpointEnvironmentProps> 
     }
 
     if (availableEnvironments.length === 0) {
-        return (
-            <Box
-                component="small"
-                sx={{ width: '100%', margin: (theme) => theme.spacing(0, 0, 3) }}
-            >
-                There are no environments defined for this endpoint.
-            </Box>
-        );
+        return <FormWarning warning="There are no environments defined for this endpoint." />;
     }
 
     return (

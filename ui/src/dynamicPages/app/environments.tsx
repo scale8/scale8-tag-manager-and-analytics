@@ -70,6 +70,7 @@ const AppEnvironmentsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
                       { field: 'id' },
                       { title: 'Page views', field: 'pageViews', type: 'graph' },
                       { title: 'URL', field: 'url', hidden: true },
+                      { field: 'installDomain' },
                       { field: 'revision' },
                       { field: 'updatedAt' },
                       { field: 'createdAt', hidden: true },
