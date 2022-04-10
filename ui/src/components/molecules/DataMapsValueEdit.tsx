@@ -6,22 +6,11 @@ import { AppPlatformRevision } from '../../types/TagRulesTypes';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { PlatformValueEdit } from '../atoms/PlatformValueEdit';
-import { SelectValueWithSub } from '../../hooks/form/useFormValidation';
 import { isValueFromPlatform, isVarTypeScalar } from '../../utils/VarTypeUtils';
-import { buildDataContainersFilteredPlatforms } from '../../utils/DataContainersUtils';
-
-export type DataContainersElementsFilteredContainer = {
-    id: string;
-    name: string;
-    allowCustom: boolean;
-    elements: SelectValueWithSub[];
-};
-
-export type DataContainersFilteredPlatform = {
-    id: string;
-    name: string;
-    containers: DataContainersElementsFilteredContainer[];
-};
+import {
+    buildDataContainersSelectValues,
+    getAvailableDataContainers,
+} from '../../utils/DataContainersUtils';
 
 export type DataMapsValueEditProps = {
     dataMapsPayloadValues: DataMapsPayloadValues;
@@ -37,11 +26,10 @@ const DataMapsValueEdit: FC<DataMapsValueEditProps> = (props: DataMapsValueEditP
 
     const [usePlatformValue, setUsePlatformValue] = useState(isValueFromPlatform(v.values[0]));
 
-    const dataContainersFilteredPlatforms: DataContainersFilteredPlatform[] =
-        buildDataContainersFilteredPlatforms(appPlatformRevisions, v.dataMap.var_type);
+    const dataContainersSelectValues = buildDataContainersSelectValues(appPlatformRevisions);
 
     const canUsePlatformValue: boolean =
-        dataContainersFilteredPlatforms.length > 0 && isVarTypeScalar(v.dataMap.var_type);
+        dataContainersSelectValues.length > 0 && isVarTypeScalar(v.dataMap.var_type);
 
     return (
         <Box>
@@ -73,7 +61,8 @@ const DataMapsValueEdit: FC<DataMapsValueEditProps> = (props: DataMapsValueEditP
             )}
             {usePlatformValue ? (
                 <PlatformValueEdit
-                    dataContainersFilteredPlatforms={dataContainersFilteredPlatforms}
+                    availableDataContainers={getAvailableDataContainers(appPlatformRevisions)}
+                    dataContainersSelectValues={dataContainersSelectValues}
                     value={v.values[0].toString()}
                     setValue={(value: string) => s.setValue(v.keyPath, value, 0)}
                     disabled={disabled}

@@ -10,6 +10,7 @@ import { AppPlatformRevision } from '../../types/TagRulesTypes';
 import { Box } from '@mui/material';
 import { SelectValueWithSub } from '../../hooks/form/useFormValidation';
 import FormWarning from '../atoms/FormWarning';
+import { AlertWarning } from '../atoms/AlertWarning';
 
 type SelectIngestEndpointProps = {
     ingestEndpointId: string;
@@ -151,18 +152,23 @@ const IngestEndpointPayloadInputType: FC<IngestEndpointPayloadInputTypeProps> = 
 ) => {
     const { value, setValue, ingestEndpoints, appPlatformRevisions } = props;
 
-    const { ingest_environment_id: initialEnvironmentId, payload: initialPayload } =
-        value === ''
-            ? {
-                  ingest_environment_id: '',
-                  payload: null,
-              }
-            : JSON.parse(value.toString());
+    const {
+        ingest_environment_id: initialEnvironmentId,
+        endpoint: initialEndpoint,
+        payload: initialPayload,
+    } = value === ''
+        ? {
+              ingest_environment_id: '',
+              endpoint: '',
+              payload: null,
+          }
+        : JSON.parse(value.toString());
 
     const [ingestEndpointId, setIngestEndpointId] = useState(
         findIngestEndpointId(initialEnvironmentId, ingestEndpoints),
     );
     const [environmentId, setEnvironmentId] = useState(initialEnvironmentId);
+    const [endpoint, setEndpoint] = useState(initialEndpoint);
     const [payload, setPayload] = useState<DataMapsPayload>(initialPayload);
 
     const [dataMapsPayloadValues, setDataMapsPayloadValues] = useState<DataMapsPayloadValues[]>([]);
@@ -172,6 +178,7 @@ const IngestEndpointPayloadInputType: FC<IngestEndpointPayloadInputTypeProps> = 
             setValue(
                 JSON.stringify({
                     ingest_environment_id: environmentId,
+                    endpoint,
                     payload,
                 }),
                 0,
@@ -185,6 +192,12 @@ const IngestEndpointPayloadInputType: FC<IngestEndpointPayloadInputTypeProps> = 
         () => findIngestEndpointEnvironment(environmentId, ingestEndpointId, ingestEndpoints),
         [environmentId, ingestEndpointId, ingestEndpoints],
     );
+
+    useEffect(() => {
+        if (ingestEndpointEnvironment !== undefined) {
+            setEndpoint(ingestEndpointEnvironment.install_endpoint);
+        }
+    }, [ingestEndpointEnvironment]);
 
     return (
         <>
@@ -202,17 +215,27 @@ const IngestEndpointPayloadInputType: FC<IngestEndpointPayloadInputTypeProps> = 
                 disabled={props.disabled}
             />
             {ingestEndpointEnvironment !== undefined && (
-                <DataMapsPayloadBuilder
-                    appPlatformRevisions={appPlatformRevisions}
-                    initialPayload={initialPayload}
-                    setPayload={setPayload}
-                    dataMaps={
-                        ingestEndpointEnvironment.ingest_endpoint_revision.ingest_endpoint_data_maps
-                    }
-                    dataMapsPayloadValues={dataMapsPayloadValues}
-                    setDataMapsPayloadValues={setDataMapsPayloadValues}
-                    disabled={props.disabled}
-                />
+                <>
+                    <small>Endpoint</small>
+                    <Box sx={{ color: '#777777', fontWeight: 'bold' }}>{endpoint}</Box>
+                    <Box mt={2} />
+                    <AlertWarning>
+                        Any changes to the endpoint environment will not be automatically updated
+                        here. You will need to update the revision and redeploy manually.
+                    </AlertWarning>
+                    <DataMapsPayloadBuilder
+                        appPlatformRevisions={appPlatformRevisions}
+                        initialPayload={initialPayload}
+                        setPayload={setPayload}
+                        dataMaps={
+                            ingestEndpointEnvironment.ingest_endpoint_revision
+                                .ingest_endpoint_data_maps
+                        }
+                        dataMapsPayloadValues={dataMapsPayloadValues}
+                        setDataMapsPayloadValues={setDataMapsPayloadValues}
+                        disabled={props.disabled}
+                    />
+                </>
             )}
 
             {props.validationError !== undefined && (

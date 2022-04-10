@@ -4,7 +4,6 @@ import {
     PlatformDataMap,
     PlatformDataMapInput,
 } from '../types/DataMapsTypes';
-import { SelectValueWithSub } from '../hooks/form/useFormValidation';
 import { TypeIcon, VarType } from '../gql/generated/globalTypes';
 import { MappedPlatformElement } from '../types/MappedPlatformValuesTypes';
 import {
@@ -92,41 +91,6 @@ const platformDataMapsToSubAndDeeper = (
             } else return subAndDeeper;
         })
         .flat();
-};
-
-const platformDataMapsToSelectValuesFilteredWithPath = (
-    platformDataMaps: PlatformDataMap[],
-    varType: VarType,
-    allowRawObjects = false,
-): SelectValueWithSub[] => {
-    return platformDataMapsToSubAndDeeper(platformDataMaps)
-        .map((subAndDeeper) => ({
-            key: subAndDeeper.keys.join('.'),
-            varType: subAndDeeper.varType,
-            description: subAndDeeper.description,
-            text: subAndDeeper.keys.join('.'),
-            sub: subAndDeeper.sub
-                ?.filter(
-                    (sub) =>
-                        sub.varType === varType ||
-                        (allowRawObjects && sub.varType === VarType.OBJECT),
-                )
-                .map((sub) => ({
-                    description: subAndDeeper.description,
-                    key: `${subAndDeeper.keys.join('.')}.${sub.key}`,
-                    text: sub.key,
-                    unFilteredSubCount: sub.varType === VarType.OBJECT ? 0 : undefined,
-                })),
-            unFilteredSubCount: subAndDeeper.sub?.length ?? 0,
-        }))
-        .filter(
-            (subAndDeeper) =>
-                subAndDeeper.varType === varType ||
-                (allowRawObjects && subAndDeeper.unFilteredSubCount === 0) ||
-                (subAndDeeper.varType === VarType.OBJECT &&
-                    subAndDeeper.sub &&
-                    subAndDeeper.sub.length > 0),
-        );
 };
 
 // assume max nested values 3
@@ -284,7 +248,6 @@ const buildPlatformDataMapPlatformElements = (
 export {
     platformDataMapsToSubAndDeeper,
     platformDataMapHasChildren,
-    platformDataMapsToSelectValuesFilteredWithPath,
     getCurrentDataMapInputFromParentsIndexes,
     buildPlatformDataMapPlatformElements,
     buildPlatformDataMapPayload,

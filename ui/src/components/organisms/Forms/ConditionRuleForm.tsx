@@ -10,35 +10,9 @@ import DrawerFormLayout from '../../molecules/DrawerFormLayout';
 import { matchConditionValues } from '../../../utils/MatchConditionValues';
 import ControlledTextAreaInput from '../../atoms/ControlledInputs/ControlledTextAreaInput';
 import { extractDataMapDefaultValue } from '../../../utils/MappedPlatformElementUtils';
-import { PlatformDataMap } from '../../../types/DataMapsTypes';
-import { SelectValueWithSub } from '../../../hooks/form/useFormValidation';
-import { getDataMapsIcon } from '../../../utils/TypeIconsUtils';
-import { platformDataMapsToSubAndDeeper } from '../../../utils/PlatformDataMapsUtils';
 import { buildConditionName } from '../../../dialogPages/tagManager/app/trigger/ConditionRuleUpdate';
-
-export const platformDataMapsToSelectValues = (
-    platformDataMaps: PlatformDataMap[],
-): SelectValueWithSub[] => {
-    return platformDataMapsToSubAndDeeper(platformDataMaps).map((subAndDeeper) => {
-        const MainIcon = getDataMapsIcon(subAndDeeper.icon);
-
-        return {
-            key: subAndDeeper.id,
-            text: subAndDeeper.keys.join('.'),
-            iconType: subAndDeeper.sub === undefined ? subAndDeeper.icon ?? undefined : undefined,
-            icon: subAndDeeper.sub === undefined ? <MainIcon /> : undefined,
-            sub: subAndDeeper.sub?.map((sub) => {
-                const SubIcon = getDataMapsIcon(sub.icon);
-                return {
-                    key: sub.id,
-                    text: sub.key,
-                    iconType: sub.icon ?? undefined,
-                    icon: <SubIcon />,
-                };
-            }),
-        };
-    });
-};
+import { snakeToTitleCase } from '../../../utils/TextUtils';
+import { platformDataMapsToSelectValues } from '../../../utils/DataContainersUtils';
 
 const ConditionRuleForm: FC<ConditionRuleFormProps> = (props: ConditionRuleFormProps) => {
     const [useCustom, setUseCustom] = useState(false);
@@ -198,15 +172,18 @@ const ConditionRuleForm: FC<ConditionRuleFormProps> = (props: ConditionRuleFormP
             ) : (
                 (props.currentDataElement !== undefined || useCustom) && (
                     <>
-                        <Box
-                            component="small"
-                            sx={{
-                                width: '100%',
-                                margin: (theme) => theme.spacing(0, 0, 2),
-                            }}
-                        >
-                            {props.currentDataElement?.description}
-                        </Box>
+                        {props.currentDataElement && (
+                            <Box
+                                component="small"
+                                sx={{
+                                    width: '100%',
+                                    margin: (theme) => theme.spacing(0, 0, 2),
+                                }}
+                            >
+                                ({snakeToTitleCase(props.currentDataElement.var_type)}){' '}
+                                {props.currentDataElement.description}
+                            </Box>
+                        )}
                         {isRawObject && (
                             <ControlledTextInput
                                 name="matchKey"
