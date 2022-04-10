@@ -64,6 +64,10 @@ export interface AppInstructionsGetData_getApp_environments {
    */
   install_domain: string;
   /**
+   * `Environment`'s install endpoint
+   */
+  install_endpoint: string;
+  /**
    * `Environment`'s custom domain name if configured
    */
   custom_domain: string | null;
