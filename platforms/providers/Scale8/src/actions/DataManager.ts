@@ -16,5 +16,6 @@ export const dataManager = {
     ],
     run: (data: PlatformActionData, log: (msg: string) => void): void => {
         Logger.info(data.props);
+        //navigator.sendBeacon('');
     },
 };
