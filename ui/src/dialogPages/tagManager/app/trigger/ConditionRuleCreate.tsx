@@ -17,9 +17,12 @@ import { DialogPageProps } from '../../../../types/DialogTypes';
 import { usePageDialogControls } from '../../../../hooks/dialog/usePageDialogControls';
 import { buildStandardFormInfo } from '../../../../utils/InfoLabelsUtils';
 import { QueryLoaderAndError } from '../../../../abstractions/QueryLoaderAndError';
-import { getDataContainersIcon } from '../../../../utils/TypeIconsUtils';
 import { useConfigState } from '../../../../context/AppContext';
 import { logError } from '../../../../utils/logUtils';
+import {
+    buildDataContainersSelectValues,
+    getAvailableDataContainers,
+} from '../../../../utils/DataContainersUtils';
 
 type ConditionRuleCreateProps = DialogPageProps & {
     submitText: string;
@@ -114,31 +117,11 @@ const ConditionRuleCreate: FC<ConditionRuleCreateProps> = (props: ConditionRuleC
         (data: FetchAvailableDataContainers) => {
             return (
                 <ConditionRuleCreateAfterLoad
-                    availableDataContainers={data.getTrigger.revision.app_platform_revisions.reduce(
-                        (accumulator: DataContainer[], currentValue) => {
-                            return [
-                                ...accumulator,
-                                ...currentValue.platform_revision.platform_data_containers,
-                            ] as DataContainer[];
-                        },
-                        [],
+                    availableDataContainers={getAvailableDataContainers(
+                        data.getTrigger.revision.app_platform_revisions,
                     )}
-                    dataContainersSelectValues={data.getTrigger.revision.app_platform_revisions.map(
-                        (_) => ({
-                            key: _.platform_revision.platform.id,
-                            text: _.platform_revision.platform.name,
-                            sub: _.platform_revision.platform_data_containers.map((c) => {
-                                const Icon = getDataContainersIcon(c.icon);
-
-                                return {
-                                    key: c.id,
-                                    text: c.name,
-                                    iconType: c.icon,
-                                    icon: <Icon />,
-                                    description: c.description,
-                                };
-                            }) as SelectValueWithSub[],
-                        }),
+                    dataContainersSelectValues={buildDataContainersSelectValues(
+                        data.getTrigger.revision.app_platform_revisions,
                     )}
                     consentPurposes={consentPurposes}
                     consentVendors={consentVendors}

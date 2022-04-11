@@ -1,9 +1,9 @@
 import { ReactElement } from 'react';
-import { ControlledColorInputProps } from '../../../hooks/form/useFormValidation';
+import { ControlledGenericStringInputProps } from '../../../hooks/form/useFormValidation';
 import DomSelectorInput from '../InputTypes/DomSelectorInput';
 
 const ControlledDomSelectorInput = <T extends { [key: string]: any }>(
-    props: ControlledColorInputProps<T>,
+    props: ControlledGenericStringInputProps<T>,
 ): ReactElement => {
     const { name, formProps, disabled, ...inputProps } = props;
 

@@ -1,4 +1,5 @@
 import TextField from '@mui/material/TextField';
+import * as React from 'react';
 import { FC, ReactElement, useState } from 'react';
 import {
     addMinutesUTC,
@@ -12,11 +13,10 @@ import {
 import { DesktopDatePicker, DesktopDateTimePicker, LocalizationProvider } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { InputBaseProps } from '@mui/material/InputBase';
-import { FormProps } from '../../../hooks/form/useFormValidation';
+import { FormFieldProps } from '../../../hooks/form/useFormValidation';
 import { TextFieldProps as MuiTextFieldPropsType } from '@mui/material/TextField/TextField';
 import { SxProps } from '@mui/system';
 import { Theme } from '@mui/material/styles';
-import * as React from 'react';
 
 export type DateInputProps = {
     name: string;
@@ -36,7 +36,7 @@ export type ControlledDateInputProps<Values extends { [key: string]: any }> = Om
     DateInputProps,
     'value' | 'setValue'
 > & {
-    formProps: FormProps<Values>;
+    formProps: FormFieldProps<Values>;
 };
 
 const DateInput: FC<DateInputProps> = ({

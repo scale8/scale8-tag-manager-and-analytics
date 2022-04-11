@@ -39,6 +39,11 @@ function splitOnce(s: string, on: string): string[] {
     return [first, ...(rest.length > 0 ? [rest.join(on)] : [])];
 }
 
+function splitTwice(s: string, on: string): string[] {
+    const [first, second, ...rest] = s.split(on);
+    return [first, second, ...(rest.length > 0 ? [rest.join(on)] : [])];
+}
+
 const buildMockComponentId = (prefix: string): string => {
     return `${prefix}${Date.now()}${Math.floor(Math.random() * 1000)}`;
 };
@@ -91,6 +96,7 @@ export {
     removeStringQuotes,
     buildTagInstallMarkup,
     splitOnce,
+    splitTwice,
     buildMockComponentId,
     abbreviateNumber,
     displayTime,

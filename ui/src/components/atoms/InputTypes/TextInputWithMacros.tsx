@@ -4,11 +4,12 @@ import { TextFieldProps } from '@mui/material/TextField/TextField';
 import { autocompleteOff } from '../../../utils/BrowserUtils';
 import { AppPlatformRevision } from '../../../types/TagRulesTypes';
 import { PlatformValueEdit } from '../PlatformValueEdit';
-import { buildDataContainersFilteredPlatforms } from '../../../utils/DataContainersUtils';
-import { DataContainersFilteredPlatform } from '../../molecules/DataMapsValueEdit';
 import AdornmentButton from '../AdornamentButton';
-import { VarType } from '../../../gql/generated/globalTypes';
 import { SmallAddButton } from '../SmallAddButton';
+import {
+    buildDataContainersSelectValues,
+    getAvailableDataContainers,
+} from '../../../utils/DataContainersUtils';
 
 export type TextInputWithMacrosProps = TextFieldProps & {
     name: string;
@@ -29,8 +30,7 @@ const TextInputWithMacros: FC<TextInputWithMacrosProps> = (props: TextInputWithM
         ...textFieldProps
     } = props;
 
-    const dataContainersFilteredPlatforms: DataContainersFilteredPlatform[] =
-        buildDataContainersFilteredPlatforms(appPlatformRevisions, VarType.STRING, true);
+    const dataContainersSelectValues = buildDataContainersSelectValues(appPlatformRevisions);
 
     const [requiredError, setRequiredError] = useState(false);
     const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
@@ -102,7 +102,10 @@ const TextInputWithMacros: FC<TextInputWithMacrosProps> = (props: TextInputWithM
                 <Box width={250} height={330} p={1} display="flex" flexDirection="column">
                     <Box flex={1}>
                         <PlatformValueEdit
-                            dataContainersFilteredPlatforms={dataContainersFilteredPlatforms}
+                            availableDataContainers={getAvailableDataContainers(
+                                appPlatformRevisions,
+                            )}
+                            dataContainersSelectValues={dataContainersSelectValues}
                             value={dataContainerValue}
                             setValue={(v) => setDataContainerValue(v)}
                             disabled={!!disabled}

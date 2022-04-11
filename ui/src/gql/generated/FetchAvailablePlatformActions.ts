@@ -716,6 +716,10 @@ export interface FetchAvailablePlatformActions_getActionGroupDistribution_revisi
    */
   install_domain: string;
   /**
+   * `IngestEndpointEnvironment`'s install endpoint
+   */
+  install_endpoint: string;
+  /**
    * A hint of the credentials currently in use by the `IngestEndpointEnvironment`.
    * For security reasons we don't enable to full retrival of this information via
    * the API. It does not persist in our database or servers and remains in our vault.
