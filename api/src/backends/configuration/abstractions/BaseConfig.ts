@@ -250,6 +250,10 @@ export default abstract class BaseConfig {
         return await this.getConfigEntryThrows('SMTP_PASSWORD');
     }
 
+    public async trackDependencies(): Promise<boolean> {
+        return (await this.getConfigEntryOrElse('TRACK_DEPENDENCIES', 'false')) === 'true';
+    }
+
     public async isCaptchaEnabled(): Promise<boolean> {
         return (await this.getConfigEntryOrElse('CAPTCHA_ENABLED', 'true')) === 'true';
     }
