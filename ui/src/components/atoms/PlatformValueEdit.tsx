@@ -40,7 +40,17 @@ const PlatformValueEdit: FC<PlatformValueEditProps> = (props: PlatformValueEditP
     const match = value.match(/^{{([^}]+)}}$/);
     const path = match === null ? '' : match[1];
 
-    const [initialDataContainerId, initialDataElement, initialObjectKey] = splitTwice(path, '.');
+    const [initialDataContainerPersistingId, initialDataElement, initialObjectKey] = splitTwice(
+        path,
+        '.',
+    );
+
+    const initialDataContainer = availableDataContainers.find(
+        (dataContainer) => dataContainer.persisting_id === initialDataContainerPersistingId,
+    );
+
+    const initialDataContainerId = initialDataContainer?.id ?? '';
+
     const [useCustom, setUseCustom] = useState(false);
 
     const [values, setValues] = useState({
@@ -49,10 +59,14 @@ const PlatformValueEdit: FC<PlatformValueEditProps> = (props: PlatformValueEditP
         objectKey: initialObjectKey ?? '',
     });
 
+    const currentDataContainer = availableDataContainers.find(
+        (dataContainer) => dataContainer.id === values.dataContainerId,
+    );
+
     useEffect(() => {
-        if (values.dataElement !== '') {
+        if (values.dataElement !== '' && currentDataContainer) {
             setValue(
-                `{{${values.dataContainerId}.${values.dataElement}${
+                `{{${currentDataContainer.persisting_id}.${values.dataElement}${
                     values.objectKey === '' ? '' : '.'
                 }${values.objectKey}}}`,
             );
@@ -60,10 +74,6 @@ const PlatformValueEdit: FC<PlatformValueEditProps> = (props: PlatformValueEditP
             setValue('');
         }
     }, [values]);
-
-    const currentDataContainer = availableDataContainers.find(
-        (dataContainer) => dataContainer.id === values.dataContainerId,
-    );
 
     const noContainers = availableDataContainers.length < 1;
 
