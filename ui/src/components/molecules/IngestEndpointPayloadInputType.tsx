@@ -11,6 +11,7 @@ import { Box } from '@mui/material';
 import { SelectValueWithSub } from '../../hooks/form/useFormValidation';
 import FormWarning from '../atoms/FormWarning';
 import { AlertWarning } from '../atoms/AlertWarning';
+import CopyBlock from '../atoms/CopyBlock';
 
 type SelectIngestEndpointProps = {
     ingestEndpointId: string;
@@ -207,6 +208,16 @@ const IngestEndpointPayloadInputType: FC<IngestEndpointPayloadInputTypeProps> = 
                 ingestEndpoints={ingestEndpoints}
                 disabled={props.disabled}
             />
+            {ingestEndpointEnvironment !== undefined && (
+                <>
+                    <AlertWarning>
+                        Any changes to the Data Manager Endpoint environment will not be
+                        automatically updated here. You will need to update the revision and
+                        redeploy manually.
+                    </AlertWarning>
+                    <Box mt={2} />
+                </>
+            )}
             <SelectIngestEndpointEnvironment
                 ingestEndpointId={ingestEndpointId}
                 environmentId={environmentId}
@@ -217,12 +228,10 @@ const IngestEndpointPayloadInputType: FC<IngestEndpointPayloadInputTypeProps> = 
             {ingestEndpointEnvironment !== undefined && (
                 <>
                     <small>Endpoint</small>
-                    <Box sx={{ color: '#777777', fontWeight: 'bold' }}>{endpoint}</Box>
+                    <Box fontSize={12}>
+                        <CopyBlock text={endpoint} language="html" flat />
+                    </Box>
                     <Box mt={2} />
-                    <AlertWarning>
-                        Any changes to the endpoint environment will not be automatically updated
-                        here. You will need to update the revision and redeploy manually.
-                    </AlertWarning>
                     <DataMapsPayloadBuilder
                         appPlatformRevisions={appPlatformRevisions}
                         initialPayload={initialPayload}

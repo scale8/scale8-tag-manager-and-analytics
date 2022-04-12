@@ -99,8 +99,18 @@ const TextInputWithMacros: FC<TextInputWithMacrosProps> = (props: TextInputWithM
                     horizontal: 'right',
                 }}
             >
-                <Box width={250} height={330} p={1} display="flex" flexDirection="column">
-                    <Box flex={1}>
+                <Box width={250} height={400} p={1} display="flex" flexDirection="column">
+                    <Box
+                        flex={1}
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            '& .DrawerFormField': {
+                                width: '100%',
+                                margin: (theme) => theme.spacing(0, 0, 3),
+                            },
+                        }}
+                    >
                         <PlatformValueEdit
                             availableDataContainers={getAvailableDataContainers(
                                 appPlatformRevisions,
