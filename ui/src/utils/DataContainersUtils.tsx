@@ -41,19 +41,20 @@ export const buildDataContainersSelectValues = (
 
 export const platformDataMapsToSelectValues = (
     platformDataMaps: PlatformDataMap[],
+    useKeys = false,
 ): SelectValueWithSub[] => {
     return platformDataMapsToSubAndDeeper(platformDataMaps).map((subAndDeeper) => {
         const MainIcon = getDataMapsIcon(subAndDeeper.icon);
 
         return {
-            key: subAndDeeper.id,
+            key: useKeys ? subAndDeeper.keys.join('.') : subAndDeeper.id,
             text: subAndDeeper.keys.join('.'),
             iconType: subAndDeeper.sub === undefined ? subAndDeeper.icon ?? undefined : undefined,
             icon: subAndDeeper.sub === undefined ? <MainIcon /> : undefined,
             sub: subAndDeeper.sub?.map((sub) => {
                 const SubIcon = getDataMapsIcon(sub.icon);
                 return {
-                    key: sub.id,
+                    key: useKeys ? sub.key : sub.id,
                     text: sub.key,
                     iconType: sub.icon ?? undefined,
                     icon: <SubIcon />,

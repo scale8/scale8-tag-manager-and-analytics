@@ -140,7 +140,7 @@ const PlatformValueEdit: FC<PlatformValueEditProps> = (props: PlatformValueEditP
     }, [currentDataContainer]);
 
     const currentDataElement = (currentDataContainer?.platform_data_maps ?? []).find(
-        (_) => _.id === values.dataElement,
+        (_) => _.key === values.dataElement,
     );
 
     const isDataElementObject =
@@ -223,6 +223,7 @@ const PlatformValueEdit: FC<PlatformValueEditProps> = (props: PlatformValueEditP
                         name="dataElement"
                         values={platformDataMapsToSelectValues(
                             currentDataContainer.platform_data_maps,
+                            true,
                         )}
                         formProps={formProps}
                         required
