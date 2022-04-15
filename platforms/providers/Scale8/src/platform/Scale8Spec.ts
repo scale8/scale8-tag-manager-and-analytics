@@ -38,7 +38,7 @@ const scale8Spec: PlatformSpec = {
     version: {
         major: 0,
         minor: 0,
-        patch: 1,
+        patch: 2,
     },
     actions: [
         trackEvent,
