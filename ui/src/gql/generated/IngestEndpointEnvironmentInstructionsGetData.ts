@@ -159,6 +159,10 @@ export interface IngestEndpointEnvironmentInstructionsGetData_getIngestEndpointE
    */
   custom_domain: string | null;
   /**
+   * `IngestEndpointEnvironment`'s install endpoint
+   */
+  install_endpoint: string;
+  /**
    * The `IngestEndpointRevision` currently bound to the `IngestEndpointEnvironment`
    */
   ingest_endpoint_revision: IngestEndpointEnvironmentInstructionsGetData_getIngestEndpointEnvironment_ingest_endpoint_revision;

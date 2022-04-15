@@ -14,7 +14,7 @@ const PUBLIC_PATH = `http://127.0.0.1:${SERVER_PORT}`;
 
 const runTests = (projectName) => {
     return new Promise((resolve, reject) => {
-        const jest = spawn('jest', [
+        const opts = [
             '--testEnvironment=node',
             "--transform='" + JSON.stringify({
                 '\\.tsx?$': 'ts-jest',
@@ -22,7 +22,11 @@ const runTests = (projectName) => {
             `--moduleFileExtensions=js`,
             `--moduleFileExtensions=ts`,
             `--testRegex='providers/${projectName}/tests/.+?spec\\.ts$'`,
-        ], { shell: true, stdio: 'inherit' });
+        ];
+
+        console.log(`Jest opts: ${opts.join(' ')}`);
+
+        const jest = spawn('yarn jest', opts, { shell: true, stdio: 'inherit' });
 
         jest.on('close', (code) => {
             if(code === 0){
@@ -32,7 +36,7 @@ const runTests = (projectName) => {
             }
         });
 
-    },);
+    });
 }
 
 const runBuild = async (projectName) => {

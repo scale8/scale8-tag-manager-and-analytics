@@ -63,6 +63,7 @@ const IngestEndpointUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
         buildInitialStatePreload: (formLoadedData: UpdateIngestEndpointGetData) => ({
             ...initialStorageProviderFields,
             storageProvider: formLoadedData.getIngestEndpoint.storage_provider,
+            wizard: '',
             name: formLoadedData.getIngestEndpoint.name,
             analyticsEnabled: formLoadedData.getIngestEndpoint.analytics_enabled,
         }),

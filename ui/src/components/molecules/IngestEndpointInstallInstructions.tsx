@@ -16,10 +16,10 @@ import {
     ingestEndpointInstallSnippets,
 } from '../atoms/IngestEndpointInstallInstructionCode';
 import { Mode } from '../../gql/generated/globalTypes';
-import { getNodeEnv } from '../../utils/ConfigUtils';
 
 export type IngestEndpointInstallInstructionsDialogProps = {
     installDomain: string;
+    installEndpoint: string;
     cname: string;
     payload: DataMapsPayload;
     mode: Mode;
@@ -28,9 +28,6 @@ export type IngestEndpointInstallInstructionsDialogProps = {
 
 export type IngestEndpointInstallInstructionCodeProps = {
     endpoint: string;
-    domain: string;
-    port: string;
-    path: string;
     payload: DataMapsPayload;
     snippet: IngestEndpointInstallSnippet;
 };
@@ -50,27 +47,6 @@ const IngestEndpointInstallInstructions: FC<IngestEndpointInstallInstructionsDia
     const handleSnippetChange = (event: SelectChangeEvent) => {
         setSnippetId(event.target.value as string);
     };
-
-    const domain =
-        props.mode === Mode.COMMERCIAL
-            ? `https://${props.installDomain}`
-            : `${window.location.protocol}//${window.location.hostname}`;
-
-    const path = props.mode === Mode.COMMERCIAL ? undefined : `/edge/${props.environmentId}`;
-
-    const determinePort = () => {
-        if (props.mode === Mode.COMMERCIAL) {
-            if (getNodeEnv() === 'development') {
-                return '8443';
-            }
-            return undefined;
-        }
-        return window.location.port;
-    };
-
-    const port = determinePort();
-
-    const endpoint = `${domain}${port === undefined ? '' : `:${port}`}${path ?? ''}`;
 
     const currentSnippet = ingestEndpointInstallSnippets.find((_) => _.id === snippetId);
 
@@ -109,7 +85,9 @@ const IngestEndpointInstallInstructions: FC<IngestEndpointInstallInstructionsDia
             {tab === 'pixel' && (
                 <Box fontSize={12} mt={3} pb={2}>
                     <CopyBlock
-                        text={`<!-- S8 Pixel -->\n<img width=0 height=0 src="${endpoint}/?d=${encodeURI(
+                        text={`<!-- S8 Pixel -->\n<img width=0 height=0 src="${
+                            props.installEndpoint
+                        }/?d=${encodeURI(
                             JSON.stringify(props.payload),
                         )}" alt=""/>\n<!-- / S8 Pixel -->`}
                         language="html"
@@ -153,10 +131,7 @@ const IngestEndpointInstallInstructions: FC<IngestEndpointInstallInstructionsDia
                     </FormControl>
                     {currentSnippet !== undefined && (
                         <IngestEndpointInstallInstructionCode
-                            domain={domain}
-                            port={port ?? ''}
-                            path={path ?? ''}
-                            endpoint={endpoint}
+                            endpoint={props.installEndpoint}
                             payload={props.payload}
                             snippet={currentSnippet}
                         />

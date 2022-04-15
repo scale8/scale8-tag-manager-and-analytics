@@ -9,6 +9,9 @@ import {
 import { AppPlatformRevision } from '../../types/TagRulesTypes';
 import { Box } from '@mui/material';
 import { SelectValueWithSub } from '../../hooks/form/useFormValidation';
+import FormWarning from '../atoms/FormWarning';
+import { AlertWarning } from '../atoms/AlertWarning';
+import CopyBlock from '../atoms/CopyBlock';
 
 type SelectIngestEndpointProps = {
     ingestEndpointId: string;
@@ -85,14 +88,7 @@ const SelectIngestEndpointEnvironment: FC<SelectIngestEndpointEnvironmentProps> 
     }
 
     if (availableEnvironments.length === 0) {
-        return (
-            <Box
-                component="small"
-                sx={{ width: '100%', margin: (theme) => theme.spacing(0, 0, 3) }}
-            >
-                There are no environments defined for this endpoint.
-            </Box>
-        );
+        return <FormWarning warning="There are no environments defined for this endpoint." />;
     }
 
     return (
@@ -157,18 +153,23 @@ const IngestEndpointPayloadInputType: FC<IngestEndpointPayloadInputTypeProps> = 
 ) => {
     const { value, setValue, ingestEndpoints, appPlatformRevisions } = props;
 
-    const { ingest_environment_id: initialEnvironmentId, payload: initialPayload } =
-        value === ''
-            ? {
-                  ingest_environment_id: '',
-                  payload: null,
-              }
-            : JSON.parse(value.toString());
+    const {
+        ingest_environment_id: initialEnvironmentId,
+        endpoint: initialEndpoint,
+        payload: initialPayload,
+    } = value === ''
+        ? {
+              ingest_environment_id: '',
+              endpoint: '',
+              payload: null,
+          }
+        : JSON.parse(value.toString());
 
     const [ingestEndpointId, setIngestEndpointId] = useState(
         findIngestEndpointId(initialEnvironmentId, ingestEndpoints),
     );
     const [environmentId, setEnvironmentId] = useState(initialEnvironmentId);
+    const [endpoint, setEndpoint] = useState(initialEndpoint);
     const [payload, setPayload] = useState<DataMapsPayload>(initialPayload);
 
     const [dataMapsPayloadValues, setDataMapsPayloadValues] = useState<DataMapsPayloadValues[]>([]);
@@ -178,6 +179,7 @@ const IngestEndpointPayloadInputType: FC<IngestEndpointPayloadInputTypeProps> = 
             setValue(
                 JSON.stringify({
                     ingest_environment_id: environmentId,
+                    endpoint,
                     payload,
                 }),
                 0,
@@ -192,6 +194,12 @@ const IngestEndpointPayloadInputType: FC<IngestEndpointPayloadInputTypeProps> = 
         [environmentId, ingestEndpointId, ingestEndpoints],
     );
 
+    useEffect(() => {
+        if (ingestEndpointEnvironment !== undefined) {
+            setEndpoint(ingestEndpointEnvironment.install_endpoint);
+        }
+    }, [ingestEndpointEnvironment]);
+
     return (
         <>
             <SelectIngestEndpoint
@@ -200,6 +208,16 @@ const IngestEndpointPayloadInputType: FC<IngestEndpointPayloadInputTypeProps> = 
                 ingestEndpoints={ingestEndpoints}
                 disabled={props.disabled}
             />
+            {ingestEndpointEnvironment !== undefined && (
+                <>
+                    <AlertWarning>
+                        Any changes to the Data Manager Endpoint environment will not be
+                        automatically updated here. You will need to update the revision and
+                        redeploy manually.
+                    </AlertWarning>
+                    <Box mt={2} />
+                </>
+            )}
             <SelectIngestEndpointEnvironment
                 ingestEndpointId={ingestEndpointId}
                 environmentId={environmentId}
@@ -208,17 +226,25 @@ const IngestEndpointPayloadInputType: FC<IngestEndpointPayloadInputTypeProps> = 
                 disabled={props.disabled}
             />
             {ingestEndpointEnvironment !== undefined && (
-                <DataMapsPayloadBuilder
-                    appPlatformRevisions={appPlatformRevisions}
-                    initialPayload={initialPayload}
-                    setPayload={setPayload}
-                    dataMaps={
-                        ingestEndpointEnvironment.ingest_endpoint_revision.ingest_endpoint_data_maps
-                    }
-                    dataMapsPayloadValues={dataMapsPayloadValues}
-                    setDataMapsPayloadValues={setDataMapsPayloadValues}
-                    disabled={props.disabled}
-                />
+                <>
+                    <small>Endpoint</small>
+                    <Box fontSize={12}>
+                        <CopyBlock text={endpoint} language="html" flat />
+                    </Box>
+                    <Box mt={2} />
+                    <DataMapsPayloadBuilder
+                        appPlatformRevisions={appPlatformRevisions}
+                        initialPayload={initialPayload}
+                        setPayload={setPayload}
+                        dataMaps={
+                            ingestEndpointEnvironment.ingest_endpoint_revision
+                                .ingest_endpoint_data_maps
+                        }
+                        dataMapsPayloadValues={dataMapsPayloadValues}
+                        setDataMapsPayloadValues={setDataMapsPayloadValues}
+                        disabled={props.disabled}
+                    />
+                </>
             )}
 
             {props.validationError !== undefined && (

@@ -8,6 +8,7 @@ const EnvironmentInstructionsGetQuery = gql`
             cname
             install_domain
             custom_domain
+            install_endpoint
             revision {
                 id
                 tags {

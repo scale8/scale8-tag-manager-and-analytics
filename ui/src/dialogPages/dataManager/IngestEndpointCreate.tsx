@@ -3,7 +3,10 @@ import IngestEndpointForm from '../../components/organisms/Forms/IngestEndpointF
 import { FormProps, FormValidationResult } from '../../hooks/form/useFormValidation';
 import CreateIngestEndpointQuery from '../../gql/mutations/CreateIngestEndpointQuery';
 import { ApolloError, useMutation } from '@apollo/client';
-import { CreateIngestEndpointResult } from '../../gql/generated/CreateIngestEndpointResult';
+import {
+    CreateIngestEndpointResult,
+    CreateIngestEndpointResultVariables,
+} from '../../gql/generated/CreateIngestEndpointResult';
 import { DialogPageProps } from '../../types/DialogTypes';
 import { buildStandardFormInfo } from '../../utils/InfoLabelsUtils';
 import {
@@ -67,28 +70,26 @@ const IngestEndpointCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
         buildInitialState: () => ({
             ...initialStorageProviderFields,
             name: '',
+            wizard: '',
             analyticsEnabled: false,
             storageProvider: StorageProvider.MONGODB,
         }),
         saveQuery: useMutation<CreateIngestEndpointResult>(CreateIngestEndpointQuery),
-        mapSaveData: (formValues: IngestEndpointValues) => {
-            if (mode === Mode.COMMERCIAL) {
-                return {
-                    ingestEndpointCreateInput: {
-                        data_manager_account_id: dataManagerId,
-                        name: formValues.name,
-                        analytics_enabled: true,
-                    },
-                };
-            }
-
+        mapSaveData: (formValues: IngestEndpointValues): CreateIngestEndpointResultVariables => {
             return {
                 ingestEndpointCreateInput: {
                     data_manager_account_id: dataManagerId,
+                    ingest_schema_wizard: formValues.wizard === '' ? undefined : formValues.wizard,
                     name: formValues.name,
-                    analytics_enabled: formValues.analyticsEnabled,
-                    storage_provider: formValues.storageProvider as StorageProvider,
-                    ...buildStorageProviderSaveProperties(formValues, true),
+                    ...(mode === Mode.COMMERCIAL
+                        ? {
+                              analytics_enabled: true,
+                          }
+                        : {
+                              analytics_enabled: formValues.analyticsEnabled,
+                              storage_provider: formValues.storageProvider as StorageProvider,
+                              ...buildStorageProviderSaveProperties(formValues, true),
+                          }),
                 },
             };
         },

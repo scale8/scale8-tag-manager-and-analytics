@@ -41,6 +41,10 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
             """
             name: String!
             """
+            \`IngestEndpointEnvironment\`'s install endpoint
+            """
+            install_endpoint: String!
+            """
             A custom domain name associated with this \`IngestEndpointEnvironment\`
             """
             custom_domain: String
@@ -332,8 +336,29 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
      * Custom Resolvers
      * @protected
      */
+
+    private async getInstallDomain(environmentId: ObjectId, ctx: CTX): Promise<string> {
+        const env = await this.repoFactory(IngestEndpointEnvironment).findByIdThrows(
+            environmentId,
+            userMessages.environmentFailed,
+        );
+        return await this.orgAuth.asUserWithViewAccess(ctx, env.orgId, async () =>
+            getIngestEndpointInstallDomain(env),
+        );
+    }
+
     protected gqlCustomResolvers = {
         IngestEndpointEnvironment: {
+            install_endpoint: async (parent: any, args: any, ctx: CTX) => {
+                if (this.config.isCommercial()) {
+                    return `https://${await this.getInstallDomain(new ObjectId(parent.id), ctx)}`;
+                } else if (this.config.isDevelopment()) {
+                    //todo. remove hard coded port...
+                    return `http://localhost:6080/edge/${parent.id}`;
+                } else {
+                    return `${await this.config.getUiUrl()}/edge/${parent.id}`;
+                }
+            },
             cname: async (parent: any) =>
                 getCNAME(
                     await this.repoFactory(IngestEndpointEnvironment).findByIdThrows(

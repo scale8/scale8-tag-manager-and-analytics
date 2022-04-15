@@ -27,6 +27,7 @@ import StripeProducts from '../payments/providers/StripeProducts';
 import Org from '../mongo/models/Org';
 import BaseConfig from '../backends/configuration/abstractions/BaseConfig';
 import { InputType } from '../../../common/enums/InputType';
+import { IngestSchemaWizard } from '../enums/IngestSchemaWizard';
 
 type CoreElementDataMapDescription = {
     name: string;

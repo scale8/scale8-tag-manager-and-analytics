@@ -147,7 +147,7 @@ var fs = require('fs');
 var payload = '[payloadJs]';
 var reqOptions = {
   'method': 'POST',
-  'hostname': '[domain]',[portOption][pathOption]
+  'hostname': '[hostname]',[portOption][pathOption]
   'headers': {
     'Content-Type': 'application/json'
   },
@@ -268,12 +268,17 @@ const IngestEndpointInstallInstructionCode: FC<IngestEndpointInstallInstructionC
     const payloadJs = payloadPhp;
     const payloadShell = JSON.stringify(props.payload, null, 2).replace(/'/g, "'\\''");
 
+    const endpointParsedUrl = new URL(props.endpoint);
+    const hostname = endpointParsedUrl.hostname;
+    const port = endpointParsedUrl.port;
+    const path = endpointParsedUrl.pathname;
+
     const text = props.snippet.snippet
         .replace('[endpoint]', props.endpoint)
-        .replace('[domain]', props.domain)
-        .replace('[portOption]', props.port === '' ? '' : `\n  'port': ${props.port},`)
-        .replace('[pathOption]', props.path === '' ? '' : `\n  'path': '${props.path}',`)
-        .replace('[portParameter]', props.port === '' ? '' : `, ${props.port}`)
+        .replace('[hostname]', hostname)
+        .replace('[portOption]', port === '' ? '' : `\n  'port': ${port},`)
+        .replace('[pathOption]', path === '' ? '' : `\n  'path': '${path}',`)
+        .replace('[portParameter]', port === '' ? '' : `, ${port}`)
         .replace('[payloadRuby]', payloadRuby)
         .replace('[payloadPython]', payloadPython)
         .replace('[payloadPhp]', payloadPhp)

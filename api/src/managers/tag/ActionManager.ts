@@ -358,26 +358,28 @@ export default class ActionManager extends Manager<Action> {
     };
 
     private async registerAllDeps(actor: User, action: Action, checks: DataMapSchemaCheck[]) {
-        const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
-        await Promise.all(
-            checks
-                .map((_) =>
-                    _.model_links?.map(
-                        async (modelLink) =>
-                            await repoFactory(Dependency).save(
-                                new Dependency(
-                                    action.id,
-                                    action.constructor.name,
-                                    modelLink.id,
-                                    modelLink.name,
+        if (await this.config.trackDependencies()) {
+            const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
+            await Promise.all(
+                checks
+                    .map((_) =>
+                        _.model_links?.map(
+                            async (modelLink) =>
+                                await repoFactory(Dependency).save(
+                                    new Dependency(
+                                        action.id,
+                                        action.constructor.name,
+                                        modelLink.id,
+                                        modelLink.name,
+                                    ),
+                                    actor,
                                 ),
-                                actor,
-                            ),
-                    ),
-                )
-                .filter((_): _ is Promise<Dependency>[] => _ !== undefined)
-                .flat(),
-        );
+                        ),
+                    )
+                    .filter((_): _ is Promise<Dependency>[] => _ !== undefined)
+                    .flat(),
+            );
+        }
     }
 
     private async removeAllDeps(actor: User, action: Action) {

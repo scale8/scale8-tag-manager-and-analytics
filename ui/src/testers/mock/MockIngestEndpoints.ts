@@ -23,6 +23,7 @@ const mockIngestEndpoints = {
                     cname: 'd5edf4c48e9615d9a1c66bc3d.scale8.com',
                     custom_domain: null,
                     install_domain: 'd5edf4c48e9615d9a1c66bc3d.scale8.com',
+                    install_endpoint: 'hhtp://d5edf4c48e9615d9a1c66bc3d.scale8.com',
                     config_hint: 'Data Set: development',
                     storage_provider: 'GC_BIGQUERY_STREAM',
                     ingest_endpoint_revision: {

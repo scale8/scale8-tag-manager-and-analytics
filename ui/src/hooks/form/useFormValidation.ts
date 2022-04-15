@@ -21,8 +21,7 @@ export type FormErrors<T> = { [P in keyof T]?: string };
 export type FormLoadedData = { [key: string]: any };
 export type FormMutationData = { [key: string]: any };
 
-export type FormValidationResult<T extends FormValues> = {
-    handleSubmit: (event?: FormEvent<HTMLFormElement>) => void;
+export type FormFieldProps<T extends FormValues> = {
     handleChange: (
         valueKey: string,
         value: any,
@@ -32,24 +31,24 @@ export type FormValidationResult<T extends FormValues> = {
     errors: FormErrors<T>;
     values: T;
     setValues: Dispatch<SetStateAction<T>>;
+};
+
+export type FormValidationResult<T extends FormValues> = FormFieldProps<T> & {
+    handleSubmit: (event?: FormEvent<HTMLFormElement>) => void;
     isSubmitting: boolean;
 };
 
-export type FormProps<T extends FormValues> = FormCommonProps &
-    FormValidationResult<T> & {
-        errors: FormErrors<T>;
-        values: T;
-    };
+export type FormProps<T extends FormValues> = FormCommonProps & FormValidationResult<T>;
 
 export type ControlledSwitchProps<Values extends { [key: string]: any }> = SwitchProps & {
     name: string;
-    formProps: FormProps<Values>;
+    formProps: FormFieldProps<Values>;
 };
 
 export type ControlledInputProps<Values extends { [key: string]: any }> = TextFieldProps & {
     name: string;
     requiredOnValidation?: boolean;
-    formProps: FormProps<Values>;
+    formProps: FormFieldProps<Values>;
 };
 
 export type BaseCodeInputProps = {
@@ -68,7 +67,7 @@ export type CodeInputProps = BaseCodeInputProps & {
 };
 
 export type ControlledCodeInputProps<Values extends { [key: string]: any }> = BaseCodeInputProps & {
-    formProps: FormProps<Values>;
+    formProps: FormFieldProps<Values>;
 };
 
 export type SelectValueWithSub = {
@@ -91,7 +90,7 @@ export type ControlledSelectProps<Values extends { [key: string]: any }> = FormC
     label: string;
     values: SelectValueWithSub[];
     resetErrorsOnKeys?: string[];
-    formProps: FormProps<Values>;
+    formProps: FormFieldProps<Values>;
     allowEmpty?: boolean;
     requiredOnValidation?: boolean;
 };
@@ -108,14 +107,15 @@ export type ControlledBooleanSelectProps<Values extends { [key: string]: any }> 
     FormControlProps & {
         name: string;
         label: string;
-        formProps: FormProps<Values>;
+        formProps: FormFieldProps<Values>;
     };
 
-export type ControlledColorInputProps<Values extends { [key: string]: any }> = TextFieldProps & {
-    name: string;
-    label: string;
-    formProps: FormProps<Values>;
-};
+export type ControlledGenericStringInputProps<Values extends { [key: string]: any }> =
+    TextFieldProps & {
+        name: string;
+        label: string;
+        formProps: FormFieldProps<Values>;
+    };
 
 function removeCurrentFieldErrors<T extends FormValues>(
     setErrors: Dispatch<SetStateAction<FormErrors<T>>>,

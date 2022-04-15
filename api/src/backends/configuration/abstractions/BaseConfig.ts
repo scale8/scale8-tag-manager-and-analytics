@@ -129,10 +129,18 @@ export default abstract class BaseConfig {
     }
 
     public async getUiUrl(): Promise<string> {
-        return await this.getConfigEntryOrElse(
-            'S8_UI_SERVER',
-            this.isProduction() ? 'https://ui.scale8.com' : 'https://ui-dev.scale8.com:8443',
-        );
+        const getDefaultUiUrl = () => {
+            if (this.isCommercial()) {
+                if (this.isProduction()) {
+                    return 'https://ui.scale8.com';
+                } else {
+                    return 'https://ui-dev.scale8.com:8443';
+                }
+            } else {
+                return 'http://127.0.0.1:3000';
+            }
+        };
+        return await this.getConfigEntryOrElse('S8_UI_SERVER', getDefaultUiUrl());
     }
 
     public async getDefaultAdminPassword(): Promise<string> {
@@ -240,6 +248,10 @@ export default abstract class BaseConfig {
 
     public async getSMTPPassword(): Promise<string> {
         return await this.getConfigEntryThrows('SMTP_PASSWORD');
+    }
+
+    public async trackDependencies(): Promise<boolean> {
+        return (await this.getConfigEntryOrElse('TRACK_DEPENDENCIES', 'false')) === 'true';
     }
 
     public async isCaptchaEnabled(): Promise<boolean> {

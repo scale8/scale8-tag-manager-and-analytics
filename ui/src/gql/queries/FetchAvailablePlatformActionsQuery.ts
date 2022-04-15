@@ -74,6 +74,7 @@ const FetchAvailablePlatformActionsQuery = gql`
                                         cname
                                         custom_domain
                                         install_domain
+                                        install_endpoint
                                         config_hint
                                         storage_provider
                                         ingest_endpoint_revision {

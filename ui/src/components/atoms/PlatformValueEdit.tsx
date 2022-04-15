@@ -1,275 +1,256 @@
 import { FC, useEffect, useState } from 'react';
 import { Box, Checkbox, FormControlLabel } from '@mui/material';
-import SelectInput from './InputTypes/SelectInput';
-import {
-    DataContainersElementsFilteredContainer,
-    DataContainersFilteredPlatform,
-} from '../molecules/DataMapsValueEdit';
-import TextInput from './InputTypes/TextInput';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import { SelectValueWithSub } from '../../hooks/form/useFormValidation';
-import { splitOnce } from '../../utils/TextUtils';
-import { SxProps } from '@mui/system';
-import { Theme } from '@mui/material/styles';
-
-const findCurrentDataElement = (
-    dataElement: string,
-    currentDataContainer: DataContainersElementsFilteredContainer | undefined,
-): SelectValueWithSub | undefined => {
-    if (dataElement === '') return undefined;
-    if (currentDataContainer === undefined) return undefined;
-
-    const rootElement: SelectValueWithSub | undefined = currentDataContainer.elements.find(
-        (element) => element.key === dataElement,
-    );
-
-    let innerElement: SelectValueWithSub | undefined = undefined;
-
-    if (rootElement === undefined) {
-        currentDataContainer.elements.forEach((element) => {
-            const currentMatch = element.sub?.find((_) => _.key === dataElement);
-            innerElement = currentMatch === undefined ? innerElement : currentMatch;
-        });
-    }
-
-    return rootElement ?? innerElement;
-};
-
-const findPlatformIdFromContainerId = (
-    containerId: string,
-    platforms: DataContainersFilteredPlatform[],
-): string => {
-    if (containerId === '') return '';
-
-    const platform: DataContainersFilteredPlatform | undefined = platforms.find(
-        (platform) =>
-            platform.containers.find((container) => container.id === containerId) !== undefined,
-    );
-
-    if (platform === undefined) return '';
-
-    return platform.id;
-};
-
-const checkInitialUseCustom = (
-    platformId: string,
-    dataContainerId: string,
-    dataElement: string,
-    platforms: DataContainersFilteredPlatform[],
-): boolean => {
-    if (platformId === '' || dataContainerId === '' || dataElement === '') {
-        return false;
-    }
-
-    const platform: DataContainersFilteredPlatform | undefined = platforms.find(
-        (_) => _.id === platformId,
-    );
-
-    const dataContainer =
-        platform === undefined
-            ? undefined
-            : platform.containers.find((_) => _.id === dataContainerId);
-
-    const currentDataElement: SelectValueWithSub | undefined = findCurrentDataElement(
-        dataElement,
-        dataContainer,
-    );
-
-    return currentDataElement === undefined;
-};
+import { FormErrors, SelectValueWithSub } from '../../hooks/form/useFormValidation';
+import { snakeToTitleCase, splitTwice } from '../../utils/TextUtils';
+import ControlledFilteredSelects from './ControlledInputs/ControlledFilteredSelects';
+import { DataContainer } from '../../types/DataMapsTypes';
+import ControlledTextInput from './ControlledInputs/ControlledTextInput';
+import ControlledSelect from './ControlledInputs/ControlledSelect';
+import { platformDataMapsToSelectValues } from '../../utils/DataContainersUtils';
+import { VarType } from '../../gql/generated/globalTypes';
 
 export type PlatformValueEditProps = {
     value: string;
     setValue: (value: string) => void;
-    dataContainersFilteredPlatforms: DataContainersFilteredPlatform[];
+    availableDataContainers: DataContainer[];
+    dataContainersSelectValues: SelectValueWithSub[];
     disabled: boolean;
 };
 
+const findPlatformIdFromContainerId = (
+    containerId: string,
+    platforms: SelectValueWithSub[],
+): string => {
+    if (containerId === '') return '';
+
+    const platform: SelectValueWithSub | undefined = platforms.find((platform) => {
+        if (platform.sub === undefined) return false;
+        return platform.sub.find((container) => container.key === containerId) !== undefined;
+    });
+
+    if (platform === undefined) return '';
+
+    return platform.key;
+};
+
 const PlatformValueEdit: FC<PlatformValueEditProps> = (props: PlatformValueEditProps) => {
-    const { value, setValue, dataContainersFilteredPlatforms, disabled } = props;
+    const { value, setValue, dataContainersSelectValues, disabled, availableDataContainers } =
+        props;
 
     const match = value.match(/^{{([^}]+)}}$/);
     const path = match === null ? '' : match[1];
-    const [initialDataContainerId, initialDataElement] = splitOnce(path, '.');
-    const initialPlatformId = findPlatformIdFromContainerId(
-        initialDataContainerId,
-        dataContainersFilteredPlatforms,
-    );
-    const initialUseCustom = checkInitialUseCustom(
-        initialPlatformId,
-        initialDataContainerId,
-        initialDataElement ?? '',
-        dataContainersFilteredPlatforms,
+
+    const [initialDataContainerPersistingId, initialDataElement, initialObjectKey] = splitTwice(
+        path,
+        '.',
     );
 
-    const [platformId, setPlatformId] = useState(initialPlatformId);
-    const [dataContainerId, setDataContainerId] = useState(initialDataContainerId);
-    const [useCustom, setUseCustom] = useState(initialUseCustom);
-    const [dataElement, setDataElement] = useState(initialDataElement ?? '');
+    const initialDataContainer = availableDataContainers.find(
+        (dataContainer) => dataContainer.persisting_id === initialDataContainerPersistingId,
+    );
 
-    const [rawObjectKey, setRawObjectKey] = useState('');
+    const initialDataContainerId = initialDataContainer?.id ?? '';
 
-    const currentPlatform: DataContainersFilteredPlatform | undefined =
-        dataContainersFilteredPlatforms.find((_) => _.id === platformId);
+    const [useCustom, setUseCustom] = useState(false);
 
-    const currentDataContainer =
-        currentPlatform === undefined
-            ? undefined
-            : currentPlatform.containers.find((_) => _.id === dataContainerId);
+    const [values, setValues] = useState({
+        dataContainerId: initialDataContainerId,
+        dataElement: initialDataElement ?? '',
+        objectKey: initialObjectKey ?? '',
+    });
 
-    const currentDataElement: SelectValueWithSub | undefined = findCurrentDataElement(
-        dataElement,
-        currentDataContainer,
+    const currentDataContainer = availableDataContainers.find(
+        (dataContainer) => dataContainer.id === values.dataContainerId,
     );
 
     useEffect(() => {
-        if (dataElement !== '') {
+        if (values.dataElement !== '' && currentDataContainer) {
             setValue(
-                `{{${dataContainerId}.${dataElement}${
-                    rawObjectKey === '' ? '' : '.'
-                }${rawObjectKey}}}`,
+                `{{${currentDataContainer.persisting_id}.${values.dataElement}${
+                    values.objectKey === '' ? '' : '.'
+                }${values.objectKey}}}`,
             );
         } else {
             setValue('');
         }
-    }, [dataElement, rawObjectKey]);
+    }, [values]);
+
+    const noContainers = availableDataContainers.length < 1;
+
+    const notAvailable =
+        currentDataContainer !== undefined &&
+        !currentDataContainer.allow_custom &&
+        currentDataContainer.platform_data_maps.length === 0;
 
     const hasDataMaps =
-        currentDataContainer !== undefined && currentDataContainer.elements.length > 0;
+        currentDataContainer !== undefined && currentDataContainer.platform_data_maps.length > 0;
 
     const hasDataMapsAndCustom =
         currentDataContainer !== undefined &&
-        currentDataContainer.elements.length > 0 &&
-        currentDataContainer.allowCustom;
+        currentDataContainer.platform_data_maps.length > 0 &&
+        currentDataContainer.allow_custom;
 
-    const forceCustom =
-        currentDataContainer !== undefined &&
-        currentDataContainer.allowCustom &&
-        currentDataContainer.elements.length < 1;
-
-    const inputStyle: SxProps<Theme> = {
-        width: '100%',
-        margin: (theme) => theme.spacing(0, 0, 1),
+    const formProps = {
+        handleChange: (valueKey: string, value: any) => {
+            if (valueKey === 'dataContainerId') {
+                setValues({
+                    dataContainerId: value,
+                    dataElement: '',
+                    objectKey: '',
+                });
+            } else if (valueKey === 'dataElement') {
+                setValues({
+                    ...values,
+                    dataElement: value,
+                    objectKey: '',
+                });
+            } else {
+                setValues({
+                    ...values,
+                    [valueKey]: value,
+                });
+            }
+        },
+        handleBlur: () => {
+            //no validation
+        },
+        errors: {} as FormErrors<any>,
+        values,
+        setValues,
     };
+
+    useEffect(() => {
+        if (
+            currentDataContainer &&
+            currentDataContainer.allow_custom &&
+            currentDataContainer.platform_data_maps.length < 1
+        ) {
+            if (values.objectKey) {
+                setValues({
+                    ...values,
+                    dataElement: `${values.dataElement}.${values.objectKey}`,
+                    objectKey: '',
+                });
+            }
+
+            setUseCustom(true);
+        } else {
+            setUseCustom(false);
+        }
+    }, [currentDataContainer]);
+
+    const currentDataElement = (currentDataContainer?.platform_data_maps ?? []).find(
+        (_) => _.key === values.dataElement,
+    );
+
+    const isDataElementObject =
+        currentDataElement !== undefined && currentDataElement.var_type === VarType.OBJECT;
 
     return (
         <Box>
-            <SelectInput
-                name="Platform"
-                label="Platform"
-                value={platformId}
-                setValue={(v) => {
-                    setPlatformId(v);
-                    setDataContainerId('');
-                    setDataElement('');
-                }}
-                optionValues={[]}
-                keyTextValues={dataContainersFilteredPlatforms.map((_) => ({
-                    key: _.id,
-                    text: _.name,
-                }))}
-                sx={inputStyle}
-                disabled={disabled}
-                required
-            />
-            {platformId !== '' && (
-                <SelectInput
-                    name="dataContainerId"
+            {noContainers ? (
+                <small>There are no platforms with data containers available.</small>
+            ) : (
+                <ControlledFilteredSelects
+                    className="DrawerFormField"
                     label="Data Container"
-                    value={dataContainerId}
-                    setValue={(v) => {
-                        setDataContainerId(v);
-                        setDataElement('');
-                    }}
-                    optionValues={[]}
-                    keyTextValues={
-                        currentPlatform === undefined
-                            ? []
-                            : currentPlatform.containers.map((_) => ({
-                                  key: _.id,
-                                  text: _.name,
-                              }))
-                    }
-                    sx={inputStyle}
-                    disabled={disabled}
+                    initialFilterValue={findPlatformIdFromContainerId(
+                        initialDataContainerId,
+                        dataContainersSelectValues,
+                    )}
+                    name="dataContainerId"
+                    values={dataContainersSelectValues}
+                    formProps={formProps}
                     required
+                    disabled={disabled}
+                    filterLabel="Platform"
+                    missingSubMessage="There are no data containers available in this platform."
+                    hideNoSub
                 />
             )}
+            {currentDataContainer && (
+                <Box
+                    component="small"
+                    sx={{
+                        display: 'block',
+                        width: '100%',
+                        margin: (theme) => theme.spacing(0, 0, 2),
+                    }}
+                >
+                    {currentDataContainer.description}
+                </Box>
+            )}
+
+            {notAvailable && (
+                <small>It is not possible to use this data container for this field.</small>
+            )}
+
             {hasDataMapsAndCustom && (
                 <FormControlLabel
-                    sx={{
-                        fontSize: '11px',
-                        '& .MuiFormControlLabel-label': {
-                            fontSize: '11px',
-                        },
-                    }}
                     control={
                         <Checkbox
-                            sx={{ fontSize: '14px' }}
-                            icon={<CheckBoxOutlineBlankIcon fontSize="inherit" />}
-                            checkedIcon={<CheckBoxIcon fontSize="inherit" />}
                             name="useCustom"
                             checked={useCustom}
                             onChange={(event) => {
                                 if (event.target.checked) {
-                                    setDataElement('');
                                     setUseCustom(true);
                                 } else {
-                                    setDataElement('');
                                     setUseCustom(false);
                                 }
                             }}
-                            disabled={disabled}
                             color="primary"
                         />
                     }
                     label="Use Custom Data Element"
                 />
             )}
-            {((hasDataMapsAndCustom && useCustom) || forceCustom) && (
-                <TextInput
-                    value={dataElement}
-                    setValue={(v) => setDataElement(v)}
-                    name="customDataElement"
+
+            {useCustom && (
+                <ControlledTextInput
+                    name="dataElement"
                     label="Custom Data Element"
-                    sx={inputStyle}
-                    disabled={disabled}
+                    formProps={formProps}
+                    className="DrawerFormField"
                     required
                 />
             )}
+
             {currentDataContainer && hasDataMaps && !useCustom && (
-                <SelectInput
-                    value={dataElement}
-                    setValue={(v) => setDataElement(v)}
-                    sx={inputStyle}
-                    label="Data Element"
-                    name="matchId"
-                    optionValues={[]}
-                    keyTextValues={currentDataContainer.elements}
-                    disabled={disabled}
-                    required
-                />
-            )}
-            {currentDataElement?.description !== undefined && (
-                <Box mb={1}>
-                    <Box component="small" sx={{ width: '100%', color: '#666666' }}>
-                        {currentDataElement.description}
-                    </Box>
-                </Box>
-            )}
-            {currentDataElement?.unFilteredSubCount === 0 && (
-                <Box mb={1}>
-                    <TextInput
-                        value={rawObjectKey}
-                        setValue={(v) => setRawObjectKey(v)}
-                        name="rawObjectKey"
-                        label="Key"
-                        sx={inputStyle}
-                        disabled={disabled}
+                <>
+                    <ControlledSelect
+                        className="DrawerFormField"
+                        label="Data Element"
+                        name="dataElement"
+                        values={platformDataMapsToSelectValues(
+                            currentDataContainer.platform_data_maps,
+                            true,
+                        )}
+                        formProps={formProps}
                         required
                     />
+                </>
+            )}
+            {currentDataElement && (
+                <Box
+                    component="small"
+                    sx={{
+                        display: 'block',
+                        width: '100%',
+                        margin: (theme) => theme.spacing(0, 0, 2),
+                    }}
+                >
+                    ({snakeToTitleCase(currentDataElement.var_type)}){' '}
+                    {currentDataElement.description}
                 </Box>
+            )}
+            {isDataElementObject && (
+                <ControlledTextInput
+                    name="objectKey"
+                    label="Key"
+                    formProps={formProps}
+                    className="DrawerFormField"
+                    required
+                />
             )}
         </Box>
     );

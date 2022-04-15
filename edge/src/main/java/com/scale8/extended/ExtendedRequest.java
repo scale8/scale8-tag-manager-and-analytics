@@ -91,13 +91,13 @@ public class ExtendedRequest {
   }
 
   public Optional<JsonObject> getJSONPayload() {
-    if (request.getMethodName().equals("POST")) {
+    String data = request.getParameters().get("d");
+    if(data != null){
+      return Optional.of(new Gson().fromJson(data, JsonObject.class));
+    } else if(request.getMethodName().equals("POST")){
       return asJsonObject();
     } else {
-      String data = request.getParameters().get("d");
-      return data == null
-          ? Optional.empty()
-          : Optional.of(new Gson().fromJson(data, JsonObject.class));
+      return Optional.empty();
     }
   }
 

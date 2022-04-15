@@ -29,6 +29,7 @@ export type IngestEndpointEnvironment = {
     cname: string;
     install_domain: string;
     custom_domain: string | null;
+    install_endpoint: string;
     ingest_endpoint_revision: IngestEndpointRevision;
     [key: string]: any;
 };

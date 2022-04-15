@@ -31,6 +31,7 @@ import { queryString } from '../containers/QueryString';
 import { browser } from '../containers/Browser';
 import { elementClick } from '../containers/ElementClick';
 import { browserError } from '../containers/BrowserError';
+import { dataManager } from '../actions/DataManager';
 
 const scale8Spec: PlatformSpec = {
     name: 'Scale8 Core',
@@ -49,6 +50,7 @@ const scale8Spec: PlatformSpec = {
         firePixel,
         loadJs,
         loadHTML,
+        dataManager,
     ],
     events: [
         cmpCheck,
