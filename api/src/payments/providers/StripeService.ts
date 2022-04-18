@@ -344,6 +344,16 @@ export default class StripeService {
                     quantity: 1,
                 },
             ],
+            tax_id_collection: {
+                enabled: true,
+            },
+            automatic_tax: {
+                enabled: true,
+            },
+            customer_update: {
+                address: 'auto',
+                name: 'auto',
+            },
             success_url: successUrl,
             cancel_url: cancelUrl,
         });
