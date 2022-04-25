@@ -18,19 +18,21 @@ export type GqlOrgUserAccount = {
     id: string;
     trial_expires_in: number;
     is_trial: boolean;
+    enabled: boolean;
 };
 
 export type OrgUserAccount = {
     id: string;
     trialExpiration: number;
     isTrial: boolean;
-} | null;
+    enabled: boolean;
+};
 
 export type GqlOrgUserState = {
     id: string;
     name: string;
-    tag_manager_account: GqlOrgUserAccount | null;
-    data_manager_account: GqlOrgUserAccount | null;
+    tag_manager_account: GqlOrgUserAccount;
+    data_manager_account: GqlOrgUserAccount;
     me: {
         id: string;
         owner: boolean;
@@ -57,6 +59,7 @@ export const OrgUserAccountFromGql = (gqlOrgUserAccount: GqlOrgUserAccount): Org
         id: gqlOrgUserAccount.id,
         trialExpiration: gqlOrgUserAccount.trial_expires_in,
         isTrial: gqlOrgUserAccount.is_trial,
+        enabled: gqlOrgUserAccount.enabled,
     };
 };
 
@@ -72,14 +75,8 @@ export const OrgUserStateFromGql = (orgUserDetails: GqlOrgUserState): OrgUserSta
             isAdmin: orgUserDetails.me.permissions.is_admin,
         },
         isOwner: orgUserDetails.me.owner,
-        dataManagerAccount:
-            orgUserDetails.data_manager_account === null
-                ? null
-                : OrgUserAccountFromGql(orgUserDetails.data_manager_account),
-        tagManagerAccount:
-            orgUserDetails.tag_manager_account === null
-                ? null
-                : OrgUserAccountFromGql(orgUserDetails.tag_manager_account),
+        dataManagerAccount: OrgUserAccountFromGql(orgUserDetails.data_manager_account),
+        tagManagerAccount: OrgUserAccountFromGql(orgUserDetails.tag_manager_account),
     };
 };
 

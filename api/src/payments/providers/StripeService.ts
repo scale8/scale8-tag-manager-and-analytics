@@ -17,6 +17,7 @@ import { LogPriority } from '../../enums/LogPriority';
 import BaseLogger from '../../backends/logging/abstractions/BaseLogger';
 import BaseConfig from '../../backends/configuration/abstractions/BaseConfig';
 import StripeProducts from './StripeProducts';
+import AccountService from '../../accounts/AccountService';
 
 dotenv.config();
 
@@ -407,7 +408,7 @@ export default class StripeService {
 
     public async getStripeProductId(
         org: Org,
-        account: 'TagManagerAccount' | 'DataManagerAccount',
+        account: TagManagerAccount | DataManagerAccount,
     ): Promise<string | undefined> {
         if (this.config.isNotCommercial()) {
             return undefined;
@@ -422,31 +423,9 @@ export default class StripeService {
             return undefined;
         }
         const lineItem = subscription.items.data.find(
-            (_) => _.price.metadata.account_type === account,
+            (_) =>
+                _.price.metadata.account_type === AccountService.accountToAccountTypeName(account),
         );
         return lineItem === undefined ? undefined : (lineItem.price.product as string);
-    }
-
-    public accountToAccountType(
-        account: TagManagerAccount | DataManagerAccount,
-    ): 'TagManagerAccount' | 'DataManagerAccount' {
-        if (account.constructor.name === 'TagManagerAccount') {
-            return 'TagManagerAccount';
-        } else if (account.constructor.name === 'DataManagerAccount') {
-            return 'DataManagerAccount';
-        } else {
-            throw new GenericError(
-                `Account type ${account.constructor.name} has not been implemented yet`,
-                LogPriority.ERROR,
-                userMessages.accountFailed,
-            );
-        }
-    }
-
-    public async getStripeProductIdForAccount(
-        org: Org,
-        account: TagManagerAccount | DataManagerAccount,
-    ): Promise<string | undefined> {
-        return this.getStripeProductId(org, this.accountToAccountType(account));
     }
 }

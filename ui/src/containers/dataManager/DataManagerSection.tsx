@@ -2,7 +2,8 @@ import { FC } from 'react';
 import { useQuery } from '@apollo/client';
 import {
     BreadcrumbButtonProps,
-    buildDataManagerButtonProps,
+    buildDataManagerButtonPropsAndCheckAccounts,
+    ButtonAccount,
 } from '../../utils/BreadcrumbButtonsUtils';
 import NavDataManagerQuery from '../../gql/queries/NavDataManagerQuery';
 import { NavDataManager } from '../../gql/generated/NavDataManager';
@@ -17,15 +18,20 @@ import { buildOrgButtons } from '../global/OrgSection';
 export const buildDataManagerButtons = (
     orgs: SectionItem[],
     currentOrg: SectionItem,
-    tagManagerId: string,
-    dataManagerId: string,
+    dataManagerAccount: ButtonAccount,
+    tagManagerAccount: ButtonAccount,
     router: NextRouter,
     orgPermissions: CurrentOrgPermissions,
     useSignup: boolean,
     isCurrentPage = false,
 ): BreadcrumbButtonProps[] => [
     ...buildOrgButtons(orgs, currentOrg, router, orgPermissions, useSignup, 'Services'),
-    buildDataManagerButtonProps(router, dataManagerId, tagManagerId, isCurrentPage),
+    buildDataManagerButtonPropsAndCheckAccounts(
+        router,
+        dataManagerAccount,
+        tagManagerAccount,
+        isCurrentPage,
+    ),
 ];
 
 const DataManagerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
@@ -45,8 +51,8 @@ const DataManagerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) =
             return buildDataManagerButtons(
                 data.me.orgs,
                 data.getDataManagerAccount.org,
-                data.getDataManagerAccount.org.tag_manager_account?.id ?? '',
-                id,
+                data.getDataManagerAccount,
+                data.getDataManagerAccount.org.tag_manager_account,
                 router,
                 orgPermissions,
                 useSignup,

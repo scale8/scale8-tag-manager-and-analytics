@@ -1120,7 +1120,7 @@ export interface InspectActionData_getActionGroupDistribution_revision_app_tag_m
    * account might not exist yet unless a trial has been requested or product has
    * been subscribed to.
    */
-  data_manager_account: InspectActionData_getActionGroupDistribution_revision_app_tag_manager_account_org_data_manager_account | null;
+  data_manager_account: InspectActionData_getActionGroupDistribution_revision_app_tag_manager_account_org_data_manager_account;
 }
 
 export interface InspectActionData_getActionGroupDistribution_revision_app_tag_manager_account {

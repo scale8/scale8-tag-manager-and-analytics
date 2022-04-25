@@ -19,6 +19,7 @@ const NavAppQuery = gql`
                 org {
                     ...orgUserDetails
                 }
+                enabled
             }
         }
         me {

@@ -34,6 +34,7 @@ const NavTagQuery = gql`
                         org {
                             ...orgUserDetails
                         }
+                        enabled
                     }
                 }
             }

@@ -8,6 +8,7 @@ import {
     BreadcrumbButtonProps,
     buildIngestEndpointButtonProps,
     buildTabButtonProps,
+    ButtonAccount,
 } from '../../utils/BreadcrumbButtonsUtils';
 import { Section, SectionItem, SectionProps } from '../abstractions/Section';
 import { SectionKey } from '../SectionsDetails';
@@ -51,8 +52,8 @@ export const buildIngestEndpointTabsMenu = (
 export const buildIngestEndpointsButtons = (
     orgs: SectionItem[],
     currentOrg: SectionItem,
-    tagManagerId: string,
-    dataManagerId: string,
+    dataManagerAccount: ButtonAccount,
+    tagManagerAccount: ButtonAccount,
     ingestEndpoints: SectionItem[],
     currentIngestEndpoint: SectionItem,
     analyticsEnabled: boolean,
@@ -64,8 +65,8 @@ export const buildIngestEndpointsButtons = (
     ...buildDataManagerButtons(
         orgs,
         currentOrg,
-        tagManagerId,
-        dataManagerId,
+        dataManagerAccount,
+        tagManagerAccount,
         router,
         orgPermissions,
         useSignup,
@@ -104,8 +105,8 @@ const IngestEndpointSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps
             return buildIngestEndpointsButtons(
                 data.me.orgs,
                 data.getIngestEndpoint.data_manager_account.org,
-                data.getIngestEndpoint.data_manager_account.org.tag_manager_account?.id ?? '',
-                data.getIngestEndpoint.data_manager_account.id,
+                data.getIngestEndpoint.data_manager_account,
+                data.getIngestEndpoint.data_manager_account.org.tag_manager_account,
                 data.getIngestEndpoint.data_manager_account.ingest_endpoints,
                 data.getIngestEndpoint,
                 analyticsEnabled(data.getIngestEndpoint),

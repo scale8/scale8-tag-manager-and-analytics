@@ -34,6 +34,7 @@ const NavGlobalActionQuery = gql`
                         org {
                             ...orgUserDetails
                         }
+                        enabled
                     }
                 }
             }

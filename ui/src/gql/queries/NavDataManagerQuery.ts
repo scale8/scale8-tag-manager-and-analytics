@@ -9,6 +9,7 @@ const NavDataManagerQuery = gql`
             org {
                 ...orgUserDetails
             }
+            enabled
         }
         me {
             ...userOrgList

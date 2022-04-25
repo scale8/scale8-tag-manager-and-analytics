@@ -63,7 +63,7 @@ const SelectOrgPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
         }
 
         if (org !== null) {
-            if (org.tag_manager_account !== null) {
+            if (org.tag_manager_account.enabled) {
                 const tagManager = org.tag_manager_account;
                 if (action === 'go-to-tm') {
                     return <Navigate to={toTagManager({ id: tagManager.id })} />;

@@ -136,13 +136,9 @@ const ActionUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
             initialPlatformId: formLoadedData.getAction.platform_action.platform.id,
             appPlatformRevisions: formLoadedData.getActionGroupDistribution.revision
                 .app_platform_revisions as AppPlatformRevision[],
-            ingestEndpoints:
-                formLoadedData.getActionGroupDistribution.revision.app.tag_manager_account.org
-                    .data_manager_account === null
-                    ? []
-                    : (formLoadedData.getActionGroupDistribution.revision.app.tag_manager_account
-                          .org.data_manager_account
-                          .ingest_endpoints as IngestEndpointForEnvironmentSelection[]),
+            ingestEndpoints: formLoadedData.getActionGroupDistribution.revision.app
+                .tag_manager_account.org.data_manager_account
+                .ingest_endpoints as IngestEndpointForEnvironmentSelection[],
             environments: formLoadedData.getActionGroupDistribution.revision.app.environments,
             revisions: formLoadedData.getActionGroupDistribution.revision.app.revisions,
             consentPurposes,

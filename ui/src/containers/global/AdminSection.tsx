@@ -34,8 +34,18 @@ const AdminSection: FC<ChildrenOnlyProps> = (props: ChildrenOnlyProps) => {
             id: '',
             name: '',
             is_paid: false,
-            tag_manager_account: null,
-            data_manager_account: null,
+            tag_manager_account: {
+                id: '',
+                trial_expires_in: 0,
+                is_trial: false,
+                enabled: true,
+            },
+            data_manager_account: {
+                id: '',
+                trial_expires_in: 0,
+                is_trial: false,
+                enabled: true,
+            },
             me: {
                 id: '',
                 owner: false,

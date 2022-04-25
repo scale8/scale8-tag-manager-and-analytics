@@ -17,6 +17,10 @@ export interface orgUserDetails_tag_manager_account {
    * If the account is in a trial period
    */
   is_trial: boolean;
+  /**
+   * If the account is enabled
+   */
+  enabled: boolean;
 }
 
 export interface orgUserDetails_data_manager_account {
@@ -33,6 +37,10 @@ export interface orgUserDetails_data_manager_account {
    * If the account is in a trial period
    */
   is_trial: boolean;
+  /**
+   * If the account is enabled
+   */
+  enabled: boolean;
 }
 
 export interface orgUserDetails_me_permissions {
@@ -90,13 +98,13 @@ export interface orgUserDetails {
    * A `TagManagerAccount` associated with this `Org`. A Scale8 Tag Manager account
    * might not exist yet unless a trial has been requested or product has been subscribed to.
    */
-  tag_manager_account: orgUserDetails_tag_manager_account | null;
+  tag_manager_account: orgUserDetails_tag_manager_account;
   /**
    * A `DataManagerAccount` associated with this `Org`. A Scale8 Data Manager
    * account might not exist yet unless a trial has been requested or product has
    * been subscribed to.
    */
-  data_manager_account: orgUserDetails_data_manager_account | null;
+  data_manager_account: orgUserDetails_data_manager_account;
   /**
    * `OrgUser` representation of current `User`
    */

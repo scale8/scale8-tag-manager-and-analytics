@@ -29,9 +29,9 @@ const PlatformEventSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps)
             ...buildCustomPlatformRevisionButtons(
                 data.me.orgs,
                 data.getPlatformEvent.platform_revision.platform.tag_manager_account.org,
-                data.getPlatformEvent.platform_revision.platform.tag_manager_account.id,
+                data.getPlatformEvent.platform_revision.platform.tag_manager_account,
                 data.getPlatformEvent.platform_revision.platform.tag_manager_account.org
-                    .data_manager_account?.id ?? '',
+                    .data_manager_account,
                 data.getPlatformEvent.platform_revision.platform.tag_manager_account.platforms.filter(
                     (_) => _.type === PlatformType.CUSTOM,
                 ),

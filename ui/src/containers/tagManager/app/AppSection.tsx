@@ -9,6 +9,7 @@ import {
     BreadcrumbButtonProps,
     buildAppButtonProps,
     buildTabButtonProps,
+    ButtonAccount,
 } from '../../../utils/BreadcrumbButtonsUtils';
 import { Section, SectionItem, SectionProps } from '../../abstractions/Section';
 import AppAnalyticsIcon from '../../../components/atoms/Icons/AppAnalyticsIcon';
@@ -67,8 +68,8 @@ export const buildAppTabsMenu = (
 export const buildAppButtons = (
     orgs: SectionItem[],
     currentOrg: SectionItem,
-    tagManagerId: string,
-    dataManagerId: string,
+    tagManagerAccount: ButtonAccount,
+    dataManagerAccount: ButtonAccount,
     apps: SectionItem[],
     currentApp: SectionItem,
     analyticsEnabled: boolean,
@@ -81,8 +82,8 @@ export const buildAppButtons = (
     ...buildTagManagerButtons(
         orgs,
         currentOrg,
-        tagManagerId,
-        dataManagerId,
+        tagManagerAccount,
+        tagManagerAccount,
         router,
         orgPermissions,
         useSignup,
@@ -123,8 +124,8 @@ const AppSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
             return buildAppButtons(
                 data.me.orgs,
                 data.getApp.tag_manager_account.org,
-                data.getApp.tag_manager_account.id,
-                data.getApp.tag_manager_account.org.data_manager_account?.id ?? '',
+                data.getApp.tag_manager_account,
+                data.getApp.tag_manager_account.org.data_manager_account,
                 data.getApp.tag_manager_account.apps,
                 data.getApp,
                 analyticsEnabled(data.getApp),

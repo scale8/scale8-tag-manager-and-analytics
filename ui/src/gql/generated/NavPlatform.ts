@@ -35,6 +35,10 @@ export interface NavPlatform_getPlatform_tag_manager_account_org_tag_manager_acc
    * If the account is in a trial period
    */
   is_trial: boolean;
+  /**
+   * If the account is enabled
+   */
+  enabled: boolean;
 }
 
 export interface NavPlatform_getPlatform_tag_manager_account_org_data_manager_account {
@@ -51,6 +55,10 @@ export interface NavPlatform_getPlatform_tag_manager_account_org_data_manager_ac
    * If the account is in a trial period
    */
   is_trial: boolean;
+  /**
+   * If the account is enabled
+   */
+  enabled: boolean;
 }
 
 export interface NavPlatform_getPlatform_tag_manager_account_org_me_permissions {
@@ -108,13 +116,13 @@ export interface NavPlatform_getPlatform_tag_manager_account_org {
    * A `TagManagerAccount` associated with this `Org`. A Scale8 Tag Manager account
    * might not exist yet unless a trial has been requested or product has been subscribed to.
    */
-  tag_manager_account: NavPlatform_getPlatform_tag_manager_account_org_tag_manager_account | null;
+  tag_manager_account: NavPlatform_getPlatform_tag_manager_account_org_tag_manager_account;
   /**
    * A `DataManagerAccount` associated with this `Org`. A Scale8 Data Manager
    * account might not exist yet unless a trial has been requested or product has
    * been subscribed to.
    */
-  data_manager_account: NavPlatform_getPlatform_tag_manager_account_org_data_manager_account | null;
+  data_manager_account: NavPlatform_getPlatform_tag_manager_account_org_data_manager_account;
   /**
    * `OrgUser` representation of current `User`
    */
@@ -126,6 +134,10 @@ export interface NavPlatform_getPlatform_tag_manager_account {
   id: string;
   platforms: NavPlatform_getPlatform_tag_manager_account_platforms[];
   org: NavPlatform_getPlatform_tag_manager_account_org;
+  /**
+   * If the account is enabled
+   */
+  enabled: boolean;
 }
 
 export interface NavPlatform_getPlatform {

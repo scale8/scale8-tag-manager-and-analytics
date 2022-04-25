@@ -37,8 +37,8 @@ const TagSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
             ...buildAppRevisionButtons(
                 data.me.orgs,
                 data.getTag.revision.app.tag_manager_account.org,
-                data.getTag.revision.app.tag_manager_account.id,
-                data.getTag.revision.app.tag_manager_account.org.data_manager_account?.id ?? '',
+                data.getTag.revision.app.tag_manager_account,
+                data.getTag.revision.app.tag_manager_account.org.data_manager_account,
                 data.getTag.revision.app.tag_manager_account.apps,
                 data.getTag.revision.app,
                 data.getTag.revision.app.revisions,

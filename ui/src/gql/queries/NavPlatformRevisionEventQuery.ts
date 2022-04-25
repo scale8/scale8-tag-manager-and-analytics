@@ -27,6 +27,7 @@ const NavPlatformRevisionEventQuery = gql`
                         org {
                             ...orgUserDetails
                         }
+                        enabled
                     }
                     platform_revisions {
                         id

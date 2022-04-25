@@ -20,6 +20,7 @@ const NavPlatformRevisionQuery = gql`
                     org {
                         ...orgUserDetails
                     }
+                    enabled
                 }
                 platform_revisions {
                     id

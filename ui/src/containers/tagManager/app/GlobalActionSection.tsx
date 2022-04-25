@@ -39,9 +39,9 @@ const GlobalActionSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) 
             ...buildAppRevisionButtons(
                 data.me.orgs,
                 data.getActionGroupDistribution.revision.app.tag_manager_account.org,
-                data.getActionGroupDistribution.revision.app.tag_manager_account.id,
+                data.getActionGroupDistribution.revision.app.tag_manager_account,
                 data.getActionGroupDistribution.revision.app.tag_manager_account.org
-                    .data_manager_account?.id ?? '',
+                    .data_manager_account,
                 data.getActionGroupDistribution.revision.app.tag_manager_account.apps,
                 data.getActionGroupDistribution.revision.app,
                 data.getActionGroupDistribution.revision.app.revisions,

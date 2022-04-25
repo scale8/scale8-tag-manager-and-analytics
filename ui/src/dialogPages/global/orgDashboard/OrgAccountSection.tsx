@@ -40,7 +40,7 @@ const OrgAccountSection: FC<OrgAccountSectionProps> = (props: OrgAccountSectionP
 
     const account = isTag ? data.getOrg.tag_manager_account : data.getOrg.data_manager_account;
 
-    if (account === null) {
+    if (!account.enabled) {
         if (isOwner) {
             return (
                 <AccountSectionButton

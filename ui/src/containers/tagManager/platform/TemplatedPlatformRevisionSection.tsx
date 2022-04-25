@@ -30,9 +30,8 @@ const TemplatedPlatformRevisionSection: FC<ChildrenAndIdProps> = (props: Childre
                 PlatformType.TEMPLATED,
                 data.me.orgs,
                 data.getPlatformRevision.platform.tag_manager_account.org,
-                data.getPlatformRevision.platform.tag_manager_account.id,
-                data.getPlatformRevision.platform.tag_manager_account.org.data_manager_account
-                    ?.id ?? '',
+                data.getPlatformRevision.platform.tag_manager_account,
+                data.getPlatformRevision.platform.tag_manager_account.org.data_manager_account,
                 data.getPlatformRevision.platform.tag_manager_account.platforms.filter(
                     (_) => _.type === PlatformType.TEMPLATED,
                 ),
@@ -53,8 +52,8 @@ const TemplatedPlatformRevisionSection: FC<ChildrenAndIdProps> = (props: Childre
         ],
         buildMenuItemsProps: () => [],
         extractOrgUserDetails: (data) => data.getPlatformRevision.platform.tag_manager_account.org,
-        accountExpireIn: orgUserState?.tagManagerAccount?.trialExpiration ?? undefined,
-        accountIsTrial: orgUserState?.tagManagerAccount?.isTrial ?? undefined,
+        accountExpireIn: orgUserState?.tagManagerAccount.trialExpiration ?? undefined,
+        accountIsTrial: orgUserState?.tagManagerAccount.isTrial ?? undefined,
     };
 
     return <Section<NavPlatformRevision> {...sectionProps} />;

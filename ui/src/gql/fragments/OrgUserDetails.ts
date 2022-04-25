@@ -8,11 +8,13 @@ export const OrgUserDetails = gql`
             id
             trial_expires_in
             is_trial
+            enabled
         }
         data_manager_account {
             id
             trial_expires_in
             is_trial
+            enabled
         }
         me {
             id

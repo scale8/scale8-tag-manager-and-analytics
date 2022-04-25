@@ -18,6 +18,7 @@ const NavIngestEndpointQuery = gql`
                 org {
                     ...orgUserDetails
                 }
+                enabled
             }
         }
         me {

@@ -8,6 +8,7 @@ import {
     BreadcrumbButtonProps,
     buildAppRevisionButtonProps,
     buildTabButtonProps,
+    ButtonAccount,
 } from '../../../utils/BreadcrumbButtonsUtils';
 import { Section, SectionItem, SectionProps } from '../../abstractions/Section';
 import ActionIcon from '../../../components/atoms/Icons/ActionIcon';
@@ -52,8 +53,8 @@ export const buildAppRevisionTabsMenu = (id: string): PageMenuButtonProps[] => [
 export const buildAppRevisionButtons = (
     orgs: SectionItem[],
     currentOrg: SectionItem,
-    tagManagerId: string,
-    dataManagerId: string,
+    tagManagerAccount: ButtonAccount,
+    dataManagerAccount: ButtonAccount,
     apps: SectionItem[],
     currentApp: SectionItem,
     revisions: SectionItem[],
@@ -68,8 +69,8 @@ export const buildAppRevisionButtons = (
     ...buildAppButtons(
         orgs,
         currentOrg,
-        tagManagerId,
-        dataManagerId,
+        tagManagerAccount,
+        dataManagerAccount,
         apps,
         currentApp,
         analyticsEnabled,
@@ -113,8 +114,8 @@ const AppRevisionSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) =
             return buildAppRevisionButtons(
                 data.me.orgs,
                 data.getRevision.app.tag_manager_account.org,
-                data.getRevision.app.tag_manager_account.id,
-                data.getRevision.app.tag_manager_account.org.data_manager_account?.id ?? '',
+                data.getRevision.app.tag_manager_account,
+                data.getRevision.app.tag_manager_account.org.data_manager_account,
                 data.getRevision.app.tag_manager_account.apps,
                 data.getRevision.app,
                 data.getRevision.app.revisions,

@@ -11,6 +11,7 @@ import {
     BreadcrumbButtonProps,
     buildPlatformRevisionButtonProps,
     buildTabButtonProps,
+    ButtonAccount,
 } from '../../../utils/BreadcrumbButtonsUtils';
 import { Section, SectionItem, SectionProps } from '../../abstractions/Section';
 import { PlatformType } from '../../../gql/generated/globalTypes';
@@ -54,8 +55,8 @@ export const buildCustomPlatformRevisionTabsMenu = (id: string): PageMenuButtonP
 export const buildCustomPlatformRevisionButtons = (
     orgs: SectionItem[],
     currentOrg: SectionItem,
-    tagManagerId: string,
-    dataManagerId: string,
+    tagManagerAccount: ButtonAccount,
+    dataManagerAccount: ButtonAccount,
     platforms: SectionItem[],
     currentPlatform: SectionItem,
     platformsRevisions: SectionItem[],
@@ -69,8 +70,8 @@ export const buildCustomPlatformRevisionButtons = (
         PlatformType.CUSTOM,
         orgs,
         currentOrg,
-        tagManagerId,
-        dataManagerId,
+        tagManagerAccount,
+        dataManagerAccount,
         platforms,
         currentPlatform,
         router,
@@ -109,9 +110,8 @@ const CustomPlatformRevisionSection: FC<ChildrenAndIdProps> = (props: ChildrenAn
             return buildCustomPlatformRevisionButtons(
                 data.me.orgs,
                 data.getPlatformRevision.platform.tag_manager_account.org,
-                data.getPlatformRevision.platform.tag_manager_account.id,
-                data.getPlatformRevision.platform.tag_manager_account.org.data_manager_account
-                    ?.id ?? '',
+                data.getPlatformRevision.platform.tag_manager_account,
+                data.getPlatformRevision.platform.tag_manager_account.org.data_manager_account,
                 data.getPlatformRevision.platform.tag_manager_account.platforms.filter(
                     (_) => _.type === PlatformType.CUSTOM,
                 ),
