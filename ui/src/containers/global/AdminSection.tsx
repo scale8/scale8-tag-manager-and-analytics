@@ -37,12 +37,14 @@ const AdminSection: FC<ChildrenOnlyProps> = (props: ChildrenOnlyProps) => {
             tag_manager_account: {
                 id: '',
                 trial_expires_in: 0,
+                trial_expired: false,
                 is_trial: false,
                 enabled: true,
             },
             data_manager_account: {
                 id: '',
                 trial_expires_in: 0,
+                trial_expired: false,
                 is_trial: false,
                 enabled: true,
             },
