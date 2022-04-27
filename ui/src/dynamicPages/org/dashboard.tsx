@@ -31,17 +31,13 @@ const OrgDashboardPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
             const tmAccount = data.getOrg.tag_manager_account;
             const dmAccount = data.getOrg.data_manager_account;
 
-            const tmTrialExpired = tmAccount.enabled && tmAccount.trial_expired;
-
-            const dmTrialExpired = dmAccount.enabled && dmAccount.trial_expired;
-
             const tagMangerSectionProps = {
                 title: 'Tag Manager',
                 linkText: 'Go to Tag Manager',
                 content: (
                     <OrgAccountSection data={data} accountProduct={AccountProduct.TAG_MANAGER} />
                 ),
-                ...(!tmAccount.enabled || tmTrialExpired
+                ...(!tmAccount.enabled
                     ? {}
                     : {
                           action: () => {
@@ -56,7 +52,7 @@ const OrgDashboardPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
                 content: (
                     <OrgAccountSection data={data} accountProduct={AccountProduct.DATA_MANAGER} />
                 ),
-                ...(!dmAccount.enabled || dmTrialExpired
+                ...(!dmAccount.enabled
                     ? {}
                     : {
                           action: () => {

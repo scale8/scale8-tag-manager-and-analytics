@@ -143,7 +143,8 @@ export default class TagManagerAccountManager extends Manager<TagManagerAccount>
                     if (account.trialExpiresOn === undefined) {
                         return 0;
                     } else {
-                        const daysRemaining = differenceInDays(account.trialExpiresOn, new Date());
+                        const daysRemaining =
+                            differenceInDays(account.trialExpiresOn, new Date()) + 1;
                         return daysRemaining > 0 ? daysRemaining : 0;
                     }
                 });

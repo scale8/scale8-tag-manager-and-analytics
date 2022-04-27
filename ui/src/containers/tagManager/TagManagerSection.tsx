@@ -81,6 +81,7 @@ const TagManagerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) =>
         },
         buildMenuItemsProps: () => buildTagManagerTabsMenu(id),
         accountExpireIn: orgUserState?.tagManagerAccount.trialExpiration ?? undefined,
+        accountExpired: orgUserState?.tagManagerAccount.trialExpired ?? undefined,
         accountIsTrial: orgUserState?.tagManagerAccount.isTrial ?? undefined,
     };
 

@@ -84,8 +84,9 @@ const IngestEndpointRevisionSection: FC<ChildrenAndIdProps> = (props: ChildrenAn
                 () => !currentOrgPermissions.canCreate,
             ),
         ],
-        accountExpireIn: orgUserState?.dataManagerAccount?.trialExpiration ?? undefined,
-        accountIsTrial: orgUserState?.dataManagerAccount?.isTrial ?? undefined,
+        accountExpireIn: orgUserState?.dataManagerAccount.trialExpiration ?? undefined,
+        accountExpired: orgUserState?.dataManagerAccount.trialExpired ?? undefined,
+        accountIsTrial: orgUserState?.dataManagerAccount.isTrial ?? undefined,
     };
 
     return <Section<NavIngestEndpointRevision> {...sectionProps} />;

@@ -40,6 +40,10 @@ export interface NavAppRevision_getRevision_app_tag_manager_account_org_tag_mana
    */
   trial_expires_in: number;
   /**
+   * If the free trial is expired
+   */
+  trial_expired: boolean;
+  /**
    * If the account is in a trial period
    */
   is_trial: boolean;
@@ -59,6 +63,10 @@ export interface NavAppRevision_getRevision_app_tag_manager_account_org_data_man
    * The amount of days until the trial expires
    */
   trial_expires_in: number;
+  /**
+   * If the free trial is expired
+   */
+  trial_expired: boolean;
   /**
    * If the account is in a trial period
    */

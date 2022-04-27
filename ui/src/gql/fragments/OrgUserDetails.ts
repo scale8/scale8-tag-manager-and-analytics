@@ -7,12 +7,14 @@ export const OrgUserDetails = gql`
         tag_manager_account {
             id
             trial_expires_in
+            trial_expired
             is_trial
             enabled
         }
         data_manager_account {
             id
             trial_expires_in
+            trial_expired
             is_trial
             enabled
         }

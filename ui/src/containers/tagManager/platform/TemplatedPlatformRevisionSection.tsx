@@ -53,6 +53,7 @@ const TemplatedPlatformRevisionSection: FC<ChildrenAndIdProps> = (props: Childre
         buildMenuItemsProps: () => [],
         extractOrgUserDetails: (data) => data.getPlatformRevision.platform.tag_manager_account.org,
         accountExpireIn: orgUserState?.tagManagerAccount.trialExpiration ?? undefined,
+        accountExpired: orgUserState?.tagManagerAccount.trialExpired ?? undefined,
         accountIsTrial: orgUserState?.tagManagerAccount.isTrial ?? undefined,
     };
 

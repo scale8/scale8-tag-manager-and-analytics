@@ -17,6 +17,7 @@ export type GqlOrgPermissions = {
 export type GqlOrgUserAccount = {
     id: string;
     trial_expires_in: number;
+    trial_expired: boolean;
     is_trial: boolean;
     enabled: boolean;
 };
@@ -24,6 +25,7 @@ export type GqlOrgUserAccount = {
 export type OrgUserAccount = {
     id: string;
     trialExpiration: number;
+    trialExpired: boolean;
     isTrial: boolean;
     enabled: boolean;
 };
@@ -58,6 +60,7 @@ export const OrgUserAccountFromGql = (gqlOrgUserAccount: GqlOrgUserAccount): Org
     return {
         id: gqlOrgUserAccount.id,
         trialExpiration: gqlOrgUserAccount.trial_expires_in,
+        trialExpired: gqlOrgUserAccount.trial_expired,
         isTrial: gqlOrgUserAccount.is_trial,
         enabled: gqlOrgUserAccount.enabled,
     };

@@ -61,8 +61,9 @@ const DataManagerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) =
         },
         buildMenuItemsProps: () => [],
         extractOrgUserDetails: (data) => data.getDataManagerAccount.org,
-        accountExpireIn: orgUserState?.dataManagerAccount?.trialExpiration ?? undefined,
-        accountIsTrial: orgUserState?.dataManagerAccount?.isTrial ?? undefined,
+        accountExpireIn: orgUserState?.dataManagerAccount.trialExpiration ?? undefined,
+        accountExpired: orgUserState?.dataManagerAccount.trialExpired ?? undefined,
+        accountIsTrial: orgUserState?.dataManagerAccount.isTrial ?? undefined,
     };
 
     return <Section<NavDataManager> {...sectionProps} />;

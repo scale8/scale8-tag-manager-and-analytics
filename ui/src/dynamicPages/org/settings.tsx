@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import LeaveOrganizationSection from '../../dialogPages/global/orgSettings/LeaveOrganizationSection';
 import { useConfigState, useLoggedInState } from '../../context/AppContext';
@@ -15,6 +15,8 @@ import TransferOwnershipSection from '../../dialogPages/global/orgSettings/Trans
 import RemoveOrganizationSection from '../../dialogPages/global/orgSettings/RemoveOrganizationSection';
 import { DynamicPageProps } from '../../pageLoader/DynamicPageLoader';
 import AccountPlans from '../../components/organisms/AccountPlans';
+import { useRouter } from 'next/router';
+import { toOrg } from '../../utils/NavigationPaths';
 
 const OrgSettings: FC<{ id: string; plan?: string }> = (props: { id: string; plan?: string }) => {
     const { id, plan } = props;
@@ -57,7 +59,15 @@ const OrgSettings: FC<{ id: string; plan?: string }> = (props: { id: string; pla
 
 const OrgSettingsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const orgId = props.params.id ?? '';
-    const plan = props.params.plan;
+    const router = useRouter();
+    const [plan, setPlan] = useState<string | undefined>();
+
+    useEffect(() => {
+        if (props.params.plan) {
+            setPlan(props.params.plan);
+            router.replace(toOrg({ id: orgId }, 'settings'), undefined, { shallow: true }).then();
+        }
+    }, []);
 
     const { orgUserState } = useLoggedInState();
 

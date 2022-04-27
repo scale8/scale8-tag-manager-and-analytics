@@ -73,8 +73,9 @@ const GlobalTriggerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps)
                 ask,
                 data.getTrigger.revision.locked,
             ),
-        accountExpireIn: orgUserState?.tagManagerAccount?.trialExpiration ?? undefined,
-        accountIsTrial: orgUserState?.tagManagerAccount?.isTrial ?? undefined,
+        accountExpireIn: orgUserState?.tagManagerAccount.trialExpiration ?? undefined,
+        accountExpired: orgUserState?.tagManagerAccount.trialExpired ?? undefined,
+        accountIsTrial: orgUserState?.tagManagerAccount.isTrial ?? undefined,
     };
 
     return <Section<NavGlobalTrigger> {...sectionProps} />;

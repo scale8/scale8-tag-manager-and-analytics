@@ -119,8 +119,9 @@ const IngestEndpointSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps
             return buildIngestEndpointTabsMenu(id, analyticsEnabled(data.getIngestEndpoint));
         },
         extractOrgUserDetails: (data) => data.getIngestEndpoint.data_manager_account.org,
-        accountExpireIn: orgUserState?.dataManagerAccount?.trialExpiration ?? undefined,
-        accountIsTrial: orgUserState?.dataManagerAccount?.isTrial ?? undefined,
+        accountExpireIn: orgUserState?.dataManagerAccount.trialExpiration ?? undefined,
+        accountExpired: orgUserState?.dataManagerAccount.trialExpired ?? undefined,
+        accountIsTrial: orgUserState?.dataManagerAccount.isTrial ?? undefined,
     };
 
     return <Section<NavIngestEndpoint> {...sectionProps} />;

@@ -75,8 +75,9 @@ const GlobalActionSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) 
                 ask,
                 data.getActionGroupDistribution.revision.locked,
             ),
-        accountExpireIn: orgUserState?.tagManagerAccount?.trialExpiration ?? undefined,
-        accountIsTrial: orgUserState?.tagManagerAccount?.isTrial ?? undefined,
+        accountExpireIn: orgUserState?.tagManagerAccount.trialExpiration ?? undefined,
+        accountExpired: orgUserState?.tagManagerAccount.trialExpired ?? undefined,
+        accountIsTrial: orgUserState?.tagManagerAccount.isTrial ?? undefined,
     };
 
     return <Section<NavGlobalAction> {...sectionProps} />;

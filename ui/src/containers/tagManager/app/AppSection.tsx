@@ -83,7 +83,7 @@ export const buildAppButtons = (
         orgs,
         currentOrg,
         tagManagerAccount,
-        tagManagerAccount,
+        dataManagerAccount,
         router,
         orgPermissions,
         useSignup,
@@ -143,8 +143,9 @@ const AppSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
             );
         },
         extractOrgUserDetails: (data) => data.getApp.tag_manager_account.org,
-        accountExpireIn: orgUserState?.tagManagerAccount?.trialExpiration ?? undefined,
-        accountIsTrial: orgUserState?.tagManagerAccount?.isTrial ?? undefined,
+        accountExpireIn: orgUserState?.tagManagerAccount.trialExpiration ?? undefined,
+        accountExpired: orgUserState?.tagManagerAccount.trialExpired ?? undefined,
+        accountIsTrial: orgUserState?.tagManagerAccount.isTrial ?? undefined,
     };
 
     return <Section<NavApp> {...sectionProps} />;

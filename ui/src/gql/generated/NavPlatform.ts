@@ -32,6 +32,10 @@ export interface NavPlatform_getPlatform_tag_manager_account_org_tag_manager_acc
    */
   trial_expires_in: number;
   /**
+   * If the free trial is expired
+   */
+  trial_expired: boolean;
+  /**
    * If the account is in a trial period
    */
   is_trial: boolean;
@@ -51,6 +55,10 @@ export interface NavPlatform_getPlatform_tag_manager_account_org_data_manager_ac
    * The amount of days until the trial expires
    */
   trial_expires_in: number;
+  /**
+   * If the free trial is expired
+   */
+  trial_expired: boolean;
   /**
    * If the account is in a trial period
    */

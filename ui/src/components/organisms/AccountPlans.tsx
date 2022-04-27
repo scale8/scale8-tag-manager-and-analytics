@@ -63,7 +63,7 @@ const AccountPlanCard: FC<AccountPlanCardProps> = ({ data, type }) => {
                 price: '',
             };
         }
-        if (tagManagerAccount.is_trial && tagManagerAccount.trial_expired) {
+        if (tagManagerAccount.trial_expired) {
             return {
                 state: 'Trial Expired',
                 pageViews: '',
@@ -73,6 +73,13 @@ const AccountPlanCard: FC<AccountPlanCardProps> = ({ data, type }) => {
         if (tagManagerAccount.is_trial) {
             return {
                 state: 'Trial',
+                pageViews: '',
+                price: '',
+            };
+        }
+        if (!currentTagManagerProduct) {
+            return {
+                state: 'Unavailable',
                 pageViews: '',
                 price: '',
             };
@@ -101,7 +108,7 @@ const AccountPlanCard: FC<AccountPlanCardProps> = ({ data, type }) => {
                 price: '',
             };
         }
-        if (dataManagerAccount.is_trial && dataManagerAccount.trial_expired) {
+        if (dataManagerAccount.trial_expired) {
             return {
                 state: 'Trial Expired',
                 requests: '',
@@ -114,6 +121,13 @@ const AccountPlanCard: FC<AccountPlanCardProps> = ({ data, type }) => {
                 state: 'Trial',
                 requests: '',
                 gbs: '',
+                price: '',
+            };
+        }
+        if (!currentDataManagerProduct) {
+            return {
+                state: 'Unavailable',
+                pageViews: '',
                 price: '',
             };
         }

@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { DynamicPageProps } from '../../pageLoader/DynamicPageLoader';
 import { transferPeriodSessionParams, useChartPeriod } from '../../hooks/chart/useChartPeriod';
 import { useAnalyticsTimer } from '../../hooks/timer/useAnalyticsTimer';
@@ -10,9 +10,18 @@ import AppAnalyticsPageTagCheck from '../../lazyComponents/AppAnalyticsPageTagCh
 import { transferFilterSessionParamToErrors, useFilters } from '../../hooks/chart/useFilters';
 
 const AppAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
-    const id = props.params.id ?? '';
     const router = useRouter();
-    const periodParam = props.params.period;
+
+    const [periodParam, setPeriodParam] = useState<string | undefined>();
+
+    const id = props.params.id ?? '';
+
+    useEffect(() => {
+        if (props.params.period) {
+            setPeriodParam(props.params.period);
+            router.replace(toApp({ id }, 'analytics'), undefined, { shallow: true }).then();
+        }
+    }, []);
 
     const chartPeriodProps = useChartPeriod('analytics', periodParam);
 

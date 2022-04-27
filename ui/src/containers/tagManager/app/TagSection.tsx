@@ -65,8 +65,9 @@ const TagSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
                 ask,
                 data.getTag.revision.locked,
             ),
-        accountExpireIn: orgUserState?.tagManagerAccount?.trialExpiration ?? undefined,
-        accountIsTrial: orgUserState?.tagManagerAccount?.isTrial ?? undefined,
+        accountExpireIn: orgUserState?.tagManagerAccount.trialExpiration ?? undefined,
+        accountExpired: orgUserState?.tagManagerAccount.trialExpired ?? undefined,
+        accountIsTrial: orgUserState?.tagManagerAccount.isTrial ?? undefined,
     };
 
     return <Section<NavTag> {...sectionProps} />;

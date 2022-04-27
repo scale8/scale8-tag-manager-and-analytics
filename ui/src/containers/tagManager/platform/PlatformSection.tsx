@@ -96,8 +96,9 @@ const PlatformSection: FC<PlatformSectionProps> = (props: PlatformSectionProps) 
         },
         buildMenuItemsProps: () => [],
         extractOrgUserDetails: (data) => data.getPlatform.tag_manager_account.org,
-        accountExpireIn: orgUserState?.tagManagerAccount?.trialExpiration ?? undefined,
-        accountIsTrial: orgUserState?.tagManagerAccount?.isTrial ?? undefined,
+        accountExpireIn: orgUserState?.tagManagerAccount.trialExpiration ?? undefined,
+        accountExpired: orgUserState?.tagManagerAccount.trialExpired ?? undefined,
+        accountIsTrial: orgUserState?.tagManagerAccount.isTrial ?? undefined,
     };
 
     return <Section<NavPlatform> {...sectionProps} />;

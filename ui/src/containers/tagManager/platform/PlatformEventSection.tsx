@@ -54,8 +54,9 @@ const PlatformEventSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps)
         buildMenuItemsProps: () => [],
         extractOrgUserDetails: (data) =>
             data.getPlatformEvent.platform_revision.platform.tag_manager_account.org,
-        accountExpireIn: orgUserState?.tagManagerAccount?.trialExpiration ?? undefined,
-        accountIsTrial: orgUserState?.tagManagerAccount?.isTrial ?? undefined,
+        accountExpireIn: orgUserState?.tagManagerAccount.trialExpiration ?? undefined,
+        accountExpired: orgUserState?.tagManagerAccount.trialExpired ?? undefined,
+        accountIsTrial: orgUserState?.tagManagerAccount.isTrial ?? undefined,
     };
 
     return <Section<NavPlatformRevisionEvent> {...sectionProps} />;

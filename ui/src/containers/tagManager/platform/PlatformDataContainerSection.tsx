@@ -58,8 +58,9 @@ const PlatformDataContainerSection: FC<ChildrenAndIdProps> = (props: ChildrenAnd
         buildMenuItemsProps: () => [],
         extractOrgUserDetails: (data) =>
             data.getPlatformDataContainer.platform_revision.platform.tag_manager_account.org,
-        accountExpireIn: orgUserState?.tagManagerAccount?.trialExpiration ?? undefined,
-        accountIsTrial: orgUserState?.tagManagerAccount?.isTrial ?? undefined,
+        accountExpireIn: orgUserState?.tagManagerAccount.trialExpiration ?? undefined,
+        accountExpired: orgUserState?.tagManagerAccount.trialExpired ?? undefined,
+        accountIsTrial: orgUserState?.tagManagerAccount.isTrial ?? undefined,
     };
 
     return <Section<NavPlatformRevisionDataContainer> {...sectionProps} />;
