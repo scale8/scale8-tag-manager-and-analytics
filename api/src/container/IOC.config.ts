@@ -154,6 +154,7 @@ import { Mode } from '../enums/Mode';
 import AwsKeyStoreConfig from '../backends/configuration/AwsKeyStoreConfig';
 import Context = interfaces.Context;
 import Factory = interfaces.Factory;
+import AccountService from '../accounts/AccountService';
 
 const container = new Container();
 
@@ -231,6 +232,7 @@ container.bind<Routing>(TYPES.Routing).to(Routing).inSingletonScope();
 container.bind<S3Service>(TYPES.S3Service).to(S3Service).inSingletonScope();
 container.bind<Route53Service>(TYPES.Route53Service).to(Route53Service).inSingletonScope();
 container.bind<StripeService>(TYPES.StripeService).to(StripeService).inSingletonScope();
+container.bind<AccountService>(TYPES.AccountService).to(AccountService).inSingletonScope();
 container.bind<ConsoleLogger>(TYPES.ConsoleLogger).to(ConsoleLogger).inSingletonScope();
 
 [

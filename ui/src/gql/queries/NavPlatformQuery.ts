@@ -17,6 +17,7 @@ const NavPlatformQuery = gql`
                 org {
                     ...orgUserDetails
                 }
+                enabled
             }
         }
         me {

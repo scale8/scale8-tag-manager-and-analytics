@@ -3,7 +3,8 @@ import { useQuery } from '@apollo/client';
 import {
     BreadcrumbButtonProps,
     buildTabButtonProps,
-    buildTagManagerButtonProps,
+    buildTagManagerButtonPropsAndCheckAccounts,
+    ButtonAccount,
 } from '../../utils/BreadcrumbButtonsUtils';
 import NavTagManagerQuery from '../../gql/queries/NavTagManagerQuery';
 import { NavTagManager } from '../../gql/generated/NavTagManager';
@@ -35,21 +36,21 @@ export const buildTagManagerTabsMenu = (id: string): PageMenuButtonProps[] => [
 export const buildTagManagerButtons = (
     orgs: SectionItem[],
     currentOrg: SectionItem,
-    tagManagerId: string,
-    dataManagerId: string,
+    tagManagerAccount: ButtonAccount,
+    dataManagerAccount: ButtonAccount,
     router: NextRouter,
     orgPermissions: CurrentOrgPermissions,
     useSignup: boolean,
     forceCurrentEntry?: string,
 ): BreadcrumbButtonProps[] => [
     ...buildOrgButtons(orgs, currentOrg, router, orgPermissions, useSignup, 'Services'),
-    buildTagManagerButtonProps(
+    buildTagManagerButtonPropsAndCheckAccounts(
         router,
-        tagManagerId,
-        dataManagerId,
+        tagManagerAccount,
+        dataManagerAccount,
         forceCurrentEntry === undefined,
     ),
-    buildTabButtonProps(router, buildTagManagerTabsMenu(tagManagerId), forceCurrentEntry),
+    buildTabButtonProps(router, buildTagManagerTabsMenu(tagManagerAccount.id), forceCurrentEntry),
 ];
 
 const TagManagerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
@@ -71,16 +72,17 @@ const TagManagerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) =>
             return buildTagManagerButtons(
                 data.me.orgs,
                 data.getTagManagerAccount.org,
-                id,
-                data.getTagManagerAccount.org.data_manager_account?.id ?? '',
+                data.getTagManagerAccount,
+                data.getTagManagerAccount.org.data_manager_account,
                 router,
                 orgPermissions,
                 useSignup,
             );
         },
         buildMenuItemsProps: () => buildTagManagerTabsMenu(id),
-        accountExpireIn: orgUserState?.tagManagerAccount?.trialExpiration ?? undefined,
-        accountIsTrial: orgUserState?.tagManagerAccount?.isTrial ?? undefined,
+        accountExpireIn: orgUserState?.tagManagerAccount.trialExpiration ?? undefined,
+        accountExpired: orgUserState?.tagManagerAccount.trialExpired ?? undefined,
+        accountIsTrial: orgUserState?.tagManagerAccount.isTrial ?? undefined,
     };
 
     return <Section<NavTagManager> {...sectionProps} />;

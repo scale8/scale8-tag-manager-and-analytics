@@ -34,6 +34,8 @@ import TriggerIcon from '../components/atoms/Icons/TriggerIcon';
 import { NextRouter } from 'next/router';
 import { PageMenuButtonProps } from '../components/molecules/SideMenuButton';
 
+export type ButtonAccount = { id: string; enabled: boolean };
+
 export type BreadcrumbAction = {
     text: string;
     icon?: FC<SvgIconProps>;
@@ -159,33 +161,6 @@ export const buildOrgButtonProps = (
         'Organization',
         'Change Organization',
         OrgIcon,
-    );
-};
-
-export const buildTagManagerButtonProps = (
-    router: NextRouter,
-    id: string,
-    dataManagerId: string,
-    isCurrentPage = false,
-): BreadcrumbButtonProps => {
-    return buildButtonPropsFromActions(
-        dataManagerId === ''
-            ? []
-            : [
-                  {
-                      text: 'Data Manager',
-                      action: () => {
-                          router.push(toDataManager({ id: dataManagerId })).then();
-                      },
-                  },
-              ],
-        id,
-        'Tag Manager',
-        isCurrentPage,
-        (_) => router.push(toTagManager({ id: _ })).then(),
-        'Service',
-        'Change Service',
-        ServiceIcon,
     );
 };
 
@@ -435,33 +410,6 @@ export const buildPlatformRevisionEventButtonProps = (
     );
 };
 
-export const buildDataManagerButtonProps = (
-    router: NextRouter,
-    id: string,
-    tagManagerId: string,
-    isCurrentPage = false,
-): BreadcrumbButtonProps => {
-    return buildButtonPropsFromActions(
-        tagManagerId === ''
-            ? []
-            : [
-                  {
-                      text: 'Tag Manager',
-                      action: () => {
-                          router.push(toTagManager({ id: tagManagerId })).then();
-                      },
-                  },
-              ],
-        id,
-        'Data Manager',
-        isCurrentPage,
-        (_) => router.push(toDataManager({ id: _ })).then(),
-        'Service',
-        'Change Service',
-        ServiceIcon,
-    );
-};
-
 export const buildIngestEndpointButtonProps = (
     router: NextRouter,
     allIngestEndpoints: {
@@ -537,5 +485,67 @@ export const buildTabButtonProps = (
         'Change Tab',
         undefined,
         forcedCurrentEntry?.icon ?? routerEntry?.icon,
+    );
+};
+
+export const buildTagManagerButtonPropsAndCheckAccounts = (
+    router: NextRouter,
+    tagManagerAccount: ButtonAccount,
+    dataManagerAccount: ButtonAccount,
+    isCurrentPage = false,
+): BreadcrumbButtonProps => {
+    if (!tagManagerAccount.enabled) {
+        throw Error('Account disabled');
+    }
+
+    return buildButtonPropsFromActions(
+        !dataManagerAccount.enabled
+            ? []
+            : [
+                  {
+                      text: 'Data Manager',
+                      action: () => {
+                          router.push(toDataManager({ id: dataManagerAccount.id })).then();
+                      },
+                  },
+              ],
+        tagManagerAccount.id,
+        'Tag Manager',
+        isCurrentPage,
+        (_) => router.push(toTagManager({ id: _ })).then(),
+        'Service',
+        'Change Service',
+        ServiceIcon,
+    );
+};
+
+export const buildDataManagerButtonPropsAndCheckAccounts = (
+    router: NextRouter,
+    dataManagerAccount: ButtonAccount,
+    tagManagerAccount: ButtonAccount,
+    isCurrentPage = false,
+): BreadcrumbButtonProps => {
+    if (!dataManagerAccount.enabled) {
+        throw Error('Account disabled');
+    }
+
+    return buildButtonPropsFromActions(
+        !tagManagerAccount.enabled
+            ? []
+            : [
+                  {
+                      text: 'Tag Manager',
+                      action: () => {
+                          router.push(toTagManager({ id: tagManagerAccount.id })).then();
+                      },
+                  },
+              ],
+        dataManagerAccount.id,
+        'Data Manager',
+        isCurrentPage,
+        (_) => router.push(toDataManager({ id: _ })).then(),
+        'Service',
+        'Change Service',
+        ServiceIcon,
     );
 };

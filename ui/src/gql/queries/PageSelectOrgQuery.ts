@@ -15,9 +15,11 @@ const PageSelectOrgQuery = gql`
                     apps {
                         id
                     }
+                    enabled
                 }
                 data_manager_account {
                     id
+                    enabled
                 }
             }
         }

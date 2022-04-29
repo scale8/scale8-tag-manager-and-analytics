@@ -31,39 +31,32 @@ const OrgDashboardPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
             const tmAccount = data.getOrg.tag_manager_account;
             const dmAccount = data.getOrg.data_manager_account;
 
-            const tmId = tmAccount?.id ?? null;
-            const dmId = dmAccount?.id ?? null;
-
-            const tmTrialExpired = tmAccount !== null && tmAccount.trial_expired;
-
-            const dmTrialExpired = dmAccount !== null && dmAccount.trial_expired;
-
             const tagMangerSectionProps = {
                 title: 'Tag Manager',
                 linkText: 'Go to Tag Manager',
                 content: (
                     <OrgAccountSection data={data} accountProduct={AccountProduct.TAG_MANAGER} />
                 ),
-                ...(tmId === null || tmTrialExpired
+                ...(!tmAccount.enabled
                     ? {}
                     : {
                           action: () => {
-                              router.push(toTagManager({ id: tmId })).then();
+                              router.push(toTagManager({ id: tmAccount.id })).then();
                           },
                       }),
             };
 
-            const dataMangerSectionProps = {
+            const dataManagerSectionProps = {
                 title: 'Data Manager',
                 linkText: 'Go to Data Manager',
                 content: (
                     <OrgAccountSection data={data} accountProduct={AccountProduct.DATA_MANAGER} />
                 ),
-                ...(dmId === null || dmTrialExpired
+                ...(!dmAccount.enabled
                     ? {}
                     : {
                           action: () => {
-                              router.push(toDataManager({ id: dmId })).then();
+                              router.push(toDataManager({ id: dmAccount.id })).then();
                           },
                       }),
             };
@@ -77,7 +70,7 @@ const OrgDashboardPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
                                     <DashboardAccountSection {...tagMangerSectionProps} />
                                 </Grid>
                                 <Grid item xs={12} sm={12} md={12} lg={6}>
-                                    <DashboardAccountSection {...dataMangerSectionProps} />
+                                    <DashboardAccountSection {...dataManagerSectionProps} />
                                 </Grid>
                             </Grid>
                         </Box>

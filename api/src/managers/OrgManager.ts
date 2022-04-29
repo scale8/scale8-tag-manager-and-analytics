@@ -126,11 +126,11 @@ export default class OrgManager extends Manager<Org> {
             """
             A \`TagManagerAccount\` associated with this \`Org\`. A Scale8 Tag Manager account might not exist yet unless a trial has been requested or product has been subscribed to.
             """
-            tag_manager_account: TagManagerAccount
+            tag_manager_account: TagManagerAccount!
             """
             A \`DataManagerAccount\` associated with this \`Org\`. A Scale8 Data Manager account might not exist yet unless a trial has been requested or product has been subscribed to.
             """
-            data_manager_account: DataManagerAccount
+            data_manager_account: DataManagerAccount!
             """
             List of \`OrgUser\`'s associated with this \`Org\`
             """
@@ -599,24 +599,6 @@ export default class OrgManager extends Manager<Org> {
                         TagManagerAccount,
                     ).getFromOrg(org);
 
-                    if (!account.enabled || account.isOnFreeTrial() || account.trialExpired()) {
-                        const stripeProductId = await this.stripeService.getStripeProductId(
-                            org,
-                            'TagManagerAccount',
-                        );
-                        // ensure the account is in the right state
-                        if (stripeProductId !== undefined) {
-                            const accountRepo = this.repoFactory(TagManagerAccount);
-                            account.enabled = true;
-                            account.cancelTrial();
-                            return (
-                                await accountRepo.save(account, 'SYSTEM', OperationOwner.SYSTEM)
-                            ).toGQLType();
-                        }
-                    }
-                    if (!account.enabled) {
-                        return undefined;
-                    }
                     return account.toGQLType();
                 });
             },
@@ -627,24 +609,6 @@ export default class OrgManager extends Manager<Org> {
                         DataManagerAccount,
                     ).getFromOrg(org);
 
-                    if (!account.enabled || account.isOnFreeTrial() || account.trialExpired()) {
-                        const stripeProductId = await this.stripeService.getStripeProductId(
-                            org,
-                            'DataManagerAccount',
-                        );
-                        // ensure the account is in the right state
-                        if (stripeProductId !== undefined) {
-                            const accountRepo = this.repoFactory(DataManagerAccount);
-                            account.enabled = true;
-                            account.cancelTrial();
-                            return (
-                                await accountRepo.save(account, 'SYSTEM', OperationOwner.SYSTEM)
-                            ).toGQLType();
-                        }
-                    }
-                    if (!account.enabled) {
-                        return undefined;
-                    }
                     return account.toGQLType();
                 });
             },
@@ -1132,8 +1096,10 @@ export default class OrgManager extends Manager<Org> {
                 if (stripeSubscriptionId === undefined) {
                     return await generateSubscriptionLink();
                 } else {
-                    const currentStripeProductId =
-                        await this.stripeService.getStripeProductIdForAccount(org, account);
+                    const currentStripeProductId = await this.stripeService.getStripeProductId(
+                        org,
+                        account,
+                    );
 
                     if (currentStripeProductId === undefined) {
                         //we must be upgrading from a free trail, but there is an existing subscription to join to...
@@ -1222,8 +1188,10 @@ export default class OrgManager extends Manager<Org> {
                         const stripeSubscription = await this.stripeService.getStripeSubscription(
                             org,
                         );
-                        const stripeProductId =
-                            await this.stripeService.getStripeProductIdForAccount(org, account);
+                        const stripeProductId = await this.stripeService.getStripeProductId(
+                            org,
+                            account,
+                        );
                         if (stripeSubscription === undefined) {
                             throw new GQLError(userMessages.noSubscription, true);
                         } else if (stripeSubscription.status === 'active') {

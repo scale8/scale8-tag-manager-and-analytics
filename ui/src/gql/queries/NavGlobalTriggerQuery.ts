@@ -34,6 +34,7 @@ const NavGlobalTriggerQuery = gql`
                         org {
                             ...orgUserDetails
                         }
+                        enabled
                     }
                 }
             }

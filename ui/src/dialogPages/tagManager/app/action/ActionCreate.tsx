@@ -83,13 +83,9 @@ const ActionCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
             revisions: formLoadedData.getActionGroupDistribution.revision.app.revisions,
             consentPurposes,
             consentVendors,
-            ingestEndpoints:
-                formLoadedData.getActionGroupDistribution.revision.app.tag_manager_account.org
-                    .data_manager_account === null
-                    ? []
-                    : (formLoadedData.getActionGroupDistribution.revision.app.tag_manager_account
-                          .org.data_manager_account
-                          .ingest_endpoints as IngestEndpointForEnvironmentSelection[]),
+            ingestEndpoints: formLoadedData.getActionGroupDistribution.revision.app
+                .tag_manager_account.org.data_manager_account
+                .ingest_endpoints as IngestEndpointForEnvironmentSelection[],
             platformActions:
                 formLoadedData.getActionGroupDistribution.revision.app_platform_revisions.map(
                     (_) => ({

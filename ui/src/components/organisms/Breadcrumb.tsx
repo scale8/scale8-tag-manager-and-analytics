@@ -20,6 +20,7 @@ type BreadcrumbProps = {
     valuesRefresh: ValuesRefreshFunction;
     breadcrumbActions: RowAction<any>[];
     accountExpireIn?: number;
+    accountExpired?: boolean;
     accountIsTrial?: boolean;
 };
 
@@ -61,7 +62,7 @@ const Breadcrumb: FC<BreadcrumbProps> = (props: BreadcrumbProps) => {
         return () => window.removeEventListener('resize', updateSize);
     }, [breadcrumbScroll.current]);
 
-    const { buttonsProps, accountExpireIn, accountIsTrial } = props;
+    const { buttonsProps, accountExpireIn, accountExpired, accountIsTrial } = props;
 
     if (params === null) return <></>;
 
@@ -89,11 +90,31 @@ const Breadcrumb: FC<BreadcrumbProps> = (props: BreadcrumbProps) => {
                         py={0.25}
                         borderRadius="0px 0px 10px 10px"
                     >
-                        You have <b>{accountExpireIn}</b> days left in your free trial. You can
-                        upgrade to a paid plan in{' '}
+                        You have <b>{accountExpireIn}</b> day{accountExpireIn === 1 ? '' : 's'} left
+                        in your free trial. You can upgrade to a paid plan in{' '}
                         <Link
                             href={buildSettingsLink(orgUserState)}
                             sx={{ color: '#ffffff', textDecorationColor: '#ffffff' }}
+                        >
+                            organization settings
+                        </Link>
+                        .
+                    </Box>
+                </Box>
+            )}
+            {orgUserState !== null && accountExpired && (
+                <Box display="flex" justifyContent="center">
+                    <Box
+                        color="#53272e"
+                        bgcolor="#faeff1"
+                        px={2}
+                        py={0.25}
+                        borderRadius="0px 0px 10px 10px"
+                    >
+                        Your free trial is expired. You must upgrade to a paid plan in{' '}
+                        <Link
+                            href={buildSettingsLink(orgUserState)}
+                            sx={{ color: '#53272e', textDecorationColor: '#53272e' }}
                         >
                             organization settings
                         </Link>

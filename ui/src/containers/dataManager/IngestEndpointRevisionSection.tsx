@@ -40,9 +40,9 @@ const IngestEndpointRevisionSection: FC<ChildrenAndIdProps> = (props: ChildrenAn
             ...buildIngestEndpointsButtons(
                 data.me.orgs,
                 data.getIngestEndpointRevision.ingest_endpoint.data_manager_account.org,
+                data.getIngestEndpointRevision.ingest_endpoint.data_manager_account,
                 data.getIngestEndpointRevision.ingest_endpoint.data_manager_account.org
-                    .tag_manager_account?.id ?? '',
-                data.getIngestEndpointRevision.ingest_endpoint.data_manager_account.id,
+                    .tag_manager_account,
                 data.getIngestEndpointRevision.ingest_endpoint.data_manager_account
                     .ingest_endpoints,
                 data.getIngestEndpointRevision.ingest_endpoint,
@@ -84,8 +84,9 @@ const IngestEndpointRevisionSection: FC<ChildrenAndIdProps> = (props: ChildrenAn
                 () => !currentOrgPermissions.canCreate,
             ),
         ],
-        accountExpireIn: orgUserState?.dataManagerAccount?.trialExpiration ?? undefined,
-        accountIsTrial: orgUserState?.dataManagerAccount?.isTrial ?? undefined,
+        accountExpireIn: orgUserState?.dataManagerAccount.trialExpiration ?? undefined,
+        accountExpired: orgUserState?.dataManagerAccount.trialExpired ?? undefined,
+        accountIsTrial: orgUserState?.dataManagerAccount.isTrial ?? undefined,
     };
 
     return <Section<NavIngestEndpointRevision> {...sectionProps} />;

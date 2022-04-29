@@ -28,6 +28,7 @@ const PageOrgDashboardQuery = gql`
                 trial_expired
                 stripe_product_id
                 is_trial
+                enabled
             }
             data_manager_account {
                 id
@@ -55,6 +56,7 @@ const PageOrgDashboardQuery = gql`
                 trial_expired
                 stripe_product_id
                 is_trial
+                enabled
             }
             me {
                 id

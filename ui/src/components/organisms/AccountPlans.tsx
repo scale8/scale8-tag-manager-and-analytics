@@ -13,11 +13,9 @@ type AccountPlanCardProps = {
 
 const accountDetailsFromProductSettings = (data: ProductSettings) => {
     const tagManagerAccount = data.getOrg.tag_manager_account;
-    const tagManagerProductId =
-        tagManagerAccount === null ? null : tagManagerAccount.stripe_product_id;
+    const tagManagerProductId = tagManagerAccount.stripe_product_id;
     const dataManagerAccount = data.getOrg.data_manager_account;
-    const dataManagerProductId =
-        dataManagerAccount === null ? null : dataManagerAccount.stripe_product_id;
+    const dataManagerProductId = dataManagerAccount.stripe_product_id;
 
     return {
         tagManagerAccount,
@@ -51,7 +49,7 @@ const AccountPlanCard: FC<AccountPlanCardProps> = ({ data, type }) => {
         : undefined;
 
     const tagManagerDetails = (() => {
-        if (tagManagerAccount === null) {
+        if (!tagManagerAccount.enabled) {
             return {
                 state: 'Inactive',
                 pageViews: '',
@@ -65,7 +63,7 @@ const AccountPlanCard: FC<AccountPlanCardProps> = ({ data, type }) => {
                 price: '',
             };
         }
-        if (tagManagerAccount.is_trial && tagManagerAccount.trial_expired) {
+        if (tagManagerAccount.trial_expired) {
             return {
                 state: 'Trial Expired',
                 pageViews: '',
@@ -79,6 +77,13 @@ const AccountPlanCard: FC<AccountPlanCardProps> = ({ data, type }) => {
                 price: '',
             };
         }
+        if (!currentTagManagerProduct) {
+            return {
+                state: 'Unavailable',
+                pageViews: '',
+                price: '',
+            };
+        }
         return {
             state: 'Active',
             pageViews: currentTagManagerProduct?.page_views?.toLocaleString('en-GB') ?? '',
@@ -87,7 +92,7 @@ const AccountPlanCard: FC<AccountPlanCardProps> = ({ data, type }) => {
     })();
 
     const dataManagerDetails = (() => {
-        if (dataManagerAccount === null) {
+        if (!dataManagerAccount.enabled) {
             return {
                 state: 'Inactive',
                 requests: '',
@@ -103,7 +108,7 @@ const AccountPlanCard: FC<AccountPlanCardProps> = ({ data, type }) => {
                 price: '',
             };
         }
-        if (dataManagerAccount.is_trial && dataManagerAccount.trial_expired) {
+        if (dataManagerAccount.trial_expired) {
             return {
                 state: 'Trial Expired',
                 requests: '',
@@ -116,6 +121,13 @@ const AccountPlanCard: FC<AccountPlanCardProps> = ({ data, type }) => {
                 state: 'Trial',
                 requests: '',
                 gbs: '',
+                price: '',
+            };
+        }
+        if (!currentDataManagerProduct) {
+            return {
+                state: 'Unavailable',
+                pageViews: '',
                 price: '',
             };
         }

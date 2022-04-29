@@ -39,8 +39,8 @@ const GlobalTriggerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps)
             ...buildAppRevisionButtons(
                 data.me.orgs,
                 data.getTrigger.revision.app.tag_manager_account.org,
-                data.getTrigger.revision.app.tag_manager_account.id,
-                data.getTrigger.revision.app.tag_manager_account.org.data_manager_account?.id ?? '',
+                data.getTrigger.revision.app.tag_manager_account,
+                data.getTrigger.revision.app.tag_manager_account.org.data_manager_account,
                 data.getTrigger.revision.app.tag_manager_account.apps,
                 data.getTrigger.revision.app,
                 data.getTrigger.revision.app.revisions,
@@ -73,8 +73,9 @@ const GlobalTriggerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps)
                 ask,
                 data.getTrigger.revision.locked,
             ),
-        accountExpireIn: orgUserState?.tagManagerAccount?.trialExpiration ?? undefined,
-        accountIsTrial: orgUserState?.tagManagerAccount?.isTrial ?? undefined,
+        accountExpireIn: orgUserState?.tagManagerAccount.trialExpiration ?? undefined,
+        accountExpired: orgUserState?.tagManagerAccount.trialExpired ?? undefined,
+        accountIsTrial: orgUserState?.tagManagerAccount.isTrial ?? undefined,
     };
 
     return <Section<NavGlobalTrigger> {...sectionProps} />;

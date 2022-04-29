@@ -52,9 +52,17 @@ export interface NavGlobalAction_getActionGroupDistribution_revision_app_tag_man
    */
   trial_expires_in: number;
   /**
+   * If the free trial is expired
+   */
+  trial_expired: boolean;
+  /**
    * If the account is in a trial period
    */
   is_trial: boolean;
+  /**
+   * If the account is enabled
+   */
+  enabled: boolean;
 }
 
 export interface NavGlobalAction_getActionGroupDistribution_revision_app_tag_manager_account_org_data_manager_account {
@@ -68,9 +76,17 @@ export interface NavGlobalAction_getActionGroupDistribution_revision_app_tag_man
    */
   trial_expires_in: number;
   /**
+   * If the free trial is expired
+   */
+  trial_expired: boolean;
+  /**
    * If the account is in a trial period
    */
   is_trial: boolean;
+  /**
+   * If the account is enabled
+   */
+  enabled: boolean;
 }
 
 export interface NavGlobalAction_getActionGroupDistribution_revision_app_tag_manager_account_org_me_permissions {
@@ -128,13 +144,13 @@ export interface NavGlobalAction_getActionGroupDistribution_revision_app_tag_man
    * A `TagManagerAccount` associated with this `Org`. A Scale8 Tag Manager account
    * might not exist yet unless a trial has been requested or product has been subscribed to.
    */
-  tag_manager_account: NavGlobalAction_getActionGroupDistribution_revision_app_tag_manager_account_org_tag_manager_account | null;
+  tag_manager_account: NavGlobalAction_getActionGroupDistribution_revision_app_tag_manager_account_org_tag_manager_account;
   /**
    * A `DataManagerAccount` associated with this `Org`. A Scale8 Data Manager
    * account might not exist yet unless a trial has been requested or product has
    * been subscribed to.
    */
-  data_manager_account: NavGlobalAction_getActionGroupDistribution_revision_app_tag_manager_account_org_data_manager_account | null;
+  data_manager_account: NavGlobalAction_getActionGroupDistribution_revision_app_tag_manager_account_org_data_manager_account;
   /**
    * `OrgUser` representation of current `User`
    */
@@ -146,6 +162,10 @@ export interface NavGlobalAction_getActionGroupDistribution_revision_app_tag_man
   id: string;
   apps: NavGlobalAction_getActionGroupDistribution_revision_app_tag_manager_account_apps[];
   org: NavGlobalAction_getActionGroupDistribution_revision_app_tag_manager_account_org;
+  /**
+   * If the account is enabled
+   */
+  enabled: boolean;
 }
 
 export interface NavGlobalAction_getActionGroupDistribution_revision_app {
