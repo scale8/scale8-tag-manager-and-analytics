@@ -336,7 +336,10 @@ export default class IngestEndpointRevisionManager extends Manager<IngestEndpoin
                         revision.ingestEndpointId,
                         userMessages.ingestEndpointFailed,
                     );
-                    if (ingestEndpoint.storageProvider === StorageProvider.AWS_S3) {
+                    if (
+                        ingestEndpoint.storageProvider === StorageProvider.AWS_S3 ||
+                        ingestEndpoint.storageProvider === StorageProvider.AWS_KINESIS
+                    ) {
                         return {
                             result: [],
                             from: new Date(),
@@ -360,7 +363,10 @@ export default class IngestEndpointRevisionManager extends Manager<IngestEndpoin
                         revision.ingestEndpointId,
                         userMessages.ingestEndpointFailed,
                     );
-                    if (ingestEndpoint.storageProvider === StorageProvider.AWS_S3) {
+                    if (
+                        ingestEndpoint.storageProvider === StorageProvider.AWS_S3 ||
+                        ingestEndpoint.storageProvider === StorageProvider.AWS_KINESIS
+                    ) {
                         return {
                             result: [],
                             from: new Date(),

@@ -155,6 +155,7 @@ import AwsKeyStoreConfig from '../backends/configuration/AwsKeyStoreConfig';
 import Context = interfaces.Context;
 import Factory = interfaces.Factory;
 import AccountService from '../accounts/AccountService';
+import KinesisService from '../aws/KinesisService';
 
 const container = new Container();
 
@@ -230,6 +231,7 @@ container
 container.bind<Render>(TYPES.Render).to(Render).inSingletonScope();
 container.bind<Routing>(TYPES.Routing).to(Routing).inSingletonScope();
 container.bind<S3Service>(TYPES.S3Service).to(S3Service).inSingletonScope();
+container.bind<KinesisService>(TYPES.KinesisService).to(KinesisService).inSingletonScope();
 container.bind<Route53Service>(TYPES.Route53Service).to(Route53Service).inSingletonScope();
 container.bind<StripeService>(TYPES.StripeService).to(StripeService).inSingletonScope();
 container.bind<AccountService>(TYPES.AccountService).to(AccountService).inSingletonScope();

@@ -27,7 +27,10 @@ export const fetchEventRequests = async (
     return await orgAuth.asUserWithViewAccess(ctx, model.orgId, async () => {
         const app = await repoFactory(App).findByIdThrows(model.appId, userMessages.appFailed);
         args.query_options.filter_options[filterOptionsKey] = model.id.toString();
-        if (app.storageProvider === StorageProvider.AWS_S3) {
+        if (
+            app.storageProvider === StorageProvider.AWS_S3 ||
+            app.storageProvider === StorageProvider.AWS_KINESIS
+        ) {
             return {
                 result: [],
                 from: new Date(),

@@ -11,8 +11,8 @@ import userMessages from '../../errors/UserMessages';
 import {
     createIngestEndpointEnvironment,
     getIngestEndpointInstallDomain,
-    getProviderConfigThrows,
     getProviderConfig,
+    getProviderConfigThrows,
     updateIngestEndpointEnvironment,
 } from '../../utils/IngestEndpointEnvironmentUtils';
 import BaseDatabase from '../../backends/databases/abstractions/BaseDatabase';
@@ -119,17 +119,9 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
             """
             ingest_endpoint_revision_id: ID!
             """
-            The AWS specific configuration linked to this new \`IngestEndpointEnvironment\`
+            The storage backend.
             """
-            aws_storage_config: AWSStorageConfig
-            """
-            The Google Cloud BigQuery Stream specific configuration linked to this new \`IngestEndpointEnvironment\`
-            """
-            gc_bigquery_stream_config: GCBigQueryStreamConfig
-            """
-            The MongoDB specific configuration linked to this new \`IngestEndpointEnvironment\`
-            """
-            mongo_push_config: MongoDbPushConfig
+            storage_backend: StorageBackend
         }
 
         """
@@ -171,17 +163,9 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
             """
             key_pem: String
             """
-            The AWS specific configuration linked to this new \`IngestEndpointEnvironment\`
+            The storage backend.
             """
-            aws_storage_config: AWSStorageConfig
-            """
-            The Google Cloud BigQuery Stream specific configuration linked to this new \`IngestEndpointEnvironment\`
-            """
-            gc_bigquery_stream_config: GCBigQueryStreamConfig
-            """
-            The MongoDB specific configuration linked to this new \`IngestEndpointEnvironment\`
-            """
-            mongo_push_config: MongoDbPushConfig
+            storage_backend: StorageBackend
         }
 
         # noinspection GraphQLMemberRedefinition
@@ -402,7 +386,10 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
                         env.ingestEndpointId,
                         userMessages.ingestEndpointFailed,
                     );
-                    if (ingestEndpoint.storageProvider === StorageProvider.AWS_S3) {
+                    if (
+                        ingestEndpoint.storageProvider === StorageProvider.AWS_S3 ||
+                        ingestEndpoint.storageProvider === StorageProvider.AWS_KINESIS
+                    ) {
                         return {
                             result: [],
                             from: new Date(),
@@ -426,7 +413,10 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
                         env.ingestEndpointId,
                         userMessages.ingestEndpointFailed,
                     );
-                    if (ingestEndpoint.storageProvider === StorageProvider.AWS_S3) {
+                    if (
+                        ingestEndpoint.storageProvider === StorageProvider.AWS_S3 ||
+                        ingestEndpoint.storageProvider === StorageProvider.AWS_KINESIS
+                    ) {
                         return {
                             result: [],
                             from: new Date(),

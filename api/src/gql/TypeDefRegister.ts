@@ -497,8 +497,23 @@ export default class TypeDefRegister {
                 value: DataMapValue
             }
 
+            input StorageBackend {
+                """
+                The AWS specific configuration linked to this new \`IngestEndpointEnvironment\`
+                """
+                aws_storage_config: AWSStorageConfig
+                """
+                The Google Cloud BigQuery Stream specific configuration linked to this new \`IngestEndpointEnvironment\`
+                """
+                gc_bigquery_stream_config: GCBigQueryStreamConfig
+                """
+                The MongoDB specific configuration linked to this new \`IngestEndpointEnvironment\`
+                """
+                mongo_push_config: MongoDbPushConfig
+            }
+
             """
-            In order to use AWS as your storage engine, you will need to create an AWS account and create a new service account for Scale8. Please see our documentation on how to configure this.
+            In order to use AWS S3 as your storage engine, you will need to create an AWS account and create a new service account for Scale8. Please see our documentation on how to configure this.
             """
             input AWSStorageConfig {
                 """
@@ -521,6 +536,28 @@ export default class TypeDefRegister {
                 The name of the storage bucket currently in use
                 """
                 bucket_name: String!
+            }
+
+            """
+            In order to use AWS Kinesis as your storage engine, you will need to create an AWS account and create a new service account for Scale8. Please see our documentation on how to configure this.
+            """
+            input AWSKinesisConfig {
+                """
+                Your AWS access key.
+                """
+                access_key_id: String!
+                """
+                Your AWS secret key.
+                """
+                secret_access_key: String!
+                """
+                The AWS region in which you want the data to be placed and your bucket has been created.
+                """
+                region: AWSRegion!
+                """
+                The AWS Kinesis Firehose stream name
+                """
+                stream_name: String!
             }
 
             """

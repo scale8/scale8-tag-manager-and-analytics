@@ -298,17 +298,9 @@ export default class AppManager extends Manager<App> {
             """
             storage_provider: StorageProvider
             """
-            The AWS specific configuration linked to this new \`App\`
+            The storage backend.
             """
-            aws_storage_config: AWSStorageConfig
-            """
-            The Google Cloud BigQuery Stream specific configuration linked to this new \`App\`
-            """
-            gc_bigquery_stream_config: GCBigQueryStreamConfig
-            """
-            The MongoDB specific configuration linked to this new \`App\`
-            """
-            mongo_push_config: MongoDbPushConfig
+            storage_backend: StorageBackend
             """
             If the analytics on the \`App\` should be enabled
             """
@@ -347,17 +339,9 @@ export default class AppManager extends Manager<App> {
             """
             storage_provider: StorageProvider
             """
-            The AWS specific configuration linked to this new \`App\`
+            The storage backend.
             """
-            aws_storage_config: AWSStorageConfig
-            """
-            The Google Cloud BigQuery Stream specific configuration linked to this new \`App\`
-            """
-            gc_bigquery_stream_config: GCBigQueryStreamConfig
-            """
-            The MongoDB specific configuration linked to this new \`App\`
-            """
-            mongo_push_config: MongoDbPushConfig
+            storage_backend: StorageBackend
             """
             If the analytics on the \`App\` should be enabled
             """
@@ -753,7 +737,10 @@ export default class AppManager extends Manager<App> {
                     new ObjectId(parent.id),
                     userMessages.appFailed,
                 );
-                if (app.storageProvider === StorageProvider.AWS_S3) {
+                if (
+                    app.storageProvider === StorageProvider.AWS_S3 ||
+                    app.storageProvider === StorageProvider.AWS_KINESIS
+                ) {
                     return {
                         result: [],
                         from: new Date(),
