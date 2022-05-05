@@ -27,6 +27,7 @@ const NavPlatformRevisionDataContainerQuery = gql`
                         org {
                             ...orgUserDetails
                         }
+                        enabled
                     }
                     platform_revisions {
                         id

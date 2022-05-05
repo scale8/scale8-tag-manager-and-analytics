@@ -1,5 +1,5 @@
 import TagManagerAccount from '../../mongo/models/tag/TagManagerAccount';
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import Manager from '../../abstractions/Manager';
 import { gql } from 'apollo-server-express';
 import CTX from '../../gql/ctx/CTX';
@@ -10,9 +10,14 @@ import { differenceInDays } from 'date-fns';
 import userMessages from '../../errors/UserMessages';
 import { fetchOrg } from '../../utils/OrgUtils';
 import { usageFromAccount } from '../../utils/UsageUtils';
+import TagManagerAccountRepo from '../../mongo/repos/tag/TagManagerAccountRepo';
+import TYPES from '../../container/IOC.types';
+import AccountService from '../../accounts/AccountService';
 
 @injectable()
 export default class TagManagerAccountManager extends Manager<TagManagerAccount> {
+    @inject(TYPES.AccountService) protected readonly accountService!: AccountService;
+
     protected gqlSchema = gql`
         """
         @model
@@ -48,6 +53,10 @@ export default class TagManagerAccountManager extends Manager<TagManagerAccount>
             If the free trial is expired
             """
             trial_expired: Boolean!
+            """
+            If the account is enabled
+            """
+            enabled: Boolean!
             """
             Account Usage
             """
@@ -134,7 +143,8 @@ export default class TagManagerAccountManager extends Manager<TagManagerAccount>
                     if (account.trialExpiresOn === undefined) {
                         return 0;
                     } else {
-                        const daysRemaining = differenceInDays(account.trialExpiresOn, new Date());
+                        const daysRemaining =
+                            differenceInDays(account.trialExpiresOn, new Date()) + 1;
                         return daysRemaining > 0 ? daysRemaining : 0;
                     }
                 });
@@ -159,8 +169,20 @@ export default class TagManagerAccountManager extends Manager<TagManagerAccount>
             },
             stripe_product_id: async (parent: any, args: any, ctx: CTX) => {
                 const org = await fetchOrg(new ObjectId(parent.org_id));
+
                 return await this.orgAuth.asUserWithViewAccess(ctx, org.id, async () => {
-                    return this.stripeService.getStripeProductId(org, 'TagManagerAccount');
+                    const account = await this.repoFactory<TagManagerAccountRepo>(
+                        TagManagerAccount,
+                    ).getFromOrg(org);
+                    const stripeProductId = await this.stripeService.getStripeProductId(
+                        org,
+                        account,
+                    );
+                    await this.accountService.alignAccountWithSubscription(
+                        stripeProductId,
+                        account,
+                    );
+                    return stripeProductId;
                 });
             },
             usage: async (parent: any, args: any, ctx: CTX) => {

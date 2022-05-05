@@ -105,7 +105,7 @@ export interface IngestEndpointPageData_getDataManagerAccount {
 export interface IngestEndpointPageData {
   /**
    * @bound=DataManagerAccount
-   * Returns a `DataManagerAccount` instance provided a valid ID is given and the user has sufficient priviledges to view it.
+   * Returns a `DataManagerAccount` instance provided a valid ID is given and the user has sufficient privileges to view it.
    */
   getDataManagerAccount: IngestEndpointPageData_getDataManagerAccount;
 }

@@ -1,4 +1,4 @@
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import Manager from '../../abstractions/Manager';
 import { gql } from 'apollo-server-express';
 import CTX from '../../gql/ctx/CTX';
@@ -9,9 +9,14 @@ import { differenceInDays } from 'date-fns';
 import userMessages from '../../errors/UserMessages';
 import { fetchOrg } from '../../utils/OrgUtils';
 import { usageFromAccount } from '../../utils/UsageUtils';
+import DataManagerAccountRepo from '../../mongo/repos/data/DataManagerAccountRepo';
+import TYPES from '../../container/IOC.types';
+import AccountService from '../../accounts/AccountService';
 
 @injectable()
 export default class DataManagerAccountManager extends Manager<DataManagerAccount> {
+    @inject(TYPES.AccountService) protected readonly accountService!: AccountService;
+
     protected gqlSchema = gql`
         """
         @model
@@ -65,6 +70,10 @@ export default class DataManagerAccountManager extends Manager<DataManagerAccoun
             """
             trial_expired: Boolean!
             """
+            If the account is enabled
+            """
+            enabled: Boolean!
+            """
             Account usage
             """
             usage: [DataManagerAccountUsage!]!
@@ -74,7 +83,7 @@ export default class DataManagerAccountManager extends Manager<DataManagerAccoun
         extend type Query {
             """
             @bound=DataManagerAccount
-            Returns a \`DataManagerAccount\` instance provided a valid ID is given and the user has sufficient priviledges to view it.
+            Returns a \`DataManagerAccount\` instance provided a valid ID is given and the user has sufficient privileges to view it.
             """
             getDataManagerAccount(id: ID!): DataManagerAccount!
         }
@@ -136,7 +145,8 @@ export default class DataManagerAccountManager extends Manager<DataManagerAccoun
                     if (account.trialExpiresOn === undefined) {
                         return 0;
                     } else {
-                        const daysRemaining = differenceInDays(account.trialExpiresOn, new Date());
+                        const daysRemaining =
+                            differenceInDays(account.trialExpiresOn, new Date()) + 1;
                         return daysRemaining > 0 ? daysRemaining : 0;
                     }
                 });
@@ -161,8 +171,20 @@ export default class DataManagerAccountManager extends Manager<DataManagerAccoun
             },
             stripe_product_id: async (parent: any, args: any, ctx: CTX) => {
                 const org = await fetchOrg(new ObjectId(parent.org_id));
+
                 return await this.orgAuth.asUserWithViewAccess(ctx, org.id, async () => {
-                    return this.stripeService.getStripeProductId(org, 'DataManagerAccount');
+                    const account = await this.repoFactory<DataManagerAccountRepo>(
+                        DataManagerAccount,
+                    ).getFromOrg(org);
+                    const stripeProductId = await this.stripeService.getStripeProductId(
+                        org,
+                        account,
+                    );
+                    await this.accountService.alignAccountWithSubscription(
+                        stripeProductId,
+                        account,
+                    );
+                    return stripeProductId;
                 });
             },
             usage: async (parent: any, args: any, ctx: CTX) => {

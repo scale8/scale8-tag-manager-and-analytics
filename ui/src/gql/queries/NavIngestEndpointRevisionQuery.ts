@@ -25,6 +25,7 @@ const NavIngestEndpointRevisionQuery = gql`
                     org {
                         ...orgUserDetails
                     }
+                    enabled
                 }
             }
         }

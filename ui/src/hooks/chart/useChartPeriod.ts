@@ -89,11 +89,7 @@ export const transferPeriodSessionParams = (source: GraphName, target: GraphName
 export const useChartPeriod = (graphName: GraphName, initialPeriod?: string): ChartPeriodProps => {
     const chartPeriodSessionParams = getChartPeriodSessionParams(graphName);
 
-    const [period, setPeriod] = useState<ChartPeriodType>(
-        initialPeriod === undefined
-            ? chartPeriodSessionParams.period ?? 'day'
-            : (initialPeriod as ChartPeriodType),
-    );
+    const [period, setPeriod] = useState<ChartPeriodType>(chartPeriodSessionParams.period ?? 'day');
     const [date, setDate] = useState<UTCTimestamp | undefined>(
         chartPeriodSessionParams.from
             ? undefined
@@ -101,6 +97,12 @@ export const useChartPeriod = (graphName: GraphName, initialPeriod?: string): Ch
     );
     const [from, setFrom] = useState<UTCTimestamp | undefined>(chartPeriodSessionParams.from);
     const [to, setTo] = useState<UTCTimestamp | undefined>(chartPeriodSessionParams.to);
+
+    useEffect(() => {
+        if (initialPeriod !== undefined) {
+            setPeriod(initialPeriod as ChartPeriodType);
+        }
+    }, [initialPeriod]);
 
     useEffect(() => {
         setChartPeriodSessionParams(graphName, {

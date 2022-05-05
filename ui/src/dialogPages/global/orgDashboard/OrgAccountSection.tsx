@@ -40,7 +40,7 @@ const OrgAccountSection: FC<OrgAccountSectionProps> = (props: OrgAccountSectionP
 
     const account = isTag ? data.getOrg.tag_manager_account : data.getOrg.data_manager_account;
 
-    if (account === null) {
+    if (!account.enabled) {
         if (isOwner) {
             return (
                 <AccountSectionButton
@@ -80,42 +80,31 @@ const OrgAccountSection: FC<OrgAccountSectionProps> = (props: OrgAccountSectionP
         }
     }
 
-    if (account.trial_expired) {
-        return (
-            <AccountSectionButton
-                clickAction={() => {
-                    router.push(toOrg({ id: data.getOrg.id }, 'settings')).then();
-                }}
-                text="Select Plan"
-                isOwner={isOwner}
-                isTag={isTag}
-                tooltip={
-                    isOwner
-                        ? 'Go to settings to select a plan'
-                        : 'Only the organization owner can change the account plans'
-                }
-            />
-        );
-    }
-
-    const trialInfo = account.is_trial ? (
-        <Box width="100%" mb={2}>
-            <Alert severity="info">
-                You have <b>{account.trial_expires_in}</b> days left in your free trial.{' '}
-                <Link
-                    href={
-                        isTag
-                            ? toOrg({ id: data.getOrg.id, plan: 'tag' }, 'settings')
-                            : toOrg({ id: data.getOrg.id, plan: 'data' }, 'settings')
-                    }
-                    sx={{ color: '#1b1b1b' }}
-                >
-                    Upgrade to a paid plan
-                </Link>
-                .
-            </Alert>
-        </Box>
-    ) : null;
+    const trialInfo =
+        account.is_trial || account.trial_expired ? (
+            <Box width="100%" mb={2}>
+                <Alert severity={account.trial_expired ? 'error' : 'info'}>
+                    {account.trial_expired ? (
+                        <>Your free trial is expired. </>
+                    ) : (
+                        <>
+                            You have <b>{account.trial_expires_in}</b> days left in your free trial.{' '}
+                        </>
+                    )}
+                    <Link
+                        href={
+                            isTag
+                                ? toOrg({ id: data.getOrg.id, plan: 'tag' }, 'settings')
+                                : toOrg({ id: data.getOrg.id, plan: 'data' }, 'settings')
+                        }
+                        sx={{ color: '#1b1b1b' }}
+                    >
+                        Upgrade to a paid plan
+                    </Link>
+                    .
+                </Alert>
+            </Box>
+        ) : null;
 
     if (isTag) {
         return (

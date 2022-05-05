@@ -29,9 +29,9 @@ const PlatformActionSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps
             ...buildCustomPlatformRevisionButtons(
                 data.me.orgs,
                 data.getPlatformAction.platform_revision.platform.tag_manager_account.org,
-                data.getPlatformAction.platform_revision.platform.tag_manager_account.id,
+                data.getPlatformAction.platform_revision.platform.tag_manager_account,
                 data.getPlatformAction.platform_revision.platform.tag_manager_account.org
-                    .data_manager_account?.id ?? '',
+                    .data_manager_account,
                 data.getPlatformAction.platform_revision.platform.tag_manager_account.platforms.filter(
                     (_) => _.type === PlatformType.CUSTOM,
                 ),
@@ -54,8 +54,9 @@ const PlatformActionSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps
         buildMenuItemsProps: () => [],
         extractOrgUserDetails: (data) =>
             data.getPlatformAction.platform_revision.platform.tag_manager_account.org,
-        accountExpireIn: orgUserState?.tagManagerAccount?.trialExpiration ?? undefined,
-        accountIsTrial: orgUserState?.tagManagerAccount?.isTrial ?? undefined,
+        accountExpireIn: orgUserState?.tagManagerAccount.trialExpiration ?? undefined,
+        accountExpired: orgUserState?.tagManagerAccount.trialExpired ?? undefined,
+        accountIsTrial: orgUserState?.tagManagerAccount.isTrial ?? undefined,
     };
 
     return <Section<NavPlatformRevisionAction> {...sectionProps} />;

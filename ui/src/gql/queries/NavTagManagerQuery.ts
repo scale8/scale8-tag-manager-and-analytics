@@ -9,6 +9,7 @@ const NavTagManagerQuery = gql`
             org {
                 ...orgUserDetails
             }
+            enabled
         }
         me {
             ...userOrgList

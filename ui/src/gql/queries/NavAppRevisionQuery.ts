@@ -27,6 +27,7 @@ const NavAppRevisionQuery = gql`
                     org {
                         ...orgUserDetails
                     }
+                    enabled
                 }
             }
         }

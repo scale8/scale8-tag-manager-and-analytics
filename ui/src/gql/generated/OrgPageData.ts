@@ -41,13 +41,13 @@ export interface OrgPageData_me_orgs {
    * A `TagManagerAccount` associated with this `Org`. A Scale8 Tag Manager account
    * might not exist yet unless a trial has been requested or product has been subscribed to.
    */
-  tag_manager_account: OrgPageData_me_orgs_tag_manager_account | null;
+  tag_manager_account: OrgPageData_me_orgs_tag_manager_account;
   /**
    * A `DataManagerAccount` associated with this `Org`. A Scale8 Data Manager
    * account might not exist yet unless a trial has been requested or product has
    * been subscribed to.
    */
-  data_manager_account: OrgPageData_me_orgs_data_manager_account | null;
+  data_manager_account: OrgPageData_me_orgs_data_manager_account;
   /**
    * List of `OrgUser`'s associated with this `Org`
    */

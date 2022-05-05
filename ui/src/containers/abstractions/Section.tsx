@@ -36,6 +36,7 @@ export type SectionProps<Q> = {
     requireValidTagManagerAccount?: boolean;
     requireValidDataManagerAccount?: boolean;
     accountExpireIn?: number;
+    accountExpired?: boolean;
     accountIsTrial?: boolean;
 };
 
@@ -48,6 +49,7 @@ const Section = <Q extends { [key: string]: any }>(props: SectionProps<Q>): Reac
         buildMenuItemsProps,
         buildBreadcrumbActions,
         accountExpireIn,
+        accountExpired,
         accountIsTrial,
         initContext,
     } = props;
@@ -152,6 +154,7 @@ const Section = <Q extends { [key: string]: any }>(props: SectionProps<Q>): Reac
                     buttonsProps={buttonsProps}
                     breadcrumbActions={breadcrumbActions}
                     accountExpireIn={accountExpireIn}
+                    accountExpired={accountExpired}
                     accountIsTrial={accountIsTrial}
                 />,
             );

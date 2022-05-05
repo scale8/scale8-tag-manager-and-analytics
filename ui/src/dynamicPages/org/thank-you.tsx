@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client';
 import ProductSettingsQuery from '../../gql/queries/ProductSettingsQuery';
 import { ProductSettings } from '../../gql/generated/ProductSettings';
 import Typography from '@mui/material/Typography';
-import { toDataManager, toOrg, toTagManager } from '../../utils/NavigationPaths';
+import { toOrg } from '../../utils/NavigationPaths';
 import Loader from '../../components/organisms/Loader';
 import Navigate from '../../components/atoms/Next/Navigate';
 import { QueryLoaderAndError } from '../../abstractions/QueryLoaderAndError';
@@ -50,31 +50,27 @@ const OrgThankYouPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
 
             if (product === 'tag-manager') {
                 if (
-                    data.getOrg.tag_manager_account !== null &&
+                    data.getOrg.tag_manager_account.enabled &&
                     !data.getOrg.tag_manager_account.is_trial &&
                     data.getOrg.tag_manager_account.stripe_product_id === plan_id
                 ) {
                     if (timer.current !== null) {
                         clearInterval(timer.current);
                     }
-                    return (
-                        <Navigate to={toTagManager({ id: data.getOrg.tag_manager_account.id })} />
-                    );
+                    return <Navigate to={toOrg({ id: data.getOrg.id }, 'settings')} />;
                 }
             }
 
             if (product === 'data-manger') {
                 if (
-                    data.getOrg.data_manager_account !== null &&
+                    data.getOrg.data_manager_account.enabled &&
                     !data.getOrg.data_manager_account.is_trial &&
                     data.getOrg.data_manager_account.stripe_product_id === plan_id
                 ) {
                     if (timer.current !== null) {
                         clearInterval(timer.current);
                     }
-                    return (
-                        <Navigate to={toDataManager({ id: data.getOrg.data_manager_account.id })} />
-                    );
+                    return <Navigate to={toOrg({ id: data.getOrg.id }, 'settings')} />;
                 }
             }
 

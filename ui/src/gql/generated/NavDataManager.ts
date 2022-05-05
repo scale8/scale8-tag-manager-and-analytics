@@ -14,9 +14,17 @@ export interface NavDataManager_getDataManagerAccount_org_tag_manager_account {
    */
   trial_expires_in: number;
   /**
+   * If the free trial is expired
+   */
+  trial_expired: boolean;
+  /**
    * If the account is in a trial period
    */
   is_trial: boolean;
+  /**
+   * If the account is enabled
+   */
+  enabled: boolean;
 }
 
 export interface NavDataManager_getDataManagerAccount_org_data_manager_account {
@@ -30,9 +38,17 @@ export interface NavDataManager_getDataManagerAccount_org_data_manager_account {
    */
   trial_expires_in: number;
   /**
+   * If the free trial is expired
+   */
+  trial_expired: boolean;
+  /**
    * If the account is in a trial period
    */
   is_trial: boolean;
+  /**
+   * If the account is enabled
+   */
+  enabled: boolean;
 }
 
 export interface NavDataManager_getDataManagerAccount_org_me_permissions {
@@ -90,13 +106,13 @@ export interface NavDataManager_getDataManagerAccount_org {
    * A `TagManagerAccount` associated with this `Org`. A Scale8 Tag Manager account
    * might not exist yet unless a trial has been requested or product has been subscribed to.
    */
-  tag_manager_account: NavDataManager_getDataManagerAccount_org_tag_manager_account | null;
+  tag_manager_account: NavDataManager_getDataManagerAccount_org_tag_manager_account;
   /**
    * A `DataManagerAccount` associated with this `Org`. A Scale8 Data Manager
    * account might not exist yet unless a trial has been requested or product has
    * been subscribed to.
    */
-  data_manager_account: NavDataManager_getDataManagerAccount_org_data_manager_account | null;
+  data_manager_account: NavDataManager_getDataManagerAccount_org_data_manager_account;
   /**
    * `OrgUser` representation of current `User`
    */
@@ -113,6 +129,10 @@ export interface NavDataManager_getDataManagerAccount {
    * `Org` that owns this `DataManagerAccount`
    */
   org: NavDataManager_getDataManagerAccount_org;
+  /**
+   * If the account is enabled
+   */
+  enabled: boolean;
 }
 
 export interface NavDataManager_me_orgs {
@@ -142,7 +162,7 @@ export interface NavDataManager_me {
 export interface NavDataManager {
   /**
    * @bound=DataManagerAccount
-   * Returns a `DataManagerAccount` instance provided a valid ID is given and the user has sufficient priviledges to view it.
+   * Returns a `DataManagerAccount` instance provided a valid ID is given and the user has sufficient privileges to view it.
    */
   getDataManagerAccount: NavDataManager_getDataManagerAccount;
   /**

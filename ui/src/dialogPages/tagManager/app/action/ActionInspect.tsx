@@ -40,11 +40,8 @@ const ActionInspect: FC<DialogPageProps> = (props: DialogPageProps) => {
                     }
                     ingestEndpoints={
                         data.getActionGroupDistribution.revision.app.tag_manager_account.org
-                            .data_manager_account === null
-                            ? []
-                            : (data.getActionGroupDistribution.revision.app.tag_manager_account.org
-                                  .data_manager_account
-                                  .ingest_endpoints as IngestEndpointForEnvironmentSelection[])
+                            .data_manager_account
+                            .ingest_endpoints as IngestEndpointForEnvironmentSelection[]
                     }
                     environments={data.getActionGroupDistribution.revision.app.environments}
                     revisions={data.getActionGroupDistribution.revision.app.revisions}
