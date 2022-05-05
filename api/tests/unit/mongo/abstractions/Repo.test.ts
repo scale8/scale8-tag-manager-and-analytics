@@ -42,6 +42,7 @@ describe('Abstract Repo', () => {
         );
         mockCollection.find = jest.fn(() => mockCursor) as Mock;
         mockCursor.sort = jest.fn(() => mockCursor) as Mock;
+        mockCursor.skip = jest.fn(() => mockCursor) as Mock;
         mockCursor.limit = jest.fn(() => mockCursor) as Mock;
         mockCursor.toArray = jest.fn().mockReturnValueOnce([
             {
