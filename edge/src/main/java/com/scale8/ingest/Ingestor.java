@@ -4,10 +4,7 @@ import com.google.gson.JsonObject;
 import com.scale8.Env;
 import com.scale8.config.structures.IngestSettings;
 import com.scale8.extended.types.Tuple;
-import com.scale8.ingest.storage.LogProvider;
-import com.scale8.ingest.storage.PushToMongoDb;
-import com.scale8.ingest.storage.PushToS3;
-import com.scale8.ingest.storage.StreamToBigQuery;
+import com.scale8.ingest.storage.*;
 import com.spencerwi.either.Either;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,11 +22,13 @@ public class Ingestor {
 
   @Inject Env env;
 
-  @Inject StreamToBigQuery streamToBigQuery;
+  @Inject PushToBigQuery pushToBigQuery;
 
   @Inject PushToMongoDb pushToMongoDb;
 
   @Inject PushToS3 pushToS3;
+
+  @Inject PushToKinesis pushToKinesis;
 
   @Inject LogProvider logProvider;
 
@@ -116,10 +115,13 @@ public class Ingestor {
                                 pushToMongoDb.push(ingestSettings, job.y);
                                 return Either.<Boolean, Exception>left(true);
                               case "GC_BIGQUERY_STREAM":
-                                streamToBigQuery.push(ingestSettings, job.y);
+                                pushToBigQuery.push(ingestSettings, job.y);
                                 return Either.<Boolean, Exception>left(true);
                               case "AWS_S3":
                                 pushToS3.push(ingestSettings, job.y);
+                                return Either.<Boolean, Exception>left(true);
+                              case "AWS_KINESIS":
+                                pushToKinesis.push(ingestSettings, job.y);
                                 return Either.<Boolean, Exception>left(true);
                               default:
                                 logProvider.push(ingestSettings, job.y);

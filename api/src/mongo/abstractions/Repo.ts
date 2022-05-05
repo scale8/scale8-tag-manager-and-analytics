@@ -196,18 +196,39 @@ export default abstract class Repo<T extends Model> {
         sort: { [k: string]: SortDirection } = {},
         limit = 1000,
         commonFilter: Filter<Document> = { _is_deleted: { $eq: false } },
+        skip = 0,
     ): Promise<T[]> {
         const collection = await this.getRepoCollection();
         const docs = await collection
             .find({ ...query, ...commonFilter })
             .sort(sort)
-            .limit(limit)
+            .skip(Math.abs(skip))
+            .limit(Math.abs(limit))
             .toArray();
         await this.logger.database(
             `Query on ${this.model.name}, returned ${docs.length} results`,
             query,
         );
         return docs.map((doc) => this.toModelType(doc) as T);
+    }
+
+    public async *findIterator(
+        query: Filter<Document>,
+        sort: { [k: string]: SortDirection } = {},
+        commonFilter: Filter<Document> = { _is_deleted: { $eq: false } },
+        bufferSize = 1000,
+    ): AsyncGenerator<T> {
+        let skip = 0;
+        let hasMore = false;
+        do {
+            const docs = await this.find(query, sort, bufferSize + 1, commonFilter, skip);
+            hasMore = docs.length > bufferSize;
+            skip += bufferSize;
+            for (const doc of docs.slice(0, bufferSize)) {
+                yield doc;
+            }
+        } while (hasMore);
+        return;
     }
 
     public async delete(

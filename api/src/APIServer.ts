@@ -214,8 +214,6 @@ export default class APIServer {
     }
 
     public async startServer(): Promise<void> {
-        //await this.config.dump();
-
         this.logger.info(`Connecting to MongoDB...`).then();
         await this.shell.connect();
 

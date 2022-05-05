@@ -3,6 +3,7 @@ package com.scale8.config.structures;
 import com.google.gson.Gson;
 import com.scale8.config.structures.schema.TypeSchema;
 import com.scale8.config.structures.storage.BigQueryStreamConfig;
+import com.scale8.config.structures.storage.KinesisConfig;
 import com.scale8.config.structures.storage.MongoDbConfig;
 import com.scale8.config.structures.storage.S3Config;
 import org.apache.commons.codec.binary.Hex;
@@ -29,6 +30,7 @@ public class IngestSettings {
   private BigQueryStreamConfig gc_bigquery_stream_config;
   private MongoDbConfig mongodb_config;
   private S3Config aws_s3_config;
+  private KinesisConfig aws_kinesis_config;
   private TypeSchema[] schema;
 
   public String getBuilt() {
@@ -85,6 +87,10 @@ public class IngestSettings {
 
   public S3Config getS3Config() {
     return aws_s3_config;
+  }
+
+  public KinesisConfig getKinesisConfig() {
+    return aws_kinesis_config;
   }
 
   public TypeSchema[] getSchema() {
