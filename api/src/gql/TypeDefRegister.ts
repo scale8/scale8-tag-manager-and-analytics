@@ -499,9 +499,13 @@ export default class TypeDefRegister {
 
             input StorageBackend {
                 """
-                The AWS specific configuration linked to this new \`IngestEndpointEnvironment\`
+                The AWS S3 configuration linked to this new \`IngestEndpointEnvironment\`
                 """
                 aws_storage_config: AWSStorageConfig
+                """
+                The AWS Kinesis configuration linked to this new \`IngestEndpointEnvironment\`
+                """
+                aws_kinesis_config: AWSKinesisConfig
                 """
                 The Google Cloud BigQuery Stream specific configuration linked to this new \`IngestEndpointEnvironment\`
                 """

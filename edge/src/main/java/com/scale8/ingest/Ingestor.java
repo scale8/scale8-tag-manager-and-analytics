@@ -46,13 +46,16 @@ public class Ingestor {
   }
 
   public void add(JsonObject payload, IngestSettings ingestSettings) {
-    environmentIngestSettings.putIfAbsent(
+    //this needs to be kept fresh.
+    environmentIngestSettings.put(
         ingestSettings.getIngestEndpointEnvironmentId(), ingestSettings);
     String revisionId = ingestSettings.getIngestEndpointRevisionId();
     revisionToEnvironment.put(revisionId, ingestSettings.getIngestEndpointEnvironmentId());
     revisionData.putIfAbsent(revisionId, new ConcurrentHashMap<>());
+
     ConcurrentHashMap<Long, ConcurrentLinkedQueue<JsonObject>> timeWindowMap =
         revisionData.get(revisionId);
+
     long currentWindow = getCurrentWritableWindow();
     ConcurrentLinkedQueue<JsonObject> writableWindow = timeWindowMap.get(currentWindow);
     if (writableWindow == null) {
