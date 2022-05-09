@@ -287,6 +287,7 @@ export enum SignUpType {
  * A set of supported storage providers for use with `TrackedEnvironment`s
  */
 export enum StorageProvider {
+  AWS_KINESIS = "AWS_KINESIS",
   AWS_S3 = "AWS_S3",
   GC_BIGQUERY_STREAM = "GC_BIGQUERY_STREAM",
   MONGODB = "MONGODB",
@@ -381,7 +382,7 @@ export enum VarType {
 }
 
 /**
- * In order to use AWS as your storage engine, you will need to create an AWS
+ * In order to use AWS S3 as your storage engine, you will need to create an AWS
  * account and create a new service account for Scale8. Please see our
  * documentation on how to configure this.
  */
@@ -502,9 +503,7 @@ export interface AppCreateInput {
   domain: string;
   type: AppType;
   storage_provider?: StorageProvider | null;
-  aws_storage_config?: AWSStorageConfig | null;
-  gc_bigquery_stream_config?: GCBigQueryStreamConfig | null;
-  mongo_push_config?: MongoDbPushConfig | null;
+  storage_backend?: StorageBackend | null;
   analytics_enabled: boolean;
   error_tracking_enabled: boolean;
 }
@@ -573,9 +572,7 @@ export interface AppUpdateInput {
   name?: string | null;
   domain?: string | null;
   storage_provider?: StorageProvider | null;
-  aws_storage_config?: AWSStorageConfig | null;
-  gc_bigquery_stream_config?: GCBigQueryStreamConfig | null;
-  mongo_push_config?: MongoDbPushConfig | null;
+  storage_backend?: StorageBackend | null;
   analytics_enabled: boolean;
   error_tracking_enabled: boolean;
 }
@@ -797,9 +794,7 @@ export interface IngestEndpointCreateInput {
   name: string;
   ingest_schema_wizard?: IngestSchemaWizard | null;
   storage_provider?: StorageProvider | null;
-  aws_storage_config?: AWSStorageConfig | null;
-  gc_bigquery_stream_config?: GCBigQueryStreamConfig | null;
-  mongo_push_config?: MongoDbPushConfig | null;
+  storage_backend?: StorageBackend | null;
   analytics_enabled: boolean;
 }
 
@@ -851,9 +846,7 @@ export interface IngestEndpointEnvironmentCreateInput {
   key_pem?: string | null;
   storage_provider: StorageProvider;
   ingest_endpoint_revision_id: string;
-  aws_storage_config?: AWSStorageConfig | null;
-  gc_bigquery_stream_config?: GCBigQueryStreamConfig | null;
-  mongo_push_config?: MongoDbPushConfig | null;
+  storage_backend?: StorageBackend | null;
 }
 
 /**
@@ -877,9 +870,7 @@ export interface IngestEndpointEnvironmentUpdateInput {
   custom_domain?: string | null;
   cert_pem?: string | null;
   key_pem?: string | null;
-  aws_storage_config?: AWSStorageConfig | null;
-  gc_bigquery_stream_config?: GCBigQueryStreamConfig | null;
-  mongo_push_config?: MongoDbPushConfig | null;
+  storage_backend?: StorageBackend | null;
 }
 
 /**
@@ -897,9 +888,7 @@ export interface IngestEndpointUpdateInput {
   ingest_endpoint_id: string;
   name?: string | null;
   storage_provider?: StorageProvider | null;
-  aws_storage_config?: AWSStorageConfig | null;
-  gc_bigquery_stream_config?: GCBigQueryStreamConfig | null;
-  mongo_push_config?: MongoDbPushConfig | null;
+  storage_backend?: StorageBackend | null;
   analytics_enabled: boolean;
 }
 
@@ -1199,6 +1188,12 @@ export interface StartDataManagerTrialInput {
 
 export interface StartTagManagerTrialInput {
   org_id: string;
+}
+
+export interface StorageBackend {
+  aws_storage_config?: AWSStorageConfig | null;
+  gc_bigquery_stream_config?: GCBigQueryStreamConfig | null;
+  mongo_push_config?: MongoDbPushConfig | null;
 }
 
 export interface TagCreateInput {

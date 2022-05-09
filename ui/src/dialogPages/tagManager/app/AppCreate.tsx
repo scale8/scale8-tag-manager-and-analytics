@@ -11,7 +11,7 @@ import { DialogPageProps } from '../../../types/DialogTypes';
 import { buildStandardFormInfo } from '../../../utils/InfoLabelsUtils';
 import { DialogForm, DialogFormProps } from '../../abstractions/DialogForm';
 import {
-    buildStorageProviderSaveProperties,
+    buildStorageBackendSaveProperties,
     initialStorageProviderFields,
     storageProviderCustomValueSetter,
     StorageProviderFields,
@@ -102,7 +102,7 @@ const AppCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
                     analytics_enabled: appValues.analyticsEnabled,
                     error_tracking_enabled: appValues.errorTrackingEnabled,
                     storage_provider: appValues.storageProvider as StorageProvider,
-                    ...buildStorageProviderSaveProperties(appValues, true),
+                    storage_backend: buildStorageBackendSaveProperties(appValues, true),
                 },
             };
         },

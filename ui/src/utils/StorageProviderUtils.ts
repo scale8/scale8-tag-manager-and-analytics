@@ -12,6 +12,8 @@ export const getStorageProviderLabel = (key: string): string => {
     switch (key) {
         case StorageProvider.GC_BIGQUERY_STREAM:
             return 'Google Cloud BigQuery Stream';
+        case StorageProvider.AWS_KINESIS:
+            return 'Amazon Kinesis';
         case StorageProvider.AWS_S3:
             return 'Amazon AWS S3';
         case StorageProvider.MONGODB:
@@ -104,7 +106,7 @@ export const storageProviderValidators: ValidateConfiguration<any>[] = [
     },
 ];
 
-export const buildStorageProviderSaveProperties = (
+export const buildStorageBackendSaveProperties = (
     values: StorageProviderFieldsWithPartitionFilterChoice,
     isCreate = false,
     hasPartitionFilterChoice = false,

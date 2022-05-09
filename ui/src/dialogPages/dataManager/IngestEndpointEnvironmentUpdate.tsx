@@ -16,7 +16,7 @@ import { buildStandardFormInfo } from '../../utils/InfoLabelsUtils';
 import { DialogPageProps } from '../../types/DialogTypes';
 import { DialogPreloadForm, DialogPreloadFormProps } from '../abstractions/DialogPreloadForm';
 import {
-    buildStorageProviderSaveProperties,
+    buildStorageBackendSaveProperties,
     initialStorageProviderFieldsWithPartitionFilterChoice,
     storageProviderValidators,
 } from '../../utils/StorageProviderUtils';
@@ -53,7 +53,10 @@ const IngestEndpointEnvironmentUpdate: FC<DialogPageProps> = (props: DialogPageP
                 ingest_endpoint_environment_id: props.id,
                 ingest_endpoint_revision_id: ingestEndpointEnvironmentValues.revisionId,
                 name: ingestEndpointEnvironmentValues.name,
-                ...buildStorageProviderSaveProperties(ingestEndpointEnvironmentValues, false),
+                storage_backend: buildStorageBackendSaveProperties(
+                    ingestEndpointEnvironmentValues,
+                    false,
+                ),
             };
 
             if (ingestEndpointEnvironmentValues.certificate !== '') {
