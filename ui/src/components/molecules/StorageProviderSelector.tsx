@@ -85,6 +85,13 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
                     <>
                         <BoxedInputs label="AWS Kinesis Storage Config">
                             <ControlledTextInput
+                                name="streamName"
+                                label="Stream Name"
+                                formProps={props}
+                                className="DrawerFormField"
+                                required
+                            />
+                            <ControlledTextInput
                                 name="accessKeyId"
                                 label="Access Key Id"
                                 formProps={props}

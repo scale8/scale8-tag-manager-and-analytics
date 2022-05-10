@@ -1,8 +1,10 @@
 import {
+    AWSKinesisConfig,
     AWSRegion,
     AWSStorageConfig,
     GCBigQueryStreamConfig,
     MongoDbPushConfig,
+    StorageBackend,
     StorageProvider,
 } from '../gql/generated/globalTypes';
 import { Dispatch, SetStateAction } from 'react';
@@ -26,6 +28,7 @@ export const getStorageProviderLabel = (key: string): string => {
 export type StorageProviderFields = {
     storageProvider?: string;
     bucketName?: string;
+    streamName?: string;
     accessKeyId?: string;
     secretAccessKey?: string;
     region?: string;
@@ -110,11 +113,7 @@ export const buildStorageBackendSaveProperties = (
     values: StorageProviderFieldsWithPartitionFilterChoice,
     isCreate = false,
     hasPartitionFilterChoice = false,
-): {
-    aws_storage_config?: AWSStorageConfig;
-    gc_bigquery_stream_config?: GCBigQueryStreamConfig;
-    mongo_push_config?: MongoDbPushConfig;
-} => {
+): StorageBackend => {
     const pathPrefix = values.pathPrefix ?? '';
 
     const aws_storage_config: AWSStorageConfig = {
@@ -123,6 +122,13 @@ export const buildStorageBackendSaveProperties = (
         region: values.region as AWSRegion,
         bucket_name: values.bucketName ?? '',
         path_prefix: pathPrefix === '' ? pathPrefix : undefined,
+    };
+
+    const aws_kinesis_config: AWSKinesisConfig = {
+        access_key_id: values.accessKeyId ?? '',
+        secret_access_key: values.secretAccessKey ?? '',
+        region: values.region as AWSRegion,
+        stream_name: values.streamName ?? '',
     };
 
     const parseServiceAccountJson = (): S8JSON => {
@@ -153,6 +159,10 @@ export const buildStorageBackendSaveProperties = (
     if (isCreate || values.editStorageProviderSettings) {
         if (values.storageProvider === StorageProvider.AWS_S3) {
             return { aws_storage_config };
+        }
+
+        if (values.storageProvider === StorageProvider.AWS_KINESIS) {
+            return { aws_kinesis_config };
         }
 
         if (values.storageProvider === StorageProvider.GC_BIGQUERY_STREAM) {

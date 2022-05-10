@@ -382,6 +382,18 @@ export enum VarType {
 }
 
 /**
+ * In order to use AWS Kinesis as your storage engine, you will need to create an
+ * AWS account and create a new service account for Scale8. Please see our
+ * documentation on how to configure this.
+ */
+export interface AWSKinesisConfig {
+  access_key_id: string;
+  secret_access_key: string;
+  region: AWSRegion;
+  stream_name: string;
+}
+
+/**
  * In order to use AWS S3 as your storage engine, you will need to create an AWS
  * account and create a new service account for Scale8. Please see our
  * documentation on how to configure this.
@@ -1192,6 +1204,7 @@ export interface StartTagManagerTrialInput {
 
 export interface StorageBackend {
   aws_storage_config?: AWSStorageConfig | null;
+  aws_kinesis_config?: AWSKinesisConfig | null;
   gc_bigquery_stream_config?: GCBigQueryStreamConfig | null;
   mongo_push_config?: MongoDbPushConfig | null;
 }
