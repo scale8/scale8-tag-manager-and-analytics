@@ -14,6 +14,7 @@ import {
     DuplicateValidators,
     DuplicateValues,
 } from '../../../../utils/forms/DuplicateDialogFormUtils';
+import { generateRevisionName } from '../../../../../../common/utils/GenerateRevisionName';
 
 const TagDuplicate: FC<DialogPageProps> = (props: DialogPageProps) => {
     const duplicateProps: DialogPreloadFormProps<
@@ -25,8 +26,8 @@ const TagDuplicate: FC<DialogPageProps> = (props: DialogPageProps) => {
         loadQuery: useQuery<DuplicateTagGetData>(DuplicateTagGetQuery, {
             variables: { id: props.id },
         }),
-        buildInitialStatePreload: (formLoadedData: DuplicateTagGetData) => ({
-            name: `${formLoadedData.getTag.name} Copy`,
+        buildInitialStatePreload: () => ({
+            name: generateRevisionName(),
         }),
         saveQuery: useMutation<DuplicateTag>(DuplicateTagQuery),
         mapSaveData: (formValues: DuplicateValues) => ({

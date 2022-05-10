@@ -11,6 +11,7 @@ import GQLMethod from '../../enums/GQLMethod';
 import OperationOwner from '../../enums/OperationOwner';
 import userMessages from '../../errors/UserMessages';
 import { PlatformType } from '../../enums/PlatformType';
+import { generateRevisionName } from '../../../../common/utils/GenerateRevisionName';
 
 @injectable()
 export default class PlatformManager extends Manager<Platform> {
@@ -164,7 +165,7 @@ export default class PlatformManager extends Manager<Platform> {
                         if (platform.type === PlatformType.TEMPLATED) {
                             //we have to create the first revision automatically...
                             await this.repoFactory(PlatformRevision).save(
-                                new PlatformRevision('Revision 1', platform),
+                                new PlatformRevision(generateRevisionName(), platform),
                                 me,
                                 OperationOwner.USER,
                                 {
