@@ -1,13 +1,14 @@
 import { FC, useEffect, useState } from 'react';
-import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import DrawerFormLayout from '../../molecules/DrawerFormLayout';
 import { Box, Checkbox, Divider, FormControlLabel } from '@mui/material';
 import Loader from '../Loader';
-import { AppFormProps } from '../../../dialogPages/tagManager/app/AppCreate';
+import { AppFormProps, AppValues } from '../../../dialogPages/tagManager/app/AppCreate';
 import StorageProviderSelector from '../../molecules/StorageProviderSelector';
 import CheckBoxInput from '../../atoms/InputTypes/CheckBoxInput';
 import { Mode } from '../../../gql/generated/globalTypes';
 import { useConfigState } from '../../../context/AppContext';
+import { DialogFormContextProvider } from '../../../context/DialogFormContext';
+import { DialogFormTextInput } from '../../atoms/DialogFormInputs/DialogFormTextInput';
 
 const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
     const { mode } = useConfigState();
@@ -25,7 +26,7 @@ const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
     }, [values, handleChange, useDomainName]);
 
     return (
-        <>
+        <DialogFormContextProvider<AppValues> formProps={props}>
             {props.isSubmitting && props.isCreate ? (
                 <Box display="flex" flexDirection="column" height="100vh">
                     <Box display="flex" alignItems="center" height={44}>
@@ -47,13 +48,7 @@ const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
                 </Box>
             ) : (
                 <DrawerFormLayout {...props}>
-                    <ControlledTextInput
-                        name="domain"
-                        label="Domain"
-                        formProps={props}
-                        className="DrawerFormField"
-                        required
-                    />
+                    <DialogFormTextInput name="domain" label="Domain" />
                     <FormControlLabel
                         sx={{ marginBottom: (theme) => theme.spacing(3) }}
                         control={
@@ -68,15 +63,7 @@ const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
                         }
                         label="Use domain as Application name"
                     />
-                    {!useDomainName && (
-                        <ControlledTextInput
-                            name="name"
-                            label="Name"
-                            formProps={props}
-                            className="DrawerFormField"
-                            required
-                        />
-                    )}
+                    {!useDomainName && <DialogFormTextInput name="name" label="Name" />}
 
                     {mode !== Mode.COMMERCIAL && (
                         <>
@@ -87,13 +74,13 @@ const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
                                     props.handleChange('analyticsEnabled', v);
                                 }}
                                 label="Enable Analytics"
-                                className="DrawerFormField"
+                                className="DialogFormField"
                                 sx={{ marginLeft: '-11px!important' }}
                                 color="primary"
                             />
                             <Box
                                 component="small"
-                                className="DrawerFormField"
+                                className="DialogFormField"
                                 sx={{ marginTop: '-24px' }}
                             >
                                 Enable simple analytics dashboard when using Tag Manager. We
@@ -106,13 +93,13 @@ const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
                                     props.handleChange('errorTrackingEnabled', v);
                                 }}
                                 label="Enable Error Tracking"
-                                className="DrawerFormField"
+                                className="DialogFormField"
                                 sx={{ marginLeft: '-11px!important' }}
                                 color="primary"
                             />
                             <Box
                                 component="small"
-                                className="DrawerFormField"
+                                className="DialogFormField"
                                 sx={{ marginTop: '-24px' }}
                             >
                                 Enable basic website and mobile website application errors directly
@@ -136,7 +123,7 @@ const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
                     )}
                 </DrawerFormLayout>
             )}
-        </>
+        </DialogFormContextProvider>
     );
 };
 

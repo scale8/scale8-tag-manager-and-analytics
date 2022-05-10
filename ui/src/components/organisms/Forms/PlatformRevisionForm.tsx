@@ -11,7 +11,7 @@ const PlatformRevisionForm: FC<PlatformRevisionFormProps> = (props: PlatformRevi
                 name="name"
                 label="Name"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
                 required
                 autoFocus
             />
@@ -19,7 +19,7 @@ const PlatformRevisionForm: FC<PlatformRevisionFormProps> = (props: PlatformRevi
                 name="comments"
                 label="Comments"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
             />
         </DrawerFormLayout>
     );

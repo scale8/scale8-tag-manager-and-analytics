@@ -52,7 +52,7 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
             {props.isCreate ? (
                 <>
                     <ControlledSelect
-                        className="DrawerFormField"
+                        className="DialogFormField"
                         label="Storage Provider"
                         name="storageProvider"
                         values={storageProviderValues}
@@ -62,7 +62,7 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
                     />
 
                     {props.infoText && (
-                        <Alert severity="info" className="DrawerFormField">
+                        <Alert severity="info" className="DialogFormField">
                             {props.infoText}
                         </Alert>
                     )}
@@ -75,7 +75,7 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
                         props.handleChange('editStorageProviderSettings', v);
                     }}
                     label="Edit Storage Provider Settings"
-                    className="DrawerFormField"
+                    className="DialogFormField"
                     sx={{ marginLeft: '-11px!important' }}
                     color="primary"
                 />
@@ -88,25 +88,25 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
                                 name="streamName"
                                 label="Stream Name"
                                 formProps={props}
-                                className="DrawerFormField"
+                                className="DialogFormField"
                                 required
                             />
                             <ControlledTextInput
                                 name="accessKeyId"
                                 label="Access Key Id"
                                 formProps={props}
-                                className="DrawerFormField"
+                                className="DialogFormField"
                                 required
                             />
                             <ControlledTextInput
                                 name="secretAccessKey"
                                 label="Secret Access Key"
                                 formProps={props}
-                                className="DrawerFormField"
+                                className="DialogFormField"
                                 required
                             />
                             <ControlledSelect
-                                className="DrawerFormField"
+                                className="DialogFormField"
                                 label="Region"
                                 name="region"
                                 values={awsRegionValues}
@@ -120,7 +120,7 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
                 props.values.storageProvider === StorageProvider.AWS_S3 && (
                     <>
                         {props.warnGraphDisabled && (
-                            <Alert severity="warning" className="DrawerFormField">
+                            <Alert severity="warning" className="DialogFormField">
                                 If you use S3 as provider the graphs in the dashboard will be
                                 disabled.
                             </Alert>
@@ -130,25 +130,25 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
                                 name="bucketName"
                                 label="Bucket Name"
                                 formProps={props}
-                                className="DrawerFormField"
+                                className="DialogFormField"
                                 required
                             />
                             <ControlledTextInput
                                 name="accessKeyId"
                                 label="Access Key Id"
                                 formProps={props}
-                                className="DrawerFormField"
+                                className="DialogFormField"
                                 required
                             />
                             <ControlledTextInput
                                 name="secretAccessKey"
                                 label="Secret Access Key"
                                 formProps={props}
-                                className="DrawerFormField"
+                                className="DialogFormField"
                                 required
                             />
                             <ControlledSelect
-                                className="DrawerFormField"
+                                className="DialogFormField"
                                 label="Region"
                                 name="region"
                                 values={awsRegionValues}
@@ -159,7 +159,7 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
                                 name="pathPrefix"
                                 label="Path Prefix"
                                 formProps={props}
-                                className="DrawerFormField"
+                                className="DialogFormField"
                             />
                         </BoxedInputs>
                     </>
@@ -182,11 +182,11 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
                             name="dataSetName"
                             label="Data Set Name"
                             formProps={props}
-                            className="DrawerFormField"
+                            className="DialogFormField"
                             required
                         />
                         <ControlledSelect
-                            className="DrawerFormField"
+                            className="DialogFormField"
                             label="Data Set Location"
                             name="dataSetLocation"
                             values={dataSetLocationValues}
@@ -195,7 +195,7 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
                         />
                         {props.includeBigQueryPartitionFilter && (
                             <ControlledBooleanSelect
-                                className="DrawerFormField"
+                                className="DialogFormField"
                                 label="Require partition filter in queries"
                                 name="requirePartitionFilterInQueries"
                                 formProps={props}
@@ -214,7 +214,7 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
                                 props.handleChange('useApiMongoServer', v);
                             }}
                             label="Use API Mongo Server"
-                            className="DrawerFormField"
+                            className="DialogFormField"
                             sx={{ marginLeft: '-11px!important' }}
                             color="primary"
                         />
@@ -224,14 +224,14 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
                                     name="connectionString"
                                     label="Connection String"
                                     formProps={props}
-                                    className="DrawerFormField"
+                                    className="DialogFormField"
                                     required
                                 />
                                 <ControlledTextInput
                                     name="databaseName"
                                     label="Database Name"
                                     formProps={props}
-                                    className="DrawerFormField"
+                                    className="DialogFormField"
                                     required
                                 />
                             </>

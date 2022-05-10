@@ -17,7 +17,7 @@ const EnvironmentForm: FC<EnvironmentFormProps> = (props: EnvironmentFormProps) 
                 name="name"
                 label="Name"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
                 required
                 autoFocus
             />
@@ -26,7 +26,7 @@ const EnvironmentForm: FC<EnvironmentFormProps> = (props: EnvironmentFormProps) 
                 name="url"
                 label="URL"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
             />
 
             {props.availableRevisions.length < 1 && (
@@ -37,7 +37,7 @@ const EnvironmentForm: FC<EnvironmentFormProps> = (props: EnvironmentFormProps) 
             )}
 
             <ControlledSelect
-                className="DrawerFormField"
+                className="DialogFormField"
                 label="Revision"
                 name="revisionId"
                 values={props.availableRevisions}
@@ -70,7 +70,7 @@ const EnvironmentForm: FC<EnvironmentFormProps> = (props: EnvironmentFormProps) 
                 name="comments"
                 label="Comments"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
             />
         </DrawerFormLayout>
     );

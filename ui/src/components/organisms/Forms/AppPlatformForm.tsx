@@ -12,7 +12,7 @@ const AppPlatformForm: FC<AppPlatformFormProps> = (props: AppPlatformFormProps) 
                 <small>There are no more platforms available.</small>
             ) : (
                 <ControlledSelect
-                    className="DrawerFormField"
+                    className="DialogFormField"
                     label="Platform"
                     name="platformId"
                     values={props.availableAppPlatforms}

@@ -41,7 +41,7 @@ const ChangePasswordForm: FC<ChangePasswordFormProps> = (props: ChangePasswordFo
                         name="oldPassword"
                         label="Old Password"
                         formProps={props}
-                        className="DrawerFormField"
+                        className="DialogFormField"
                         required
                         inputProps={{
                             autoComplete: 'password',
@@ -53,7 +53,7 @@ const ChangePasswordForm: FC<ChangePasswordFormProps> = (props: ChangePasswordFo
                         name="newPassword"
                         label="New Password"
                         formProps={props}
-                        className="DrawerFormField"
+                        className="DialogFormField"
                         required
                         inputProps={{
                             autoComplete: 'new-password',
@@ -64,7 +64,7 @@ const ChangePasswordForm: FC<ChangePasswordFormProps> = (props: ChangePasswordFo
                         name="newPasswordConfirm"
                         label="Confirm New Password"
                         formProps={props}
-                        className="DrawerFormField"
+                        className="DialogFormField"
                         required
                         inputProps={{
                             autoComplete: 'new-password',

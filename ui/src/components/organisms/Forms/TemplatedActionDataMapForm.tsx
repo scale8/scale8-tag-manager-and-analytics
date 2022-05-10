@@ -46,12 +46,12 @@ const TemplatedActionDataMapForm: FC<TemplatedActionDataMapFormProps> = (
                 name="key"
                 label="Key"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
                 disabled={props.readOnly}
                 required
             />
             <ControlledSelect
-                className="DrawerFormField"
+                className="DialogFormField"
                 label="Type"
                 name="type"
                 values={getSelectValuesForPlatformDataMapType()}
@@ -63,7 +63,7 @@ const TemplatedActionDataMapForm: FC<TemplatedActionDataMapFormProps> = (
                 name="description"
                 label="Description"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
                 disabled={props.isEdit}
                 required
             />

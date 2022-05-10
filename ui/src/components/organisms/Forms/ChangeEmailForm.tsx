@@ -22,14 +22,14 @@ const ChangeEmailForm: FC<ChangeEmailProps> = (props: ChangeEmailProps) => {
                         name="email"
                         label="Email"
                         formProps={props}
-                        className="DrawerFormField"
+                        className="DialogFormField"
                         required
                     />
                     <ControlledTextInput
                         name="confirmEmail"
                         label="Confirm Email"
                         formProps={props}
-                        className="DrawerFormField"
+                        className="DialogFormField"
                         required
                     />
                 </DialogContent>

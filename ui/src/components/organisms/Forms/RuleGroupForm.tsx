@@ -11,7 +11,7 @@ const RuleGroupForm: FC<RuleGroupFormProps> = (props: RuleGroupFormProps) => {
                 name="name"
                 label="Name"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
                 required
                 autoFocus
             />
@@ -19,7 +19,7 @@ const RuleGroupForm: FC<RuleGroupFormProps> = (props: RuleGroupFormProps) => {
                 name="comments"
                 label="Comments"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
             />
         </DrawerFormLayout>
     );

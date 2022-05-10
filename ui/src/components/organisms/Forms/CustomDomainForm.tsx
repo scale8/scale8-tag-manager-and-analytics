@@ -19,7 +19,7 @@ const CustomDomainForm: FC<CustomDomainFormProps> = (props: CustomDomainFormProp
                 name="domain"
                 label="Domain"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
                 required
             />
             <ControlledTextAreaInput
@@ -27,7 +27,7 @@ const CustomDomainForm: FC<CustomDomainFormProps> = (props: CustomDomainFormProp
                 name="certificate"
                 label="Certificate (pem)"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
                 required
             />
             <ControlledTextAreaInput
@@ -35,7 +35,7 @@ const CustomDomainForm: FC<CustomDomainFormProps> = (props: CustomDomainFormProp
                 name="key"
                 label="Key (pem)"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
                 required
             />
         </DrawerFormLayout>

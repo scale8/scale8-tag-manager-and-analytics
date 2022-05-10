@@ -11,7 +11,7 @@ const OrgUserAddForm: FC<OrgUserAddFormProps> = (props: OrgUserAddFormProps) => 
                 name="firstName"
                 label="First Name"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
                 required
                 fullWidth
             />
@@ -19,7 +19,7 @@ const OrgUserAddForm: FC<OrgUserAddFormProps> = (props: OrgUserAddFormProps) => 
                 name="lastName"
                 label="Last Name"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
                 required
                 fullWidth
             />
@@ -27,7 +27,7 @@ const OrgUserAddForm: FC<OrgUserAddFormProps> = (props: OrgUserAddFormProps) => 
                 name="email"
                 label="Email"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
                 required
             />
             <FormPermissionSection formProps={props} />
