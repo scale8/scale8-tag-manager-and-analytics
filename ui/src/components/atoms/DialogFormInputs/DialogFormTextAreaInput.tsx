@@ -1,24 +1,27 @@
 import { FC } from 'react';
-import ControlledTextInput from '../ControlledInputs/ControlledTextInput';
 import { useDialogFormContext } from '../../../context/DialogFormContext';
+import ControlledTextAreaInput from '../ControlledInputs/ControlledTextAreaInput';
 
-type DialogFormTextInputProps = {
+type DialogFormTextAreaInputProps = {
     name: string;
     label: string;
-    autoFocus?: boolean;
+    optional?: boolean;
 };
 
-export const DialogFormTextInput: FC<DialogFormTextInputProps> = ({ name, label, autoFocus }) => {
+export const DialogFormTextAreaInput: FC<DialogFormTextAreaInputProps> = ({
+    name,
+    label,
+    optional,
+}) => {
     const formProps = useDialogFormContext();
 
     return (
-        <ControlledTextInput
+        <ControlledTextAreaInput
             name={name}
             label={label}
             formProps={formProps}
             className="DialogFormField"
-            autoFocus={autoFocus}
-            required
+            required={!optional}
         />
     );
 };

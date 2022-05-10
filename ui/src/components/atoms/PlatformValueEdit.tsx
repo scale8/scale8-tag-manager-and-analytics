@@ -2,12 +2,13 @@ import { FC, useEffect, useState } from 'react';
 import { Box, Checkbox, FormControlLabel } from '@mui/material';
 import { FormErrors, SelectValueWithSub } from '../../hooks/form/useFormValidation';
 import { snakeToTitleCase, splitTwice } from '../../utils/TextUtils';
-import ControlledFilteredSelects from './ControlledInputs/ControlledFilteredSelects';
 import { DataContainer } from '../../types/DataMapsTypes';
-import ControlledTextInput from './ControlledInputs/ControlledTextInput';
-import ControlledSelect from './ControlledInputs/ControlledSelect';
 import { platformDataMapsToSelectValues } from '../../utils/DataContainersUtils';
 import { VarType } from '../../gql/generated/globalTypes';
+import { DialogFormTextInput } from './DialogFormInputs/DialogFormTextInput';
+import { DialogFormSelect } from './DialogFormInputs/DialogFormSelect';
+import { DialogFormFilteredSelects } from './DialogFormInputs/DialogFormFilteredSelects';
+import { DialogFormContextProvider } from '../../context/DialogFormContext';
 
 export type PlatformValueEditProps = {
     value: string;
@@ -32,6 +33,8 @@ const findPlatformIdFromContainerId = (
 
     return platform.key;
 };
+
+type PlatformValues = { dataContainerId: string; objectKey: string; dataElement: string };
 
 const PlatformValueEdit: FC<PlatformValueEditProps> = (props: PlatformValueEditProps) => {
     const { value, setValue, dataContainersSelectValues, disabled, availableDataContainers } =
@@ -147,112 +150,93 @@ const PlatformValueEdit: FC<PlatformValueEditProps> = (props: PlatformValueEditP
         currentDataElement !== undefined && currentDataElement.var_type === VarType.OBJECT;
 
     return (
-        <Box>
-            {noContainers ? (
-                <small>There are no platforms with data containers available.</small>
-            ) : (
-                <ControlledFilteredSelects
-                    className="DialogFormField"
-                    label="Data Container"
-                    initialFilterValue={findPlatformIdFromContainerId(
-                        initialDataContainerId,
-                        dataContainersSelectValues,
-                    )}
-                    name="dataContainerId"
-                    values={dataContainersSelectValues}
-                    formProps={formProps}
-                    required
-                    disabled={disabled}
-                    filterLabel="Platform"
-                    missingSubMessage="There are no data containers available in this platform."
-                    hideNoSub
-                />
-            )}
-            {currentDataContainer && (
-                <Box
-                    component="small"
-                    sx={{
-                        display: 'block',
-                        width: '100%',
-                        margin: (theme) => theme.spacing(0, 0, 2),
-                    }}
-                >
-                    {currentDataContainer.description}
-                </Box>
-            )}
-
-            {notAvailable && (
-                <small>It is not possible to use this data container for this field.</small>
-            )}
-
-            {hasDataMapsAndCustom && (
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            name="useCustom"
-                            checked={useCustom}
-                            onChange={(event) => {
-                                if (event.target.checked) {
-                                    setUseCustom(true);
-                                } else {
-                                    setUseCustom(false);
-                                }
-                            }}
-                            color="primary"
-                        />
-                    }
-                    label="Use Custom Data Element"
-                />
-            )}
-
-            {useCustom && (
-                <ControlledTextInput
-                    name="dataElement"
-                    label="Custom Data Element"
-                    formProps={formProps}
-                    className="DialogFormField"
-                    required
-                />
-            )}
-
-            {currentDataContainer && hasDataMaps && !useCustom && (
-                <>
-                    <ControlledSelect
-                        className="DialogFormField"
-                        label="Data Element"
-                        name="dataElement"
-                        values={platformDataMapsToSelectValues(
-                            currentDataContainer.platform_data_maps,
-                            true,
+        <DialogFormContextProvider<PlatformValues> formProps={formProps}>
+            <Box>
+                {noContainers ? (
+                    <small>There are no platforms with data containers available.</small>
+                ) : (
+                    <DialogFormFilteredSelects
+                        name="dataContainerId"
+                        label="Data Container"
+                        initialFilterValue={findPlatformIdFromContainerId(
+                            initialDataContainerId,
+                            dataContainersSelectValues,
                         )}
-                        formProps={formProps}
-                        required
+                        values={dataContainersSelectValues}
+                        filterLabel="Platform"
+                        missingSubMessage="There are no data containers available in this platform."
+                        disabled={disabled}
                     />
-                </>
-            )}
-            {currentDataElement && (
-                <Box
-                    component="small"
-                    sx={{
-                        display: 'block',
-                        width: '100%',
-                        margin: (theme) => theme.spacing(0, 0, 2),
-                    }}
-                >
-                    ({snakeToTitleCase(currentDataElement.var_type)}){' '}
-                    {currentDataElement.description}
-                </Box>
-            )}
-            {isDataElementObject && (
-                <ControlledTextInput
-                    name="objectKey"
-                    label="Key"
-                    formProps={formProps}
-                    className="DialogFormField"
-                    required
-                />
-            )}
-        </Box>
+                )}
+                {currentDataContainer && (
+                    <Box
+                        component="small"
+                        sx={{
+                            display: 'block',
+                            width: '100%',
+                            margin: (theme) => theme.spacing(0, 0, 2),
+                        }}
+                    >
+                        {currentDataContainer.description}
+                    </Box>
+                )}
+
+                {notAvailable && (
+                    <small>It is not possible to use this data container for this field.</small>
+                )}
+
+                {hasDataMapsAndCustom && (
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                name="useCustom"
+                                checked={useCustom}
+                                onChange={(event) => {
+                                    if (event.target.checked) {
+                                        setUseCustom(true);
+                                    } else {
+                                        setUseCustom(false);
+                                    }
+                                }}
+                                color="primary"
+                            />
+                        }
+                        label="Use Custom Data Element"
+                    />
+                )}
+
+                {useCustom && (
+                    <DialogFormTextInput name="dataElement" label="Custom Data Element" />
+                )}
+
+                {currentDataContainer && hasDataMaps && !useCustom && (
+                    <>
+                        <DialogFormSelect
+                            label="Data Element"
+                            name="dataElement"
+                            values={platformDataMapsToSelectValues(
+                                currentDataContainer.platform_data_maps,
+                                true,
+                            )}
+                        />
+                    </>
+                )}
+                {currentDataElement && (
+                    <Box
+                        component="small"
+                        sx={{
+                            display: 'block',
+                            width: '100%',
+                            margin: (theme) => theme.spacing(0, 0, 2),
+                        }}
+                    >
+                        ({snakeToTitleCase(currentDataElement.var_type)}){' '}
+                        {currentDataElement.description}
+                    </Box>
+                )}
+                {isDataElementObject && <DialogFormTextInput name="objectKey" label="Key" />}
+            </Box>
+        </DialogFormContextProvider>
     );
 };
 

@@ -1,15 +1,15 @@
 import { FC, useEffect, useState } from 'react';
 import { Box, Checkbox, FormControlLabel } from '@mui/material';
 import { MappedPlatformValuesForm } from '../../molecules/MappedPlatformValues/MappedPlatformValuesForm';
-import ControlledFilteredSelects from '../../atoms/ControlledInputs/ControlledFilteredSelects';
 import { SelectValueWithSub } from '../../../hooks/form/useFormValidation';
 import { controlledSelectValuesFindByInnerKey } from '../../../utils/ControlledSelectUtils';
 import DrawerFormLayout from '../../molecules/DrawerFormLayout';
 import { ActionFormProps, ActionValues } from '../../../types/props/forms/ActionFormProps';
-import ControlledTextAreaInput from '../../atoms/ControlledInputs/ControlledTextAreaInput';
 import { buildActionName } from '../../../dialogPages/tagManager/app/action/ActionUpdate';
 import { DialogFormContextProvider } from '../../../context/DialogFormContext';
 import { DialogFormTextInput } from '../../atoms/DialogFormInputs/DialogFormTextInput';
+import { DialogFormTextAreaInput } from '../../atoms/DialogFormInputs/DialogFormTextAreaInput';
+import { DialogFormFilteredSelects } from '../../atoms/DialogFormInputs/DialogFormFilteredSelects';
 
 const getDescription = (values: ActionValues, platformActions: SelectValueWithSub[]): string => {
     if (!values.platformActionId) {
@@ -54,18 +54,14 @@ const ActionForm: FC<ActionFormProps> = (props: ActionFormProps) => {
                 {noPlatformActions ? (
                     <small>There are no platforms with actions available.</small>
                 ) : (
-                    <ControlledFilteredSelects
-                        disabled={!!props.update}
-                        className="DialogFormField"
-                        label="Action"
+                    <DialogFormFilteredSelects
                         name="platformActionId"
+                        label="Action"
                         initialFilterValue={props.initialPlatformId}
                         values={props.platformActions}
-                        formProps={props}
-                        required
                         filterLabel="Platform"
                         missingSubMessage="There are no actions available in this platform."
-                        hideNoSub
+                        disabled={!!props.update}
                     />
                 )}
                 <Box
@@ -100,12 +96,7 @@ const ActionForm: FC<ActionFormProps> = (props: ActionFormProps) => {
                             {!generateName && <DialogFormTextInput name="name" label="Name" />}
                         </>
                     )}
-                <ControlledTextAreaInput
-                    name="comments"
-                    label="Comments"
-                    formProps={props}
-                    className="DialogFormField"
-                />
+                <DialogFormTextAreaInput name="comments" label="Comments" optional />
             </DrawerFormLayout>
         </DialogFormContextProvider>
     );

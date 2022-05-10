@@ -6,13 +6,15 @@ import ControlledTextInput from '../atoms/ControlledInputs/ControlledTextInput';
 import ControlledCodeInput from '../atoms/ControlledInputs/ControlledCodeInput';
 import { FormProps } from '../../hooks/form/useFormValidation';
 import ControlledBooleanSelect from '../atoms/ControlledInputs/ControlledBooleanSelect';
-import { Alert } from '@mui/material';
 import {
     getStorageProviderLabel,
     initialStorageProviderFields,
 } from '../../utils/StorageProviderUtils';
 import CheckBoxInput from '../atoms/InputTypes/CheckBoxInput';
 import { useConfigState } from '../../context/AppContext';
+import { DialogFormSelect } from '../atoms/DialogFormInputs/DialogFormSelect';
+import { DialogInfoAlert } from '../atoms/DialogFormInputs/DialogInfoAlert';
+import { DialogWarningAlert } from '../atoms/DialogFormInputs/DialogWarningAlert';
 
 const StorageProviderSelector = <T extends { [key: string]: any }>(
     props: FormProps<T> & {
@@ -51,21 +53,14 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
         <>
             {props.isCreate ? (
                 <>
-                    <ControlledSelect
-                        className="DialogFormField"
+                    <DialogFormSelect
                         label="Storage Provider"
                         name="storageProvider"
                         values={storageProviderValues}
-                        formProps={props}
-                        required
                         resetErrorsOnKeys={Object.keys(initialStorageProviderFields)}
                     />
 
-                    {props.infoText && (
-                        <Alert severity="info" className="DialogFormField">
-                            {props.infoText}
-                        </Alert>
-                    )}
+                    {props.infoText && <DialogInfoAlert>{props.infoText}</DialogInfoAlert>}
                 </>
             ) : (
                 <CheckBoxInput
@@ -120,10 +115,10 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
                 props.values.storageProvider === StorageProvider.AWS_S3 && (
                     <>
                         {props.warnGraphDisabled && (
-                            <Alert severity="warning" className="DialogFormField">
+                            <DialogWarningAlert>
                                 If you use S3 as provider the graphs in the dashboard will be
                                 disabled.
-                            </Alert>
+                            </DialogWarningAlert>
                         )}
                         <BoxedInputs label="AWS S3 Storage Config">
                             <ControlledTextInput
