@@ -2,7 +2,7 @@ import Field from '../../decorators/Field';
 import Model from '../../abstractions/Model';
 import Org from '../Org';
 import { ObjectId } from 'mongodb';
-import { add, isBefore } from 'date-fns';
+import { add, differenceInCalendarDays, isBefore } from 'date-fns';
 
 export default class TagManagerAccount extends Model {
     public getOrgEntityId(): ObjectId {
@@ -87,5 +87,13 @@ export default class TagManagerAccount extends Model {
             return false; //no free trial applied...
         }
         return !isBefore(new Date(), this._trial_expires_on);
+    }
+
+    public trailDaysRemaining(): number {
+        if (this._trial_expires_on === undefined || this._trial_started_on === undefined) {
+            return 0;
+        } else {
+            return differenceInCalendarDays(this._trial_expires_on, this._trial_started_on);
+        }
     }
 }

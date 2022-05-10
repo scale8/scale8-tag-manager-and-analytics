@@ -81,6 +81,42 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
                 />
             )}
             {(props.isCreate || props.values.editStorageProviderSettings) &&
+                props.values.storageProvider === StorageProvider.AWS_KINESIS && (
+                    <>
+                        <BoxedInputs label="AWS Kinesis Storage Config">
+                            <ControlledTextInput
+                                name="streamName"
+                                label="Stream Name"
+                                formProps={props}
+                                className="DrawerFormField"
+                                required
+                            />
+                            <ControlledTextInput
+                                name="accessKeyId"
+                                label="Access Key Id"
+                                formProps={props}
+                                className="DrawerFormField"
+                                required
+                            />
+                            <ControlledTextInput
+                                name="secretAccessKey"
+                                label="Secret Access Key"
+                                formProps={props}
+                                className="DrawerFormField"
+                                required
+                            />
+                            <ControlledSelect
+                                className="DrawerFormField"
+                                label="Region"
+                                name="region"
+                                values={awsRegionValues}
+                                formProps={props}
+                                required
+                            />
+                        </BoxedInputs>
+                    </>
+                )}
+            {(props.isCreate || props.values.editStorageProviderSettings) &&
                 props.values.storageProvider === StorageProvider.AWS_S3 && (
                     <>
                         {props.warnGraphDisabled && (
@@ -89,7 +125,7 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
                                 disabled.
                             </Alert>
                         )}
-                        <BoxedInputs label="AWS Storage Config">
+                        <BoxedInputs label="AWS S3 Storage Config">
                             <ControlledTextInput
                                 name="bucketName"
                                 label="Bucket Name"

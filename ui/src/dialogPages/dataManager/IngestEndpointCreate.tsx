@@ -15,7 +15,7 @@ import {
 } from '../../utils/forms/IngestEndpointFormUtils';
 import { DialogForm, DialogFormProps } from '../abstractions/DialogForm';
 import {
-    buildStorageProviderSaveProperties,
+    buildStorageBackendSaveProperties,
     initialStorageProviderFields,
     storageProviderCustomValueSetter,
 } from '../../utils/StorageProviderUtils';
@@ -88,7 +88,7 @@ const IngestEndpointCreate: FC<DialogPageProps> = (props: DialogPageProps) => {
                         : {
                               analytics_enabled: formValues.analyticsEnabled,
                               storage_provider: formValues.storageProvider as StorageProvider,
-                              ...buildStorageProviderSaveProperties(formValues, true),
+                              storage_backend: buildStorageBackendSaveProperties(formValues, true),
                           }),
                 },
             };

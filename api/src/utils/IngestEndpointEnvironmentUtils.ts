@@ -26,7 +26,8 @@ import BaseConfig from '../backends/configuration/abstractions/BaseConfig';
 import { BigQuery } from '@google-cloud/bigquery';
 import Hash from '../core/Hash';
 import S3Service from '../aws/S3Service';
-import { AwsConfig, GCBigQueryStreamConfig, MongoDbPushConfig } from '../Types';
+import { AwsKinesisConfig, AwsS3Config, GCBigQueryStreamConfig, MongoDbPushConfig } from '../Types';
+import KinesisService from '../aws/KinesisService';
 
 export const getCommercialStorageProviderConfig = async (): Promise<StorageProviderConfig> => {
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
@@ -74,9 +75,14 @@ const getIngestUsageIngestEnvironmentId = async (
 
 export const getStorageProviderConfig = async (
     ingestEndpointEnvironmentId: ObjectId,
-): Promise<GCBigQueryStreamConfig | AwsConfig | MongoDbPushConfig | Record<string, never>> => {
+): Promise<
+    | GCBigQueryStreamConfig
+    | AwsS3Config
+    | AwsKinesisConfig
+    | MongoDbPushConfig
+    | Record<string, never>
+> => {
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
-
     try {
         const obj = await getStorageBackend().getAsString(
             await config.getConfigsBucket(),
@@ -265,7 +271,24 @@ export const createIngestEndpointEnvironment = async (
     return ingestEndpointEnvironment;
 };
 
-const getAwsS3ProviderConfig = async (awsStorageConfig: AwsConfig) => {
+const getAwsKinesisProviderConfig = async (awsKinesisConfig: AwsKinesisConfig) => {
+    const kinesisService = container.get<KinesisService>(TYPES.KinesisService);
+    //we need to test AWS setup is correct...
+    const kinesis = kinesisService.getKinesisClient(
+        awsKinesisConfig.access_key_id,
+        awsKinesisConfig.secret_access_key,
+        awsKinesisConfig.region,
+    );
+    if (!(await kinesisService.isStreamWriteable(kinesis, awsKinesisConfig.stream_name))) {
+        throw new GQLError(userMessages.awsKinesisCantWrite(awsKinesisConfig.stream_name), true);
+    }
+    return {
+        config: awsKinesisConfig,
+        hint: `Using AWS Access Key: ${awsKinesisConfig.access_key_id}`,
+    };
+};
+
+const getAwsS3ProviderConfig = async (awsStorageConfig: AwsS3Config) => {
     const s3Service = container.get<S3Service>(TYPES.S3Service);
     //we need to test AWS setup is correct...
     const s3 = s3Service.getS3Client(
@@ -377,6 +400,8 @@ export const getProviderConfig = async (
     data: any,
     ingestEndpointEnvironment?: IngestEndpointEnvironment,
 ): Promise<StorageProviderConfig | undefined> => {
+    const storageBackend = data.storage_backend;
+
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
 
     const storageProviderType =
@@ -384,19 +409,27 @@ export const getProviderConfig = async (
             ? ingestEndpointEnvironment.storageProvider
             : data.storage_provider;
 
-    if (storageProviderType === StorageProvider.AWS_S3 && data.aws_storage_config !== undefined) {
-        return await getAwsS3ProviderConfig(data.aws_storage_config);
+    if (
+        storageProviderType === StorageProvider.AWS_S3 &&
+        storageBackend.aws_storage_config !== undefined
+    ) {
+        return await getAwsS3ProviderConfig(storageBackend.aws_storage_config);
+    } else if (
+        storageProviderType === StorageProvider.AWS_KINESIS &&
+        storageBackend.aws_kinesis_config !== undefined
+    ) {
+        return await getAwsKinesisProviderConfig(storageBackend.aws_kinesis_config);
     } else if (
         storageProviderType === StorageProvider.GC_BIGQUERY_STREAM &&
-        data.gc_bigquery_stream_config !== undefined
+        storageBackend.gc_bigquery_stream_config !== undefined
     ) {
-        return await getBigQueryProviderConfig(data.gc_bigquery_stream_config);
+        return await getBigQueryProviderConfig(storageBackend.gc_bigquery_stream_config);
     } else if (
         storageProviderType === StorageProvider.MONGODB &&
-        data.mongo_push_config !== undefined &&
+        storageBackend.mongo_push_config !== undefined &&
         config.isNotCommercial()
     ) {
-        return await getMongoDbProviderConfig(data.mongo_push_config);
+        return await getMongoDbProviderConfig(storageBackend.mongo_push_config);
     } else {
         return undefined;
     }

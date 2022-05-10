@@ -145,17 +145,9 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
             """
             storage_provider: StorageProvider
             """
-            The AWS specific configuration linked to this new \`App\`
+            The storage backend.
             """
-            aws_storage_config: AWSStorageConfig
-            """
-            The Google Cloud BigQuery Stream specific configuration linked to this new \`App\`
-            """
-            gc_bigquery_stream_config: GCBigQueryStreamConfig
-            """
-            The MongoDB specific configuration linked to this new \`App\`
-            """
-            mongo_push_config: MongoDbPushConfig
+            storage_backend: StorageBackend
             """
             If the analytics on the \`IngestEndpoint\` should be enabled
             """
@@ -189,17 +181,9 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
             """
             storage_provider: StorageProvider
             """
-            The AWS specific configuration linked to this new \`App\`
+            The storage backend.
             """
-            aws_storage_config: AWSStorageConfig
-            """
-            The Google Cloud BigQuery Stream specific configuration linked to this new \`App\`
-            """
-            gc_bigquery_stream_config: GCBigQueryStreamConfig
-            """
-            The MongoDB specific configuration linked to this new \`App\`
-            """
-            mongo_push_config: MongoDbPushConfig
+            storage_backend: StorageBackend
             """
             If the analytics on the \`IngestEndpoint\` should be enabled
             """
@@ -504,7 +488,10 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                     new ObjectId(parent.id),
                     userMessages.ingestEndpointFailed,
                 );
-                if (ingestEndpoint.storageProvider === StorageProvider.AWS_S3) {
+                if (
+                    ingestEndpoint.storageProvider === StorageProvider.AWS_S3 ||
+                    ingestEndpoint.storageProvider === StorageProvider.AWS_KINESIS
+                ) {
                     return {
                         result: [],
                         from: new Date(),
@@ -526,7 +513,10 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                     new ObjectId(parent.id),
                     userMessages.ingestEndpointFailed,
                 );
-                if (ingestEndpoint.storageProvider === StorageProvider.AWS_S3) {
+                if (
+                    ingestEndpoint.storageProvider === StorageProvider.AWS_S3 ||
+                    ingestEndpoint.storageProvider === StorageProvider.AWS_KINESIS
+                ) {
                     return {
                         result: [],
                         from: new Date(),

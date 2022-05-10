@@ -25,6 +25,7 @@ const TYPES = {
     Render: Symbol.for("<Render>"),
     StripeService: Symbol.for("<StripeService>"),
     S3Service: Symbol.for("<S3Service>"),
+    KinesisService: Symbol.for("<KinesisService>"),
     Route53Service: Symbol.for("<Route53Service>"),
     Routing: Symbol.for("<Routing>"),
     Contact: Symbol.for("<Contact>"),

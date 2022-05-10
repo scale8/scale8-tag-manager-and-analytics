@@ -49,12 +49,18 @@ export interface PlatformRevisionConfig {
     events?: PlatformEventConfig[];
     data_containers?: PlatformDataContainerConfig[];
 }
-export interface AwsConfig {
+export interface AwsS3Config {
     access_key_id: string;
     secret_access_key: string;
     region: AwsRegion;
     path_prefix: string;
     bucket_name: string;
+}
+export interface AwsKinesisConfig {
+    access_key_id: string;
+    secret_access_key: string;
+    region: AwsRegion;
+    stream_name: string;
 }
 export interface GCBigQueryStreamConfig {
     service_account_json: JWTInput;

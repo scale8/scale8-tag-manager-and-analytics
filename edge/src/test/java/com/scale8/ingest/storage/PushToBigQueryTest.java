@@ -22,9 +22,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import static org.mockito.Mockito.*;
 
 @MicronautTest
-class StreamToBigQueryTest {
+class PushToBigQueryTest {
     @Inject
-    StreamToBigQuery sut;
+    PushToBigQuery sut;
 
     private static IngestSettings ingestSettings;
 

@@ -13,7 +13,7 @@ import { DialogPageProps } from '../../../types/DialogTypes';
 import { DialogPreloadForm, DialogPreloadFormProps } from '../../abstractions/DialogPreloadForm';
 import { buildStandardFormInfo } from '../../../utils/InfoLabelsUtils';
 import {
-    buildStorageProviderSaveProperties,
+    buildStorageBackendSaveProperties,
     initialStorageProviderFields,
     storageProviderValidators,
 } from '../../../utils/StorageProviderUtils';
@@ -89,7 +89,7 @@ const AppUpdate: FC<DialogPageProps> = (props: DialogPageProps) => {
                     domain: appValues.domain,
                     analytics_enabled: appValues.analyticsEnabled,
                     error_tracking_enabled: appValues.errorTrackingEnabled,
-                    ...buildStorageProviderSaveProperties(appValues, false),
+                    storage_backend: buildStorageBackendSaveProperties(appValues, false),
                 },
             };
         },

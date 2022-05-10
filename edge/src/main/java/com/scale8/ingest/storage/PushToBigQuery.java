@@ -25,15 +25,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Singleton
-public class StreamToBigQuery extends StorageProvider {
+public class PushToBigQuery extends StorageProvider {
 
-  private static final Logger LOG = LoggerFactory.getLogger(StreamToBigQuery.class);
+  private static final Logger LOG = LoggerFactory.getLogger(PushToBigQuery.class);
 
   private final HashMap<String, BigQuery> bigQueryInstances = new HashMap<>();
 
   final Env env;
 
-  StreamToBigQuery(Env env) {
+  PushToBigQuery(Env env) {
     this.env = env;
   }
 

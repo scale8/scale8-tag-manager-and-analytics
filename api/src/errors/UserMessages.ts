@@ -138,6 +138,8 @@ const userMessages = {
         `Unable to find the bucket "${bucket}" using the credentials provided.`,
     awsBucketCantWrite: (bucket: string) =>
         `Unable to write to bucket '${bucket}' using the credentials provided.`,
+    awsKinesisCantWrite: (streamName: string) =>
+        `Unable to write to stream '${streamName}' using the credentials provided.`,
     invalidServiceAccount: 'Expecting service account JSON to be an object.',
     noStorageProvider:
         'A storage provider configuration is required when creating a tracking environment.',
