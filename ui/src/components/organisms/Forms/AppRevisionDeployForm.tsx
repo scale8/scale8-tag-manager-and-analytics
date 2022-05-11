@@ -14,7 +14,7 @@ const EnvironmentSelect: FC<AppRevisionDeployFormProps> = (props: AppRevisionDep
 
     return (
         <ControlledSelect
-            className="DrawerFormField"
+            className="DialogFormField"
             label="Environment"
             name="environmentId"
             values={props.availableEnvironments}

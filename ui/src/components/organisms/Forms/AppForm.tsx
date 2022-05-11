@@ -51,7 +51,7 @@ const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
                         name="domain"
                         label="Domain"
                         formProps={props}
-                        className="DrawerFormField"
+                        className="DialogFormField"
                         required
                     />
                     <FormControlLabel
@@ -73,7 +73,7 @@ const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
                             name="name"
                             label="Name"
                             formProps={props}
-                            className="DrawerFormField"
+                            className="DialogFormField"
                             required
                         />
                     )}
@@ -87,13 +87,13 @@ const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
                                     props.handleChange('analyticsEnabled', v);
                                 }}
                                 label="Enable Analytics"
-                                className="DrawerFormField"
+                                className="DialogFormField"
                                 sx={{ marginLeft: '-11px!important' }}
                                 color="primary"
                             />
                             <Box
                                 component="small"
-                                className="DrawerFormField"
+                                className="DialogFormField"
                                 sx={{ marginTop: '-24px' }}
                             >
                                 Enable simple analytics dashboard when using Tag Manager. We
@@ -106,13 +106,13 @@ const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
                                     props.handleChange('errorTrackingEnabled', v);
                                 }}
                                 label="Enable Error Tracking"
-                                className="DrawerFormField"
+                                className="DialogFormField"
                                 sx={{ marginLeft: '-11px!important' }}
                                 color="primary"
                             />
                             <Box
                                 component="small"
-                                className="DrawerFormField"
+                                className="DialogFormField"
                                 sx={{ marginTop: '-24px' }}
                             >
                                 Enable basic website and mobile website application errors directly

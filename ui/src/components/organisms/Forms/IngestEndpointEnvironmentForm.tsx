@@ -17,7 +17,7 @@ const IngestEndpointEnvironmentForm: FC<IngestEndpointEnvironmentFormProps> = (
                 name="name"
                 label="Name"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
                 required
                 autoFocus
             />
@@ -30,7 +30,7 @@ const IngestEndpointEnvironmentForm: FC<IngestEndpointEnvironmentFormProps> = (
             )}
 
             <ControlledSelect
-                className="DrawerFormField"
+                className="DialogFormField"
                 label="Revision"
                 name="revisionId"
                 values={props.availableRevisions}

@@ -105,7 +105,7 @@ const TextInputWithMacros: FC<TextInputWithMacrosProps> = (props: TextInputWithM
                         sx={{
                             display: 'flex',
                             flexDirection: 'column',
-                            '& .DrawerFormField': {
+                            '& .DialogFormField': {
                                 width: '100%',
                                 margin: (theme) => theme.spacing(0, 0, 3),
                             },

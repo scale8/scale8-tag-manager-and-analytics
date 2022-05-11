@@ -85,7 +85,7 @@ const EventForm: FC<EventFormProps> = (props: EventFormProps) => {
                         name="browserEvent"
                         label="Custom Event"
                         formProps={props}
-                        className="DrawerFormField"
+                        className="DialogFormField"
                         required
                     />
                 </>
@@ -95,7 +95,7 @@ const EventForm: FC<EventFormProps> = (props: EventFormProps) => {
                 <>
                     <ControlledFilteredSelects
                         disabled={!!props.update}
-                        className="DrawerFormField"
+                        className="DialogFormField"
                         initialFilterValue={props.initialPlatformId}
                         label="Event"
                         name="eventId"
@@ -148,7 +148,7 @@ const EventForm: FC<EventFormProps> = (props: EventFormProps) => {
                     name="clearState"
                     label="Reset event state after (milliseconds)"
                     formProps={props}
-                    className="DrawerFormField"
+                    className="DialogFormField"
                     required
                 />
             )}
@@ -174,7 +174,7 @@ const EventForm: FC<EventFormProps> = (props: EventFormProps) => {
                             name="name"
                             label="Name"
                             formProps={props}
-                            className="DrawerFormField"
+                            className="DialogFormField"
                             required
                         />
                     )}
@@ -203,7 +203,7 @@ const EventForm: FC<EventFormProps> = (props: EventFormProps) => {
                                         name="name"
                                         label="Name"
                                         formProps={props}
-                                        className="DrawerFormField"
+                                        className="DialogFormField"
                                         required
                                     />
                                 )}
@@ -215,7 +215,7 @@ const EventForm: FC<EventFormProps> = (props: EventFormProps) => {
                 name="comments"
                 label="Comments"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
             />
         </DrawerFormLayout>
     );
