@@ -1,27 +1,21 @@
 import { FC } from 'react';
-import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import DrawerFormLayout from '../../molecules/DrawerFormLayout';
-import ControlledTextAreaInput from '../../atoms/ControlledInputs/ControlledTextAreaInput';
-import { AppRevisionFormProps } from '../../../dialogPages/tagManager/app/AppRevisionUpdate';
+import {
+    AppRevisionFormProps,
+    AppRevisionValues,
+} from '../../../dialogPages/tagManager/app/AppRevisionUpdate';
+import { DialogFormContextProvider } from '../../../context/DialogFormContext';
+import { DialogFormTextInput } from '../../atoms/DialogFormInputs/DialogFormTextInput';
+import { DialogFormTextAreaInput } from '../../atoms/DialogFormInputs/DialogFormTextAreaInput';
 
 const AppRevisionForm: FC<AppRevisionFormProps> = (props: AppRevisionFormProps) => {
     return (
-        <DrawerFormLayout {...props}>
-            <ControlledTextInput
-                name="name"
-                label="Name"
-                formProps={props}
-                className="DialogFormField"
-                required
-                autoFocus
-            />
-            <ControlledTextAreaInput
-                name="comments"
-                label="Comments"
-                formProps={props}
-                className="DialogFormField"
-            />
-        </DrawerFormLayout>
+        <DialogFormContextProvider<AppRevisionValues> formProps={props}>
+            <DrawerFormLayout {...props}>
+                <DialogFormTextInput name="name" label="Name" autoFocus />
+                <DialogFormTextAreaInput name="comments" label="Comments" optional />
+            </DrawerFormLayout>
+        </DialogFormContextProvider>
     );
 };
 

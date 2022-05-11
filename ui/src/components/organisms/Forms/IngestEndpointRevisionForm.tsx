@@ -1,22 +1,21 @@
 import { FC } from 'react';
-import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import DrawerFormLayout from '../../molecules/DrawerFormLayout';
-import { IngestEndpointRevisionFormProps } from '../../../dialogPages/dataManager/IngestEndpointRevisionUpdate';
+import {
+    IngestEndpointRevisionFormProps,
+    IngestEndpointRevisionValues,
+} from '../../../dialogPages/dataManager/IngestEndpointRevisionUpdate';
+import { DialogFormContextProvider } from '../../../context/DialogFormContext';
+import { DialogFormTextInput } from '../../atoms/DialogFormInputs/DialogFormTextInput';
 
 const IngestEndpointRevisionForm: FC<IngestEndpointRevisionFormProps> = (
     props: IngestEndpointRevisionFormProps,
 ) => {
     return (
-        <DrawerFormLayout {...props}>
-            <ControlledTextInput
-                name="name"
-                label="Name"
-                formProps={props}
-                className="DialogFormField"
-                required
-                autoFocus
-            />
-        </DrawerFormLayout>
+        <DialogFormContextProvider<IngestEndpointRevisionValues> formProps={props}>
+            <DrawerFormLayout {...props}>
+                <DialogFormTextInput name="name" label="Name" autoFocus />
+            </DrawerFormLayout>
+        </DialogFormContextProvider>
     );
 };
 

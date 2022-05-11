@@ -1,46 +1,42 @@
 import { FC } from 'react';
-import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
-import ControlledSelect from '../../atoms/ControlledInputs/ControlledSelect';
 import DrawerFormLayout from '../../molecules/DrawerFormLayout';
-import { IngestEndpointEnvironmentFormProps } from '../../../dialogPages/dataManager/IngestEndpointEnvironmentCreate';
+import {
+    IngestEndpointEnvironmentFormProps,
+    IngestEndpointEnvironmentValues,
+} from '../../../dialogPages/dataManager/IngestEndpointEnvironmentCreate';
 import StorageProviderSelector from '../../molecules/StorageProviderSelector';
+import { DialogFormContextProvider } from '../../../context/DialogFormContext';
+import { DialogFormTextInput } from '../../atoms/DialogFormInputs/DialogFormTextInput';
+import { DialogFormSelect } from '../../atoms/DialogFormInputs/DialogFormSelect';
 
 const IngestEndpointEnvironmentForm: FC<IngestEndpointEnvironmentFormProps> = (
     props: IngestEndpointEnvironmentFormProps,
 ) => {
     return (
-        <DrawerFormLayout
-            {...props}
-            submitDisable={props.isSubmitting || props.availableRevisions.length < 1}
-        >
-            <ControlledTextInput
-                name="name"
-                label="Name"
-                formProps={props}
-                className="DialogFormField"
-                required
-                autoFocus
-            />
+        <DialogFormContextProvider<IngestEndpointEnvironmentValues> formProps={props}>
+            <DrawerFormLayout
+                {...props}
+                submitDisable={props.isSubmitting || props.availableRevisions.length < 1}
+            >
+                <DialogFormTextInput name="name" label="Name" autoFocus />
 
-            {props.availableRevisions.length < 1 && (
-                <small>
-                    At least one revision needs to be finalised for it to be attached to an
-                    environment.
-                </small>
-            )}
+                {props.availableRevisions.length < 1 && (
+                    <small>
+                        At least one revision needs to be finalised for it to be attached to an
+                        environment.
+                    </small>
+                )}
 
-            <ControlledSelect
-                className="DialogFormField"
-                label="Revision"
-                name="revisionId"
-                values={props.availableRevisions}
-                formProps={props}
-                disabled={props.availableRevisions.length < 1}
-                required
-            />
+                <DialogFormSelect
+                    label="Revision"
+                    name="revisionId"
+                    values={props.availableRevisions}
+                    disabled={props.availableRevisions.length < 1}
+                />
 
-            <StorageProviderSelector {...props} includeBigQueryPartitionFilter />
-        </DrawerFormLayout>
+                <StorageProviderSelector {...props} includeBigQueryPartitionFilter />
+            </DrawerFormLayout>
+        </DialogFormContextProvider>
     );
 };
 

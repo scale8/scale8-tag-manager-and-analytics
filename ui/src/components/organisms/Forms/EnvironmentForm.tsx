@@ -1,78 +1,59 @@
 import { FC } from 'react';
 import { Box } from '@mui/material';
-import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
-import ControlledSelect from '../../atoms/ControlledInputs/ControlledSelect';
 import EnvironmentVariablesInput from '../../atoms/EnvironmentVariablesInput';
-import ControlledTextAreaInput from '../../atoms/ControlledInputs/ControlledTextAreaInput';
 import DrawerFormLayout from '../../molecules/DrawerFormLayout';
 import { EnvironmentFormProps } from '../../../dialogPages/tagManager/app/EnvironmentCreate';
+import { DialogFormTextInput } from '../../atoms/DialogFormInputs/DialogFormTextInput';
+import { DialogFormContextProvider } from '../../../context/DialogFormContext';
+import { EnvironmentValues } from '../../../utils/forms/EnvironmentFormUtils';
+import { DialogFormSelect } from '../../atoms/DialogFormInputs/DialogFormSelect';
+import { DialogFormTextAreaInput } from '../../atoms/DialogFormInputs/DialogFormTextAreaInput';
 
 const EnvironmentForm: FC<EnvironmentFormProps> = (props: EnvironmentFormProps) => {
     return (
-        <DrawerFormLayout
-            {...props}
-            submitDisable={props.isSubmitting || props.availableRevisions.length < 1}
-        >
-            <ControlledTextInput
-                name="name"
-                label="Name"
-                formProps={props}
-                className="DialogFormField"
-                required
-                autoFocus
-            />
+        <DialogFormContextProvider<EnvironmentValues> formProps={props}>
+            <DrawerFormLayout
+                {...props}
+                submitDisable={props.isSubmitting || props.availableRevisions.length < 1}
+            >
+                <DialogFormTextInput name="name" label="Name" autoFocus />
+                <DialogFormTextInput name="url" label="URL" />
+                {props.availableRevisions.length < 1 && (
+                    <small>
+                        At least one revision needs to be finalised for it to be attached to an
+                        environment.
+                    </small>
+                )}
+                <DialogFormSelect
+                    label="Revision"
+                    name="revisionId"
+                    values={props.availableRevisions}
+                    disabled={props.availableRevisions.length < 1}
+                />
 
-            <ControlledTextInput
-                name="url"
-                label="URL"
-                formProps={props}
-                className="DialogFormField"
-            />
-
-            {props.availableRevisions.length < 1 && (
-                <small>
-                    At least one revision needs to be finalised for it to be attached to an
-                    environment.
-                </small>
-            )}
-
-            <ControlledSelect
-                className="DialogFormField"
-                label="Revision"
-                name="revisionId"
-                values={props.availableRevisions}
-                formProps={props}
-                disabled={props.availableRevisions.length < 1}
-                required
-            />
-
-            {props.values.variables !== undefined && (
-                <Box mb={3}>
-                    <EnvironmentVariablesInput
-                        label="Environment Variables"
-                        values={props.values.variables}
-                        add={(key: string, value: string) => {
-                            props.handleChange('variables', [
-                                ...(props.values.variables ?? []),
-                                { key, value },
-                            ]);
-                        }}
-                        remove={(key: string) => {
-                            props.handleChange(
-                                'variables',
-                                props.values.variables?.filter((_) => _.key !== key),
-                            );
-                        }}
-                    />
-                </Box>
-            )}
-            <ControlledTextAreaInput
-                name="comments"
-                label="Comments"
-                formProps={props}
-                className="DialogFormField"
-            />
-        </DrawerFormLayout>
+                {props.values.variables !== undefined && (
+                    <Box mb={3}>
+                        <EnvironmentVariablesInput
+                            label="Environment Variables"
+                            values={props.values.variables}
+                            add={(key: string, value: string) => {
+                                props.handleChange('variables', [
+                                    ...(props.values.variables ?? []),
+                                    { key, value },
+                                ]);
+                            }}
+                            remove={(key: string) => {
+                                props.handleChange(
+                                    'variables',
+                                    props.values.variables?.filter((_) => _.key !== key),
+                                );
+                            }}
+                        />
+                    </Box>
+                )}
+                <DialogFormTextAreaInput name="comments" label="Comments" optional />
+            </DrawerFormLayout>
+        </DialogFormContextProvider>
     );
 };
 

@@ -11,6 +11,7 @@ type DialogFormControlledFilteredSelectsProps = {
     initialFilterValue?: string;
     missingSubMessage: string;
     disabled?: boolean;
+    showNoSub?: boolean;
 };
 
 export const DialogFormFilteredSelects: FC<DialogFormControlledFilteredSelectsProps> = ({
@@ -21,6 +22,7 @@ export const DialogFormFilteredSelects: FC<DialogFormControlledFilteredSelectsPr
     initialFilterValue,
     missingSubMessage,
     disabled,
+    showNoSub,
 }) => {
     const formProps = useDialogFormContext();
 
@@ -35,7 +37,7 @@ export const DialogFormFilteredSelects: FC<DialogFormControlledFilteredSelectsPr
             formProps={formProps}
             className="DialogFormField"
             disabled={disabled}
-            hideNoSub
+            hideNoSub={!showNoSub}
             required
         />
     );

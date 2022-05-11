@@ -1,45 +1,39 @@
 import { FC } from 'react';
 import { Box, DialogContent } from '@mui/material';
-import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import FormGqlError from '../../atoms/FormGqlError';
 import DialogActionsWithCancel from '../../molecules/DialogActionsWithCancel';
-import { PersonalInfoFormProps } from '../../../dialogPages/global/PersonalInfoUpdate';
+import {
+    PersonalInfoFormProps,
+    PersonalInfoValues,
+} from '../../../dialogPages/global/PersonalInfoUpdate';
 import FormFlex from '../../atoms/FormFlex';
+import { DialogFormContextProvider } from '../../../context/DialogFormContext';
+import { DialogFormTextInput } from '../../atoms/DialogFormInputs/DialogFormTextInput';
 
 const PersonalInfoForm: FC<PersonalInfoFormProps> = (props: PersonalInfoFormProps) => {
     return (
-        <Box display="flex" flexDirection="column">
-            <FormGqlError error={props.gqlError} />
-            <FormFlex handleSubmit={props.handleSubmit}>
-                <DialogContent
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        minHeight: '248px',
-                    }}
-                >
-                    <ControlledTextInput
-                        name="firstName"
-                        label="First Name"
-                        formProps={props}
-                        className="DialogFormField"
-                        required
+        <DialogFormContextProvider<PersonalInfoValues> formProps={props}>
+            <Box display="flex" flexDirection="column">
+                <FormGqlError error={props.gqlError} />
+                <FormFlex handleSubmit={props.handleSubmit}>
+                    <DialogContent
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            minHeight: '248px',
+                        }}
+                    >
+                        <DialogFormTextInput name="firstName" label="First Name" />
+                        <DialogFormTextInput name="lastName" label="Last Name" />
+                    </DialogContent>
+                    <DialogActionsWithCancel
+                        disableSubmit={props.isSubmitting}
+                        handleDialogClose={props.handleDialogClose}
+                        confirmText={props.submitText}
                     />
-                    <ControlledTextInput
-                        name="lastName"
-                        label="Last Name"
-                        formProps={props}
-                        className="DialogFormField"
-                        required
-                    />
-                </DialogContent>
-                <DialogActionsWithCancel
-                    disableSubmit={props.isSubmitting}
-                    handleDialogClose={props.handleDialogClose}
-                    confirmText={props.submitText}
-                />
-            </FormFlex>
-        </Box>
+                </FormFlex>
+            </Box>
+        </DialogFormContextProvider>
     );
 };
 

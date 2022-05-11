@@ -1,7 +1,5 @@
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
-import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
-import ControlledSelect from '../../atoms/ControlledInputs/ControlledSelect';
 import {
     DataManagerDateTimeMacros,
     DataManagerIntegerMacros,
@@ -15,7 +13,13 @@ import { SelectValueWithSub } from '../../../hooks/form/useFormValidation';
 import { isVarTypeObject, isVarTypeScalar } from '../../../utils/VarTypeUtils';
 import DrawerFormLayout from '../../molecules/DrawerFormLayout';
 import ValidationRulesSection from '../../molecules/ValidationRulesSection';
-import { IngestEndpointDataMapFormProps } from '../../../dialogPages/dataManager/IngestEndpointDataMapCreate';
+import {
+    IngestEndpointDataMapFormProps,
+    IngestEndpointDataMapValues,
+} from '../../../dialogPages/dataManager/IngestEndpointDataMapCreate';
+import { DialogFormContextProvider } from '../../../context/DialogFormContext';
+import { DialogFormTextInput } from '../../atoms/DialogFormInputs/DialogFormTextInput';
+import { DialogFormSelect } from '../../atoms/DialogFormInputs/DialogFormSelect';
 
 const IngestEndpointDataMapForm: FC<IngestEndpointDataMapFormProps> = (
     props: IngestEndpointDataMapFormProps,
@@ -110,90 +114,83 @@ const IngestEndpointDataMapForm: FC<IngestEndpointDataMapFormProps> = (
         }));
 
     return (
-        <DrawerFormLayout {...props} noSubmit={props.readOnly}>
-            <ControlledTextInput
-                name="key"
-                label="Key"
-                formProps={props}
-                className="DialogFormField"
-                disabled={props.edit || props.readOnly}
-                required
-            />
-            <ControlledSelect
-                className="DialogFormField"
-                label="Var Type"
-                name="varType"
-                values={props.lastLevel ? varTypeValuesLastLevel : varTypeValues}
-                formProps={props}
-                disabled={props.edit || props.readOnly}
-                required
-            />
-            <RadioGroup
-                value={getRadioValue()}
-                onChange={handleRadioChange}
-                sx={{
-                    width: '100%',
-                    marginBottom: (theme) => theme.spacing(3),
-                }}
-            >
-                <FormControlLabel
-                    value="optional"
-                    control={<Radio />}
-                    label="Optional"
-                    disabled={props.readOnly}
+        <DialogFormContextProvider<IngestEndpointDataMapValues> formProps={props}>
+            <DrawerFormLayout {...props} noSubmit={props.readOnly}>
+                <DialogFormTextInput
+                    name="key"
+                    label="Key"
+                    disabled={props.edit || props.readOnly}
                 />
-                <FormControlLabel
-                    value="required"
-                    control={<Radio />}
-                    label="Required"
-                    disabled={props.readOnly}
+                <DialogFormSelect
+                    label="Var Type"
+                    name="varType"
+                    values={props.lastLevel ? varTypeValuesLastLevel : varTypeValues}
+                    disabled={props.edit || props.readOnly}
                 />
-                {!isVarTypeObject(props.values.varType as VarType) && (
+                <RadioGroup
+                    value={getRadioValue()}
+                    onChange={handleRadioChange}
+                    sx={{
+                        width: '100%',
+                        marginBottom: (theme) => theme.spacing(3),
+                    }}
+                >
                     <FormControlLabel
-                        value="default"
+                        value="optional"
                         control={<Radio />}
-                        label="Use Default Value"
+                        label="Optional"
                         disabled={props.readOnly}
                     />
-                )}
-                {isVarTypeScalar(props.values.varType as VarType) &&
-                    getMacroValues().length !== 0 && (
+                    <FormControlLabel
+                        value="required"
+                        control={<Radio />}
+                        label="Required"
+                        disabled={props.readOnly}
+                    />
+                    {!isVarTypeObject(props.values.varType as VarType) && (
                         <FormControlLabel
-                            value="macro"
+                            value="default"
                             control={<Radio />}
-                            label="Use Macro"
+                            label="Use Default Value"
                             disabled={props.readOnly}
                         />
                     )}
-            </RadioGroup>
+                    {isVarTypeScalar(props.values.varType as VarType) &&
+                        getMacroValues().length !== 0 && (
+                            <FormControlLabel
+                                value="macro"
+                                control={<Radio />}
+                                label="Use Macro"
+                                disabled={props.readOnly}
+                            />
+                        )}
+                </RadioGroup>
 
-            {props.values.varType !== '' &&
-                props.values.useDefault &&
-                (useMacro ? (
-                    <ControlledSelect
-                        className="DialogFormField"
-                        label="Macro"
-                        name="defaultValue"
-                        values={getMacroSelectValues()}
-                        formProps={props}
-                        disabled={props.readOnly}
-                        required
-                    />
-                ) : (
-                    <DataMapDefaultValueFormSection
-                        varType={props.values.varType}
-                        formProps={props}
-                        readOnly={props.readOnly}
-                    />
-                ))}
+                {props.values.varType !== '' &&
+                    props.values.useDefault &&
+                    (useMacro ? (
+                        <DialogFormSelect
+                            label="Macro"
+                            name="defaultValue"
+                            values={getMacroSelectValues()}
+                            disabled={props.readOnly}
+                        />
+                    ) : (
+                        <DataMapDefaultValueFormSection
+                            varType={props.values.varType}
+                            formProps={props}
+                            readOnly={props.readOnly}
+                        />
+                    ))}
 
-            <ValidationRulesSection
-                varType={props.values.varType === '' ? null : (props.values.varType as VarType)}
-                validationRules={props.values.validationRules}
-                handleChange={props.handleChange}
-                readOnly={props.readOnly}
-            />
-        </DrawerFormLayout>
+                <ValidationRulesSection
+                    varType={props.values.varType === '' ? null : (props.values.varType as VarType)}
+                    validationRules={props.values.validationRules}
+                    handleChange={props.handleChange}
+                    readOnly={props.readOnly}
+                />
+            </DrawerFormLayout>
+        </DialogFormContextProvider>
     );
 };
 

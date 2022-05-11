@@ -5,11 +5,8 @@ import FetchAvailableAppPlatformRevisionsQuery from '../../../gql/queries/FetchA
 import AppPlatformRevisionForm from '../../../components/organisms/Forms/AppPlatformRevisionForm';
 import LinkAppPlatformRevisionQuery from '../../../gql/mutations/LinkAppPlatformRevisionQuery';
 import { LinkAppPlatformRevisionValues } from '../../../gql/generated/LinkAppPlatformRevisionValues';
-import {
-    FormWithMappedPlatformValuesResult,
-    ModelWithPlatformDataMaps,
-} from '../../../hooks/form/useFormWithMappedPlatformValues';
-import { DataMap, PlatformDataMap } from '../../../types/DataMapsTypes';
+import { FormWithMappedPlatformValuesResult } from '../../../hooks/form/useFormWithMappedPlatformValues';
+import { PlatformDataMap } from '../../../types/DataMapsTypes';
 import {
     MappedPlatformValues,
     ValuesWithMappedPlatformData,
@@ -20,18 +17,6 @@ import { DialogPageProps } from '../../../types/DialogTypes';
 import { buildStandardFormInfo } from '../../../utils/InfoLabelsUtils';
 import { FormBaseProps } from '../../../types/props/forms/CommonFormProps';
 import { DialogPreloadForm, DialogPreloadFormProps } from '../../abstractions/DialogPreloadForm';
-
-export type ConnectPlatformRevisionAfterLoadLoadProps = DialogPageProps & {
-    availableAppPlatformRevisions: {
-        key: string;
-        text: string;
-        sub?: { key: string; text: string }[];
-    }[];
-    appPlatformRevisionsWithSettings: ModelWithPlatformDataMaps[];
-    isUpdate: boolean;
-    currentPlatformRevisionId?: string;
-    currentPlatformSettings?: DataMap[];
-};
 
 export type AppPlatformRevisionBaseValues = {
     platformRevisionId: string;

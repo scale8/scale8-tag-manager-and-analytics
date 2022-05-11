@@ -1,8 +1,13 @@
 import { FC } from 'react';
 import { MappedPlatformValuesForm } from '../../molecules/MappedPlatformValues/MappedPlatformValuesForm';
-import ControlledFilteredSelects from '../../atoms/ControlledInputs/ControlledFilteredSelects';
 import DrawerFormLayout from '../../molecules/DrawerFormLayout';
-import { AppPlatformRevisionFormProps } from '../../../dialogPages/tagManager/app/LinkPlatformRevision';
+import {
+    AppPlatformRevisionFormProps,
+    AppPlatformRevisionValues,
+} from '../../../dialogPages/tagManager/app/LinkPlatformRevision';
+import { DialogPlainAlert } from '../../atoms/DialogFormInputs/DialogPlainAlert';
+import { DialogFormFilteredSelects } from '../../atoms/DialogFormInputs/DialogFormFilteredSelects';
+import { DialogFormContextProvider } from '../../../context/DialogFormContext';
 
 const PlatformRevisionSelect: FC<AppPlatformRevisionFormProps> = (
     props: AppPlatformRevisionFormProps,
@@ -12,27 +17,21 @@ const PlatformRevisionSelect: FC<AppPlatformRevisionFormProps> = (
     const onlyOne = props.availableAppPlatformRevisions.length === 1;
 
     if (notAvailable) {
-        return <small className="DialogFormField">There are no more platforms available.</small>;
+        return <DialogPlainAlert>There are no more platforms available.</DialogPlainAlert>;
     }
 
     if (isEdit && onlyOne) {
-        return (
-            <small className="DialogFormField">
-                There is only one platform revision available.
-            </small>
-        );
+        return <DialogPlainAlert>There is only one platform revision available.</DialogPlainAlert>;
     }
 
     return (
-        <ControlledFilteredSelects
-            className="DialogFormField"
+        <DialogFormFilteredSelects
             label="Platform Revision"
             name="platformRevisionId"
             values={availableAppPlatformRevisions}
-            formProps={props}
-            required
             filterLabel="Platform"
             missingSubMessage="There are no revisions available."
+            showNoSub
         />
     );
 };
@@ -45,22 +44,24 @@ const AppPlatformRevisionForm: FC<AppPlatformRevisionFormProps> = (
     const onlyOne = props.availableAppPlatformRevisions.length === 1;
 
     return (
-        <DrawerFormLayout
-            {...props}
-            noSubmit={notAvailable || (isEdit && onlyOne)}
-            submitDisable={
-                props.isSubmitting || props.values.platformRevisionId === props.initialId
-            }
-        >
-            <PlatformRevisionSelect {...props} />
-            {props.values.mappedPlatformValues !== undefined && (
-                <MappedPlatformValuesForm
-                    mappedPlatformValues={props.values.mappedPlatformValues}
-                    parentLocators={[]}
-                    {...props}
-                />
-            )}
-        </DrawerFormLayout>
+        <DialogFormContextProvider<AppPlatformRevisionValues> formProps={props}>
+            <DrawerFormLayout
+                {...props}
+                noSubmit={notAvailable || (isEdit && onlyOne)}
+                submitDisable={
+                    props.isSubmitting || props.values.platformRevisionId === props.initialId
+                }
+            >
+                <PlatformRevisionSelect {...props} />
+                {props.values.mappedPlatformValues !== undefined && (
+                    <MappedPlatformValuesForm
+                        mappedPlatformValues={props.values.mappedPlatformValues}
+                        parentLocators={[]}
+                        {...props}
+                    />
+                )}
+            </DrawerFormLayout>
+        </DialogFormContextProvider>
     );
 };
 

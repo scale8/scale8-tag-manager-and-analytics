@@ -1,22 +1,21 @@
 import { FC } from 'react';
-import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import FormPermissionSection from '../../molecules/FormPermissionSection';
 import DrawerFormLayout from '../../molecules/DrawerFormLayout';
-import { OrgUserInviteFormProps } from '../../../dialogPages/global/OrgUserInvite';
+import {
+    OrgUserInviteFormProps,
+    OrgUserInviteValues,
+} from '../../../dialogPages/global/OrgUserInvite';
+import { DialogFormContextProvider } from '../../../context/DialogFormContext';
+import { DialogFormTextInput } from '../../atoms/DialogFormInputs/DialogFormTextInput';
 
 const OrgUserInviteForm: FC<OrgUserInviteFormProps> = (props: OrgUserInviteFormProps) => {
     return (
-        <DrawerFormLayout {...props}>
-            <ControlledTextInput
-                name="email"
-                label="Email"
-                formProps={props}
-                className="DialogFormField"
-                required
-                autoFocus
-            />
-            <FormPermissionSection formProps={props} />
-        </DrawerFormLayout>
+        <DialogFormContextProvider<OrgUserInviteValues> formProps={props}>
+            <DrawerFormLayout {...props}>
+                <DialogFormTextInput name="email" label="Email" autoFocus />
+                <FormPermissionSection formProps={props} />
+            </DrawerFormLayout>
+        </DialogFormContextProvider>
     );
 };
 

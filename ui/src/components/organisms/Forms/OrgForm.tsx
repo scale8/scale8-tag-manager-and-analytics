@@ -1,20 +1,16 @@
 import { FC } from 'react';
-import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import DrawerFormLayout from '../../molecules/DrawerFormLayout';
-import { OrgFormProps } from '../../../dialogPages/global/OrgCreate';
+import { OrgFormProps, OrgValues } from '../../../dialogPages/global/OrgCreate';
+import { DialogFormContextProvider } from '../../../context/DialogFormContext';
+import { DialogFormTextInput } from '../../atoms/DialogFormInputs/DialogFormTextInput';
 
 const OrgForm: FC<OrgFormProps> = (props: OrgFormProps) => {
     return (
-        <DrawerFormLayout {...props}>
-            <ControlledTextInput
-                name="name"
-                label="Name"
-                formProps={props}
-                className="DialogFormField"
-                required
-                autoFocus
-            />
-        </DrawerFormLayout>
+        <DialogFormContextProvider<OrgValues> formProps={props}>
+            <DrawerFormLayout {...props}>
+                <DialogFormTextInput name="name" label="Name" autoFocus />
+            </DrawerFormLayout>
+        </DialogFormContextProvider>
     );
 };
 

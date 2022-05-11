@@ -4,11 +4,12 @@ import { Box, Checkbox, Divider, FormControlLabel } from '@mui/material';
 import Loader from '../Loader';
 import { AppFormProps, AppValues } from '../../../dialogPages/tagManager/app/AppCreate';
 import StorageProviderSelector from '../../molecules/StorageProviderSelector';
-import CheckBoxInput from '../../atoms/InputTypes/CheckBoxInput';
 import { Mode } from '../../../gql/generated/globalTypes';
 import { useConfigState } from '../../../context/AppContext';
 import { DialogFormContextProvider } from '../../../context/DialogFormContext';
 import { DialogFormTextInput } from '../../atoms/DialogFormInputs/DialogFormTextInput';
+import { DialogFormCheckbox } from '../../atoms/DialogFormInputs/DialogFormCheckbox';
+import { DialogPlainAlert } from '../../atoms/DialogFormInputs/DialogPlainAlert';
 
 const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
     const { mode } = useConfigState();
@@ -67,45 +68,25 @@ const AppForm: FC<AppFormProps> = (props: AppFormProps) => {
 
                     {mode !== Mode.COMMERCIAL && (
                         <>
-                            <CheckBoxInput
+                            <DialogFormCheckbox
                                 name="analyticsEnabled"
-                                value={props.values.analyticsEnabled}
-                                setValue={(v) => {
-                                    props.handleChange('analyticsEnabled', v);
-                                }}
                                 label="Enable Analytics"
-                                className="DialogFormField"
-                                sx={{ marginLeft: '-11px!important' }}
-                                color="primary"
+                                realignLeft
                             />
-                            <Box
-                                component="small"
-                                className="DialogFormField"
-                                sx={{ marginTop: '-24px' }}
-                            >
+                            <DialogPlainAlert realignTop>
                                 Enable simple analytics dashboard when using Tag Manager. We
                                 recommend this option is left enabled.
-                            </Box>
-                            <CheckBoxInput
+                            </DialogPlainAlert>
+                            <DialogFormCheckbox
                                 name="errorTrackingEnabled"
-                                value={props.values.errorTrackingEnabled}
-                                setValue={(v) => {
-                                    props.handleChange('errorTrackingEnabled', v);
-                                }}
                                 label="Enable Error Tracking"
-                                className="DialogFormField"
-                                sx={{ marginLeft: '-11px!important' }}
-                                color="primary"
+                                realignLeft
                             />
-                            <Box
-                                component="small"
-                                className="DialogFormField"
-                                sx={{ marginTop: '-24px' }}
-                            >
+                            <DialogPlainAlert realignTop>
                                 Enable basic website and mobile website application errors directly
                                 in the dashboard. If you are using another service you may wish to
                                 disable this option.
-                            </Box>
+                            </DialogPlainAlert>
                             {(props.values.analyticsEnabled ||
                                 props.values.errorTrackingEnabled) && (
                                 <StorageProviderSelector

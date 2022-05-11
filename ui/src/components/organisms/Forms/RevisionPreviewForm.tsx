@@ -1,12 +1,13 @@
 import { FC } from 'react';
 import { DialogContent, DialogContentText } from '@mui/material';
-import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
-import ControlledSelect from '../../atoms/ControlledInputs/ControlledSelect';
 import { FormProps } from '../../../hooks/form/useFormValidation';
 import FormGqlError from '../../atoms/FormGqlError';
 import DialogActionsWithCancel from '../../molecules/DialogActionsWithCancel';
 import { RevisionPreviewValues } from '../../../dialogPages/tagManager/app/AppRevisionPreview';
 import FormFlex from '../../atoms/FormFlex';
+import { DialogFormContextProvider } from '../../../context/DialogFormContext';
+import { DialogFormSelect } from '../../atoms/DialogFormInputs/DialogFormSelect';
+import { DialogFormTextInput } from '../../atoms/DialogFormInputs/DialogFormTextInput';
 
 type RevisionPreviewFormProps = FormProps<RevisionPreviewValues> & {
     environments: { name: string; url: string }[];
@@ -16,43 +17,36 @@ type RevisionPreviewFormProps = FormProps<RevisionPreviewValues> & {
 
 const RevisionPreviewForm: FC<RevisionPreviewFormProps> = (props: RevisionPreviewFormProps) => {
     return (
-        <FormFlex handleSubmit={props.handleSubmit}>
-            <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                    {props.description}
-                </DialogContentText>
-                <FormGqlError error={props.gqlError} />
-                {props.environments.length > 0 && (
-                    <ControlledSelect
-                        className="DialogFormField"
-                        label="Environment"
-                        name="environment"
-                        values={[
-                            { key: '', text: '-- None --' },
-                            ...props.environments.map((_) => ({
-                                key: _.name,
-                                text: _.name,
-                            })),
-                        ]}
-                        formProps={props}
-                    />
-                )}
-                <ControlledTextInput
-                    name="url"
-                    label="App URL"
-                    formProps={props}
-                    className="DialogFormField"
-                    required
-                    autoFocus
+        <DialogFormContextProvider<RevisionPreviewValues> formProps={props}>
+            <FormFlex handleSubmit={props.handleSubmit}>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        {props.description}
+                    </DialogContentText>
+                    <FormGqlError error={props.gqlError} />
+                    {props.environments.length > 0 && (
+                        <DialogFormSelect
+                            label="Environment"
+                            name="environment"
+                            values={[
+                                { key: '', text: '-- None --' },
+                                ...props.environments.map((_) => ({
+                                    key: _.name,
+                                    text: _.name,
+                                })),
+                            ]}
+                        />
+                    )}
+                    <DialogFormTextInput name="url" label="App URL" autoFocus />
+                </DialogContent>
+                <DialogActionsWithCancel
+                    disableSubmit={props.isSubmitting}
+                    handleDialogClose={props.handleDialogClose}
+                    confirmText={props.submitText}
+                    ignoreChanges
                 />
-            </DialogContent>
-            <DialogActionsWithCancel
-                disableSubmit={props.isSubmitting}
-                handleDialogClose={props.handleDialogClose}
-                confirmText={props.submitText}
-                ignoreChanges
-            />
-        </FormFlex>
+            </FormFlex>
+        </DialogFormContextProvider>
     );
 };
 
