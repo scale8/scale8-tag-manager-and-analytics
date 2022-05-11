@@ -15,13 +15,13 @@ const TagForm: FC<TagFormProps> = (props: TagFormProps) => {
                 name="name"
                 label="Name"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
                 required
                 autoFocus
             />
             {props.existingType === null && (
                 <ControlledSelect
-                    className="DrawerFormField"
+                    className="DialogFormField"
                     label="Type"
                     name="type"
                     values={[
@@ -39,7 +39,7 @@ const TagForm: FC<TagFormProps> = (props: TagFormProps) => {
                         name="width"
                         label="Width"
                         formProps={props}
-                        className="DrawerFormField"
+                        className="DialogFormField"
                         required
                         autoFocus
                     />
@@ -47,7 +47,7 @@ const TagForm: FC<TagFormProps> = (props: TagFormProps) => {
                         name="height"
                         label="Height"
                         formProps={props}
-                        className="DrawerFormField"
+                        className="DialogFormField"
                         required
                         autoFocus
                     />
@@ -61,7 +61,7 @@ const TagForm: FC<TagFormProps> = (props: TagFormProps) => {
                         props.handleChange('autoLoad', v);
                     }}
                     label="Load the tag automatically"
-                    className="DrawerFormField"
+                    className="DialogFormField"
                     sx={{ marginLeft: '-11px!important' }}
                     color="primary"
                 />
@@ -70,7 +70,7 @@ const TagForm: FC<TagFormProps> = (props: TagFormProps) => {
                 name="comments"
                 label="Comments"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
             />
         </DrawerFormLayout>
     );

@@ -33,7 +33,7 @@ const TwoFactorEnableForm: FC<TwoFactorEnableFormProps> = (props: TwoFactorEnabl
                                         name="code"
                                         label="Code"
                                         formProps={props}
-                                        className="DrawerFormField"
+                                        className="DialogFormField"
                                         required
                                         fullWidth
                                         autoFocus

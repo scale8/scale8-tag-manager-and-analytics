@@ -26,7 +26,7 @@ const GithubPreparationForm: FC<GitHubPreparationFormProps> = (
                         name="githubUser"
                         label="GitHub User"
                         formProps={props}
-                        className="DrawerFormField"
+                        className="DialogFormField"
                         required
                         autoFocus
                     />

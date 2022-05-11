@@ -115,12 +115,12 @@ const IngestEndpointDataMapForm: FC<IngestEndpointDataMapFormProps> = (
                 name="key"
                 label="Key"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
                 disabled={props.edit || props.readOnly}
                 required
             />
             <ControlledSelect
-                className="DrawerFormField"
+                className="DialogFormField"
                 label="Var Type"
                 name="varType"
                 values={props.lastLevel ? varTypeValuesLastLevel : varTypeValues}
@@ -171,7 +171,7 @@ const IngestEndpointDataMapForm: FC<IngestEndpointDataMapFormProps> = (
                 props.values.useDefault &&
                 (useMacro ? (
                     <ControlledSelect
-                        className="DrawerFormField"
+                        className="DialogFormField"
                         label="Macro"
                         name="defaultValue"
                         values={getMacroSelectValues()}
