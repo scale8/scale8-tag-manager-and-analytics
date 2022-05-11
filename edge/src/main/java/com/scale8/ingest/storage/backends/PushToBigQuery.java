@@ -1,4 +1,4 @@
-package com.scale8.ingest.storage;
+package com.scale8.ingest.storage.backends;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.ServiceAccountCredentials;
@@ -11,6 +11,8 @@ import com.scale8.Env;
 import com.scale8.config.structures.IngestSettings;
 import com.scale8.config.structures.schema.TypeSchema;
 import com.scale8.extended.types.Tuple;
+import com.scale8.ingest.storage.PushResult;
+import com.scale8.ingest.storage.StorageProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.inject.Singleton;
@@ -38,31 +40,31 @@ public class PushToBigQuery extends StorageProvider {
   }
 
   @Override
-  public void push(IngestSettings ingestSettings, ConcurrentLinkedQueue<JsonObject> q) {
-    try {
-      BigQuery bigQuery = getBigQueryInstance(ingestSettings);
-      TableId tableId = getTableId(ingestSettings);
-      buildMissingTable(bigQuery, ingestSettings);
+  public PushResult push(IngestSettings ingestSettings, ConcurrentLinkedQueue<JsonObject> q)
+      throws Exception {
+    int count = 0;
+    long bytes = 0;
 
-      while (!q.isEmpty()) {
-        List<InsertAllRequest.RowToInsert> rows =
-            getNextBatch(q).stream()
-                .map(
-                    jsonObject ->
-                        InsertAllRequest.RowToInsert.of(
-                            UUID.randomUUID().toString(), convertJsonObject(jsonObject)))
-                .collect(Collectors.toList());
+    BigQuery bigQuery = getBigQueryInstance(ingestSettings);
+    TableId tableId = getTableId(ingestSettings);
+    buildMissingTable(bigQuery, ingestSettings);
+    while (!q.isEmpty()) {
+      List<InsertAllRequest.RowToInsert> rows =
+          getNextBatch(q).stream()
+              .map(
+                  jsonObject ->
+                      InsertAllRequest.RowToInsert.of(
+                          UUID.randomUUID().toString(), convertJsonObject(jsonObject)))
+              .collect(Collectors.toList());
 
-        InsertAllResponse response =
-            bigQuery.insertAll(InsertAllRequest.newBuilder(tableId).setRows(rows).build());
-        if (response.hasErrors()) {
-          LOG.error("BigQuery: " + response.toString());
-        }
+      InsertAllResponse response =
+          bigQuery.insertAll(InsertAllRequest.newBuilder(tableId).setRows(rows).build());
+      if (response.hasErrors()) {
+        throw new Exception("BigQuery: " + response);
       }
-
-    } catch (Exception e) {
-      LOG.error("BigQuery: " + e.getMessage());
     }
+
+    return new PushResult(count, bytes);
   }
 
   private BigQuery getBigQueryInstance(IngestSettings ingestSettings)

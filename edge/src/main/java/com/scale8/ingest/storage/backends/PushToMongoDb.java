@@ -1,4 +1,4 @@
-package com.scale8.ingest.storage;
+package com.scale8.ingest.storage.backends;
 
 import com.google.gson.*;
 import com.mongodb.client.MongoClient;
@@ -11,16 +11,16 @@ import com.scale8.config.structures.schema.TypeSchema;
 import com.scale8.extended.Streamable;
 import com.scale8.extended.collectors.TupleCollector;
 import com.scale8.extended.types.Tuple;
+import com.scale8.ingest.storage.PushResult;
+import com.scale8.ingest.storage.StorageProvider;
 import org.bson.BsonDateTime;
 import org.bson.Document;
 import javax.inject.Singleton;
+import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -58,15 +58,24 @@ public class PushToMongoDb extends StorageProvider {
   }
 
   @Override
-  public void push(IngestSettings ingestSettings, ConcurrentLinkedQueue<JsonObject> q)
+  public PushResult push(IngestSettings ingestSettings, ConcurrentLinkedQueue<JsonObject> q)
       throws NoSuchAlgorithmException {
+
+    int count = 0;
+    long bytes = 0;
+
     while (!q.isEmpty()) {
-      List<Document> documents =
-          getNextBatch(q).stream()
-              .map(d -> createFromJsonObject(ingestSettings, d))
-              .collect(Collectors.toList());
+      ArrayList<JsonObject> nextBatch = getNextBatch(q);
+      List<Document> documents = new ArrayList<>(nextBatch.size());
+      for (JsonObject jsonObject : nextBatch) {
+        documents.add(createFromJsonObject(ingestSettings, jsonObject));
+        count++;
+        bytes += new Gson().toJson(jsonObject).getBytes(StandardCharsets.UTF_8).length;
+      }
       getCollection(ingestSettings).insertMany(documents);
     }
+
+    return new PushResult(count, bytes);
   }
 
   private MongoCollection<Document> getCollection(IngestSettings ingestSettings)

@@ -6,6 +6,7 @@ import com.google.cloud.bigquery.*;
 import com.google.gson.JsonObject;
 import com.scale8.config.structures.IngestSettings;
 import com.scale8.config.structures.storage.BigQueryStreamConfig;
+import com.scale8.ingest.storage.backends.PushToBigQuery;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -66,7 +67,7 @@ class PushToBigQueryTest {
     }
 
     @Test
-    void testPush() {
+    void testPush() throws Exception {
         JsonObject payload = new JsonObject();
         payload.addProperty("a", "test");
         ConcurrentLinkedQueue<JsonObject> q = new ConcurrentLinkedQueue<>();
