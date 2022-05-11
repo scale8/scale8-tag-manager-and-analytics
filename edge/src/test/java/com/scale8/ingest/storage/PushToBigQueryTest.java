@@ -72,6 +72,11 @@ class PushToBigQueryTest {
         payload.addProperty("a", "test");
         ConcurrentLinkedQueue<JsonObject> q = new ConcurrentLinkedQueue<>();
         q.add(payload);
+
+        InsertAllResponse insertAllResponse = mock(InsertAllResponse.class);
+        when(insertAllResponse.hasErrors()).thenReturn(false);
+        when(bigQuery.insertAll(any(InsertAllRequest.class))).thenReturn(insertAllResponse);
+
         sut.push(ingestSettings, q);
         Schema schema = Schema.of(new ArrayList<>());
         TableInfo tableInfo =
@@ -90,8 +95,6 @@ class PushToBigQueryTest {
         List<InsertAllRequest.RowToInsert> rows = new ArrayList<>();
         rows.add(InsertAllRequest.RowToInsert.of(UUID.randomUUID().toString(),  Map.of("a", "test")));
 
-        InsertAllResponse insertAllResponse = mock(InsertAllResponse.class);
-        when(bigQuery.insertAll(any(InsertAllRequest.class))).thenReturn(insertAllResponse);
         verify(bigQuery).insertAll(InsertAllRequest.newBuilder(TableId.of("ds", "s8_eid_rid")).setRows(rows).build());
     }
 }
