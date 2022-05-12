@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TwoFactorDisableForm form render unchanged 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiBox-root css-j7qwjs"
+  >
+    <form
+      class="MuiBox-root css-mjj15b"
+    >
+      <div
+        class="MuiDialogContent-root css-5o4y7a-MuiDialogContent-root"
+      >
+        <small>
+          Enter the 6-digit code from the app to confirm.
+          <br />
+          <br />
+        </small>
+        <div
+          class="MuiBox-root css-1nbic85"
+        >
+          <div
+            class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root DialogFormField css-wb57ya-MuiFormControl-root-MuiTextField-root"
+          >
+            <label
+              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary Mui-focused Mui-required css-14a706p-MuiFormLabel-root-MuiInputLabel-root"
+              data-shrink="true"
+            >
+              Code
+              <span
+                aria-hidden="true"
+                class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-b4y4zd-MuiFormLabel-asterisk"
+              >
+                 *
+              </span>
+            </label>
+            <div
+              class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth Mui-focused MuiInputBase-formControl css-dloxrs-MuiInputBase-root-MuiOutlinedInput-root"
+            >
+              <input
+                aria-invalid="false"
+                autocomplete="off"
+                class="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+                name="code"
+                required=""
+                type="text"
+                value=""
+              />
+              <fieldset
+                aria-hidden="true"
+                class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+              >
+                <legend
+                  class="css-186xcr5"
+                >
+                  <span>
+                    Code *
+                  </span>
+                </legend>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="MuiDialogActions-root MuiDialogActions-spacing css-snbeu5-MuiDialogActions-root"
+      >
+        <button
+          class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root css-7kx4b6-MuiButtonBase-root-MuiButton-root"
+          tabindex="0"
+          type="button"
+        >
+          Cancel
+          <span
+            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+          />
+        </button>
+      </div>
+    </form>
+  </div>
+</DocumentFragment>
+`;

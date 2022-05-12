@@ -5,7 +5,7 @@ import { Box } from '@mui/material';
 import Diff from '../components/molecules/Diff/Diff';
 import { addHasChangesToDiffMap } from '../utils/DiffUtils';
 import Head from 'next/head';
-import { mockDiffMap } from './mock/MockDiffMap';
+import { mockDiffMap } from '../../tests/componentsMocks/MockDiffMap';
 
 const DiffTester: FC = () => {
     const diffMap = mockDiffMap.defaultCase;

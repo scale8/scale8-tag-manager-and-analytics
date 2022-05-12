@@ -1,5 +1,5 @@
 import { buildMockPlatformDataMap } from './TestersMockBuilders';
-import { InputType, VarType } from '../../gql/generated/globalTypes';
+import { InputType, VarType } from '../../src/gql/generated/globalTypes';
 
 const mockPlatformDataMaps = {
     ingestEndpointPayloadDesigner: buildMockPlatformDataMap(
