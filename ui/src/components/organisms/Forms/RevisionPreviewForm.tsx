@@ -35,6 +35,7 @@ const RevisionPreviewForm: FC<RevisionPreviewFormProps> = (props: RevisionPrevie
                                     text: _.name,
                                 })),
                             ]}
+                            optional
                         />
                     )}
                     <DialogFormTextInput name="url" label="App URL" autoFocus />

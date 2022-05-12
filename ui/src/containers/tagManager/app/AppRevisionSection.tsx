@@ -23,7 +23,7 @@ import { useConfigState, useLoggedInState } from '../../../context/AppContext';
 import { NextRouter, useRouter } from 'next/router';
 import { ChildrenAndIdProps } from '../../../types/props/ChildrenAndIdProps';
 import { toAppRevision } from '../../../utils/NavigationPaths';
-import { analyticsEnabled } from '../../../utils/AnalyticsUtils';
+import { analyticsEnabled, errorTrackingEnabled } from '../../../utils/AnalyticsUtils';
 import { PageMenuButtonProps } from '../../../components/molecules/SideMenuButton';
 import { buildAppButtons } from './AppSection';
 
@@ -107,9 +107,7 @@ const AppRevisionSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) =
         queryResult: useQuery<NavAppRevision>(NavAppRevisionQuery, {
             variables: { id },
         }),
-        initContext: (data) => {
-            templateInteractions.setSectionHasAnalytics(analyticsEnabled(data.getRevision.app));
-        },
+        sectionHasAnalytics: (data) => analyticsEnabled(data.getRevision.app),
         buildButtonsProps: (data, orgPermissions) => {
             return buildAppRevisionButtons(
                 data.me.orgs,
@@ -121,7 +119,7 @@ const AppRevisionSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) =
                 data.getRevision.app.revisions,
                 data.getRevision,
                 analyticsEnabled(data.getRevision.app),
-                data.getRevision.app.error_tracking_enabled,
+                errorTrackingEnabled(data.getRevision.app),
                 router,
                 orgPermissions,
                 useSignup,

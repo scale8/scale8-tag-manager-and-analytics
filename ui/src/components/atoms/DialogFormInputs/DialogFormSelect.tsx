@@ -10,6 +10,7 @@ type DialogFormControlledSelectProps = {
     resetErrorsOnKeys?: string[];
     disabled?: boolean;
     requiredOnValidation?: boolean;
+    optional?: boolean;
 };
 
 export const DialogFormSelect: FC<DialogFormControlledSelectProps> = ({
@@ -19,6 +20,7 @@ export const DialogFormSelect: FC<DialogFormControlledSelectProps> = ({
     resetErrorsOnKeys,
     disabled,
     requiredOnValidation,
+    optional,
 }) => {
     const formProps = useDialogFormContext();
 
@@ -31,7 +33,7 @@ export const DialogFormSelect: FC<DialogFormControlledSelectProps> = ({
             className="DialogFormField"
             resetErrorsOnKeys={resetErrorsOnKeys}
             disabled={disabled}
-            required={!requiredOnValidation}
+            required={!optional && !requiredOnValidation}
             requiredOnValidation={requiredOnValidation}
         />
     );

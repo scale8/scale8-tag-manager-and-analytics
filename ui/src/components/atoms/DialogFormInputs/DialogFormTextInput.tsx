@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import ControlledTextInput from '../ControlledInputs/ControlledTextInput';
 import { useDialogFormContext } from '../../../context/DialogFormContext';
+import { autocompleteOff } from '../../../utils/BrowserUtils';
 
 type DialogFormTextInputProps = {
     name: string;
@@ -48,7 +49,9 @@ export const DialogFormTextInput: FC<DialogFormTextInputProps> = ({
                     ? {
                           autoComplete: 'new-password',
                       }
-                    : {}
+                    : {
+                          autoComplete: autocompleteOff,
+                      }
             }
             type={password || newPassword ? 'password' : 'text'}
             disabled={disabled}

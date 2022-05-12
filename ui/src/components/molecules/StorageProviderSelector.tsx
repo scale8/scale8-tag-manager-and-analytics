@@ -72,6 +72,12 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
             {(props.isCreate || props.values.editStorageProviderSettings) &&
                 props.values.storageProvider === StorageProvider.AWS_KINESIS && (
                     <>
+                        {props.warnGraphDisabled && (
+                            <DialogWarningAlert>
+                                If you use Kinesis as provider the graphs in the dashboard will be
+                                disabled.
+                            </DialogWarningAlert>
+                        )}
                         <BoxedInputs label="AWS Kinesis Storage Config">
                             <DialogFormTextInput name="streamName" label="Stream Name" />
                             <DialogFormTextInput name="accessKeyId" label="Access Key Id" />

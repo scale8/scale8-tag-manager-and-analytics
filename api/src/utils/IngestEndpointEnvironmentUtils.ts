@@ -28,6 +28,7 @@ import Hash from '../core/Hash';
 import S3Service from '../aws/S3Service';
 import { AwsKinesisConfig, AwsS3Config, GCBigQueryStreamConfig, MongoDbPushConfig } from '../Types';
 import KinesisService from '../aws/KinesisService';
+import { generateRevisionName } from '../../../common/utils/GenerateRevisionName';
 
 export const getCommercialStorageProviderConfig = async (): Promise<StorageProviderConfig> => {
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
@@ -470,7 +471,7 @@ export const createUsageEndpointEnvironment = async (
     );
     //create revision...
     let ingestEndpointRevision = await repoFactory(IngestEndpointRevision).save(
-        new IngestEndpointRevision('Revision 1', ingestEndpoint),
+        new IngestEndpointRevision(generateRevisionName(), ingestEndpoint),
         actor,
     );
     ingestEndpointRevision.ingestEndpointDataMapIds = (

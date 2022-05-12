@@ -137,20 +137,20 @@ const IngestEndpointDataMapForm: FC<IngestEndpointDataMapFormProps> = (
                 >
                     <FormControlLabel
                         value="optional"
-                        control={<Radio />}
+                        control={<Radio name="optional-radio" />}
                         label="Optional"
                         disabled={props.readOnly}
                     />
                     <FormControlLabel
                         value="required"
-                        control={<Radio />}
+                        control={<Radio name="required-radio" />}
                         label="Required"
                         disabled={props.readOnly}
                     />
                     {!isVarTypeObject(props.values.varType as VarType) && (
                         <FormControlLabel
                             value="default"
-                            control={<Radio />}
+                            control={<Radio name="default-radio" />}
                             label="Use Default Value"
                             disabled={props.readOnly}
                         />
@@ -159,7 +159,7 @@ const IngestEndpointDataMapForm: FC<IngestEndpointDataMapFormProps> = (
                         getMacroValues().length !== 0 && (
                             <FormControlLabel
                                 value="macro"
-                                control={<Radio />}
+                                control={<Radio name="macro-radio" />}
                                 label="Use Macro"
                                 disabled={props.readOnly}
                             />

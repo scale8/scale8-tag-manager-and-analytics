@@ -14,6 +14,7 @@ import {
     DuplicateValidators,
     DuplicateValues,
 } from '../../../../utils/forms/DuplicateDialogFormUtils';
+import { generateRevisionName } from '../../../../../../common/utils/GenerateRevisionName';
 
 const RuleDuplicate: FC<DialogPageProps> = (props: DialogPageProps) => {
     const duplicateProps: DialogPreloadFormProps<
@@ -25,8 +26,8 @@ const RuleDuplicate: FC<DialogPageProps> = (props: DialogPageProps) => {
         loadQuery: useQuery<DuplicateRuleGetData>(DuplicateRuleGetQuery, {
             variables: { id: props.id },
         }),
-        buildInitialStatePreload: (formLoadedData: DuplicateRuleGetData) => ({
-            name: `${formLoadedData.getRule.name} Copy`,
+        buildInitialStatePreload: () => ({
+            name: generateRevisionName(),
         }),
         saveQuery: useMutation<DuplicateRule>(DuplicateRuleQuery),
         mapSaveData: (formValues: DuplicateValues) => ({

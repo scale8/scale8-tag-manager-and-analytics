@@ -10,7 +10,7 @@ import { SectionKey } from '../../SectionsDetails';
 import { useConfigState, useLoggedInState } from '../../../context/AppContext';
 import { useRouter } from 'next/router';
 import { ChildrenAndIdProps } from '../../../types/props/ChildrenAndIdProps';
-import { analyticsEnabled } from '../../../utils/AnalyticsUtils';
+import { analyticsEnabled, errorTrackingEnabled } from '../../../utils/AnalyticsUtils';
 import { buildAppRevisionButtons } from './AppRevisionSection';
 
 const GlobalActionSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
@@ -30,11 +30,8 @@ const GlobalActionSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) 
         queryResult: useQuery<NavGlobalAction>(NavGlobalActionQuery, {
             variables: { id },
         }),
-        initContext: (data) => {
-            templateInteractions.setSectionHasAnalytics(
-                analyticsEnabled(data.getActionGroupDistribution.revision.app),
-            );
-        },
+        sectionHasAnalytics: (data) =>
+            analyticsEnabled(data.getActionGroupDistribution.revision.app),
         buildButtonsProps: (data, orgPermissions) => [
             ...buildAppRevisionButtons(
                 data.me.orgs,
@@ -47,7 +44,7 @@ const GlobalActionSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) 
                 data.getActionGroupDistribution.revision.app.revisions,
                 data.getActionGroupDistribution.revision,
                 analyticsEnabled(data.getActionGroupDistribution.revision.app),
-                data.getActionGroupDistribution.revision.app.error_tracking_enabled,
+                errorTrackingEnabled(data.getActionGroupDistribution.revision.app),
                 router,
                 orgPermissions,
                 useSignup,

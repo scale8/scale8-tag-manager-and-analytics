@@ -17,7 +17,7 @@ const EnvironmentForm: FC<EnvironmentFormProps> = (props: EnvironmentFormProps) 
                 submitDisable={props.isSubmitting || props.availableRevisions.length < 1}
             >
                 <DialogFormTextInput name="name" label="Name" autoFocus />
-                <DialogFormTextInput name="url" label="URL" />
+                <DialogFormTextInput name="url" label="URL" optional />
                 {props.availableRevisions.length < 1 && (
                     <small>
                         At least one revision needs to be finalised for it to be attached to an

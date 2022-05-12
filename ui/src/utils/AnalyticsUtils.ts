@@ -19,6 +19,12 @@ export type EntityWithAnalytics = {
     storage_provider: StorageProvider;
 };
 
+export type EntityWithAnalyticsAndErrorTracking = {
+    analytics_enabled: boolean;
+    error_tracking_enabled: boolean;
+    storage_provider: StorageProvider;
+};
+
 export const buildSummaryDetailPropsFromValue = (
     title: string,
     value: number,
@@ -79,5 +85,17 @@ export const calculateEventsPerUser = (eventCount: number, userCount: number): n
 };
 
 export const analyticsEnabled = (entity: EntityWithAnalytics) => {
-    return entity.analytics_enabled && entity.storage_provider !== StorageProvider.AWS_S3;
+    return (
+        entity.analytics_enabled &&
+        entity.storage_provider !== StorageProvider.AWS_S3 &&
+        entity.storage_provider !== StorageProvider.AWS_KINESIS
+    );
+};
+
+export const errorTrackingEnabled = (entity: EntityWithAnalyticsAndErrorTracking) => {
+    return (
+        entity.error_tracking_enabled &&
+        entity.storage_provider !== StorageProvider.AWS_S3 &&
+        entity.storage_provider !== StorageProvider.AWS_KINESIS
+    );
 };
