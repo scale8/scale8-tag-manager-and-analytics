@@ -18,7 +18,7 @@ import { useConfigState, useLoggedInState } from '../../../context/AppContext';
 import { NextRouter, useRouter } from 'next/router';
 import { ChildrenAndIdProps } from '../../../types/props/ChildrenAndIdProps';
 import { toApp } from '../../../utils/NavigationPaths';
-import { analyticsEnabled } from '../../../utils/AnalyticsUtils';
+import { analyticsEnabled, errorTrackingEnabled } from '../../../utils/AnalyticsUtils';
 import { PageMenuButtonProps } from '../../../components/molecules/SideMenuButton';
 import AppErrorsIcon from '../../../components/atoms/Icons/AppErrorsIcon';
 import { CurrentOrgPermissions } from '../../../context/OrgUserReducer';
@@ -108,7 +108,7 @@ const AppSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
 
     const { id, children } = props;
 
-    const { orgUserState, templateInteractions } = useLoggedInState();
+    const { orgUserState } = useLoggedInState();
     const { useSignup } = useConfigState();
 
     const sectionProps: SectionProps<NavApp> = {
@@ -117,9 +117,7 @@ const AppSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
         queryResult: useQuery<NavApp>(NavAppQuery, {
             variables: { id },
         }),
-        initContext: (data) => {
-            templateInteractions.setSectionHasAnalytics(analyticsEnabled(data.getApp));
-        },
+        sectionHasAnalytics: (data) => analyticsEnabled(data.getApp),
         buildButtonsProps: (data, orgPermissions) => {
             return buildAppButtons(
                 data.me.orgs,
@@ -129,7 +127,7 @@ const AppSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
                 data.getApp.tag_manager_account.apps,
                 data.getApp,
                 analyticsEnabled(data.getApp),
-                data.getApp.error_tracking_enabled,
+                errorTrackingEnabled(data.getApp),
                 router,
                 orgPermissions,
                 useSignup,
@@ -139,7 +137,7 @@ const AppSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
             return buildAppTabsMenu(
                 id,
                 analyticsEnabled(data.getApp),
-                data.getApp.error_tracking_enabled,
+                errorTrackingEnabled(data.getApp),
             );
         },
         extractOrgUserDetails: (data) => data.getApp.tag_manager_account.org,

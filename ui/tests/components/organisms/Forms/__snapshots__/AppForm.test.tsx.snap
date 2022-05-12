@@ -267,6 +267,31 @@ exports[`AppForm form render unchanged 1`] = `
             </div>
           </div>
           <div
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAlert-root MuiAlert-standardWarning MuiAlert-standard DialogFormField css-18ix9of-MuiPaper-root-MuiAlert-root"
+            role="alert"
+          >
+            <div
+              class="MuiAlert-icon css-1ytlwq5-MuiAlert-icon"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeInherit css-17ii7u1-MuiSvgIcon-root"
+                data-testid="ReportProblemOutlinedIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M12 5.99L19.53 19H4.47L12 5.99M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z"
+                />
+              </svg>
+            </div>
+            <div
+              class="MuiAlert-message css-acap47-MuiAlert-message"
+            >
+              If you use Kinesis as provider the graphs in the dashboard will be disabled.
+            </div>
+          </div>
+          <div
             class="MuiBox-root css-17ck9e8"
           >
             <div

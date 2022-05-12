@@ -10,7 +10,7 @@ import { SectionKey } from '../../SectionsDetails';
 import { useConfigState, useLoggedInState } from '../../../context/AppContext';
 import { useRouter } from 'next/router';
 import { ChildrenAndIdProps } from '../../../types/props/ChildrenAndIdProps';
-import { analyticsEnabled } from '../../../utils/AnalyticsUtils';
+import { analyticsEnabled, errorTrackingEnabled } from '../../../utils/AnalyticsUtils';
 import { buildAppRevisionButtons } from './AppRevisionSection';
 
 const GlobalTriggerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
@@ -30,11 +30,7 @@ const GlobalTriggerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps)
         queryResult: useQuery<NavGlobalTrigger>(NavGlobalTriggerQuery, {
             variables: { id },
         }),
-        initContext: (data) => {
-            templateInteractions.setSectionHasAnalytics(
-                analyticsEnabled(data.getTrigger.revision.app),
-            );
-        },
+        sectionHasAnalytics: (data) => analyticsEnabled(data.getTrigger.revision.app),
         buildButtonsProps: (data, orgPermissions) => [
             ...buildAppRevisionButtons(
                 data.me.orgs,
@@ -46,7 +42,7 @@ const GlobalTriggerSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps)
                 data.getTrigger.revision.app.revisions,
                 data.getTrigger.revision,
                 analyticsEnabled(data.getTrigger.revision.app),
-                data.getTrigger.revision.app.error_tracking_enabled,
+                errorTrackingEnabled(data.getTrigger.revision.app),
                 router,
                 orgPermissions,
                 useSignup,

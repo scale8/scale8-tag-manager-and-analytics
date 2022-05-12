@@ -10,7 +10,7 @@ import { SectionKey } from '../../SectionsDetails';
 import { useConfigState, useLoggedInState } from '../../../context/AppContext';
 import { useRouter } from 'next/router';
 import { ChildrenAndIdProps } from '../../../types/props/ChildrenAndIdProps';
-import { analyticsEnabled } from '../../../utils/AnalyticsUtils';
+import { analyticsEnabled, errorTrackingEnabled } from '../../../utils/AnalyticsUtils';
 import { buildAppRevisionButtons } from './AppRevisionSection';
 
 const TagSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
@@ -30,9 +30,7 @@ const TagSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
         queryResult: useQuery<NavTag>(NavTagQuery, {
             variables: { id },
         }),
-        initContext: (data) => {
-            templateInteractions.setSectionHasAnalytics(analyticsEnabled(data.getTag.revision.app));
-        },
+        sectionHasAnalytics: (data) => analyticsEnabled(data.getTag.revision.app),
         buildButtonsProps: (data, orgPermissions) => [
             ...buildAppRevisionButtons(
                 data.me.orgs,
@@ -44,7 +42,7 @@ const TagSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps) => {
                 data.getTag.revision.app.revisions,
                 data.getTag.revision,
                 analyticsEnabled(data.getTag.revision.app),
-                data.getTag.revision.app.error_tracking_enabled,
+                errorTrackingEnabled(data.getTag.revision.app),
                 router,
                 orgPermissions,
                 useSignup,

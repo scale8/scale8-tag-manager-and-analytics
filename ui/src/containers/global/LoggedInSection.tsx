@@ -60,8 +60,6 @@ const LoggedInSection: FC<ChildrenOnlyProps> = (props: ChildrenOnlyProps) => {
 
     const [section, setSection] = useState<symbol>(SectionKey.loggedOut);
 
-    const [sectionHasAnalytics, setSectionHasAnalytics] = useState(false);
-
     const [gates, dispatchGatesAction] = useReducer(
         (
             state: Record<string, JSX.Element>,
@@ -96,8 +94,6 @@ const LoggedInSection: FC<ChildrenOnlyProps> = (props: ChildrenOnlyProps) => {
                     setRefreshCurrentSection,
                     section,
                     setSection,
-                    sectionHasAnalytics,
-                    setSectionHasAnalytics,
                 },
                 loggedInUserState: {
                     loggedUserId: data?.me.id ?? '',

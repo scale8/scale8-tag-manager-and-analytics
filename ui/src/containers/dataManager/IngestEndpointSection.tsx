@@ -89,7 +89,7 @@ const IngestEndpointSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps
     const router = useRouter();
     const { id, children } = props;
 
-    const { orgUserState, templateInteractions } = useLoggedInState();
+    const { orgUserState } = useLoggedInState();
     const { useSignup } = useConfigState();
 
     const sectionProps: SectionProps<NavIngestEndpoint> = {
@@ -98,9 +98,7 @@ const IngestEndpointSection: FC<ChildrenAndIdProps> = (props: ChildrenAndIdProps
         queryResult: useQuery<NavIngestEndpoint>(NavIngestEndpointQuery, {
             variables: { id },
         }),
-        initContext: (data) => {
-            templateInteractions.setSectionHasAnalytics(analyticsEnabled(data.getIngestEndpoint));
-        },
+        sectionHasAnalytics: (data) => analyticsEnabled(data.getIngestEndpoint),
         buildButtonsProps: (data, orgPermissions) => {
             return buildIngestEndpointsButtons(
                 data.me.orgs,

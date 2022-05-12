@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode, useEffect } from 'react';
+import { createContext, ReactElement, ReactNode, useEffect } from 'react';
 import { BreadcrumbButtonProps } from '../../utils/BreadcrumbButtonsUtils';
 import { QueryResult } from '@apollo/client/react/types/types';
 import { PageMenuButtonProps } from '../../components/molecules/SideMenuButton';
@@ -28,7 +28,7 @@ export type SectionProps<Q> = {
     children?: ReactNode;
     sectionKey: symbol;
     queryResult: QueryResult<Q>;
-    initContext?: (data: Q) => void;
+    sectionHasAnalytics?: (data: Q) => boolean;
     buildButtonsProps: (data: Q, orgPermissions: CurrentOrgPermissions) => BreadcrumbButtonProps[];
     buildMenuItemsProps: (data: Q, orgPermissions: CurrentOrgPermissions) => PageMenuButtonProps[];
     extractOrgUserDetails: (data: Q) => GqlOrgUserState;
@@ -39,6 +39,12 @@ export type SectionProps<Q> = {
     accountExpired?: boolean;
     accountIsTrial?: boolean;
 };
+
+export type SectionContextType = {
+    hasAnalytics: boolean;
+};
+
+export const SectionContext = createContext<SectionContextType>({ hasAnalytics: false });
 
 const Section = <Q extends { [key: string]: any }>(props: SectionProps<Q>): ReactElement => {
     const {
@@ -51,7 +57,7 @@ const Section = <Q extends { [key: string]: any }>(props: SectionProps<Q>): Reac
         accountExpireIn,
         accountExpired,
         accountIsTrial,
-        initContext,
+        sectionHasAnalytics,
     } = props;
 
     const sectionDetails = getSectionDetails(sectionKey);
@@ -132,12 +138,6 @@ const Section = <Q extends { [key: string]: any }>(props: SectionProps<Q>): Reac
         }
     }, [refreshCurrentSection]);
 
-    useEffect(() => {
-        if (initContext && data) {
-            initContext(data);
-        }
-    }, [initContext, data]);
-
     const orgPermissions = extractPermissionsFromOrgUser(orgUserState);
     const buttonsProps = data ? buildButtonsProps(data, orgPermissions) : [];
     const menuItemsProps = data ? buildMenuItemsProps(data, orgPermissions) : [];
@@ -169,7 +169,7 @@ const Section = <Q extends { [key: string]: any }>(props: SectionProps<Q>): Reac
         }
     }, [buttonsProps, menuItemsProps, breadcrumbActions]);
 
-    if (loading) {
+    if (loading || !data) {
         return <Loader />;
     }
 
@@ -177,7 +177,13 @@ const Section = <Q extends { [key: string]: any }>(props: SectionProps<Q>): Reac
         return <GQLError error={error} />;
     }
 
-    return <>{props.children}</>;
+    return (
+        <SectionContext.Provider
+            value={{ hasAnalytics: sectionHasAnalytics ? sectionHasAnalytics(data) : false }}
+        >
+            {props.children}
+        </SectionContext.Provider>
+    );
 };
 
 export { Section };

@@ -31,11 +31,8 @@ const IngestEndpointRevisionSection: FC<ChildrenAndIdProps> = (props: ChildrenAn
         queryResult: useQuery<NavIngestEndpointRevision>(NavIngestEndpointRevisionQuery, {
             variables: { id },
         }),
-        initContext: (data) => {
-            templateInteractions.setSectionHasAnalytics(
-                analyticsEnabled(data.getIngestEndpointRevision.ingest_endpoint),
-            );
-        },
+        sectionHasAnalytics: (data) =>
+            analyticsEnabled(data.getIngestEndpointRevision.ingest_endpoint),
         buildButtonsProps: (data, orgPermissions) => [
             ...buildIngestEndpointsButtons(
                 data.me.orgs,

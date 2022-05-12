@@ -1,17 +1,13 @@
-import { FC } from 'react';
-import { useLoggedInState } from '../../context/AppContext';
+import { FC, useContext } from 'react';
 import { DynamicPageProps } from '../../pageLoader/DynamicPageLoader';
 import { toIngestEndpoint } from '../../utils/NavigationPaths';
 import Navigate from '../../components/atoms/Next/Navigate';
+import { SectionContext } from '../../containers/abstractions/Section';
 
 const IngestEndpointAuto: FC<DynamicPageProps> = (props: DynamicPageProps) => {
     const id = props.params.id ?? '';
-    const { templateInteractions } = useLoggedInState();
-    const { sectionHasAnalytics } = templateInteractions;
-
-    return (
-        <Navigate to={toIngestEndpoint({ id }, sectionHasAnalytics ? 'analytics' : 'revisions')} />
-    );
+    const { hasAnalytics } = useContext(SectionContext);
+    return <Navigate to={toIngestEndpoint({ id }, hasAnalytics ? 'analytics' : 'revisions')} />;
 };
 
 export default IngestEndpointAuto;
