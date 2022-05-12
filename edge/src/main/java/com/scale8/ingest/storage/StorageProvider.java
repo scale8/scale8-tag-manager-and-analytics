@@ -19,5 +19,5 @@ public abstract class StorageProvider {
     return batch;
   }
 
-  public abstract void push(IngestSettings ingestSettings, ConcurrentLinkedQueue<JsonObject> q) throws Exception;
+  public abstract PushResult push(IngestSettings ingestSettings, ConcurrentLinkedQueue<JsonObject> q) throws Exception;
 }

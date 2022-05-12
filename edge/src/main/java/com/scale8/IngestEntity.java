@@ -86,7 +86,7 @@ public class IngestEntity {
   }
 
   protected List<String> offerToIngestor(
-      ExtendedRequest extendedRequest, JsonObject jsonObject, IngestSettings ingestSettings) {
+      ExtendedRequest extendedRequest, JsonObject jsonObject, IngestSettings ingestSettings) throws IOException {
     JsonObject data =
         payload.applyDefaultValues(
             jsonObject,
@@ -97,15 +97,19 @@ public class IngestEntity {
         payload.validateSchemaAgainstPayload(data, ingestSettings.getSchemaAsMap());
 
     if (issues.isEmpty()) {
-      ingestor.add(data, ingestSettings);
-      trackUsage(extendedRequest, data, ingestSettings);
+      if(!ingestSettings.getUsageIngestEnvId().isEmpty() && ingestSettings.getIsAnalyticsEnabled()){
+        //we need to track usage...
+        ingestor.add(data, ingestSettings, getConfigById(ingestSettings.getUsageIngestEnvId()));
+      } else {
+        ingestor.add(data, ingestSettings);
+      }
     }
 
     return issues;
   }
 
   public List<String> add(
-      ExtendedRequest extendedRequest, IngestSettings ingestSettings, JsonObject jsonObject) {
+      ExtendedRequest extendedRequest, IngestSettings ingestSettings, JsonObject jsonObject) throws IOException {
     return offerToIngestor(extendedRequest, jsonObject, ingestSettings);
   }
 

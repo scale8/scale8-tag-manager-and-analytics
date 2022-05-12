@@ -8,6 +8,7 @@ import com.mongodb.client.MongoDatabase;
 import com.scale8.config.structures.IngestSettings;
 import com.scale8.config.structures.schema.TypeSchema;
 import com.scale8.config.structures.storage.MongoDbConfig;
+import com.scale8.ingest.storage.backends.PushToMongoDb;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import org.bson.Document;
 import org.junit.jupiter.api.BeforeAll;

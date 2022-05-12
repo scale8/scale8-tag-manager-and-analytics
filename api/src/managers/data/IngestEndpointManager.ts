@@ -283,26 +283,27 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                         {
                             varType: VarType.DATETIME,
                             key: 'dt',
-                            defaultValue: '%S8_DATE_TIME_UTC%',
                         },
                         {
                             varType: VarType.STRING,
                             key: 'env_id',
-                            defaultValue: '%S8_INGEST_ENV_ID%',
                         },
                         {
                             varType: VarType.STRING,
                             key: 'revision_id',
-                            defaultValue: '%S8_INGEST_REVISION_ID%',
                         },
                         {
                             varType: VarType.INT,
                             key: 'requests',
-                            defaultValue: 1,
                         },
                         {
                             varType: VarType.INT,
                             key: 'bytes',
+                        },
+                        {
+                            varType: VarType.STRING,
+                            key: 'error',
+                            optional: true,
                         },
                     ],
                 );

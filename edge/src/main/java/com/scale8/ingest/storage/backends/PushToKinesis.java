@@ -1,10 +1,12 @@
-package com.scale8.ingest.storage;
+package com.scale8.ingest.storage.backends;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.scale8.Env;
 import com.scale8.config.structures.IngestSettings;
 import com.scale8.config.structures.storage.KinesisConfig;
+import com.scale8.ingest.storage.PushResult;
+import com.scale8.ingest.storage.StorageProvider;
 import software.amazon.awssdk.auth.credentials.AwsCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.SdkBytes;
@@ -30,8 +32,12 @@ public class PushToKinesis extends StorageProvider {
   }
 
   @Override
-  public void push(IngestSettings ingestSettings, ConcurrentLinkedQueue<JsonObject> q)
+  public PushResult push(IngestSettings ingestSettings, ConcurrentLinkedQueue<JsonObject> q)
       throws IOException {
+
+    int count = 0;
+    long bytes = 0;
+
     if (!q.isEmpty()) {
       KinesisConfig kinesisConfig = ingestSettings.getKinesisConfig();
 
@@ -58,12 +64,10 @@ public class PushToKinesis extends StorageProvider {
           ArrayList<JsonObject> nextBatch = getNextBatch(q);
           List<Record> recordList = new ArrayList<>();
           for (JsonObject jsonObject : nextBatch) {
-            recordList.add(
-                Record.builder()
-                    .data(
-                        SdkBytes.fromByteArray(
-                            new Gson().toJson(jsonObject).getBytes(StandardCharsets.UTF_8)))
-                    .build());
+            byte[] data = (new Gson().toJson(jsonObject) + "\n").getBytes(StandardCharsets.UTF_8);
+            recordList.add(Record.builder().data(SdkBytes.fromByteArray(data)).build());
+            count++;
+            bytes += data.length;
           }
           PutRecordBatchRequest recordBatchRequest =
               PutRecordBatchRequest.builder()
@@ -76,5 +80,6 @@ public class PushToKinesis extends StorageProvider {
         firehoseClient.close();
       }
     }
+    return new PushResult(count, bytes);
   }
 }

@@ -1,10 +1,12 @@
-package com.scale8.ingest.storage;
+package com.scale8.ingest.storage.backends;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.scale8.Env;
 import com.scale8.config.structures.IngestSettings;
 import com.scale8.config.structures.storage.S3Config;
+import com.scale8.ingest.storage.PushResult;
+import com.scale8.ingest.storage.StorageProvider;
 import software.amazon.awssdk.auth.credentials.AwsCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -31,8 +33,12 @@ public class PushToS3 extends StorageProvider {
   }
 
   @Override
-  public void push(IngestSettings ingestSettings, ConcurrentLinkedQueue<JsonObject> q)
+  public PushResult push(IngestSettings ingestSettings, ConcurrentLinkedQueue<JsonObject> q)
       throws IOException {
+
+    int count = 0;
+    long bytes = 0;
+
     if (!q.isEmpty()) {
       S3Config s3Config = ingestSettings.getS3Config();
 
@@ -71,8 +77,10 @@ public class PushToS3 extends StorageProvider {
       while (!q.isEmpty()) {
         ArrayList<JsonObject> nextBatch = getNextBatch(q);
         for (JsonObject jsonObject : nextBatch) {
-          String newLineJson = new Gson().toJson(jsonObject) + "\n";
-          gzip.write(newLineJson.getBytes(StandardCharsets.UTF_8));
+          byte[] data = (new Gson().toJson(jsonObject) + "\n").getBytes(StandardCharsets.UTF_8);
+          gzip.write(data);
+          count++;
+          bytes += data.length;
         }
       }
       gzip.close();
@@ -84,5 +92,6 @@ public class PushToS3 extends StorageProvider {
       stream.flush();
       stream.close();
     }
+    return new PushResult(count, bytes);
   }
 }
