@@ -23,7 +23,7 @@ const UserSelect: FC<OrgTransferOwnershipFormProps> = (props: OrgTransferOwnersh
 
     return (
         <ControlledSelect
-            className="DrawerFormField"
+            className="DialogFormField"
             label="New Owner"
             name="userId"
             values={props.viableUsers}

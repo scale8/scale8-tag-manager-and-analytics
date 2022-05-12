@@ -12,7 +12,7 @@ const IngestEndpointRevisionForm: FC<IngestEndpointRevisionFormProps> = (
                 name="name"
                 label="Name"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
                 required
                 autoFocus
             />

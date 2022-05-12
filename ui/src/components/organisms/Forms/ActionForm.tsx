@@ -54,7 +54,7 @@ const ActionForm: FC<ActionFormProps> = (props: ActionFormProps) => {
             ) : (
                 <ControlledFilteredSelects
                     disabled={!!props.update}
-                    className="DrawerFormField"
+                    className="DialogFormField"
                     label="Action"
                     name="platformActionId"
                     initialFilterValue={props.initialPlatformId}
@@ -100,7 +100,7 @@ const ActionForm: FC<ActionFormProps> = (props: ActionFormProps) => {
                                 name="name"
                                 label="Name"
                                 formProps={props}
-                                className="DrawerFormField"
+                                className="DialogFormField"
                                 required
                             />
                         )}
@@ -110,7 +110,7 @@ const ActionForm: FC<ActionFormProps> = (props: ActionFormProps) => {
                 name="comments"
                 label="Comments"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
             />
         </DrawerFormLayout>
     );

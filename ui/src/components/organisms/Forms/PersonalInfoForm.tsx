@@ -22,14 +22,14 @@ const PersonalInfoForm: FC<PersonalInfoFormProps> = (props: PersonalInfoFormProp
                         name="firstName"
                         label="First Name"
                         formProps={props}
-                        className="DrawerFormField"
+                        className="DialogFormField"
                         required
                     />
                     <ControlledTextInput
                         name="lastName"
                         label="Last Name"
                         formProps={props}
-                        className="DrawerFormField"
+                        className="DialogFormField"
                         required
                     />
                 </DialogContent>

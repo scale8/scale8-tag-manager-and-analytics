@@ -32,7 +32,7 @@ const RuleForm: FC<RuleFormProps> = (props: RuleFormProps) => {
                 name="name"
                 label="Name"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
                 required
                 autoFocus
             />
@@ -57,7 +57,7 @@ const RuleForm: FC<RuleFormProps> = (props: RuleFormProps) => {
                             <small>There are no global triggers available.</small>
                         ) : (
                             <ControlledSelect
-                                className="DrawerFormField"
+                                className="DialogFormField"
                                 label="Global Trigger"
                                 name="globalTriggerId"
                                 values={availableGlobalTriggers}
@@ -90,14 +90,14 @@ const RuleForm: FC<RuleFormProps> = (props: RuleFormProps) => {
                     validationError={props.errors.minRepeatInterval}
                     onBlur={props.handleBlur}
                     max="1200"
-                    className="DrawerFormField"
+                    className="DialogFormField"
                 />
             )}
             <ControlledTextAreaInput
                 name="comments"
                 label="Comments"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
             />
         </DrawerFormLayout>
     );

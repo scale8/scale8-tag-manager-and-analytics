@@ -11,7 +11,7 @@ const OrgUserInviteForm: FC<OrgUserInviteFormProps> = (props: OrgUserInviteFormP
                 name="email"
                 label="Email"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
                 required
                 autoFocus
             />

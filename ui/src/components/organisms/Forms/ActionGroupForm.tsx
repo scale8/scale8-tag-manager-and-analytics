@@ -11,7 +11,7 @@ const ActionGroupForm: FC<ActionGroupFormProps> = (props: ActionGroupFormProps) 
                 name="name"
                 label="Name"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
                 required
                 autoFocus
             />
@@ -19,7 +19,7 @@ const ActionGroupForm: FC<ActionGroupFormProps> = (props: ActionGroupFormProps) 
                 name="comments"
                 label="Comments"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
             />
         </DrawerFormLayout>
     );

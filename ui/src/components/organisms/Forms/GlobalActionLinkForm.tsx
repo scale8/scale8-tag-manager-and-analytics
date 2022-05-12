@@ -16,7 +16,7 @@ const GlobalActionLinkForm: FC<ActionGroupDistributionLinkFormProps> = (
                 <small>There are no global action group distributions available.</small>
             ) : (
                 <ControlledSelect
-                    className="DrawerFormField"
+                    className="DialogFormField"
                     label="Global Action Group Distribution"
                     name="globalActionGroupDistributionId"
                     values={props.availableGlobalActions}

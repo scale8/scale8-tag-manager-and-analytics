@@ -16,7 +16,7 @@ const PlatformForm: FC<PlatformFormProps> = (props: PlatformFormProps) => {
                 name="name"
                 label="Name"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
                 required
                 autoFocus
             />
@@ -24,12 +24,12 @@ const PlatformForm: FC<PlatformFormProps> = (props: PlatformFormProps) => {
                 name="description"
                 label="Description"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
                 required
             />
             {!props.isUpdate && (
                 <ControlledSelect
-                    className="DrawerFormField"
+                    className="DialogFormField"
                     label="Type"
                     name="type"
                     values={[
