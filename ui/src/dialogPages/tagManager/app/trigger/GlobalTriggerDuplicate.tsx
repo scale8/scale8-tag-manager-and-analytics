@@ -14,6 +14,7 @@ import {
     DuplicateValidators,
     DuplicateValues,
 } from '../../../../utils/forms/DuplicateDialogFormUtils';
+import { generateRevisionName } from '../../../../../../common/utils/GenerateRevisionName';
 
 const GlobalTriggerDuplicate: FC<DialogPageProps> = (props: DialogPageProps) => {
     const duplicateProps: DialogPreloadFormProps<
@@ -25,8 +26,8 @@ const GlobalTriggerDuplicate: FC<DialogPageProps> = (props: DialogPageProps) => 
         loadQuery: useQuery<DuplicateGlobalTriggerGetData>(DuplicateGlobalTriggerGetQuery, {
             variables: { id: props.id },
         }),
-        buildInitialStatePreload: (formLoadedData: DuplicateGlobalTriggerGetData) => ({
-            name: `${formLoadedData.getTrigger.name} Copy`,
+        buildInitialStatePreload: () => ({
+            name: generateRevisionName(),
         }),
         saveQuery: useMutation<DuplicateGlobalTrigger>(DuplicateGlobalTriggerQuery),
         mapSaveData: (formValues: DuplicateValues) => ({

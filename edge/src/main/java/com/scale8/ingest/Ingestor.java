@@ -1,15 +1,21 @@
 package com.scale8.ingest;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.scale8.Env;
+import com.scale8.config.Payload;
 import com.scale8.config.structures.IngestSettings;
 import com.scale8.extended.types.Tuple;
 import com.scale8.ingest.storage.*;
+import com.scale8.ingest.storage.backends.*;
 import com.spencerwi.either.Either;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +27,8 @@ import java.util.stream.Collectors;
 public class Ingestor {
 
   @Inject Env env;
+
+  @Inject Payload payload;
 
   @Inject PushToBigQuery pushToBigQuery;
 
@@ -38,19 +46,30 @@ public class Ingestor {
           String, ConcurrentHashMap<Long, ConcurrentLinkedQueue<JsonObject>>>
       revisionData = new ConcurrentHashMap<>();
 
-  private static final HashMap<String, String> revisionToEnvironment = new HashMap<>();
-  private static final HashMap<String, IngestSettings> environmentIngestSettings = new HashMap<>();
+  private static final HashMap<String, String> revisionToEnvironmentMap = new HashMap<>();
+  private static final HashMap<String, IngestSettings> environmentToIngestSettingsMap =
+      new HashMap<>();
+  private static final HashMap<String, IngestSettings> environmentToUsageIngestSettingsMap =
+      new HashMap<>();
 
   private long getCurrentWritableWindow() {
     return System.currentTimeMillis() / 1000 / env.INGEST_WINDOW_SIZE_SECONDS;
   }
 
+  public void add(
+      JsonObject payload, IngestSettings ingestSettings, IngestSettings usageIngestSettings) {
+    String environmentId = ingestSettings.getIngestEndpointEnvironmentId();
+    environmentToUsageIngestSettingsMap.put(environmentId, usageIngestSettings);
+    add(payload, ingestSettings);
+  }
+
   public void add(JsonObject payload, IngestSettings ingestSettings) {
-    //this needs to be kept fresh.
-    environmentIngestSettings.put(
-        ingestSettings.getIngestEndpointEnvironmentId(), ingestSettings);
+    String environmentId = ingestSettings.getIngestEndpointEnvironmentId();
     String revisionId = ingestSettings.getIngestEndpointRevisionId();
-    revisionToEnvironment.put(revisionId, ingestSettings.getIngestEndpointEnvironmentId());
+
+    environmentToIngestSettingsMap.put(environmentId, ingestSettings);
+    revisionToEnvironmentMap.put(revisionId, ingestSettings.getIngestEndpointEnvironmentId());
+
     revisionData.putIfAbsent(revisionId, new ConcurrentHashMap<>());
 
     ConcurrentHashMap<Long, ConcurrentLinkedQueue<JsonObject>> timeWindowMap =
@@ -67,11 +86,43 @@ public class Ingestor {
     }
   }
 
+  private void trackUsage(IngestSettings ingestSettings, PushResult pushResult) {
+    if (!ingestSettings.getUsageIngestEnvId().isEmpty() && ingestSettings.getIsAnalyticsEnabled()) {
+      String environmentId = ingestSettings.getIngestEndpointEnvironmentId();
+      String revisionId = ingestSettings.getIngestEndpointRevisionId();
+      IngestSettings usageIngestSettings = environmentToUsageIngestSettingsMap.get(environmentId);
+
+      JsonObject payloadObject = new JsonObject();
+      payloadObject.add(
+          "dt",
+          new JsonPrimitive(
+              LocalDateTime.now(ZoneId.of("UTC")).format(DateTimeFormatter.ISO_DATE_TIME)));
+      payloadObject.add("env_id", new JsonPrimitive(environmentId));
+      payloadObject.add("revision_id", new JsonPrimitive(revisionId));
+      payloadObject.add("requests", new JsonPrimitive(pushResult.getCount()));
+      payloadObject.add("bytes", new JsonPrimitive(pushResult.getBytes()));
+
+      if (pushResult.hasError()) {
+        payloadObject.add("error", new JsonPrimitive(pushResult.getError()));
+      }
+
+      List<String> trackingIssues =
+          payload.validateSchemaAgainstPayload(payloadObject, usageIngestSettings.getSchemaAsMap());
+      if (trackingIssues.isEmpty()) {
+        // go ahead and log this...
+        add(payloadObject, usageIngestSettings);
+      } else {
+        LOG.error("Failed to track usage on ingest endpoint");
+      }
+    }
+  }
+
   public void push() throws Exception {
     ExecutorService executorService = Executors.newFixedThreadPool(env.INGEST_MAX_THREADS);
     long currentWindow = getCurrentWritableWindow();
 
     ArrayList<Tuple<IngestSettings, ConcurrentLinkedQueue<JsonObject>>> qJobs = new ArrayList<>();
+
     for (Map.Entry<String, ConcurrentHashMap<Long, ConcurrentLinkedQueue<JsonObject>>>
         revisionTimeWindows : revisionData.entrySet()) {
       String revisionId = revisionTimeWindows.getKey();
@@ -96,46 +147,77 @@ public class Ingestor {
             } else {
               qJobs.add(
                   new Tuple<>(
-                      environmentIngestSettings.get(revisionToEnvironment.get(revisionId)), q));
+                      environmentToIngestSettingsMap.get(revisionToEnvironmentMap.get(revisionId)),
+                      q));
             }
           }
         }
       }
     }
 
-    List<Future<Either<Boolean, Exception>>> runningJobs =
-        qJobs.stream()
-            .map(
-                job ->
-                    executorService.submit(
-                        () -> {
-                          LOG.info("Starting job");
-                          try {
-                            IngestSettings ingestSettings = job.x;
-                            String storageProvider = ingestSettings.getStorageProvider();
-                            switch (storageProvider) {
-                              case "MONGODB":
-                                pushToMongoDb.push(ingestSettings, job.y);
-                                return Either.<Boolean, Exception>left(true);
-                              case "GC_BIGQUERY_STREAM":
-                                pushToBigQuery.push(ingestSettings, job.y);
-                                return Either.<Boolean, Exception>left(true);
-                              case "AWS_S3":
-                                pushToS3.push(ingestSettings, job.y);
-                                return Either.<Boolean, Exception>left(true);
-                              case "AWS_KINESIS":
-                                pushToKinesis.push(ingestSettings, job.y);
-                                return Either.<Boolean, Exception>left(true);
-                              default:
-                                logProvider.push(ingestSettings, job.y);
-                                return Either.<Boolean, Exception>right(
-                                    new Exception(storageProvider + " is not supported"));
-                            }
-                          } catch (Exception e) {
-                            return Either.<Boolean, Exception>right(e);
-                          }
-                        }))
-            .collect(Collectors.toList());
+    List<Future<Either<Tuple<PushResult, IngestSettings>, Tuple<Exception, IngestSettings>>>>
+        runningJobs =
+            qJobs.stream()
+                .map(
+                    job ->
+                        executorService.submit(
+                            () -> {
+                              LOG.info("Starting job");
+                              IngestSettings ingestSettings = job.x;
+                              try {
+                                String storageProvider = ingestSettings.getStorageProvider();
+                                switch (storageProvider) {
+                                  case "MONGODB":
+                                    return Either
+                                        .<Tuple<PushResult, IngestSettings>,
+                                            Tuple<Exception, IngestSettings>>
+                                            left(
+                                                new Tuple<>(
+                                                    pushToMongoDb.push(ingestSettings, job.y),
+                                                    ingestSettings));
+                                  case "GC_BIGQUERY_STREAM":
+                                    return Either
+                                        .<Tuple<PushResult, IngestSettings>,
+                                            Tuple<Exception, IngestSettings>>
+                                            left(
+                                                new Tuple<>(
+                                                    pushToBigQuery.push(ingestSettings, job.y),
+                                                    ingestSettings));
+                                  case "AWS_S3":
+                                    return Either
+                                        .<Tuple<PushResult, IngestSettings>,
+                                            Tuple<Exception, IngestSettings>>
+                                            left(
+                                                new Tuple<>(
+                                                    pushToS3.push(ingestSettings, job.y),
+                                                    ingestSettings));
+                                  case "AWS_KINESIS":
+                                    return Either
+                                        .<Tuple<PushResult, IngestSettings>,
+                                            Tuple<Exception, IngestSettings>>
+                                            left(
+                                                new Tuple<>(
+                                                    pushToKinesis.push(ingestSettings, job.y),
+                                                    ingestSettings));
+                                  default:
+                                    logProvider.push(ingestSettings, job.y);
+                                    return Either
+                                        .<Tuple<PushResult, IngestSettings>,
+                                            Tuple<Exception, IngestSettings>>
+                                            right(
+                                                new Tuple<>(
+                                                    new Exception(
+                                                        storageProvider + " is not supported"),
+                                                    ingestSettings));
+                                }
+                              } catch (Exception e) {
+                                return Either
+                                    .<Tuple<PushResult, IngestSettings>,
+                                        Tuple<Exception, IngestSettings>>
+                                        right(new Tuple<>(e, ingestSettings));
+                              }
+                            }))
+                .collect(Collectors.toList());
 
     executorService.shutdown();
     if (!executorService.awaitTermination(env.INGEST_TIMEOUT_JOBS_SECONDS, TimeUnit.SECONDS)) {
@@ -143,9 +225,21 @@ public class Ingestor {
       executorService.shutdownNow();
     }
 
-    for (Future<Either<Boolean, Exception>> runningJob : runningJobs) {
-      if (runningJob.get().isRight()) {
-        LOG.error(runningJob.get().getRight().getMessage(), runningJob.get().getRight());
+    for (Future<Either<Tuple<PushResult, IngestSettings>, Tuple<Exception, IngestSettings>>>
+        runningJob : runningJobs) {
+      if (runningJob.get().isLeft()) {
+        Tuple<PushResult, IngestSettings> res = runningJob.get().getLeft();
+        LOG.info("Pushed " + res.x.getCount() + " records (" +  res.x.getBytes() + " bytes)");
+        trackUsage(res.y, res.x);
+      } else if (runningJob.get().isRight()) {
+        Tuple<Exception, IngestSettings> err = runningJob.get().getRight();
+        LOG.error(err.x.getMessage());
+        trackUsage(
+            err.y,
+            new PushResult(
+                1,
+                0,
+                "Failed to connect and stream to backend. Please check your credentials are correct."));
       }
     }
   }

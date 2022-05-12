@@ -32,6 +32,7 @@ import Hash from '../../core/Hash';
 import { createIngestEndpointDataMapFromSchemas } from '../../utils/IngestEndpointDataMapUtils';
 import { IngestSchemaWizard } from '../../enums/IngestSchemaWizard';
 import { errorTrackingSchema, userTrackingSchema } from '../../utils/AppUtils';
+import { generateRevisionName } from '../../../../common/utils/GenerateRevisionName';
 
 @injectable()
 export default class IngestEndpointManager extends Manager<IngestEndpoint> {
@@ -283,26 +284,27 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                         {
                             varType: VarType.DATETIME,
                             key: 'dt',
-                            defaultValue: '%S8_DATE_TIME_UTC%',
                         },
                         {
                             varType: VarType.STRING,
                             key: 'env_id',
-                            defaultValue: '%S8_INGEST_ENV_ID%',
                         },
                         {
                             varType: VarType.STRING,
                             key: 'revision_id',
-                            defaultValue: '%S8_INGEST_REVISION_ID%',
                         },
                         {
                             varType: VarType.INT,
                             key: 'requests',
-                            defaultValue: 1,
                         },
                         {
                             varType: VarType.INT,
                             key: 'bytes',
+                        },
+                        {
+                            varType: VarType.STRING,
+                            key: 'error',
+                            optional: true,
                         },
                     ],
                 );
@@ -347,7 +349,7 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                 );
                 ingestEndpoint = await this.repoFactory(IngestEndpoint).save(ingestEndpoint, actor);
                 const ingestEndpointRevision = await this.repoFactory(IngestEndpointRevision).save(
-                    new IngestEndpointRevision('Revision 1', ingestEndpoint),
+                    new IngestEndpointRevision(generateRevisionName(), ingestEndpoint),
                     actor,
                 );
 

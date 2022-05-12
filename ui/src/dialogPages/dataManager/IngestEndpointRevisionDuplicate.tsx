@@ -12,6 +12,7 @@ import { ApolloError } from '@apollo/client/errors';
 import { DialogPageProps } from '../../types/DialogTypes';
 import { DuplicateValidators, DuplicateValues } from '../../utils/forms/DuplicateDialogFormUtils';
 import { DialogPreloadForm, DialogPreloadFormProps } from '../abstractions/DialogPreloadForm';
+import { generateRevisionName } from '../../../../common/utils/GenerateRevisionName';
 
 const IngestEndpointRevisionDuplicate: FC<DialogPageProps> = (props: DialogPageProps) => {
     const ingestEndpointRevisionDuplicateProps: DialogPreloadFormProps<
@@ -26,8 +27,8 @@ const IngestEndpointRevisionDuplicate: FC<DialogPageProps> = (props: DialogPageP
                 variables: { id: props.id },
             },
         ),
-        buildInitialStatePreload: (formLoadedData: DuplicateIngestEndpointRevisionGetData) => ({
-            name: `${formLoadedData.getIngestEndpointRevision.name} Copy`,
+        buildInitialStatePreload: () => ({
+            name: generateRevisionName(),
         }),
         saveQuery: useMutation<DuplicateIngestEndpointRevision>(
             DuplicateIngestEndpointRevisionQuery,
