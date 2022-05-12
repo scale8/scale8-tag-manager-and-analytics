@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RevisionPreviewDisplayForm form render unchanged 1`] = `
+<DocumentFragment>
+  <form
+    class="MuiBox-root css-ueizbf"
+  >
+    <div
+      class="MuiDialogContent-root css-aoata0-MuiDialogContent-root"
+    >
+      <p
+        class="MuiDialogContentText-root MuiTypography-root MuiTypography-body1 css-s2fmnb-MuiTypography-root-MuiDialogContentText-root"
+        id="alert-dialog-description"
+      >
+         Preview
+      </p>
+      <div
+        class="MuiBox-root css-1yuhvjn"
+      />
+      <svg
+        height="128"
+        shape-rendering="crispEdges"
+        viewBox="0 0 21 21"
+        width="128"
+      >
+        <path
+          d="M0,0 h21v21H0z"
+          fill="transparent"
+        />
+        <path
+          d="M0 0h7v1H0zM9 0h1v1H9zM14,0 h7v1H14zM0 1h1v1H0zM6 1h1v1H6zM10 1h2v1H10zM14 1h1v1H14zM20,1 h1v1H20zM0 2h1v1H0zM2 2h3v1H2zM6 2h1v1H6zM8 2h5v1H8zM14 2h1v1H14zM16 2h3v1H16zM20,2 h1v1H20zM0 3h1v1H0zM2 3h3v1H2zM6 3h1v1H6zM8 3h3v1H8zM12 3h1v1H12zM14 3h1v1H14zM16 3h3v1H16zM20,3 h1v1H20zM0 4h1v1H0zM2 4h3v1H2zM6 4h1v1H6zM9 4h3v1H9zM14 4h1v1H14zM16 4h3v1H16zM20,4 h1v1H20zM0 5h1v1H0zM6 5h1v1H6zM9 5h1v1H9zM11 5h2v1H11zM14 5h1v1H14zM20,5 h1v1H20zM0 6h7v1H0zM8 6h1v1H8zM10 6h1v1H10zM12 6h1v1H12zM14,6 h7v1H14zM3 8h2v1H3zM6 8h2v1H6zM12 8h1v1H12zM17 8h2v1H17zM0 9h2v1H0zM5 9h1v1H5zM7 9h2v1H7zM11 9h2v1H11zM15 9h3v1H15zM19,9 h2v1H19zM0 10h2v1H0zM5 10h4v1H5zM12 10h4v1H12zM17 10h1v1H17zM20,10 h1v1H20zM1 11h1v1H1zM3 11h2v1H3zM8 11h4v1H8zM15 11h2v1H15zM19 11h1v1H19zM0 12h1v1H0zM2 12h2v1H2zM6 12h1v1H6zM8 12h1v1H8zM14,12 h7v1H14zM8 13h2v1H8zM13 13h1v1H13zM18,13 h3v1H18zM0 14h7v1H0zM8 14h3v1H8zM13 14h2v1H13zM17 14h2v1H17zM20,14 h1v1H20zM0 15h1v1H0zM6 15h1v1H6zM9 15h3v1H9zM13 15h2v1H13zM18 15h1v1H18zM0 16h1v1H0zM2 16h3v1H2zM6 16h1v1H6zM8 16h2v1H8zM11 16h1v1H11zM14 16h1v1H14zM16 16h1v1H16zM18 16h2v1H18zM0 17h1v1H0zM2 17h3v1H2zM6 17h1v1H6zM8 17h2v1H8zM12 17h1v1H12zM15 17h2v1H15zM0 18h1v1H0zM2 18h3v1H2zM6 18h1v1H6zM9 18h1v1H9zM11 18h2v1H11zM15 18h3v1H15zM19,18 h2v1H19zM0 19h1v1H0zM6 19h1v1H6zM13 19h1v1H13zM15 19h1v1H15zM17 19h1v1H17zM19,19 h2v1H19zM0 20h7v1H0zM10 20h3v1H10zM14 20h3v1H14zM18 20h2v1H18z"
+          fill="black"
+        />
+      </svg>
+      <div
+        class="MuiBox-root css-164r41r"
+      />
+      <p
+        class="MuiDialogContentText-root MuiTypography-root MuiTypography-body1 css-s2fmnb-MuiTypography-root-MuiDialogContentText-root"
+        id="alert-dialog-description"
+      >
+        <span
+          class="MuiBox-root css-gdgl1m"
+        >
+          Scan the code with your phone to preview
+        </span>
+      </p>
+    </div>
+    <div
+      class="MuiDialogActions-root MuiDialogActions-spacing css-snbeu5-MuiDialogActions-root"
+    >
+      <button
+        class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root css-7kx4b6-MuiButtonBase-root-MuiButton-root"
+        tabindex="0"
+        type="button"
+      >
+        Cancel
+        <span
+          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+        />
+      </button>
+      <button
+        class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root css-18croe1-MuiButtonBase-root-MuiButton-root"
+        tabindex="0"
+        type="submit"
+      >
+        submit
+        <span
+          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+        />
+      </button>
+    </div>
+  </form>
+</DocumentFragment>
+`;

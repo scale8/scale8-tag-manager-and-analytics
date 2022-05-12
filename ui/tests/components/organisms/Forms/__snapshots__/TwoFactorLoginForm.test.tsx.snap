@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TwoFactorLoginForm form render unchanged 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiBox-root css-1q1izzo"
+  >
+    <div
+      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation5 MuiCard-root css-1sxjyu4-MuiPaper-root-MuiCard-root"
+    >
+      <div
+        class="MuiBox-root css-1qm1lh"
+      >
+        <h1
+          class="MuiTypography-root MuiTypography-h5 css-43s22r-MuiTypography-root"
+        >
+          Sign in
+        </h1>
+      </div>
+      <form
+        class="MuiBox-root css-1u15dwc"
+      >
+        <small>
+          Two-factor authentication is enabled for your account. Enter your authentication code to verify your identity.
+          <br />
+          <br />
+          Check your authentication app for your code.
+          <br />
+          <br />
+        </small>
+        <div
+          class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root css-wb57ya-MuiFormControl-root-MuiTextField-root"
+        >
+          <label
+            class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary Mui-focused Mui-required css-14a706p-MuiFormLabel-root-MuiInputLabel-root"
+            data-shrink="true"
+          >
+            Code
+            <span
+              aria-hidden="true"
+              class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-b4y4zd-MuiFormLabel-asterisk"
+            >
+               *
+            </span>
+          </label>
+          <div
+            class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth Mui-focused MuiInputBase-formControl css-dloxrs-MuiInputBase-root-MuiOutlinedInput-root"
+          >
+            <input
+              aria-invalid="false"
+              autocomplete="off"
+              class="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+              name="code"
+              required=""
+              type="text"
+              value=""
+            />
+            <fieldset
+              aria-hidden="true"
+              class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+            >
+              <legend
+                class="css-186xcr5"
+              >
+                <span>
+                  Code *
+                </span>
+              </legend>
+            </fieldset>
+          </div>
+        </div>
+        <button
+          class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButtonBase-root formFullSubmit css-8gt83u-MuiButtonBase-root-MuiButton-root"
+          tabindex="0"
+          type="submit"
+        >
+          <span
+            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+          />
+        </button>
+      </form>
+    </div>
+  </div>
+</DocumentFragment>
+`;

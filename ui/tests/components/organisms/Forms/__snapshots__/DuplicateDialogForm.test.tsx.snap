@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DuplicateDialogForm form render unchanged 1`] = `
+<DocumentFragment>
+  <form
+    class="MuiBox-root css-j7qwjs"
+  >
+    <div
+      class="MuiDialogContent-root css-ypiqx9-MuiDialogContent-root"
+    >
+      <p
+        class="MuiDialogContentText-root MuiTypography-root MuiTypography-body1 css-s2fmnb-MuiTypography-root-MuiDialogContentText-root"
+        id="alert-dialog-description"
+      />
+      <div
+        class="MuiFormControl-root MuiTextField-root css-1rrfi79-MuiFormControl-root-MuiTextField-root"
+      >
+        <label
+          class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-focused Mui-required css-1oyovms-MuiFormLabel-root-MuiInputLabel-root"
+          data-shrink="true"
+        >
+          New Name
+          <span
+            aria-hidden="true"
+            class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-b4y4zd-MuiFormLabel-asterisk"
+          >
+             *
+          </span>
+        </label>
+        <div
+          class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary Mui-focused MuiInputBase-formControl css-1ejkwvn-MuiInputBase-root-MuiInput-root"
+        >
+          <input
+            aria-invalid="false"
+            autocomplete="off"
+            class="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+            name="name"
+            required=""
+            type="text"
+            value=""
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      class="MuiDialogActions-root MuiDialogActions-spacing css-snbeu5-MuiDialogActions-root"
+    >
+      <button
+        class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root css-7kx4b6-MuiButtonBase-root-MuiButton-root"
+        tabindex="0"
+        type="button"
+      >
+        Cancel
+        <span
+          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+        />
+      </button>
+    </div>
+  </form>
+</DocumentFragment>
+`;

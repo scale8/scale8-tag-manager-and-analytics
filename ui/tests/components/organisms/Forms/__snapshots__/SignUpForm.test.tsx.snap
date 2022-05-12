@@ -1,0 +1,582 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SignUpForm form render unchanged 1`] = `
+<DocumentFragment>
+  <div>
+    <div
+      class="MuiBox-root css-cegarq"
+    >
+      <svg
+        height="151"
+        viewBox="0 0 29.036954 38.838082"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M 0 9.721 C 0 4.3775 4.332 0.0458 9.675 0.0458 L 9.675 9.721 Z"
+          id="path158"
+          style="fill: #39cce0; fill-opacity: 1; fill-rule: nonzero; stroke: none;"
+        />
+        <path
+          d="M 29.037 0.0468 C 29.037 5.3903 24.705 9.7221 19.361 9.7221 L 19.361 0.0468 Z"
+          id="path162"
+          style="fill: #39cce0; fill-opacity: 1; fill-rule: nonzero; stroke: none;"
+        />
+        <path
+          d="M 19.361 29.1625 C 19.361 34.506 15.029 38.8378 9.686 38.8378 L 9.686 29.1625 Z"
+          id="path166"
+          style="fill: #39cce0; fill-opacity: 1; fill-rule: nonzero; stroke: none;"
+        />
+        <path
+          d="M 9.675 0.0002 L 19.361 0.0002 L 19.361 9.7221 L 9.675 9.7221 Z"
+          id="path168"
+          style="fill: #39cce0; fill-opacity: 1; fill-rule: nonzero; stroke: none;"
+        />
+        <path
+          d="M 9.675 9.721 L 19.361 9.721 L 19.361 19.4418 L 9.675 19.4418 Z"
+          id="path170"
+          style="fill: #39cce0; fill-opacity: 1; fill-rule: nonzero; stroke: none;"
+        />
+        <path
+          d="M 9.675 19.4418 L 19.361 19.4418 L 19.361 29.1636 L 9.675 29.1636 Z"
+          id="path172"
+          style="fill: #39cce0; fill-opacity: 1; fill-rule: nonzero; stroke: none;"
+        />
+      </svg>
+    </div>
+    <div
+      class="MuiBox-root css-19ayr1g"
+    >
+      Sign-up for an unlimited 30 day free trial.
+    </div>
+    <div
+      class="MuiBox-root css-zoser8"
+    />
+    <div
+      class="MuiBox-root css-1181e6k"
+    >
+      No payment information or credit card is required.
+    </div>
+    <div
+      class="MuiBox-root css-1v3caum"
+    />
+    <div
+      class="MuiBox-root css-hiapv6"
+    >
+      <div
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation5 MuiCard-root css-1sxjyu4-MuiPaper-root-MuiCard-root"
+      >
+        <div>
+          <div
+            class="MuiStepper-root MuiStepper-horizontal css-m5vj9m-MuiStepper-root"
+            color="red"
+          >
+            <div
+              class="MuiStep-root MuiStep-horizontal css-1bw0nnu-MuiStep-root"
+            >
+              <span
+                class="MuiStepLabel-root MuiStepLabel-horizontal css-1fi72el-MuiStepLabel-root"
+              >
+                <span
+                  class="MuiStepLabel-iconContainer css-vnkopk-MuiStepLabel-iconContainer"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root Mui-active css-1hbon82-MuiSvgIcon-root-MuiStepIcon-root"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="12"
+                    />
+                    <text
+                      class="MuiStepIcon-text css-pj2ghc-MuiStepIcon-text"
+                      text-anchor="middle"
+                      x="12"
+                      y="16"
+                    >
+                      1
+                    </text>
+                  </svg>
+                </span>
+                <span
+                  class="MuiStepLabel-labelContainer css-16ubnlw-MuiStepLabel-labelContainer"
+                >
+                  <span
+                    class="MuiStepLabel-label Mui-active css-1ie2zp2-MuiStepLabel-label"
+                  >
+                    Create Account
+                  </span>
+                </span>
+              </span>
+            </div>
+            <div
+              class="MuiStepConnector-root MuiStepConnector-horizontal Mui-disabled css-j5w0w9-MuiStepConnector-root"
+            >
+              <span
+                class="MuiStepConnector-line MuiStepConnector-lineHorizontal css-z7uhs0-MuiStepConnector-line"
+              />
+            </div>
+            <div
+              class="MuiStep-root MuiStep-horizontal css-1bw0nnu-MuiStep-root"
+            >
+              <span
+                class="MuiStepLabel-root MuiStepLabel-horizontal Mui-disabled css-1fi72el-MuiStepLabel-root"
+              >
+                <span
+                  class="MuiStepLabel-iconContainer css-vnkopk-MuiStepLabel-iconContainer"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root css-1hbon82-MuiSvgIcon-root-MuiStepIcon-root"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="12"
+                    />
+                    <text
+                      class="MuiStepIcon-text css-pj2ghc-MuiStepIcon-text"
+                      text-anchor="middle"
+                      x="12"
+                      y="16"
+                    >
+                      2
+                    </text>
+                  </svg>
+                </span>
+                <span
+                  class="MuiStepLabel-labelContainer css-16ubnlw-MuiStepLabel-labelContainer"
+                >
+                  <span
+                    class="MuiStepLabel-label Mui-disabled css-1ie2zp2-MuiStepLabel-label"
+                  >
+                    Confirm Email
+                  </span>
+                </span>
+              </span>
+            </div>
+            <div
+              class="MuiStepConnector-root MuiStepConnector-horizontal Mui-disabled css-j5w0w9-MuiStepConnector-root"
+            >
+              <span
+                class="MuiStepConnector-line MuiStepConnector-lineHorizontal css-z7uhs0-MuiStepConnector-line"
+              />
+            </div>
+            <div
+              class="MuiStep-root MuiStep-horizontal css-1bw0nnu-MuiStep-root"
+            >
+              <span
+                class="MuiStepLabel-root MuiStepLabel-horizontal Mui-disabled css-1fi72el-MuiStepLabel-root"
+              >
+                <span
+                  class="MuiStepLabel-iconContainer css-vnkopk-MuiStepLabel-iconContainer"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root css-1hbon82-MuiSvgIcon-root-MuiStepIcon-root"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="12"
+                    />
+                    <text
+                      class="MuiStepIcon-text css-pj2ghc-MuiStepIcon-text"
+                      text-anchor="middle"
+                      x="12"
+                      y="16"
+                    >
+                      3
+                    </text>
+                  </svg>
+                </span>
+                <span
+                  class="MuiStepLabel-labelContainer css-16ubnlw-MuiStepLabel-labelContainer"
+                >
+                  <span
+                    class="MuiStepLabel-label Mui-disabled css-1ie2zp2-MuiStepLabel-label"
+                  >
+                    Prepare Account
+                  </span>
+                </span>
+              </span>
+            </div>
+            <div
+              class="MuiStepConnector-root MuiStepConnector-horizontal Mui-disabled css-j5w0w9-MuiStepConnector-root"
+            >
+              <span
+                class="MuiStepConnector-line MuiStepConnector-lineHorizontal css-z7uhs0-MuiStepConnector-line"
+              />
+            </div>
+            <div
+              class="MuiStep-root MuiStep-horizontal css-1bw0nnu-MuiStep-root"
+            >
+              <span
+                class="MuiStepLabel-root MuiStepLabel-horizontal Mui-disabled css-1fi72el-MuiStepLabel-root"
+              >
+                <span
+                  class="MuiStepLabel-iconContainer css-vnkopk-MuiStepLabel-iconContainer"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiStepIcon-root css-1hbon82-MuiSvgIcon-root-MuiStepIcon-root"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="12"
+                    />
+                    <text
+                      class="MuiStepIcon-text css-pj2ghc-MuiStepIcon-text"
+                      text-anchor="middle"
+                      x="12"
+                      y="16"
+                    >
+                      4
+                    </text>
+                  </svg>
+                </span>
+                <span
+                  class="MuiStepLabel-labelContainer css-16ubnlw-MuiStepLabel-labelContainer"
+                >
+                  <span
+                    class="MuiStepLabel-label Mui-disabled css-1ie2zp2-MuiStepLabel-label"
+                  >
+                    Install Tags
+                  </span>
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          class="MuiBox-root css-1yuhvjn"
+        />
+        <form
+          class="MuiBox-root css-1u15dwc"
+        >
+          <div
+            class="MuiFormControl-root MuiFormControl-marginNormal MuiFormControl-fullWidth MuiTextField-root css-17vbkzs-MuiFormControl-root-MuiTextField-root"
+          >
+            <label
+              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-ip4mx2-MuiFormLabel-root-MuiInputLabel-root"
+              data-shrink="false"
+            >
+              Public beta access code
+              <span
+                aria-hidden="true"
+                class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-b4y4zd-MuiFormLabel-asterisk"
+              >
+                 *
+              </span>
+            </label>
+            <div
+              class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-dloxrs-MuiInputBase-root-MuiOutlinedInput-root"
+            >
+              <input
+                aria-invalid="false"
+                autocomplete="off"
+                class="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+                name="tempAccessCode"
+                required=""
+                type="text"
+                value=""
+              />
+              <fieldset
+                aria-hidden="true"
+                class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+              >
+                <legend
+                  class="css-dhh0px"
+                >
+                  <span>
+                    Public beta access code *
+                  </span>
+                </legend>
+              </fieldset>
+            </div>
+          </div>
+          <div
+            class="MuiFormControl-root MuiFormControl-marginNormal MuiFormControl-fullWidth MuiTextField-root css-17vbkzs-MuiFormControl-root-MuiTextField-root"
+          >
+            <label
+              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-ip4mx2-MuiFormLabel-root-MuiInputLabel-root"
+              data-shrink="false"
+            >
+              Full Name
+              <span
+                aria-hidden="true"
+                class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-b4y4zd-MuiFormLabel-asterisk"
+              >
+                 *
+              </span>
+            </label>
+            <div
+              class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-dloxrs-MuiInputBase-root-MuiOutlinedInput-root"
+            >
+              <input
+                aria-invalid="false"
+                autocomplete="off"
+                class="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+                name="fullName"
+                required=""
+                type="text"
+                value=""
+              />
+              <fieldset
+                aria-hidden="true"
+                class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+              >
+                <legend
+                  class="css-dhh0px"
+                >
+                  <span>
+                    Full Name *
+                  </span>
+                </legend>
+              </fieldset>
+            </div>
+          </div>
+          <div
+            class="MuiFormControl-root MuiFormControl-marginNormal MuiFormControl-fullWidth MuiTextField-root css-17vbkzs-MuiFormControl-root-MuiTextField-root"
+          >
+            <label
+              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-ip4mx2-MuiFormLabel-root-MuiInputLabel-root"
+              data-shrink="false"
+            >
+              Email Address
+              <span
+                aria-hidden="true"
+                class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-b4y4zd-MuiFormLabel-asterisk"
+              >
+                 *
+              </span>
+            </label>
+            <div
+              class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-dloxrs-MuiInputBase-root-MuiOutlinedInput-root"
+            >
+              <input
+                aria-invalid="false"
+                autocomplete="off"
+                class="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+                name="email"
+                required=""
+                type="text"
+                value=""
+              />
+              <fieldset
+                aria-hidden="true"
+                class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+              >
+                <legend
+                  class="css-dhh0px"
+                >
+                  <span>
+                    Email Address *
+                  </span>
+                </legend>
+              </fieldset>
+            </div>
+          </div>
+          <div
+            class="MuiFormControl-root MuiFormControl-marginNormal MuiFormControl-fullWidth MuiTextField-root css-17vbkzs-MuiFormControl-root-MuiTextField-root"
+          >
+            <label
+              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-ip4mx2-MuiFormLabel-root-MuiInputLabel-root"
+              data-shrink="false"
+            >
+              Organization name
+              <span
+                aria-hidden="true"
+                class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-b4y4zd-MuiFormLabel-asterisk"
+              >
+                 *
+              </span>
+            </label>
+            <div
+              class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-dloxrs-MuiInputBase-root-MuiOutlinedInput-root"
+            >
+              <input
+                aria-invalid="false"
+                autocomplete="off"
+                class="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+                name="orgName"
+                required=""
+                type="text"
+                value=""
+              />
+              <fieldset
+                aria-hidden="true"
+                class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+              >
+                <legend
+                  class="css-dhh0px"
+                >
+                  <span>
+                    Organization name *
+                  </span>
+                </legend>
+              </fieldset>
+            </div>
+          </div>
+          <div
+            class="MuiFormControl-root MuiFormControl-marginNormal MuiFormControl-fullWidth MuiTextField-root css-17vbkzs-MuiFormControl-root-MuiTextField-root"
+          >
+            <label
+              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-ip4mx2-MuiFormLabel-root-MuiInputLabel-root"
+              data-shrink="false"
+            >
+              Domain
+              <span
+                aria-hidden="true"
+                class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-b4y4zd-MuiFormLabel-asterisk"
+              >
+                 *
+              </span>
+            </label>
+            <div
+              class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-dloxrs-MuiInputBase-root-MuiOutlinedInput-root"
+            >
+              <input
+                aria-invalid="false"
+                autocomplete="off"
+                class="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+                name="domain"
+                required=""
+                type="text"
+                value=""
+              />
+              <fieldset
+                aria-hidden="true"
+                class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+              >
+                <legend
+                  class="css-dhh0px"
+                >
+                  <span>
+                    Domain *
+                  </span>
+                </legend>
+              </fieldset>
+            </div>
+          </div>
+          <div
+            class="MuiFormGroup-root css-dmmspl-MuiFormGroup-root"
+          >
+            <label
+              class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+            >
+              <span
+                class="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root Mui-checked css-esq4az-MuiButtonBase-root-MuiCheckbox-root"
+              >
+                <input
+                  checked=""
+                  class="PrivateSwitchBase-input css-1m9pwf3"
+                  data-indeterminate="false"
+                  name="generatePassword"
+                  type="checkbox"
+                />
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-erxxaa-MuiSvgIcon-root"
+                  data-testid="CheckBoxIcon"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                  />
+                </svg>
+                <span
+                  class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                />
+              </span>
+              <span
+                class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-13p0dqt-MuiTypography-root"
+              >
+                Auto-generate secure password
+              </span>
+            </label>
+          </div>
+          <div
+            class="MuiFormControl-root css-1nrlq1o-MuiFormControl-root"
+          >
+            <div
+              class="MuiFormGroup-root css-dmmspl-MuiFormGroup-root"
+            >
+              <label
+                class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+              >
+                <span
+                  class="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root css-esq4az-MuiButtonBase-root-MuiCheckbox-root"
+                >
+                  <input
+                    class="PrivateSwitchBase-input css-1m9pwf3"
+                    data-indeterminate="false"
+                    name="agree"
+                    type="checkbox"
+                  />
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-erxxaa-MuiSvgIcon-root"
+                    data-testid="CheckBoxOutlineBlankIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
+                    />
+                  </svg>
+                  <span
+                    class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                  />
+                </span>
+                <span
+                  class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-13p0dqt-MuiTypography-root"
+                >
+                  <span
+                    class="MuiBox-root css-0"
+                  >
+                    I agree to the 
+                    <a
+                      class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-ap0bds-MuiTypography-root-MuiLink-root"
+                      href="https://scale8.com/legal/terms"
+                    >
+                      Terms of Service
+                    </a>
+                  </span>
+                </span>
+              </label>
+            </div>
+          </div>
+          <div
+            class="MuiBox-root css-1yuhvjn"
+          />
+          <div
+            class="MuiFormControl-root css-1nrlq1o-MuiFormControl-root"
+          >
+            <div />
+          </div>
+          <button
+            class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButtonBase-root formFullTMColorSubmit css-8gt83u-MuiButtonBase-root-MuiButton-root"
+            tabindex="0"
+            type="submit"
+          >
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

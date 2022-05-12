@@ -1,0 +1,347 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TemplatedActionForm form render unchanged 1`] = `
+<DocumentFragment>
+  <form
+    class="MuiBox-root css-1d8zmdf"
+  >
+    <div
+      class="MuiBox-root css-70qvj9"
+    >
+      <div
+        class="MuiBox-root css-1isemmb"
+      >
+        <button
+          class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeLarge css-mf1cb5-MuiButtonBase-root-MuiIconButton-root"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-erxxaa-MuiSvgIcon-root"
+            data-testid="CloseIcon"
+            focusable="false"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+            />
+          </svg>
+          <span
+            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+          />
+        </button>
+      </div>
+      <div
+        class="MuiBox-root css-uix0gv"
+      >
+        <div
+          class="MuiBox-root css-i9gxme"
+        >
+          mock form
+        </div>
+        <div
+          class="MuiBox-root css-0"
+        >
+          <button
+            class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButtonBase-root css-t6tyzl-MuiButtonBase-root-MuiButton-root"
+            tabindex="0"
+            type="submit"
+          >
+            Save
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </button>
+        </div>
+      </div>
+    </div>
+    <hr
+      class="MuiDivider-root MuiDivider-fullWidth css-9mgopn-MuiDivider-root"
+    />
+    <header
+      class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAppBar-root MuiAppBar-colorDefault MuiAppBar-positionStatic css-1w39ges-MuiPaper-root-MuiAppBar-root"
+    >
+      <div
+        class="MuiTabs-root css-1ujnqem-MuiTabs-root"
+      >
+        <div
+          class="MuiTabs-scroller MuiTabs-fixed css-jpln7h-MuiTabs-scroller"
+          style="overflow: hidden; margin-bottom: 0px;"
+        >
+          <div
+            class="MuiTabs-flexContainer css-heg063-MuiTabs-flexContainer"
+            role="tablist"
+          >
+            <button
+              aria-selected="true"
+              class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary MuiTab-fullWidth MuiTab-wrapped Mui-selected css-otdxzw-MuiButtonBase-root-MuiTab-root"
+              role="tab"
+              tabindex="0"
+              type="button"
+            >
+              <span
+                class="MuiBadge-root css-1abb7hm-MuiBadge-root"
+              >
+                Info
+                <span
+                  class="MuiBadge-colorSecondary MuiBadge-badge MuiBadge-standard MuiBadge-anchorOriginTopRightRectangular MuiBadge-invisible css-1mbxvc-MuiBadge-badge"
+                />
+              </span>
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </button>
+            <button
+              aria-selected="false"
+              class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary MuiTab-fullWidth MuiTab-wrapped css-otdxzw-MuiButtonBase-root-MuiTab-root"
+              role="tab"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="MuiBadge-root css-1abb7hm-MuiBadge-root"
+              >
+                Form
+                <span
+                  class="MuiBadge-colorSecondary MuiBadge-badge MuiBadge-standard MuiBadge-anchorOriginTopRightRectangular MuiBadge-invisible css-1mbxvc-MuiBadge-badge"
+                />
+              </span>
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </button>
+            <button
+              aria-selected="false"
+              class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary MuiTab-fullWidth MuiTab-wrapped css-otdxzw-MuiButtonBase-root-MuiTab-root"
+              role="tab"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="MuiBadge-root css-1abb7hm-MuiBadge-root"
+              >
+                Code
+                <span
+                  class="MuiBadge-colorSecondary MuiBadge-badge MuiBadge-standard MuiBadge-anchorOriginTopRightRectangular MuiBadge-invisible css-1mbxvc-MuiBadge-badge"
+                />
+              </span>
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </button>
+            <button
+              aria-selected="false"
+              class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary MuiTab-fullWidth MuiTab-wrapped css-otdxzw-MuiButtonBase-root-MuiTab-root"
+              role="tab"
+              tabindex="-1"
+              type="button"
+            >
+              <span
+                class="MuiBadge-root css-1abb7hm-MuiBadge-root"
+              >
+                Permissions
+                <span
+                  class="MuiBadge-colorSecondary MuiBadge-badge MuiBadge-standard MuiBadge-anchorOriginTopRightRectangular MuiBadge-invisible css-1mbxvc-MuiBadge-badge"
+                />
+              </span>
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </button>
+          </div>
+          <span
+            class="MuiTabs-indicator css-147qviu-MuiTabs-indicator"
+            style="left: 0px; width: 0px;"
+          />
+        </div>
+      </div>
+    </header>
+    <hr
+      class="MuiDivider-root MuiDivider-fullWidth css-9mgopn-MuiDivider-root"
+    />
+    <div
+      class="MuiBox-root css-1bqnmih"
+    >
+      <div
+        class="MuiBox-root css-zv8qq2"
+      >
+        <div
+          aria-labelledby="tab-0"
+          class="MuiBox-root css-1ufzvhp"
+          id="tabpanel-0"
+          role="tabpanel"
+        >
+          <div
+            class="MuiBox-root css-19kzrtu"
+          >
+            <div
+              class="MuiFormControl-root MuiTextField-root DialogFormField css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+            >
+              <label
+                class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-a6y1oi-MuiFormLabel-root-MuiInputLabel-root"
+                data-shrink="false"
+              >
+                Name *
+              </label>
+              <div
+                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-1ejkwvn-MuiInputBase-root-MuiInput-root"
+              >
+                <input
+                  aria-invalid="false"
+                  autocomplete="off"
+                  class="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                  name="name"
+                  type="text"
+                  value=""
+                />
+              </div>
+            </div>
+            <div
+              class="MuiFormControl-root MuiTextField-root DialogFormField css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+            >
+              <label
+                class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-ip4mx2-MuiFormLabel-root-MuiInputLabel-root"
+                data-shrink="false"
+              >
+                Description *
+              </label>
+              <div
+                class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-multiline css-1yxqjki-MuiInputBase-root-MuiOutlinedInput-root"
+              >
+                <textarea
+                  aria-invalid="false"
+                  autocomplete="off"
+                  class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputMultiline css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input"
+                  name="description"
+                  style="height: 0px; overflow: hidden;"
+                />
+                <textarea
+                  aria-hidden="true"
+                  class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputMultiline css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input"
+                  readonly=""
+                  style="visibility: hidden; position: absolute; overflow: hidden; height: 0px; top: 0px; left: 0px; transform: translateZ(0); padding: 0px; width: 100%;"
+                  tabindex="-1"
+                />
+                <fieldset
+                  aria-hidden="true"
+                  class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+                >
+                  <legend
+                    class="css-dhh0px"
+                  >
+                    <span>
+                      Description *
+                    </span>
+                  </legend>
+                </fieldset>
+              </div>
+            </div>
+            <div
+              class="MuiFormControl-root DialogFormField css-1nrlq1o-MuiFormControl-root"
+            >
+              <label
+                class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-a6y1oi-MuiFormLabel-root-MuiInputLabel-root"
+                data-shrink="false"
+              >
+                Icon *
+              </label>
+              <div
+                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiSelect-root css-1ejkwvn-MuiInputBase-root-MuiInput-root"
+              >
+                <div
+                  aria-expanded="false"
+                  aria-haspopup="listbox"
+                  aria-labelledby="mui-component-select-icon"
+                  class="MuiSelect-select MuiSelect-standard MuiInput-input MuiInputBase-input css-1rxz5jq-MuiSelect-select-MuiInputBase-input-MuiInput-input"
+                  id="mui-component-select-icon"
+                  role="button"
+                  tabindex="0"
+                >
+                  <span
+                    class="notranslate"
+                  >
+                    ​
+                  </span>
+                </div>
+                <input
+                  aria-hidden="true"
+                  class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
+                  name="icon"
+                  tabindex="-1"
+                  value=""
+                />
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconStandard css-yqkyv6-MuiSvgIcon-root-MuiSelect-icon"
+                  data-testid="ArrowDropDownIcon"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M7 10l5 5 5-5z"
+                  />
+                </svg>
+              </div>
+            </div>
+            <label
+              class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd DialogFormField css-j204z7-MuiFormControlLabel-root"
+            >
+              <span
+                class="MuiCheckbox-root MuiCheckbox-colorPrimary MuiButtonBase-root MuiCheckbox-root MuiCheckbox-colorPrimary PrivateSwitchBase-root css-esq4az-MuiButtonBase-root-MuiCheckbox-root"
+              >
+                <input
+                  class="PrivateSwitchBase-input css-1m9pwf3"
+                  data-indeterminate="false"
+                  name="execRaw"
+                  type="checkbox"
+                />
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-erxxaa-MuiSvgIcon-root"
+                  data-testid="CheckBoxOutlineBlankIcon"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
+                  />
+                </svg>
+                <span
+                  class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                />
+              </span>
+              <span
+                class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-13p0dqt-MuiTypography-root"
+              >
+                Execute Raw In iFrame
+              </span>
+            </label>
+          </div>
+        </div>
+        <div
+          aria-labelledby="tab-1"
+          class="MuiBox-root css-10klw3m"
+          hidden=""
+          id="tabpanel-1"
+          role="tabpanel"
+        />
+        <div
+          aria-labelledby="tab-2"
+          class="MuiBox-root css-10klw3m"
+          hidden=""
+          id="tabpanel-2"
+          role="tabpanel"
+        />
+        <div
+          aria-labelledby="tab-3"
+          class="MuiBox-root css-1ufzvhp"
+          hidden=""
+          id="tabpanel-3"
+          role="tabpanel"
+        />
+      </div>
+    </div>
+  </form>
+</DocumentFragment>
+`;

@@ -1,7 +1,7 @@
 import { buildMockPlatformAction, buildMockPlatformDataMap } from './TestersMockBuilders';
 import { mockPlatformDataMaps } from './MockPlatformDataMaps';
-import { PlatformAction } from '../../types/TagRulesTypes';
-import { InputType, VarType } from '../../gql/generated/globalTypes';
+import { PlatformAction } from '../../src/types/TagRulesTypes';
+import { InputType, VarType } from '../../src/gql/generated/globalTypes';
 
 const mockPlatformAction = {
     dataManagerAction: buildMockPlatformAction('Data Manager', [

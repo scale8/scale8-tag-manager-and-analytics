@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NotificationSettingsForm form render unchanged 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiBox-root css-j7qwjs"
+  >
+    <form
+      class="MuiBox-root css-mjj15b"
+    >
+      <div
+        class="MuiBox-root css-18gfnub"
+      >
+        <label
+          class="MuiFormControlLabel-root MuiFormControlLabel-labelPlacementEnd css-j204z7-MuiFormControlLabel-root"
+        >
+          <span
+            class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+          >
+            <span
+              class="MuiSwitch-switchBase MuiSwitch-colorPrimary MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root css-z5i0yo-MuiButtonBase-root-MuiSwitch-switchBase"
+            >
+              <input
+                class="MuiSwitch-input PrivateSwitchBase-input css-1m9pwf3"
+                name="emailNotifications"
+                type="checkbox"
+              />
+              <span
+                class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
+              />
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </span>
+            <span
+              class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+            />
+          </span>
+          <span
+            class="MuiTypography-root MuiTypography-body1 MuiFormControlLabel-label css-13p0dqt-MuiTypography-root"
+          >
+            Receive a notification alert via e-mail
+          </span>
+        </label>
+      </div>
+      <div
+        class="MuiDialogActions-root MuiDialogActions-spacing css-snbeu5-MuiDialogActions-root"
+      >
+        <button
+          class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root css-7kx4b6-MuiButtonBase-root-MuiButton-root"
+          tabindex="0"
+          type="button"
+        >
+          Cancel
+          <span
+            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+          />
+        </button>
+      </div>
+    </form>
+  </div>
+</DocumentFragment>
+`;

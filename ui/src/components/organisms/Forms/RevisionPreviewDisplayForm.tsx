@@ -3,7 +3,7 @@ import { Box, DialogContent, DialogContentText } from '@mui/material';
 import qrcode from 'qrcode.react';
 import DialogActionsWithCancel from '../../molecules/DialogActionsWithCancel';
 
-type RevisionPreviewDisplayFormProps = {
+export type RevisionPreviewDisplayFormProps = {
     submitText: string;
     handleSubmit: (event?: FormEvent<HTMLFormElement>) => void;
     handleDialogClose: (checkChanges: boolean) => void;
@@ -36,9 +36,19 @@ const RevisionPreviewDisplayForm: FC<RevisionPreviewDisplayFormProps> = (
                 <DialogContentText id="alert-dialog-description">
                     {props.revisionName} Preview
                 </DialogContentText>
-                <QRCodeSec value={props.url} />
+                <Box mt={2} />
+                <QRCodeSec
+                    size={128}
+                    renderAs="svg"
+                    level="L"
+                    value={props.url}
+                    bgColor="transparent"
+                    fgColor="black"
+                    includeMargin={false}
+                />
+                <Box mt={1} />
                 <DialogContentText id="alert-dialog-description">
-                    <Box fontSize={10} mt={1}>
+                    <Box component="span" fontSize={10} mt={1}>
                         Scan the code with your phone to preview
                     </Box>
                 </DialogContentText>

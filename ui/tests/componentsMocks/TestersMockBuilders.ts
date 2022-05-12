@@ -1,7 +1,7 @@
-import { PlatformDataMap } from '../../types/DataMapsTypes';
-import { Platform, PlatformAction } from '../../types/TagRulesTypes';
-import { InputType, VarType } from '../../gql/generated/globalTypes';
-import { buildMockComponentId } from '../../utils/TextUtils';
+import { PlatformDataMap } from '../../src/types/DataMapsTypes';
+import { Platform, PlatformAction } from '../../src/types/TagRulesTypes';
+import { InputType, VarType } from '../../src/gql/generated/globalTypes';
+import { buildMockComponentId } from '../../src/utils/TextUtils';
 
 const buildMockPlatformAction = (
     name: string,

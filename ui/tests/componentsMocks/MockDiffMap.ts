@@ -1,4 +1,4 @@
-import { DiffMap } from '../../types/DiffTypes';
+import { DiffMap } from '../../src/types/DiffTypes';
 
 const mockDiffMap = {
     defaultCase: new Map([

@@ -1,6 +1,6 @@
-import { AppPlatformRevision } from '../../types/TagRulesTypes';
+import { AppPlatformRevision } from '../../src/types/TagRulesTypes';
 import { buildMockPlatformDataMap } from './TestersMockBuilders';
-import { InputType, VarType } from '../../gql/generated/globalTypes';
+import { InputType, VarType } from '../../src/gql/generated/globalTypes';
 
 const mockAppPlatformRevisions = {
     defaultCase: [

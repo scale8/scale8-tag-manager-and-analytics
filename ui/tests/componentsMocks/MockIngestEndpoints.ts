@@ -1,4 +1,4 @@
-import { IngestEndpointForEnvironmentSelection } from '../../types/IngestEndpointsTypes';
+import { IngestEndpointForEnvironmentSelection } from '../../src/types/IngestEndpointsTypes';
 
 const mockIngestEndpoints = {
     emptyIngestEndpointList: [] as IngestEndpointForEnvironmentSelection[],

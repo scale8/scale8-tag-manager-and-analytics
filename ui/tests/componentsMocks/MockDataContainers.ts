@@ -1,5 +1,5 @@
-import { InputType, VarType } from '../../gql/generated/globalTypes';
-import { DataContainer } from '../../types/DataMapsTypes';
+import { InputType, VarType } from '../../src/gql/generated/globalTypes';
+import { DataContainer } from '../../src/types/DataMapsTypes';
 
 const mockDataContainers = {
     noDataCase: [] as DataContainer[],
