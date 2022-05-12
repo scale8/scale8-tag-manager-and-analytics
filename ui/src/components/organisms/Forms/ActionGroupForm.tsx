@@ -1,27 +1,21 @@
 import { FC } from 'react';
-import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import DrawerFormLayout from '../../molecules/DrawerFormLayout';
-import ControlledTextAreaInput from '../../atoms/ControlledInputs/ControlledTextAreaInput';
-import { ActionGroupFormProps } from '../../../dialogPages/tagManager/app/action/ActionGroupCreate';
+import {
+    ActionGroupFormProps,
+    ActionGroupValues,
+} from '../../../dialogPages/tagManager/app/action/ActionGroupCreate';
+import { DialogFormTextInput } from '../../atoms/DialogFormInputs/DialogFormTextInput';
+import { DialogFormTextAreaInput } from '../../atoms/DialogFormInputs/DialogFormTextAreaInput';
+import { DialogFormContextProvider } from '../../../context/DialogFormContext';
 
 const ActionGroupForm: FC<ActionGroupFormProps> = (props: ActionGroupFormProps) => {
     return (
-        <DrawerFormLayout {...props}>
-            <ControlledTextInput
-                name="name"
-                label="Name"
-                formProps={props}
-                className="DialogFormField"
-                required
-                autoFocus
-            />
-            <ControlledTextAreaInput
-                name="comments"
-                label="Comments"
-                formProps={props}
-                className="DialogFormField"
-            />
-        </DrawerFormLayout>
+        <DialogFormContextProvider<ActionGroupValues> formProps={props}>
+            <DrawerFormLayout {...props}>
+                <DialogFormTextInput name="name" label="Name" autoFocus />
+                <DialogFormTextAreaInput name="comments" label="Comments" optional />
+            </DrawerFormLayout>
+        </DialogFormContextProvider>
     );
 };
 

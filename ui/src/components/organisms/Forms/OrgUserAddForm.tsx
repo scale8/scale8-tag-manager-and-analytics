@@ -1,37 +1,20 @@
 import { FC } from 'react';
-import ControlledTextInput from '../../atoms/ControlledInputs/ControlledTextInput';
 import FormPermissionSection from '../../molecules/FormPermissionSection';
 import DrawerFormLayout from '../../molecules/DrawerFormLayout';
-import { OrgUserAddFormProps } from '../../../dialogPages/global/OrgUserAdd';
+import { OrgUserAddFormProps, OrgUserAddValues } from '../../../dialogPages/global/OrgUserAdd';
+import { DialogFormTextInput } from '../../atoms/DialogFormInputs/DialogFormTextInput';
+import { DialogFormContextProvider } from '../../../context/DialogFormContext';
 
 const OrgUserAddForm: FC<OrgUserAddFormProps> = (props: OrgUserAddFormProps) => {
     return (
-        <DrawerFormLayout {...props}>
-            <ControlledTextInput
-                name="firstName"
-                label="First Name"
-                formProps={props}
-                className="DialogFormField"
-                required
-                fullWidth
-            />
-            <ControlledTextInput
-                name="lastName"
-                label="Last Name"
-                formProps={props}
-                className="DialogFormField"
-                required
-                fullWidth
-            />
-            <ControlledTextInput
-                name="email"
-                label="Email"
-                formProps={props}
-                className="DialogFormField"
-                required
-            />
-            <FormPermissionSection formProps={props} />
-        </DrawerFormLayout>
+        <DialogFormContextProvider<OrgUserAddValues> formProps={props}>
+            <DrawerFormLayout {...props}>
+                <DialogFormTextInput name="firstName" label="First Name" fullWidth />
+                <DialogFormTextInput name="lastName" label="Last Name" fullWidth />
+                <DialogFormTextInput name="email" label="Email" />
+                <FormPermissionSection formProps={props} />
+            </DrawerFormLayout>
+        </DialogFormContextProvider>
     );
 };
 

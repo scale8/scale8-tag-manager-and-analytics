@@ -15,6 +15,7 @@ import {
     validateFormValues,
 } from '../../utils/validators/validateFormValues';
 import { FormCommonProps } from '../../types/props/forms/CommonFormProps';
+import { BooleanInputProps } from '../../components/atoms/InputTypes/CheckBoxInput';
 
 export type FormValues = { [key: string]: any };
 export type FormErrors<T> = { [P in keyof T]?: string };
@@ -41,6 +42,14 @@ export type FormValidationResult<T extends FormValues> = FormFieldProps<T> & {
 export type FormProps<T extends FormValues> = FormCommonProps & FormValidationResult<T>;
 
 export type ControlledSwitchProps<Values extends { [key: string]: any }> = SwitchProps & {
+    name: string;
+    formProps: FormFieldProps<Values>;
+};
+
+export type ControlledCheckboxProps<Values extends { [key: string]: any }> = Omit<
+    BooleanInputProps,
+    'value' | 'setValue'
+> & {
     name: string;
     formProps: FormFieldProps<Values>;
 };

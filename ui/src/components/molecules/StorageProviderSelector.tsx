@@ -1,18 +1,20 @@
 import { ReactElement } from 'react';
-import ControlledSelect from '../atoms/ControlledInputs/ControlledSelect';
 import { AWSRegion, Mode, StorageProvider } from '../../gql/generated/globalTypes';
 import BoxedInputs from '../atoms/BoxedInputs';
-import ControlledTextInput from '../atoms/ControlledInputs/ControlledTextInput';
-import ControlledCodeInput from '../atoms/ControlledInputs/ControlledCodeInput';
 import { FormProps } from '../../hooks/form/useFormValidation';
-import ControlledBooleanSelect from '../atoms/ControlledInputs/ControlledBooleanSelect';
-import { Alert } from '@mui/material';
 import {
     getStorageProviderLabel,
     initialStorageProviderFields,
 } from '../../utils/StorageProviderUtils';
-import CheckBoxInput from '../atoms/InputTypes/CheckBoxInput';
 import { useConfigState } from '../../context/AppContext';
+import { DialogFormSelect } from '../atoms/DialogFormInputs/DialogFormSelect';
+import { DialogInfoAlert } from '../atoms/DialogFormInputs/DialogInfoAlert';
+import { DialogWarningAlert } from '../atoms/DialogFormInputs/DialogWarningAlert';
+import { DialogFormCheckbox } from '../atoms/DialogFormInputs/DialogFormCheckbox';
+import { DialogFormTextInput } from '../atoms/DialogFormInputs/DialogFormTextInput';
+import { DialogFormContextProvider } from '../../context/DialogFormContext';
+import { DialogFormBooleanSelect } from '../atoms/DialogFormInputs/DialogFormBooleanSelect';
+import { DialogFormCodeInput } from '../atoms/DialogFormInputs/DialogFormCodeInput';
 
 const StorageProviderSelector = <T extends { [key: string]: any }>(
     props: FormProps<T> & {
@@ -48,76 +50,42 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
     ];
 
     return (
-        <>
+        <DialogFormContextProvider<T> formProps={props}>
             {props.isCreate ? (
                 <>
-                    <ControlledSelect
-                        className="DialogFormField"
+                    <DialogFormSelect
                         label="Storage Provider"
                         name="storageProvider"
                         values={storageProviderValues}
-                        formProps={props}
-                        required
                         resetErrorsOnKeys={Object.keys(initialStorageProviderFields)}
                     />
 
-                    {props.infoText && (
-                        <Alert severity="info" className="DialogFormField">
-                            {props.infoText}
-                        </Alert>
-                    )}
+                    {props.infoText && <DialogInfoAlert>{props.infoText}</DialogInfoAlert>}
                 </>
             ) : (
-                <CheckBoxInput
+                <DialogFormCheckbox
                     name="editStorageProviderSettings"
-                    value={props.values.editStorageProviderSettings}
-                    setValue={(v) => {
-                        props.handleChange('editStorageProviderSettings', v);
-                    }}
                     label="Edit Storage Provider Settings"
-                    className="DialogFormField"
-                    sx={{ marginLeft: '-11px!important' }}
-                    color="primary"
+                    realignLeft
                 />
             )}
             {(props.isCreate || props.values.editStorageProviderSettings) &&
                 props.values.storageProvider === StorageProvider.AWS_KINESIS && (
                     <>
                         {props.warnGraphDisabled && (
-                            <Alert severity="warning" className="DialogFormField">
+                            <DialogWarningAlert>
                                 If you use Kinesis as provider the graphs in the dashboard will be
                                 disabled.
-                            </Alert>
+                            </DialogWarningAlert>
                         )}
                         <BoxedInputs label="AWS Kinesis Storage Config">
-                            <ControlledTextInput
-                                name="streamName"
-                                label="Stream Name"
-                                formProps={props}
-                                className="DialogFormField"
-                                required
-                            />
-                            <ControlledTextInput
-                                name="accessKeyId"
-                                label="Access Key Id"
-                                formProps={props}
-                                className="DialogFormField"
-                                required
-                            />
-                            <ControlledTextInput
-                                name="secretAccessKey"
-                                label="Secret Access Key"
-                                formProps={props}
-                                className="DialogFormField"
-                                required
-                            />
-                            <ControlledSelect
-                                className="DialogFormField"
+                            <DialogFormTextInput name="streamName" label="Stream Name" />
+                            <DialogFormTextInput name="accessKeyId" label="Access Key Id" />
+                            <DialogFormTextInput name="secretAccessKey" label="Secret Access Key" />
+                            <DialogFormSelect
                                 label="Region"
                                 name="region"
                                 values={awsRegionValues}
-                                formProps={props}
-                                required
                             />
                         </BoxedInputs>
                     </>
@@ -126,86 +94,42 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
                 props.values.storageProvider === StorageProvider.AWS_S3 && (
                     <>
                         {props.warnGraphDisabled && (
-                            <Alert severity="warning" className="DialogFormField">
+                            <DialogWarningAlert>
                                 If you use S3 as provider the graphs in the dashboard will be
                                 disabled.
-                            </Alert>
+                            </DialogWarningAlert>
                         )}
                         <BoxedInputs label="AWS S3 Storage Config">
-                            <ControlledTextInput
-                                name="bucketName"
-                                label="Bucket Name"
-                                formProps={props}
-                                className="DialogFormField"
-                                required
-                            />
-                            <ControlledTextInput
-                                name="accessKeyId"
-                                label="Access Key Id"
-                                formProps={props}
-                                className="DialogFormField"
-                                required
-                            />
-                            <ControlledTextInput
-                                name="secretAccessKey"
-                                label="Secret Access Key"
-                                formProps={props}
-                                className="DialogFormField"
-                                required
-                            />
-                            <ControlledSelect
-                                className="DialogFormField"
+                            <DialogFormTextInput name="bucketName" label="Bucket Name" />
+                            <DialogFormTextInput name="accessKeyId" label="Access Key Id" />
+                            <DialogFormTextInput name="secretAccessKey" label="Secret Access Key" />
+                            <DialogFormSelect
                                 label="Region"
                                 name="region"
                                 values={awsRegionValues}
-                                formProps={props}
-                                required
                             />
-                            <ControlledTextInput
-                                name="pathPrefix"
-                                label="Path Prefix"
-                                formProps={props}
-                                className="DialogFormField"
-                            />
+                            <DialogFormTextInput name="pathPrefix" label="Path Prefix" optional />
                         </BoxedInputs>
                     </>
                 )}
             {(props.isCreate || props.values.editStorageProviderSettings) &&
                 props.values.storageProvider === StorageProvider.GC_BIGQUERY_STREAM && (
                     <BoxedInputs label="Google Cloud BigQuery Stream Config">
-                        <ControlledCodeInput
+                        <DialogFormCodeInput
                             name="serviceAccountJSON"
                             label="Service Account Config"
-                            formProps={
-                                props as unknown as FormProps<{
-                                    [key: string]: any;
-                                }>
-                            }
                             mode="json"
-                            required
                         />
-                        <ControlledTextInput
-                            name="dataSetName"
-                            label="Data Set Name"
-                            formProps={props}
-                            className="DialogFormField"
-                            required
-                        />
-                        <ControlledSelect
-                            className="DialogFormField"
+                        <DialogFormTextInput name="dataSetName" label="Data Set Name" />
+                        <DialogFormSelect
                             label="Data Set Location"
                             name="dataSetLocation"
                             values={dataSetLocationValues}
-                            formProps={props}
-                            required
                         />
                         {props.includeBigQueryPartitionFilter && (
-                            <ControlledBooleanSelect
-                                className="DialogFormField"
+                            <DialogFormBooleanSelect
                                 label="Require partition filter in queries"
                                 name="requirePartitionFilterInQueries"
-                                formProps={props}
-                                required
                             />
                         )}
                     </BoxedInputs>
@@ -213,38 +137,23 @@ const StorageProviderSelector = <T extends { [key: string]: any }>(
             {(props.isCreate || props.values.editStorageProviderSettings) &&
                 props.values.storageProvider === StorageProvider.MONGODB && (
                     <BoxedInputs label="MongoDb Push Config">
-                        <CheckBoxInput
+                        <DialogFormCheckbox
                             name="useApiMongoServer"
-                            value={props.values.useApiMongoServer}
-                            setValue={(v) => {
-                                props.handleChange('useApiMongoServer', v);
-                            }}
                             label="Use API Mongo Server"
-                            className="DialogFormField"
-                            sx={{ marginLeft: '-11px!important' }}
-                            color="primary"
+                            realignLeft
                         />
                         {!props.values.useApiMongoServer && (
                             <>
-                                <ControlledTextInput
+                                <DialogFormTextInput
                                     name="connectionString"
                                     label="Connection String"
-                                    formProps={props}
-                                    className="DialogFormField"
-                                    required
                                 />
-                                <ControlledTextInput
-                                    name="databaseName"
-                                    label="Database Name"
-                                    formProps={props}
-                                    className="DialogFormField"
-                                    required
-                                />
+                                <DialogFormTextInput name="databaseName" label="Database Name" />
                             </>
                         )}
                     </BoxedInputs>
                 )}
-        </>
+        </DialogFormContextProvider>
     );
 };
 
