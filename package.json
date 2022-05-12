@@ -17,8 +17,5 @@
         "edge:dev:commercial": "SERVER_MODE=COMMERCIAL S8_ENV=development mvn -f edge/pom.xml mn:run",
         "start:mongodb": "docker run --name mongodb-dev -p 27017:27017 -d mongo:4.4",
         "stop:mongodb": "docker stop mongodb-dev || true && docker rm mongodb-dev || true"
-    },
-    "dependencies": {
-        "jest-next-dynamic": "^1.0.1"
     }
 }
