@@ -15,13 +15,13 @@ const ActionGroupDistributionForm: FC<ActionGroupDistributionFormProps & { isUpd
                 name="name"
                 label="Name"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
                 required
                 autoFocus
             />
             {!props.isUpdate && (
                 <ControlledSelect
-                    className="DrawerFormField"
+                    className="DialogFormField"
                     label="Type"
                     name="type"
                     values={[
@@ -46,7 +46,7 @@ const ActionGroupDistributionForm: FC<ActionGroupDistributionFormProps & { isUpd
                 name="comments"
                 label="Comments"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
             />
         </DrawerFormLayout>
     );

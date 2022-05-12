@@ -152,7 +152,7 @@ const PlatformValueEdit: FC<PlatformValueEditProps> = (props: PlatformValueEditP
                 <small>There are no platforms with data containers available.</small>
             ) : (
                 <ControlledFilteredSelects
-                    className="DrawerFormField"
+                    className="DialogFormField"
                     label="Data Container"
                     initialFilterValue={findPlatformIdFromContainerId(
                         initialDataContainerId,
@@ -210,7 +210,7 @@ const PlatformValueEdit: FC<PlatformValueEditProps> = (props: PlatformValueEditP
                     name="dataElement"
                     label="Custom Data Element"
                     formProps={formProps}
-                    className="DrawerFormField"
+                    className="DialogFormField"
                     required
                 />
             )}
@@ -218,7 +218,7 @@ const PlatformValueEdit: FC<PlatformValueEditProps> = (props: PlatformValueEditP
             {currentDataContainer && hasDataMaps && !useCustom && (
                 <>
                     <ControlledSelect
-                        className="DrawerFormField"
+                        className="DialogFormField"
                         label="Data Element"
                         name="dataElement"
                         values={platformDataMapsToSelectValues(
@@ -248,7 +248,7 @@ const PlatformValueEdit: FC<PlatformValueEditProps> = (props: PlatformValueEditP
                     name="objectKey"
                     label="Key"
                     formProps={formProps}
-                    className="DrawerFormField"
+                    className="DialogFormField"
                     required
                 />
             )}

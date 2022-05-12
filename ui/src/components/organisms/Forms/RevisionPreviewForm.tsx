@@ -24,7 +24,7 @@ const RevisionPreviewForm: FC<RevisionPreviewFormProps> = (props: RevisionPrevie
                 <FormGqlError error={props.gqlError} />
                 {props.environments.length > 0 && (
                     <ControlledSelect
-                        className="DrawerFormField"
+                        className="DialogFormField"
                         label="Environment"
                         name="environment"
                         values={[
@@ -41,7 +41,7 @@ const RevisionPreviewForm: FC<RevisionPreviewFormProps> = (props: RevisionPrevie
                     name="url"
                     label="App URL"
                     formProps={props}
-                    className="DrawerFormField"
+                    className="DialogFormField"
                     required
                     autoFocus
                 />

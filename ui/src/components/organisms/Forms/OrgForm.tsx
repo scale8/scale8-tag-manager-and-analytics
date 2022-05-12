@@ -10,7 +10,7 @@ const OrgForm: FC<OrgFormProps> = (props: OrgFormProps) => {
                 name="name"
                 label="Name"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
                 required
                 autoFocus
             />

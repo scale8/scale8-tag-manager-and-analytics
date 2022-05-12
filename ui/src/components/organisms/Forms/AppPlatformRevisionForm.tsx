@@ -12,12 +12,12 @@ const PlatformRevisionSelect: FC<AppPlatformRevisionFormProps> = (
     const onlyOne = props.availableAppPlatformRevisions.length === 1;
 
     if (notAvailable) {
-        return <small className="DrawerFormField">There are no more platforms available.</small>;
+        return <small className="DialogFormField">There are no more platforms available.</small>;
     }
 
     if (isEdit && onlyOne) {
         return (
-            <small className="DrawerFormField">
+            <small className="DialogFormField">
                 There is only one platform revision available.
             </small>
         );
@@ -25,7 +25,7 @@ const PlatformRevisionSelect: FC<AppPlatformRevisionFormProps> = (
 
     return (
         <ControlledFilteredSelects
-            className="DrawerFormField"
+            className="DialogFormField"
             label="Platform Revision"
             name="platformRevisionId"
             values={availableAppPlatformRevisions}

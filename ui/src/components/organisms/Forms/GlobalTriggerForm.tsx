@@ -11,7 +11,7 @@ const GlobalTriggerForm: FC<TriggerFormProps> = (props: TriggerFormProps) => {
                 name="name"
                 label="Name"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
                 required
                 autoFocus
             />
@@ -19,7 +19,7 @@ const GlobalTriggerForm: FC<TriggerFormProps> = (props: TriggerFormProps) => {
                 name="comments"
                 label="Comments"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
             />
         </DrawerFormLayout>
     );

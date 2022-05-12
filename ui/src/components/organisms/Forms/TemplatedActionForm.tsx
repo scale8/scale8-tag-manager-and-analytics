@@ -70,7 +70,7 @@ const TemplatedActionForm: FC<TemplatedActionFormProps> = (props: TemplatedActio
         <Box
             component="form"
             sx={{
-                '& .DrawerFormField': {
+                '& .DialogFormField': {
                     width: '100%',
                     margin: (theme) => theme.spacing(0, 0, 3),
                 },
@@ -172,7 +172,7 @@ const TemplatedActionForm: FC<TemplatedActionFormProps> = (props: TemplatedActio
                                 name="name"
                                 label="Name"
                                 formProps={props}
-                                className="DrawerFormField"
+                                className="DialogFormField"
                                 disabled={props.readOnly}
                                 requiredOnValidation
                             />
@@ -180,12 +180,12 @@ const TemplatedActionForm: FC<TemplatedActionFormProps> = (props: TemplatedActio
                                 name="description"
                                 label="Description"
                                 formProps={props}
-                                className="DrawerFormField"
+                                className="DialogFormField"
                                 disabled={props.readOnly}
                                 requiredOnValidation
                             />
                             <ControlledSelect
-                                className="DrawerFormField"
+                                className="DialogFormField"
                                 label="Icon"
                                 name="icon"
                                 values={getSelectValuesForTypeIcons('Action')}
@@ -200,7 +200,7 @@ const TemplatedActionForm: FC<TemplatedActionFormProps> = (props: TemplatedActio
                                     value={props.values['execRaw']}
                                     disabled={props.readOnly || props.isEdit}
                                     setValue={(v) => props.handleChange('execRaw', v)}
-                                    className="DrawerFormField"
+                                    className="DialogFormField"
                                 />
                             )}
                         </Box>

@@ -87,7 +87,7 @@ const ConditionRuleForm: FC<ConditionRuleFormProps> = (props: ConditionRuleFormP
             ) : (
                 <ControlledFilteredSelects
                     disabled={!!props.update}
-                    className="DrawerFormField"
+                    className="DialogFormField"
                     label="Data Container"
                     initialFilterValue={props.initialPlatformId}
                     name="dataContainerId"
@@ -144,14 +144,14 @@ const ConditionRuleForm: FC<ConditionRuleFormProps> = (props: ConditionRuleFormP
                     name="match"
                     label="Custom Data Element"
                     formProps={props}
-                    className="DrawerFormField"
+                    className="DialogFormField"
                     required
                 />
             )}
 
             {currentDataContainer && hasDataMaps && !useCustom && (
                 <ControlledSelect
-                    className="DrawerFormField"
+                    className="DialogFormField"
                     label="Data Element"
                     name="matchId"
                     values={platformDataMapsToSelectValues(currentDataContainer.platform_data_maps)}
@@ -189,12 +189,12 @@ const ConditionRuleForm: FC<ConditionRuleFormProps> = (props: ConditionRuleFormP
                                 name="matchKey"
                                 label="Key"
                                 formProps={props}
-                                className="DrawerFormField"
+                                className="DialogFormField"
                                 required
                             />
                         )}
                         <ControlledSelect
-                            className="DrawerFormField"
+                            className="DialogFormField"
                             label="Condition"
                             name="matchCondition"
                             values={filteredConditions.map((matchConditionValue) => ({
@@ -241,7 +241,7 @@ const ConditionRuleForm: FC<ConditionRuleFormProps> = (props: ConditionRuleFormP
                                         disabled: false,
                                         required: true,
                                         flatten: true,
-                                        className: 'DrawerFormField',
+                                        className: 'DialogFormField',
                                     }}
                                 />
                             )}
@@ -269,7 +269,7 @@ const ConditionRuleForm: FC<ConditionRuleFormProps> = (props: ConditionRuleFormP
                             name="name"
                             label="Name"
                             formProps={props}
-                            className="DrawerFormField"
+                            className="DialogFormField"
                             required
                         />
                     )}
@@ -279,7 +279,7 @@ const ConditionRuleForm: FC<ConditionRuleFormProps> = (props: ConditionRuleFormP
                 name="comments"
                 label="Comments"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
             />
         </DrawerFormLayout>
     );

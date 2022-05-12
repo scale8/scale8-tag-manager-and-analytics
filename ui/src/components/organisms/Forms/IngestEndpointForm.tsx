@@ -29,7 +29,7 @@ const IngestEndpointForm: FC<IngestEndpointFormProps> = (props: IngestEndpointFo
                 name="name"
                 label="Name"
                 formProps={props}
-                className="DrawerFormField"
+                className="DialogFormField"
                 required
                 autoFocus
             />
@@ -51,7 +51,7 @@ const IngestEndpointForm: FC<IngestEndpointFormProps> = (props: IngestEndpointFo
             )}
             {useWizard && (
                 <ControlledSelect
-                    className="DrawerFormField"
+                    className="DialogFormField"
                     label="Wizard"
                     name="wizard"
                     values={Object.values(IngestSchemaWizard).map((_) => ({
@@ -71,11 +71,11 @@ const IngestEndpointForm: FC<IngestEndpointFormProps> = (props: IngestEndpointFo
                             props.handleChange('analyticsEnabled', v);
                         }}
                         label="Enable Analytics"
-                        className="DrawerFormField"
+                        className="DialogFormField"
                         sx={{ marginLeft: '-11px!important' }}
                         color="primary"
                     />
-                    <Box component="small" className="DrawerFormField" sx={{ marginTop: '-24px' }}>
+                    <Box component="small" className="DialogFormField" sx={{ marginTop: '-24px' }}>
                         Enable analytics dashboard when using Data Manager.
                     </Box>
                     {props.values.analyticsEnabled && (
