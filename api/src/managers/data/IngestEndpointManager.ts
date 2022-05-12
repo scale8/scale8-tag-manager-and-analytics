@@ -32,6 +32,7 @@ import Hash from '../../core/Hash';
 import { createIngestEndpointDataMapFromSchemas } from '../../utils/IngestEndpointDataMapUtils';
 import { IngestSchemaWizard } from '../../enums/IngestSchemaWizard';
 import { errorTrackingSchema, userTrackingSchema } from '../../utils/AppUtils';
+import { generateRevisionName } from '../../../../common/utils/GenerateRevisionName';
 
 @injectable()
 export default class IngestEndpointManager extends Manager<IngestEndpoint> {
@@ -348,7 +349,7 @@ export default class IngestEndpointManager extends Manager<IngestEndpoint> {
                 );
                 ingestEndpoint = await this.repoFactory(IngestEndpoint).save(ingestEndpoint, actor);
                 const ingestEndpointRevision = await this.repoFactory(IngestEndpointRevision).save(
-                    new IngestEndpointRevision('Revision 1', ingestEndpoint),
+                    new IngestEndpointRevision(generateRevisionName(), ingestEndpoint),
                     actor,
                 );
 

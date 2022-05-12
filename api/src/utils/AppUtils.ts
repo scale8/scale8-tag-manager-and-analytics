@@ -30,6 +30,7 @@ import { TagType } from '../enums/TagType';
 import { StorageProvider } from '../enums/StorageProvider';
 import { StorageProviderConfig } from '../mongo/types/Types';
 import Hash from '../core/Hash';
+import { generateRevisionName } from '../../../common/utils/GenerateRevisionName';
 
 export const userTrackingSchema = [
     {
@@ -306,7 +307,7 @@ export const createApp = async (
     app = await repoFactory(App).save(app, actor, OperationOwner.USER);
 
     //create first revision...
-    let revision = new Revision('Revision 1', app);
+    let revision = new Revision('Initial Revision', app);
     revision = await repoFactory(Revision).save(revision, actor, OperationOwner.USER, {
         gqlMethod: GQLMethod.CREATE,
         userComments: 'Auto-generated the first revision for the App',
@@ -370,7 +371,7 @@ export const createApp = async (
 
     //finally clone first revision ready for editing...
     const newRevision = await duplicateRevision(actor, revision);
-    newRevision.name = 'Revision 2';
+    newRevision.name = generateRevisionName();
     await repoFactory(Revision).save(newRevision, actor, OperationOwner.USER, {
         gqlMethod: GQLMethod.CREATE,
         userComments: 'Automatically cloned the first revision to enable editing',

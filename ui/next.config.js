@@ -1,6 +1,9 @@
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 
 module.exports = {
+    experimental: {
+        externalDir: true,
+    },
     eslint: {
         ignoreDuringBuilds: true,
     },
