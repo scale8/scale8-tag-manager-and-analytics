@@ -57,6 +57,7 @@ export type ControlledCheckboxProps<Values extends { [key: string]: any }> = Omi
 export type ControlledInputProps<Values extends { [key: string]: any }> = TextFieldProps & {
     name: string;
     requiredOnValidation?: boolean;
+    clearable?: boolean;
     formProps: FormFieldProps<Values>;
 };
 

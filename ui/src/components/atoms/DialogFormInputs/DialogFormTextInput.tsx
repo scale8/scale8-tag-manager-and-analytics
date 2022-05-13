@@ -39,6 +39,7 @@ export const DialogFormTextInput: FC<DialogFormTextInputProps> = ({
             className="DialogFormField"
             autoFocus={autoFocus}
             fullWidth={fullWidth}
+            clearable={!outlined}
             required={!optional && !requiredOnValidation}
             inputProps={
                 password
