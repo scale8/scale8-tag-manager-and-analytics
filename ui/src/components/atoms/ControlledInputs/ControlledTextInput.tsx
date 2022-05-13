@@ -5,7 +5,7 @@ import TextInput from '../InputTypes/TextInput';
 const ControlledTextInput = <T extends { [key: string]: any }>(
     props: ControlledInputProps<T>,
 ): ReactElement => {
-    const { name, formProps, requiredOnValidation, label, ...textFieldProps } = props;
+    const { name, formProps, requiredOnValidation, label, clearable, ...textFieldProps } = props;
 
     const inputLabel =
         requiredOnValidation !== undefined && requiredOnValidation ? `${label} *` : label;
@@ -18,6 +18,7 @@ const ControlledTextInput = <T extends { [key: string]: any }>(
             validationError={formProps.errors[name]}
             onBlur={formProps.handleBlur}
             label={inputLabel}
+            clearable={clearable}
             {...textFieldProps}
         />
     );
