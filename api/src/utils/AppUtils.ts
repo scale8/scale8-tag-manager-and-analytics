@@ -57,13 +57,13 @@ export const userTrackingSchema = [
     {
         varType: VarType.STRING,
         key: 'user_region',
-        defaultValue: '%S8_USER_REGION_CODE%',
+        defaultValue: '%S8_USER_REGION%',
         optional: true,
     },
     {
         varType: VarType.STRING,
         key: 'user_city',
-        defaultValue: '%S8_USER_CITY_CODE%',
+        defaultValue: '%S8_USER_CITY%',
         optional: true,
     },
     {

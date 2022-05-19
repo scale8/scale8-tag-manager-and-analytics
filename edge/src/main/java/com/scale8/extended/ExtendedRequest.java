@@ -81,7 +81,15 @@ public class ExtendedRequest {
   }
 
   public String getCountryCode() {
-    return geo.getCountryCode(getClientAddressAsString());
+    return geo.getGeoData(getClientAddressAsString()).getCountryCode();
+  }
+
+  public String getRegion() {
+    return geo.getGeoData(getClientAddressAsString()).getRegion();
+  }
+
+  public String getCity() {
+    return geo.getGeoData(getClientAddressAsString()).getCity();
   }
 
   public HttpRequest<String> getRequest() {

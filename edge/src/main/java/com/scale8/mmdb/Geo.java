@@ -34,21 +34,44 @@ public class Geo {
     }
   }
 
-  @Cacheable()
-  public String getCountryCode(String host) {
+  private JsonNode getLookUp(String host) {
     if (GEO_DB == null) {
       return null;
-    } else {
-      try {
-        JsonNode lookup = GEO_DB.get(InetAddress.getByName(host));
-        if (lookup == null) {
-          return null;
-        } else {
-          return lookup.findValue("country").findValue("iso_code").asText();
+    }
+    try {
+      return GEO_DB.get(InetAddress.getByName(host));
+    } catch (Exception e) {
+      return null;
+    }
+  }
+
+  @Cacheable()
+  public GeoData getGeoData(String host) {
+    String countryCode = null;
+    String region = null;
+    String city = null;
+    JsonNode lookup = getLookUp(host);
+    if (lookup != null) {
+      JsonNode countryNode = lookup.findValue("country");
+      if (countryNode != null) {
+        countryCode = countryNode.findValue("iso_code").asText();
+      }
+      JsonNode subdivisionsNode = lookup.findValue("subdivisions");
+      if(subdivisionsNode != null && subdivisionsNode.isArray() && subdivisionsNode.has(0)){
+        JsonNode first = subdivisionsNode.get(0);
+        JsonNode name = first.findValue("names");
+        if(name != null){
+          region = name.findValue("en").asText();
         }
-      } catch (Exception e) {
-        return null;
+      }
+      JsonNode cityNode = lookup.findValue("city");
+      if(cityNode != null){
+        JsonNode name = cityNode.findValue("names");
+        if(name != null){
+          city = name.findValue("en").asText();
+        }
       }
     }
+    return new GeoData(countryCode, region, city);
   }
 }

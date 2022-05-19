@@ -14,7 +14,7 @@
         "clean:all": "docker rm router edge api mongodb",
         "edge:dev": "S8_ENV=development mvn -f edge/pom.xml mn:run",
         "edge:dev:proxy": "S8_ENV=development PROXY_FOR=core PROXY_LOCATION=\"http://127.0.0.1:3124/main.js\" mvn -f edge/pom.xml mn:run",
-        "edge:dev:commercial": "SERVER_MODE=COMMERCIAL S8_ENV=development mvn -f edge/pom.xml mn:run",
+        "edge:dev:commercial": "SERVER_MODE=COMMERCIAL S8_ENV=development MMDB_FILE=\"$(pwd)/mmdbs/dbip.mmdb\" mvn -f edge/pom.xml mn:run",
         "start:mongodb": "docker run --name mongodb-dev -p 27017:27017 -d mongo:4.4",
         "stop:mongodb": "docker stop mongodb-dev || true && docker rm mongodb-dev || true"
     }

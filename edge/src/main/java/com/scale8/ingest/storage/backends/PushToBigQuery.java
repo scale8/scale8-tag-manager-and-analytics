@@ -15,6 +15,9 @@ import com.scale8.ingest.storage.PushResult;
 import com.scale8.ingest.storage.StorageProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import software.amazon.awssdk.core.SdkBytes;
+import software.amazon.awssdk.services.firehose.model.Record;
+
 import javax.inject.Singleton;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
@@ -49,13 +52,17 @@ public class PushToBigQuery extends StorageProvider {
     TableId tableId = getTableId(ingestSettings);
     buildMissingTable(bigQuery, ingestSettings);
     while (!q.isEmpty()) {
-      List<InsertAllRequest.RowToInsert> rows =
-          getNextBatch(q).stream()
-              .map(
-                  jsonObject ->
-                      InsertAllRequest.RowToInsert.of(
-                          UUID.randomUUID().toString(), convertJsonObject(jsonObject)))
-              .collect(Collectors.toList());
+      ArrayList<JsonObject> nextBatch = getNextBatch(q);
+      List<InsertAllRequest.RowToInsert> rows = new ArrayList<>(nextBatch.size());
+
+      for (JsonObject jsonObject : nextBatch) {
+        byte[] data = (new Gson().toJson(jsonObject) + "\n").getBytes(StandardCharsets.UTF_8);
+        rows.add(
+            InsertAllRequest.RowToInsert.of(
+                UUID.randomUUID().toString(), convertJsonObject(jsonObject)));
+        count++;
+        bytes += data.length;
+      }
 
       InsertAllResponse response =
           bigQuery.insertAll(InsertAllRequest.newBuilder(tableId).setRows(rows).build());
