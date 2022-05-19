@@ -6,6 +6,7 @@ export default class EventTracking {
     private static getParams(extra: { [k: string]: string } = {}) {
         const w = getTopWindow();
         return [
+            ['r', `${(Math.random() + '').replace('0.', '')}`],
             ['url', w.location.href],
             ['referrer', w.document.referrer],
             ['p_x', `${w.screen.width}`],

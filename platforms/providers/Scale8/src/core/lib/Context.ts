@@ -143,6 +143,6 @@ export default class Context {
     }
 
     public static trackHashChange(): boolean {
-        return true;
+        return false;
     }
 }

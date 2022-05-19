@@ -707,9 +707,9 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
 
         const query = `
                     SELECT
-                      IF(user_country = null, ${
+                      IF(user_country IS NULL, "${
                           GoogleCloudBigQuery.NULL_AS_STRING
-                      }, user_country) AS key,
+                      }", user_country) AS key,
                       COUNT(DISTINCT user_hash) AS user_count,
                       SUM(1) AS event_count,
                     FROM

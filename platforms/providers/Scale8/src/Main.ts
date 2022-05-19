@@ -57,18 +57,41 @@ export class S8 {
         //listen for errors...
         getTopWindow().addEventListener('error', (event) => EventTracking.trackError(event), false);
 
-        const pageUpdateListener = () => {
+        const pageUpdateListener = (track = true) => {
             AppState.refreshData();
-            EventTracking.track('page-view').then(() => Logger.debug('Tracked page-view'));
+            if (track) {
+                EventTracking.track('page-view').then(() => Logger.debug('Tracked page-view'));
+            }
         };
 
-        if (Context.trackUrlChange()) {
-            getTopWindow().addEventListener('popstate', pageUpdateListener, false);
-        }
-
-        if (Context.trackHashChange()) {
-            getTopWindow().addEventListener('hashchange', pageUpdateListener, false);
-        }
+        const oldPushState = history.pushState;
+        history.pushState = function () {
+            // eslint-disable-next-line prefer-rest-params,@typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            // eslint-disable-next-line prefer-rest-params
+            const applied = oldPushState.apply(this, arguments);
+            pageUpdateListener(Context.trackUrlChange());
+            return applied;
+        };
+        const oldReplaceState = history.replaceState;
+        history.replaceState = function () {
+            // eslint-disable-next-line prefer-rest-params,@typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            // eslint-disable-next-line prefer-rest-params
+            const applied = oldReplaceState.apply(this, arguments);
+            pageUpdateListener(Context.trackUrlChange());
+            return applied;
+        };
+        getTopWindow().addEventListener(
+            'popstate',
+            () => pageUpdateListener(Context.trackUrlChange()),
+            false,
+        );
+        getTopWindow().addEventListener(
+            'hashchange',
+            () => pageUpdateListener(Context.trackHashChange()),
+            false,
+        );
 
         //register all events...
         (scale8Spec.events || []).forEach((event) => {
