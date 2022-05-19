@@ -17,7 +17,6 @@ import java.net.URL;
 @CacheConfig("geo")
 public class Geo {
 
-  private final String STANDARD_RESPONSE = "--";
   private static final Logger LOG = LoggerFactory.getLogger(Geo.class);
 
   Reader GEO_DB;
@@ -30,12 +29,7 @@ public class Geo {
                   ? new URL(env.MMDB_FILE).openStream()
                   : new FileInputStream(env.MMDB_FILE));
     } catch (IOException e) {
-      LOG.warn(
-          "Geo-IP-Lookup: Failed to find "
-              + env.MMDB_FILE
-              + " '"
-              + STANDARD_RESPONSE
-              + "' will be returned as country code for all IP lookups");
+      LOG.warn("Geo-IP-Lookup: Failed to find IP database" + env.MMDB_FILE);
       this.GEO_DB = null;
     }
   }
@@ -43,7 +37,7 @@ public class Geo {
   @Cacheable()
   public String getCountryCode(String host) {
     if (GEO_DB == null) {
-      return STANDARD_RESPONSE;
+      return null;
     } else {
       try {
         JsonNode lookup = GEO_DB.get(InetAddress.getByName(host));
@@ -53,7 +47,7 @@ public class Geo {
           return lookup.findValue("country").findValue("iso_code").asText();
         }
       } catch (Exception e) {
-        return STANDARD_RESPONSE;
+        return null;
       }
     }
   }

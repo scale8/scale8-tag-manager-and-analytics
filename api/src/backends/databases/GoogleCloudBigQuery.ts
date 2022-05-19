@@ -323,6 +323,13 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                       params: { error_message: queryOptions.filter_options.error_message },
                   }
                 : undefined;
+
+        const replaceStringNullsAsNulls = (params: { [k: string]: any }) =>
+            Object.keys(params).reduce((o, k) => {
+                o[k] = params[k] == GoogleCloudBigQuery.NULL_AS_STRING ? null : params[k];
+                return o;
+            }, {} as { [k: string]: any });
+
         return [
             getRevisionFilter(),
             getEnvironmentFilter(),
@@ -351,7 +358,10 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                 } else {
                     return {
                         where: a.where + ' AND ' + c.where,
-                        params: { ...a.params, ...c.params },
+                        params: {
+                            ...replaceStringNullsAsNulls(a.params),
+                            ...replaceStringNullsAsNulls(c.params),
+                        },
                     };
                 }
             },
@@ -697,7 +707,9 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
 
         const query = `
                     SELECT
-                      user_country AS key,
+                      IF(user_country = null, ${
+                          GoogleCloudBigQuery.NULL_AS_STRING
+                      }, user_country) AS key,
                       COUNT(DISTINCT user_hash) AS user_count,
                       SUM(1) AS event_count,
                     FROM

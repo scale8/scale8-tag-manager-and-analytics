@@ -54,6 +54,8 @@ export interface IngestQueryOptions extends BaseQueryOptions {
 
 @injectable()
 export default abstract class BaseDatabase {
+    protected static readonly NULL_AS_STRING = '--';
+
     protected getRangeFromAsDate(options: BaseQueryOptions): Date {
         return new Date(options.filter_options.from);
     }

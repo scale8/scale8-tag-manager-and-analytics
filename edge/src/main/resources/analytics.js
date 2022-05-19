@@ -1,5 +1,6 @@
 ;window.top.__s8 = function(b, h, f, k, l) {
-  var g = [["url", b.location.href], ["referrer", b.document.referrer], ].reduce(function(c, a) {
+  var z = b.screen || { width: 0, height: 0 };
+  var g = [["url", b.location.href],["referrer", b.document.referrer],["p_x", z.width],["p_y", z.height]].reduce(function(c, a) {
     return 0 < a[1].length ? c + "&" + a[0] + "=" + encodeURIComponent(a[1]) : c;
   }, "").substr(1), e = function(c, a) {
     var d = new XMLHttpRequest;

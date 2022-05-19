@@ -136,6 +136,14 @@ public class Payload {
               String tld = getTldFromUrl(request.getRequestingPage());
               return tld == null ? JsonNull.INSTANCE : new JsonPrimitive(tld);
             }
+          case "%S8_PAGE_X%":
+            return request.getPageX() == null
+                ? JsonNull.INSTANCE
+                : new JsonPrimitive(request.getPageX());
+          case "%S8_PAGE_Y%":
+            return request.getPageY() == null
+                ? JsonNull.INSTANCE
+                : new JsonPrimitive(request.getPageY());
           case "%S8_REFERRER_URL%":
             return request.getRequestingPageReferrer() == null
                 ? JsonNull.INSTANCE
@@ -179,6 +187,8 @@ public class Payload {
             return request.getUserAgent().device.family == null
                 ? JsonNull.INSTANCE
                 : new JsonPrimitive(request.getUserAgent().device.family);
+          case "%S8_USER_REGION_CODE%":
+          case "%S8_USER_CITY_CODE%":
           case "%S8_DEVICE_MODEL%":
           case "%S8_DEVICE_BRAND%":
             return JsonNull.INSTANCE; // todo, not supported in current library

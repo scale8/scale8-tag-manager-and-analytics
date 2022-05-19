@@ -8,6 +8,8 @@ export default class EventTracking {
         return [
             ['url', w.location.href],
             ['referrer', w.document.referrer],
+            ['p_x', `${w.screen.width}`],
+            ['p_y', `${w.screen.height}`],
             ...Object.entries(extra),
         ]
             .reduce(function (s, v) {

@@ -20,6 +20,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static java.lang.Math.abs;
+
 public class ExtendedRequest {
 
   final Env env;
@@ -124,6 +126,23 @@ public class ExtendedRequest {
     } else {
       return url;
     }
+  }
+
+  private Integer getPageDim(String key){
+    String pageDim = request.getParameters().get(key);
+    if(pageDim == null){
+      return null;
+    }
+    int absValue = abs(Integer.parseInt(pageDim));
+    return absValue > 10000? null : absValue;
+  }
+
+  public Integer getPageX() {
+    return getPageDim("p_x");
+  }
+
+  public Integer getPageY() {
+    return getPageDim("p_y");
   }
 
   public String getRevisionPreviewId() {
