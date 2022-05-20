@@ -153,6 +153,16 @@ public class ExtendedRequest {
     return getPageDim("p_y");
   }
 
+  public String getScreenSize() {
+    Integer x = getPageX();
+    Integer y = getPageY();
+    if(x == null || y == null){
+      return null;
+    } else {
+      return x + "x" + y;
+    }
+  }
+
   public String getRevisionPreviewId() {
     return getAllParameters().get("preview");
   }

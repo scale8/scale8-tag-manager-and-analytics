@@ -79,15 +79,9 @@ export const userTrackingSchema = [
         optional: true,
     },
     {
-        varType: VarType.INT,
-        key: 'width',
-        defaultValue: '%S8_PAGE_X%',
-        optional: true,
-    },
-    {
-        varType: VarType.INT,
-        key: 'height',
-        defaultValue: '%S8_PAGE_Y%',
+        varType: VarType.STRING,
+        key: 'screen_size',
+        defaultValue: '%S8_SCREEN_SIZE%',
         optional: true,
     },
     {

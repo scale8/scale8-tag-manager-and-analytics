@@ -185,6 +185,10 @@ export default class MongoDb extends BaseDatabase {
             );
         const getCountry = () =>
             MongoDb.getFilterObjectFromStringFilterOption(queryOptions, 'country', 'user_country');
+        const getRegion = () =>
+            MongoDb.getFilterObjectFromStringFilterOption(queryOptions, 'region', 'user_region');
+        const getCity = () =>
+            MongoDb.getFilterObjectFromStringFilterOption(queryOptions, 'city', 'user_city');
         const getReferrer = () =>
             MongoDb.getFilterObjectFromStringFilterOption(queryOptions, 'referrer', 'referrer_url');
         const getReferrerTld = () =>
@@ -210,6 +214,12 @@ export default class MongoDb extends BaseDatabase {
         };
         const getBrowser = () =>
             MongoDb.getFilterObjectFromStringFilterOption(queryOptions, 'browser', 'browser_name');
+        const getScreenSize = () =>
+            MongoDb.getFilterObjectFromStringFilterOption(
+                queryOptions,
+                'screen_size',
+                'screen_size',
+            );
         const getOS = () =>
             MongoDb.getFilterObjectFromStringFilterOption(queryOptions, 'os', 'os_name');
         const getCustomReleaseId = () =>
@@ -240,11 +250,14 @@ export default class MongoDb extends BaseDatabase {
             getUTMTermFilter(),
             getUTMContentFilter(),
             getCountry(),
+            getRegion(),
+            getCity(),
             getPage(),
             getReferrer(),
             getReferrerTld(),
             getMobile(),
             getBrowser(),
+            getScreenSize(),
             getOS(),
             getCustomReleaseId(),
             getErrorId(),
@@ -809,6 +822,28 @@ export default class MongoDb extends BaseDatabase {
         return this.simpleAppAggregation(app, queryOptions, 'user_country', false, true);
     }
 
+    public async regions(
+        app: App,
+        queryOptions: AppQueryOptions,
+    ): Promise<{
+        result: { key: string; user_count: number; event_count: number }[];
+        from: Date;
+        to: Date;
+    }> {
+        return this.simpleAppAggregation(app, queryOptions, 'user_region', false, true);
+    }
+
+    public async cities(
+        app: App,
+        queryOptions: AppQueryOptions,
+    ): Promise<{
+        result: { key: string; user_count: number; event_count: number }[];
+        from: Date;
+        to: Date;
+    }> {
+        return this.simpleAppAggregation(app, queryOptions, 'user_city', false, true);
+    }
+
     public async devices(
         app: App,
         queryOptions: AppQueryOptions,
@@ -901,6 +936,17 @@ export default class MongoDb extends BaseDatabase {
         to: Date;
     }> {
         return this.simpleAppAggregation(app, queryOptions, 'browser_name');
+    }
+
+    public async screenSizes(
+        app: App,
+        queryOptions: AppQueryOptions,
+    ): Promise<{
+        result: { key: string; user_count: number; event_count: number }[];
+        from: Date;
+        to: Date;
+    }> {
+        return this.simpleAppAggregation(app, queryOptions, 'screen_size');
     }
 
     public async operatingSystems(

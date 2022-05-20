@@ -150,6 +150,10 @@ public class Payload {
             return request.getPageY() == null
                 ? JsonNull.INSTANCE
                 : new JsonPrimitive(request.getPageY());
+          case "%S8_SCREEN_SIZE%":
+            return request.getScreenSize() == null
+                    ? JsonNull.INSTANCE
+                    : new JsonPrimitive(request.getScreenSize());
           case "%S8_REFERRER_URL%":
             return request.getRequestingPageReferrer() == null
                 ? JsonNull.INSTANCE
