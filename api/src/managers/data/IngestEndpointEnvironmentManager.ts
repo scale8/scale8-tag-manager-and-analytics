@@ -335,7 +335,11 @@ export default class IngestEndpointEnvironmentManager extends Manager<IngestEndp
         IngestEndpointEnvironment: {
             install_endpoint: async (parent: any, args: any, ctx: CTX) => {
                 if (this.config.isCommercial()) {
-                    return `https://${await this.getInstallDomain(new ObjectId(parent.id), ctx)}`;
+                    const port = this.config.isDevelopment() ? ':8443' : '';
+                    return `https://${await this.getInstallDomain(
+                        new ObjectId(parent.id),
+                        ctx,
+                    )}${port}`;
                 } else if (this.config.isDevelopment()) {
                     //todo. remove hard coded port...
                     return `http://localhost:6080/edge/${parent.id}`;
