@@ -9,6 +9,8 @@ import { AppBrowsersQueryData } from '../../gql/generated/AppBrowsersQueryData';
 import { AppOperatingSystemsQueryData } from '../../gql/generated/AppOperatingSystemsQueryData';
 import { getEventLabel } from '../../utils/AnalyticsUtils';
 import { AppErrorContentProps } from '../../types/props/AppErrorContentProps';
+import { AppScreenSizesQueryData } from '../../gql/generated/AppScreenSizesQueryData';
+import AppScreenSizesQuery from '../../gql/queries/AppScreenSizesQuery';
 
 const AppErrorsDevices: FC<AppErrorContentProps> = (props: AppErrorContentProps) => {
     const { appQueryOptions, id, refreshAt } = props;
@@ -35,6 +37,23 @@ const AppErrorsDevices: FC<AppErrorContentProps> = (props: AppErrorContentProps)
                             props.setFilter('mobile', value === 'Mobile');
                         },
                         lazyQuery: useLazyQuery(AppDevicesQuery),
+                        lazyQueryVariables: queryOptions,
+                        refreshAt,
+                        forErrors: true,
+                    },
+                },
+                {
+                    title: 'Screen Sizes',
+                    listProps: {
+                        textTitle: 'Screen Size',
+                        eventLabel: getEventLabel(appQueryOptions),
+                        extractList: (queryData: AppScreenSizesQueryData) => {
+                            return queryData.getApp.screen_size_stats.result;
+                        },
+                        addFilter: (value) => {
+                            props.setFilter('screen_size', value);
+                        },
+                        lazyQuery: useLazyQuery(AppScreenSizesQuery),
                         lazyQueryVariables: queryOptions,
                         refreshAt,
                         forErrors: true,

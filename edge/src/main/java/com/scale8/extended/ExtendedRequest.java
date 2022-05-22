@@ -20,6 +20,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static java.lang.Math.abs;
+
 public class ExtendedRequest {
 
   final Env env;
@@ -79,7 +81,15 @@ public class ExtendedRequest {
   }
 
   public String getCountryCode() {
-    return geo.getCountryCode(getClientAddressAsString());
+    return geo.getGeoData(getClientAddressAsString()).getCountryCode();
+  }
+
+  public String getRegion() {
+    return geo.getGeoData(getClientAddressAsString()).getRegion();
+  }
+
+  public String getCity() {
+    return geo.getGeoData(getClientAddressAsString()).getCity();
   }
 
   public HttpRequest<String> getRequest() {
@@ -123,6 +133,33 @@ public class ExtendedRequest {
       return request.getHeaders().get(HttpHeaders.REFERER);
     } else {
       return url;
+    }
+  }
+
+  private Integer getPageDim(String key){
+    String pageDim = request.getParameters().get(key);
+    if(pageDim == null){
+      return null;
+    }
+    int absValue = abs(Integer.parseInt(pageDim));
+    return absValue > 10000? null : absValue;
+  }
+
+  public Integer getPageX() {
+    return getPageDim("p_x");
+  }
+
+  public Integer getPageY() {
+    return getPageDim("p_y");
+  }
+
+  public String getScreenSize() {
+    Integer x = getPageX();
+    Integer y = getPageY();
+    if(x == null || y == null){
+      return null;
+    } else {
+      return x + "x" + y;
     }
   }
 

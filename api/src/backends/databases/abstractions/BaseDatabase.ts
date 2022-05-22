@@ -28,11 +28,14 @@ export interface AppQueryOptions extends BaseQueryOptions {
         utm_term?: string;
         utm_content?: string;
         country?: string;
+        region?: string;
+        city?: string;
         referrer?: string;
         referrer_tld?: string;
         page?: string;
         mobile?: boolean;
         browser?: string;
+        screen_size?: string;
         os?: string;
         event?: string;
         event_group?: string;
@@ -54,6 +57,8 @@ export interface IngestQueryOptions extends BaseQueryOptions {
 
 @injectable()
 export default abstract class BaseDatabase {
+    protected static readonly NULL_AS_STRING = '--';
+
     protected getRangeFromAsDate(options: BaseQueryOptions): Date {
         return new Date(options.filter_options.from);
     }
@@ -156,6 +161,24 @@ export default abstract class BaseDatabase {
         to: Date;
     }>;
 
+    public abstract regions(
+        app: App,
+        queryOptions: AppQueryOptions,
+    ): Promise<{
+        result: { key: string; user_count: number; event_count: number }[];
+        from: Date;
+        to: Date;
+    }>;
+
+    public abstract cities(
+        app: App,
+        queryOptions: AppQueryOptions,
+    ): Promise<{
+        result: { key: string; user_count: number; event_count: number }[];
+        from: Date;
+        to: Date;
+    }>;
+
     public abstract devices(
         app: App,
         queryOptions: AppQueryOptions,
@@ -175,6 +198,15 @@ export default abstract class BaseDatabase {
     }>;
 
     public abstract events(
+        app: App,
+        queryOptions: AppQueryOptions,
+    ): Promise<{
+        result: { key: string; user_count: number; event_count: number }[];
+        from: Date;
+        to: Date;
+    }>;
+
+    public abstract screenSizes(
         app: App,
         queryOptions: AppQueryOptions,
     ): Promise<{

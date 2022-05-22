@@ -116,11 +116,14 @@ export default class AppManager extends Manager<App> {
             utm_term: String
             utm_content: String
             country: String
+            region: String
+            city: String
             referrer: String
             referrer_tld: String
             page: String
             mobile: Boolean
             browser: String
+            screen_size: String
             os: String
             event: String
             event_group: String
@@ -230,6 +233,14 @@ export default class AppManager extends Manager<App> {
             """
             country_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
             """
+            Regions
+            """
+            region_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+            """
+            Cities
+            """
+            city_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+            """
             Devices
             """
             device_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
@@ -237,6 +248,10 @@ export default class AppManager extends Manager<App> {
             Browsers
             """
             browser_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+            """
+            Screen Sizes
+            """
+            screen_size_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
             """
             Operating Systems
             """
@@ -610,6 +625,18 @@ export default class AppManager extends Manager<App> {
                     ),
                 );
             },
+            screen_size_stats: async (parent: any, args: any, ctx: CTX) => {
+                const app = await this.repoFactory(App).findByIdThrows(
+                    new ObjectId(parent.id),
+                    userMessages.appFailed,
+                );
+                return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
+                    this.backendDatabaseFactory(app.storageProvider).screenSizes(
+                        app,
+                        args.query_options,
+                    ),
+                );
+            },
             operating_system_stats: async (parent: any, args: any, ctx: CTX) => {
                 const app = await this.repoFactory(App).findByIdThrows(
                     new ObjectId(parent.id),
@@ -629,6 +656,30 @@ export default class AppManager extends Manager<App> {
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
                     this.backendDatabaseFactory(app.storageProvider).countries(
+                        app,
+                        args.query_options,
+                    ),
+                );
+            },
+            region_stats: async (parent: any, args: any, ctx: CTX) => {
+                const app = await this.repoFactory(App).findByIdThrows(
+                    new ObjectId(parent.id),
+                    userMessages.appFailed,
+                );
+                return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
+                    this.backendDatabaseFactory(app.storageProvider).regions(
+                        app,
+                        args.query_options,
+                    ),
+                );
+            },
+            city_stats: async (parent: any, args: any, ctx: CTX) => {
+                const app = await this.repoFactory(App).findByIdThrows(
+                    new ObjectId(parent.id),
+                    userMessages.appFailed,
+                );
+                return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
+                    this.backendDatabaseFactory(app.storageProvider).cities(
                         app,
                         args.query_options,
                     ),

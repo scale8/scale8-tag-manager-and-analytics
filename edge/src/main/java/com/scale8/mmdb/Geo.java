@@ -17,7 +17,6 @@ import java.net.URL;
 @CacheConfig("geo")
 public class Geo {
 
-  private final String STANDARD_RESPONSE = "--";
   private static final Logger LOG = LoggerFactory.getLogger(Geo.class);
 
   Reader GEO_DB;
@@ -30,31 +29,49 @@ public class Geo {
                   ? new URL(env.MMDB_FILE).openStream()
                   : new FileInputStream(env.MMDB_FILE));
     } catch (IOException e) {
-      LOG.warn(
-          "Geo-IP-Lookup: Failed to find "
-              + env.MMDB_FILE
-              + " '"
-              + STANDARD_RESPONSE
-              + "' will be returned as country code for all IP lookups");
+      LOG.warn("Geo-IP-Lookup: Failed to find IP database" + env.MMDB_FILE);
       this.GEO_DB = null;
     }
   }
 
-  @Cacheable()
-  public String getCountryCode(String host) {
+  private JsonNode getLookUp(String host) {
     if (GEO_DB == null) {
-      return STANDARD_RESPONSE;
-    } else {
-      try {
-        JsonNode lookup = GEO_DB.get(InetAddress.getByName(host));
-        if (lookup == null) {
-          return null;
-        } else {
-          return lookup.findValue("country").findValue("iso_code").asText();
+      return null;
+    }
+    try {
+      return GEO_DB.get(InetAddress.getByName(host));
+    } catch (Exception e) {
+      return null;
+    }
+  }
+
+  @Cacheable()
+  public GeoData getGeoData(String host) {
+    String countryCode = null;
+    String region = null;
+    String city = null;
+    JsonNode lookup = getLookUp(host);
+    if (lookup != null) {
+      JsonNode countryNode = lookup.findValue("country");
+      if (countryNode != null) {
+        countryCode = countryNode.findValue("iso_code").asText();
+      }
+      JsonNode subdivisionsNode = lookup.findValue("subdivisions");
+      if(subdivisionsNode != null && subdivisionsNode.isArray() && subdivisionsNode.has(0)){
+        JsonNode first = subdivisionsNode.get(0);
+        JsonNode name = first.findValue("names");
+        if(name != null){
+          region = name.findValue("en").asText();
         }
-      } catch (Exception e) {
-        return STANDARD_RESPONSE;
+      }
+      JsonNode cityNode = lookup.findValue("city");
+      if(cityNode != null){
+        JsonNode name = cityNode.findValue("names");
+        if(name != null){
+          city = name.findValue("en").asText();
+        }
       }
     }
+    return new GeoData(countryCode, region, city);
   }
 }

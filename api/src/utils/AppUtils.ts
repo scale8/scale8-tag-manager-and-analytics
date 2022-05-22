@@ -56,6 +56,18 @@ export const userTrackingSchema = [
     },
     {
         varType: VarType.STRING,
+        key: 'user_region',
+        defaultValue: '%S8_USER_REGION%',
+        optional: true,
+    },
+    {
+        varType: VarType.STRING,
+        key: 'user_city',
+        defaultValue: '%S8_USER_CITY%',
+        optional: true,
+    },
+    {
+        varType: VarType.STRING,
         key: 'page_url',
         defaultValue: '%S8_PAGE_URL%',
         optional: true,
@@ -64,6 +76,12 @@ export const userTrackingSchema = [
         varType: VarType.STRING,
         key: 'page_tld',
         defaultValue: '%S8_PAGE_TLD%',
+        optional: true,
+    },
+    {
+        varType: VarType.STRING,
+        key: 'screen_size',
+        defaultValue: '%S8_SCREEN_SIZE%',
         optional: true,
     },
     {

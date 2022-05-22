@@ -91,6 +91,12 @@ public class Payload {
           case "%S8_USER_COUNTRY_CODE%":
             String countryCode = request.getCountryCode();
             return countryCode == null ? JsonNull.INSTANCE : new JsonPrimitive(countryCode);
+          case "%S8_USER_REGION%":
+            String region = request.getRegion();
+            return region == null ? JsonNull.INSTANCE : new JsonPrimitive(region);
+          case "%S8_USER_CITY%":
+            String city = request.getCity();
+            return city == null ? JsonNull.INSTANCE : new JsonPrimitive(city);
           case "%S8_RANDOM_INTEGER%":
             return new JsonPrimitive(ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE));
           case "%S8_ORG_ID%":
@@ -136,6 +142,18 @@ public class Payload {
               String tld = getTldFromUrl(request.getRequestingPage());
               return tld == null ? JsonNull.INSTANCE : new JsonPrimitive(tld);
             }
+          case "%S8_PAGE_X%":
+            return request.getPageX() == null
+                ? JsonNull.INSTANCE
+                : new JsonPrimitive(request.getPageX());
+          case "%S8_PAGE_Y%":
+            return request.getPageY() == null
+                ? JsonNull.INSTANCE
+                : new JsonPrimitive(request.getPageY());
+          case "%S8_SCREEN_SIZE%":
+            return request.getScreenSize() == null
+                    ? JsonNull.INSTANCE
+                    : new JsonPrimitive(request.getScreenSize());
           case "%S8_REFERRER_URL%":
             return request.getRequestingPageReferrer() == null
                 ? JsonNull.INSTANCE

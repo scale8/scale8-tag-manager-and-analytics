@@ -1,5 +1,6 @@
 package com.scale8;
 
+import com.scale8.mmdb.Geo;
 import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.runtime.Micronaut;
 import io.micronaut.runtime.server.event.ServerStartupEvent;
