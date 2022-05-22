@@ -556,11 +556,14 @@ export interface AppQueryFilterOptions {
   utm_term?: string | null;
   utm_content?: string | null;
   country?: string | null;
+  region?: string | null;
+  city?: string | null;
   referrer?: string | null;
   referrer_tld?: string | null;
   page?: string | null;
   mobile?: boolean | null;
   browser?: string | null;
+  screen_size?: string | null;
   os?: string | null;
   event?: string | null;
   event_group?: string | null;

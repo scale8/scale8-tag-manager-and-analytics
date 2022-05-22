@@ -6,6 +6,10 @@ import { AppCountriesQueryData } from '../../gql/generated/AppCountriesQueryData
 import { getCountryCode, getCountryLabel } from '../../utils/CountryUtils';
 import { getEventLabel } from '../../utils/AnalyticsUtils';
 import { AppErrorContentProps } from '../../types/props/AppErrorContentProps';
+import AppRegionsQuery from '../../gql/queries/AppRegionsQuery';
+import { AppRegionsQueryData } from '../../gql/generated/AppRegionsQueryData';
+import AppCitiesQuery from '../../gql/queries/AppCitiesQuery';
+import { AppCitiesQueryData } from '../../gql/generated/AppCitiesQueryData';
 
 const AppErrorsCountries: FC<AppErrorContentProps> = (props: AppErrorContentProps) => {
     const { appQueryOptions, id, refreshAt } = props;
@@ -36,6 +40,40 @@ const AppErrorsCountries: FC<AppErrorContentProps> = (props: AppErrorContentProp
                             props.setFilter('country', getCountryCode(value));
                         },
                         lazyQuery: useLazyQuery(AppCountriesQuery),
+                        lazyQueryVariables: queryOptions,
+                        refreshAt,
+                        forErrors: true,
+                    },
+                },
+                {
+                    title: 'Regions',
+                    listProps: {
+                        textTitle: 'Region',
+                        eventLabel: getEventLabel(appQueryOptions),
+                        extractList: (queryData: AppRegionsQueryData) => {
+                            return queryData.getApp.region_stats.result;
+                        },
+                        addFilter: (value) => {
+                            props.setFilter('region', value);
+                        },
+                        lazyQuery: useLazyQuery(AppRegionsQuery),
+                        lazyQueryVariables: queryOptions,
+                        refreshAt,
+                        forErrors: true,
+                    },
+                },
+                {
+                    title: 'Cities',
+                    listProps: {
+                        textTitle: 'City',
+                        eventLabel: getEventLabel(appQueryOptions),
+                        extractList: (queryData: AppCitiesQueryData) => {
+                            return queryData.getApp.city_stats.result;
+                        },
+                        addFilter: (value) => {
+                            props.setFilter('city', value);
+                        },
+                        lazyQuery: useLazyQuery(AppCitiesQuery),
                         lazyQueryVariables: queryOptions,
                         refreshAt,
                         forErrors: true,

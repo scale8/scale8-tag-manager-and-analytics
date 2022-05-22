@@ -123,6 +123,7 @@ export default class AppManager extends Manager<App> {
             page: String
             mobile: Boolean
             browser: String
+            screen_size: String
             os: String
             event: String
             event_group: String
