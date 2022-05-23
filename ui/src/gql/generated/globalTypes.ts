@@ -1189,7 +1189,6 @@ export interface SignUpInput {
   sign_up_type: SignUpType;
   full_name: string;
   captcha_token: string;
-  temp_access_code: string;
   email?: string | null;
   domain?: string | null;
   org_name?: string | null;

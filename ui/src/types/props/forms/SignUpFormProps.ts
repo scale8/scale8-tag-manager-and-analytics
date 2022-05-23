@@ -13,7 +13,6 @@ export type SignUpValues = {
     email: string;
     agree: boolean;
     CAPTCHAToken: string;
-    tempAccessCode: string;
 };
 
 export type SignUpFormProps = FormProps<SignUpValues> & {

@@ -23,7 +23,6 @@ const MockForm: FC = () => {
         email: '',
         agree: false,
         CAPTCHAToken: '',
-        tempAccessCode: '',
     });
 
     const captcha = createRef<HCaptcha>();

@@ -93,15 +93,6 @@ const SignUpForm: FC<SignUpFormProps> = (props: SignUpFormProps) => {
             )}
             <FormFull handleSubmit={props.handleSubmit}>
                 <ControlledTextInput
-                    name="tempAccessCode"
-                    label="Public beta access code"
-                    formProps={props}
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                />
-                <ControlledTextInput
                     name="fullName"
                     label="Full Name"
                     formProps={props}

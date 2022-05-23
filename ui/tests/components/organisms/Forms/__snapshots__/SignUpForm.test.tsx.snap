@@ -270,47 +270,6 @@ exports[`SignUpForm form render unchanged 1`] = `
               class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-ip4mx2-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink="false"
             >
-              Public beta access code
-              <span
-                aria-hidden="true"
-                class="MuiInputLabel-asterisk MuiFormLabel-asterisk css-b4y4zd-MuiFormLabel-asterisk"
-              >
-                 *
-              </span>
-            </label>
-            <div
-              class="MuiOutlinedInput-root MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-dloxrs-MuiInputBase-root-MuiOutlinedInput-root"
-            >
-              <input
-                aria-invalid="false"
-                autocomplete="off"
-                class="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
-                name="tempAccessCode"
-                required=""
-                type="text"
-                value=""
-              />
-              <fieldset
-                aria-hidden="true"
-                class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
-              >
-                <legend
-                  class="css-dhh0px"
-                >
-                  <span>
-                    Public beta access code *
-                  </span>
-                </legend>
-              </fieldset>
-            </div>
-          </div>
-          <div
-            class="MuiFormControl-root MuiFormControl-marginNormal MuiFormControl-fullWidth MuiTextField-root css-17vbkzs-MuiFormControl-root-MuiTextField-root"
-          >
-            <label
-              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-ip4mx2-MuiFormLabel-root-MuiInputLabel-root"
-              data-shrink="false"
-            >
               Full Name
               <span
                 aria-hidden="true"
