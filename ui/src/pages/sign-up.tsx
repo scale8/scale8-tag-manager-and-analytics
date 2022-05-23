@@ -43,7 +43,6 @@ const SignUpContent: FC<SignUpContentProps> = (props: SignUpContentProps) => {
 
         const signUpInput: SignUpInput = {
             full_name: signUpValues.fullName,
-            temp_access_code: signUpValues.tempAccessCode,
             captcha_token: signUpValues.CAPTCHAToken,
             sign_up_type: signUpType,
             org_name: signUpType === SignUpType.INVITE ? target : signUpValues.orgName,
@@ -69,7 +68,6 @@ const SignUpContent: FC<SignUpContentProps> = (props: SignUpContentProps) => {
         fullName: '',
         email: '',
         CAPTCHAToken: '',
-        tempAccessCode: '',
         agree: false,
     };
 

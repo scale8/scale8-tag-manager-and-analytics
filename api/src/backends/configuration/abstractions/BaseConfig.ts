@@ -281,8 +281,4 @@ export default abstract class BaseConfig {
     public async getEncryptionSalt(): Promise<string> {
         return await this.getConfigEntryOrElse('ENCRYPTION_SALT', 'replace_me');
     }
-
-    public async getBetaAccessCode(): Promise<string> {
-        return await this.getConfigEntryOrElse('BETA_ACCESS_CODE', 'test');
-    }
 }

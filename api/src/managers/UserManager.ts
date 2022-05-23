@@ -230,7 +230,6 @@ export default class UserManager extends Manager<User> {
             sign_up_type: SignUpType!
             full_name: String!
             captcha_token: String!
-            temp_access_code: String!
             email: String
             domain: String
             org_name: String
@@ -528,10 +527,6 @@ export default class UserManager extends Manager<User> {
 
             if (!(await this.config.emailServerEnabled())) {
                 throw new GenericError(userMessages.emailServerNotEnabled, LogPriority.ERROR, true);
-            }
-
-            if (args.signUpInput.temp_access_code !== (await this.config.getBetaAccessCode())) {
-                throw new ValidationError('Invalid access code.', true);
             }
 
             const getEmail = async () => {
