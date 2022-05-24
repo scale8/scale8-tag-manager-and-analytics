@@ -13,9 +13,13 @@ import { FormValidationResult } from '../../hooks/form/useFormValidation';
 import { ApolloError } from '@apollo/client/errors';
 import OrgTransferOwnershipForm from '../../components/organisms/Forms/OrgTransferOwnershipForm';
 import { DialogPreloadForm, DialogPreloadFormProps } from '../abstractions/DialogPreloadForm';
+import { toOrg } from '../../utils/NavigationPaths';
+import { useRouter } from 'next/router';
 
 const OrgTransferOwnership: FC<DialogPageProps> = (props: DialogPageProps) => {
-    const duplicateProps: DialogPreloadFormProps<
+    const router = useRouter();
+
+    const transferProps: DialogPreloadFormProps<
         OrgTransferOwnershipGetData,
         OrgTransferOwnershipValues,
         OrgTransferOwnershipFormProps,
@@ -64,7 +68,10 @@ const OrgTransferOwnership: FC<DialogPageProps> = (props: DialogPageProps) => {
             OrgTransferOwnershipFormProps,
             OrgTransferOwnershipResult
         >
-            {...duplicateProps}
+            {...transferProps}
+            pageRefresh={() => {
+                router.push(toOrg({ id: props.id }, 'users')).then();
+            }}
         />
     );
 };
