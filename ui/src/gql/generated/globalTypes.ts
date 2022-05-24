@@ -1193,7 +1193,7 @@ export interface SignUpInput {
   domain?: string | null;
   org_name?: string | null;
   password?: string | null;
-  invite_id?: string | null;
+  invite_token?: string | null;
 }
 
 export interface StartDataManagerTrialInput {

@@ -24,11 +24,11 @@ type SignUpContentProps = {
     type?: string;
     email?: string;
     target?: string;
-    inviteId?: string;
+    inviteToken?: string;
 };
 
 const SignUpContent: FC<SignUpContentProps> = (props: SignUpContentProps) => {
-    const { type, target, inviteId, email: qsEmail } = props;
+    const { type, target, inviteToken, email: qsEmail } = props;
 
     const captcha = createRef<HCaptcha>();
 
@@ -47,7 +47,7 @@ const SignUpContent: FC<SignUpContentProps> = (props: SignUpContentProps) => {
             sign_up_type: signUpType,
             org_name: signUpType === SignUpType.INVITE ? target : signUpValues.orgName,
             ...(email !== undefined ? { email } : {}),
-            ...(inviteId !== undefined ? { invite_id: inviteId } : {}),
+            ...(inviteToken !== undefined ? { invite_token: inviteToken } : {}),
             ...(signUpType === SignUpType.TAG_MANAGER ? { domain: signUpValues.domain } : {}),
             ...(signUpValues.newPassword !== '' ? { password: signUpValues.newPassword } : {}),
         };
@@ -164,6 +164,7 @@ const SignUpContent: FC<SignUpContentProps> = (props: SignUpContentProps) => {
         captcha,
         success: data?.signUp !== undefined,
         email: data?.signUp.email,
+        requestToken: data?.signUp.request_token,
         handleDialogClose: () => {
             // not in dialog
         },
@@ -173,7 +174,7 @@ const SignUpContent: FC<SignUpContentProps> = (props: SignUpContentProps) => {
 };
 
 const SignUp: ComponentWithParams = ({ params }) => {
-    const { type, email, target, invite_id: inviteId } = params;
+    const { type, email, target, invite_token } = params;
 
     return (
         <>
@@ -182,7 +183,12 @@ const SignUp: ComponentWithParams = ({ params }) => {
                 <meta name="description" content="Scale8 - Sign Up page." />
             </Head>
             <LoggedOutSection>
-                <SignUpContent type={type} email={email} target={target} inviteId={inviteId} />
+                <SignUpContent
+                    type={type}
+                    email={email}
+                    target={target}
+                    inviteToken={invite_token}
+                />
             </LoggedOutSection>
         </>
     );

@@ -26,5 +26,10 @@ export default class InviteRepo extends Repo<Invite> {
                 _org_id: 1,
             },
         },
+        {
+            key: {
+                _token: 1,
+            },
+        },
     ];
 }

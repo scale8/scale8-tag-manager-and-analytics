@@ -16,6 +16,7 @@ import Captcha from '../../atoms/Captcha';
 import { SignUpFormProps } from '../../../types/props/forms/SignUpFormProps';
 import Link from '../../atoms/Next/Link';
 import FormFull from '../../atoms/FormFull';
+import Navigate from '../../atoms/Next/Navigate';
 
 const SignUpForm: FC<SignUpFormProps> = (props: SignUpFormProps) => {
     const { type, values, handleChange, errors, qsEmail } = props;
@@ -56,6 +57,9 @@ const SignUpForm: FC<SignUpFormProps> = (props: SignUpFormProps) => {
     }
 
     if (props.success) {
+        if (props.requestToken) {
+            return <Navigate to={`/account-prepare?type=invite&token=${props.requestToken}`} />;
+        }
         return (
             <SignUpContainer
                 type={props.type}
