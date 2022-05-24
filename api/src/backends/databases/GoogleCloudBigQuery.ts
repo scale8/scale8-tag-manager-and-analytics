@@ -66,7 +66,6 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
         params?: { [p: string]: any },
     ): Promise<any[]> {
         const bq = await this.getBigQuery(entity);
-
         try {
             const [job] = await bq.createQueryJob({
                 query: query.trim(),
@@ -302,6 +301,13 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                       params: { browser: queryOptions.filter_options.browser },
                   }
                 : undefined;
+        const getBrowserVersion = () =>
+            typeof queryOptions.filter_options.browser_version === 'string'
+                ? {
+                      where: 'browser_version = @browser_version',
+                      params: { browser_version: queryOptions.filter_options.browser_version },
+                  }
+                : undefined;
         const getScreenSize = () =>
             typeof queryOptions.filter_options.screen_size === 'string'
                 ? {
@@ -369,6 +375,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
             getReferrerTld(),
             getMobile(),
             getBrowser(),
+            getBrowserVersion(),
             getScreenSize(),
             getOS(),
             getCustomReleaseId(),
@@ -393,6 +400,92 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                 where: this.generateRange(queryOptions),
                 params: {},
             },
+        );
+    }
+
+    protected async simpleAppAggregation<T extends string | string[]>(
+        app: App,
+        queryOptions: AppQueryOptions,
+        key: T,
+        checkExists = false,
+        stringNulls = false,
+    ): Promise<{
+        result: {
+            key: T extends string ? string : { field: string; value: string }[];
+            user_count: number;
+            event_count: number;
+        }[];
+        from: Date;
+        to: Date;
+    }> {
+        const filter = this.getAppFilter(queryOptions);
+
+        const getKeys = (): string[] => {
+            return typeof key === 'string' ? [key] : key;
+        };
+
+        const keys = getKeys();
+
+        const getSelectKeysSQL = (): string[] => {
+            return keys.map((k) => {
+                if (stringNulls) {
+                    return `IF(${k} IS NULL, "${GoogleCloudBigQuery.NULL_AS_STRING}", ${k}) AS k_${k}`;
+                } else {
+                    return `${k} as k_${k}`;
+                }
+            });
+        };
+
+        const getWhereSQL = (): string => {
+            if (checkExists) {
+                return `${filter.where} AND ${keys.map((_) => `${_} IS NOT NULL`).join(' AND ')}`;
+            } else {
+                return filter.where;
+            }
+        };
+
+        const query = `
+                    SELECT
+                      ${getSelectKeysSQL().join(',')},
+                      COUNT(DISTINCT user_hash) AS user_count,
+                      SUM(1) AS event_count,
+                    FROM
+                      ${await this.getTable(app)}
+                    WHERE
+                      ${getWhereSQL()}
+                    GROUP BY
+                      ${keys.map((_) => `k_${_}`).join(',')}
+                    ORDER BY
+                      user_count DESC
+                    ${this.getLimit(queryOptions)}
+                `;
+
+        const formatResult = (result: any) => {
+            const counts = {
+                user_count: result['user_count'],
+                event_count: result['event_count'],
+            };
+            if (typeof key === 'string') {
+                return {
+                    key: result[`k_${key}`],
+                    ...counts,
+                };
+            } else {
+                return {
+                    key: key.map((_) => {
+                        return {
+                            field: _,
+                            value: result[`k_${_}`],
+                        };
+                    }),
+                    ...counts,
+                };
+            }
+        };
+
+        return this.getResultWithRange(
+            queryOptions,
+            (await this.query(app, query, filter.params)).map((_) => formatResult(_)),
         );
     }
 
@@ -550,6 +643,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
             WHERE
               ${filter.where}
               AND referrer_url <> ""
+              AND referrer_url IS NOT NULL
             GROUP BY
               key
             ORDER BY
@@ -593,6 +687,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
             WHERE
               ${filter.where}
               AND referrer_url <> ""
+              AND referrer_url IS NOT NULL
             GROUP BY
               key
             ORDER BY
@@ -612,8 +707,6 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
         from: Date;
         to: Date;
     }> {
-        const filter = this.getAppFilter(queryOptions);
-
         const getUTMKey = () => {
             if (utmFilter === 'MEDIUM') {
                 return 'utm_medium';
@@ -629,26 +722,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
             }
         };
 
-        const utmKey = getUTMKey();
-
-        const query = `
-                    SELECT
-                      ${utmKey} AS key,
-                      COUNT(DISTINCT user_hash) AS user_count,
-                      SUM(1) AS event_count,
-                    FROM
-                      ${await this.getTable(app)}
-                    WHERE
-                      ${filter.where}
-                      AND ${utmKey} <> ""
-                    GROUP BY
-                      key
-                    ORDER BY
-                      user_count DESC
-                    ${this.getLimit(queryOptions)}
-                `;
-
-        return this.getResultWithRange(queryOptions, await this.query(app, query, filter.params));
+        return this.simpleAppAggregation(app, queryOptions, getUTMKey(), true);
     }
 
     public async pages(
@@ -674,6 +748,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                     WHERE
                       ${filter.where}
                       AND page_url <> ""
+                      AND page_url IS NOT NULL
                     GROUP BY
                       key
                     ORDER BY
@@ -704,6 +779,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                     WHERE
                       ${filter.where}
                       AND page_url <> ""
+                      AND page_url IS NOT NULL
                     GROUP BY
                       key
                     ORDER BY
@@ -727,27 +803,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
         from: Date;
         to: Date;
     }> {
-        const filter = this.getAppFilter(queryOptions);
-
-        const query = `
-                    SELECT
-                      IF(user_country IS NULL, "${
-                          GoogleCloudBigQuery.NULL_AS_STRING
-                      }", user_country) AS key,
-                      COUNT(DISTINCT user_hash) AS user_count,
-                      SUM(1) AS event_count,
-                    FROM
-                      ${await this.getTable(app)}
-                    WHERE
-                      ${filter.where}
-                    GROUP BY
-                      key
-                    ORDER BY
-                      user_count DESC
-                    ${this.getLimit(queryOptions)}
-                `;
-
-        return this.getResultWithRange(queryOptions, await this.query(app, query, filter.params));
+        return this.simpleAppAggregation(app, queryOptions, 'user_country', false, true);
     }
 
     public async regions(
@@ -758,27 +814,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
         from: Date;
         to: Date;
     }> {
-        const filter = this.getAppFilter(queryOptions);
-
-        const query = `
-                    SELECT
-                      IF(user_region IS NULL, "${
-                          GoogleCloudBigQuery.NULL_AS_STRING
-                      }", user_region) AS key,
-                      COUNT(DISTINCT user_hash) AS user_count,
-                      SUM(1) AS event_count,
-                    FROM
-                      ${await this.getTable(app)}
-                    WHERE
-                      ${filter.where}
-                    GROUP BY
-                      key
-                    ORDER BY
-                      user_count DESC
-                    ${this.getLimit(queryOptions)}
-                `;
-
-        return this.getResultWithRange(queryOptions, await this.query(app, query, filter.params));
+        return this.simpleAppAggregation(app, queryOptions, 'user_region', false, true);
     }
 
     public async cities(
@@ -789,27 +825,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
         from: Date;
         to: Date;
     }> {
-        const filter = this.getAppFilter(queryOptions);
-
-        const query = `
-                    SELECT
-                      IF(user_city IS NULL, "${
-                          GoogleCloudBigQuery.NULL_AS_STRING
-                      }", user_city) AS key,
-                      COUNT(DISTINCT user_hash) AS user_count,
-                      SUM(1) AS event_count,
-                    FROM
-                      ${await this.getTable(app)}
-                    WHERE
-                      ${filter.where}
-                    GROUP BY
-                      key
-                    ORDER BY
-                      user_count DESC
-                    ${this.getLimit(queryOptions)}
-                `;
-
-        return this.getResultWithRange(queryOptions, await this.query(app, query, filter.params));
+        return this.simpleAppAggregation(app, queryOptions, 'user_city', false, true);
     }
 
     public async devices(
@@ -849,25 +865,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
         from: Date;
         to: Date;
     }> {
-        const filter = this.getAppFilter(queryOptions);
-
-        const query = `
-                    SELECT
-                      event_group as key,
-                      COUNT(DISTINCT user_hash) AS user_count,
-                      SUM(1) AS event_count,
-                    FROM
-                      ${await this.getTable(app)}
-                    WHERE
-                      ${filter.where} AND event_group IS NOT NULL
-                    GROUP BY
-                      key
-                    ORDER BY
-                      user_count DESC
-                    ${this.getLimit(queryOptions)}
-                `;
-
-        return this.getResultWithRange(queryOptions, await this.query(app, query, filter.params));
+        return this.simpleAppAggregation(app, queryOptions, 'event_group', true);
     }
 
     public async events(
@@ -878,25 +876,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
         from: Date;
         to: Date;
     }> {
-        const filter = this.getAppFilter(queryOptions);
-
-        const query = `
-                    SELECT
-                      event as key,
-                      COUNT(DISTINCT user_hash) AS user_count,
-                      SUM(1) AS event_count,
-                    FROM
-                      ${await this.getTable(app)}
-                    WHERE
-                      ${filter.where}
-                    GROUP BY
-                      key
-                    ORDER BY
-                      user_count DESC
-                    ${this.getLimit(queryOptions)}
-                `;
-
-        return this.getResultWithRange(queryOptions, await this.query(app, query, filter.params));
+        return this.simpleAppAggregation(app, queryOptions, 'event', true);
     }
 
     public async browsers(
@@ -907,25 +887,28 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
         from: Date;
         to: Date;
     }> {
-        const filter = this.getAppFilter(queryOptions);
+        return this.simpleAppAggregation(app, queryOptions, 'browser_name', false, true);
+    }
 
-        const query = `
-                    SELECT
-                      browser_name as key,
-                      COUNT(DISTINCT user_hash) AS user_count,
-                      SUM(1) AS event_count,
-                    FROM
-                      ${await this.getTable(app)}
-                    WHERE
-                      ${filter.where}
-                    GROUP BY
-                      key
-                    ORDER BY
-                      user_count DESC
-                    ${this.getLimit(queryOptions)}
-                `;
-
-        return this.getResultWithRange(queryOptions, await this.query(app, query, filter.params));
+    public async browserVersions(
+        app: App,
+        queryOptions: AppQueryOptions,
+    ): Promise<{
+        result: {
+            key: { field: string; value: string }[];
+            user_count: number;
+            event_count: number;
+        }[];
+        from: Date;
+        to: Date;
+    }> {
+        return this.simpleAppAggregation(
+            app,
+            queryOptions,
+            ['browser_name', 'browser_version'],
+            false,
+            true,
+        );
     }
 
     public async screenSizes(
@@ -936,25 +919,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
         from: Date;
         to: Date;
     }> {
-        const filter = this.getAppFilter(queryOptions);
-
-        const query = `
-                    SELECT
-                      screen_size as key,
-                      COUNT(DISTINCT user_hash) AS user_count,
-                      SUM(1) AS event_count,
-                    FROM
-                      ${await this.getTable(app)}
-                    WHERE
-                      ${filter.where}
-                    GROUP BY
-                      key
-                    ORDER BY
-                      user_count DESC
-                    ${this.getLimit(queryOptions)}
-                `;
-
-        return this.getResultWithRange(queryOptions, await this.query(app, query, filter.params));
+        return this.simpleAppAggregation(app, queryOptions, 'screen_size', false, true);
     }
 
     public async operatingSystems(
@@ -965,25 +930,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
         from: Date;
         to: Date;
     }> {
-        const filter = this.getAppFilter(queryOptions);
-
-        const query = `
-                    SELECT
-                      os_name as key,
-                      COUNT(DISTINCT user_hash) AS user_count,
-                      SUM(1) AS event_count,
-                    FROM
-                      ${await this.getTable(app)}
-                    WHERE
-                      ${filter.where}
-                    GROUP BY
-                      key
-                    ORDER BY
-                      user_count DESC
-                    ${this.getLimit(queryOptions)}
-                `;
-
-        return this.getResultWithRange(queryOptions, await this.query(app, query, filter.params));
+        return this.simpleAppAggregation(app, queryOptions, 'os_name', false, true);
     }
 
     protected getIngestEndpointFilter(queryOptions: IngestQueryOptions): {

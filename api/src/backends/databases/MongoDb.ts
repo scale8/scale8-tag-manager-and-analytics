@@ -214,6 +214,12 @@ export default class MongoDb extends BaseDatabase {
         };
         const getBrowser = () =>
             MongoDb.getFilterObjectFromStringFilterOption(queryOptions, 'browser', 'browser_name');
+        const getBrowserVersion = () =>
+            MongoDb.getFilterObjectFromStringFilterOption(
+                queryOptions,
+                'browser_version',
+                'browser_version',
+            );
         const getScreenSize = () =>
             MongoDb.getFilterObjectFromStringFilterOption(
                 queryOptions,
@@ -257,6 +263,7 @@ export default class MongoDb extends BaseDatabase {
             getReferrerTld(),
             getMobile(),
             getBrowser(),
+            getBrowserVersion(),
             getScreenSize(),
             getOS(),
             getCustomReleaseId(),
@@ -268,27 +275,47 @@ export default class MongoDb extends BaseDatabase {
         }, {} as { [k: string]: any }) as { [p: string]: any };
     }
 
-    public async simpleAppAggregation(
+    protected async simpleAppAggregation<T extends string | string[]>(
         app: App,
         queryOptions: AppQueryOptions,
-        key: string,
+        key: T,
         checkExists = false,
         stringNulls = false,
     ): Promise<{
-        result: { key: string; user_count: number; event_count: number }[];
+        result: {
+            key: T extends string ? string : { field: string; value: string }[];
+            user_count: number;
+            event_count: number;
+        }[];
         from: Date;
         to: Date;
     }> {
         const getMatch = () => {
             const match = this.getAppFilter(queryOptions);
             if (checkExists) {
-                match[key] = { $exists: true };
+                if (typeof key === 'string') {
+                    match[key] = { $exists: true };
+                } else {
+                    key.forEach((_) => (match[_] = { $exists: true }));
+                }
             }
             return match;
         };
 
-        const getKey = () =>
-            stringNulls ? { $ifNull: ['$' + key, MongoDb.NULL_AS_STRING] } : '$' + key;
+        const getKey = () => {
+            const handleNulls = (k: string) =>
+                stringNulls ? { $ifNull: ['$' + k, MongoDb.NULL_AS_STRING] } : '$' + k;
+            if (typeof key === 'string') {
+                return handleNulls(key);
+            } else {
+                return key.map((_) => {
+                    return {
+                        field: _,
+                        value: handleNulls(_),
+                    };
+                });
+            }
+        };
 
         const rows = await this.runAggregation(
             app,
@@ -938,6 +965,27 @@ export default class MongoDb extends BaseDatabase {
         return this.simpleAppAggregation(app, queryOptions, 'browser_name');
     }
 
+    public async browserVersions(
+        app: App,
+        queryOptions: AppQueryOptions,
+    ): Promise<{
+        result: {
+            key: { field: string; value: string }[];
+            user_count: number;
+            event_count: number;
+        }[];
+        from: Date;
+        to: Date;
+    }> {
+        return this.simpleAppAggregation(
+            app,
+            queryOptions,
+            ['browser_name', 'browser_version'],
+            false,
+            true,
+        );
+    }
+
     public async screenSizes(
         app: App,
         queryOptions: AppQueryOptions,
@@ -946,7 +994,7 @@ export default class MongoDb extends BaseDatabase {
         from: Date;
         to: Date;
     }> {
-        return this.simpleAppAggregation(app, queryOptions, 'screen_size');
+        return this.simpleAppAggregation(app, queryOptions, 'screen_size', false, true);
     }
 
     public async operatingSystems(
