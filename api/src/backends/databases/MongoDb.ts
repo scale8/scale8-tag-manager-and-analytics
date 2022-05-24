@@ -16,11 +16,13 @@ import { MongoDbPushConfig } from '../../Types';
 import BaseConfig from '../configuration/abstractions/BaseConfig';
 import GQLError from '../../errors/GQLError';
 import userMessages from '../../errors/UserMessages';
+import BaseLogger from '../logging/abstractions/BaseLogger';
 
 @injectable()
 export default class MongoDb extends BaseDatabase {
     @inject(TYPES.Shell) protected readonly shell!: Shell;
     @inject(TYPES.BackendConfig) private readonly config!: BaseConfig;
+    @inject(TYPES.BackendLogger) private readonly logger!: BaseLogger;
 
     private mongoConnections: Map<string, MongoClient> = new Map<string, MongoClient>();
 
@@ -97,6 +99,7 @@ export default class MongoDb extends BaseDatabase {
         pipeline: { [k: string]: any }[],
         limit?: number,
     ): Promise<any[]> {
+        //this.logger.info('Pipeline', pipeline).then();
         try {
             const collection = await this.getCollection(entity);
             const aggregation = collection.aggregate(pipeline);

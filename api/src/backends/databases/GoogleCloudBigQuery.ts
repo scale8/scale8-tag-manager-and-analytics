@@ -65,6 +65,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
         query: string,
         params?: { [p: string]: any },
     ): Promise<any[]> {
+        //this.logger.info('Query', query).then();
         const bq = await this.getBigQuery(entity);
         try {
             const [job] = await bq.createQueryJob({
@@ -75,7 +76,11 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
             const [rows] = await job.getQueryResults();
             return rows;
         } catch (e: any) {
-            this.logger.warn(e.message, e).then();
+            if (typeof e.message === 'string' && e.message.match(/does not match any table/)) {
+                this.logger.warn('Unable to query table, it has yet to be created').then();
+            } else {
+                this.logger.warn(e.message, e).then();
+            }
             return [];
         }
     }
