@@ -29,6 +29,7 @@ const Breadcrumb: FC<BreadcrumbProps> = (props: BreadcrumbProps) => {
     const { orgUserState, templateInteractions } = useLoggedInState();
     const { section } = templateInteractions;
     const sectionDetails = getSectionDetails(section);
+    const isOwner = orgUserState !== null && orgUserState.isOwner;
 
     const [scroller, setScroller] = useState<'left' | 'right' | 'none'>('none');
 
@@ -81,7 +82,7 @@ const Breadcrumb: FC<BreadcrumbProps> = (props: BreadcrumbProps) => {
 
     return (
         <>
-            {orgUserState !== null && accountIsTrial && (
+            {orgUserState !== null && accountIsTrial && isOwner && (
                 <Box display="flex" justifyContent="center">
                     <Box
                         color="#ffffff"

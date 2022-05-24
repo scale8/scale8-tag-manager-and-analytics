@@ -81,7 +81,7 @@ const OrgAccountSection: FC<OrgAccountSectionProps> = (props: OrgAccountSectionP
     }
 
     const trialInfo =
-        account.is_trial || account.trial_expired ? (
+        isOwner && (account.is_trial || account.trial_expired) ? (
             <Box width="100%" mb={2}>
                 <Alert severity={account.trial_expired ? 'error' : 'info'}>
                     {account.trial_expired ? (
