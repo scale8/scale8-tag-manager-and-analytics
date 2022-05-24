@@ -857,7 +857,7 @@ export default class OrgManager extends Manager<Org> {
                             orgName: org.name,
                             uiUrl: `${await this.config.getUiUrl()}/sign-up?type=invite&target=${encodeURI(
                                 org.name,
-                            )}&invite_id=${invite.id}`,
+                            )}&invite_token=${invite.token}`,
                         },
                     );
                     return true;

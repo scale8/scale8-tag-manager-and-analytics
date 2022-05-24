@@ -5,7 +5,6 @@ import User from '../mongo/models/User';
 import Hash from '../core/Hash';
 import CTX from '../gql/ctx/CTX';
 import Org from '../mongo/models/Org';
-import { ObjectId } from 'mongodb';
 import OrgRole from '../mongo/models/OrgRole';
 import Invite from '../mongo/models/Invite';
 import UserNotification from '../mongo/models/UserNotification';
@@ -14,44 +13,22 @@ import TYPES from '../container/IOC.types';
 import GenericError from '../errors/GenericError';
 import { authenticator } from 'otplib';
 import OperationOwner from '../enums/OperationOwner';
-import SignUpRequest from '../mongo/models/SignUpRequest';
-import ValidationError from '../errors/ValidationError';
-import got from 'got';
-import SignUpType from '../enums/SignUpType';
 import UserNotificationManager from './UserNotificationManager';
-import App from '../mongo/models/tag/App';
-import Environment from '../mongo/models/tag/Environment';
 import userMessages from '../errors/UserMessages';
 import GQLError from '../errors/GQLError';
-import { createOrg } from '../utils/OrgUtils';
-import {
-    createSession,
-    createSessionFromUser,
-    generateNewSession,
-    getTempSessionUser,
-} from '../utils/SessionUtils';
-import { createApp } from '../utils/AppUtils';
-import TagManagerAccountRepo from '../mongo/repos/tag/TagManagerAccountRepo';
-import TagManagerAccount from '../mongo/models/tag/TagManagerAccount';
+import { createSession, generateNewSession, getTempSessionUser } from '../utils/SessionUtils';
 import { GQLType } from '../mongo/types/Types';
 import UserRepo from '../mongo/repos/UserRepo';
-import DataManagerAccountRepo from '../mongo/repos/data/DataManagerAccountRepo';
-import DataManagerAccount from '../mongo/models/data/DataManagerAccount';
-import container from '../container/IOC.config';
-import RepoFromModelFactory from '../container/factoryTypes/RepoFromModelFactory';
-import { NotificationType } from '../enums/NotificationType';
-import { AppType } from '../enums/AppType';
 import BaseEmail from '../backends/email/abstractions/BaseEmail';
 import { LogPriority } from '../enums/LogPriority';
-import {
-    getCommercialStorageProvider,
-    getCommercialStorageProviderConfig,
-} from '../utils/IngestEndpointEnvironmentUtils';
+
+import SignUpService from '../signup/SignUpService';
 
 @injectable()
 export default class UserManager extends Manager<User> {
     @inject(TYPES.BackendEmail) private readonly mailer!: BaseEmail;
     @inject(TYPES.UserNotificationManager) private notificationManager!: UserNotificationManager;
+    @inject(TYPES.SignUpService) private signUpService!: SignUpService;
 
     protected gqlSchema = gql`
         """
@@ -189,6 +166,10 @@ export default class UserManager extends Manager<User> {
             The email of the user signing up
             """
             email: String!
+            """
+            The request token used to skip email validation (invite)
+            """
+            request_token: String
         }
 
         """
@@ -234,7 +215,7 @@ export default class UserManager extends Manager<User> {
             domain: String
             org_name: String
             password: String
-            invite_id: String
+            invite_token: String
         }
 
         input CompleteSignUpInput {
@@ -521,117 +502,16 @@ export default class UserManager extends Manager<User> {
             });
         },
         signUp: async (parent: any, args: any) => {
-            if (!(await this.config.useSignup())) {
-                throw new GenericError(userMessages.signupDisabled, LogPriority.ERROR, true);
-            }
-
-            if (!(await this.config.emailServerEnabled())) {
-                throw new GenericError(userMessages.emailServerNotEnabled, LogPriority.ERROR, true);
-            }
-
-            const getEmail = async () => {
-                if (args.signUpInput.invite_id !== undefined) {
-                    const invite = await this.repoFactory(Invite).findByIdThrows(
-                        new ObjectId(args.signUpInput.invite_id),
-                        userMessages.inviteFailed,
-                    );
-
-                    return invite.email;
-                } else {
-                    //Check if email existing
-                    const existingUser = await this.repoFactory(User).findOne({
-                        _email: args.signUpInput.email,
-                    });
-
-                    if (existingUser !== null) {
-                        throw new ValidationError(
-                            userMessages.duplicateEmail(args.signUpInput.email),
-                            true,
-                        );
-                    }
-
-                    return args.signUpInput.email;
-                }
-            };
-
-            const email = await getEmail();
-
-            // Check if org name existing
-            const orgName = args.signUpInput.org_name;
-
-            if (orgName !== undefined && args.signUpInput.sign_up_type !== SignUpType.INVITE) {
-                const existingOrg = await this.repoFactory(Org).findOne({
-                    _name: orgName,
-                });
-
-                if (existingOrg !== null) {
-                    throw new ValidationError(userMessages.duplicateOrg(orgName), true);
-                }
-            }
-
-            const { body } = await got.post(
-                `https://hcaptcha.com/siteverify?secret=${await this.config.getCaptchaSecret()}&response=${
-                    args.signUpInput.captcha_token
-                }`,
-                {
-                    responseType: 'json',
-                },
-            );
-
-            const captchaSuccess = (body as { success: boolean }).success;
-            const captchaScore = (body as { score: number }).score;
-
-            if (!captchaSuccess || captchaScore < 0.5) {
-                throw new ValidationError(userMessages.validationCAPTCHA, true);
-            }
-
-            const signUpRequest = await this.repoFactory(SignUpRequest).save(
-                new SignUpRequest(
-                    args.signUpInput.sign_up_type,
-                    await this.config.getEncryptionSalt(),
-                    args.signUpInput.full_name,
-                    email,
-                    args.signUpInput.domain,
-                    args.signUpInput.org_name,
-                    args.signUpInput.password,
-                ),
-                'SYSTEM',
-                OperationOwner.SYSTEM,
-            );
-
-            const buildUrlType = () => {
-                if (signUpRequest.sign_up_type === SignUpType.TAG_MANAGER) {
-                    return 'tag-manager';
-                }
-                if (signUpRequest.sign_up_type === SignUpType.DATA_MANAGER) {
-                    return 'data-manager';
-                }
-                return 'invite';
-            };
-
-            const buildCompleteSignUpLink = async () => {
-                return `${await this.config.getUiUrl()}/account-prepare?type=${buildUrlType()}&token=${
-                    signUpRequest.token
-                }${
-                    signUpRequest.sign_up_type === SignUpType.INVITE
-                        ? `&target=${signUpRequest.org_name}`
-                        : ''
-                }`;
-            };
-
-            await this.mailer.sendEmail(
-                email,
-                `Thank you for registering for a Scale8 account!`,
-                'VerificationEmail.twig',
-                {
-                    firstName: signUpRequest.first_name,
-                    uiUrl: await buildCompleteSignUpLink(),
-                },
-            );
-
-            return {
-                email,
-            };
+            return this.signUpService.prepareSignup({
+                captchaToken: args.signUpInput.captcha_token,
+                signUpType: args.signUpInput.sign_up_type,
+                fullName: args.signUpInput.full_name,
+                domain: args.signUpInput.domain,
+                orgName: args.signUpInput.org_name,
+                password: args.signUpInput.password,
+                requestEmail: args.signUpInput.email,
+                inviteToken: args.signUpInput.invite_token,
+            });
         },
 
         completeSignUp: async (
@@ -649,199 +529,10 @@ export default class UserManager extends Manager<User> {
                 environment_id: string;
             };
         }> => {
-            if (!(await this.config.useSignup())) {
-                throw new GenericError(userMessages.signupDisabled, LogPriority.ERROR, true);
-            }
-
-            if (!(await this.config.emailServerEnabled())) {
-                throw new GenericError(userMessages.emailServerNotEnabled, LogPriority.ERROR, true);
-            }
-
-            const createWelcomeNotification = async (user: User): Promise<UserNotification> => {
-                const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
-
-                return repoFactory(UserNotification).save(
-                    new UserNotification(user, NotificationType.WELCOME),
-                    'SYSTEM',
-                    OperationOwner.SYSTEM,
-                );
-            };
-
-            // args.completeSignUpInput.sign_up_type
-            const signUpRequest = await this.repoFactory(SignUpRequest).findOneThrows(
-                {
-                    _token: args.completeSignUpInput.token,
-                },
-                userMessages.userFailed,
+            return this.signUpService.completeSignUp(
+                args.completeSignUpInput.token,
+                args.completeSignUpInput.sign_up_type,
             );
-
-            //Check if email existing
-            const existingUser = await this.repoFactory(User).findOne({
-                _email: signUpRequest.email,
-            });
-
-            if (existingUser !== null) {
-                return {
-                    uid: '',
-                    token: '',
-                    is_duplicate: true,
-                };
-            }
-
-            const generatedPassword: string = Hash.simpleRandomHash(9);
-
-            const passwordHash: string =
-                signUpRequest.password !== undefined
-                    ? signUpRequest.password
-                    : Hash.hashString(generatedPassword, await this.config.getEncryptionSalt());
-
-            const buildNewUser = async () => {
-                const user = new User(
-                    signUpRequest.first_name,
-                    signUpRequest.last_name,
-                    passwordHash,
-                    signUpRequest.email,
-                    Hash.randomHash(await this.config.getEncryptionSalt()),
-                    [],
-                    true,
-                );
-
-                return this.repoFactory(User).save(user, 'SYSTEM', OperationOwner.SYSTEM);
-            };
-
-            const user = await buildNewUser();
-
-            await createWelcomeNotification(user);
-
-            const isTag = args.completeSignUpInput.sign_up_type === SignUpType.TAG_MANAGER;
-            const isData = args.completeSignUpInput.sign_up_type === SignUpType.DATA_MANAGER;
-            const isInvite = args.completeSignUpInput.sign_up_type === SignUpType.INVITE;
-
-            const createNewOrg = async (): Promise<Org | null> => {
-                if (isTag || isData) {
-                    // Create Org
-                    if (signUpRequest.org_name === undefined) {
-                        throw new ValidationError(userMessages.validationOrgName, true);
-                    }
-
-                    return await createOrg(
-                        user,
-                        signUpRequest.org_name,
-                        [user],
-                        undefined,
-                        undefined,
-                        isTag,
-                        isData,
-                    );
-                }
-                return null;
-            };
-
-            const org = await createNewOrg();
-
-            const createAppForUser = async (): Promise<App | null> => {
-                if (isTag) {
-                    if (signUpRequest.domain === undefined) {
-                        throw new ValidationError(userMessages.validationAppDomain, true);
-                    }
-                    if (org === null) {
-                        throw new ValidationError('Cannot find org', userMessages.orgFailed);
-                    }
-                    const tagManagerAccount = await this.repoFactory<TagManagerAccountRepo>(
-                        TagManagerAccount,
-                    ).getFromOrg(org);
-                    // Create Org
-                    if (signUpRequest.org_name === undefined) {
-                        throw new ValidationError(userMessages.validationOrgName, true);
-                    }
-
-                    return createApp(
-                        user,
-                        tagManagerAccount,
-                        signUpRequest.domain,
-                        signUpRequest.domain,
-                        AppType.WEB,
-                        getCommercialStorageProvider(),
-                        await getCommercialStorageProviderConfig(),
-                        true,
-                        true,
-                    );
-                }
-                return null;
-            };
-
-            const app = await createAppForUser();
-
-            await this.mailer.sendEmail(
-                user.email,
-                `Your sign up is complete!`,
-                'SignUpRequestVerified.twig',
-                {
-                    firstName: user.firstName,
-                    password: signUpRequest.password === undefined ? generatedPassword : undefined,
-                    uiUrl: `${await this.config.getUiUrl()}/login`,
-                },
-            );
-
-            await this.repoFactory(SignUpRequest).delete(
-                signUpRequest,
-                'SYSTEM',
-                OperationOwner.SYSTEM,
-            );
-
-            const session = await createSessionFromUser(user);
-
-            if (isInvite) {
-                return {
-                    uid: session.uid,
-                    token: session.token,
-                };
-            } else if (isTag) {
-                if (app === null) {
-                    throw new ValidationError('Cannot find app', userMessages.appFailed);
-                }
-
-                const getEnvironmentId = async () => {
-                    const environments = await this.repoFactory(Environment).find({
-                        _app_id: app.id,
-                    });
-
-                    if (environments.length > 0) {
-                        return environments[0].id.toString();
-                    } else {
-                        throw new ValidationError(
-                            'Cannot find environment',
-                            userMessages.envFailed,
-                        );
-                    }
-                };
-
-                return {
-                    uid: session.uid,
-                    token: session.token,
-                    tag_manager: {
-                        app_id: app.id.toString(),
-                        environment_id: await getEnvironmentId(),
-                    },
-                };
-            } else if (isData) {
-                if (org === null) {
-                    throw new ValidationError('Cannot find org', userMessages.orgFailed);
-                }
-                return {
-                    uid: session.uid,
-                    token: session.token,
-                    data_manager: {
-                        data_manager_account_id: (
-                            await this.repoFactory<DataManagerAccountRepo>(
-                                DataManagerAccount,
-                            ).getFromOrg(org)
-                        ).id.toString(),
-                    },
-                };
-            } else {
-                throw new ValidationError(userMessages.validationInvalidSignUp, true);
-            }
         },
         login: async (parent: any, args: any) => {
             const session = await createSession(args.login.email, args.login.password);

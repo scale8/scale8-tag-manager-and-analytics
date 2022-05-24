@@ -4,6 +4,7 @@ const SignUpQuery = gql`
     mutation SignUp($signUpInput: SignUpInput!) {
         signUp(signUpInput: $signUpInput) {
             email
+            request_token
         }
     }
 `;

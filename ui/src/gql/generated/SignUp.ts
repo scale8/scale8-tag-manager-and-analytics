@@ -14,6 +14,10 @@ export interface SignUp_signUp {
    * The email of the user signing up
    */
   email: string;
+  /**
+   * The request token used to skip email validation (invite)
+   */
+  request_token: string | null;
 }
 
 export interface SignUp {

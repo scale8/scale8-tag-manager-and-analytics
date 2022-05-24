@@ -11,6 +11,11 @@ export default class SignUpRequest extends Model {
     })
     private readonly _token: string;
 
+    @Field<string>({
+        required: false,
+    })
+    private readonly _invite_token?: string;
+
     @Field<SignUpType>({
         required: true,
         exposeToGQLAs: 'sign_up_type',
@@ -65,6 +70,7 @@ export default class SignUpRequest extends Model {
         domain?: string,
         orgName?: string,
         password?: string,
+        inviteToken?: string,
     ) {
         super();
         if (typeof fullName === 'string') {
@@ -105,6 +111,7 @@ export default class SignUpRequest extends Model {
 
         if (signUpType === SignUpType.INVITE) {
             this._org_name = orgName;
+            this._invite_token = inviteToken;
         }
 
         this._token = Hash.simpleRandomHash();
@@ -136,6 +143,10 @@ export default class SignUpRequest extends Model {
 
     get token(): string {
         return this._token;
+    }
+
+    get invite_token(): string | undefined {
+        return this._invite_token;
     }
 
     get password(): string | undefined {
