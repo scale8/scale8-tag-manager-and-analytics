@@ -156,6 +156,7 @@ import Context = interfaces.Context;
 import Factory = interfaces.Factory;
 import AccountService from '../accounts/AccountService';
 import KinesisService from '../aws/KinesisService';
+import SignUpService from '../signup/SignUpService';
 
 const container = new Container();
 
@@ -234,6 +235,7 @@ container.bind<S3Service>(TYPES.S3Service).to(S3Service).inSingletonScope();
 container.bind<KinesisService>(TYPES.KinesisService).to(KinesisService).inSingletonScope();
 container.bind<Route53Service>(TYPES.Route53Service).to(Route53Service).inSingletonScope();
 container.bind<StripeService>(TYPES.StripeService).to(StripeService).inSingletonScope();
+container.bind<SignUpService>(TYPES.SignUpService).to(SignUpService).inSingletonScope();
 container.bind<AccountService>(TYPES.AccountService).to(AccountService).inSingletonScope();
 container.bind<ConsoleLogger>(TYPES.ConsoleLogger).to(ConsoleLogger).inSingletonScope();
 

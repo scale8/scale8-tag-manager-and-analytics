@@ -3,6 +3,7 @@ import { InputType } from '../../common/enums/InputType';
 import { TypeIcon } from '../../common/enums/TypeIcon';
 import { AwsRegion } from './enums/AwsRegion';
 import { JWTInput } from 'google-auth-library/build/src/auth/credentials';
+import SignUpType from './enums/SignUpType';
 
 export interface PlatformEventConfig {
     persistence_id: string;
@@ -72,4 +73,14 @@ export interface MongoDbPushConfig {
     use_api_mongo_server: boolean;
     connection_string: string;
     database_name: string;
+}
+export interface SignupPayload {
+    captchaToken: string;
+    signUpType: SignUpType;
+    fullName: string;
+    domain?: string;
+    orgName?: string;
+    password?: string;
+    requestEmail?: string;
+    inviteToken?: string;
 }

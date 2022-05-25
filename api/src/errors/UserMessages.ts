@@ -18,6 +18,7 @@ const userMessages = {
     conditionFailed: 'Cannot find condition/exception details.',
     environmentFailed: 'Cannot find environment details.',
     inviteFailed: 'Cannot find invite details.',
+    inviteInvalid: 'The invite is no longer valid.',
     userFailed: 'Cannot find user details.',
     notificationFailed: 'Cannot find notification details.',
     ruleGroupFailed: 'Cannot find rule group details.',
