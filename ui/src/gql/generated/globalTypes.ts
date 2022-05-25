@@ -563,6 +563,7 @@ export interface AppQueryFilterOptions {
   page?: string | null;
   mobile?: boolean | null;
   browser?: string | null;
+  browser_version?: string | null;
   screen_size?: string | null;
   os?: string | null;
   event?: string | null;

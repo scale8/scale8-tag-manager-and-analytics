@@ -11,6 +11,8 @@ import { AppOperatingSystemsQueryData } from '../../gql/generated/AppOperatingSy
 import { getEventLabel } from '../../utils/AnalyticsUtils';
 import { AppScreenSizesQueryData } from '../../gql/generated/AppScreenSizesQueryData';
 import AppScreenSizesQuery from '../../gql/queries/AppScreenSizesQuery';
+import AppBrowserVersionsQuery from '../../gql/queries/AppBrowserVersionsQuery';
+import { AppBrowserVersionsQueryData } from '../../gql/generated/AppBrowserVersionsQueryData';
 
 const AppAnalyticsDevices: FC<AppAnalyticsContentProps> = (props: AppAnalyticsContentProps) => {
     const { appQueryOptions, id, refreshAt } = props;
@@ -71,6 +73,41 @@ const AppAnalyticsDevices: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCo
                             props.setFilter('browser', value);
                         },
                         lazyQuery: useLazyQuery(AppBrowsersQuery),
+                        lazyQueryVariables: queryOptions,
+                        refreshAt,
+                        forErrors: false,
+                    },
+                },
+                {
+                    title: 'Browser Versions',
+                    listProps: {
+                        textTitle: 'Browser Version',
+                        eventLabel: getEventLabel(appQueryOptions),
+                        extractList: (queryData: AppBrowserVersionsQueryData) => {
+                            return queryData.getApp.browser_version_stats.result;
+                        },
+                        compositeValueToLabel: (
+                            value: {
+                                field: string;
+                                value: string;
+                            }[],
+                        ) => {
+                            return value.map((_) => _.value).join(' - Version ');
+                        },
+                        addCompositeFilter: (value) => {
+                            const browserValue = value.find((_) => _.field === 'browser_name');
+                            const browserVersionValue = value.find(
+                                (_) => _.field === 'browser_version',
+                            );
+                            if (browserValue && browserVersionValue) {
+                                props.setFilters((filters) => ({
+                                    ...filters,
+                                    browser: browserValue.value,
+                                    browser_version: browserVersionValue.value,
+                                }));
+                            }
+                        },
+                        lazyQuery: useLazyQuery(AppBrowserVersionsQuery),
                         lazyQueryVariables: queryOptions,
                         refreshAt,
                         forErrors: false,
