@@ -46,10 +46,19 @@ export const useFilters = (
     }, [filters]);
 
     const setFilter = (key: string, value: string | boolean | undefined) => {
-        setFilters({
-            ...filters,
-            [key]: value,
-        });
+        // browser_version depends on browser, unset it if required
+        if (key === 'browser' && value === undefined) {
+            setFilters({
+                ...filters,
+                browser: undefined,
+                browser_version: undefined,
+            });
+        } else {
+            setFilters({
+                ...filters,
+                [key]: value,
+            });
+        }
     };
 
     return {

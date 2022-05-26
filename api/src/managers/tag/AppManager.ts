@@ -76,10 +76,36 @@ export default class AppManager extends Manager<App> {
         """
         @type
         """
+        type AppGroupingKeys {
+            field: String!
+            value: String!
+        }
+
+        """
+        @type
+        """
+        type AppGroupingCompKeysCount {
+            key: [AppGroupingKeys!]!
+            user_count: Int!
+            event_count: Int!
+        }
+
+        """
+        @type
+        """
         type AppGroupingCountsResponse {
             from: DateTime!
             to: DateTime!
             result: [AppGroupingCount!]!
+        }
+
+        """
+        @type
+        """
+        type AppGroupingCompKeysCountsResponse {
+            from: DateTime!
+            to: DateTime!
+            result: [AppGroupingCompKeysCount!]!
         }
 
         """
@@ -123,6 +149,7 @@ export default class AppManager extends Manager<App> {
             page: String
             mobile: Boolean
             browser: String
+            browser_version: String
             screen_size: String
             os: String
             event: String
@@ -248,6 +275,12 @@ export default class AppManager extends Manager<App> {
             Browsers
             """
             browser_stats(query_options: AppQueryOptions!): AppGroupingCountsResponse!
+            """
+            Browsers Versions
+            """
+            browser_version_stats(
+                query_options: AppQueryOptions!
+            ): AppGroupingCompKeysCountsResponse!
             """
             Screen Sizes
             """
@@ -620,6 +653,18 @@ export default class AppManager extends Manager<App> {
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
                     this.backendDatabaseFactory(app.storageProvider).browsers(
+                        app,
+                        args.query_options,
+                    ),
+                );
+            },
+            browser_version_stats: async (parent: any, args: any, ctx: CTX) => {
+                const app = await this.repoFactory(App).findByIdThrows(
+                    new ObjectId(parent.id),
+                    userMessages.appFailed,
+                );
+                return await this.orgAuth.asUserWithViewAccess(ctx, app.orgId, async () =>
+                    this.backendDatabaseFactory(app.storageProvider).browserVersions(
                         app,
                         args.query_options,
                     ),

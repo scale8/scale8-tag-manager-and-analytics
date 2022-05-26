@@ -2,11 +2,29 @@ import { FC } from 'react';
 import { Box } from '@mui/material';
 import { DashboardListProps } from '../../lazyComponents/abstractions/AppDashboardList';
 import { CircularProgressWithLabel } from '../atoms/CircularProgressWithLabel';
-import { AppGroupingCount } from '../../utils/AnalyticsUtils';
+import { AppGroupingCompKeysCount, AppGroupingCount } from '../../utils/AnalyticsUtils';
 
 export const AppDashboardListContent: FC<
-    DashboardListProps & { list: AppGroupingCount[]; total: number }
+    DashboardListProps & { list: (AppGroupingCount | AppGroupingCompKeysCount)[]; total: number }
 > = ({ list, total, ...props }) => {
+    const convertKey = (
+        key:
+            | string
+            | {
+                  field: string;
+                  value: string;
+              }[],
+    ) => {
+        if (Array.isArray(key)) {
+            if (props.compositeValueToLabel !== undefined) {
+                return props.compositeValueToLabel(key);
+            }
+            return JSON.stringify(key);
+        } else {
+            return key;
+        }
+    };
+
     return (
         <Box width="100%">
             <Box display="flex" alignItems="center" mb={1}>
@@ -23,18 +41,20 @@ export const AppDashboardListContent: FC<
 
             {list.map((_) => {
                 const hasFilterLink =
-                    props.addFilter !== undefined &&
+                    (props.addFilter !== undefined || props.addCompositeFilter !== undefined) &&
                     (props.allowFilterOnSingleEntity || list.length > 1);
 
                 const addFilter = () => {
                     if (props.addFilter !== undefined) {
-                        props.addFilter(_.key);
+                        props.addFilter(convertKey(_.key));
+                    } else if (props.addCompositeFilter !== undefined && Array.isArray(_.key)) {
+                        props.addCompositeFilter(_.key);
                     }
                 };
 
                 return (
-                    <Box key={_.key} display="flex" alignItems="center">
-                        {props.useSourceIcon && (
+                    <Box key={convertKey(_.key)} display="flex" alignItems="center">
+                        {props.useSourceIcon && !Array.isArray(_.key) && (
                             <Box
                                 component="img"
                                 src={`https://icons.duckduckgo.com/ip3/${_.key}.ico`}
@@ -70,7 +90,7 @@ export const AppDashboardListContent: FC<
                                 }
                                 onClick={hasFilterLink ? addFilter : undefined}
                             >
-                                {_.key}
+                                {convertKey(_.key)}
                             </Box>
                         </Box>
                         <Box width={100} mx={1} flexShrink={0} textAlign="right">

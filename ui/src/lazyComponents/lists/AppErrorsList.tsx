@@ -72,6 +72,7 @@ const AppErrorsList: FC<AppErrorContentProps> = (props: AppErrorContentProps) =>
                         list={list}
                         totalErrors={totalErrors}
                         setFilter={props.setFilter}
+                        setFilters={props.setFilters}
                     />
                 </AppErrorsListContainer>
             );
