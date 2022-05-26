@@ -6,6 +6,8 @@ import {
     addMinutesUTC,
     addMonthsUTC,
     differenceDaysUTC,
+    differenceHoursUTC,
+    differenceMinutesUTC,
     displayDayDetails,
     displayFullMonth,
     displayHourDetails,
@@ -19,6 +21,7 @@ import {
     stringToUTCTimestamp,
     subDaysUTC,
     subMonthsUTC,
+    timestampDisplay,
     UTCNow,
     UTCTimestamp,
 } from '../../utils/DateTimeUtils';
@@ -137,19 +140,19 @@ export const datesFromChartPeriod = (
 ): UTCTimestamp[] => {
     switch (period) {
         case 'day':
-            return Array(24)
+            return Array(differenceHoursUTC(to, from) + 1)
                 .fill(from)
                 .map((_, i) => addHoursUTC(_, i));
         case 'realtime':
-            return Array(31)
+            return Array(differenceMinutesUTC(to, from) + 1)
                 .fill(from)
-                .map((_, i) => addMinutesUTC(_, i + 1));
+                .map((_, i) => addMinutesUTC(_, i));
         case '7d':
-            return Array(7)
+            return Array(differenceDaysUTC(to, from) + 1)
                 .fill(from)
                 .map((_, i) => addDaysUTC(_, i));
         case '30d':
-            return Array(30)
+            return Array(differenceDaysUTC(to, from) + 1)
                 .fill(from)
                 .map((_, i) => addDaysUTC(_, i));
         case 'month':

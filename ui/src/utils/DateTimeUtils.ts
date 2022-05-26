@@ -4,6 +4,8 @@ import {
     addMinutes,
     addMonths,
     differenceInCalendarDays,
+    differenceInHours,
+    differenceInMinutes,
     getDaysInMonth,
     isSameMinute,
     isToday,
@@ -190,6 +192,12 @@ export const getDaysInMonthFromTimestamp = (value: UTCTimestamp): UTCTimestamp =
 
 export const differenceDaysUTC = (left: UTCTimestamp, right: UTCTimestamp): number =>
     differenceInCalendarDays(new Date(left), new Date(right));
+
+export const differenceMinutesUTC = (left: UTCTimestamp, right: UTCTimestamp): number =>
+    differenceInMinutes(new Date(left), new Date(right));
+
+export const differenceHoursUTC = (left: UTCTimestamp, right: UTCTimestamp): number =>
+    differenceInHours(new Date(left), new Date(right));
 
 export const getMinutesUTC = (value: UTCTimestamp): UTCTimestamp => {
     const elements = dateToUTCElements(new Date(value));
