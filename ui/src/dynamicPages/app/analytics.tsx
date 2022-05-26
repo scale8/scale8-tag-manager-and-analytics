@@ -85,6 +85,7 @@ const AppAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
         <AppAnalyticsPageTagCheck
             chartPeriodProps={chartPeriodProps}
             setFilter={setFilter}
+            setFilters={setFilters}
             setEventGroup={setEventGroup}
             referrerTLD={filters.referrer_tld ?? undefined}
             appQueryOptions={queryOptions}

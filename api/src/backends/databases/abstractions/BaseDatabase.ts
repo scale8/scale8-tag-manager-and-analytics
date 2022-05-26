@@ -35,6 +35,7 @@ export interface AppQueryOptions extends BaseQueryOptions {
         page?: string;
         mobile?: boolean;
         browser?: string;
+        browser_version?: string;
         screen_size?: string;
         os?: string;
         event?: string;
@@ -220,6 +221,19 @@ export default abstract class BaseDatabase {
         queryOptions: AppQueryOptions,
     ): Promise<{
         result: { key: string; user_count: number; event_count: number }[];
+        from: Date;
+        to: Date;
+    }>;
+
+    public abstract browserVersions(
+        app: App,
+        queryOptions: AppQueryOptions,
+    ): Promise<{
+        result: {
+            key: { field: string; value: string }[];
+            user_count: number;
+            event_count: number;
+        }[];
         from: Date;
         to: Date;
     }>;

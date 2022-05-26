@@ -1,13 +1,15 @@
-import { FC } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import { Box, Table, TableBody, TableCell, TableHead, TableRow, Tooltip } from '@mui/material';
 import { AnchorLinkIcon } from '../atoms/AnchorLinkIcon';
 import { CircularProgressWithLabel } from '../atoms/CircularProgressWithLabel';
 import { AppError } from '../../lazyComponents/lists/AppErrorsList';
+import { AppQueryFilters } from '../../types/props/AppAnalyticsContentProps';
 
 type AppErrorListTableProps = {
     list: AppError[];
     totalErrors: number;
     setFilter: (key: string, value: string | boolean | undefined) => void;
+    setFilters: Dispatch<SetStateAction<AppQueryFilters>>;
 };
 
 export const AppErrorListTable: FC<AppErrorListTableProps> = ({ list, totalErrors, setFilter }) => {

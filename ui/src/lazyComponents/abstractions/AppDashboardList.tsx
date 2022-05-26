@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { QueryTuple } from '@apollo/client/react/types/types';
 import { OperationVariables } from '@apollo/client/core';
 import { LazyQueryLoaderAndError } from '../../abstractions/LazyQueryLoaderAndError';
-import { AppGroupingCount } from '../../utils/AnalyticsUtils';
+import { AppGroupingCompKeysCount, AppGroupingCount } from '../../utils/AnalyticsUtils';
 import { UTCTimestamp } from '../../utils/DateTimeUtils';
 import { NoRecordsMessage } from '../../components/atoms/NoRecordsMessage';
 import { AppDashboardListContent } from '../../components/organisms/AppDashboardListContent';
@@ -18,8 +18,20 @@ export type DashboardListProps = {
     lazyQuery: QueryTuple<any, any>;
     eventLabel: string;
     lazyQueryVariables: OperationVariables;
-    extractList: (queryData: any) => AppGroupingCount[];
+    extractList: (queryData: any) => (AppGroupingCount | AppGroupingCompKeysCount)[];
+    compositeValueToLabel?: (
+        value: {
+            field: string;
+            value: string;
+        }[],
+    ) => string;
     addFilter?: (value: string) => void;
+    addCompositeFilter?: (
+        value: {
+            field: string;
+            value: string;
+        }[],
+    ) => void;
     useSourceIcon?: boolean;
     allowFilterOnSingleEntity?: boolean;
     refreshAt: UTCTimestamp | undefined;
