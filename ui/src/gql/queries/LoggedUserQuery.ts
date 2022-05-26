@@ -35,6 +35,8 @@ const LoggedUserQuery = gql`
             use_github_sso
             use_two_factor_auth
             is_audit_enabled
+            stripe_publishable
+            captcha_publishable
             consent_purposes {
                 id
                 name

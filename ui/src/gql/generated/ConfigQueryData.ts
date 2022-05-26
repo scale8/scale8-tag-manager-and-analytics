@@ -84,6 +84,14 @@ export interface ConfigQueryData_config {
    */
   is_audit_enabled: boolean | null;
   /**
+   * Stripe Publishable Key
+   */
+  stripe_publishable: string | null;
+  /**
+   * Captcha Publishable Key
+   */
+  captcha_publishable: string | null;
+  /**
    * A list of consent purposes
    */
   consent_purposes: ConfigQueryData_config_consent_purposes[];

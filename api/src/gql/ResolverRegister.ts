@@ -227,6 +227,12 @@ export default class ResolverRegister {
                     use_github_sso: await this.config.gitHubSsoEnabled(),
                     use_email: await this.config.emailServerEnabled(),
                     is_audit_enabled: await this.config.isAuditEnabled(),
+                    stripe_publishable: this.config.isCommercial()
+                        ? await this.config.getStripePublishableKey()
+                        : null,
+                    captcha_publishable: this.config.isCommercial()
+                        ? await this.config.getCaptchaPublishable()
+                        : null,
                     is_dev: this.config.isDevelopment(),
                 };
             },

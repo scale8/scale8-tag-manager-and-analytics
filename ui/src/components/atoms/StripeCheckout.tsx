@@ -2,8 +2,7 @@ import { FC } from 'react';
 import { loadStripe } from '@stripe/stripe-js/pure';
 import { Elements, useStripe } from '@stripe/react-stripe-js';
 import { ApolloError } from '@apollo/client/errors';
-import { getStripeKey } from '../../utils/ConfigUtils';
-import { useLoggedInState } from '../../context/AppContext';
+import { useConfigState, useLoggedInState } from '../../context/AppContext';
 
 const SubscriptionStripe: FC<{ session: string }> = (props: { session: string }) => {
     const { templateInteractions } = useLoggedInState();
@@ -29,8 +28,9 @@ const SubscriptionStripe: FC<{ session: string }> = (props: { session: string })
 
 const StripeCheckout: FC<{ session: string }> = (props: { session: string }) => {
     const { session } = props;
+    const { stripePublishable } = useConfigState();
 
-    const stripePromise = loadStripe(getStripeKey());
+    const stripePromise = loadStripe(stripePublishable);
     return (
         <Elements stripe={stripePromise}>
             <SubscriptionStripe session={session} />

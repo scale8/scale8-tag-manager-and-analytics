@@ -1,6 +1,6 @@
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { FC, RefObject } from 'react';
-import { getCaptchaKey } from '../../utils/ConfigUtils';
+import { useConfigState } from '../../context/AppContext';
 
 type CaptchaProps = {
     captcha: RefObject<HCaptcha>;
@@ -8,10 +8,12 @@ type CaptchaProps = {
 };
 
 const Captcha: FC<CaptchaProps> = (props: CaptchaProps) => {
+    const { captchaPublishable } = useConfigState();
+
     return (
         <HCaptcha
             ref={props.captcha}
-            sitekey={getCaptchaKey()}
+            sitekey={captchaPublishable}
             onVerify={(token) => props.setCaptchaToken(token)}
         />
     );

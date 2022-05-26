@@ -258,6 +258,10 @@ export default abstract class BaseConfig {
         return (await this.getConfigEntryOrElse('CAPTCHA_ENABLED', 'true')) === 'true';
     }
 
+    public async getCaptchaPublishable(): Promise<string> {
+        return await this.getConfigEntryThrows('CAPTCHA_PUBLISHABLE');
+    }
+
     public async getCaptchaSecret(): Promise<string> {
         return await this.getConfigEntryThrows('CAPTCHA_SECRET');
     }
@@ -268,6 +272,10 @@ export default abstract class BaseConfig {
 
     public async getAirbrakeKey(): Promise<string> {
         return await this.getConfigEntryThrows('AIRBRAKE_KEY');
+    }
+
+    public async getStripePublishableKey(): Promise<string> {
+        return await this.getConfigEntryThrows('STRIPE_PUBLISHABLE_KEY');
     }
 
     public async getStripeSecretKey(): Promise<string> {
