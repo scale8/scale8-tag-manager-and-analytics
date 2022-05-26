@@ -14,6 +14,15 @@ export type AppGroupingCount = {
     event_count: number;
 };
 
+export type AppGroupingCompKeysCount = {
+    key: {
+        field: string;
+        value: string;
+    }[];
+    user_count: number;
+    event_count: number;
+};
+
 export type EntityWithAnalytics = {
     analytics_enabled: boolean;
     storage_provider: StorageProvider;
