@@ -92,7 +92,7 @@ const AppAnalyticsDevices: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCo
                                 value: string;
                             }[],
                         ) => {
-                            return value.map((_) => _.value).join(' - Version ');
+                            return value.map((_) => _.value).join(' - ');
                         },
                         addCompositeFilter: (value) => {
                             const browserValue = value.find((_) => _.field === 'browser_name');
