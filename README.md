@@ -21,8 +21,6 @@
 
 > :eyes: \*MIT License is applied to **Platforms** to enable network distribution. The rest of the project remains under AGPL v3.
 
-> :warning: &nbsp;**Pre-launch**: We're currently in the final stage of testing before publishing the first stable release. :rocket:
-
 A simple, yet powerful [Google Tag Manager alternative](https://scale8.com/tag-manager/) that is fully open-sourced and privacy-friendly.
 Our in-built [Google Analytics alternative](https://scale8.com) doesn't use any cookies and is fully GDPR, CCPA and PECR compliant.
 We've made it quick and easy to try a demo or simply host it yourself in production. We'll also be offering a cloud hosted version in the near future.
@@ -181,18 +179,7 @@ There is a plan to potentially re-introduce this later and should anyone require
 All of our [documentation](https://scale8.github.io/docs) is designed for the cloud version of the product, however we'll be adding more detailed documentation for the self-hosted version soon.
 We've hidden away some features such as payment processing and SSL termination for custom domains that are not relevant to the self-hosted version.
 
-The entire UI is powered by [GraphQL](https://graphql.org/) using Apollo and the [API documentation](https://scale8.github.io/api-docs) is automatically generated and easily navigated. 
-
-## Roadmap - 2021 Q4 / 2022 Q1.
-
-- [X] **Open-source project**: Provide a fully open-sourced version of the platform.
-- [X] **Error tracking**: Introduce error tracking for web applications directly into your existing analytics. If the Tag Manager is on the page, and an error is detected, we'll automatically log it for you.
-- [ ] **Analytics backends**: New backends to support Clickhouse and Redshift.
-- [ ] **Prebid & Google Ads (DFP) Support**: We know that some publishers will need to run ads. Our goal here is to enable full support for [Prebid](https://prebid.org/) and Google Ads, providing a simple setup of tags for publishers.
-- [ ] **Shopify**: A new custom platform, built by us to support anyone using the Shopify platform.
-- [ ] **Code refactor & test coverage**: As we push for a 0.1.0 build, we are aiming for complete test coverage and also a refactor of some business logic too.
-- [ ] **Cloud version**: Offering a few additional features, instant setup and fully hosted by us.
-- [ ] **Server-to-Server support**: Ability to execute code server-side and reduce latency on the client whilst gaining access to more features (e.g run jobs in parallel). We've already built this for the cloud version, but we need to move logic to the new Edge server.
+The entire UI is powered by [GraphQL](https://graphql.org/) using Apollo and the [API documentation](https://scale8.github.io/api-docs) is automatically generated and easily navigated.
 
 ## Support us!
 
