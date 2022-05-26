@@ -198,7 +198,7 @@ export default class MongoDb extends BaseDatabase {
             MongoDb.getFilterObjectFromStringFilterOption(
                 queryOptions,
                 'referrer_tld',
-                'referrer_url',
+                'referrer_tld',
             );
         const getPage = () =>
             MongoDb.getFilterObjectFromStringFilterOption(queryOptions, 'page', 'page_url');
