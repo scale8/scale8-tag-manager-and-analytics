@@ -143,7 +143,7 @@ export const datesFromChartPeriod = (
         case 'realtime':
             return Array(31)
                 .fill(from)
-                .map((_, i) => addMinutesUTC(_, i));
+                .map((_, i) => addMinutesUTC(_, i + 1));
         case '7d':
             return Array(7)
                 .fill(from)
