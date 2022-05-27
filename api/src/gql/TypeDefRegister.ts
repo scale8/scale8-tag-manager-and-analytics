@@ -811,6 +811,14 @@ export default class TypeDefRegister {
                 """
                 is_audit_enabled: Boolean
                 """
+                Stripe Publishable Key
+                """
+                stripe_publishable: String
+                """
+                Captcha Publishable Key
+                """
+                captcha_publishable: String
+                """
                 The backend started in developer mode
                 """
                 is_dev: Boolean

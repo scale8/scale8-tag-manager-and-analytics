@@ -9,6 +9,8 @@ export type ConfigState = {
     useGithubSSO: boolean;
     useTwoFactorAuth: boolean;
     isAuditEnabled: boolean;
+    stripePublishable: string;
+    captchaPublishable: string;
     isConfigured: boolean;
     isDev: boolean;
     consentPurposes: { id: number; name: string }[];
@@ -26,6 +28,8 @@ export const configInitialState = {
     isAuditEnabled: false,
     isConfigured: false,
     isDev: false,
+    stripePublishable: '',
+    captchaPublishable: '',
     consentPurposes: [],
     consentVendors: [],
     tagManagerProducts: [],
@@ -39,6 +43,8 @@ export const configStateFromData = (data?: ConfigQueryData): ConfigState => ({
     useGithubSSO: data?.config.use_github_sso ?? false,
     useTwoFactorAuth: data?.config.use_two_factor_auth ?? false,
     isAuditEnabled: data?.config.is_audit_enabled ?? false,
+    stripePublishable: data?.config.stripe_publishable ?? '',
+    captchaPublishable: data?.config.captcha_publishable ?? '',
     isConfigured: data?.config.is_configured ?? false,
     isDev: data?.config.is_dev ?? false,
     consentPurposes: data?.config.consent_purposes ?? [],
