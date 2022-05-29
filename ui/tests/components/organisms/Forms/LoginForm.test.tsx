@@ -5,12 +5,24 @@ import { FC } from 'react';
 import { useMockFormProps } from '../../../componentsMocks/useMockFormProps';
 import LoginForm from '../../../../src/components/organisms/Forms/LoginForm';
 import { LoginValues } from '../../../../src/types/props/forms/LoginFormProps';
-import * as nextRouter from 'next/router';
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-nextRouter.useRouter = jest.fn();
-(nextRouter.useRouter as jest.Mock).mockImplementation(() => ({ route: '/' }));
+jest.mock('next/router', () => ({
+    useRouter() {
+        return {
+            route: '/',
+            pathname: '',
+            query: '',
+            asPath: '',
+            push: jest.fn(),
+            events: {
+                on: jest.fn(),
+                off: jest.fn(),
+            },
+            beforePopState: jest.fn(() => null),
+            prefetch: jest.fn(() => null),
+        };
+    },
+}));
 
 const MockForm: FC = () => {
     const formProps = useMockFormProps<LoginValues>({
