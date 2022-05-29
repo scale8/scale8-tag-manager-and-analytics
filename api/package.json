@@ -4,7 +4,7 @@
     "description": "The api behind Scale 8 services",
     "license": "AGPL-3.0",
     "engines": {
-        "node": "14.18"
+        "node": "14"
     },
     "scripts": {
         "clean": "rimraf coverage dist tmp logs test_emails",

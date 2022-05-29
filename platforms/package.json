@@ -9,7 +9,7 @@
     },
     "license": "AGPL-3.0",
     "engines": {
-        "node": "14.18"
+        "node": "14"
     },
     "devDependencies": {
         "@typescript-eslint/eslint-plugin": "^5.3.1",
@@ -49,7 +49,14 @@
         "webpack": "^4.43.0",
         "webpack-cli": "^4.2.0",
         "webpack-dev-middleware": "^3.7.2",
-        "write-file-webpack-plugin": "^4.5.1"
+        "write-file-webpack-plugin": "^4.5.1",
+        "tmpl": "^1.0.5",
+        "minimist": "^1.2.6",
+        "ansi-regex": "5.0.1",
+        "moment": "^2.29.3",
+        "node-fetch": "^3.2.4",
+        "json-schema": "^0.4.0",
+        "nth-check": "^2.1.1"
     },
     "dependencies": {
         "@scale8/s8-interpreter": "^0.3.2",
