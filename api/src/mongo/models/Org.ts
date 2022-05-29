@@ -3,8 +3,11 @@ import Field from '../decorators/Field';
 import TimeZones from '../../core/TimeZones';
 import { ObjectId } from 'mongodb';
 import User from './User';
+import DatabaseError from '../../errors/DatabaseError';
 
 export default class Org extends Model {
+    protected readonly RESERVED_ORG_NAME = 'Scale8';
+
     public getOrgEntityId(): ObjectId {
         return this.id;
     }
@@ -51,6 +54,9 @@ export default class Org extends Model {
         if (orgOwnerUser !== undefined) {
             this._org_owner_user_id = orgOwnerUser.id;
         }
+        if (name === this.RESERVED_ORG_NAME && !orgOwnerUser.isAdmin) {
+            throw new DatabaseError('Protected org name used');
+        }
         this._name = name;
         this._tz = tz;
         this._manual_invoicing = manualInvoicing;
@@ -65,7 +71,11 @@ export default class Org extends Model {
     }
 
     set name(value: string) {
-        this._name = value;
+        if (value === this.RESERVED_ORG_NAME) {
+            throw new DatabaseError('Protected org name used');
+        } else {
+            this._name = value;
+        }
     }
 
     get tz(): string {
