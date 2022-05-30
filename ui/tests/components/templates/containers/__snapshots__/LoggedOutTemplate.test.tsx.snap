@@ -12,7 +12,7 @@ exports[`LoggedOutTemplate renders LoggedOutTemplate unchanged 1`] = `
         class="MuiContainer-root MuiContainer-maxWidthLg MuiContainer-disableGutters css-1p4tas-MuiContainer-root"
       >
         <div
-          class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-1wxq31f-MuiToolbar-root"
+          class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-rjyizo-MuiToolbar-root"
         >
           <div
             class="MuiBox-root css-1mbqzx0"
@@ -79,7 +79,7 @@ exports[`LoggedOutTemplate renders LoggedOutTemplate unchanged 1`] = `
               />
             </svg>
             <a
-              class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-1xwna19-MuiTypography-root-MuiLink-root"
+              class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-wvco2h-MuiTypography-root-MuiLink-root"
               href="https://scale8.com/"
             >
               Scale8

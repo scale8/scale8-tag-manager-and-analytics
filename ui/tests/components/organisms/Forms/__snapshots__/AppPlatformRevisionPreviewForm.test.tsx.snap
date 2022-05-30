@@ -63,7 +63,7 @@ exports[`AppPlatformRevisionForm form render unchanged 1`] = `
             class="MuiBox-root css-wpygli"
           >
             <button
-              class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root css-xcbv7o-MuiButtonBase-root-MuiButton-root"
+              class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root  css-xcbv7o-MuiButtonBase-root-MuiButton-root"
               tabindex="0"
               type="submit"
             >

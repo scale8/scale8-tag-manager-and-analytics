@@ -66,7 +66,7 @@ exports[`ActionForm form render unchanged 1`] = `
               </span>
             </label>
             <div
-              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary Mui-error MuiInputBase-formControl MuiSelect-root css-1ejkwvn-MuiInputBase-root-MuiInput-root"
+              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary Mui-error MuiInputBase-formControl  css-foxv06-MuiInputBase-root-MuiInput-root-MuiSelect-root"
             >
               <div
                 aria-expanded="false"
@@ -118,6 +118,8 @@ exports[`ActionForm form render unchanged 1`] = `
             <label
               class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-ip4mx2-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink="false"
+              for="mui-1"
+              id="mui-1-label"
             >
               Comments
             </label>
@@ -128,6 +130,7 @@ exports[`ActionForm form render unchanged 1`] = `
                 aria-invalid="false"
                 autocomplete="off"
                 class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputMultiline css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input"
+                id="mui-1"
                 name="comments"
                 style="height: 0px; overflow: hidden;"
               />
@@ -143,7 +146,7 @@ exports[`ActionForm form render unchanged 1`] = `
                 class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
               >
                 <legend
-                  class="css-dhh0px"
+                  class="css-1ftyaf0"
                 >
                   <span>
                     Comments
@@ -156,7 +159,7 @@ exports[`ActionForm form render unchanged 1`] = `
             class="MuiBox-root css-wpygli"
           >
             <button
-              class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled css-xcbv7o-MuiButtonBase-root-MuiButton-root"
+              class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled  css-xcbv7o-MuiButtonBase-root-MuiButton-root"
               disabled=""
               tabindex="-1"
               type="submit"

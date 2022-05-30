@@ -158,7 +158,7 @@ exports[`LoggedInTemplate renders LoggedInTemplate unchanged 1`] = `
             type="button"
           >
             <span
-              class="MuiBadge-root css-1c32n2y-MuiBadge-root"
+              class="BaseBadge-root MuiBadge-root css-1c32n2y-MuiBadge-root"
             >
               <svg
                 aria-hidden="true"
@@ -172,7 +172,7 @@ exports[`LoggedInTemplate renders LoggedInTemplate unchanged 1`] = `
                 />
               </svg>
               <span
-                class="MuiBadge-colorSecondary MuiBadge-badge MuiBadge-standard MuiBadge-anchorOriginTopRightRectangular css-1n4jbui-MuiBadge-badge"
+                class="BaseBadge-badge MuiBadge-badge MuiBadge-standard MuiBadge-anchorOriginTopRight MuiBadge-anchorOriginTopRightRectangular MuiBadge-overlapRectangular MuiBadge-colorSecondary css-1n4jbui-MuiBadge-badge"
               >
                 5
               </span>

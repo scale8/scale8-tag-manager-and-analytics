@@ -56,6 +56,8 @@ exports[`OrgForm form render unchanged 1`] = `
             <label
               class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-focused Mui-required css-1oyovms-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink="true"
+              for="mui-1"
+              id="mui-1-label"
             >
               Name
               <span
@@ -66,12 +68,13 @@ exports[`OrgForm form render unchanged 1`] = `
               </span>
             </label>
             <div
-              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary Mui-focused MuiInputBase-formControl MuiInputBase-adornedEnd css-1ejkwvn-MuiInputBase-root-MuiInput-root"
+              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary Mui-focused MuiInputBase-formControl MuiInputBase-adornedEnd css-1v2pam7-MuiInputBase-root-MuiInput-root"
             >
               <input
                 aria-invalid="false"
                 autocomplete="off"
                 class="MuiInput-input MuiInputBase-input MuiInputBase-inputAdornedEnd css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                id="mui-1"
                 name="name"
                 required=""
                 type="text"
@@ -108,7 +111,7 @@ exports[`OrgForm form render unchanged 1`] = `
             class="MuiBox-root css-wpygli"
           >
             <button
-              class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root css-xcbv7o-MuiButtonBase-root-MuiButton-root"
+              class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root  css-xcbv7o-MuiButtonBase-root-MuiButton-root"
               tabindex="0"
               type="submit"
             >

@@ -12,10 +12,10 @@ exports[`TwoFactorEnableForm form render unchanged 1`] = `
         class="MuiDialogContent-root css-5o4y7a-MuiDialogContent-root"
       >
         <div
-          class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-undefined css-11lq3yg-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-container css-11lq3yg-MuiGrid-root"
         >
           <div
-            class="MuiGrid-root MuiGrid-item MuiGrid-grid-sm-true css-eoqe4v-MuiGrid-root"
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-sm-true css-1vknvy4-MuiGrid-root"
           >
             <div
               class="MuiBox-root css-1isemmb"
@@ -32,8 +32,10 @@ exports[`TwoFactorEnableForm form render unchanged 1`] = `
                   class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root DialogFormField css-wb57ya-MuiFormControl-root-MuiTextField-root"
                 >
                   <label
-                    class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary Mui-focused Mui-required css-14a706p-MuiFormLabel-root-MuiInputLabel-root"
+                    class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary Mui-focused Mui-required css-f46b9c-MuiFormLabel-root-MuiInputLabel-root"
                     data-shrink="true"
+                    for="mui-1"
+                    id="mui-1-label"
                   >
                     Code
                     <span
@@ -50,6 +52,7 @@ exports[`TwoFactorEnableForm form render unchanged 1`] = `
                       aria-invalid="false"
                       autocomplete="off"
                       class="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+                      id="mui-1"
                       name="code"
                       required=""
                       type="text"
@@ -60,7 +63,7 @@ exports[`TwoFactorEnableForm form render unchanged 1`] = `
                       class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
                     >
                       <legend
-                        class="css-186xcr5"
+                        class="css-1in441m"
                       >
                         <span>
                           Code *
@@ -73,7 +76,7 @@ exports[`TwoFactorEnableForm form render unchanged 1`] = `
             </div>
           </div>
           <div
-            class="MuiGrid-root MuiGrid-item MuiGrid-grid-sm-true css-eoqe4v-MuiGrid-root"
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-sm-true css-1vknvy4-MuiGrid-root"
           >
             <div
               class="MuiBox-root css-1e9m84g"
@@ -99,7 +102,7 @@ exports[`TwoFactorEnableForm form render unchanged 1`] = `
         class="MuiDialogActions-root MuiDialogActions-spacing css-snbeu5-MuiDialogActions-root"
       >
         <button
-          class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root css-7kx4b6-MuiButtonBase-root-MuiButton-root"
+          class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root  css-7kx4b6-MuiButtonBase-root-MuiButton-root"
           tabindex="0"
           type="button"
         >
