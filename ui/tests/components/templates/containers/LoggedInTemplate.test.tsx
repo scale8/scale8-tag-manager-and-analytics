@@ -1,13 +1,25 @@
-import * as nextRouter from 'next/router';
 import LoggedInTemplate from '../../../../src/components/templates/containers/LoggedInTemplate';
 import theme from '../../../../src/theme';
 import { ThemeProvider } from '@mui/material';
 import { render } from '@testing-library/react';
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-nextRouter.useRouter = jest.fn();
-(nextRouter.useRouter as jest.Mock).mockImplementation(() => ({ route: '/' }));
+jest.mock('next/router', () => ({
+    useRouter() {
+        return {
+            route: '/',
+            pathname: '',
+            query: '',
+            asPath: '',
+            push: jest.fn(),
+            events: {
+                on: jest.fn(),
+                off: jest.fn(),
+            },
+            beforePopState: jest.fn(() => null),
+            prefetch: jest.fn(() => null),
+        };
+    },
+}));
 
 describe('LoggedInTemplate', () => {
     afterEach(() => {

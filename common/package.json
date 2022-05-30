@@ -4,7 +4,7 @@
     "description": "Shared conde for Scale 8 services",
     "license": "AGPL-3.0",
     "engines": {
-        "node": "14.18"
+        "node": "14"
     },
     "scripts": {
         "lint": "eslint . --ext .ts",
