@@ -19,6 +19,7 @@ import { logError } from '../utils/logUtils';
 import { ComponentWithParams, ParamsLoader } from '../components/atoms/ParamsLoader';
 import { clearAuthSession } from '../utils/authUtils';
 import { SignUpUrlType } from '../types/props/SignUpTypes';
+import LoggedOutSectionWithConfig from '../containers/global/LoggedOutSectionWithConfig';
 
 type SignUpContentProps = {
     type?: string;
@@ -182,14 +183,14 @@ const SignUp: ComponentWithParams = ({ params }) => {
                 <title>Scale8 - Sign Up</title>
                 <meta name="description" content="Scale8 - Sign Up page." />
             </Head>
-            <LoggedOutSection>
+            <LoggedOutSectionWithConfig>
                 <SignUpContent
                     type={type}
                     email={email}
                     target={target}
                     inviteToken={invite_token}
                 />
-            </LoggedOutSection>
+            </LoggedOutSectionWithConfig>
         </>
     );
 };
