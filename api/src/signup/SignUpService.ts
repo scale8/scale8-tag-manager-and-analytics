@@ -13,7 +13,6 @@ import got from 'got';
 import BaseEmail from '../backends/email/abstractions/BaseEmail';
 import { SignupPayload } from '../Types';
 import SignUpRequest from '../mongo/models/SignUpRequest';
-import OperationOwner from '../enums/OperationOwner';
 import SignUpType from '../enums/SignUpType';
 import Invite from '../mongo/models/Invite';
 import UserNotification from '../mongo/models/UserNotification';
@@ -109,7 +108,6 @@ export default class SignUpService {
                 inviteToken,
             ),
             'SYSTEM',
-            OperationOwner.SYSTEM,
         );
     }
 
@@ -147,7 +145,6 @@ export default class SignUpService {
         return repoFactory(UserNotification).save(
             new UserNotification(user, NotificationType.WELCOME),
             'SYSTEM',
-            OperationOwner.SYSTEM,
         );
     }
 
@@ -178,7 +175,6 @@ export default class SignUpService {
                 true,
             ),
             'SYSTEM',
-            OperationOwner.SYSTEM,
         );
 
         await SignUpService.createWelcomeNotification(user);
@@ -252,11 +248,7 @@ export default class SignUpService {
     }
 
     private async deleteSignupRequest(signUpRequest: SignUpRequest): Promise<void> {
-        await this.repoFactory(SignUpRequest).delete(
-            signUpRequest,
-            'SYSTEM',
-            OperationOwner.SYSTEM,
-        );
+        await this.repoFactory(SignUpRequest).delete(signUpRequest, 'SYSTEM');
     }
 
     private async acceptInvite(signUpRequest: SignUpRequest, user: User): Promise<void> {

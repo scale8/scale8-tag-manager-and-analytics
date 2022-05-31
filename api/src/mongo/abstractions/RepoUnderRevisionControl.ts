@@ -14,7 +14,6 @@ export default class RepoUnderRevisionControl<T extends Model> extends Repo<T> {
         isRevisionFinal: boolean,
         model: T,
         actor: OperationActor,
-        owner: OperationOwner = OperationOwner.USER,
         saveOptions: SaveOptions = {},
     ): Promise<T> {
         if (isRevisionFinal) {
@@ -29,7 +28,7 @@ export default class RepoUnderRevisionControl<T extends Model> extends Repo<T> {
                     throw new DataError(userMessages.maxConstructor(model.constructor.name), true);
                 }
             }
-            return super.save(model, actor, owner, saveOptions);
+            return super.save(model, actor, saveOptions);
         }
     }
 }

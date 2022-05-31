@@ -60,7 +60,7 @@ export default class Scale8Setup {
         const foundUser = await this.repoFactory(User).findOne({ _email: user.email });
         if (foundUser === null) {
             this.logger.info(`Scale8 user '${user.email}' not found, creating new user...`).then();
-            return this.repoFactory(User).save(user, 'SYSTEM', OperationOwner.SYSTEM);
+            return this.repoFactory(User).save(user, 'SYSTEM');
         } else {
             this.logger.info(`Scale8 user '${user.email}' already exists...`).then();
             return foundUser;
@@ -112,7 +112,6 @@ export default class Scale8Setup {
                     true,
                 ),
                 owner,
-                OperationOwner.USER,
             );
         } else {
             this.logger.info(`Scale8 platform '${name}' already exists...`).then();

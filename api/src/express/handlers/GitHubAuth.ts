@@ -100,11 +100,7 @@ export default class GitHubAuth extends Handler {
                             ];
                             res.redirect(
                                 `${uiUrl}/sso/success?uid=${(
-                                    await this.userRepo.save(
-                                        requestingUser,
-                                        'SYSTEM',
-                                        OperationOwner.SYSTEM,
-                                    )
+                                    await this.userRepo.save(requestingUser, 'SYSTEM')
                                 ).id.toString()}&token=${encodeURIComponent(sessionToken)}`,
                             );
                         } else {
@@ -118,7 +114,7 @@ export default class GitHubAuth extends Handler {
                         user.sessions = [new Session(sessionToken), ...user.sessions];
                         res.redirect(
                             `${uiUrl}/sso/success?uid=${(
-                                await this.userRepo.save(user, 'SYSTEM', OperationOwner.SYSTEM)
+                                await this.userRepo.save(user, 'SYSTEM')
                             ).id.toString()}&token=${encodeURIComponent(sessionToken)}`,
                         );
                     }

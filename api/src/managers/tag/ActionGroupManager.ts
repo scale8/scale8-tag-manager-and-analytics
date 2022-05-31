@@ -7,7 +7,6 @@ import { ObjectId } from 'mongodb';
 import Action from '../../mongo/models/tag/Action';
 import ActionGroupDistribution from '../../mongo/models/tag/ActionGroupDistribution';
 import Revision from '../../mongo/models/tag/Revision';
-import OperationOwner from '../../enums/OperationOwner';
 import GQLMethod from '../../enums/GQLMethod';
 import userMessages from '../../errors/UserMessages';
 import {
@@ -209,7 +208,7 @@ export default class ActionGroupManager extends Manager<ActionGroup> {
             );
             return this.orgAuth.asUserWithEditAccess(ctx, actionGroup.orgId, async (me) => {
                 actionGroup.actionIds = getNewModelsOrder(actionGroup.actionIds, data.new_order);
-                await this.repoFactory(ActionGroup).save(actionGroup, me, OperationOwner.USER, {
+                await this.repoFactory(ActionGroup).save(actionGroup, me, {
                     gqlMethod: GQLMethod.REORDER_LINKED_ENTITIES,
                     opConnectedModels: await this.repoFactory(Action).findByIds(
                         actionGroup.actionIds,
@@ -243,7 +242,6 @@ export default class ActionGroupManager extends Manager<ActionGroup> {
                     await this.repoFactory(ActionGroupDistribution).save(
                         actionGroupDistribution,
                         me,
-                        OperationOwner.USER,
                         {
                             gqlMethod: GQLMethod.DELETE_LINKED_ENTITY,
                             userComments: data.comments,
@@ -262,7 +260,7 @@ export default class ActionGroupManager extends Manager<ActionGroup> {
             );
             return this.orgAuth.asUserWithEditAccess(ctx, actionGroup.orgId, async (me) => {
                 actionGroup.bulkGQLSet(data, ['name', 'distribution', 'is_locked']); //only is a safety check against this function
-                await this.repoFactory(ActionGroup).save(actionGroup, me, OperationOwner.USER, {
+                await this.repoFactory(ActionGroup).save(actionGroup, me, {
                     gqlMethod: GQLMethod.UPDATE_PROPERTIES,
                     userComments: data.comments,
                 });
@@ -278,15 +276,10 @@ export default class ActionGroupManager extends Manager<ActionGroup> {
                     );
                     return this.orgAuth.asUserWithEditAccess(ctx, actionGroup.orgId, async (me) => {
                         actionGroup.bulkGQLSet({ ...input }, ['name', 'distribution', 'is_locked']); //only is a safety check against this function
-                        await this.repoFactory(ActionGroup).save(
-                            actionGroup,
-                            me,
-                            OperationOwner.USER,
-                            {
-                                gqlMethod: GQLMethod.UPDATE_PROPERTIES,
-                                userComments: input.comments,
-                            },
-                        );
+                        await this.repoFactory(ActionGroup).save(actionGroup, me, {
+                            gqlMethod: GQLMethod.UPDATE_PROPERTIES,
+                            userComments: input.comments,
+                        });
                         return true;
                     });
                 },
@@ -318,7 +311,6 @@ export default class ActionGroupManager extends Manager<ActionGroup> {
                 await this.repoFactory(ActionGroupDistribution).save(
                     actionGroupDistribution,
                     actor,
-                    OperationOwner.USER,
                     {
                         gqlMethod: GQLMethod.ADD_LINKED_ENTITY,
                         opConnectedModels: [newActionGroup],
@@ -336,7 +328,7 @@ export default class ActionGroupManager extends Manager<ActionGroup> {
                 const duplicate = await duplicateActionGroup(me, actionGroup);
                 duplicate.name = data.name;
                 return (
-                    await this.repoFactory(ActionGroup).save(duplicate, me, OperationOwner.USER, {
+                    await this.repoFactory(ActionGroup).save(duplicate, me, {
                         gqlMethod: GQLMethod.UPDATE_PROPERTIES,
                         userComments: `Updated name to ${duplicate.name}`,
                     })
@@ -363,7 +355,6 @@ export default class ActionGroupManager extends Manager<ActionGroup> {
                     const newActionGroup = await this.repoFactory(ActionGroup).save(
                         new ActionGroup(data.name, revision, [], data.distribution, data.is_locked),
                         me,
-                        OperationOwner.USER,
                         {
                             gqlMethod: GQLMethod.CREATE,
                             userComments: data.comments,
@@ -377,7 +368,6 @@ export default class ActionGroupManager extends Manager<ActionGroup> {
                     await this.repoFactory(ActionGroupDistribution).save(
                         actionGroupDistribution,
                         me,
-                        OperationOwner.USER,
                         {
                             gqlMethod: GQLMethod.ADD_LINKED_ENTITY,
                             opConnectedModels: [newActionGroup],

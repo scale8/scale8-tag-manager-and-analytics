@@ -13,7 +13,6 @@ import container from '../container/IOC.config';
 import RepoFromModelFactory from '../container/factoryTypes/RepoFromModelFactory';
 import TYPES from '../container/IOC.types';
 import Trigger from '../mongo/models/tag/Trigger';
-import OperationOwner from '../enums/OperationOwner';
 import GQLMethod from '../enums/GQLMethod';
 import ActionGroupDistribution from '../mongo/models/tag/ActionGroupDistribution';
 
@@ -60,7 +59,7 @@ export const unLinkFromRevision = async (
         userMessages.revisionFailed,
     );
     revision.globalTriggerIds = revision.globalTriggerIds.filter((_) => !_.equals(linkedModel.id));
-    await repoFactory(Revision).save(revision, me, OperationOwner.USER, {
+    await repoFactory(Revision).save(revision, me, {
         gqlMethod: GQLMethod.DELETE_LINKED_ENTITY,
         userComments: comments,
         opConnectedModels: [linkedModel],

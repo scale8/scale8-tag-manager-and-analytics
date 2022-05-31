@@ -13,7 +13,6 @@ import DiffState from '../../enums/DiffState';
 import PlatformAction from '../../mongo/models/tag/PlatformAction';
 import PlatformDataContainer from '../../mongo/models/tag/PlatformDataContainer';
 import PlatformEvent from '../../mongo/models/tag/PlatformEvent';
-import OperationOwner from '../../enums/OperationOwner';
 import GQLMethod from '../../enums/GQLMethod';
 import userMessages from '../../errors/UserMessages';
 import { diff } from '../../utils/DiffUtils';
@@ -383,7 +382,7 @@ export default class AppPlatformRevisionManager extends Manager<AppPlatformRevis
                                                     userMessages.diffFailed,
                                                 );
                                                 (model as any)[prop.field] = new ObjectId(newValue);
-                                                await repo.save(model, me, OperationOwner.USER, {
+                                                await repo.save(model, me, {
                                                     gqlMethod: GQLMethod.AUTO_MERGE,
                                                 });
                                             }

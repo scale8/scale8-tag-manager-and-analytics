@@ -19,14 +19,13 @@ export const createGlobalTrigger = async (
     const newTrigger = await repoFactory(Trigger).save(
         new Trigger(name, RevisionEntityParentType.REVISION, revision),
         actor,
-        OperationOwner.USER,
         {
             gqlMethod: GQLMethod.CREATE,
             userComments: comments,
         },
     );
     revision.globalTriggerIds = [...revision.globalTriggerIds, newTrigger.id];
-    await repoFactory(Revision).save(revision, actor, OperationOwner.USER, {
+    await repoFactory(Revision).save(revision, actor, {
         gqlMethod: GQLMethod.ADD_LINKED_ENTITY,
         opConnectedModels: [newTrigger],
     });

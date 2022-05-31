@@ -274,7 +274,6 @@ export const createEnvironment = async (
     const environment = await repoFactory(Environment).save(
         new Environment(name, app, revision, url, environmentVariables),
         actor,
-        OperationOwner.USER,
         {
             gqlMethod: GQLMethod.CREATE,
             userComments: comments,

@@ -96,12 +96,12 @@ export default class StripeService {
         subscription: Stripe.Subscription,
     ): Promise<void> {
         org.stripeSubscriptionId = subscription.id;
-        await this.repoFactory(Org).save(org, 'SYSTEM', OperationOwner.SYSTEM);
+        await this.repoFactory(Org).save(org, 'SYSTEM');
     }
 
     private async removeOrgSubscriptionData(org: Org): Promise<void> {
         org.stripeSubscriptionId = undefined;
-        await this.repoFactory(Org).save(org, 'SYSTEM', OperationOwner.SYSTEM);
+        await this.repoFactory(Org).save(org, 'SYSTEM');
     }
 
     private async processSubscriptionItems(
@@ -133,7 +133,6 @@ export default class StripeService {
                     await this.repoFactory(accountType).save(
                         account,
                         'SYSTEM',
-                        OperationOwner.SYSTEM,
                     );
                 }),
             );
@@ -229,7 +228,7 @@ export default class StripeService {
             };
             const customer = await getCustomer();
             org.stripeCustomerId = customer.id;
-            return await this.repoFactory(Org).save(org, 'SYSTEM', OperationOwner.SYSTEM);
+            return await this.repoFactory(Org).save(org, 'SYSTEM');
         }
     }
 

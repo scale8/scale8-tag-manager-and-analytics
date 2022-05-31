@@ -3,7 +3,6 @@ import User from '../models/User';
 import { injectable } from 'inversify';
 import { OperationActor, SaveOptions } from '../types/Types';
 import { IndexDescription, ObjectId } from 'mongodb';
-import OperationOwner from '../../enums/OperationOwner';
 import Org from '../models/Org';
 import OrgRole from '../models/OrgRole';
 import PermissionGroup from '../models/PermissionGroup';
@@ -50,11 +49,10 @@ export default class UserRepo extends Repo<User> {
     public async save(
         model: User,
         actor: OperationActor,
-        owner: OperationOwner,
         saveOptions: SaveOptions = {},
     ): Promise<User> {
         model.sessions.slice(0, 5); //only keep 5 sessions? maybe sort this by created at and then slice?
-        return super.save(model, actor, owner, saveOptions);
+        return super.save(model, actor, saveOptions);
     }
 
     public async getOrgs(user: User): Promise<Org[]> {
@@ -74,11 +72,7 @@ export default class UserRepo extends Repo<User> {
         org: Org,
         permissionGroup?: PermissionGroup,
     ): Promise<OrgRole> {
-        return this.repoFactory(OrgRole).save(
-            new OrgRole(org, user, permissionGroup),
-            actor,
-            actor === 'SYSTEM' ? OperationOwner.SYSTEM : OperationOwner.USER,
-        );
+        return this.repoFactory(OrgRole).save(new OrgRole(org, user, permissionGroup), actor);
     }
 
     public async convertToOrgUser(

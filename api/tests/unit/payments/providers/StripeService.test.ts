@@ -6,7 +6,6 @@ import TYPES from '../../../../src/container/IOC.types';
 import Org from '../../../../src/mongo/models/Org';
 import OrgRepo from '../../../../src/mongo/repos/OrgRepo';
 import RepoFromModelFactory from '../../../../src/container/factoryTypes/RepoFromModelFactory';
-import OperationOwner from '../../../../src/enums/OperationOwner';
 import { CT } from '../../../../src/mongo/types/Types';
 import Model from '../../../../src/mongo/abstractions/Model';
 import User from '../../../../src/mongo/models/User';
@@ -109,14 +108,12 @@ describe('StripeService', () => {
         expect(mockOrgRepo.save).toBeCalledWith(
             { stripeSubscriptionId: 'subscriptionId' },
             'SYSTEM',
-            OperationOwner.SYSTEM,
         );
         expect(mockTagManagerAccountRepo.findOne).toBeCalled();
         expect(mockTagManagerAccount.cancelTrial).toBeCalled();
         expect(mockTagManagerAccountRepo.save).toBeCalledWith(
             { ...mockTagManagerAccount, enabled: true },
             'SYSTEM',
-            OperationOwner.SYSTEM,
         );
 
         expect(mockDataManagerAccountRepo.findOne).toBeCalled();
@@ -124,7 +121,6 @@ describe('StripeService', () => {
         expect(mockDataManagerAccountRepo.save).toBeCalledWith(
             { ...mockDataManagerAccount, enabled: true },
             'SYSTEM',
-            OperationOwner.SYSTEM,
         );
     });
 });

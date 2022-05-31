@@ -1,7 +1,7 @@
 import IngestEndpointDataMap from '../mongo/models/data/IngestEndpointDataMap';
 import {
     IngestEndpointDataMapSchema,
-    IngestEndpointDataMapValidationSchema,
+    IngestEndpointDataMapValidationSchema, OperationActor,
 } from '../mongo/types/Types';
 import ScalarContainer from '../mongo/custom/ScalarContainer';
 import container from '../container/IOC.config';
@@ -75,7 +75,7 @@ export const createIngestEndpointDataMapValidationSchema = async (
 };
 
 export const createIngestEndpointDataMapFromSchemas = async (
-    actor: User,
+    actor: OperationActor,
     ingestEndpointDataMapSchemas: IngestEndpointDataMapSchema[],
     attachment: IngestEndpointRevision | IngestEndpointDataMap,
 ): Promise<IngestEndpointDataMap[]> => {

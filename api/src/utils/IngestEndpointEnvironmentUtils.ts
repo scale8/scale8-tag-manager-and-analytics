@@ -18,7 +18,7 @@ import {
 } from './IngestEndpointDataMapUtils';
 import Org from '../mongo/models/Org';
 import App from '../mongo/models/tag/App';
-import { IngestEndpointDataMapSchema, StorageProviderConfig } from '../mongo/types/Types';
+import { IngestEndpointDataMapSchema, OperationActor, StorageProviderConfig } from '../mongo/types/Types';
 import DataManagerAccountRepo from '../mongo/repos/data/DataManagerAccountRepo';
 import { StorageProvider } from '../enums/StorageProvider';
 import BaseStorage from '../backends/storage/abstractions/BaseStorage';
@@ -157,11 +157,11 @@ export const buildIngestEndpointConfig = async (
 };
 
 export const updateIngestEndpointEnvironment = async (
-    actor: User,
+    actor: OperationActor,
     ingestEndpointEnvironment: IngestEndpointEnvironment,
     providerConfig?: StorageProviderConfig,
     newName?: string,
-    ingestEndpointRevisionId?: string,
+    ingestEndpointRevisionId?: string | ObjectId,
     customDomain?: string,
     customDomainCert?: string,
     customDomainKey?: string,
@@ -256,7 +256,6 @@ export const createIngestEndpointEnvironment = async (
     ingestEndpointEnvironment = await repoFactory(IngestEndpointEnvironment).save(
         ingestEndpointEnvironment,
         actor,
-        undefined,
         { forceCreate: fixedId !== undefined },
     );
 
@@ -493,4 +492,37 @@ export const createUsageEndpointEnvironment = async (
     //create the new env...
     await buildIngestEndpointConfig(ingestEndpointEnvironment);
     return ingestEndpointEnvironment;
+};
+
+export const updateUsageEndpointEnvironment = async (
+    actor: OperationActor,
+    ingestEndpointEnvironment: IngestEndpointEnvironment,
+    schema: IngestEndpointDataMapSchema[],
+): Promise<void> => {
+    const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
+    const ingestEndpoint = await repoFactory(IngestEndpoint).findByIdThrows(
+        ingestEndpointEnvironment.ingestEndpointId,
+    );
+    //create revision...
+    let ingestEndpointRevision = await repoFactory(IngestEndpointRevision).save(
+        new IngestEndpointRevision(generateRevisionName(), ingestEndpoint),
+        actor,
+    );
+    //create new datamaps for schema
+    ingestEndpointRevision.ingestEndpointDataMapIds = (
+        await createIngestEndpointDataMapFromSchemas(actor, schema, ingestEndpointRevision)
+    ).map((_) => _.id);
+    ingestEndpointRevision.isFinal = true; //no further changes to this...
+    ingestEndpointRevision = await repoFactory(IngestEndpointRevision).save(
+        ingestEndpointRevision,
+        actor,
+    );
+    //this will update with new revision and deploy...
+    await updateIngestEndpointEnvironment(
+        actor,
+        ingestEndpointEnvironment,
+        undefined,
+        undefined,
+        ingestEndpointRevision.id,
+    );
 };

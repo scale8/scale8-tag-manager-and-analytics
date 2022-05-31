@@ -342,7 +342,7 @@ export default class EnvironmentManager extends Manager<Environment> {
                 }
                 environment.bulkGQLSet(data, ['name', 'url']); //only is a safety check against this function
                 await buildConfig(
-                    await this.repoFactory(Environment).save(environment, me, OperationOwner.USER, {
+                    await this.repoFactory(Environment).save(environment, me, {
                         gqlMethod: GQLMethod.UPDATE_PROPERTIES,
                         userComments: data.comments,
                     }),

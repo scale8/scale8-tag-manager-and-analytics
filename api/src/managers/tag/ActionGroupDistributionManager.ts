@@ -8,7 +8,6 @@ import ActionGroupDistribution from '../../mongo/models/tag/ActionGroupDistribut
 import Rule from '../../mongo/models/tag/Rule';
 import Revision from '../../mongo/models/tag/Revision';
 import GQLError from '../../errors/GQLError';
-import OperationOwner from '../../enums/OperationOwner';
 import GQLMethod from '../../enums/GQLMethod';
 import userMessages from '../../errors/UserMessages';
 import {
@@ -235,7 +234,6 @@ export default class ActionGroupDistributionManager extends Manager<ActionGroupD
                     await this.repoFactory(ActionGroupDistribution).save(
                         actionGroupDistribution,
                         me,
-                        OperationOwner.USER,
                         {
                             gqlMethod: GQLMethod.REORDER_LINKED_ENTITIES,
                             opConnectedModels: await this.repoFactory(ActionGroup).findByIds(
@@ -306,7 +304,7 @@ export default class ActionGroupDistributionManager extends Manager<ActionGroupD
                                     (_) => !_.id.equals(actionGroupDistribution.id),
                                 ),
                             );
-                            await this.repoFactory(Rule).save(rule, me, OperationOwner.USER, {
+                            await this.repoFactory(Rule).save(rule, me, {
                                 gqlMethod: GQLMethod.DELETE_LINKED_ENTITY,
                                 userComments: data.comments,
                                 opConnectedModels: [actionGroupDistribution],
@@ -333,7 +331,6 @@ export default class ActionGroupDistributionManager extends Manager<ActionGroupD
                     await this.repoFactory(ActionGroupDistribution).save(
                         actionGroupDistribution,
                         me,
-                        OperationOwner.USER,
                         {
                             gqlMethod: GQLMethod.UPDATE_PROPERTIES,
                             userComments: data.comments,
@@ -392,15 +389,10 @@ export default class ActionGroupDistributionManager extends Manager<ActionGroupD
                     );
                     duplicate.name = data.name;
                     return (
-                        await this.repoFactory(ActionGroupDistribution).save(
-                            duplicate,
-                            me,
-                            OperationOwner.USER,
-                            {
-                                gqlMethod: GQLMethod.UPDATE_PROPERTIES,
-                                userComments: `Updated name to ${duplicate.name}`,
-                            },
-                        )
+                        await this.repoFactory(ActionGroupDistribution).save(duplicate, me, {
+                            gqlMethod: GQLMethod.UPDATE_PROPERTIES,
+                            userComments: `Updated name to ${duplicate.name}`,
+                        })
                     ).toGQLType();
                 },
             );

@@ -8,7 +8,6 @@ import PlatformDataContainer from '../../../models/tag/PlatformDataContainer';
 import PlatformDataMap from '../../../models/tag/PlatformDataMap';
 import PlatformEvent from '../../../models/tag/PlatformEvent';
 import PlatformRevision from '../../../models/tag/PlatformRevision';
-import OperationOwner from '../../../../enums/OperationOwner';
 import PlatformActionPermission from '../../../models/tag/PlatformActionPermission';
 import userMessages from '../../../../errors/UserMessages';
 import RepoUnderRevisionControl from '../../../abstractions/RepoUnderRevisionControl';
@@ -32,31 +31,21 @@ export default class UnderPlatformRevisionControl<
         return revision !== null && revision.isFinal;
     }
 
-    public async save(
-        model: T,
-        actor: OperationActor,
-        owner: OperationOwner = OperationOwner.USER,
-        saveOptions: SaveOptions = {},
-    ): Promise<T> {
+    public async save(model: T, actor: OperationActor, saveOptions: SaveOptions = {}): Promise<T> {
         return this.saveUnderRevisionControl(
             model.platformRevisionId,
             await this.isRevisionFinal(model.platformRevisionId),
             model,
             actor,
-            owner,
             saveOptions,
         );
     }
 
-    public async delete(
-        model: T,
-        actor: OperationActor,
-        owner: OperationOwner = OperationOwner.USER,
-    ): Promise<void> {
+    public async delete(model: T, actor: OperationActor): Promise<void> {
         if (await this.isRevisionFinal(model.platformRevisionId)) {
             throw new DataError(userMessages.finalisedRevision, true);
         } else {
-            return super.delete(model, actor, owner);
+            return super.delete(model, actor);
         }
     }
 }

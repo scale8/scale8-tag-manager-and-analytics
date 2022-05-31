@@ -1,7 +1,6 @@
 import User from '../mongo/models/User';
 import Tag from '../mongo/models/tag/Tag';
 import Revision from '../mongo/models/tag/Revision';
-import OperationOwner from '../enums/OperationOwner';
 import GQLMethod from '../enums/GQLMethod';
 import container from '../container/IOC.config';
 import RepoFromModelFactory from '../container/factoryTypes/RepoFromModelFactory';
@@ -49,7 +48,6 @@ export const createTagSkeleton = async (
                                         revision,
                                     ),
                                     actor,
-                                    OperationOwner.USER,
                                     {
                                         gqlMethod: GQLMethod.CREATE,
                                         userComments: autoGenerateComment,
@@ -65,7 +63,6 @@ export const createTagSkeleton = async (
                                                 await repoFactory(ActionGroup).save(
                                                     new ActionGroup('Action Group 1', revision),
                                                     actor,
-                                                    OperationOwner.USER,
                                                     {
                                                         gqlMethod: GQLMethod.CREATE,
                                                         userComments: autoGenerateComment,
@@ -74,7 +71,6 @@ export const createTagSkeleton = async (
                                             ],
                                         ),
                                         actor,
-                                        OperationOwner.USER,
                                         {
                                             gqlMethod: GQLMethod.CREATE,
                                             userComments: autoGenerateComment,
@@ -83,7 +79,6 @@ export const createTagSkeleton = async (
                                 ],
                             ),
                             actor,
-                            OperationOwner.USER,
                             {
                                 gqlMethod: GQLMethod.CREATE,
                                 userComments: autoGenerateComment,
@@ -91,7 +86,6 @@ export const createTagSkeleton = async (
                         ),
                     ]),
                     actor,
-                    OperationOwner.USER,
                     {
                         gqlMethod: GQLMethod.CREATE,
                         userComments: autoGenerateComment,
@@ -100,7 +94,6 @@ export const createTagSkeleton = async (
             ],
         ),
         actor,
-        OperationOwner.USER,
         {
             gqlMethod: GQLMethod.CREATE,
             userComments: comments,
@@ -108,7 +101,7 @@ export const createTagSkeleton = async (
     );
     //link this back to the parent entity...
     revision.tagIds = [...revision.tagIds, newTag.id];
-    await repoFactory(Revision).save(revision, actor, OperationOwner.USER, {
+    await repoFactory(Revision).save(revision, actor, {
         gqlMethod: GQLMethod.ADD_LINKED_ENTITY,
         opConnectedModels: [newTag],
     });

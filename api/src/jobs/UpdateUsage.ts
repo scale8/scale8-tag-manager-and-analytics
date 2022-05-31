@@ -61,14 +61,10 @@ const updateTagManagerUsage = async () => {
                         });
                         if (usage === null) {
                             //create a reference...
-                            await repoFactory(Usage).save(
-                                new Usage(account, day, value),
-                                'SYSTEM',
-                                OperationOwner.SYSTEM,
-                            );
+                            await repoFactory(Usage).save(new Usage(account, day, value), 'SYSTEM');
                         } else {
                             usage.requests = value;
-                            await repoFactory(Usage).save(usage, 'SYSTEM', OperationOwner.SYSTEM);
+                            await repoFactory(Usage).save(usage, 'SYSTEM');
                         }
                     }),
                 );
@@ -140,12 +136,11 @@ const updateDataManagerUsage = async () => {
                             await repoFactory(Usage).save(
                                 new Usage(account, day, value.requests, value.bytes),
                                 'SYSTEM',
-                                OperationOwner.SYSTEM,
                             );
                         } else {
                             usage.requests = value.requests;
                             usage.bytes = value.bytes;
-                            await repoFactory(Usage).save(usage, 'SYSTEM', OperationOwner.SYSTEM);
+                            await repoFactory(Usage).save(usage, 'SYSTEM');
                         }
                     }),
                 );

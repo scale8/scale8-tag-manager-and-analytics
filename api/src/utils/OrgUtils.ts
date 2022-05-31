@@ -78,7 +78,7 @@ export const createOrg = async (
     if (orgId !== undefined) {
         org['_id'] = orgId;
     }
-    org = await repoFactory(Org).save(org, actor, OperationOwner.USER, {
+    org = await repoFactory(Org).save(org, actor, {
         gqlMethod: GQLMethod.CREATE,
         userComments: comments,
         forceCreate: orgId !== undefined,
@@ -97,7 +97,6 @@ export const createOrg = async (
             isTagManagerTrial,
         ),
         actor,
-        OperationOwner.USER,
         {
             gqlMethod: GQLMethod.CREATE,
         },
@@ -112,7 +111,6 @@ export const createOrg = async (
             isDataManagerTrial,
         ),
         actor,
-        OperationOwner.USER,
         {
             gqlMethod: GQLMethod.CREATE,
         },
@@ -123,7 +121,6 @@ export const createOrg = async (
     await repoFactory(DataManagerAccount).save(
         new DataManagerAccount(org, AccountType.SYSTEM, true),
         actor,
-        OperationOwner.USER,
         {
             gqlMethod: GQLMethod.CREATE,
         },

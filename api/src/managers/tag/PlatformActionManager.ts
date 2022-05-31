@@ -9,7 +9,6 @@ import Platform from '../../mongo/models/tag/Platform';
 import PlatformRevision from '../../mongo/models/tag/PlatformRevision';
 import PlatformActionPermission from '../../mongo/models/tag/PlatformActionPermission';
 import GQLError from '../../errors/GQLError';
-import OperationOwner from '../../enums/OperationOwner';
 import GQLMethod from '../../enums/GQLMethod';
 import userMessages from '../../errors/UserMessages';
 import { deleteModelCascading } from '../../utils/ModelUtils';
@@ -408,15 +407,10 @@ export default class PlatformActionManager extends Manager<PlatformAction> {
                             oldPlatformActionPermissions.map((_) => deleteModelCascading(me, _)),
                         );
                     }
-                    await this.repoFactory(PlatformAction).save(
-                        platformAction,
-                        me,
-                        OperationOwner.USER,
-                        {
-                            gqlMethod: GQLMethod.UPDATE_PROPERTIES,
-                            userComments: data.comments,
-                        },
-                    );
+                    await this.repoFactory(PlatformAction).save(platformAction, me, {
+                        gqlMethod: GQLMethod.UPDATE_PROPERTIES,
+                        userComments: data.comments,
+                    });
                     return true;
                 } else {
                     throw new GQLError(userMessages.platformUpdateInvalid, true);

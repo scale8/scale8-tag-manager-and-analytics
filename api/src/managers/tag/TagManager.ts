@@ -7,7 +7,6 @@ import { ObjectId } from 'mongodb';
 import RuleGroup from '../../mongo/models/tag/RuleGroup';
 import Revision from '../../mongo/models/tag/Revision';
 import GQLError from '../../errors/GQLError';
-import OperationOwner from '../../enums/OperationOwner';
 import GQLMethod from '../../enums/GQLMethod';
 import userMessages from '../../errors/UserMessages';
 import { createNewModelBranchFromModel, deleteModelCascading } from '../../utils/ModelUtils';
@@ -251,7 +250,7 @@ export default class TagManager extends Manager<Tag> {
                 ) {
                     //the length is the same and every item has been accounted for...
                     tag.ruleGroupIds = (data.new_order as string[]).map((_) => new ObjectId(_));
-                    await this.repoFactory(Tag).save(tag, me, OperationOwner.USER, {
+                    await this.repoFactory(Tag).save(tag, me, {
                         gqlMethod: GQLMethod.REORDER_LINKED_ENTITIES,
                         opConnectedModels: await this.repoFactory(RuleGroup).findByIds(
                             tag.ruleGroupIds,
@@ -278,7 +277,7 @@ export default class TagManager extends Manager<Tag> {
                         userMessages.revisionFailed,
                     );
                     revision.tagIds = revision.tagIds.filter((_) => !_.equals(tag.id));
-                    await this.repoFactory(Revision).save(revision, me, OperationOwner.USER, {
+                    await this.repoFactory(Revision).save(revision, me, {
                         gqlMethod: GQLMethod.DELETE_LINKED_ENTITY,
                         userComments: data.comments,
                         opConnectedModels: [tag],
@@ -298,7 +297,7 @@ export default class TagManager extends Manager<Tag> {
                     throw new GQLError('Auto-load can not be used with this placement type');
                 }
                 tag.bulkGQLSet(data, ['name', 'width', 'height', 'auto_load', 'is_active']); //only is a safety check against this function
-                await this.repoFactory(Tag).save(tag, me, OperationOwner.USER, {
+                await this.repoFactory(Tag).save(tag, me, {
                     gqlMethod: GQLMethod.UPDATE_PROPERTIES,
                     userComments: data.comments,
                 });
@@ -313,7 +312,7 @@ export default class TagManager extends Manager<Tag> {
                 );
                 const newTag = await createNewModelBranchFromModel(actor, tag, TagRepo);
                 revision.tagIds = [...revision.tagIds, newTag.id];
-                await this.repoFactory(Revision).save(revision, actor, OperationOwner.USER, {
+                await this.repoFactory(Revision).save(revision, actor, {
                     gqlMethod: GQLMethod.ADD_LINKED_ENTITY,
                     opConnectedModels: [newTag],
                 });
@@ -329,7 +328,7 @@ export default class TagManager extends Manager<Tag> {
                 const duplicate = await duplicateTag(me, tag);
                 duplicate.name = data.name;
                 return (
-                    await this.repoFactory(Tag).save(duplicate, me, OperationOwner.USER, {
+                    await this.repoFactory(Tag).save(duplicate, me, {
                         gqlMethod: GQLMethod.UPDATE_PROPERTIES,
                         userComments: `Changed tag name to ${duplicate.name}`,
                     })

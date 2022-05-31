@@ -11,7 +11,6 @@ import DataMap from '../../mongo/models/tag/DataMap';
 import PlatformDataMap from '../../mongo/models/tag/PlatformDataMap';
 import PlatformRevision from '../../mongo/models/tag/PlatformRevision';
 import Trigger from '../../mongo/models/tag/Trigger';
-import OperationOwner from '../../enums/OperationOwner';
 import GQLMethod from '../../enums/GQLMethod';
 import { DataMapSchema, DataMapSchemaCheck } from '../../mongo/types/Types';
 import userMessages from '../../errors/UserMessages';
@@ -230,7 +229,7 @@ export default class EventManager extends Manager<Event> {
                             revision,
                         );
                         event.dataMapIds = newDataMaps.map((_) => _.id);
-                        await this.repoFactory(Event).save(event, me, OperationOwner.USER, {
+                        await this.repoFactory(Event).save(event, me, {
                             gqlMethod: GQLMethod.UPDATE_PROPERTIES,
                             userComments: data.comments,
                         });
@@ -240,7 +239,7 @@ export default class EventManager extends Manager<Event> {
                         throw new GQLError(userMessages.eventUpdateInvalidDM, true);
                     }
                 } else {
-                    await this.repoFactory(Event).save(event, me, OperationOwner.USER, {
+                    await this.repoFactory(Event).save(event, me, {
                         gqlMethod: GQLMethod.UPDATE_PROPERTIES,
                         userComments: data.comments,
                     });
@@ -262,7 +261,7 @@ export default class EventManager extends Manager<Event> {
                     userMessages.triggerFailed,
                 );
                 trigger.eventIds = trigger.eventIds.filter((_) => !_.equals(event.id));
-                await this.repoFactory(Trigger).save(trigger, me, OperationOwner.USER, {
+                await this.repoFactory(Trigger).save(trigger, me, {
                     gqlMethod: GQLMethod.DELETE_LINKED_ENTITY,
                     userComments: data.comments,
                     opConnectedModels: [event],
@@ -348,7 +347,6 @@ export default class EventManager extends Manager<Event> {
                 const newEvent = await this.repoFactory(Event).save(
                     new Event(revision, event, data.name, dataMaps, data.clear_state_ms),
                     me,
-                    OperationOwner.USER,
                     {
                         gqlMethod: GQLMethod.CREATE,
                         userComments: data.comments,
@@ -356,7 +354,7 @@ export default class EventManager extends Manager<Event> {
                 );
                 //link this back to the parent entity...
                 trigger.eventIds = [...trigger.eventIds, newEvent.id];
-                await this.repoFactory(Trigger).save(trigger, me, OperationOwner.USER, {
+                await this.repoFactory(Trigger).save(trigger, me, {
                     gqlMethod: GQLMethod.ADD_LINKED_ENTITY,
                     opConnectedModels: [newEvent],
                 });
