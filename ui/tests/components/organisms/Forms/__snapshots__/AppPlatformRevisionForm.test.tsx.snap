@@ -66,7 +66,7 @@ exports[`AppPlatformRevisionForm form render unchanged 1`] = `
               </span>
             </label>
             <div
-              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiSelect-root css-1ejkwvn-MuiInputBase-root-MuiInput-root"
+              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl  css-foxv06-MuiInputBase-root-MuiInput-root-MuiSelect-root"
             >
               <div
                 aria-expanded="false"
@@ -108,7 +108,7 @@ exports[`AppPlatformRevisionForm form render unchanged 1`] = `
             class="MuiBox-root css-wpygli"
           >
             <button
-              class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled css-xcbv7o-MuiButtonBase-root-MuiButton-root"
+              class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root Mui-disabled  css-xcbv7o-MuiButtonBase-root-MuiButton-root"
               disabled=""
               tabindex="-1"
               type="submit"

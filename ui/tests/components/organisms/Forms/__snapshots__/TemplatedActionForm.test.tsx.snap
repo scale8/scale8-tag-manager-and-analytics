@@ -44,7 +44,7 @@ exports[`TemplatedActionForm form render unchanged 1`] = `
           class="MuiBox-root css-0"
         >
           <button
-            class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButtonBase-root css-t6tyzl-MuiButtonBase-root-MuiButton-root"
+            class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeSmall MuiButton-textSizeSmall MuiButtonBase-root  css-t6tyzl-MuiButtonBase-root-MuiButton-root"
             tabindex="0"
             type="submit"
           >
@@ -81,11 +81,11 @@ exports[`TemplatedActionForm form render unchanged 1`] = `
               type="button"
             >
               <span
-                class="MuiBadge-root css-1abb7hm-MuiBadge-root"
+                class="BaseBadge-root MuiBadge-root css-1abb7hm-MuiBadge-root"
               >
                 Info
                 <span
-                  class="MuiBadge-colorSecondary MuiBadge-badge MuiBadge-standard MuiBadge-anchorOriginTopRightRectangular MuiBadge-invisible css-1mbxvc-MuiBadge-badge"
+                  class="BaseBadge-badge MuiBadge-badge MuiBadge-standard MuiBadge-invisible MuiBadge-anchorOriginTopRight MuiBadge-anchorOriginTopRightRectangular MuiBadge-overlapRectangular MuiBadge-colorSecondary css-1n4jbui-MuiBadge-badge"
                 />
               </span>
               <span
@@ -100,11 +100,11 @@ exports[`TemplatedActionForm form render unchanged 1`] = `
               type="button"
             >
               <span
-                class="MuiBadge-root css-1abb7hm-MuiBadge-root"
+                class="BaseBadge-root MuiBadge-root css-1abb7hm-MuiBadge-root"
               >
                 Form
                 <span
-                  class="MuiBadge-colorSecondary MuiBadge-badge MuiBadge-standard MuiBadge-anchorOriginTopRightRectangular MuiBadge-invisible css-1mbxvc-MuiBadge-badge"
+                  class="BaseBadge-badge MuiBadge-badge MuiBadge-standard MuiBadge-invisible MuiBadge-anchorOriginTopRight MuiBadge-anchorOriginTopRightRectangular MuiBadge-overlapRectangular MuiBadge-colorSecondary css-1n4jbui-MuiBadge-badge"
                 />
               </span>
               <span
@@ -119,11 +119,11 @@ exports[`TemplatedActionForm form render unchanged 1`] = `
               type="button"
             >
               <span
-                class="MuiBadge-root css-1abb7hm-MuiBadge-root"
+                class="BaseBadge-root MuiBadge-root css-1abb7hm-MuiBadge-root"
               >
                 Code
                 <span
-                  class="MuiBadge-colorSecondary MuiBadge-badge MuiBadge-standard MuiBadge-anchorOriginTopRightRectangular MuiBadge-invisible css-1mbxvc-MuiBadge-badge"
+                  class="BaseBadge-badge MuiBadge-badge MuiBadge-standard MuiBadge-invisible MuiBadge-anchorOriginTopRight MuiBadge-anchorOriginTopRightRectangular MuiBadge-overlapRectangular MuiBadge-colorSecondary css-1n4jbui-MuiBadge-badge"
                 />
               </span>
               <span
@@ -138,11 +138,11 @@ exports[`TemplatedActionForm form render unchanged 1`] = `
               type="button"
             >
               <span
-                class="MuiBadge-root css-1abb7hm-MuiBadge-root"
+                class="BaseBadge-root MuiBadge-root css-1abb7hm-MuiBadge-root"
               >
                 Permissions
                 <span
-                  class="MuiBadge-colorSecondary MuiBadge-badge MuiBadge-standard MuiBadge-anchorOriginTopRightRectangular MuiBadge-invisible css-1mbxvc-MuiBadge-badge"
+                  class="BaseBadge-badge MuiBadge-badge MuiBadge-standard MuiBadge-invisible MuiBadge-anchorOriginTopRight MuiBadge-anchorOriginTopRightRectangular MuiBadge-overlapRectangular MuiBadge-colorSecondary css-1n4jbui-MuiBadge-badge"
                 />
               </span>
               <span
@@ -181,16 +181,19 @@ exports[`TemplatedActionForm form render unchanged 1`] = `
               <label
                 class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary css-a6y1oi-MuiFormLabel-root-MuiInputLabel-root"
                 data-shrink="false"
+                for="mui-1"
+                id="mui-1-label"
               >
                 Name *
               </label>
               <div
-                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd css-1ejkwvn-MuiInputBase-root-MuiInput-root"
+                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd css-1v2pam7-MuiInputBase-root-MuiInput-root"
               >
                 <input
                   aria-invalid="false"
                   autocomplete="off"
                   class="MuiInput-input MuiInputBase-input MuiInputBase-inputAdornedEnd css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                  id="mui-1"
                   name="name"
                   type="text"
                   value=""
@@ -228,6 +231,8 @@ exports[`TemplatedActionForm form render unchanged 1`] = `
               <label
                 class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary css-ip4mx2-MuiFormLabel-root-MuiInputLabel-root"
                 data-shrink="false"
+                for="mui-2"
+                id="mui-2-label"
               >
                 Description *
               </label>
@@ -238,6 +243,7 @@ exports[`TemplatedActionForm form render unchanged 1`] = `
                   aria-invalid="false"
                   autocomplete="off"
                   class="MuiOutlinedInput-input MuiInputBase-input MuiInputBase-inputMultiline css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input"
+                  id="mui-2"
                   name="description"
                   style="height: 0px; overflow: hidden;"
                 />
@@ -253,7 +259,7 @@ exports[`TemplatedActionForm form render unchanged 1`] = `
                   class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
                 >
                   <legend
-                    class="css-dhh0px"
+                    class="css-1ftyaf0"
                   >
                     <span>
                       Description *
@@ -272,7 +278,7 @@ exports[`TemplatedActionForm form render unchanged 1`] = `
                 Icon *
               </label>
               <div
-                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiSelect-root css-1ejkwvn-MuiInputBase-root-MuiInput-root"
+                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl  css-foxv06-MuiInputBase-root-MuiInput-root-MuiSelect-root"
               >
                 <div
                   aria-expanded="false"

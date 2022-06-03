@@ -27,7 +27,7 @@ exports[`OrgTransferOwnershipForm form render unchanged 1`] = `
             </span>
           </label>
           <div
-            class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiSelect-root css-1ejkwvn-MuiInputBase-root-MuiInput-root"
+            class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl  css-foxv06-MuiInputBase-root-MuiInput-root-MuiSelect-root"
           >
             <div
               aria-expanded="false"
@@ -70,7 +70,7 @@ exports[`OrgTransferOwnershipForm form render unchanged 1`] = `
         class="MuiDialogActions-root MuiDialogActions-spacing css-snbeu5-MuiDialogActions-root"
       >
         <button
-          class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root css-7kx4b6-MuiButtonBase-root-MuiButton-root"
+          class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root  css-7kx4b6-MuiButtonBase-root-MuiButton-root"
           tabindex="0"
           type="button"
         >

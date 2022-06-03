@@ -31,7 +31,7 @@ exports[`APITokenForm form render unchanged 1`] = `
           class="MuiBox-root css-178yklu"
         >
           <div
-            class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAlert-root MuiAlert-standardError MuiAlert-standard css-1uijqfy-MuiPaper-root-MuiAlert-root"
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-standardError MuiAlert-standard css-nygxxl-MuiPaper-root-MuiAlert-root"
             role="alert"
           >
             <div
@@ -61,7 +61,7 @@ exports[`APITokenForm form render unchanged 1`] = `
         class="MuiDialogActions-root MuiDialogActions-spacing css-snbeu5-MuiDialogActions-root"
       >
         <button
-          class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root css-7kx4b6-MuiButtonBase-root-MuiButton-root"
+          class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root  css-7kx4b6-MuiButtonBase-root-MuiButton-root"
           tabindex="0"
           type="button"
         >
@@ -71,7 +71,7 @@ exports[`APITokenForm form render unchanged 1`] = `
           />
         </button>
         <button
-          class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root css-18croe1-MuiButtonBase-root-MuiButton-root"
+          class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root  css-18croe1-MuiButtonBase-root-MuiButton-root"
           tabindex="0"
           type="submit"
         >

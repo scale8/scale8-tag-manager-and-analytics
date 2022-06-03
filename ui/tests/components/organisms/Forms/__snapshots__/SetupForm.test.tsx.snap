@@ -24,8 +24,10 @@ exports[`SetupForm form render unchanged 1`] = `
           class="MuiFormControl-root MuiFormControl-marginNormal MuiFormControl-fullWidth MuiTextField-root css-17vbkzs-MuiFormControl-root-MuiTextField-root"
         >
           <label
-            class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary Mui-focused Mui-required css-14a706p-MuiFormLabel-root-MuiInputLabel-root"
+            class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary Mui-focused Mui-required css-f46b9c-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink="true"
+            for="mui-1"
+            id="mui-1-label"
           >
             Email Address
             <span
@@ -42,6 +44,7 @@ exports[`SetupForm form render unchanged 1`] = `
               aria-invalid="false"
               autocomplete="email"
               class="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+              id="mui-1"
               name="email"
               required=""
               type="text"
@@ -52,7 +55,7 @@ exports[`SetupForm form render unchanged 1`] = `
               class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
             >
               <legend
-                class="css-186xcr5"
+                class="css-1in441m"
               >
                 <span>
                   Email Address *
@@ -67,6 +70,8 @@ exports[`SetupForm form render unchanged 1`] = `
           <label
             class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-ip4mx2-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink="false"
+            for="mui-2"
+            id="mui-2-label"
           >
             New Password
             <span
@@ -83,6 +88,7 @@ exports[`SetupForm form render unchanged 1`] = `
               aria-invalid="false"
               autocomplete="new-password"
               class="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+              id="mui-2"
               name="newPassword"
               required=""
               type="password"
@@ -93,7 +99,7 @@ exports[`SetupForm form render unchanged 1`] = `
               class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
             >
               <legend
-                class="css-dhh0px"
+                class="css-1ftyaf0"
               >
                 <span>
                   New Password *
@@ -108,6 +114,8 @@ exports[`SetupForm form render unchanged 1`] = `
           <label
             class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-ip4mx2-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink="false"
+            for="mui-3"
+            id="mui-3-label"
           >
             Confirm New Password
             <span
@@ -124,6 +132,7 @@ exports[`SetupForm form render unchanged 1`] = `
               aria-invalid="false"
               autocomplete="new-password"
               class="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+              id="mui-3"
               name="newPasswordConfirm"
               required=""
               type="password"
@@ -134,7 +143,7 @@ exports[`SetupForm form render unchanged 1`] = `
               class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
             >
               <legend
-                class="css-dhh0px"
+                class="css-1ftyaf0"
               >
                 <span>
                   Confirm New Password *
@@ -149,6 +158,8 @@ exports[`SetupForm form render unchanged 1`] = `
           <label
             class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-ip4mx2-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink="false"
+            for="mui-4"
+            id="mui-4-label"
           >
             Organization name
             <span
@@ -165,6 +176,7 @@ exports[`SetupForm form render unchanged 1`] = `
               aria-invalid="false"
               autocomplete="off"
               class="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+              id="mui-4"
               name="orgName"
               required=""
               type="text"
@@ -175,7 +187,7 @@ exports[`SetupForm form render unchanged 1`] = `
               class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
             >
               <legend
-                class="css-dhh0px"
+                class="css-1ftyaf0"
               >
                 <span>
                   Organization name *
@@ -190,6 +202,8 @@ exports[`SetupForm form render unchanged 1`] = `
           <label
             class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-ip4mx2-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink="false"
+            for="mui-5"
+            id="mui-5-label"
           >
             First Name
             <span
@@ -206,6 +220,7 @@ exports[`SetupForm form render unchanged 1`] = `
               aria-invalid="false"
               autocomplete="off"
               class="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+              id="mui-5"
               name="firstName"
               required=""
               type="text"
@@ -216,7 +231,7 @@ exports[`SetupForm form render unchanged 1`] = `
               class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
             >
               <legend
-                class="css-dhh0px"
+                class="css-1ftyaf0"
               >
                 <span>
                   First Name *
@@ -231,6 +246,8 @@ exports[`SetupForm form render unchanged 1`] = `
           <label
             class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-ip4mx2-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink="false"
+            for="mui-6"
+            id="mui-6-label"
           >
             Last Name
             <span
@@ -247,6 +264,7 @@ exports[`SetupForm form render unchanged 1`] = `
               aria-invalid="false"
               autocomplete="off"
               class="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+              id="mui-6"
               name="lastName"
               required=""
               type="text"
@@ -257,7 +275,7 @@ exports[`SetupForm form render unchanged 1`] = `
               class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
             >
               <legend
-                class="css-dhh0px"
+                class="css-1ftyaf0"
               >
                 <span>
                   Last Name *

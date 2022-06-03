@@ -105,9 +105,9 @@ const useTableStateManager = <T extends RowData>(
         return columns.reduce(
             (accumulator, currentValue) =>
                 accumulator +
-                `${currentValue.title}${JSON.stringify(currentValue.columnInfoProps)}${
-                    currentValue.field
-                }${Object.keys(currentValue).filter((_) => _ !== 'hidden')}`,
+                `${currentValue.title}${JSON.stringify(currentValue.columnInfoProps)}${String(
+                    currentValue.field,
+                )}${Object.keys(currentValue).filter((_) => _ !== 'hidden')}`,
             '',
         );
     };

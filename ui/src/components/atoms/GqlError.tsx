@@ -9,7 +9,7 @@ import { logError } from '../../utils/logUtils';
 
 type GqlErrorProps = {
     error: ApolloError;
-    onClose?: (event: SyntheticEvent | MouseEvent, reason?: string) => void;
+    onClose?: (event: SyntheticEvent | MouseEvent) => void;
 };
 
 const GqlError: FC<GqlErrorProps> = (props: GqlErrorProps) => {

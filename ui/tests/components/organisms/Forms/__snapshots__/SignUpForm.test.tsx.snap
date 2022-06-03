@@ -269,6 +269,8 @@ exports[`SignUpForm form render unchanged 1`] = `
             <label
               class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-ip4mx2-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink="false"
+              for="mui-1"
+              id="mui-1-label"
             >
               Full Name
               <span
@@ -285,6 +287,7 @@ exports[`SignUpForm form render unchanged 1`] = `
                 aria-invalid="false"
                 autocomplete="off"
                 class="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+                id="mui-1"
                 name="fullName"
                 required=""
                 type="text"
@@ -295,7 +298,7 @@ exports[`SignUpForm form render unchanged 1`] = `
                 class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
               >
                 <legend
-                  class="css-dhh0px"
+                  class="css-1ftyaf0"
                 >
                   <span>
                     Full Name *
@@ -310,6 +313,8 @@ exports[`SignUpForm form render unchanged 1`] = `
             <label
               class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-ip4mx2-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink="false"
+              for="mui-2"
+              id="mui-2-label"
             >
               Email Address
               <span
@@ -326,6 +331,7 @@ exports[`SignUpForm form render unchanged 1`] = `
                 aria-invalid="false"
                 autocomplete="off"
                 class="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+                id="mui-2"
                 name="email"
                 required=""
                 type="text"
@@ -336,7 +342,7 @@ exports[`SignUpForm form render unchanged 1`] = `
                 class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
               >
                 <legend
-                  class="css-dhh0px"
+                  class="css-1ftyaf0"
                 >
                   <span>
                     Email Address *
@@ -351,6 +357,8 @@ exports[`SignUpForm form render unchanged 1`] = `
             <label
               class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-ip4mx2-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink="false"
+              for="mui-3"
+              id="mui-3-label"
             >
               Organization name
               <span
@@ -367,6 +375,7 @@ exports[`SignUpForm form render unchanged 1`] = `
                 aria-invalid="false"
                 autocomplete="off"
                 class="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+                id="mui-3"
                 name="orgName"
                 required=""
                 type="text"
@@ -377,7 +386,7 @@ exports[`SignUpForm form render unchanged 1`] = `
                 class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
               >
                 <legend
-                  class="css-dhh0px"
+                  class="css-1ftyaf0"
                 >
                   <span>
                     Organization name *
@@ -392,6 +401,8 @@ exports[`SignUpForm form render unchanged 1`] = `
             <label
               class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-outlined MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-ip4mx2-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink="false"
+              for="mui-4"
+              id="mui-4-label"
             >
               Domain
               <span
@@ -408,6 +419,7 @@ exports[`SignUpForm form render unchanged 1`] = `
                 aria-invalid="false"
                 autocomplete="off"
                 class="MuiOutlinedInput-input MuiInputBase-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+                id="mui-4"
                 name="domain"
                 required=""
                 type="text"
@@ -418,7 +430,7 @@ exports[`SignUpForm form render unchanged 1`] = `
                 class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
               >
                 <legend
-                  class="css-dhh0px"
+                  class="css-1ftyaf0"
                 >
                   <span>
                     Domain *
@@ -506,7 +518,7 @@ exports[`SignUpForm form render unchanged 1`] = `
                   >
                     I agree to the 
                     <a
-                      class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-ap0bds-MuiTypography-root-MuiLink-root"
+                      class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-zlr2jj-MuiTypography-root-MuiLink-root"
                       href="https://scale8.com/legal/terms"
                     >
                       Terms of Service

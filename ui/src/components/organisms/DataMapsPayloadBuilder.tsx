@@ -84,7 +84,7 @@ const objectsFromPayload = (
             return [
                 {
                     children: buildDataMapsPayloadValues(
-                        dataMap.child_ingest_endpoint_data_maps,
+                        dataMap.child_ingest_endpoint_data_maps ?? [],
                         keyPath,
                         dataMap.var_type === VarType.ARRAY_OBJECT ? 0 : -1,
                         payload[key] as DataMapsPayload,
@@ -98,7 +98,7 @@ const objectsFromPayload = (
         if (Array.isArray(payload[key])) {
             return (payload[key] as DataMapsPayload[]).map((currentPayload) => ({
                 children: buildDataMapsPayloadValues(
-                    dataMap.child_ingest_endpoint_data_maps,
+                    dataMap.child_ingest_endpoint_data_maps ?? [],
                     keyPath,
                     dataMap.var_type === VarType.ARRAY_OBJECT ? 0 : -1,
                     currentPayload,
@@ -130,7 +130,7 @@ const initDataMapPayloadValue = (
             objects: payloadObjects ?? [
                 {
                     children: buildDataMapsPayloadValues(
-                        dataMap.child_ingest_endpoint_data_maps,
+                        dataMap.child_ingest_endpoint_data_maps ?? [],
                         keyPath,
                         dataMap.var_type === VarType.ARRAY_OBJECT ? 0 : -1,
                     ),
@@ -394,7 +394,7 @@ const DataMapsPayloadBuilder: FC<DataMapsPayloadBuilderProps> = (
                     ...oldObjects,
                     {
                         children: buildDataMapsPayloadValues(
-                            dataMap.child_ingest_endpoint_data_maps,
+                            dataMap.child_ingest_endpoint_data_maps ?? [],
                             keyPath,
                             oldObjects.length,
                         ),

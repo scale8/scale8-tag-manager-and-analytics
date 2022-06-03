@@ -56,6 +56,8 @@ exports[`AppForm form render unchanged 1`] = `
             <label
               class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-a6y1oi-MuiFormLabel-root-MuiInputLabel-root"
               data-shrink="false"
+              for="mui-1"
+              id="mui-1-label"
             >
               Domain
               <span
@@ -66,12 +68,13 @@ exports[`AppForm form render unchanged 1`] = `
               </span>
             </label>
             <div
-              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd css-1ejkwvn-MuiInputBase-root-MuiInput-root"
+              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd css-1v2pam7-MuiInputBase-root-MuiInput-root"
             >
               <input
                 aria-invalid="false"
                 autocomplete="off"
                 class="MuiInput-input MuiInputBase-input MuiInputBase-inputAdornedEnd css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                id="mui-1"
                 name="domain"
                 required=""
                 type="text"
@@ -232,7 +235,7 @@ exports[`AppForm form render unchanged 1`] = `
               </span>
             </label>
             <div
-              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiSelect-root css-1ejkwvn-MuiInputBase-root-MuiInput-root"
+              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl  css-foxv06-MuiInputBase-root-MuiInput-root-MuiSelect-root"
             >
               <div
                 aria-expanded="false"
@@ -267,7 +270,7 @@ exports[`AppForm form render unchanged 1`] = `
             </div>
           </div>
           <div
-            class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAlert-root MuiAlert-standardInfo MuiAlert-standard DialogFormField css-1sd9cqf-MuiPaper-root-MuiAlert-root"
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-standardInfo MuiAlert-standard DialogFormField css-qnzb18-MuiPaper-root-MuiAlert-root"
             role="alert"
           >
             <div
@@ -292,7 +295,7 @@ exports[`AppForm form render unchanged 1`] = `
             </div>
           </div>
           <div
-            class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAlert-root MuiAlert-standardWarning MuiAlert-standard DialogFormField css-18ix9of-MuiPaper-root-MuiAlert-root"
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-standardWarning MuiAlert-standard DialogFormField css-1ciohd0-MuiPaper-root-MuiAlert-root"
             role="alert"
           >
             <div
@@ -334,6 +337,8 @@ exports[`AppForm form render unchanged 1`] = `
               <label
                 class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-a6y1oi-MuiFormLabel-root-MuiInputLabel-root"
                 data-shrink="false"
+                for="mui-2"
+                id="mui-2-label"
               >
                 Stream Name
                 <span
@@ -344,12 +349,13 @@ exports[`AppForm form render unchanged 1`] = `
                 </span>
               </label>
               <div
-                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd css-1ejkwvn-MuiInputBase-root-MuiInput-root"
+                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd css-1v2pam7-MuiInputBase-root-MuiInput-root"
               >
                 <input
                   aria-invalid="false"
                   autocomplete="off"
                   class="MuiInput-input MuiInputBase-input MuiInputBase-inputAdornedEnd css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                  id="mui-2"
                   name="streamName"
                   required=""
                   type="text"
@@ -388,6 +394,8 @@ exports[`AppForm form render unchanged 1`] = `
               <label
                 class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-a6y1oi-MuiFormLabel-root-MuiInputLabel-root"
                 data-shrink="false"
+                for="mui-3"
+                id="mui-3-label"
               >
                 Access Key Id
                 <span
@@ -398,12 +406,13 @@ exports[`AppForm form render unchanged 1`] = `
                 </span>
               </label>
               <div
-                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd css-1ejkwvn-MuiInputBase-root-MuiInput-root"
+                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd css-1v2pam7-MuiInputBase-root-MuiInput-root"
               >
                 <input
                   aria-invalid="false"
                   autocomplete="off"
                   class="MuiInput-input MuiInputBase-input MuiInputBase-inputAdornedEnd css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                  id="mui-3"
                   name="accessKeyId"
                   required=""
                   type="text"
@@ -442,6 +451,8 @@ exports[`AppForm form render unchanged 1`] = `
               <label
                 class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-a6y1oi-MuiFormLabel-root-MuiInputLabel-root"
                 data-shrink="false"
+                for="mui-4"
+                id="mui-4-label"
               >
                 Secret Access Key
                 <span
@@ -452,12 +463,13 @@ exports[`AppForm form render unchanged 1`] = `
                 </span>
               </label>
               <div
-                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd css-1ejkwvn-MuiInputBase-root-MuiInput-root"
+                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd css-1v2pam7-MuiInputBase-root-MuiInput-root"
               >
                 <input
                   aria-invalid="false"
                   autocomplete="off"
                   class="MuiInput-input MuiInputBase-input MuiInputBase-inputAdornedEnd css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                  id="mui-4"
                   name="secretAccessKey"
                   required=""
                   type="text"
@@ -506,7 +518,7 @@ exports[`AppForm form render unchanged 1`] = `
                 </span>
               </label>
               <div
-                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiSelect-root css-1ejkwvn-MuiInputBase-root-MuiInput-root"
+                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl  css-foxv06-MuiInputBase-root-MuiInput-root-MuiSelect-root"
               >
                 <div
                   aria-expanded="false"
@@ -549,7 +561,7 @@ exports[`AppForm form render unchanged 1`] = `
             class="MuiBox-root css-wpygli"
           >
             <button
-              class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root css-xcbv7o-MuiButtonBase-root-MuiButton-root"
+              class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root  css-xcbv7o-MuiButtonBase-root-MuiButton-root"
               tabindex="0"
               type="submit"
             >
