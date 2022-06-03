@@ -67,7 +67,7 @@ const ConditionRuleForm: FC<ConditionRuleFormProps> = (props: ConditionRuleFormP
     const isRawObject =
         props.currentDataElement !== undefined &&
         props.currentDataElement.var_type === VarType.OBJECT &&
-        props.currentDataElement.child_platform_data_maps.length === 0;
+        (props.currentDataElement.child_platform_data_maps ?? []).length === 0;
 
     const findConditionInputType = (): InputType | 'Custom' => {
         if (props.currentDataElement === undefined || isRawObject) {

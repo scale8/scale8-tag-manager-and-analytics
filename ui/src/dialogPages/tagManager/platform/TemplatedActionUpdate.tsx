@@ -38,7 +38,7 @@ const convertPlatformDataMapsForEdit = (dataMaps: PlatformDataMap[]): PlatformDa
             option_values: dataMap.option_values ?? undefined,
             validation_rules: dataMap.validation_rules ?? undefined,
             child_platform_data_maps: convertPlatformDataMapsForEdit(
-                dataMap.child_platform_data_maps,
+                dataMap.child_platform_data_maps ?? [],
             ),
             optional: dataMap.is_optional,
         };
