@@ -8,7 +8,7 @@ import { useRefresh } from '../hooks/useRefresh';
 
 const QueryLoaderAndError = <T,>(
     isPage: boolean,
-    queryResult: QueryResult<T>,
+    queryResult: QueryResult<T, any>,
     afterLoad: (
         data: T,
         valuesRefresh: (mustResetCache: boolean) => void,
