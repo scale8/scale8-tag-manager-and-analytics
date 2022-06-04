@@ -1,8 +1,8 @@
-import { FC, MouseEvent, SyntheticEvent, useState } from 'react';
-import { Box, Paper, Snackbar } from '@mui/material';
-import { Alert } from '@mui/material';
+import { FC, useState } from 'react';
+import { Alert, Box, Paper, Snackbar } from '@mui/material';
 import { CopyBlockProps } from '../../types/props/CopyBlockProps';
 import LazyShiki from './LibraryLoaders/LazyShiki';
+import { SnackbarProps } from '@mui/material/Snackbar/Snackbar';
 
 const CopyBlock: FC<CopyBlockProps> = (props: CopyBlockProps) => {
     const [open, setOpen] = useState(false);
@@ -19,7 +19,7 @@ const CopyBlock: FC<CopyBlockProps> = (props: CopyBlockProps) => {
         })();
     };
 
-    const handleClose = (event: SyntheticEvent | MouseEvent, reason?: string) => {
+    const handleClose: SnackbarProps['onClose'] = (event, reason) => {
         if (reason === 'clickaway') {
             return;
         }

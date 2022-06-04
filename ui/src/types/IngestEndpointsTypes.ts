@@ -8,7 +8,7 @@ export interface IngestEndpointDataMap {
     var_type: VarType;
     is_optional: boolean;
     default_value: IngestEndpointEnvironmentInstructionsGetData_getIngestEndpointEnvironment_ingest_endpoint_revision_ingest_endpoint_data_maps_default_value | null;
-    child_ingest_endpoint_data_maps: IngestEndpointDataMap[];
+    child_ingest_endpoint_data_maps?: IngestEndpointDataMap[];
 }
 
 export interface IngestEndpointRevision {

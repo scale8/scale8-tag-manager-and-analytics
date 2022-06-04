@@ -11,7 +11,7 @@ import langPYTHON from 'shiki/languages/python.tmLanguage.json';
 import langRUBY from 'shiki/languages/ruby.tmLanguage.json';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import onigasm from 'arraybuffer-loader!shiki/dist/onigasm.wasm';
+import onig from 'arraybuffer-loader!shiki/dist/onig.wasm';
 import { ShikiProps } from './LazyShiki';
 import { Box } from '@mui/material';
 
@@ -30,7 +30,7 @@ const CodeShiki: FC<ShikiProps> = ({ code, language, errorPosition, smallText, l
     useEffect(() => {
         (async () => {
             try {
-                shiki.setOnigasmWASM(onigasm);
+                shiki.setWasm(onig);
                 const highlighter = await shiki.getHighlighter({
                     themes: [themeNord as any],
                     langs: [

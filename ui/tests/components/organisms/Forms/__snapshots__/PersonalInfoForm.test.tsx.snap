@@ -17,6 +17,8 @@ exports[`PersonalInfoForm form render unchanged 1`] = `
           <label
             class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-a6y1oi-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink="false"
+            for="mui-1"
+            id="mui-1-label"
           >
             First Name
             <span
@@ -27,12 +29,13 @@ exports[`PersonalInfoForm form render unchanged 1`] = `
             </span>
           </label>
           <div
-            class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd css-1ejkwvn-MuiInputBase-root-MuiInput-root"
+            class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd css-1v2pam7-MuiInputBase-root-MuiInput-root"
           >
             <input
               aria-invalid="false"
               autocomplete="off"
               class="MuiInput-input MuiInputBase-input MuiInputBase-inputAdornedEnd css-1x51dt5-MuiInputBase-input-MuiInput-input"
+              id="mui-1"
               name="firstName"
               required=""
               type="text"
@@ -71,6 +74,8 @@ exports[`PersonalInfoForm form render unchanged 1`] = `
           <label
             class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary Mui-required css-a6y1oi-MuiFormLabel-root-MuiInputLabel-root"
             data-shrink="false"
+            for="mui-2"
+            id="mui-2-label"
           >
             Last Name
             <span
@@ -81,12 +86,13 @@ exports[`PersonalInfoForm form render unchanged 1`] = `
             </span>
           </label>
           <div
-            class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd css-1ejkwvn-MuiInputBase-root-MuiInput-root"
+            class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl MuiInputBase-adornedEnd css-1v2pam7-MuiInputBase-root-MuiInput-root"
           >
             <input
               aria-invalid="false"
               autocomplete="off"
               class="MuiInput-input MuiInputBase-input MuiInputBase-inputAdornedEnd css-1x51dt5-MuiInputBase-input-MuiInput-input"
+              id="mui-2"
               name="lastName"
               required=""
               type="text"
@@ -124,7 +130,7 @@ exports[`PersonalInfoForm form render unchanged 1`] = `
         class="MuiDialogActions-root MuiDialogActions-spacing css-snbeu5-MuiDialogActions-root"
       >
         <button
-          class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root css-7kx4b6-MuiButtonBase-root-MuiButton-root"
+          class="MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButtonBase-root  css-7kx4b6-MuiButtonBase-root-MuiButton-root"
           tabindex="0"
           type="button"
         >

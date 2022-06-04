@@ -21,7 +21,7 @@ import { AlertRevisionFinal } from '../components/atoms/AlertRevisionFinal';
 export type TablePageProps<Row extends RowData, TableData> = {
     title: string;
     mainInfoProps?: InfoProps;
-    mainQuery: QueryResult<TableData>;
+    mainQuery: QueryResult<TableData, any>;
     tableId: string;
     entityName: string;
     columns: Column<Row>[];

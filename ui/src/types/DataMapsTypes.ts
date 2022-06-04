@@ -30,7 +30,7 @@ export type PlatformDataMap = {
     option_values: S8DataMapValue[] | null;
     validation_rules: PlatformDataMapValidation[] | null;
     default_value: DataMapDefaultValue | null;
-    child_platform_data_maps: PlatformDataMap[];
+    child_platform_data_maps?: PlatformDataMap[];
 };
 
 export type DataMap = {

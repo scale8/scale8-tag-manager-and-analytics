@@ -1,4 +1,4 @@
-import { FC, MouseEvent, SyntheticEvent } from 'react';
+import { FC } from 'react';
 import SideBar from '../../organisms/SideBar';
 import { Box, Snackbar } from '@mui/material';
 import CancelConfirmDialog from '../../organisms/CancelConfirmDialog';
@@ -69,7 +69,7 @@ const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
         readOnly: dialogState.readOnly === true,
     };
 
-    const handleErrorSnackbarOpenClose = (event: SyntheticEvent | MouseEvent, reason?: string) => {
+    const handleErrorSnackbarOpenClose = (event: any, reason?: string) => {
         if (reason === 'clickaway') {
             return;
         }
