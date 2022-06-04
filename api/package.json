@@ -77,5 +77,8 @@
         "ssl-validator": "^1.0.7",
         "stripe": "^8.207.0",
         "twing": "^5.1.0"
+    },
+    "resolutions": {
+        "merge": "^2.1.1"
     }
 }
