@@ -274,7 +274,7 @@ export default class MongoDb extends BaseDatabase {
             getErrorFile(),
             getErrorMessage(),
         ].reduce((a, c) => {
-            return c === undefined ? a : Object.assign(a, c);
+            return c === undefined ? a : Object.assign(a as Record<string, any>, c);
         }, {} as { [k: string]: any }) as { [p: string]: any };
     }
 
@@ -1030,7 +1030,7 @@ export default class MongoDb extends BaseDatabase {
             );
 
         return [getRange(), getRevisionFilter(), getEnvironmentFilter()].reduce((a, c) => {
-            return c === undefined ? a : Object.assign(a, c);
+            return c === undefined ? a : Object.assign(a as Record<string, any>, c);
         }, {} as { [k: string]: any }) as { [p: string]: any };
     }
 
