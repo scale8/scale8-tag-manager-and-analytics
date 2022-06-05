@@ -195,7 +195,7 @@ export default class ActionManager extends Manager<Action> {
                             revision,
                         );
                         action.dataMapIds = newDataMaps.map((_) => _.id);
-                        await this.repoFactory(Action).save(action, me, OperationOwner.USER, {
+                        await this.repoFactory(Action).save(action, me, {
                             gqlMethod: GQLMethod.UPDATE_PROPERTIES,
                             userComments: data.comments,
                         });
@@ -209,7 +209,7 @@ export default class ActionManager extends Manager<Action> {
                         throw new GQLError(userMessages.cantValidatePlatformAction, true);
                     }
                 } else {
-                    await this.repoFactory(Action).save(action, me, OperationOwner.USER, {
+                    await this.repoFactory(Action).save(action, me, {
                         gqlMethod: GQLMethod.UPDATE_PROPERTIES,
                         userComments: data.comments,
                     });
@@ -231,7 +231,7 @@ export default class ActionManager extends Manager<Action> {
                     userMessages.actionGroupFailed,
                 );
                 actionGroup.actionIds = actionGroup.actionIds.filter((_) => !_.equals(action.id));
-                await this.repoFactory(ActionGroup).save(actionGroup, me, OperationOwner.USER, {
+                await this.repoFactory(ActionGroup).save(actionGroup, me, {
                     gqlMethod: GQLMethod.DELETE_LINKED_ENTITY,
                     userComments: data.comments,
                     opConnectedModels: [action],
@@ -294,7 +294,6 @@ export default class ActionManager extends Manager<Action> {
                     const newAction = await this.repoFactory(Action).save(
                         new Action(data.name, revision, platformAction, dataMaps),
                         me,
-                        OperationOwner.USER,
                         {
                             gqlMethod: GQLMethod.CREATE,
                             userComments: data.comments,
@@ -302,7 +301,7 @@ export default class ActionManager extends Manager<Action> {
                     );
                     //link this back to the parent entity...
                     actionGroup.actionIds = [...actionGroup.actionIds, newAction.id];
-                    await this.repoFactory(ActionGroup).save(actionGroup, me, OperationOwner.USER, {
+                    await this.repoFactory(ActionGroup).save(actionGroup, me, {
                         gqlMethod: GQLMethod.ADD_LINKED_ENTITY,
                         opConnectedModels: [newAction],
                     });

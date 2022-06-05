@@ -175,7 +175,7 @@ export default class RuleGroupManager extends Manager<RuleGroup> {
                 ) {
                     //the length is the same and every item has been accounted for...
                     ruleGroup.ruleIds = (data.new_order as string[]).map((_) => new ObjectId(_));
-                    await this.repoFactory(RuleGroup).save(ruleGroup, me, OperationOwner.USER, {
+                    await this.repoFactory(RuleGroup).save(ruleGroup, me, {
                         gqlMethod: GQLMethod.REORDER_LINKED_ENTITIES,
                         opConnectedModels: await this.repoFactory(Rule).findByIds(
                             ruleGroup.ruleIds,
@@ -204,7 +204,7 @@ export default class RuleGroupManager extends Manager<RuleGroup> {
                         userMessages.tagFailed,
                     );
                     tag.ruleGroupIds = tag.ruleGroupIds.filter((_) => !_.equals(ruleGroup.id));
-                    await this.repoFactory(Tag).save(tag, me, OperationOwner.USER, {
+                    await this.repoFactory(Tag).save(tag, me, {
                         gqlMethod: GQLMethod.DELETE_LINKED_ENTITY,
                         userComments: data.comments,
                         opConnectedModels: [ruleGroup],
@@ -221,7 +221,7 @@ export default class RuleGroupManager extends Manager<RuleGroup> {
             );
             return this.orgAuth.asUserWithEditAccess(ctx, ruleGroup.orgId, async (me) => {
                 ruleGroup.bulkGQLSet(data, ['name', 'is_active']); //only is a safety check against this function
-                await this.repoFactory(RuleGroup).save(ruleGroup, me, OperationOwner.USER, {
+                await this.repoFactory(RuleGroup).save(ruleGroup, me, {
                     gqlMethod: GQLMethod.UPDATE_PROPERTIES,
                     userComments: data.comments,
                 });
@@ -246,7 +246,7 @@ export default class RuleGroupManager extends Manager<RuleGroup> {
                     RuleGroupRepo,
                 );
                 tag.ruleGroupIds = [...tag.ruleGroupIds, newRuleGroup.id];
-                await this.repoFactory(Tag).save(tag, actor, OperationOwner.USER, {
+                await this.repoFactory(Tag).save(tag, actor, {
                     gqlMethod: GQLMethod.ADD_LINKED_ENTITY,
                     opConnectedModels: [newRuleGroup],
                 });
@@ -262,7 +262,7 @@ export default class RuleGroupManager extends Manager<RuleGroup> {
                 const duplicate = await duplicateRuleGroup(me, ruleGroup);
                 duplicate.name = data.name;
                 return (
-                    await this.repoFactory(RuleGroup).save(duplicate, me, OperationOwner.USER, {
+                    await this.repoFactory(RuleGroup).save(duplicate, me, {
                         gqlMethod: GQLMethod.UPDATE_PROPERTIES,
                         userComments: `Changed rule group name to ${duplicate.name}`,
                     })
@@ -284,7 +284,6 @@ export default class RuleGroupManager extends Manager<RuleGroup> {
                 const newRuleGroup = await this.repoFactory(RuleGroup).save(
                     new RuleGroup(data.name, revision),
                     me,
-                    OperationOwner.USER,
                     {
                         gqlMethod: GQLMethod.CREATE,
                         userComments: data.comments,
@@ -292,7 +291,7 @@ export default class RuleGroupManager extends Manager<RuleGroup> {
                 );
                 //link this back to the parent entity...
                 tag.ruleGroupIds = [...tag.ruleGroupIds, newRuleGroup.id];
-                await this.repoFactory(Tag).save(tag, me, OperationOwner.USER, {
+                await this.repoFactory(Tag).save(tag, me, {
                     gqlMethod: GQLMethod.ADD_LINKED_ENTITY,
                     opConnectedModels: [newRuleGroup],
                 });

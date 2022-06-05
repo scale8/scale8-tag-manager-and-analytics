@@ -157,7 +157,6 @@ export default class PlatformManager extends Manager<Platform> {
                         const platform = await this.repoFactory(Platform).save(
                             new Platform(data.type, data.name, data.description, tagManagerAccount),
                             me,
-                            OperationOwner.USER,
                             {
                                 gqlMethod: GQLMethod.CREATE,
                             },
@@ -167,7 +166,6 @@ export default class PlatformManager extends Manager<Platform> {
                             await this.repoFactory(PlatformRevision).save(
                                 new PlatformRevision(generateRevisionName(), platform),
                                 me,
-                                OperationOwner.USER,
                                 {
                                     gqlMethod: GQLMethod.CREATE,
                                     userComments:
@@ -190,7 +188,7 @@ export default class PlatformManager extends Manager<Platform> {
             );
             return await this.orgAuth.asUserWithCreateAccess(ctx, platform.orgId, async (me) => {
                 platform.bulkGQLSet(data, ['name', 'description', 'logo']);
-                await this.repoFactory(Platform).save(platform, me, OperationOwner.USER, {
+                await this.repoFactory(Platform).save(platform, me, {
                     gqlMethod: GQLMethod.UPDATE_PROPERTIES,
                 });
                 return true;
@@ -211,7 +209,7 @@ export default class PlatformManager extends Manager<Platform> {
                     throw new GQLError(userMessages.platformPublishNoRevision, true);
                 } else {
                     platform.isPublic = true;
-                    await this.repoFactory(Platform).save(platform, me, OperationOwner.USER, {
+                    await this.repoFactory(Platform).save(platform, me, {
                         gqlMethod: GQLMethod.PUBLISH_PLATFORM,
                     });
                     return true;

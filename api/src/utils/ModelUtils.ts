@@ -131,7 +131,7 @@ export const deleteModelCascading = async <T extends Model>(
                     : 'Undefined',
         };
         if (!testDelete) {
-            await modelRepo.delete(deleteModel, actor, OperationOwner.USER, undefined, undefined, {
+            await modelRepo.delete(deleteModel, actor, undefined, undefined, {
                 mongoOptions: {
                     session: clientSession,
                 },

@@ -35,6 +35,11 @@ export default class App extends Model {
     })
     private _usage_ingest_endpoint_environment_id?: ObjectId;
 
+    @Field<string>({
+        required: false,
+    })
+    private _usage_schema_hash?: string;
+
     @Field<boolean>({
         required: true,
         defaultValue: () => true,
@@ -177,5 +182,13 @@ export default class App extends Model {
 
     set storageProviderConfigHash(value: string) {
         this._storage_provider_config_hash = value;
+    }
+
+    get usageSchemaHash(): string {
+        return this._usage_schema_hash ?? '';
+    }
+
+    set usageSchemaHash(value: string) {
+        this._usage_schema_hash = value;
     }
 }

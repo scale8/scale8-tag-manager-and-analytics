@@ -4,7 +4,6 @@ import DataError from '../../../../errors/DataError';
 import { ObjectId } from 'mongodb';
 import IngestEndpointDataMap from '../../../models/data/IngestEndpointDataMap';
 import IngestEndpointRevision from '../../../models/data/IngestEndpointRevision';
-import OperationOwner from '../../../../enums/OperationOwner';
 import userMessages from '../../../../errors/UserMessages';
 import RepoUnderRevisionControl from '../../../abstractions/RepoUnderRevisionControl';
 
@@ -23,31 +22,21 @@ export default class UnderIngestEndpointRevisionControl<
         return revision !== null && revision.isFinal;
     }
 
-    public async save(
-        model: T,
-        actor: OperationActor,
-        owner: OperationOwner = OperationOwner.USER,
-        saveOptions: SaveOptions = {},
-    ): Promise<T> {
+    public async save(model: T, actor: OperationActor, saveOptions: SaveOptions = {}): Promise<T> {
         return this.saveUnderRevisionControl(
             model.ingestEndpointRevisionId,
             await this.isRevisionFinal(model.ingestEndpointRevisionId),
             model,
             actor,
-            owner,
             saveOptions,
         );
     }
 
-    public async delete(
-        model: T,
-        actor: OperationActor,
-        owner: OperationOwner = OperationOwner.USER,
-    ): Promise<void> {
+    public async delete(model: T, actor: OperationActor): Promise<void> {
         if (await this.isRevisionFinal(model.ingestEndpointRevisionId)) {
             throw new DataError(userMessages.finalisedRevision, true);
         } else {
-            return super.delete(model, actor, owner);
+            return super.delete(model, actor);
         }
     }
 }

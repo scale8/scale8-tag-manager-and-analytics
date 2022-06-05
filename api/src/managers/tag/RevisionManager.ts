@@ -10,7 +10,6 @@ import AppPlatformRevision from '../../mongo/models/tag/AppPlatformRevision';
 import App from '../../mongo/models/tag/App';
 import Trigger from '../../mongo/models/tag/Trigger';
 import ActionGroupDistribution from '../../mongo/models/tag/ActionGroupDistribution';
-import OperationOwner from '../../enums/OperationOwner';
 import GQLMethod from '../../enums/GQLMethod';
 import userMessages from '../../errors/UserMessages';
 import { diff, revisionsJSONSafeDiff } from '../../utils/DiffUtils';
@@ -290,7 +289,7 @@ export default class RevisionManager extends Manager<Revision> {
             );
             return this.orgAuth.asUserWithEditAccess(ctx, revision.orgId, async (me) => {
                 revision.bulkGQLSet(data, ['name']); //only is a safety check against this function
-                await this.repoFactory(Revision).save(revision, me, OperationOwner.USER, {
+                await this.repoFactory(Revision).save(revision, me, {
                     gqlMethod: GQLMethod.UPDATE_PROPERTIES,
                     userComments: data.comments,
                 });
@@ -309,15 +308,10 @@ export default class RevisionManager extends Manager<Revision> {
                     if (typeof args.duplicateRevisionInput.new_name === 'string') {
                         newRevision.name = args.duplicateRevisionInput.new_name;
                         return (
-                            await this.repoFactory(Revision).save(
-                                newRevision,
-                                me,
-                                OperationOwner.USER,
-                                {
-                                    gqlMethod: GQLMethod.UPDATE_PROPERTIES,
-                                    userComments: `Updated name of duplicate revision to ${newRevision.name}`,
-                                },
-                            )
+                            await this.repoFactory(Revision).save(newRevision, me, {
+                                gqlMethod: GQLMethod.UPDATE_PROPERTIES,
+                                userComments: `Updated name of duplicate revision to ${newRevision.name}`,
+                            })
                         ).toGQLType();
                     } else {
                         return newRevision.toGQLType();
@@ -457,7 +451,7 @@ export default class RevisionManager extends Manager<Revision> {
                 if (issues.length === 0) {
                     //we can finalise this...
                     revision.isFinal = true;
-                    await this.repoFactory(Revision).save(revision, me, OperationOwner.USER, {
+                    await this.repoFactory(Revision).save(revision, me, {
                         gqlMethod: GQLMethod.FINALIZE_REVISION,
                     });
                 }

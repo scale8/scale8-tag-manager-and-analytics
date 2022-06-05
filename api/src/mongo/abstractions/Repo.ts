@@ -234,15 +234,15 @@ export default abstract class Repo<T extends Model> {
     public async delete(
         model: T,
         actor: User | 'SYSTEM',
-        owner: OperationOwner = OperationOwner.USER,
         method?: GQLMethod,
         comments?: string,
         saveOptions?: SaveOptions,
     ): Promise<void> {
+        const owner = actor === 'SYSTEM' ? OperationOwner.SYSTEM : OperationOwner.USER;
         //we do not want a set method on model for this!
         (model as any)['_is_deleted'] = true;
         (model as any)['_deleted_at'] = new Date();
-        const deletedModel = await this.save(model, actor, owner, saveOptions);
+        const deletedModel = await this.save(model, actor, saveOptions);
         await this.logger.database(`Deleted data on ${this.model.name}`, deletedModel.toGQLType());
         await this.recordAudit(actor, owner, deletedModel, AuditAction.Delete, method, comments);
     }
@@ -250,10 +250,10 @@ export default abstract class Repo<T extends Model> {
     public async hardDelete(
         model: T,
         actor: User | 'SYSTEM',
-        owner: OperationOwner = OperationOwner.USER,
         method?: GQLMethod,
         comments?: string,
     ): Promise<void> {
+        const owner = actor === 'SYSTEM' ? OperationOwner.SYSTEM : OperationOwner.USER;
         const collection = await this.getRepoCollection();
         const query = { _id: model.id };
         const result = await collection.deleteOne(query);
@@ -268,12 +268,8 @@ export default abstract class Repo<T extends Model> {
         }
     }
 
-    public async save(
-        model: T,
-        actor: User | 'SYSTEM',
-        owner: OperationOwner = OperationOwner.USER,
-        saveOptions: SaveOptions = {},
-    ): Promise<T> {
+    public async save(model: T, actor: User | 'SYSTEM', saveOptions: SaveOptions = {}): Promise<T> {
+        const owner = actor === 'SYSTEM' ? OperationOwner.SYSTEM : OperationOwner.USER;
         const setCommand: {
             $set: { [p: string]: MongoType };
             $unset: { [p: string]: string };

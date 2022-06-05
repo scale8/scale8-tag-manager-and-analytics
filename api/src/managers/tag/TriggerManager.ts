@@ -9,7 +9,6 @@ import Revision from '../../mongo/models/tag/Revision';
 import Trigger from '../../mongo/models/tag/Trigger';
 import GQLError from '../../errors/GQLError';
 import Rule from '../../mongo/models/tag/Rule';
-import OperationOwner from '../../enums/OperationOwner';
 import GQLMethod from '../../enums/GQLMethod';
 import userMessages from '../../errors/UserMessages';
 import {
@@ -215,7 +214,7 @@ export default class TriggerManager extends Manager<Trigger> {
         );
         return this.orgAuth.asUserWithEditAccess(ctx, trigger.orgId, async (me) => {
             trigger[ruleIdsField] = getNewModelsOrder(trigger[ruleIdsField], data.new_order);
-            await this.repoFactory(Trigger).save(trigger, me, OperationOwner.USER, {
+            await this.repoFactory(Trigger).save(trigger, me, {
                 gqlMethod: GQLMethod.REORDER_LINKED_ENTITIES,
                 opConnectedModels: await this.repoFactory(ConditionRule).findByIds(
                     trigger.exceptionRuleIds,
@@ -245,7 +244,7 @@ export default class TriggerManager extends Manager<Trigger> {
             );
             return this.orgAuth.asUserWithEditAccess(ctx, trigger.orgId, async (me) => {
                 trigger.eventIds = getNewModelsOrder(trigger.eventIds, data.new_order);
-                await this.repoFactory(Trigger).save(trigger, me, OperationOwner.USER, {
+                await this.repoFactory(Trigger).save(trigger, me, {
                     gqlMethod: GQLMethod.REORDER_LINKED_ENTITIES,
                     opConnectedModels: await this.repoFactory(Event).findByIds(trigger.eventIds),
                 });
@@ -291,7 +290,7 @@ export default class TriggerManager extends Manager<Trigger> {
             );
             return this.orgAuth.asUserWithEditAccess(ctx, trigger.orgId, async (me) => {
                 trigger.bulkGQLSet(data, ['name']); //only is a safety check against this function
-                await this.repoFactory(Trigger).save(trigger, me, OperationOwner.USER, {
+                await this.repoFactory(Trigger).save(trigger, me, {
                     gqlMethod: GQLMethod.UPDATE_PROPERTIES,
                     userComments: data.comments,
                 });
@@ -313,7 +312,7 @@ export default class TriggerManager extends Manager<Trigger> {
                         TriggerRepo,
                     );
                     revision.globalTriggerIds = [...revision.globalTriggerIds, newTrigger.id];
-                    await this.repoFactory(Revision).save(revision, actor, OperationOwner.USER, {
+                    await this.repoFactory(Revision).save(revision, actor, {
                         gqlMethod: GQLMethod.ADD_LINKED_ENTITY,
                         opConnectedModels: [newTrigger],
                     });
@@ -329,7 +328,7 @@ export default class TriggerManager extends Manager<Trigger> {
                 const duplicate = await duplicateTrigger(me, trigger);
                 duplicate.name = data.name;
                 return (
-                    await this.repoFactory(Trigger).save(duplicate, me, OperationOwner.USER, {
+                    await this.repoFactory(Trigger).save(duplicate, me, {
                         gqlMethod: GQLMethod.UPDATE_PROPERTIES,
                         userComments: `Updated name of trigger to ${duplicate.name}`,
                     })

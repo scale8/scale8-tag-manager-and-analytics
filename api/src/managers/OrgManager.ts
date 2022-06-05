@@ -680,7 +680,6 @@ export default class OrgManager extends Manager<Org> {
                         true,
                     ),
                     'SYSTEM',
-                    OperationOwner.SYSTEM,
                 );
                 return (
                     await createOrg(
@@ -704,7 +703,7 @@ export default class OrgManager extends Manager<Org> {
                 ).getFromOrg(org);
                 account.enabled = true;
                 account.startTrial();
-                await this.repoFactory(TagManagerAccount).save(account, me, OperationOwner.USER, {
+                await this.repoFactory(TagManagerAccount).save(account, me, {
                     gqlMethod: GQLMethod.CREATE,
                 });
                 return account.toGQLType();
@@ -721,7 +720,7 @@ export default class OrgManager extends Manager<Org> {
                 ).getFromOrg(org);
                 account.enabled = true;
                 account.startTrial();
-                await this.repoFactory(DataManagerAccount).save(account, me, OperationOwner.USER, {
+                await this.repoFactory(DataManagerAccount).save(account, me, {
                     gqlMethod: GQLMethod.CREATE,
                 });
                 return account.toGQLType();
@@ -1025,7 +1024,7 @@ export default class OrgManager extends Manager<Org> {
             return await this.orgAuth.asUserWithEditAccess(ctx, orgId, async (me) => {
                 const org = await fetchOrg(orgId);
                 org.bulkGQLSet(args.orgUpdateInput, ['name']);
-                await this.repoFactory(Org).save(org, me, OperationOwner.USER, {
+                await this.repoFactory(Org).save(org, me, {
                     gqlMethod: GQLMethod.UPDATE_PROPERTIES,
                     userComments: args.orgUpdateInput.comments,
                 });
@@ -1038,7 +1037,6 @@ export default class OrgManager extends Manager<Org> {
                 await this.repoFactory(Org).delete(
                     org,
                     me,
-                    OperationOwner.USER,
                     GQLMethod.DELETE,
                     args.orgDeleteInput.comments,
                 );
@@ -1151,7 +1149,7 @@ export default class OrgManager extends Manager<Org> {
                     const accountRepository = this.repoFactory(accountType);
 
                     const deleteAccount = async () => {
-                        await accountRepository.delete(account, 'SYSTEM', OperationOwner.SYSTEM);
+                        await accountRepository.delete(account, 'SYSTEM');
                         // generate a new inactive account
                         // todo... this is bad.... FIX IT. Data manager is breaking here for obvious reasons.
                         const buildNewAccount = () => {
@@ -1174,7 +1172,6 @@ export default class OrgManager extends Manager<Org> {
                         await accountRepository.save(
                             buildNewAccount(),
                             'SYSTEM',
-                            OperationOwner.SYSTEM,
                             {
                                 gqlMethod: GQLMethod.CREATE,
                             },

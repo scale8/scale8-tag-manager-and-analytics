@@ -3,7 +3,6 @@ import ActionGroupDistribution from '../mongo/models/tag/ActionGroupDistribution
 import Rule from '../mongo/models/tag/Rule';
 import Revision from '../mongo/models/tag/Revision';
 import userMessages from '../errors/UserMessages';
-import OperationOwner from '../enums/OperationOwner';
 import GQLMethod from '../enums/GQLMethod';
 import container from '../container/IOC.config';
 import RepoFromModelFactory from '../container/factoryTypes/RepoFromModelFactory';
@@ -30,7 +29,7 @@ export async function linkAndReturnActionGroupDistribution(
             ...parentEntity.globalActionGroupDistributionIds,
             newActionGroupDistribution.id,
         ];
-        await repoFactory(Revision).save(parentEntity, actor, OperationOwner.USER, {
+        await repoFactory(Revision).save(parentEntity, actor, {
             gqlMethod: GQLMethod.ADD_LINKED_ENTITY,
             opConnectedModels: [newActionGroupDistribution],
         });
@@ -42,7 +41,7 @@ export async function linkAndReturnActionGroupDistribution(
             ...currentActionGroupDistributions,
             newActionGroupDistribution,
         ]);
-        await repoFactory(Rule).save(parentEntity, actor, OperationOwner.USER, {
+        await repoFactory(Rule).save(parentEntity, actor, {
             gqlMethod: GQLMethod.ADD_LINKED_ENTITY,
             opConnectedModels: [newActionGroupDistribution],
         });
@@ -76,7 +75,6 @@ export const createActionGroupDistribution = async (
             type,
         ),
         actor,
-        OperationOwner.USER,
         {
             gqlMethod: GQLMethod.CREATE,
             userComments: comments,

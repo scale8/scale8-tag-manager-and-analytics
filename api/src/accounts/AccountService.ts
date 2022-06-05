@@ -25,7 +25,7 @@ export default class AccountService {
             account.enabled = true;
             account.cancelTrial();
 
-            await accountRepo.save(account, 'SYSTEM', OperationOwner.SYSTEM);
+            await accountRepo.save(account, 'SYSTEM');
         }
     }
 

@@ -179,7 +179,7 @@ export const duplicateModel = async <T extends Model>(
         (newModel as any)['_name'] = parentModelId.toString();
     }
 
-    const dupe = (await modelRepo.save(newModel, actor, OperationOwner.USER, {
+    const dupe = (await modelRepo.save(newModel, actor, {
         gqlMethod: GQLMethod.DUPLICATE,
         userComments: `Created a new duplicate`,
         forceCreate: isParentModel || newId !== undefined,
@@ -203,7 +203,6 @@ export const duplicateModel = async <T extends Model>(
                     oldDep.dependsOnModelName,
                 ),
                 actor,
-                OperationOwner.USER,
                 {
                     mongoOptions: {
                         session: clientSession,

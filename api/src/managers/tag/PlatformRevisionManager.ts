@@ -11,7 +11,6 @@ import Platform from '../../mongo/models/tag/Platform';
 import CTX from '../../gql/ctx/CTX';
 import PlatformAsset from '../../mongo/models/tag/PlatformAsset';
 import GQLError from '../../errors/GQLError';
-import OperationOwner from '../../enums/OperationOwner';
 import GQLMethod from '../../enums/GQLMethod';
 import userMessages from '../../errors/UserMessages';
 import { revisionsJSONSafeDiff } from '../../utils/DiffUtils';
@@ -330,14 +329,13 @@ export default class PlatformRevisionManager extends Manager<PlatformRevision> {
                     return this.repoFactory(PlatformAsset).save(
                         new PlatformAsset(name, revision, 'application/javascript', 0, isPrimary),
                         actor,
-                        OperationOwner.USER,
                     );
                 }),
             )
         ).map((_) => _.id);
         revision.isFinal = publish;
         revision.isPublished = publish;
-        return this.repoFactory(PlatformRevision).save(revision, actor, OperationOwner.USER);
+        return this.repoFactory(PlatformRevision).save(revision, actor);
     }
 
     protected async createRevisionFromGQLInput(
@@ -549,15 +547,10 @@ export default class PlatformRevisionManager extends Manager<PlatformRevision> {
             );
             return this.orgAuth.asUserWithEditAccess(ctx, platformRevision.orgId, async (me) => {
                 platformRevision.bulkGQLSet(data, ['name']); //only is a safety check against this function
-                await this.repoFactory(PlatformRevision).save(
-                    platformRevision,
-                    me,
-                    OperationOwner.USER,
-                    {
-                        gqlMethod: GQLMethod.UPDATE_PROPERTIES,
-                        userComments: data.comments,
-                    },
-                );
+                await this.repoFactory(PlatformRevision).save(platformRevision, me, {
+                    gqlMethod: GQLMethod.UPDATE_PROPERTIES,
+                    userComments: data.comments,
+                });
                 return true;
             });
         },
@@ -576,15 +569,10 @@ export default class PlatformRevisionManager extends Manager<PlatformRevision> {
                     if (typeof args.duplicatePlatformRevisionInput.new_name === 'string') {
                         newRevision.name = args.duplicatePlatformRevisionInput.new_name;
                         return (
-                            await this.repoFactory(PlatformRevision).save(
-                                newRevision,
-                                me,
-                                OperationOwner.USER,
-                                {
-                                    gqlMethod: GQLMethod.UPDATE_PROPERTIES,
-                                    userComments: `Updated name of duplicate platform revision to ${newRevision.name}`,
-                                },
-                            )
+                            await this.repoFactory(PlatformRevision).save(newRevision, me, {
+                                gqlMethod: GQLMethod.UPDATE_PROPERTIES,
+                                userComments: `Updated name of duplicate platform revision to ${newRevision.name}`,
+                            })
                         ).toGQLType();
                     } else {
                         return newRevision.toGQLType();

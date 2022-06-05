@@ -12,7 +12,6 @@ import PasswordReset from '../mongo/models/PasswordReset';
 import TYPES from '../container/IOC.types';
 import GenericError from '../errors/GenericError';
 import { authenticator } from 'otplib';
-import OperationOwner from '../enums/OperationOwner';
 import UserNotificationManager from './UserNotificationManager';
 import userMessages from '../errors/UserMessages';
 import GQLError from '../errors/GQLError';
@@ -497,7 +496,7 @@ export default class UserManager extends Manager<User> {
         resetAPIToken: async (parent: any, args: any, ctx: CTX) => {
             return await this.userAuth.asUser(ctx, async (me) => {
                 me.resetAPIToken(await this.config.getEncryptionSalt());
-                await this.repoFactory(User).save(me, 'SYSTEM', OperationOwner.SYSTEM);
+                await this.repoFactory(User).save(me, 'SYSTEM');
                 return me.apiToken;
             });
         },
@@ -587,7 +586,7 @@ export default class UserManager extends Manager<User> {
                     );
                 }
                 me.twoFactorAuth = true;
-                await this.repoFactory(User).save(me, 'SYSTEM', OperationOwner.SYSTEM);
+                await this.repoFactory(User).save(me, 'SYSTEM');
                 return true;
             });
         },
@@ -608,7 +607,7 @@ export default class UserManager extends Manager<User> {
                     );
                 }
                 me.twoFactorAuth = false;
-                await this.repoFactory(User).save(me, 'SYSTEM', OperationOwner.SYSTEM);
+                await this.repoFactory(User).save(me, 'SYSTEM');
                 return true;
             });
         },
@@ -628,14 +627,14 @@ export default class UserManager extends Manager<User> {
                     args.changePasswordInput.new_password,
                     await this.config.getEncryptionSalt(),
                 );
-                await this.repoFactory(User).save(user, 'SYSTEM', OperationOwner.SYSTEM);
+                await this.repoFactory(User).save(user, 'SYSTEM');
                 return true;
             });
         },
         removeGitHubLink: async (parent: any, args: any, ctx: CTX) => {
             return await this.userAuth.asUser(ctx, async (me) => {
                 me.github = undefined;
-                await this.repoFactory(User).save(me, 'SYSTEM', OperationOwner.SYSTEM);
+                await this.repoFactory(User).save(me, 'SYSTEM');
 
                 return true;
             });
@@ -655,7 +654,7 @@ export default class UserManager extends Manager<User> {
                     }
                 }
                 me.bulkGQLSet(args.meUpdateInput);
-                await this.repoFactory(User).save(me, 'SYSTEM', OperationOwner.SYSTEM);
+                await this.repoFactory(User).save(me, 'SYSTEM');
                 return true;
             });
         },
@@ -691,7 +690,7 @@ export default class UserManager extends Manager<User> {
                 // Remove github link
                 me.github = undefined;
 
-                await this.repoFactory(User).save(me, 'SYSTEM', OperationOwner.SYSTEM);
+                await this.repoFactory(User).save(me, 'SYSTEM');
 
                 await this.repoFactory(User).delete(me, me);
                 return true;
@@ -714,7 +713,6 @@ export default class UserManager extends Manager<User> {
                 const reset = await this.repoFactory(PasswordReset).save(
                     new PasswordReset(user),
                     'SYSTEM',
-                    OperationOwner.SYSTEM,
                 );
                 //send email...
                 await this.mailer.sendEmail(user.email, 'Password Reset', 'PasswordReset.twig', {
@@ -747,7 +745,7 @@ export default class UserManager extends Manager<User> {
                 await this.config.getEncryptionSalt(),
             );
             user.twoFactorAuth = false;
-            await this.repoFactory(User).save(user, 'SYSTEM', OperationOwner.SYSTEM);
+            await this.repoFactory(User).save(user, 'SYSTEM');
             //send email
             await this.mailer.sendEmail(user.email, 'Password Changed', 'PasswordChanged.twig', {
                 firstName: user.firstName,

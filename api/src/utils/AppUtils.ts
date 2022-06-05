@@ -7,7 +7,6 @@ import TagManagerAccount from '../mongo/models/tag/TagManagerAccount';
 import Platform from '../mongo/models/tag/Platform';
 import userMessages from '../errors/UserMessages';
 import AppPlatform from '../mongo/models/tag/AppPlatform';
-import OperationOwner from '../enums/OperationOwner';
 import GQLMethod from '../enums/GQLMethod';
 import { fetchOrg } from './OrgUtils';
 import Revision from '../mongo/models/tag/Revision';
@@ -28,7 +27,7 @@ import { ActionGroupDistributionType } from '../enums/ActionGroupDistributionTyp
 import { SortDirection } from '../enums/SortDirection';
 import { TagType } from '../enums/TagType';
 import { StorageProvider } from '../enums/StorageProvider';
-import { StorageProviderConfig } from '../mongo/types/Types';
+import { IngestEndpointDataMapSchema, StorageProviderConfig } from '../mongo/types/Types';
 import Hash from '../core/Hash';
 import { generateRevisionName } from '../../../common/utils/GenerateRevisionName';
 
@@ -262,6 +261,13 @@ export const appTrackingSchema = [
     },
 ];
 
+export const getAppUsageSchema = (): IngestEndpointDataMapSchema[] => [
+    ...appTrackingSchema,
+    ...userTrackingSchema,
+    ...eventTrackingSchema,
+    ...errorTrackingSchema,
+];
+
 const createAppUsageEndpointEnvironment = async (
     org: Org,
     trackingEntity: App,
@@ -269,12 +275,14 @@ const createAppUsageEndpointEnvironment = async (
     provider: StorageProvider,
     providerConfig: StorageProviderConfig,
 ): Promise<IngestEndpointEnvironment> => {
-    return createUsageEndpointEnvironment(org, trackingEntity, actor, provider, providerConfig, [
-        ...appTrackingSchema,
-        ...userTrackingSchema,
-        ...eventTrackingSchema,
-        ...errorTrackingSchema,
-    ]);
+    return createUsageEndpointEnvironment(
+        org,
+        trackingEntity,
+        actor,
+        provider,
+        providerConfig,
+        getAppUsageSchema(),
+    );
 };
 
 export const createApp = async (
@@ -308,7 +316,7 @@ export const createApp = async (
         analyticsEnabled,
         errorTrackingEnabled,
     );
-    app = await repoFactory(App).save(app, actor, OperationOwner.USER, {
+    app = await repoFactory(App).save(app, actor, {
         gqlMethod: GQLMethod.CREATE,
     });
 
@@ -321,12 +329,13 @@ export const createApp = async (
         providerConfig,
     );
     app.usageIngestEndpointEnvironmentId = usageEndpointEnvironment.id;
+    app.usageSchemaHash = Hash.hashString(JSON.stringify(getAppUsageSchema()));
     app.storageProviderConfigHash = Hash.hashString(JSON.stringify(providerConfig));
-    app = await repoFactory(App).save(app, actor, OperationOwner.USER);
+    app = await repoFactory(App).save(app, actor);
 
     //create first revision...
     let revision = new Revision('Initial Revision', app);
-    revision = await repoFactory(Revision).save(revision, actor, OperationOwner.USER, {
+    revision = await repoFactory(Revision).save(revision, actor, {
         gqlMethod: GQLMethod.CREATE,
         userComments: 'Auto-generated the first revision for the App',
     });
@@ -369,7 +378,6 @@ export const createApp = async (
             await repoFactory(AppPlatformRevision).save(
                 new AppPlatformRevision(revision, latestCorePlatformRevision),
                 actor,
-                OperationOwner.USER,
                 {
                     gqlMethod: GQLMethod.CREATE,
                     userComments:
@@ -379,7 +387,7 @@ export const createApp = async (
         ).id,
     ];
     revision.isFinal = true;
-    await repoFactory(Revision).save(revision, actor, OperationOwner.USER, {
+    await repoFactory(Revision).save(revision, actor, {
         gqlMethod: GQLMethod.FINALIZE_REVISION,
         userComments:
             'Automatically linking tags, core platform and finalizing the first revision so it can be attached to an environment and installed',
@@ -390,7 +398,7 @@ export const createApp = async (
     //finally clone first revision ready for editing...
     const newRevision = await duplicateRevision(actor, revision);
     newRevision.name = generateRevisionName();
-    await repoFactory(Revision).save(newRevision, actor, OperationOwner.USER, {
+    await repoFactory(Revision).save(newRevision, actor, {
         gqlMethod: GQLMethod.CREATE,
         userComments: 'Automatically cloned the first revision to enable editing',
     });

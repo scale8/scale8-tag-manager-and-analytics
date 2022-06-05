@@ -34,7 +34,7 @@ export const generateNewSession = async (user: User, isTemp = false): Promise<Se
             ? (user.sessions = [session])
             : (user.sessions = [session, ...user.sessions]);
     }
-    await repoFactory(User).save(user, 'SYSTEM', OperationOwner.SYSTEM);
+    await repoFactory(User).save(user, 'SYSTEM');
     return {
         uid: user.id.toHexString(),
         token: session.token,

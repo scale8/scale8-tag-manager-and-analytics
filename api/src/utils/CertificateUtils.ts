@@ -9,11 +9,11 @@ import User from '../mongo/models/User';
 import Environment from '../mongo/models/tag/Environment';
 import IngestEndpointEnvironment from '../mongo/models/data/IngestEndpointEnvironment';
 import RepoFromModelFactory from '../container/factoryTypes/RepoFromModelFactory';
-import OperationOwner from '../enums/OperationOwner';
 import GQLMethod from '../enums/GQLMethod';
 import dns from 'dns';
 import Route53Service from '../aws/Route53Service';
 import BaseLogger from '../backends/logging/abstractions/BaseLogger';
+import { OperationActor } from '../mongo/types/Types';
 
 export const getCNAME = (environment: Environment | IngestEndpointEnvironment): string => {
     const config = container.get<BaseConfig>(TYPES.BackendConfig);
@@ -83,7 +83,7 @@ export const createCname = async (environment: Environment | IngestEndpointEnvir
 };
 
 export const updateCustomDomainForEnvironment = async (
-    actor: User,
+    actor: OperationActor,
     environment: Environment | IngestEndpointEnvironment,
     customDomain: string,
     customDomainCert: string,
@@ -94,15 +94,10 @@ export const updateCustomDomainForEnvironment = async (
         await uploadCertificate(customDomain, customDomainCert, customDomainKey);
         environment.customDomain = customDomain;
         const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
-        await repoFactory(environment.constructor.name).save(
-            environment,
-            actor,
-            OperationOwner.USER,
-            {
-                gqlMethod: GQLMethod.UPDATE_PROPERTIES,
-                userComments: 'Updated SSL certificate',
-            },
-        );
+        await repoFactory(environment.constructor.name).save(environment, actor, {
+            gqlMethod: GQLMethod.UPDATE_PROPERTIES,
+            userComments: 'Updated SSL certificate',
+        });
     } else {
         throw new GQLError(userMessages.noCname, true);
     }

@@ -260,7 +260,7 @@ export default class ConditionRuleManager extends Manager<ConditionRule> {
                     'match_value',
                     'match_key',
                 ]);
-                await this.repoFactory(ConditionRule).save(conditionRule, me, OperationOwner.USER, {
+                await this.repoFactory(ConditionRule).save(conditionRule, me, {
                     gqlMethod: GQLMethod.UPDATE_PROPERTIES,
                     userComments: data.comments,
                 });
@@ -290,7 +290,7 @@ export default class ConditionRuleManager extends Manager<ConditionRule> {
                 trigger.exceptionRuleIds = trigger.exceptionRuleIds.filter(
                     (_) => !_.equals(conditionRule.id),
                 );
-                await this.repoFactory(Trigger).save(trigger, me, OperationOwner.USER, {
+                await this.repoFactory(Trigger).save(trigger, me, {
                     gqlMethod: GQLMethod.DELETE_LINKED_ENTITY,
                     userComments: data.comments,
                     opConnectedModels: [conditionRule],
@@ -351,7 +351,6 @@ export default class ConditionRuleManager extends Manager<ConditionRule> {
                         data.match_key,
                     ),
                     me,
-                    OperationOwner.USER,
                     {
                         gqlMethod: GQLMethod.CREATE,
                         userComments: data.comments,
@@ -364,7 +363,7 @@ export default class ConditionRuleManager extends Manager<ConditionRule> {
                 } else {
                     trigger.conditionRuleIds = [...trigger.conditionRuleIds, newConditionRule.id];
                 }
-                await this.repoFactory(Trigger).save(trigger, me, OperationOwner.USER, {
+                await this.repoFactory(Trigger).save(trigger, me, {
                     gqlMethod: GQLMethod.ADD_LINKED_ENTITY,
                     opConnectedModels: [newConditionRule],
                 });
