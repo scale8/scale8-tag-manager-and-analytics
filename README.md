@@ -7,6 +7,10 @@
 </h1>
 
 <p align="center">
+    <a href="https://www.producthunt.com/posts/scale8?utm_source=badge-top-post-badge&utm_medium=badge&utm_souce=badge-scale8" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/top-post-badge.svg?post_id=348531&theme=neutral&period=daily" alt="Scale8 - An&#0032;open&#0045;source&#0032;and&#0032;privacy&#0032;friendly&#0032;alternative&#0032;to&#0032;GA&#0032;&#0038;&#0032;GTM | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+</p>
+
+<p align="center">
     <a href="https://scale8.com"><img src="https://img.shields.io/badge/Scale8-Website-9042e7" height="20"/></a>
     <a href="https://scale8.github.io/docs"><img src="https://img.shields.io/badge/Scale8-Documentation-39cce0" height="20"/></a>
     <a href="https://scale8.github.io/api-docs"><img src="https://img.shields.io/badge/Scale8-API%20Documentation-ff0084" height="20"/></a>
