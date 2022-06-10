@@ -11,7 +11,7 @@ import { AppUtmSourceQueryData } from '../../gql/generated/AppUtmSourceQueryData
 import AppUtmCampaignQuery from '../../gql/queries/AppUtmCampaignQuery';
 import { AppUtmCampaignQueryData } from '../../gql/generated/AppUtmCampaignQueryData';
 import { getEventLabel } from '../../utils/AnalyticsUtils';
-import { getAnalyticsPollingFrequency } from '../../utils/ConfigUtils';
+import { getAnalyticsPollingFrequencyMs } from '../../utils/ConfigUtils';
 
 const AppAnalyticsSources: FC<AppAnalyticsContentProps> = (props: AppAnalyticsContentProps) => {
     const { appQueryOptions, id, referrerTLD, refreshAt } = props;
@@ -21,7 +21,7 @@ const AppAnalyticsSources: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCo
             id,
             appQueryOptions,
         },
-        pollInterval: getAnalyticsPollingFrequency(),
+        pollInterval: getAnalyticsPollingFrequencyMs(),
     };
 
     const lazyQuery = useLazyQuery(AppReferrersQuery);

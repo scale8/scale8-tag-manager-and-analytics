@@ -10,7 +10,7 @@ import AppRegionsQuery from '../../gql/queries/AppRegionsQuery';
 import { AppRegionsQueryData } from '../../gql/generated/AppRegionsQueryData';
 import AppCitiesQuery from '../../gql/queries/AppCitiesQuery';
 import { AppCitiesQueryData } from '../../gql/generated/AppCitiesQueryData';
-import { getAnalyticsPollingFrequency } from '../../utils/ConfigUtils';
+import { getAnalyticsPollingFrequencyMs } from '../../utils/ConfigUtils';
 
 const AppAnalyticsCountries: FC<AppAnalyticsContentProps> = (props: AppAnalyticsContentProps) => {
     const { appQueryOptions, id, refreshAt } = props;
@@ -20,7 +20,7 @@ const AppAnalyticsCountries: FC<AppAnalyticsContentProps> = (props: AppAnalytics
             id,
             appQueryOptions,
         },
-        pollInterval: getAnalyticsPollingFrequency(),
+        pollInterval: getAnalyticsPollingFrequencyMs(),
     };
 
     return (

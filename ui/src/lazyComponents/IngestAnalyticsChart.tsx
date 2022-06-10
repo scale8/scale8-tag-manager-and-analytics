@@ -11,7 +11,7 @@ import { IngestChartQueryData } from '../gql/generated/IngestChartQueryData';
 import { getProductSection, ProductSectionKey } from '../containers/SectionsDetails';
 import { ChartData, ChartOptions, ScriptableContext } from 'chart.js';
 import { buildDemoEndpointChartVars, buildEndpointChartVars } from '../utils/GraphUtils';
-import { getAnalyticsPollingFrequency } from '../utils/ConfigUtils';
+import { getAnalyticsPollingFrequencyMs } from '../utils/ConfigUtils';
 
 const IngestAnalyticsChart: FC<IngestEndpointAnalyticsContentProps> = (
     props: IngestEndpointAnalyticsContentProps,
@@ -25,7 +25,7 @@ const IngestAnalyticsChart: FC<IngestEndpointAnalyticsContentProps> = (
                 id,
                 ingestQueryOptions,
             },
-            pollInterval: getAnalyticsPollingFrequency(),
+            pollInterval: getAnalyticsPollingFrequencyMs(),
         }),
         (queryData: IngestChartQueryData) => {
             const { labels, ticksLimit, requestsChartData, bytesChartData } = process.env.demo

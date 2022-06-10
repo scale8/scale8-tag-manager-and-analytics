@@ -14,7 +14,7 @@ import {
     calculateEventsPerUser,
     getEventLabel,
 } from '../utils/AnalyticsUtils';
-import { getAnalyticsPollingFrequency } from '../utils/ConfigUtils';
+import { getAnalyticsPollingFrequencyMs } from '../utils/ConfigUtils';
 
 const AppAnalyticsSummaryRealtime: FC<AppAnalyticsContentProps> = (
     props: AppAnalyticsContentProps,
@@ -38,7 +38,7 @@ const AppAnalyticsSummaryRealtime: FC<AppAnalyticsContentProps> = (
                 appQueryOptionsPrev: appSummaryQueryOptionsPrev,
                 appQueryOptionsCurrent: appSummaryQueryOptionsCurrent,
             },
-            pollInterval: getAnalyticsPollingFrequency(),
+            pollInterval: getAnalyticsPollingFrequencyMs(),
         }),
         (queryData: AppSummaryRealtimeQueryData) => {
             const eventRequestResult =

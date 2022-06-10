@@ -13,7 +13,7 @@ import { AppScreenSizesQueryData } from '../../gql/generated/AppScreenSizesQuery
 import AppScreenSizesQuery from '../../gql/queries/AppScreenSizesQuery';
 import { AppBrowserVersionsQueryData } from '../../gql/generated/AppBrowserVersionsQueryData';
 import AppBrowserVersionsQuery from '../../gql/queries/AppBrowserVersionsQuery';
-import { getAnalyticsPollingFrequency } from '../../utils/ConfigUtils';
+import { getAnalyticsPollingFrequencyMs } from '../../utils/ConfigUtils';
 
 const AppErrorsDevices: FC<AppErrorContentProps> = (props: AppErrorContentProps) => {
     const { appQueryOptions, id, refreshAt } = props;
@@ -23,7 +23,7 @@ const AppErrorsDevices: FC<AppErrorContentProps> = (props: AppErrorContentProps)
             id,
             appQueryOptions,
         },
-        pollInterval: getAnalyticsPollingFrequency(),
+        pollInterval: getAnalyticsPollingFrequencyMs(),
     };
 
     return (

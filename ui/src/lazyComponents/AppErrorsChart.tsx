@@ -11,7 +11,7 @@ import GQLError from '../components/atoms/GqlError';
 import { AppErrorContentProps } from '../types/props/AppErrorContentProps';
 import { ChartData, ChartOptions, ScriptableContext } from 'chart.js';
 import { buildAppChartVars } from '../utils/GraphUtils';
-import { getAnalyticsPollingFrequency } from '../utils/ConfigUtils';
+import { getAnalyticsPollingFrequencyMs } from '../utils/ConfigUtils';
 
 const AppErrorsChart: FC<AppErrorContentProps> = (props: AppErrorContentProps) => {
     const { appQueryOptions, chartPeriodProps, id, refreshAt } = props;
@@ -23,7 +23,7 @@ const AppErrorsChart: FC<AppErrorContentProps> = (props: AppErrorContentProps) =
                 id,
                 appQueryOptions,
             },
-            pollInterval: getAnalyticsPollingFrequency(),
+            pollInterval: getAnalyticsPollingFrequencyMs(),
         }),
         (queryData: AppChartQueryData) => {
             const { labels, ticksLimit, chartData } = buildAppChartVars(

@@ -9,7 +9,7 @@ import { AppPagesQueryData } from '../../gql/generated/AppPagesQueryData';
 import { AppEntryPagesQueryData } from '../../gql/generated/AppEntryPagesQueryData';
 import { AppExitPagesQueryData } from '../../gql/generated/AppExitPagesQueryData';
 import { getEventLabel } from '../../utils/AnalyticsUtils';
-import { getAnalyticsPollingFrequency } from '../../utils/ConfigUtils';
+import { getAnalyticsPollingFrequencyMs } from '../../utils/ConfigUtils';
 
 const AppAnalyticsPages: FC<AppAnalyticsContentProps> = (props: AppAnalyticsContentProps) => {
     const { appQueryOptions, id, refreshAt } = props;
@@ -19,7 +19,7 @@ const AppAnalyticsPages: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCont
             id,
             appQueryOptions,
         },
-        pollInterval: getAnalyticsPollingFrequency(),
+        pollInterval: getAnalyticsPollingFrequencyMs(),
     };
 
     return (

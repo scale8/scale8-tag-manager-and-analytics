@@ -13,7 +13,7 @@ import {
 import { ApolloError } from '@apollo/client/errors';
 import GQLError from '../components/atoms/GqlError';
 import { QueryLoaderAndError } from '../abstractions/QueryLoaderAndError';
-import { getAnalyticsPollingFrequency } from '../utils/ConfigUtils';
+import { getAnalyticsPollingFrequencyMs } from '../utils/ConfigUtils';
 
 const AppAnalyticsSummary: FC<AppAnalyticsContentProps> = (props: AppAnalyticsContentProps) => {
     const { appSummaryQueryOptions, appSummaryQueryOptionsPrev, id, refreshAt } = props;
@@ -28,7 +28,7 @@ const AppAnalyticsSummary: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCo
                 appQueryOptions: appSummaryQueryOptions,
                 appQueryOptionsPrev: appSummaryQueryOptionsPrev,
             },
-            pollInterval: getAnalyticsPollingFrequency(),
+            pollInterval: getAnalyticsPollingFrequencyMs(),
         }),
         (queryData: AppSummaryQueryData) => {
             const eventRequestResult = (() => {

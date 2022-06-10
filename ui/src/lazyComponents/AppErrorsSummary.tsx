@@ -9,7 +9,7 @@ import { QueryLoaderAndError } from '../abstractions/QueryLoaderAndError';
 import { AppErrorContentProps } from '../types/props/AppErrorContentProps';
 import AppSummaryQuery from '../gql/queries/AppSummaryQuery';
 import { AppSummaryQueryData } from '../gql/generated/AppSummaryQueryData';
-import { getAnalyticsPollingFrequency } from '../utils/ConfigUtils';
+import { getAnalyticsPollingFrequencyMs } from '../utils/ConfigUtils';
 
 const AppErrorsSummary: FC<AppErrorContentProps> = (props: AppErrorContentProps) => {
     const { appSummaryQueryOptions, appSummaryQueryOptionsPrev, id, refreshAt } = props;
@@ -22,7 +22,7 @@ const AppErrorsSummary: FC<AppErrorContentProps> = (props: AppErrorContentProps)
                 appQueryOptions: appSummaryQueryOptions,
                 appQueryOptionsPrev: appSummaryQueryOptionsPrev,
             },
-            pollInterval: getAnalyticsPollingFrequency(),
+            pollInterval: getAnalyticsPollingFrequencyMs(),
         }),
         (queryData: AppSummaryQueryData) => {
             const errorResult =
