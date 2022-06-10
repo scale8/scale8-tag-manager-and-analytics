@@ -39,6 +39,7 @@ import { Mode } from '../enums/Mode';
 import { InputType } from '../../../common/enums/InputType';
 import { TypeIcon } from '../../../common/enums/TypeIcon';
 import { IngestSchemaWizard } from '../enums/IngestSchemaWizard';
+import { WebTrafficType } from '../enums/WebTrafficType';
 
 @injectable()
 export default class TypeDefRegister {
@@ -232,6 +233,12 @@ export default class TypeDefRegister {
                 key: String!
                 value: String!
             }
+
+            """
+            A set of supported \`WebTrafficType\` types.
+            """
+            enum WebTrafficType
+            ${TypeDefRegister.enumToGQL(WebTrafficType)}
 
             """
             A set of supported \`IngestSchemaWizard\` types.

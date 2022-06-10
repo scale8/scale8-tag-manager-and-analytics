@@ -148,6 +148,7 @@ export default class AppManager extends Manager<App> {
             referrer_tld: String
             page: String
             mobile: Boolean
+            traffic_type: WebTrafficType
             browser: String
             browser_version: String
             screen_size: String
