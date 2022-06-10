@@ -567,7 +567,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
         const filter = this.getAppFilter(queryOptions);
         const query = `
                         SELECT
-                          SUM(IF(count = 1,1,0)) / SUM(count) AS bounce_ratio
+                          SUM(IF(count = 1,1,0)) / SUM(1) AS bounce_ratio
                         FROM (
                             SELECT
                               user_hash,
