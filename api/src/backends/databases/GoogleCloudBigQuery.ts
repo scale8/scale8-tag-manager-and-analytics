@@ -567,7 +567,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
         const filter = this.getAppFilter(queryOptions);
         const query = `
                         SELECT
-                          SUM(IF(count = 1,1,0)) / SUM(count) AS bounce_ratio
+                          SUM(IF(count = 1,1,0)) / SUM(1) AS bounce_ratio
                         FROM (
                             SELECT
                               user_hash,
@@ -581,10 +581,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                     `.trim();
 
         const rows = await this.query(app, query, filter.params);
-        return this.getResultWithRange(
-            queryOptions,
-            rows.length > 0 ? Math.round(rows[0]['bounce_ratio']) : 0,
-        );
+        return this.getResultWithRange(queryOptions, rows.length > 0 ? rows[0]['bounce_ratio'] : 0);
     }
 
     public async eventRequests(

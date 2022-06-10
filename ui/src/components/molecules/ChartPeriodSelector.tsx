@@ -29,6 +29,7 @@ import {
 } from '../../utils/DateTimeUtils';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { DateRangePicker } from '@scale8/mui-daterange-picker';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 const ArrowBlock: FC<{
     onPrevClick: () => void;
@@ -71,6 +72,7 @@ const ArrowBlock: FC<{
 
 export type ChartPeriodSelectorProps = ChartPeriodProps & {
     ticks: number;
+    refreshNow: () => void;
     type: 'app' | 'endpoint';
 };
 
@@ -79,7 +81,7 @@ const ChartPeriodSelector: FC<ChartPeriodSelectorProps> = (props: ChartPeriodSel
     const [selectValue, setSelectValue] = useState<string>('');
     const [selectDisplay, setSelectDisplay] = useState<string>('');
 
-    const { period, setPeriod, date, setDate, from, setFrom, to, setTo, ticks } = props;
+    const { period, setPeriod, date, setDate, from, setFrom, to, setTo, ticks, refreshNow } = props;
 
     const setPeriodValues = (period: ChartPeriodType, date?: UTCTimestamp) => {
         setPeriod(period);
@@ -314,6 +316,18 @@ const ChartPeriodSelector: FC<ChartPeriodSelectorProps> = (props: ChartPeriodSel
                     }}
                 />
             </Popover>
+            <Box mx={1}>
+                <IconButton
+                    edge="end"
+                    aria-label="refresh"
+                    onClick={() => {
+                        refreshNow();
+                    }}
+                    size="large"
+                >
+                    <RefreshIcon />
+                </IconButton>
+            </Box>
         </Box>
     );
 };

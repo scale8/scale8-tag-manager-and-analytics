@@ -26,6 +26,7 @@ const AppAnalyticsPageContainer: FC<AppAnalyticsPageContainerProps> = (
         rightHeaderBlock: (
             <ChartPeriodSelector
                 {...chartPeriodProps}
+                refreshNow={appDashboardContentProps.refreshNow}
                 ticks={appDashboardContentProps.ticks}
                 type="app"
             />

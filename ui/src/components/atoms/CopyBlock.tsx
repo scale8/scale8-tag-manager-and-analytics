@@ -28,72 +28,76 @@ const CopyBlock: FC<CopyBlockProps> = (props: CopyBlockProps) => {
     };
 
     return (
-        <Paper elevation={props.flat !== undefined && props.flat ? 0 : 5} sx={{ height: '100%' }}>
-            <Box
-                height="100%"
-                my={props.flat !== undefined && props.flat ? 0 : 2}
-                pr="26px"
-                fontSize={12}
-                fontWeight="bold"
-                position="relative"
-                bgcolor="#2e3440"
-                border={1}
-                borderColor="#2e3440"
-                sx={{
-                    '& pre': {
-                        margin: 0,
-                    },
-                }}
+        <Box my={props.flat !== undefined && props.flat ? 0 : 2}>
+            <Paper
+                elevation={props.flat !== undefined && props.flat ? 0 : 5}
+                sx={{ height: '100%' }}
             >
                 <Box
-                    onClick={handleClick}
+                    height="100%"
+                    pr="26px"
+                    fontSize={12}
+                    fontWeight="bold"
+                    position="relative"
+                    bgcolor="#2e3440"
+                    border={1}
+                    borderColor="#2e3440"
                     sx={{
-                        position: 'absolute',
-                        right: 0,
-                        cursor: 'pointer',
-                        color: '#ffffff',
-                        '&:hover': {
-                            backgroundColor: 'rgba(254, 254, 254, 0.12)',
+                        '& pre': {
+                            margin: 0,
                         },
-                        padding: '6px 5px 2px',
                     }}
                 >
-                    <svg
-                        focusable="false"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 32 32"
-                        aria-hidden="true"
+                    <Box
+                        onClick={handleClick}
+                        sx={{
+                            position: 'absolute',
+                            right: 0,
+                            cursor: 'pointer',
+                            color: '#ffffff',
+                            '&:hover': {
+                                backgroundColor: 'rgba(254, 254, 254, 0.12)',
+                            },
+                            padding: '6px 5px 2px',
+                        }}
                     >
-                        <path
-                            d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z"
-                            fill="currentColor"
-                        />
-                        <path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" fill="currentColor" />
-                    </svg>
+                        <svg
+                            focusable="false"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 32 32"
+                            aria-hidden="true"
+                        >
+                            <path
+                                d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z"
+                                fill="currentColor"
+                            />
+                            <path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" fill="currentColor" />
+                        </svg>
+                    </Box>
+                    <Box height="100%">
+                        <LazyShiki language={props.language} code={props.text} smallText />
+                    </Box>
+                    <Snackbar
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center',
+                        }}
+                        open={open}
+                        autoHideDuration={1000}
+                        onClose={handleClose}
+                    >
+                        {copied ? (
+                            <Alert severity="success">Copied to clipboard.</Alert>
+                        ) : (
+                            <Alert severity="error">
+                                Copy to clipboard functionality not available.
+                            </Alert>
+                        )}
+                    </Snackbar>
                 </Box>
-                <Box height="100%">
-                    <LazyShiki language={props.language} code={props.text} smallText />
-                </Box>
-                <Snackbar
-                    anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'center',
-                    }}
-                    open={open}
-                    autoHideDuration={1000}
-                    onClose={handleClose}
-                >
-                    {copied ? (
-                        <Alert severity="success">Copied to clipboard.</Alert>
-                    ) : (
-                        <Alert severity="error">
-                            Copy to clipboard functionality not available.
-                        </Alert>
-                    )}
-                </Snackbar>
-            </Box>
-        </Paper>
+            </Paper>
+        </Box>
     );
 };
 

@@ -13,6 +13,7 @@ import { getEventLabel } from '../utils/AnalyticsUtils';
 import { ChartData, ChartOptions, ScriptableContext } from 'chart.js';
 import { buildAppChartVars, buildDemoAppChartVars } from '../utils/GraphUtils';
 import { getProductSection, ProductSectionKey } from '../containers/SectionsDetails';
+import { getAnalyticsPollingFrequencyMs } from '../utils/ConfigUtils';
 
 const AppAnalyticsChart: FC<AppAnalyticsContentProps> = (props: AppAnalyticsContentProps) => {
     const { appQueryOptions, chartPeriodProps, id, refreshAt } = props;
@@ -26,6 +27,7 @@ const AppAnalyticsChart: FC<AppAnalyticsContentProps> = (props: AppAnalyticsCont
                 id,
                 appQueryOptions,
             },
+            pollInterval: getAnalyticsPollingFrequencyMs(),
         }),
         (queryData: AppChartQueryData) => {
             const { labels, ticksLimit, chartData } = process.env.demo
