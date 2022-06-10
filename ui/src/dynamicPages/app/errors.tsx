@@ -20,7 +20,7 @@ const AppErrorsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
 
     const { period } = chartPeriodProps;
 
-    const { refreshAt, ticks } = useAnalyticsTimer(period);
+    const { refreshNow, refreshAt, ticks } = useAnalyticsTimer(period);
 
     const {
         queryOptions,
@@ -47,6 +47,7 @@ const AppErrorsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
             appSummaryQueryOptions={summaryQueryOptions}
             appSummaryQueryOptionsPrev={summaryQueryOptionsPrev}
             appSummaryQueryOptionsCurrent={summaryQueryOptionsCurrent}
+            refreshNow={refreshNow}
             refreshAt={refreshAt}
             ticks={ticks}
             id={id}
@@ -59,6 +60,7 @@ const AppErrorsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {
                 appSummaryQueryOptions={summaryQueryOptions}
                 appSummaryQueryOptionsPrev={summaryQueryOptionsPrev}
                 appSummaryQueryOptionsCurrent={summaryQueryOptionsCurrent}
+                refreshNow={refreshNow}
                 refreshAt={refreshAt}
                 id={id}
             />

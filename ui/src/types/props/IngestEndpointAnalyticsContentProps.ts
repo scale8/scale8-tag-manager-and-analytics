@@ -8,5 +8,6 @@ export type IngestEndpointAnalyticsContentProps = {
     ingestSummaryQueryOptions: IngestQueryOptions;
     ingestSummaryQueryOptionsPrev: IngestQueryOptions;
     id: string;
+    refreshNow: () => void;
     refreshAt?: UTCTimestamp;
 };

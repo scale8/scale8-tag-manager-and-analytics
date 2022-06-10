@@ -13,5 +13,6 @@ export type AppErrorContentProps = {
     appSummaryQueryOptionsPrev: AppQueryOptions;
     appSummaryQueryOptionsCurrent: AppQueryOptions;
     id: string;
+    refreshNow: () => void;
     refreshAt?: UTCTimestamp;
 };

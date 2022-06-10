@@ -17,7 +17,12 @@ const IngestAnalyticsPageContainer: FC<IngestAnalyticsPageContainerProps> = (
     const chartPageContainerProps: ChartPageContainerProps = {
         leftHeaderBlock: null,
         rightHeaderBlock: (
-            <ChartPeriodSelector {...chartPeriodProps} ticks={ticks} type="endpoint" />
+            <ChartPeriodSelector
+                {...chartPeriodProps}
+                refreshNow={appDashboardContentProps.refreshNow}
+                ticks={ticks}
+                type="endpoint"
+            />
         ),
         secondaryBlock: null,
     };
