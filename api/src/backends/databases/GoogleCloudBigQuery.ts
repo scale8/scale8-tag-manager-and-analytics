@@ -556,7 +556,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
 
         return this.getResultWithRange(
             queryOptions,
-            rows.length > 0 ? Math.round(rows[0]['duration']) : 0,
+            rows.length > 0 ? Math.round(rows[0]['duration'] || 0) : 0,
         );
     }
 
@@ -581,7 +581,10 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                     `.trim();
 
         const rows = await this.query(app, query, filter.params);
-        return this.getResultWithRange(queryOptions, rows.length > 0 ? rows[0]['bounce_ratio'] : 0);
+        return this.getResultWithRange(
+            queryOptions,
+            rows.length > 0 ? rows[0]['bounce_ratio'] || 0 : 0,
+        );
     }
 
     public async eventRequests(
