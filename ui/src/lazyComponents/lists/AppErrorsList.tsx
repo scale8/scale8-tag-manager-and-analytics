@@ -7,6 +7,7 @@ import { AppErrorsQueryData } from '../../gql/generated/AppErrorsQueryData';
 import { AppErrorsListContainer } from '../../components/atoms/AppErrorListContainer';
 import { NoRecordsMessage } from '../../components/atoms/NoRecordsMessage';
 import { AppErrorListTable } from '../../components/molecules/AppErrorListTable';
+import { getAnalyticsPollingFrequency } from '../../utils/ConfigUtils';
 
 export type AppError = {
     file: string;
@@ -27,6 +28,7 @@ const AppErrorsList: FC<AppErrorContentProps> = (props: AppErrorContentProps) =>
             appQueryOptions: { ...appQueryOptions, limit: 50 },
             appSummaryQueryOptions,
         },
+        pollInterval: getAnalyticsPollingFrequency(),
     };
 
     const extractList = (queryData: AppErrorsQueryData): AppError[] => {

@@ -9,6 +9,7 @@ import { IngestEndpointAnalyticsContentProps } from '../types/props/IngestEndpoi
 import { IngestSummaryQueryData } from '../gql/generated/IngestSummaryQueryData';
 import IngestSummaryQuery from '../gql/queries/IngestSummaryQuery';
 import { buildSummaryDetailPropsFromValue } from '../utils/AnalyticsUtils';
+import { getAnalyticsPollingFrequency } from '../utils/ConfigUtils';
 
 const IngestAnalyticsSummary: FC<IngestEndpointAnalyticsContentProps> = (
     props: IngestEndpointAnalyticsContentProps,
@@ -23,6 +24,7 @@ const IngestAnalyticsSummary: FC<IngestEndpointAnalyticsContentProps> = (
                 ingestQueryOptions: ingestSummaryQueryOptions,
                 ingestQueryOptionsPrev: ingestSummaryQueryOptionsPrev,
             },
+            pollInterval: getAnalyticsPollingFrequency(),
         }),
         (queryData: IngestSummaryQueryData) => {
             const requestsResult = (() => {
