@@ -45,6 +45,8 @@ services:
             MONGO_CONNECT_STRING: "mongodb://mongodb"
             # When booting, we want the server to run the setup job (this will race if multiple API servers are booted at the same time)
             SETUP_MODE: "true"
+            # The UI server...
+            S8_UI_SERVER: "http://127.0.0.1:8080"
 
     router:
         image: scale8/router:latest
