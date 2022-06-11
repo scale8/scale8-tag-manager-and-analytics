@@ -382,6 +382,14 @@ export enum VarType {
 }
 
 /**
+ * A set of supported `WebTrafficType` types.
+ */
+export enum WebTrafficType {
+  BOT = "BOT",
+  VISITOR = "VISITOR",
+}
+
+/**
  * In order to use AWS Kinesis as your storage engine, you will need to create an
  * AWS account and create a new service account for Scale8. Please see our
  * documentation on how to configure this.
@@ -562,6 +570,7 @@ export interface AppQueryFilterOptions {
   referrer_tld?: string | null;
   page?: string | null;
   mobile?: boolean | null;
+  traffic_type?: WebTrafficType | null;
   browser?: string | null;
   browser_version?: string | null;
   screen_size?: string | null;
