@@ -1,5 +1,7 @@
 package com.scale8;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -9,8 +11,6 @@ import com.scale8.config.Replacements;
 import com.scale8.config.structures.IngestSettings;
 import com.scale8.extended.ExtendedRequest;
 import com.scale8.ingest.Ingestor;
-import io.micronaut.cache.annotation.CacheConfig;
-import io.micronaut.cache.annotation.Cacheable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
@@ -18,10 +18,13 @@ import javax.inject.Singleton;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Singleton
-@CacheConfig("ingest")
 public class IngestEntity {
+
+  private final Cache<String, IngestSettings> cache =
+      Caffeine.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).maximumSize(100).build();
 
   private static final Logger LOG = LoggerFactory.getLogger(IngestEntity.class);
 
@@ -33,10 +36,17 @@ public class IngestEntity {
 
   @Inject Payload payload;
 
-  @Cacheable()
   protected IngestSettings getConfig(String uri) throws IOException {
-    String data = storage.get(env.CONFIG_BUCKET, uri);
-    return new Gson().fromJson(data, IngestSettings.class);
+    IngestSettings ingestSettings = cache.getIfPresent(uri);
+    if (ingestSettings == null) {
+      LOG.info("Going back to " + env.CONFIG_BUCKET + " to fetch " + uri + ", not present in cache");
+      IngestSettings freshIngestSettings =
+          new Gson().fromJson(storage.get(env.CONFIG_BUCKET, uri), IngestSettings.class);
+      cache.put(uri, freshIngestSettings);
+      return freshIngestSettings;
+    } else {
+      return ingestSettings;
+    }
   }
 
   public IngestSettings getConfigByHost(String host) throws IOException {
@@ -86,7 +96,8 @@ public class IngestEntity {
   }
 
   protected List<String> offerToIngestor(
-      ExtendedRequest extendedRequest, JsonObject jsonObject, IngestSettings ingestSettings) throws IOException {
+      ExtendedRequest extendedRequest, JsonObject jsonObject, IngestSettings ingestSettings)
+      throws IOException {
     JsonObject data =
         payload.applyDefaultValues(
             jsonObject,
@@ -97,8 +108,9 @@ public class IngestEntity {
         payload.validateSchemaAgainstPayload(data, ingestSettings.getSchemaAsMap());
 
     if (issues.isEmpty()) {
-      if(!ingestSettings.getUsageIngestEnvId().isEmpty() && ingestSettings.getIsAnalyticsEnabled()){
-        //we need to track usage...
+      if (!ingestSettings.getUsageIngestEnvId().isEmpty()
+          && ingestSettings.getIsAnalyticsEnabled()) {
+        // we need to track usage...
         ingestor.add(data, ingestSettings, getConfigById(ingestSettings.getUsageIngestEnvId()));
       } else {
         ingestor.add(data, ingestSettings);
@@ -109,7 +121,8 @@ public class IngestEntity {
   }
 
   public List<String> add(
-      ExtendedRequest extendedRequest, IngestSettings ingestSettings, JsonObject jsonObject) throws IOException {
+      ExtendedRequest extendedRequest, IngestSettings ingestSettings, JsonObject jsonObject)
+      throws IOException {
     return offerToIngestor(extendedRequest, jsonObject, ingestSettings);
   }
 
