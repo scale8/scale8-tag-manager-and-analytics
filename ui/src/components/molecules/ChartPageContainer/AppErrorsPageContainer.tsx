@@ -18,7 +18,14 @@ const AppErrorsPageContainer: FC<AppErrorsPageContainerProps> = (
 
     const chartPageContainerProps: ChartPageContainerProps = {
         leftHeaderBlock: <ChartBaseFilterSelector {...appErrorContentProps} />,
-        rightHeaderBlock: <ChartPeriodSelector {...chartPeriodProps} ticks={ticks} type="app" />,
+        rightHeaderBlock: (
+            <ChartPeriodSelector
+                refreshNow={appErrorContentProps.refreshNow}
+                {...chartPeriodProps}
+                ticks={ticks}
+                type="app"
+            />
+        ),
         secondaryBlock: (
             <ChartFilterSelector
                 filters={extractFilters(appQueryOptions.filter_options)}

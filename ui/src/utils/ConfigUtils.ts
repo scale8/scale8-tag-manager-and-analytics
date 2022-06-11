@@ -6,6 +6,10 @@ export const getIsCommercial = () => {
     return process.env.NEXT_PUBLIC_IS_COMMERCIAL === 'true';
 };
 
+export const getAnalyticsPollingFrequencyMs = () => {
+    return 60 * 60 * 1000;
+};
+
 export const getApiUrl = (): string => {
     if (process.env.NEXT_PUBLIC_API_URL !== undefined) {
         return process.env.NEXT_PUBLIC_API_URL;

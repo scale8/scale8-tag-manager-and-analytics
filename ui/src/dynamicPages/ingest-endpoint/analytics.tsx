@@ -28,7 +28,7 @@ const IngestEndpointAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPagePro
 
     const { period } = chartPeriodProps;
 
-    const { refreshAt, ticks } = useAnalyticsTimer(period);
+    const { refreshNow, refreshAt, ticks } = useAnalyticsTimer(period);
 
     const { queryOptions, summaryQueryOptions, summaryQueryOptionsPrev } =
         useQueryOptions(chartPeriodProps);
@@ -47,6 +47,7 @@ const IngestEndpointAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPagePro
             ingestQueryOptions={queryOptions}
             ingestSummaryQueryOptions={summaryQueryOptions}
             ingestSummaryQueryOptionsPrev={summaryQueryOptionsPrev}
+            refreshNow={refreshNow}
             refreshAt={refreshAt}
             ticks={ticks}
             id={id}
@@ -56,6 +57,7 @@ const IngestEndpointAnalyticsPage: FC<DynamicPageProps> = (props: DynamicPagePro
                 ingestQueryOptions={queryOptions}
                 ingestSummaryQueryOptions={summaryQueryOptions}
                 ingestSummaryQueryOptionsPrev={summaryQueryOptionsPrev}
+                refreshNow={refreshNow}
                 refreshAt={refreshAt}
                 id={id}
             />

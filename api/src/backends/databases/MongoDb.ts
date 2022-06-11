@@ -551,10 +551,7 @@ export default class MongoDb extends BaseDatabase {
             },
         ]);
 
-        return this.getResultWithRange(
-            queryOptions,
-            rows.length > 0 ? Math.round(rows[0]['bounce']) : 0,
-        );
+        return this.getResultWithRange(queryOptions, rows.length > 0 ? rows[0]['bounce'] : 0);
     }
 
     public async eventRequests(

@@ -124,6 +124,7 @@ const LoggedInTemplate: FC<LoggedInProps> = (props: LoggedInProps) => {
                             width: '15px',
                             height: '15px',
                             borderTopLeftRadius: '15px',
+                            transform: 'translateZ(0)', // Safari border radius fix
                         }}
                     />
                 </Box>
