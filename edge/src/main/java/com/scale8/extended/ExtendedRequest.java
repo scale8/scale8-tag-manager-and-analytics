@@ -1,5 +1,7 @@
 package com.scale8.extended;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -10,7 +12,6 @@ import com.scale8.mmdb.Geo;
 import com.scale8.util.HashUtil;
 import io.micronaut.http.HttpHeaders;
 import io.micronaut.http.HttpRequest;
-import ua_parser.Client;
 import ua_parser.Parser;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
@@ -18,6 +19,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 import static java.lang.Math.abs;
@@ -30,6 +32,9 @@ public class ExtendedRequest {
   final HttpRequest<String> request;
   final Map<String, String> allParameters;
   final String id;
+
+  private final Cache<String, ua_parser.Client> uaCache =
+          Caffeine.newBuilder().expireAfterAccess(10, TimeUnit.MINUTES).maximumSize(1000).build();
 
   public ExtendedRequest(HttpRequest<String> request, Env env, Geo geo, String id) {
     this.env = env;
@@ -167,8 +172,23 @@ public class ExtendedRequest {
     return getAllParameters().get("preview");
   }
 
-  public Client getUserAgent() {
-    return new Parser().parse(request.getHeaders().get(HttpHeaders.USER_AGENT));
+  public ua_parser.Client getUserAgent() {
+    String uaHeader = request.getHeaders().get(HttpHeaders.USER_AGENT);
+    String ua = uaHeader == null? "" : uaHeader;
+    String uaHash;
+    try {
+      uaHash = HashUtil.createHash(ua);
+    } catch (NoSuchAlgorithmException noSuchAlgorithmException) {
+      uaHash = "--";
+    }
+    ua_parser.Client client = uaCache.getIfPresent(uaHash);
+    if(client == null){
+      ua_parser.Client freshClient = new Parser().parse(ua);
+      uaCache.put(uaHash, freshClient);
+      return freshClient;
+    } else {
+      return client;
+    }
   }
 
   public String getUserAgentAsString() {

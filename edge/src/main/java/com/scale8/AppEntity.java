@@ -1,5 +1,7 @@
 package com.scale8;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -14,8 +16,6 @@ import com.scale8.extended.collectors.JsonObjectCollector;
 import com.scale8.extended.types.Tuple;
 import com.scale8.ingest.Ingestor;
 import com.scale8.util.HashUtil;
-import io.micronaut.cache.annotation.CacheConfig;
-import io.micronaut.cache.annotation.Cacheable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
@@ -29,13 +29,19 @@ import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static io.micronaut.http.HttpHeaders.ACCEPT;
 import static io.micronaut.http.MediaType.APPLICATION_JSON;
 
 @Singleton
-@CacheConfig("app")
 public class AppEntity {
+
+  private final Cache<String, String> configCache =
+      Caffeine.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).maximumSize(100).build();
+
+  private final Cache<String, String> assetCache =
+          Caffeine.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).maximumSize(100).build();
 
   private final String PUBLIC_PATH = "http://127.0.0.1:3123";
 
@@ -55,12 +61,19 @@ public class AppEntity {
     return new Gson().fromJson(getRawConfig(request), AppSettings.class);
   }
 
-  @Cacheable()
   protected String getRawConfig(ExtendedRequest request) throws IOException, InterruptedException {
     String previewId = request.getRevisionPreviewId();
     if (previewId == null) {
-      // fetch the config from GCS against the incoming host...
-      return storage.get(env.CONFIG_BUCKET, "tag-domain/" + request.getHost() + ".json");
+      String uri = "tag-domain/" + request.getHost() + ".json";
+      String config = configCache.getIfPresent(uri);
+      if(config == null){
+        LOG.info("Going back to " + env.CONFIG_BUCKET + " to fetch " + uri + ", not present in cache");
+        String fetchedConfig = storage.get(env.CONFIG_BUCKET, uri);
+        configCache.put(uri, fetchedConfig);
+        return fetchedConfig;
+      } else {
+        return config;
+      }
     } else {
       return HttpClient.newHttpClient()
           .send(
@@ -111,6 +124,18 @@ public class AppEntity {
     }
   }
 
+  private String getJsAsset(String uri) throws IOException {
+    String jsAsset = assetCache.getIfPresent(uri);
+    if(jsAsset == null){
+      LOG.info("Going back to " + env.ASSETS_BUCKET + " to fetch " + uri + ", not present in cache");
+      String freshJsAsset = storage.get(env.ASSETS_BUCKET, uri);
+      assetCache.put(uri, freshJsAsset);
+      return freshJsAsset;
+    } else {
+      return jsAsset;
+    }
+  }
+
   public String fetchJSAsset(ExtendedRequest request, String platformId, String asset)
       throws Exception {
     AppSettings appSettings = getConfig(request);
@@ -118,8 +143,7 @@ public class AppEntity {
     if (appSettings.getCorePlatformId().equals(platformId) && ngp != null) {
       return doJsProxyRequest("http://" + ngp + ".ngrok.io/" + asset);
     } else {
-      return storage.get(
-          env.ASSETS_BUCKET, appSettings.getAllAssetsMap().get(platformId + "-" + asset));
+      return getJsAsset(appSettings.getAllAssetsMap().get(platformId + "-" + asset));
     }
   }
 
@@ -133,7 +157,7 @@ public class AppEntity {
       String js =
           env.PROXY_FOR.equals(platformId)
               ? doJsProxyRequest(env.PROXY_LOCATION)
-              : storage.get(env.ASSETS_BUCKET, primaryAssetUri);
+              : getJsAsset(primaryAssetUri);
 
       return js.replace(
               PUBLIC_PATH, publicPath(request, platformId, request.getRevisionPreviewId()))
