@@ -63,7 +63,7 @@ export const buildSummaryDetailPropsFromValue = (
             case 'time':
                 return displayTime(value);
             case 'percentage':
-                return `${value}%`;
+                return `${roundNumber(value * 100, 2)}%`;
             default:
                 return abbreviateNumber(value);
         }
