@@ -5,6 +5,7 @@ import ChartEventSelector from '../../../lazyComponents/ChartEventSelector';
 import { AppAnalyticsContentProps } from '../../../types/props/AppAnalyticsContentProps';
 import ChartPageContainer, { ChartPageContainerProps, extractFilters } from './ChartPageContainer';
 import ChartBaseFilterSelector from '../../../lazyComponents/ChartBaseFilterSelector';
+import { ChartWebTrafficTypeFilterSelector } from '../../organisms/ChartWebTrafficTypeFilterSelector';
 
 export type AppAnalyticsPageContainerProps = AppAnalyticsContentProps & {
     children: ReactNode;
@@ -21,6 +22,7 @@ const AppAnalyticsPageContainer: FC<AppAnalyticsPageContainerProps> = (
             <>
                 <ChartBaseFilterSelector {...appDashboardContentProps} />
                 <ChartEventSelector {...appDashboardContentProps} />
+                <ChartWebTrafficTypeFilterSelector {...appDashboardContentProps} />
             </>
         ),
         rightHeaderBlock: (

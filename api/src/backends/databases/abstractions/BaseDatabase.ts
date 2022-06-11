@@ -4,6 +4,7 @@ import IngestEndpoint from '../../../mongo/models/data/IngestEndpoint';
 import { ObjectId } from 'mongodb';
 import GenericError from '../../../errors/GenericError';
 import { LogPriority } from '../../../enums/LogPriority';
+import { WebTrafficType } from '../../../enums/WebTrafficType';
 
 export interface BaseQueryOptions {
     time_slice: string;
@@ -38,6 +39,7 @@ export interface AppQueryOptions extends BaseQueryOptions {
         browser_version?: string;
         screen_size?: string;
         os?: string;
+        traffic_type?: WebTrafficType;
         event?: string;
         event_group?: string;
         custom_release_id?: string;

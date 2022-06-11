@@ -17,6 +17,7 @@ import BaseConfig from '../configuration/abstractions/BaseConfig';
 import GQLError from '../../errors/GQLError';
 import userMessages from '../../errors/UserMessages';
 import BaseLogger from '../logging/abstractions/BaseLogger';
+import { WebTrafficType } from '../../enums/WebTrafficType';
 
 @injectable()
 export default class MongoDb extends BaseDatabase {
@@ -34,6 +35,12 @@ export default class MongoDb extends BaseDatabase {
         ['os_name', /android/i],
     ];
 
+    protected readonly BOT_TEST: [string, RegExp][] = [
+        ['browser_name', /bot/i],
+        ['browser_name', /headless/i],
+        ['browser_name', /preview/i],
+    ];
+
     private getAsMobileAggregationRegex() {
         return this.MOBILE_TEST.map(([input, regex]) => {
             return {
@@ -47,6 +54,12 @@ export default class MongoDb extends BaseDatabase {
 
     private getAsMobileFilter() {
         return this.MOBILE_TEST.map(([input, regex]) => ({
+            [input]: regex,
+        }));
+    }
+
+    private getAsBotFilter() {
+        return this.BOT_TEST.map(([input, regex]) => ({
             [input]: regex,
         }));
     }
@@ -215,6 +228,19 @@ export default class MongoDb extends BaseDatabase {
                 return undefined;
             }
         };
+        const getTrafficType = () => {
+            if (queryOptions.filter_options.traffic_type === WebTrafficType.BOT) {
+                return {
+                    $or: this.getAsBotFilter(),
+                };
+            } else if (queryOptions.filter_options.traffic_type === WebTrafficType.VISITOR) {
+                return {
+                    $nor: this.getAsBotFilter(),
+                };
+            } else {
+                return undefined;
+            }
+        };
         const getBrowser = () =>
             MongoDb.getFilterObjectFromStringFilterOption(queryOptions, 'browser', 'browser_name');
         const getBrowserVersion = () =>
@@ -265,6 +291,7 @@ export default class MongoDb extends BaseDatabase {
             getReferrer(),
             getReferrerTld(),
             getMobile(),
+            getTrafficType(),
             getBrowser(),
             getBrowserVersion(),
             getScreenSize(),

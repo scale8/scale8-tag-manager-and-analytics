@@ -16,6 +16,7 @@ import BaseLogger from '../logging/abstractions/BaseLogger';
 import { getStorageProviderConfig } from '../../utils/IngestEndpointEnvironmentUtils';
 import { GCBigQueryStreamConfig } from '../../Types';
 import { getBigQueryConfig, getServiceAccountJson } from '../../utils/GoogleCloudUtils';
+import { WebTrafficType } from '../../enums/WebTrafficType';
 
 @injectable()
 export default class GoogleCloudBigQuery extends BaseDatabase {
@@ -56,6 +57,9 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
 
         return bigQuery;
     }
+
+    protected readonly BOT_TEST =
+        '(browser_name IS NULL OR INSTR(LOWER(browser_name), "bot") > 0 OR INSTR(LOWER(browser_name), "headless") > 0 OR INSTR(LOWER(browser_name), "preview") > 0)';
 
     protected readonly MOBILE_TEST =
         '(INSTR(browser_name, "Mobile") > 0 OR device_name = "iPhone" OR device_name = "iPad" OR os_name = "iOS" OR os_name = "Android")';
@@ -278,6 +282,21 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                       params: { page: queryOptions.filter_options.page },
                   }
                 : undefined;
+        const getTrafficType = () => {
+            if (queryOptions.filter_options.traffic_type === WebTrafficType.BOT) {
+                return {
+                    where: this.BOT_TEST,
+                    params: { traffic_type: queryOptions.filter_options.traffic_type },
+                };
+            } else if (queryOptions.filter_options.traffic_type === WebTrafficType.VISITOR) {
+                return {
+                    where: 'NOT ' + this.BOT_TEST,
+                    params: { traffic_type: queryOptions.filter_options.traffic_type },
+                };
+            } else {
+                return undefined;
+            }
+        };
         const getMobile = () => {
             if (
                 typeof queryOptions.filter_options.mobile === 'boolean' &&
@@ -379,6 +398,7 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
             getReferrer(),
             getReferrerTld(),
             getMobile(),
+            getTrafficType(),
             getBrowser(),
             getBrowserVersion(),
             getScreenSize(),
