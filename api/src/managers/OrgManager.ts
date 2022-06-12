@@ -13,7 +13,6 @@ import Invite from '../mongo/models/Invite';
 import TagManagerAccount from '../mongo/models/tag/TagManagerAccount';
 import DataManagerAccount from '../mongo/models/data/DataManagerAccount';
 import GenericError from '../errors/GenericError';
-import OperationOwner from '../enums/OperationOwner';
 import GQLMethod from '../enums/GQLMethod';
 import GQLError from '../errors/GQLError';
 import DataError from '../errors/DataError';
@@ -516,6 +515,11 @@ export default class OrgManager extends Manager<Org> {
         extend type Query {
             """
             @bound=Org
+            This function will return a list of all \`Org\`s, available only if the user is an admin.
+            """
+            getOrgs: [Org!]!
+            """
+            @bound=Org
             Given a valid \`Org\` ID, this function will return an \`Org\` provided the API \`User\` has been granted at least **view** access.
             """
             getOrg(
@@ -547,6 +551,16 @@ export default class OrgManager extends Manager<Org> {
      * @protected
      */
     protected gqlExtendedQueryResolvers = {
+        getOrgs: async (parent: any, args: any, ctx: CTX) => {
+            return await this.userAuth.asUser(ctx, async (me) => {
+                if (me.isAdmin) {
+                    const orgs = await this.repoFactory(Org).find({});
+                    return orgs.map((org) => org.toGQLType());
+                } else {
+                    throw new GQLError(userMessages.adminOnly, true);
+                }
+            });
+        },
         getOrg: async (parent: any, args: any, ctx: CTX) => {
             const orgId = new ObjectId(args.id);
             return await this.orgAuth.asUserWithViewAccess(ctx, orgId, async () =>
@@ -1169,13 +1183,9 @@ export default class OrgManager extends Manager<Org> {
                             }
                         };
 
-                        await accountRepository.save(
-                            buildNewAccount(),
-                            'SYSTEM',
-                            {
-                                gqlMethod: GQLMethod.CREATE,
-                            },
-                        );
+                        await accountRepository.save(buildNewAccount(), 'SYSTEM', {
+                            gqlMethod: GQLMethod.CREATE,
+                        });
                     };
 
                     if (org.manualInvoicing) {

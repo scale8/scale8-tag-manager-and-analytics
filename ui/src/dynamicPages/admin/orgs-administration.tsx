@@ -1,50 +1,44 @@
 import { FC } from 'react';
 import { useQuery } from '@apollo/client';
 import { TablePage, TablePageProps } from '../../abstractions/TablePage';
-import { AdminPageData } from '../../gql/generated/AdminPageData';
-import { UTCTimestamp } from '../../utils/DateTimeUtils';
 import { useLoggedInState } from '../../context/AppContext';
 import Navigate from '../../components/atoms/Next/Navigate';
 import { toOrgSelect } from '../../utils/NavigationPaths';
 import { buildStandardMainInfo, buildTableColumns } from '../../utils/InfoLabelsUtils';
-import PageAdminQuery from '../../gql/queries/PageAdminQuery';
+import OrgsAdminQuery from '../../gql/queries/OrgsAdminQuery';
 import { buildApproveAction } from '../../utils/TableActionsUtils';
 import { pageActions } from '../../actions/PageActions';
 import { DynamicPageProps } from '../../pageLoader/DynamicPageLoader';
+import { OrgsAdminPageData } from '../../gql/generated/OrgsAdminPageData';
+import { extractBaseColumns } from '../../utils/TableRowUtils';
+import { TableRowBase } from '../../types/TableRow';
 
-export type SignupApprovalTableRow = {
-    id: string;
-    companyName: string;
-    domain: string;
-    pageViewsPerMonth: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-    createdAt: UTCTimestamp;
+export type OrgsAdministrationTableRow = TableRowBase & {
+    name: string;
 };
 
-const AdminSignUpApprovalPage: FC<DynamicPageProps> = () => {
+const AdminOrgsAdministrationPage: FC<DynamicPageProps> = () => {
     const { templateInteractions, loggedInUserState } = useLoggedInState();
     const { userIsAdmin } = loggedInUserState;
     const { ask } = templateInteractions;
 
-    const signUpTablePageProps: TablePageProps<SignupApprovalTableRow, AdminPageData> = {
-        title: 'Sign Up Approval',
-        mainInfoProps: buildStandardMainInfo('adminApprovals'),
-        mainQuery: useQuery(PageAdminQuery),
-        tableId: 'Sign-ups',
-        entityName: 'Sign Up',
-        columns: buildTableColumns('adminApprovals', [
+    const signUpTablePageProps: TablePageProps<OrgsAdministrationTableRow, OrgsAdminPageData> = {
+        title: 'Orgs Administration',
+        mainInfoProps: buildStandardMainInfo('adminOrgs'),
+        mainQuery: useQuery(OrgsAdminQuery),
+        tableId: 'Orgs-admin',
+        entityName: 'Org',
+        columns: buildTableColumns('adminOrgs', [
             { field: 'id' },
-            { field: 'firstName' },
-            { field: 'lastName' },
-            { field: 'companyName' },
-            { field: 'domain' },
-            { title: 'PV/M', field: 'pageViewsPerMonth', type: 'numeric' },
-            { field: 'email' },
+            { field: 'name' },
+            { field: 'updatedAt' },
             { field: 'createdAt' },
         ]),
-        mapTableData: () => [],
+        mapTableData: (data) =>
+            data.getOrgs.map((org) => ({
+                ...extractBaseColumns(org),
+                name: org.name,
+            })),
         buildRowActions: (pageActionProps) => [
             buildApproveAction(
                 ({ email, id }) =>
@@ -60,7 +54,7 @@ const AdminSignUpApprovalPage: FC<DynamicPageProps> = () => {
         return <Navigate to={toOrgSelect} />;
     }
 
-    return <TablePage<SignupApprovalTableRow, AdminPageData> {...signUpTablePageProps} />;
+    return <TablePage<OrgsAdministrationTableRow, OrgsAdminPageData> {...signUpTablePageProps} />;
 };
 
-export default AdminSignUpApprovalPage;
+export default AdminOrgsAdministrationPage;

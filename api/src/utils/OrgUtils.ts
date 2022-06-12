@@ -5,7 +5,6 @@ import RepoFromModelFactory from '../container/factoryTypes/RepoFromModelFactory
 import TYPES from '../container/IOC.types';
 import userMessages from '../errors/UserMessages';
 import User from '../mongo/models/User';
-import OperationOwner from '../enums/OperationOwner';
 import GQLMethod from '../enums/GQLMethod';
 import TagManagerAccount from '../mongo/models/tag/TagManagerAccount';
 import DataManagerAccount from '../mongo/models/data/DataManagerAccount';

@@ -60,7 +60,7 @@ const UserInvitesPage = dynamic(() => import('../dynamicPages/org/user-invites')
 const OrgSettingsPage = dynamic(() => import('../dynamicPages/org/settings'));
 const OrgThankYouPage = dynamic(() => import('../dynamicPages/org/thank-you'));
 const AdminDashboardPage = dynamic(() => import('../dynamicPages/admin/dashboard'));
-const AdminSignUpApprovalPage = dynamic(() => import('../dynamicPages/admin/signup-approval'));
+const AdminSignUpApprovalPage = dynamic(() => import('../dynamicPages/admin/orgs-administration'));
 const AppsPage = dynamic(() => import('../dynamicPages/tag-manager/apps'));
 const TagManagerAuto = dynamic(() => import('../dynamicPages/tag-manager/auto'));
 const PlatformsPage = dynamic(() => import('../dynamicPages/tag-manager/platforms'));
@@ -134,7 +134,7 @@ const PageSelect: FC<PageLoaderProps> = (props: PageLoaderProps) => {
             return <OrgThankYouPage params={params} />;
         case dynamicPages.adminDashboard:
             return <AdminDashboardPage params={params} />;
-        case dynamicPages.adminSignupApproval:
+        case dynamicPages.adminOrgsAdministration:
             return <AdminSignUpApprovalPage params={params} />;
 
         case dynamicPages.tmApps:
