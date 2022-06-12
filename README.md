@@ -19,6 +19,7 @@
 <p align="center">
     <a href="https://www.gnu.org/licenses/agpl-3.0"><img src="https://img.shields.io/badge/License-AGPL%20v3%20%26%20MIT*-blue.svg" height="20"/></a>
     <a href="#"><img src="https://github.com/scale8/tag-manager/actions/workflows/main.yml/badge.svg" height="20"/></a>
+    <a href="https://twitter.com/intent/follow?region=follow_link&screen_name=scale8_com"><img src="https://img.shields.io/twitter/follow/scale8_com?style=social" height="20"/></a>
 </p>
 
 <br />
