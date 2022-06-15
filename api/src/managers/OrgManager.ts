@@ -13,7 +13,6 @@ import Invite from '../mongo/models/Invite';
 import TagManagerAccount from '../mongo/models/tag/TagManagerAccount';
 import DataManagerAccount from '../mongo/models/data/DataManagerAccount';
 import GenericError from '../errors/GenericError';
-import OperationOwner from '../enums/OperationOwner';
 import GQLMethod from '../enums/GQLMethod';
 import GQLError from '../errors/GQLError';
 import DataError from '../errors/DataError';
@@ -1169,13 +1168,9 @@ export default class OrgManager extends Manager<Org> {
                             }
                         };
 
-                        await accountRepository.save(
-                            buildNewAccount(),
-                            'SYSTEM',
-                            {
-                                gqlMethod: GQLMethod.CREATE,
-                            },
-                        );
+                        await accountRepository.save(buildNewAccount(), 'SYSTEM', {
+                            gqlMethod: GQLMethod.CREATE,
+                        });
                     };
 
                     if (org.manualInvoicing) {

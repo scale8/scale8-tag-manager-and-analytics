@@ -3,6 +3,7 @@ import { setupChecks } from './SetupChecks';
 import { testJob } from './TestJob';
 import { stripeSetup } from './StripeSetup';
 import { trackingSchemaUpdate } from './TrackingSchemaUpdate';
+import { trialStatusEmail } from './TrialStatusEmail';
 
 export interface Job {
     name: string;
@@ -15,6 +16,7 @@ export const getJobs = () => [
     testJob,
     stripeSetup,
     trackingSchemaUpdate,
+    trialStatusEmail,
 ];
 
 export const findJob = (jobs: Job[], name: string): Job | undefined =>

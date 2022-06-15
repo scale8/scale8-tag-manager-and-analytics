@@ -1,0 +1,25 @@
+{% extends 'BaseEmail.twig' %}
+{% from 'partials/button.twig' import button as button %}
+
+{% block body %}{% apply spaceless %}
+    {{ bodyStart|raw }}
+
+    {{ hiFirstName|raw }}
+
+    {{ parSpacer|raw }}
+
+    {{ parStart|raw }}
+    Your free trial for {{ orgName }} has ended.
+    To continue using the service, please upgrade to a paid plan.
+    If you require any help or assistance please contact us.
+    Please note that after our grace period your service will be automatically terminated and any data will deleted.
+    {{ parEnd|raw }}
+
+    {{ parSpacer|raw }}
+
+    {{ button(uiUrl,'Select Plan') }}
+
+    {{ parSpacer|raw }}
+
+    {{ bodyEnd|raw }}
+{% endapply %}{% endblock %}
