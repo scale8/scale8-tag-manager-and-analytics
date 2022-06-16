@@ -552,13 +552,9 @@ export default class OrgManager extends Manager<Org> {
      */
     protected gqlExtendedQueryResolvers = {
         getOrgs: async (parent: any, args: any, ctx: CTX) => {
-            return await this.userAuth.asUser(ctx, async (me) => {
-                if (me.isAdmin) {
-                    const orgs = await this.repoFactory(Org).find({});
-                    return orgs.map((org) => org.toGQLType());
-                } else {
-                    throw new GQLError(userMessages.adminOnly, true);
-                }
+            return await this.userAuth.asAdminUser(ctx, async () => {
+                const orgs = await this.repoFactory(Org).find({});
+                return orgs.map((org) => org.toGQLType());
             });
         },
         getOrg: async (parent: any, args: any, ctx: CTX) => {

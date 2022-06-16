@@ -12,7 +12,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import LockIcon from '@mui/icons-material/Lock';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import LoginIcon from '@mui/icons-material/Login';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import SettingsIcon from '@mui/icons-material/Settings';
 import CodeIcon from '@mui/icons-material/Code';
@@ -20,6 +20,7 @@ import HistoryIcon from '@mui/icons-material/History';
 import PublishIcon from '@mui/icons-material/Publish';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import VpnLockIcon from '@mui/icons-material/VpnLock';
+import CreditCardOffIcon from '@mui/icons-material/CreditCardOff';
 
 export const buildEditAction = (
     onClick: (data: RowData) => void,
@@ -161,13 +162,26 @@ export const buildCompareAction = (
     onClick,
 });
 
-export const buildApproveAction = (
+export const buildGoInAction = (
     onClick: (data: RowData) => void,
     tooltip: string,
+    disabled: (data: RowData) => boolean,
 ): RowAction<RowData> => ({
-    icon: ThumbUpIcon,
+    icon: LoginIcon,
     tooltip,
     onClick,
+    disabled,
+});
+
+export const buildManualInvoicingAction = (
+    onClick: (data: RowData) => void,
+    tooltip: string,
+    disabled: (data: RowData) => boolean,
+): RowAction<RowData> => ({
+    icon: CreditCardOffIcon,
+    tooltip,
+    onClick,
+    disabled,
 });
 
 export const buildPreviewAction = (

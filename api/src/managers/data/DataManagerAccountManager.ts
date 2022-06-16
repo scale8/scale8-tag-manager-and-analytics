@@ -24,8 +24,8 @@ export default class DataManagerAccountManager extends Manager<DataManagerAccoun
         """
         type DataManagerAccountUsage {
             day: DateTime!
-            requests: Int!
-            bytes: Int!
+            requests: Float!
+            bytes: Float!
         }
 
         """
@@ -77,6 +77,14 @@ export default class DataManagerAccountManager extends Manager<DataManagerAccoun
             Account usage
             """
             usage: [DataManagerAccountUsage!]!
+            """
+            Billing Cycle Requests
+            """
+            billing_cycle_requests: Float!
+            """
+            Billing Cycle Bytes
+            """
+            billing_cycle_bytes: Float!
         }
 
         # noinspection GraphQLMemberRedefinition
@@ -193,6 +201,12 @@ export default class DataManagerAccountManager extends Manager<DataManagerAccoun
                     userMessages.accountFailed,
                 );
                 return await usageFromAccount(account, ctx);
+            },
+            billing_cycle_requests: async (parent: any, args: any, ctx: CTX) => {
+                return 20;
+            },
+            billing_cycle_bytes: async (parent: any, args: any, ctx: CTX) => {
+                return 30;
             },
         },
     };

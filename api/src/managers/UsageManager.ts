@@ -26,11 +26,11 @@ export default class UsageManager extends Manager<Usage> {
             """
             The total number of requests
             """
-            requests: Int!
+            requests: Float!
             """
             The bytes of data transferred
             """
-            bytes: Int!
+            bytes: Float!
         }
     `;
 }

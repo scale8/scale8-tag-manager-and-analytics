@@ -24,7 +24,7 @@ export default class TagManagerAccountManager extends Manager<TagManagerAccount>
         """
         type TagManagerAccountUsage {
             day: DateTime!
-            requests: Int!
+            requests: Float!
         }
 
         """
@@ -61,6 +61,10 @@ export default class TagManagerAccountManager extends Manager<TagManagerAccount>
             Account Usage
             """
             usage: [TagManagerAccountUsage!]!
+            """
+            Billing Cycle Requests
+            """
+            billing_cycle_requests: Float!
         }
 
         # noinspection GraphQLMemberRedefinition
@@ -191,6 +195,9 @@ export default class TagManagerAccountManager extends Manager<TagManagerAccount>
                     userMessages.accountFailed,
                 );
                 return await usageFromAccount(account, ctx);
+            },
+            billing_cycle_requests: async (parent: any, args: any, ctx: CTX) => {
+                return 10;
             },
         },
     };
