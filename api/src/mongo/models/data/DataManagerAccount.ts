@@ -185,6 +185,10 @@ export default class DataManagerAccount extends Model {
         this._trial_expires_on = undefined;
     }
 
+    public isOnFreeTrialIncludingExpired(): boolean {
+        return this._trial_expires_on !== undefined;
+    }
+
     public isOnFreeTrial(): boolean {
         if (this._trial_expires_on === undefined) {
             return false; //no free trial applied...
