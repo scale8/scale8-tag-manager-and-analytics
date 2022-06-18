@@ -5,7 +5,6 @@ import TagManagerAccount from '../mongo/models/tag/TagManagerAccount';
 import App from '../mongo/models/tag/App';
 import { endOfDay, parse, startOfDay } from 'date-fns';
 import Usage from '../mongo/models/Usage';
-import OperationOwner from '../enums/OperationOwner';
 import DataManagerAccount from '../mongo/models/data/DataManagerAccount';
 import IngestEndpoint from '../mongo/models/data/IngestEndpoint';
 import { AccountType } from '../enums/AccountType';
