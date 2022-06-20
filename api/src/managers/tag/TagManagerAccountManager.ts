@@ -13,9 +13,11 @@ import { usageFromAccount } from '../../utils/UsageUtils';
 import TagManagerAccountRepo from '../../mongo/repos/tag/TagManagerAccountRepo';
 import TYPES from '../../container/IOC.types';
 import AccountService from '../../accounts/AccountService';
+import StripeService from '../../payments/providers/StripeService';
 
 @injectable()
 export default class TagManagerAccountManager extends Manager<TagManagerAccount> {
+    @inject(TYPES.StripeService) protected readonly stripeService!: StripeService;
     @inject(TYPES.AccountService) protected readonly accountService!: AccountService;
 
     protected gqlSchema = gql`
@@ -197,7 +199,8 @@ export default class TagManagerAccountManager extends Manager<TagManagerAccount>
                 return await usageFromAccount(account, ctx);
             },
             billing_cycle_requests: async (parent: any, args: any, ctx: CTX) => {
-                return 10;
+                // TODO: Chris must implement the logic as part of the billing PR
+                return 0;
             },
         },
     };

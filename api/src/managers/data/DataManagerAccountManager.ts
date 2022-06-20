@@ -12,9 +12,11 @@ import { usageFromAccount } from '../../utils/UsageUtils';
 import DataManagerAccountRepo from '../../mongo/repos/data/DataManagerAccountRepo';
 import TYPES from '../../container/IOC.types';
 import AccountService from '../../accounts/AccountService';
+import StripeService from '../../payments/providers/StripeService';
 
 @injectable()
 export default class DataManagerAccountManager extends Manager<DataManagerAccount> {
+    @inject(TYPES.StripeService) protected readonly stripeService!: StripeService;
     @inject(TYPES.AccountService) protected readonly accountService!: AccountService;
 
     protected gqlSchema = gql`
@@ -203,10 +205,12 @@ export default class DataManagerAccountManager extends Manager<DataManagerAccoun
                 return await usageFromAccount(account, ctx);
             },
             billing_cycle_requests: async (parent: any, args: any, ctx: CTX) => {
-                return 20;
+                // TODO: Chris must implement the logic as part of the billing PR
+                return 0;
             },
             billing_cycle_bytes: async (parent: any, args: any, ctx: CTX) => {
-                return 30;
+                // TODO: Chris must implement the logic as part of the billing PR
+                return 0;
             },
         },
     };

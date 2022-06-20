@@ -135,7 +135,7 @@ export interface OrgsAdminPageData_getOrgs {
    */
   is_paid: boolean;
   /**
-   * If this org has a stripeCustomerId and can use the custumer portal
+   * If this org has a stripeCustomerId and can use the costumer portal
    */
   has_billing: boolean;
   /**

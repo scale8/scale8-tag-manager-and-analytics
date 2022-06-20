@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import { useQuery } from '@apollo/client';
 import { TablePage, TablePageProps } from '../../abstractions/TablePage';
 import { useConfigState, useLoggedInState } from '../../context/AppContext';
@@ -22,8 +22,10 @@ import { formatBytes } from '../../utils/MathUtils';
 
 export type OrgsAdministrationTableRow = TableRowBase & {
     name: string;
+    tagManagerAccount: ReactNode;
     tmPlan: string;
     tmReq: string;
+    dataManagerAccount: ReactNode;
     dmPlan: string;
     dmReq: string;
     dmData: string;
@@ -49,11 +51,13 @@ const AdminOrgsAdministrationPage: FC<DynamicPageProps> = () => {
         columns: buildTableColumns('adminOrgs', [
             { field: 'id' },
             { field: 'name' },
-            { field: 'tmPlan' },
-            { field: 'tmReq' },
-            { field: 'dmPlan' },
-            { field: 'dmReq' },
-            { field: 'dmData' },
+            { field: 'tagManagerAccount', type: 'jsx' },
+            { field: 'tmPlan', hidden: true },
+            { field: 'tmReq', hidden: true },
+            { field: 'dataManagerAccount', type: 'jsx' },
+            { field: 'dmPlan', hidden: true },
+            { field: 'dmReq', hidden: true },
+            { field: 'dmData', hidden: true },
             { field: 'updatedAt' },
             { field: 'createdAt' },
             { field: 'iAmIn', type: 'boolean' },
@@ -85,14 +89,34 @@ const AdminOrgsAdministrationPage: FC<DynamicPageProps> = () => {
 
                 const owner = org.users.find((_) => _.owner);
 
+                const tmPlan = planDetailsToString(tagManagerDetails);
+                const tmReq =
+                    org.tag_manager_account.billing_cycle_requests.toLocaleString('en-GB');
+
+                const dmPlan = planDetailsToString(dataManagerDetails);
+                const dmReq =
+                    org.data_manager_account.billing_cycle_requests.toLocaleString('en-GB');
+                const dmData = formatBytes(org.data_manager_account.billing_cycle_bytes);
+
                 return {
                     ...extractBaseColumns(org),
                     name: org.name,
-                    tmPlan: planDetailsToString(tagManagerDetails),
-                    tmReq: org.tag_manager_account.billing_cycle_requests.toLocaleString('en-GB'),
-                    dmPlan: planDetailsToString(dataManagerDetails),
-                    dmReq: org.data_manager_account.billing_cycle_requests.toLocaleString('en-GB'),
-                    dmData: formatBytes(org.data_manager_account.billing_cycle_bytes),
+                    tagManagerAccount: (
+                        <>
+                            <b>{dmPlan}</b> - Billing cycle: <b>{tmReq}</b> page views
+                        </>
+                    ),
+                    tmPlan,
+                    tmReq,
+                    dataManagerAccount: (
+                        <>
+                            <b>{dmPlan}</b> - Billing cycle: <b>{dmReq}</b> requests,{' '}
+                            <b>{dmData}</b>
+                        </>
+                    ),
+                    dmPlan,
+                    dmReq,
+                    dmData,
                     iAmIn: data.me.orgs.some((_) => _.id === org.id),
                     manualInvoicing: org.manual_invoicing,
                     users: org.users.length,

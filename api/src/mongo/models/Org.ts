@@ -47,7 +47,7 @@ export default class Org extends Model {
         required: true,
         exposeToGQLAs: 'manual_invoicing',
     })
-    private readonly _manual_invoicing: boolean;
+    private _manual_invoicing: boolean;
 
     constructor(orgOwnerUser: User, name: string, tz = 'UTC', manualInvoicing = false) {
         super();
@@ -64,6 +64,10 @@ export default class Org extends Model {
 
     get manualInvoicing(): boolean {
         return this._manual_invoicing;
+    }
+
+    set manualInvoicing(value: boolean) {
+        this._manual_invoicing = value;
     }
 
     get name(): string {

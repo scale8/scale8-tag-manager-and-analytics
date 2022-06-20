@@ -19,20 +19,21 @@ import DataError from '../errors/DataError';
 import userMessages from '../errors/UserMessages';
 import { createOrg, fetchOrg, findUserAvailableByEmail } from '../utils/OrgUtils';
 import TagManagerAccountRepo from '../mongo/repos/tag/TagManagerAccountRepo';
-import { AccountType } from '../enums/AccountType';
 import DataManagerAccountRepo from '../mongo/repos/data/DataManagerAccountRepo';
 import container from '../container/IOC.config';
 import StripeService from '../payments/providers/StripeService';
 import UserRepo from '../mongo/repos/UserRepo';
-import { AccountProduct } from '../enums/AccountProduct';
 import BaseEmail from '../backends/email/abstractions/BaseEmail';
 import { LogPriority } from '../enums/LogPriority';
 import Hash from '../core/Hash';
+import AccountService from '../accounts/AccountService';
 
 @injectable()
 export default class OrgManager extends Manager<Org> {
     @inject(TYPES.UserManager) private userManager!: UserManager;
     @inject(TYPES.BackendEmail) private mailer!: BaseEmail;
+    @inject(TYPES.StripeService) protected readonly stripeService!: StripeService;
+    @inject(TYPES.AccountService) protected readonly accountService!: AccountService;
 
     protected gqlSchema = gql`
         """
@@ -155,7 +156,7 @@ export default class OrgManager extends Manager<Org> {
             """
             is_paid: Boolean!
             """
-            If this org has a stripeCustomerId and can use the custumer portal
+            If this org has a stripeCustomerId and can use the costumer portal
             """
             has_billing: Boolean!
             """
@@ -249,13 +250,20 @@ export default class OrgManager extends Manager<Org> {
             """
             first_name: String!
             """
-            The Surna,me of the \`User\` being added to this \`Org\`
+            The Surname of the \`User\` being added to this \`Org\`
             """
             last_name: String!
             """
             A set of \`Org\` permissions which will be granted to the \`User\`
             """
             org_permission_group: OrgPermissionGroupInput!
+        }
+
+        input AdminAddMeToOrgInput {
+            """
+            The ID of the \`Org\` that the admin will join
+            """
+            org_id: ID!
         }
 
         input OrgInviteUserInput {
@@ -333,7 +341,7 @@ export default class OrgManager extends Manager<Org> {
 
         input TransferOwnershipInput {
             """
-            The \`Org\` ID of the Organization whose owneship will be transferred
+            The \`Org\` ID of the Organization whose ownership will be transferred
             """
             org_id: ID!
             """
@@ -403,6 +411,10 @@ export default class OrgManager extends Manager<Org> {
             product: AccountProduct
         }
 
+        input SwitchToManualInvoicingInput {
+            org_id: ID!
+        }
+
         # noinspection GraphQLMemberRedefinition
         extend type Mutation {
             """
@@ -438,6 +450,11 @@ export default class OrgManager extends Manager<Org> {
             addUser(orgAddUserInput: OrgAddUserInput!): User!
             """
             @bound=Org
+            A system admin can add himself to an \`Org\`, in order to offer support
+            """
+            adminAddMeToOrg(adminAddMeToOrgInput: AdminAddMeToOrgInput!): Boolean!
+            """
+            @bound=Org
             Invite a user to join an \`Org\`
             """
             inviteUser(orgInviteUserInput: OrgInviteUserInput!): Boolean!
@@ -468,7 +485,7 @@ export default class OrgManager extends Manager<Org> {
             removeMe(orgRemoveMeInput: OrgRemoveMeInput!): Boolean!
             """
             @bound=Org
-            Trasfer the \`Org\` ownership to a target \`User\`.
+            Transfer the \`Org\` ownership to a target \`User\`.
             """
             transferOwnership(transferOwnershipInput: TransferOwnershipInput!): Boolean!
             """
@@ -509,6 +526,13 @@ export default class OrgManager extends Manager<Org> {
             Cancel subscription
             """
             accountUnsubscribe(accountUnsubscribeInput: AccountUnsubscribeInput): Boolean!
+            """
+            @bound=Org
+            Switch to manual invoicing (admin only)
+            """
+            switchToManualInvoicing(
+                switchToManualInvoicingInput: SwitchToManualInvoicingInput
+            ): Boolean!
         }
 
         # noinspection GraphQLMemberRedefinition
@@ -796,6 +820,18 @@ export default class OrgManager extends Manager<Org> {
                 );
 
                 return user;
+            });
+        },
+        adminAddMeToOrg: async (parent: any, args: any, ctx: CTX) => {
+            const org = await fetchOrg(new ObjectId(args.adminAddMeToOrgInput.org_id));
+            return await this.userAuth.asAdminUser(ctx, async (me) => {
+                await this.repoFactory<UserRepo>(User).linkToOrg(
+                    me,
+                    me,
+                    org,
+                    new PermissionGroup(true, true, true, true, true),
+                );
+                return true;
             });
         },
         inviteUser: async (parent: any, args: any, ctx: CTX) => {
@@ -1110,7 +1146,7 @@ export default class OrgManager extends Manager<Org> {
                     );
 
                     if (currentStripeProductId === undefined) {
-                        //we must be upgrading from a free trail, but there is an existing subscription to join to...
+                        //we must be upgrading from a free trial, but there is an existing subscription to join to...
                         await this.stripeService.createProductLineItemOnSubscription(
                             stripeSubscriptionId,
                             newStripeProductId,
@@ -1140,7 +1176,7 @@ export default class OrgManager extends Manager<Org> {
             return await this.orgAuth.asUserWithOrgOwnership(ctx, org, async () => {
                 return subscribeToAccount(
                     org,
-                    await this.getAccountByProduct(org, data.product),
+                    await this.accountService.getAccountByProduct(org, data.product),
                     data.product_id,
                     data.success_url,
                     data.cancel_url,
@@ -1148,103 +1184,29 @@ export default class OrgManager extends Manager<Org> {
             });
         },
         accountUnsubscribe: async (parent: any, args: any, ctx: CTX) => {
-            const unsubscribeAccount = async (
-                org: Org,
-                account: TagManagerAccount | DataManagerAccount | undefined,
-            ): Promise<boolean> => {
-                if (account === undefined) {
-                    throw new GQLError(userMessages.accountFailed, true);
-                } else {
-                    const accountType = account.constructor.name;
-                    const accountRepository = this.repoFactory(accountType);
-
-                    const deleteAccount = async () => {
-                        await accountRepository.delete(account, 'SYSTEM');
-                        // generate a new inactive account
-                        // todo... this is bad.... FIX IT. Data manager is breaking here for obvious reasons.
-                        const buildNewAccount = () => {
-                            if (accountType === 'TagManagerAccount') {
-                                return new TagManagerAccount(org, org.manualInvoicing);
-                            } else if (accountType === 'DataManagerAccount') {
-                                return new DataManagerAccount(
-                                    org,
-                                    AccountType.USER,
-                                    org.manualInvoicing,
-                                );
-                            } else {
-                                throw new GenericError(
-                                    `Account type ${accountType} has not been implemented yet`,
-                                    LogPriority.ERROR,
-                                );
-                            }
-                        };
-
-                        await accountRepository.save(buildNewAccount(), 'SYSTEM', {
-                            gqlMethod: GQLMethod.CREATE,
-                        });
-                    };
-
-                    if (org.manualInvoicing) {
-                        await deleteAccount();
-                        return true;
-                    } else {
-                        const stripeSubscription = await this.stripeService.getStripeSubscription(
-                            org,
-                        );
-                        const stripeProductId = await this.stripeService.getStripeProductId(
-                            org,
-                            account,
-                        );
-                        if (stripeSubscription === undefined) {
-                            throw new GQLError(userMessages.noSubscription, true);
-                        } else if (stripeSubscription.status === 'active') {
-                            if (stripeProductId === undefined) {
-                                throw new GQLError(userMessages.noProduct, true);
-                            } else {
-                                await this.stripeService.cancelProductLineItemOnSubscription(
-                                    org,
-                                    stripeProductId,
-                                );
-                                await deleteAccount();
-                                return true;
-                            }
-                        } else {
-                            throw new GQLError(userMessages.accountNotActive, true);
-                        }
-                    }
-                }
-            };
-
             const data = args.accountUnsubscribeInput;
             /*
                 User must be the Org owner as this involves billing changes...
                 User can cancel at anytime. We don't need to listen for the webhook in this instance, we can go ahead and terminate this subscription (provided there is a valid one)
-                Once cancelled, this tag manager account must be marked for clean up by the system... (we can double check everything is therefore in place before we delete and handle this with a cron)
+                Once cancelled, this tag manager account must be marked for clean up by the system... (we can double-check everything is therefore in place before we delete and handle this with a cron)
              */
             const org = await fetchOrg(new ObjectId(data.org_id));
             return await this.orgAuth.asUserWithOrgOwnership(ctx, org, async () => {
                 //force a double check here...
-                return unsubscribeAccount(org, await this.getAccountByProduct(org, data.product));
+                return this.accountService.unsubscribeAccount(
+                    org,
+                    await this.accountService.getAccountByProduct(org, data.product),
+                );
+            });
+        },
+        switchToManualInvoicing: async (parent: any, args: any, ctx: CTX) => {
+            const org = await fetchOrg(new ObjectId(args.switchToManualInvoicingInput.org_id));
+            return await this.userAuth.asAdminUser(ctx, async (me) => {
+                await this.accountService.switchToManualInvoicing(org, me);
+                return true;
             });
         },
     };
-
-    private async getAccountByProduct(
-        org: Org,
-        product: AccountProduct,
-    ): Promise<DataManagerAccount | TagManagerAccount> {
-        if (product === AccountProduct.TAG_MANAGER)
-            return await this.repoFactory<TagManagerAccountRepo>(TagManagerAccount).getFromOrg(org);
-        if (product === AccountProduct.DATA_MANAGER) {
-            return await this.repoFactory<DataManagerAccountRepo>(DataManagerAccount).getFromOrg(
-                org,
-            );
-        }
-        throw new GenericError(
-            `Account for product ${product} not implemented.`,
-            LogPriority.ERROR,
-        );
-    }
 
     private async getUserPermissionsGql(ctx: CTX, orgId: ObjectId, userId: ObjectId) {
         return this.orgAuth.asUserWithViewAccess(ctx, orgId, async () => {
