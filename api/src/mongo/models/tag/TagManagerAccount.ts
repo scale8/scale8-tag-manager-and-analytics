@@ -5,6 +5,8 @@ import { ObjectId } from 'mongodb';
 import { add, differenceInCalendarDays, isBefore } from 'date-fns';
 
 export default class TagManagerAccount extends Model {
+    private readonly TRIAL_LENGTH = 30;
+
     public getOrgEntityId(): ObjectId {
         return this.orgId;
     }
@@ -165,7 +167,7 @@ export default class TagManagerAccount extends Model {
     public startTrial(): void {
         this._trial_started_on = new Date();
         this._trial_expires_on = add(this._trial_started_on, {
-            days: 30,
+            days: this.TRIAL_LENGTH,
         });
     }
 
@@ -195,7 +197,7 @@ export default class TagManagerAccount extends Model {
         if (this._trial_expires_on === undefined || this._trial_started_on === undefined) {
             return 0;
         } else {
-            return differenceInCalendarDays(this._trial_expires_on, this._trial_started_on);
+            return this.TRIAL_LENGTH - differenceInCalendarDays(new Date(), this._trial_started_on);
         }
     }
 }
