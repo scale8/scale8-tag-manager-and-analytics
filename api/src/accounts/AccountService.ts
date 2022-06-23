@@ -139,6 +139,7 @@ export default class AccountService {
             }
         }
         account.enabled = true;
+        account.cancelTrial();
         await this.repoFactory(account.constructor.name).save(account, me);
     }
 

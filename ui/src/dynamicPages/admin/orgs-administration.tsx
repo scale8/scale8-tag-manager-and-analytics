@@ -45,7 +45,7 @@ const AdminOrgsAdministrationPage: FC<DynamicPageProps> = () => {
     const signUpTablePageProps: TablePageProps<OrgsAdministrationTableRow, OrgsAdminPageData> = {
         title: 'Orgs Administration',
         mainInfoProps: buildStandardMainInfo('adminOrgs'),
-        mainQuery: useQuery(OrgsAdminQuery),
+        mainQuery: useQuery(OrgsAdminQuery, { notifyOnNetworkStatusChange: true }),
         tableId: 'Orgs-admin',
         entityName: 'Org',
         columns: buildTableColumns('adminOrgs', [
