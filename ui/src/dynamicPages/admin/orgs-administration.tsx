@@ -103,7 +103,7 @@ const AdminOrgsAdministrationPage: FC<DynamicPageProps> = () => {
                     name: org.name,
                     tagManagerAccount: (
                         <>
-                            <b>{dmPlan}</b> - Billing cycle: <b>{tmReq}</b> page views
+                            <b>{tmPlan}</b> - Billing cycle: <b>{tmReq}</b> page views
                         </>
                     ),
                     tmPlan,
