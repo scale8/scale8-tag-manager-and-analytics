@@ -22,6 +22,14 @@ export const fetchOrg = async (id: ObjectId): Promise<Org> => {
     return repoFactory(Org).findByIdThrows(id, userMessages.orgFailed);
 };
 
+export const isUserInOrg = async (user: User, orgId: ObjectId): Promise<boolean> => {
+    const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
+    const roles = await repoFactory(OrgRole).find({
+        _org_id: orgId,
+    });
+    return roles.some((_) => _.userId.toString() === user.id.toString());
+};
+
 export const findUserAvailableByEmail = async (
     email: string,
     orgId: ObjectId,
@@ -32,12 +40,7 @@ export const findUserAvailableByEmail = async (
     });
 
     if (user !== null) {
-        // User is already in the system
-        const roles = await repoFactory(OrgRole).find({
-            _org_id: orgId,
-        });
-        const matchingRole = roles.find((_) => _.userId.toString() === user.id.toString());
-        if (matchingRole !== undefined) {
+        if (await isUserInOrg(user, orgId)) {
             throw new GenericError(userMessages.userAlreadyIncluded, LogPriority.DEBUG, true);
         }
         return user;

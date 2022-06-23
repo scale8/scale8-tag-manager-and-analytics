@@ -128,7 +128,7 @@ const AdminOrgsAdministrationPage: FC<DynamicPageProps> = () => {
             buildGoInAction(
                 ({ name, id }) =>
                     ask(`Add yourself to: ${name}?`, () => {
-                        pageActions.adminSignupApprove(pageActionProps, id);
+                        pageActions.adminGoIn(pageActionProps, id);
                     }),
                 'Go in',
                 ({ iAmIn }) => iAmIn,
@@ -136,7 +136,7 @@ const AdminOrgsAdministrationPage: FC<DynamicPageProps> = () => {
             buildManualInvoicingAction(
                 ({ name, id }) =>
                     ask(`Move ${name} to manual invoicing?`, () => {
-                        pageActions.adminSignupApprove(pageActionProps, id);
+                        pageActions.adminManualInvoicing(pageActionProps, id);
                     }),
                 'Move to manual invoicing',
                 ({ manualInvoicing }) => manualInvoicing,

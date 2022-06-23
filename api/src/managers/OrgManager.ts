@@ -17,7 +17,7 @@ import GQLMethod from '../enums/GQLMethod';
 import GQLError from '../errors/GQLError';
 import DataError from '../errors/DataError';
 import userMessages from '../errors/UserMessages';
-import { createOrg, fetchOrg, findUserAvailableByEmail } from '../utils/OrgUtils';
+import { createOrg, fetchOrg, findUserAvailableByEmail, isUserInOrg } from '../utils/OrgUtils';
 import TagManagerAccountRepo from '../mongo/repos/tag/TagManagerAccountRepo';
 import DataManagerAccountRepo from '../mongo/repos/data/DataManagerAccountRepo';
 import container from '../container/IOC.config';
@@ -768,11 +768,7 @@ export default class OrgManager extends Manager<Org> {
                     userId,
                     userMessages.userFailed,
                 );
-                const roles = await this.repoFactory(OrgRole).find({
-                    _org_id: orgId,
-                });
-                const matchingRole = roles.find((_) => _.userId.toString() === user.id.toString());
-                if (matchingRole === undefined) {
+                if (!(await isUserInOrg(me, orgId))) {
                     throw new GenericError(userMessages.userNotIncluded, LogPriority.DEBUG, true);
                 }
                 const newPassword = Hash.simpleRandomHash(9);
@@ -824,7 +820,15 @@ export default class OrgManager extends Manager<Org> {
         },
         adminAddMeToOrg: async (parent: any, args: any, ctx: CTX) => {
             const org = await fetchOrg(new ObjectId(args.adminAddMeToOrgInput.org_id));
+
             return await this.userAuth.asAdminUser(ctx, async (me) => {
+                if (await isUserInOrg(me, org.id)) {
+                    throw new GenericError(
+                        userMessages.userAlreadyIncluded,
+                        LogPriority.DEBUG,
+                        true,
+                    );
+                }
                 await this.repoFactory<UserRepo>(User).linkToOrg(
                     me,
                     me,
