@@ -97,6 +97,12 @@ export default class User extends Model {
     })
     private _is_email_verified = false;
 
+    @Field<boolean>({
+        required: false,
+        exposeToGQLAs: 'is_product_updates_enabled',
+    })
+    private _is_product_updates_enabled?: boolean;
+
     constructor(
         firstName: string,
         lastName: string,
@@ -121,6 +127,7 @@ export default class User extends Model {
         this._is_admin = isAdmin;
         this._email_notifications = emailNotifications;
         this._is_email_verified = false;
+        this._is_product_updates_enabled = false;
     }
 
     public resetAPIToken(salt: string): void {
@@ -241,5 +248,13 @@ export default class User extends Model {
 
     set isEmailVerified(value: boolean) {
         this._is_email_verified = value;
+    }
+
+    get isProductUpdatesEnabled(): boolean {
+        return this._is_product_updates_enabled || false;
+    }
+
+    set isProductUpdatesEnabled(value: boolean) {
+        this._is_product_updates_enabled = value;
     }
 }
