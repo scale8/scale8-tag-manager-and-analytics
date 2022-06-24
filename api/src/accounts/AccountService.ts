@@ -74,33 +74,29 @@ export default class AccountService {
 
     public async unsubscribeAccount(
         org: Org,
-        account: TagManagerAccount | DataManagerAccount | undefined,
+        account: TagManagerAccount | DataManagerAccount,
     ): Promise<boolean> {
-        if (account === undefined) {
-            throw new GQLError(userMessages.accountFailed, true);
+        if (org.manualInvoicing) {
+            await this.deleteAccount(org, account);
+            return true;
         } else {
-            if (org.manualInvoicing) {
-                await this.deleteAccount(org, account);
-                return true;
-            } else {
-                const stripeSubscription = await this.stripeService.getStripeSubscription(org);
-                const stripeProductId = await this.stripeService.getStripeProductId(org, account);
-                if (stripeSubscription === undefined) {
-                    throw new GQLError(userMessages.noSubscription, true);
-                } else if (stripeSubscription.status === 'active') {
-                    if (stripeProductId === undefined) {
-                        throw new GQLError(userMessages.noProduct, true);
-                    } else {
-                        await this.stripeService.cancelProductLineItemOnSubscription(
-                            org,
-                            stripeProductId,
-                        );
-                        await this.deleteAccount(org, account);
-                        return true;
-                    }
+            const stripeSubscription = await this.stripeService.getStripeSubscription(org);
+            const stripeProductId = await this.stripeService.getStripeProductId(org, account);
+            if (stripeSubscription === undefined) {
+                throw new GQLError(userMessages.noSubscription, true);
+            } else if (stripeSubscription.status === 'active') {
+                if (stripeProductId === undefined) {
+                    throw new GQLError(userMessages.noProduct, true);
                 } else {
-                    throw new GQLError(userMessages.accountNotActive, true);
+                    await this.stripeService.cancelProductLineItemOnSubscription(
+                        org,
+                        stripeProductId,
+                    );
+                    await this.deleteAccount(org, account);
+                    return true;
                 }
+            } else {
+                throw new GQLError(userMessages.accountNotActive, true);
             }
         }
     }
