@@ -132,9 +132,6 @@ import PlatformActionPermission from '../mongo/models/tag/PlatformActionPermissi
 import PlatformActionPermissionRepo from '../mongo/repos/tag/PlatformActionPermissionRepo';
 import PlatformActionPermissionManager from '../managers/tag/PlatformActionPermissionManager';
 import StripeService from '../payments/providers/StripeService';
-import Usage from '../mongo/models/Usage';
-import UsageRepo from '../mongo/repos/UsageRepo';
-import UsageManager from '../managers/UsageManager';
 import BaseStorage from '../backends/storage/abstractions/BaseStorage';
 import MongoDBStorage from '../backends/storage/MongoDBStorage';
 import BaseDatabase from '../backends/databases/abstractions/BaseDatabase';
@@ -251,11 +248,6 @@ container.bind<ConsoleLogger>(TYPES.ConsoleLogger).to(ConsoleLogger).inSingleton
 });
 
 const chainedDependencies: ChainedDependency[] = [
-    {
-        model: Usage,
-        repository: { id: TYPES.UsageRepo, constructor: UsageRepo },
-        manager: { id: TYPES.UsageManager, constructor: UsageManager },
-    },
     {
         model: User,
         repository: { id: TYPES.UserRepo, constructor: UserRepo },

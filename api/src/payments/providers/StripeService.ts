@@ -5,7 +5,6 @@ import Org from '../../mongo/models/Org';
 import TYPES from '../../container/IOC.types';
 import RepoFromModelFactory from '../../container/factoryTypes/RepoFromModelFactory';
 import User from '../../mongo/models/User';
-import OperationOwner from '../../enums/OperationOwner';
 import GenericError from '../../errors/GenericError';
 import express from 'express';
 import TagManagerAccount from '../../mongo/models/tag/TagManagerAccount';
@@ -130,10 +129,7 @@ export default class StripeService {
                     account.enabled = true;
                     account.cancelTrial();
 
-                    await this.repoFactory(accountType).save(
-                        account,
-                        'SYSTEM',
-                    );
+                    await this.repoFactory(accountType).save(account, 'SYSTEM');
                 }),
             );
         }
@@ -403,6 +399,18 @@ export default class StripeService {
             return undefined;
         }
         return customer.subscriptions.data[0];
+    }
+
+    public async getBillingCycle(org: Org): Promise<{ start: Date; end: Date } | undefined> {
+        const subscription = await this.getStripeSubscription(org);
+        if (subscription === undefined) {
+            return undefined;
+        } else {
+            return {
+                start: new Date(subscription.current_period_start * 1000),
+                end: new Date(subscription.current_period_end * 1000),
+            };
+        }
     }
 
     public async getStripeProductId(

@@ -8,26 +8,29 @@ import IngestEndpoint from '../../mongo/models/data/IngestEndpoint';
 import { differenceInDays } from 'date-fns';
 import userMessages from '../../errors/UserMessages';
 import { fetchOrg } from '../../utils/OrgUtils';
-import { usageFromAccount } from '../../utils/UsageUtils';
 import DataManagerAccountRepo from '../../mongo/repos/data/DataManagerAccountRepo';
 import TYPES from '../../container/IOC.types';
 import AccountService from '../../accounts/AccountService';
 import StripeService from '../../payments/providers/StripeService';
+import { StorageProvider } from '../../enums/StorageProvider';
+import BaseDatabase from '../../backends/databases/abstractions/BaseDatabase';
 
 @injectable()
 export default class DataManagerAccountManager extends Manager<DataManagerAccount> {
     @inject(TYPES.StripeService) protected readonly stripeService!: StripeService;
     @inject(TYPES.AccountService) protected readonly accountService!: AccountService;
 
+    @inject(TYPES.BackendDatabaseFactory) private backendDatabaseFactory!: (
+        storage_provider: StorageProvider,
+    ) => BaseDatabase;
+
     protected gqlSchema = gql`
         """
         @model
-        Metrics to describe the \`Usage\` of a Data Manager account.
         """
         type DataManagerAccountUsage {
-            day: DateTime!
-            requests: Float!
-            bytes: Float!
+            request_count: Float!
+            byte_count: Float!
         }
 
         """
@@ -76,17 +79,9 @@ export default class DataManagerAccountManager extends Manager<DataManagerAccoun
             """
             enabled: Boolean!
             """
-            Account usage
+            Current billing cycle usage
             """
-            usage: [DataManagerAccountUsage!]!
-            """
-            Billing Cycle Requests
-            """
-            billing_cycle_requests: Float!
-            """
-            Billing Cycle Bytes
-            """
-            billing_cycle_bytes: Float!
+            current_billing_cycle_usage: DataManagerAccountUsage!
         }
 
         # noinspection GraphQLMemberRedefinition
@@ -197,20 +192,51 @@ export default class DataManagerAccountManager extends Manager<DataManagerAccoun
                     return stripeProductId;
                 });
             },
-            usage: async (parent: any, args: any, ctx: CTX) => {
-                const account = await this.repoFactory(DataManagerAccount).findByIdThrows(
-                    new ObjectId(parent.id),
-                    userMessages.accountFailed,
-                );
-                return await usageFromAccount(account, ctx);
-            },
-            billing_cycle_requests: async (parent: any, args: any, ctx: CTX) => {
-                // TODO: Chris must implement the logic as part of the billing PR
-                return 0;
-            },
-            billing_cycle_bytes: async (parent: any, args: any, ctx: CTX) => {
-                // TODO: Chris must implement the logic as part of the billing PR
-                return 0;
+            current_billing_cycle_usage: async (parent: any, args: any, ctx: CTX) => {
+                const orgId = new ObjectId(parent.org_id);
+                const dataManagerAccountId = new ObjectId(parent.id);
+                return await this.orgAuth.asUserWithViewAccess(ctx, orgId, async () => {
+                    //we need to fetch all apps...
+                    const org = await fetchOrg(orgId);
+                    const ingestEndpoints = await this.repoFactory(IngestEndpoint).find({
+                        _data_manager_account_id: dataManagerAccountId,
+                    });
+                    return (
+                        await Promise.all(
+                            ingestEndpoints.map(async (ingestEndpoint) => {
+                                if (
+                                    org.billingStart !== undefined &&
+                                    org.billingEnd !== undefined
+                                ) {
+                                    const ingestEndpointUsage = await this.backendDatabaseFactory(
+                                        ingestEndpoint.storageProvider,
+                                    ).ingestBillingCycleUsage(
+                                        ingestEndpoint,
+                                        org.billingStart,
+                                        org.billingEnd,
+                                    );
+                                    return ingestEndpointUsage.result;
+                                } else {
+                                    return {
+                                        request_count: 0,
+                                        byte_count: 0,
+                                    };
+                                }
+                            }),
+                        )
+                    ).reduce(
+                        (a, b) => {
+                            return {
+                                request_count: a.request_count + b.request_count,
+                                byte_count: a.byte_count + b.byte_count,
+                            };
+                        },
+                        {
+                            request_count: 0,
+                            byte_count: 0,
+                        },
+                    );
+                });
             },
         },
     };

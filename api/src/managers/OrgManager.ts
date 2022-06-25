@@ -689,6 +689,13 @@ export default class OrgManager extends Manager<Org> {
         },
     };
 
+    public async updateOrgBillingCycle(org: Org): Promise<void> {
+        const cycle = await this.stripeService.getBillingCycle(org);
+        org.billingStart = cycle?.start;
+        org.billingEnd = cycle?.end;
+        await this.repoFactory(Org).save(org, 'SYSTEM');
+    }
+
     // noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
     /**
      * Mutation Resolvers

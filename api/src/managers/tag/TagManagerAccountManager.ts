@@ -9,24 +9,28 @@ import Platform from '../../mongo/models/tag/Platform';
 import { differenceInDays } from 'date-fns';
 import userMessages from '../../errors/UserMessages';
 import { fetchOrg } from '../../utils/OrgUtils';
-import { usageFromAccount } from '../../utils/UsageUtils';
 import TagManagerAccountRepo from '../../mongo/repos/tag/TagManagerAccountRepo';
 import TYPES from '../../container/IOC.types';
 import AccountService from '../../accounts/AccountService';
 import StripeService from '../../payments/providers/StripeService';
+import { StorageProvider } from '../../enums/StorageProvider';
+import BaseDatabase from '../../backends/databases/abstractions/BaseDatabase';
 
 @injectable()
 export default class TagManagerAccountManager extends Manager<TagManagerAccount> {
     @inject(TYPES.StripeService) protected readonly stripeService!: StripeService;
     @inject(TYPES.AccountService) protected readonly accountService!: AccountService;
 
+    @inject(TYPES.BackendDatabaseFactory) private backendDatabaseFactory!: (
+        storage_provider: StorageProvider,
+    ) => BaseDatabase;
+
     protected gqlSchema = gql`
         """
         @model
         """
         type TagManagerAccountUsage {
-            day: DateTime!
-            requests: Float!
+            request_count: Float!
         }
 
         """
@@ -60,13 +64,9 @@ export default class TagManagerAccountManager extends Manager<TagManagerAccount>
             """
             enabled: Boolean!
             """
-            Account Usage
+            Current billing cycle usage
             """
-            usage: [TagManagerAccountUsage!]!
-            """
-            Billing Cycle Requests
-            """
-            billing_cycle_requests: Float!
+            current_billing_cycle_usage: TagManagerAccountUsage!
         }
 
         # noinspection GraphQLMemberRedefinition
@@ -191,16 +191,39 @@ export default class TagManagerAccountManager extends Manager<TagManagerAccount>
                     return stripeProductId;
                 });
             },
-            usage: async (parent: any, args: any, ctx: CTX) => {
-                const account = await this.repoFactory(TagManagerAccount).findByIdThrows(
-                    new ObjectId(parent.id),
-                    userMessages.accountFailed,
-                );
-                return await usageFromAccount(account, ctx);
-            },
-            billing_cycle_requests: async (parent: any, args: any, ctx: CTX) => {
-                // TODO: Chris must implement the logic as part of the billing PR
-                return 0;
+            current_billing_cycle_usage: async (parent: any, args: any, ctx: CTX) => {
+                const orgId = new ObjectId(parent.org_id);
+                const tagManagerAccountId = new ObjectId(parent.id);
+                return await this.orgAuth.asUserWithViewAccess(ctx, orgId, async () => {
+                    //we need to fetch all apps...
+                    const org = await fetchOrg(orgId);
+                    const apps = await this.repoFactory(App).find({
+                        _tag_manager_account_id: tagManagerAccountId,
+                    });
+                    return {
+                        request_count: (
+                            await Promise.all(
+                                apps.map(async (app) => {
+                                    if (
+                                        org.billingStart !== undefined &&
+                                        org.billingEnd !== undefined
+                                    ) {
+                                        const appUsage = await this.backendDatabaseFactory(
+                                            app.storageProvider,
+                                        ).appBillingCycleUsage(
+                                            app,
+                                            org.billingStart,
+                                            org.billingEnd,
+                                        );
+                                        return appUsage.result;
+                                    } else {
+                                        return 0;
+                                    }
+                                }),
+                            )
+                        ).reduce((a, b) => a + b, 0),
+                    };
+                });
             },
         },
     };

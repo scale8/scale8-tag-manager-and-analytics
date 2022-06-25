@@ -958,6 +958,71 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
         return this.simpleAppAggregation(app, queryOptions, 'os_name', false, true);
     }
 
+    public async appBillingCycleUsage(
+        app: App,
+        cycleStart: Date,
+        cycleEnd: Date,
+    ): Promise<{ result: number; from: Date; to: Date }> {
+        const queryOptions = {
+            time_slice: 'NONE',
+            filter_options: {
+                from: cycleStart.getTime(),
+                to: cycleEnd.getTime(),
+            },
+            limit: 1,
+        };
+        const filter = this.getAppFilter(queryOptions);
+
+        const query = `
+                SELECT
+                  SUM(1) AS request_count,
+                FROM
+                  ${await this.getTable(app)}
+                WHERE
+                  ${filter.where}
+            `;
+
+        const rows = await this.query(app, query, filter.params);
+
+        return this.getResultWithRange(
+            queryOptions,
+            rows.length > 0 ? rows[0]['request_count'] : 0,
+        );
+    }
+
+    public async ingestBillingCycleUsage(
+        ingestEndpoint: IngestEndpoint,
+        cycleStart: Date,
+        cycleEnd: Date,
+    ): Promise<{ result: { request_count: number; byte_count: number }; from: Date; to: Date }> {
+        const queryOptions = {
+            time_slice: 'NONE',
+            filter_options: {
+                from: cycleStart.getTime(),
+                to: cycleEnd.getTime(),
+            },
+            limit: 1,
+        };
+        const filter = this.getIngestEndpointFilter(queryOptions);
+
+        const query = `
+                SELECT
+                  SUM(requests) AS request_count,
+                  SUM(bytes) AS byte_count,
+                FROM
+                  ${await this.getTable(ingestEndpoint)}
+                WHERE
+                  ${filter.where}
+            `;
+
+        const rows = await this.query(ingestEndpoint, query, filter.params);
+
+        return this.getResultWithRange(queryOptions, {
+            request_count: rows.length > 0 ? rows[0]['request_count'] : 0,
+            byte_count: rows.length > 0 ? rows[0]['byte_count'] : 0,
+        });
+    }
+
     protected getIngestEndpointFilter(queryOptions: IngestQueryOptions): {
         where: string;
         params: { [k: string]: any };
@@ -991,37 +1056,6 @@ export default class GoogleCloudBigQuery extends BaseDatabase {
                 where: this.generateRange(queryOptions),
                 params: {},
             },
-        );
-    }
-
-    public async usage(
-        ingestEndpoint: IngestEndpoint,
-        queryOptions: IngestQueryOptions,
-    ): Promise<{
-        result: { key: string; requests: number; bytes: number }[];
-        from: Date;
-        to: Date;
-    }> {
-        const filter = this.getIngestEndpointFilter(queryOptions);
-        const query = `
-                        SELECT
-                          FORMAT_DATETIME("${this.getFormatForTimeSlice(queryOptions)}", dt) AS key,
-                          SUM(requests) AS requests,
-                          SUM(bytes) AS bytes,
-                        FROM
-                          ${await this.getTable(ingestEndpoint)}
-                        WHERE
-                          ${filter.where}
-                        GROUP BY
-                          key
-                        ORDER BY
-                          key DESC
-                        ${this.getLimit(queryOptions)}
-                    `.trim();
-
-        return this.getResultWithRange(
-            queryOptions,
-            await this.query(ingestEndpoint, query, filter.params),
         );
     }
 

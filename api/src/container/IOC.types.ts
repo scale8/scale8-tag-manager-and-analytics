@@ -36,7 +36,6 @@ const TYPES = {
     UserAuth: Symbol.for("<UserAuth>"),
     OrgAuth: Symbol.for("<OrgAuth>"),
     //repos
-    UsageRepo: Symbol.for("<UsageRepo>"),
     UserRepo: Symbol.for("<UserRepo>"),
     DataManagerAccountRepo: Symbol.for("<DataManagerAccountRepo>"),
     TagManagerAccountRepo: Symbol.for("<TagManagerAccountRepo>"),
@@ -82,7 +81,6 @@ const TYPES = {
     DependencyRepo: Symbol.for("<DependencyRepo>"),
     PlatformActionPermissionRepo: Symbol.for("<PlatformActionPermissionRepo>"),
     //managers
-    UsageManager: Symbol.for("<UsageManager>"),
     UserManager: Symbol.for("<UserManager>"),
     DataManagerAccountManager: Symbol.for("<DataManagerAccountManager>"),
     TagManagerAccountManager: Symbol.for("<TagManagerAccountManager>"),
