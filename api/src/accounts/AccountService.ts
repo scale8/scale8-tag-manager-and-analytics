@@ -72,6 +72,69 @@ export default class AccountService {
         );
     }
 
+    //validate product id exists...
+    private getProductIdFromUserInput(productId: string): string {
+        const productData = this.stripeService
+            .getAccountConfigFromProductId(productId)
+            .plans.find((_) => (_.id = productId));
+        if (productData === undefined) {
+            throw new GQLError(userMessages.productNotFound(productId), true);
+        } else {
+            return productData.id;
+        }
+    }
+
+    public async subscribeToAccount(
+        org: Org,
+        account: TagManagerAccount | DataManagerAccount,
+        productId: string,
+        successUrl: string,
+        cancelUrl: string,
+    ): Promise<string | null> {
+        const stripeSubscriptionId = await this.stripeService.getStripeSubscriptionId(org);
+        const newStripeProductId = this.getProductIdFromUserInput(productId);
+
+        const generateSubscriptionLink = async () => {
+            //ok, generate new link for creating a subscription...
+            return (
+                await this.stripeService.createCheckoutSession(
+                    org,
+                    newStripeProductId,
+                    successUrl,
+                    cancelUrl,
+                )
+            ).id;
+        };
+
+        if (stripeSubscriptionId === undefined) {
+            return await generateSubscriptionLink();
+        } else {
+            const currentStripeProductId = await this.stripeService.getStripeProductId(
+                org,
+                account,
+            );
+
+            if (currentStripeProductId === undefined) {
+                //we must be upgrading from a free trial, but there is an existing subscription to join to...
+                await this.stripeService.createProductLineItemOnSubscription(
+                    stripeSubscriptionId,
+                    newStripeProductId,
+                );
+            } else {
+                //check products are different before trying to re-bill...
+                if (currentStripeProductId !== newStripeProductId) {
+                    await this.stripeService.updateProductLineItemOnSubscription(
+                        stripeSubscriptionId,
+                        currentStripeProductId,
+                        newStripeProductId,
+                    );
+                }
+            }
+        }
+
+        return null;
+    }
+
     public async unsubscribeAccount(
         org: Org,
         account: TagManagerAccount | DataManagerAccount,

@@ -32,6 +32,7 @@ const TYPES = {
     Contact: Symbol.for("<Contact>"),
     SignUp: Symbol.for("<SignUp>"),
     AccountService: Symbol.for("<AccountService>"),
+    OrgService: Symbol.for("<OrgService>"),
     //auth
     UserAuth: Symbol.for("<UserAuth>"),
     OrgAuth: Symbol.for("<OrgAuth>"),

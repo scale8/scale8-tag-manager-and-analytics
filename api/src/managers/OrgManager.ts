@@ -20,7 +20,6 @@ import userMessages from '../errors/UserMessages';
 import { createOrg, fetchOrg, findUserAvailableByEmail, isUserInOrg } from '../utils/OrgUtils';
 import TagManagerAccountRepo from '../mongo/repos/tag/TagManagerAccountRepo';
 import DataManagerAccountRepo from '../mongo/repos/data/DataManagerAccountRepo';
-import container from '../container/IOC.config';
 import StripeService from '../payments/providers/StripeService';
 import UserRepo from '../mongo/repos/UserRepo';
 import BaseEmail from '../backends/email/abstractions/BaseEmail';
@@ -689,13 +688,6 @@ export default class OrgManager extends Manager<Org> {
         },
     };
 
-    public async updateOrgBillingCycle(org: Org): Promise<void> {
-        const cycle = await this.stripeService.getBillingCycle(org);
-        org.billingStart = cycle?.start;
-        org.billingEnd = cycle?.end;
-        await this.repoFactory(Org).save(org, 'SYSTEM');
-    }
-
     // noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
     /**
      * Mutation Resolvers
@@ -1110,73 +1102,6 @@ export default class OrgManager extends Manager<Org> {
             );
         },
         accountSubscribe: async (parent: any, args: any, ctx: CTX) => {
-            //validate product id exists...
-            const getProductIdFromUserInput = (productId: string): string => {
-                const stripeService = container.get<StripeService>(TYPES.StripeService);
-                const getProductId = () => {
-                    const productData = stripeService
-                        .getAccountConfigFromProductId(productId)
-                        .plans.find((_) => (_.id = productId));
-                    if (productData === undefined) {
-                        throw new GQLError(userMessages.productNotFound(productId), true);
-                    } else {
-                        return productData.id;
-                    }
-                };
-                return getProductId();
-            };
-
-            const subscribeToAccount = async (
-                org: Org,
-                account: TagManagerAccount | DataManagerAccount,
-                productId: string,
-                successUrl: string,
-                cancelUrl: string,
-            ): Promise<string | null> => {
-                const stripeSubscriptionId = await this.stripeService.getStripeSubscriptionId(org);
-                const newStripeProductId = getProductIdFromUserInput(productId);
-
-                const generateSubscriptionLink = async () => {
-                    //ok, generate new link for creating a subscription...
-                    return (
-                        await this.stripeService.createCheckoutSession(
-                            org,
-                            newStripeProductId,
-                            successUrl,
-                            cancelUrl,
-                        )
-                    ).id;
-                };
-
-                if (stripeSubscriptionId === undefined) {
-                    return await generateSubscriptionLink();
-                } else {
-                    const currentStripeProductId = await this.stripeService.getStripeProductId(
-                        org,
-                        account,
-                    );
-
-                    if (currentStripeProductId === undefined) {
-                        //we must be upgrading from a free trial, but there is an existing subscription to join to...
-                        await this.stripeService.createProductLineItemOnSubscription(
-                            stripeSubscriptionId,
-                            newStripeProductId,
-                        );
-                    } else {
-                        //check products are different before trying to re-bill...
-                        if (currentStripeProductId !== newStripeProductId) {
-                            await this.stripeService.updateProductLineItemOnSubscription(
-                                stripeSubscriptionId,
-                                currentStripeProductId,
-                                newStripeProductId,
-                            );
-                        }
-                    }
-                }
-
-                return null;
-            };
-
             const data = args.accountSubscribeInput;
             /*
                 User must be the Org owner as this involves billing changes...
@@ -1185,7 +1110,7 @@ export default class OrgManager extends Manager<Org> {
            */
             const org = await fetchOrg(new ObjectId(data.org_id));
             return await this.orgAuth.asUserWithOrgOwnership(ctx, org, async () => {
-                return subscribeToAccount(
+                return this.accountService.subscribeToAccount(
                     org,
                     await this.accountService.getAccountByProduct(org, data.product),
                     data.product_id,
