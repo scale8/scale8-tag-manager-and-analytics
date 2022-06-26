@@ -75,7 +75,7 @@ export type TableDataActionsProps<T extends RowData> = {
     tableStateManager: TableStateManager<T>;
 };
 
-export type FieldType = 'boolean' | 'numeric' | 'datetime' | 'string' | 'graph' | 'jsx';
+export type FieldType = 'boolean' | 'numeric' | 'datetime' | 'date' | 'string' | 'graph' | 'jsx';
 
 export type Column<T extends RowData> = {
     title: string;

@@ -30,6 +30,11 @@ export interface OrgsAdminPageData_me {
   orgs: OrgsAdminPageData_me_orgs[];
 }
 
+export interface OrgsAdminPageData_getOrgs_tag_manager_account_current_billing_cycle_usage {
+  __typename: "TagManagerAccountUsage";
+  request_count: number;
+}
+
 export interface OrgsAdminPageData_getOrgs_tag_manager_account {
   __typename: "TagManagerAccount";
   id: string;
@@ -54,9 +59,15 @@ export interface OrgsAdminPageData_getOrgs_tag_manager_account {
    */
   enabled: boolean;
   /**
-   * Billing Cycle Requests
+   * Current billing cycle usage
    */
-  billing_cycle_requests: number;
+  current_billing_cycle_usage: OrgsAdminPageData_getOrgs_tag_manager_account_current_billing_cycle_usage;
+}
+
+export interface OrgsAdminPageData_getOrgs_data_manager_account_current_billing_cycle_usage {
+  __typename: "DataManagerAccountUsage";
+  request_count: number;
+  byte_count: number;
 }
 
 export interface OrgsAdminPageData_getOrgs_data_manager_account {
@@ -86,13 +97,9 @@ export interface OrgsAdminPageData_getOrgs_data_manager_account {
    */
   enabled: boolean;
   /**
-   * Billing Cycle Requests
+   * Current billing cycle usage
    */
-  billing_cycle_requests: number;
-  /**
-   * Billing Cycle Bytes
-   */
-  billing_cycle_bytes: number;
+  current_billing_cycle_usage: OrgsAdminPageData_getOrgs_data_manager_account_current_billing_cycle_usage;
 }
 
 export interface OrgsAdminPageData_getOrgs_users {
@@ -142,6 +149,14 @@ export interface OrgsAdminPageData_getOrgs {
    * If the org is under manual invoicing
    */
   manual_invoicing: boolean;
+  /**
+   * The billing cycle start
+   */
+  billing_start: S8DateTime | null;
+  /**
+   * The billing cycle end
+   */
+  billing_end: S8DateTime | null;
   /**
    * A `TagManagerAccount` associated with this `Org`. A Scale8 Tag Manager account
    * might not exist yet unless a trial has been requested or product has been subscribed to.

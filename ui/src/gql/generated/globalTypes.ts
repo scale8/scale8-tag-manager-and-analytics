@@ -521,6 +521,10 @@ export interface AdminAddMeToOrgInput {
   org_id: string;
 }
 
+export interface AlignSubscriptionInput {
+  org_id: string;
+}
+
 export interface AppCreateInput {
   tag_manager_account_id: string;
   name: string;

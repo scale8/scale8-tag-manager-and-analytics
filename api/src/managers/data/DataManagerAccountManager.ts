@@ -8,7 +8,6 @@ import IngestEndpoint from '../../mongo/models/data/IngestEndpoint';
 import { differenceInDays } from 'date-fns';
 import userMessages from '../../errors/UserMessages';
 import { fetchOrg } from '../../utils/OrgUtils';
-import DataManagerAccountRepo from '../../mongo/repos/data/DataManagerAccountRepo';
 import TYPES from '../../container/IOC.types';
 import AccountService from '../../accounts/AccountService';
 import StripeService from '../../payments/providers/StripeService';
@@ -19,7 +18,6 @@ import BaseDatabase from '../../backends/databases/abstractions/BaseDatabase';
 export default class DataManagerAccountManager extends Manager<DataManagerAccount> {
     @inject(TYPES.StripeService) protected readonly stripeService!: StripeService;
     @inject(TYPES.AccountService) protected readonly accountService!: AccountService;
-
     @inject(TYPES.BackendDatabaseFactory) private backendDatabaseFactory!: (
         storage_provider: StorageProvider,
     ) => BaseDatabase;
@@ -172,24 +170,6 @@ export default class DataManagerAccountManager extends Manager<DataManagerAccoun
                 );
                 return await this.orgAuth.asUserWithViewAccess(ctx, account.orgId, () => {
                     return account.trialExpired();
-                });
-            },
-            stripe_product_id: async (parent: any, args: any, ctx: CTX) => {
-                const org = await fetchOrg(new ObjectId(parent.org_id));
-
-                return await this.orgAuth.asUserWithViewAccess(ctx, org.id, async () => {
-                    const account = await this.repoFactory<DataManagerAccountRepo>(
-                        DataManagerAccount,
-                    ).getFromOrg(org);
-                    const stripeProductId = await this.stripeService.getStripeProductId(
-                        org,
-                        account,
-                    );
-                    await this.accountService.alignAccountWithSubscription(
-                        stripeProductId,
-                        account,
-                    );
-                    return stripeProductId;
                 });
             },
             current_billing_cycle_usage: async (parent: any, args: any, ctx: CTX) => {

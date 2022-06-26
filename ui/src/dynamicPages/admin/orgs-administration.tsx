@@ -19,6 +19,7 @@ import {
     planDetailsToString,
 } from '../../utils/AccountUtils';
 import { formatBytes } from '../../utils/MathUtils';
+import { UTCTimestamp } from '../../utils/DateTimeUtils';
 
 export type OrgsAdministrationTableRow = TableRowBase & {
     name: string;
@@ -34,6 +35,8 @@ export type OrgsAdministrationTableRow = TableRowBase & {
     users: number;
     owner: string;
     ownerEmail: string;
+    billingStart: UTCTimestamp | null;
+    billingEnd: UTCTimestamp | null;
 };
 
 const AdminOrgsAdministrationPage: FC<DynamicPageProps> = () => {
@@ -65,6 +68,8 @@ const AdminOrgsAdministrationPage: FC<DynamicPageProps> = () => {
             { field: 'owner' },
             { field: 'ownerEmail' },
             { field: 'users', type: 'numeric' },
+            { field: 'billingStart', type: 'datetime', hidden: true },
+            { field: 'billingEnd', type: 'datetime', hidden: true },
         ]),
         mapTableData: (data) =>
             data.getOrgs.map((org) => {
@@ -91,12 +96,18 @@ const AdminOrgsAdministrationPage: FC<DynamicPageProps> = () => {
 
                 const tmPlan = planDetailsToString(tagManagerDetails);
                 const tmReq =
-                    org.tag_manager_account.billing_cycle_requests.toLocaleString('en-GB');
+                    org.tag_manager_account.current_billing_cycle_usage.request_count.toLocaleString(
+                        'en-GB',
+                    );
 
                 const dmPlan = planDetailsToString(dataManagerDetails);
                 const dmReq =
-                    org.data_manager_account.billing_cycle_requests.toLocaleString('en-GB');
-                const dmData = formatBytes(org.data_manager_account.billing_cycle_bytes);
+                    org.data_manager_account.current_billing_cycle_usage.request_count.toLocaleString(
+                        'en-GB',
+                    );
+                const dmData = formatBytes(
+                    org.data_manager_account.current_billing_cycle_usage.byte_count,
+                );
 
                 return {
                     ...extractBaseColumns(org),
@@ -122,6 +133,8 @@ const AdminOrgsAdministrationPage: FC<DynamicPageProps> = () => {
                     users: org.users.length,
                     owner: owner ? `${owner.first_name} ${owner.last_name}` : '',
                     ownerEmail: owner ? owner.email : '',
+                    billingStart: org.billing_start as UTCTimestamp | null,
+                    billingEnd: org.billing_end as UTCTimestamp | null,
                 };
             }),
         buildRowActions: (pageActionProps) => [

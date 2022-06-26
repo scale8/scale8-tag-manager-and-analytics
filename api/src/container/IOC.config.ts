@@ -155,6 +155,7 @@ import SignUpService from '../signup/SignUpService';
 import OrgService from '../orgs/OrgService';
 import Context = interfaces.Context;
 import Factory = interfaces.Factory;
+import TagService from '../tags/TagService';
 
 const container = new Container();
 
@@ -236,6 +237,7 @@ container.bind<StripeService>(TYPES.StripeService).to(StripeService).inSingleton
 container.bind<SignUpService>(TYPES.SignUpService).to(SignUpService).inSingletonScope();
 container.bind<AccountService>(TYPES.AccountService).to(AccountService).inSingletonScope();
 container.bind<OrgService>(TYPES.OrgService).to(OrgService).inSingletonScope();
+container.bind<TagService>(TYPES.TagService).to(TagService).inSingletonScope();
 container.bind<ConsoleLogger>(TYPES.ConsoleLogger).to(ConsoleLogger).inSingletonScope();
 
 [

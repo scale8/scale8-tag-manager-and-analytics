@@ -26,6 +26,7 @@ import BaseEmail from '../backends/email/abstractions/BaseEmail';
 import { LogPriority } from '../enums/LogPriority';
 import Hash from '../core/Hash';
 import AccountService from '../accounts/AccountService';
+import OrgService from '../orgs/OrgService';
 
 @injectable()
 export default class OrgManager extends Manager<Org> {
@@ -33,6 +34,7 @@ export default class OrgManager extends Manager<Org> {
     @inject(TYPES.BackendEmail) private mailer!: BaseEmail;
     @inject(TYPES.StripeService) protected readonly stripeService!: StripeService;
     @inject(TYPES.AccountService) protected readonly accountService!: AccountService;
+    @inject(TYPES.OrgService) protected readonly orgService!: OrgService;
 
     protected gqlSchema = gql`
         """
@@ -162,6 +164,14 @@ export default class OrgManager extends Manager<Org> {
             If the org is under manual invoicing
             """
             manual_invoicing: Boolean!
+            """
+            The billing cycle start
+            """
+            billing_start: DateTime
+            """
+            The billing cycle end
+            """
+            billing_end: DateTime
         }
 
         input OrgPermissionGroupInput {
@@ -414,6 +424,10 @@ export default class OrgManager extends Manager<Org> {
             org_id: ID!
         }
 
+        input AlignSubscriptionInput {
+            org_id: ID!
+        }
+
         # noinspection GraphQLMemberRedefinition
         extend type Mutation {
             """
@@ -532,6 +546,11 @@ export default class OrgManager extends Manager<Org> {
             switchToManualInvoicing(
                 switchToManualInvoicingInput: SwitchToManualInvoicingInput
             ): Boolean!
+            """
+            @bound=Org
+            Aligns the accounts and org details to the payment method subscription.
+            """
+            alignSubscription(alignSubscriptionInput: AlignSubscriptionInput): Org!
         }
 
         # noinspection GraphQLMemberRedefinition
@@ -1121,11 +1140,6 @@ export default class OrgManager extends Manager<Org> {
         },
         accountUnsubscribe: async (parent: any, args: any, ctx: CTX) => {
             const data = args.accountUnsubscribeInput;
-            /*
-                User must be the Org owner as this involves billing changes...
-                User can cancel at anytime. We don't need to listen for the webhook in this instance, we can go ahead and terminate this subscription (provided there is a valid one)
-                Once cancelled, this tag manager account must be marked for clean up by the system... (we can double-check everything is therefore in place before we delete and handle this with a cron)
-             */
             const org = await fetchOrg(new ObjectId(data.org_id));
             return await this.orgAuth.asUserWithOrgOwnership(ctx, org, async () => {
                 //force a double check here...
@@ -1138,8 +1152,18 @@ export default class OrgManager extends Manager<Org> {
         switchToManualInvoicing: async (parent: any, args: any, ctx: CTX) => {
             const org = await fetchOrg(new ObjectId(args.switchToManualInvoicingInput.org_id));
             return await this.userAuth.asAdminUser(ctx, async (me) => {
-                await this.accountService.switchToManualInvoicing(org, me);
+                await this.orgService.switchToManualInvoicing(org, me);
                 return true;
+            });
+        },
+        alignSubscription: async (parent: any, args: any, ctx: CTX) => {
+            const data = args.alignSubscriptionInput;
+            const org = await fetchOrg(new ObjectId(data.org_id));
+            return await this.orgAuth.asUserWithViewAccess(ctx, org.id, async () => {
+                // Update subscription data
+                await this.stripeService.updateOrgSubscriptionData(org);
+
+                return (await this.orgService.alignSubscription(org)).toGQLType();
             });
         },
     };

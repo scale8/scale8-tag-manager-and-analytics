@@ -15,6 +15,8 @@ const OrgsAdminQuery = gql`
             is_paid
             has_billing
             manual_invoicing
+            billing_start
+            billing_end
             tag_manager_account {
                 id
                 trial_expires_in
@@ -22,7 +24,9 @@ const OrgsAdminQuery = gql`
                 stripe_product_id
                 is_trial
                 enabled
-                billing_cycle_requests
+                current_billing_cycle_usage {
+                    request_count
+                }
             }
             data_manager_account {
                 id
@@ -31,8 +35,10 @@ const OrgsAdminQuery = gql`
                 stripe_product_id
                 is_trial
                 enabled
-                billing_cycle_requests
-                billing_cycle_bytes
+                current_billing_cycle_usage {
+                    request_count
+                    byte_count
+                }
             }
             users {
                 id

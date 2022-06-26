@@ -23,20 +23,17 @@ export default class AccountService {
     @inject(TYPES.StripeService) protected readonly stripeService!: StripeService;
 
     public async alignAccountWithSubscription(
-        stripeProductId: string | undefined,
+        org: Org,
         account: TagManagerAccount | DataManagerAccount,
     ): Promise<void> {
-        // ensure the account is in the right state
-        if (
-            (!account.enabled || account.isOnFreeTrial() || account.trialExpired()) &&
-            stripeProductId !== undefined
-        ) {
-            const accountRepo = this.repoFactory(AccountService.accountToAccountTypeName(account));
+        const stripeProductId = await this.stripeService.getStripeProductId(org, account);
+        const accountRepo = this.repoFactory(AccountService.accountToAccountTypeName(account));
+        account.stripe_product_id = stripeProductId;
+        if (stripeProductId !== undefined) {
             account.enabled = true;
             account.cancelTrial();
-
-            await accountRepo.save(account, 'SYSTEM');
         }
+        await accountRepo.save(account, 'SYSTEM');
     }
 
     public static accountToAccountTypeName(
@@ -164,28 +161,7 @@ export default class AccountService {
         }
     }
 
-    public async switchToManualInvoicing(org: Org, me: User): Promise<void> {
-        const stripeSubscription = await this.stripeService.getStripeSubscription(org);
-
-        await this.switchAccountToManualInvoicing(
-            org,
-            await this.getAccountByProduct(org, AccountProduct.TAG_MANAGER),
-            stripeSubscription,
-            me,
-        );
-
-        await this.switchAccountToManualInvoicing(
-            org,
-            await this.getAccountByProduct(org, AccountProduct.DATA_MANAGER),
-            stripeSubscription,
-            me,
-        );
-
-        org.manualInvoicing = true;
-        await this.repoFactory(Org).save(org, me);
-    }
-
-    private async switchAccountToManualInvoicing(
+    public async switchToManualInvoicing(
         org: Org,
         account: TagManagerAccount | DataManagerAccount,
         stripeSubscription: Stripe.Subscription | undefined,
@@ -197,6 +173,7 @@ export default class AccountService {
                 await this.stripeService.cancelProductLineItemOnSubscription(org, stripeProductId);
             }
         }
+        account.stripe_product_id = undefined;
         account.enabled = true;
         account.cancelTrial();
         await this.repoFactory(account.constructor.name).save(account, me);
