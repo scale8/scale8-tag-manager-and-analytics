@@ -3,10 +3,39 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: ProductSettings
+// GraphQL query operation: OrgsAdminPageData
 // ====================================================
 
-export interface ProductSettings_getOrg_tag_manager_account {
+export interface OrgsAdminPageData_me_orgs {
+  __typename: "Org";
+  /**
+   * A unique `Org` ID
+   */
+  id: string;
+}
+
+export interface OrgsAdminPageData_me {
+  __typename: "User";
+  /**
+   * `User` ID
+   */
+  id: string;
+  /**
+   * Whether the `User` is an admin
+   */
+  is_admin: boolean;
+  /**
+   * List of `Org`s the `User` has access to
+   */
+  orgs: OrgsAdminPageData_me_orgs[];
+}
+
+export interface OrgsAdminPageData_getOrgs_tag_manager_account_current_billing_cycle_usage {
+  __typename: "TagManagerAccountUsage";
+  request_count: number;
+}
+
+export interface OrgsAdminPageData_getOrgs_tag_manager_account {
   __typename: "TagManagerAccount";
   id: string;
   /**
@@ -29,9 +58,19 @@ export interface ProductSettings_getOrg_tag_manager_account {
    * If the account is enabled
    */
   enabled: boolean;
+  /**
+   * Current billing cycle usage
+   */
+  current_billing_cycle_usage: OrgsAdminPageData_getOrgs_tag_manager_account_current_billing_cycle_usage;
 }
 
-export interface ProductSettings_getOrg_data_manager_account {
+export interface OrgsAdminPageData_getOrgs_data_manager_account_current_billing_cycle_usage {
+  __typename: "DataManagerAccountUsage";
+  request_count: number;
+  byte_count: number;
+}
+
+export interface OrgsAdminPageData_getOrgs_data_manager_account {
   __typename: "DataManagerAccount";
   /**
    * `DataManagerAccount` ID
@@ -57,9 +96,13 @@ export interface ProductSettings_getOrg_data_manager_account {
    * If the account is enabled
    */
   enabled: boolean;
+  /**
+   * Current billing cycle usage
+   */
+  current_billing_cycle_usage: OrgsAdminPageData_getOrgs_data_manager_account_current_billing_cycle_usage;
 }
 
-export interface ProductSettings_getOrg_me {
+export interface OrgsAdminPageData_getOrgs_users {
   __typename: "OrgUser";
   /**
    * `OrgUser` ID
@@ -70,9 +113,21 @@ export interface ProductSettings_getOrg_me {
    * to manage billing, upgrades, downgrades and termination of an Org.
    */
   owner: boolean;
+  /**
+   * `OrgUser`'s email address
+   */
+  email: string;
+  /**
+   * `OrgUser`'s first name
+   */
+  first_name: string;
+  /**
+   * `OrgUser`'s last name
+   */
+  last_name: string;
 }
 
-export interface ProductSettings_getOrg {
+export interface OrgsAdminPageData_getOrgs {
   __typename: "Org";
   /**
    * A unique `Org` ID
@@ -95,31 +150,47 @@ export interface ProductSettings_getOrg {
    */
   manual_invoicing: boolean;
   /**
+   * The billing cycle start
+   */
+  billing_start: S8DateTime | null;
+  /**
+   * The billing cycle end
+   */
+  billing_end: S8DateTime | null;
+  /**
    * A `TagManagerAccount` associated with this `Org`. A Scale8 Tag Manager account
    * might not exist yet unless a trial has been requested or product has been subscribed to.
    */
-  tag_manager_account: ProductSettings_getOrg_tag_manager_account;
+  tag_manager_account: OrgsAdminPageData_getOrgs_tag_manager_account;
   /**
    * A `DataManagerAccount` associated with this `Org`. A Scale8 Data Manager
    * account might not exist yet unless a trial has been requested or product has
    * been subscribed to.
    */
-  data_manager_account: ProductSettings_getOrg_data_manager_account;
+  data_manager_account: OrgsAdminPageData_getOrgs_data_manager_account;
   /**
-   * `OrgUser` representation of current `User`
+   * List of `OrgUser`'s associated with this `Org`
    */
-  me: ProductSettings_getOrg_me;
+  users: OrgsAdminPageData_getOrgs_users[];
+  /**
+   * DateTime the `Org` was last updated
+   */
+  updated_at: S8DateTime;
+  /**
+   * DateTime the `Org` was created
+   */
+  created_at: S8DateTime;
 }
 
-export interface ProductSettings {
+export interface OrgsAdminPageData {
+  /**
+   * @bound=User
+   * Get a the session user
+   */
+  me: OrgsAdminPageData_me;
   /**
    * @bound=Org
-   * Given a valid `Org` ID, this function will return an `Org` provided the API
-   * `User` has been granted at least **view** access.
+   * This function will return a list of all `Org`s, available only if the user is an admin.
    */
-  getOrg: ProductSettings_getOrg;
-}
-
-export interface ProductSettingsVariables {
-  id: string;
+  getOrgs: OrgsAdminPageData_getOrgs[];
 }

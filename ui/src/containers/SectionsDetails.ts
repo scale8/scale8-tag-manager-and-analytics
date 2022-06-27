@@ -41,7 +41,7 @@ export const productSectionMap = new Map<symbol, ProductSection>([
         ProductSectionKey.admin,
         {
             product: 'Scale 8 Admin',
-            color: '#fe6833',
+            color: '#fab300',
         },
     ],
 ]);
@@ -280,6 +280,11 @@ export const gradientFromSectionLocator = (sectionKey: symbol | undefined): stri
         return globalGradient;
     }
     const sectionDetails = getSectionDetails(sectionKey);
+
+    if (sectionDetails.productSectionKey === ProductSectionKey.admin) {
+        return 'conic-gradient(at 0% 60%, black 5%, #fab300 35%, black 55%)';
+    }
+
     if (sectionDetails.productSectionKey === ProductSectionKey.tagManager) {
         return 'conic-gradient(at 0% 60%, black 5%, #39cce0 35%, black 55%)';
     }

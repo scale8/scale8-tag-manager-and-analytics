@@ -137,6 +137,10 @@ export default class OrgAuth {
         doThisWith: (user: User) => U,
     ): Promise<U> {
         return this.userAuth.asUser(ctx, async (u) => {
+            // Admins can view orgs details
+            if (u.isAdmin) {
+                return doThisWith(u);
+            }
             const orgRole = await this.getRole(u, orgId);
             if (orgRole.permissionGroup.canView || orgRole.permissionGroup.isAdmin) {
                 return doThisWith(u);

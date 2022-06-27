@@ -5,13 +5,9 @@ import Org from '../../mongo/models/Org';
 import TYPES from '../../container/IOC.types';
 import RepoFromModelFactory from '../../container/factoryTypes/RepoFromModelFactory';
 import User from '../../mongo/models/User';
-import OperationOwner from '../../enums/OperationOwner';
 import GenericError from '../../errors/GenericError';
-import express from 'express';
 import TagManagerAccount from '../../mongo/models/tag/TagManagerAccount';
 import DataManagerAccount from '../../mongo/models/data/DataManagerAccount';
-import GQLError from '../../errors/GQLError';
-import { AccountType } from '../../enums/AccountType';
 import userMessages from '../../errors/UserMessages';
 import { LogPriority } from '../../enums/LogPriority';
 import BaseLogger from '../../backends/logging/abstractions/BaseLogger';
@@ -39,14 +35,6 @@ export default class StripeService {
             });
         }
         return this.stripe;
-    }
-
-    public async getWebhookEvent(req: express.Request): Promise<Stripe.Event> {
-        return (await this.getStripe()).webhooks.constructEvent(
-            (req as any).rawBody,
-            req.headers['stripe-signature'] as string,
-            await this.config.getStripeWebhookSecret(),
-        );
     }
 
     public getAccountTypeFromProductId(
@@ -88,95 +76,6 @@ export default class StripeService {
                 `Account type ${accountType} has not been implemented yet`,
                 LogPriority.ERROR,
             );
-        }
-    }
-
-    private async updateOrgSubscriptionData(
-        org: Org,
-        subscription: Stripe.Subscription,
-    ): Promise<void> {
-        org.stripeSubscriptionId = subscription.id;
-        await this.repoFactory(Org).save(org, 'SYSTEM');
-    }
-
-    private async removeOrgSubscriptionData(org: Org): Promise<void> {
-        org.stripeSubscriptionId = undefined;
-        await this.repoFactory(Org).save(org, 'SYSTEM');
-    }
-
-    private async processSubscriptionItems(
-        org: Org,
-        subscription: Stripe.Subscription,
-    ): Promise<void> {
-        // Change the account only when the subscription is active and the account is not
-        if (subscription.status === 'active') {
-            await Promise.all(
-                subscription.items.data.map(async (item) => {
-                    //for each item, get the price id back...
-                    const productId = item.price.product as string;
-                    const accountType = this.getAccountTypeFromProductId(productId);
-
-                    const account = (await this.repoFactory(accountType).findOne({
-                        _org_id: org.id,
-                        ...(accountType === 'DataManagerAccount'
-                            ? { _account_type: AccountType.USER }
-                            : {}),
-                    })) as TagManagerAccount | DataManagerAccount;
-
-                    if (account === null) {
-                        throw new GQLError(userMessages.cannotFindAccount(accountType), true);
-                    }
-
-                    account.enabled = true;
-                    account.cancelTrial();
-
-                    await this.repoFactory(accountType).save(
-                        account,
-                        'SYSTEM',
-                    );
-                }),
-            );
-        }
-    }
-
-    public async handleWebhookEvent(req: express.Request): Promise<void> {
-        if (this.config.isNotCommercial()) {
-            throw new GenericError(userMessages.billingUnavailable, LogPriority.DEBUG, true);
-        }
-        const event = await this.getWebhookEvent(req);
-        await this.logger.info(`Stripe webhook triggered for ${event.type}`, event);
-        if (
-            event.type === 'customer.subscription.created' ||
-            event.type === 'customer.subscription.updated'
-        ) {
-            //we have a new subscription created...
-            const subscription = event.data.object as Stripe.Subscription;
-
-            const findOrg = async () => {
-                const orgFromSubscription = await this.repoFactory(Org).findOne({
-                    _stripe_subscription_id: subscription.id,
-                });
-
-                if (orgFromSubscription === null) {
-                    return await this.repoFactory(Org).findOneThrows(
-                        {
-                            _stripe_customer_id: subscription.customer,
-                        },
-                        userMessages.paymentProviderIssue,
-                    );
-                }
-                return orgFromSubscription;
-            };
-
-            const org = await findOrg();
-
-            //update the org subscription data...
-            await this.updateOrgSubscriptionData(org, subscription);
-
-            //process subscription items...
-            await this.processSubscriptionItems(org, subscription);
-        } else {
-            await this.logger.warn(`No handler for stripe event: ${event.type}`);
         }
     }
 
@@ -426,5 +325,29 @@ export default class StripeService {
                 _.price.metadata.account_type === AccountService.accountToAccountTypeName(account),
         );
         return lineItem === undefined ? undefined : (lineItem.price.product as string);
+    }
+
+    public async updateOrgSubscriptionData(
+        org: Org,
+        stripeSubscription?: Stripe.Subscription,
+    ): Promise<Org> {
+        const subscription = stripeSubscription ?? (await this.getStripeSubscription(org));
+        if (subscription === undefined) {
+            return this.removeOrgSubscriptionData(org);
+        } else {
+            org.stripeSubscriptionId = subscription.id;
+            org.billingStart = new Date(subscription.current_period_start * 1000);
+            org.billingEnd = new Date(subscription.current_period_end * 1000);
+            await this.repoFactory(Org).save(org, 'SYSTEM');
+            return org;
+        }
+    }
+
+    private async removeOrgSubscriptionData(org: Org): Promise<Org> {
+        org.stripeSubscriptionId = undefined;
+        org.billingStart = undefined;
+        org.billingEnd = undefined;
+        await this.repoFactory(Org).save(org, 'SYSTEM');
+        return org;
     }
 }

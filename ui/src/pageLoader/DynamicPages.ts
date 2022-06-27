@@ -3,7 +3,7 @@ export const dynamicPages = {
     selectOrg: 'select-org',
 
     adminDashboard: 'admin/dashboard',
-    adminSignupApproval: 'admin/signup-approval',
+    adminOrgsAdministration: 'admin/orgs-administration',
 
     orgDashboard: 'org/dashboard',
     orgSettings: 'org/settings',
@@ -63,7 +63,7 @@ export const dynamicPages = {
 
 export const dynamicPagesSections = {
     root: [dynamicPages.orgs, dynamicPages.selectOrg],
-    admin: [dynamicPages.adminDashboard, dynamicPages.adminSignupApproval],
+    admin: [dynamicPages.adminDashboard, dynamicPages.adminOrgsAdministration],
     orgs: [
         dynamicPages.orgDashboard,
         dynamicPages.orgSettings,

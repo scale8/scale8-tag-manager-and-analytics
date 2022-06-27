@@ -1,5 +1,5 @@
 import Manager from '../../abstractions/Manager';
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import { gql } from 'apollo-server-express';
 import Tag from '../../mongo/models/tag/Tag';
 import CTX from '../../gql/ctx/CTX';
@@ -10,13 +10,16 @@ import GQLError from '../../errors/GQLError';
 import GQLMethod from '../../enums/GQLMethod';
 import userMessages from '../../errors/UserMessages';
 import { createNewModelBranchFromModel, deleteModelCascading } from '../../utils/ModelUtils';
-import { createTagSkeleton } from '../../utils/TagUtils';
 import User from '../../mongo/models/User';
 import TagRepo from '../../mongo/repos/tag/TagRepo';
 import { TagType } from '../../enums/TagType';
+import TYPES from '../../container/IOC.types';
+import TagService from '../../tags/TagService';
 
 @injectable()
 export default class TagManager extends Manager<Tag> {
+    @inject(TYPES.TagService) protected readonly tagService!: TagService;
+
     protected gqlSchema = gql`
         """
         A tag can either be a \`HEAD\` tag or \`PLACEMENT\` tag, but can't be both. Please take a look at the descriptions of each below and select the one that fits your use case.
@@ -346,7 +349,7 @@ export default class TagManager extends Manager<Tag> {
                     throw new GQLError('Auto-load can not be used with this placement type');
                 }
                 return (
-                    await createTagSkeleton(
+                    await this.tagService.createTagSkeleton(
                         me,
                         revision,
                         data.name,
