@@ -62,6 +62,7 @@ const userMessages = {
         'Invalid session. Please check your login credentials and try to login again.',
     invalidAdminSession:
         'Invalid Admin session. Please check your login credentials and ensure you have Admin rights.',
+    adminOnly: 'Values only available to admins.',
     permissionNoRWScope: (permission: PlatformActionPermissionRequest) =>
         `${permission} requires at least one variable to be defined with a read / write scope.`,
     permissionMissingUrl: (permission: PlatformActionPermissionRequest) =>

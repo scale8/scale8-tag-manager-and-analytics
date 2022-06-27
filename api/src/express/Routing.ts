@@ -4,7 +4,6 @@ import GitHubAuth from './handlers/GitHubAuth';
 import GitHubRedirect from './handlers/GitHubRedirect';
 import RevisionPreview from './handlers/RevisionPreview';
 import Ping from './handlers/Ping';
-import StripeWebhook from './handlers/StripeWebhook';
 import container from '../container/IOC.config';
 import FetchRemoteFileAsText from './handlers/FetchRemoteFileAsText';
 
@@ -50,15 +49,6 @@ export default class Routing {
             {
                 path: '/api/fetch-as-text',
                 handling: this.wrapHandler(container.resolve(FetchRemoteFileAsText).getHandler()),
-            },
-        ];
-    }
-
-    public fetchPostHandlers(): Route[] {
-        return [
-            {
-                path: '/stripe/webhook/v1',
-                handling: this.wrapHandler(container.resolve(StripeWebhook).getHandler()),
             },
         ];
     }

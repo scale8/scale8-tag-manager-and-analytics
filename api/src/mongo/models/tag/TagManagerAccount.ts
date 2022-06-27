@@ -35,6 +35,12 @@ export default class TagManagerAccount extends Model {
     })
     private _trial_expires_on?: Date;
 
+    @Field<string>({
+        required: false,
+        exposeToGQLAs: 'stripe_product_id',
+    })
+    private _stripe_product_id?: string;
+
     @Field<boolean>({
         required: false,
         exposeToGQLAs: 'ten_day_remaining_prompt',
@@ -162,6 +168,14 @@ export default class TagManagerAccount extends Model {
 
     get trialExpiresOn(): Date | undefined {
         return this._trial_expires_on;
+    }
+
+    get stripe_product_id(): string | undefined {
+        return this._stripe_product_id;
+    }
+
+    set stripe_product_id(value: string | undefined) {
+        this._stripe_product_id = value;
     }
 
     public startTrial(): void {

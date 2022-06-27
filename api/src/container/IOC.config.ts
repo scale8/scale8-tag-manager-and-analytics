@@ -132,9 +132,6 @@ import PlatformActionPermission from '../mongo/models/tag/PlatformActionPermissi
 import PlatformActionPermissionRepo from '../mongo/repos/tag/PlatformActionPermissionRepo';
 import PlatformActionPermissionManager from '../managers/tag/PlatformActionPermissionManager';
 import StripeService from '../payments/providers/StripeService';
-import Usage from '../mongo/models/Usage';
-import UsageRepo from '../mongo/repos/UsageRepo';
-import UsageManager from '../managers/UsageManager';
 import BaseStorage from '../backends/storage/abstractions/BaseStorage';
 import MongoDBStorage from '../backends/storage/MongoDBStorage';
 import BaseDatabase from '../backends/databases/abstractions/BaseDatabase';
@@ -152,11 +149,13 @@ import GenericError from '../errors/GenericError';
 import { LogPriority } from '../enums/LogPriority';
 import { Mode } from '../enums/Mode';
 import AwsKeyStoreConfig from '../backends/configuration/AwsKeyStoreConfig';
-import Context = interfaces.Context;
-import Factory = interfaces.Factory;
 import AccountService from '../accounts/AccountService';
 import KinesisService from '../aws/KinesisService';
 import SignUpService from '../signup/SignUpService';
+import OrgService from '../orgs/OrgService';
+import Context = interfaces.Context;
+import Factory = interfaces.Factory;
+import TagService from '../tags/TagService';
 
 const container = new Container();
 
@@ -237,6 +236,8 @@ container.bind<Route53Service>(TYPES.Route53Service).to(Route53Service).inSingle
 container.bind<StripeService>(TYPES.StripeService).to(StripeService).inSingletonScope();
 container.bind<SignUpService>(TYPES.SignUpService).to(SignUpService).inSingletonScope();
 container.bind<AccountService>(TYPES.AccountService).to(AccountService).inSingletonScope();
+container.bind<OrgService>(TYPES.OrgService).to(OrgService).inSingletonScope();
+container.bind<TagService>(TYPES.TagService).to(TagService).inSingletonScope();
 container.bind<ConsoleLogger>(TYPES.ConsoleLogger).to(ConsoleLogger).inSingletonScope();
 
 [
@@ -251,11 +252,6 @@ container.bind<ConsoleLogger>(TYPES.ConsoleLogger).to(ConsoleLogger).inSingleton
 });
 
 const chainedDependencies: ChainedDependency[] = [
-    {
-        model: Usage,
-        repository: { id: TYPES.UsageRepo, constructor: UsageRepo },
-        manager: { id: TYPES.UsageManager, constructor: UsageManager },
-    },
     {
         model: User,
         repository: { id: TYPES.UserRepo, constructor: UserRepo },

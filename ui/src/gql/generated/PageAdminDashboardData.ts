@@ -18,10 +18,23 @@ export interface PageAdminDashboardData_me {
   is_admin: boolean;
 }
 
+export interface PageAdminDashboardData_getOrgs {
+  __typename: "Org";
+  /**
+   * A unique `Org` ID
+   */
+  id: string;
+}
+
 export interface PageAdminDashboardData {
   /**
    * @bound=User
    * Get a the session user
    */
   me: PageAdminDashboardData_me;
+  /**
+   * @bound=Org
+   * This function will return a list of all `Org`s, available only if the user is an admin.
+   */
+  getOrgs: PageAdminDashboardData_getOrgs[];
 }

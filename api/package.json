@@ -20,8 +20,7 @@
         "dev:job": "TZ=UTC NODE_ENV=development TS_NODE_FILES=true node -r ts-node/register ./src/JobManager.ts",
         "dev:job:commercial": "TZ=UTC NODE_ENV=development SERVER_MODE=COMMERCIAL TS_NODE_FILES=true node -r ts-node/register ./src/JobManager.ts",
         "dev": "yarn platforms:build && yarn dev:job --run-job=SetupChecks && TZ=UTC NODE_ENV=development TS_NODE_FILES=true node-dev --respawn -r ts-node/register ./src/Main.ts",
-        "dev:commercial": "yarn platforms:build && yarn dev:job:commercial --run-job=SetupChecks && TZ=UTC NODE_ENV=development SERVER_MODE=COMMERCIAL TS_NODE_FILES=true node-dev --respawn -r ts-node/register ./src/Main.ts",
-        "dev:commercial:stripe": "stripe listen --forward-to https://api-dev.scale8.com:8443/stripe/webhook/v1"
+        "dev:commercial": "yarn platforms:build && yarn dev:job:commercial --run-job=SetupChecks && TZ=UTC NODE_ENV=development SERVER_MODE=COMMERCIAL TS_NODE_FILES=true node-dev --respawn -r ts-node/register ./src/Main.ts"
     },
     "devDependencies": {
         "@types/aws-lambda": "^8.10.92",
@@ -61,7 +60,7 @@
         "date-fns": "^2.25.0",
         "dotenv": "^10.0.0",
         "express": "^4.17.1",
-        "got": "^11.8.2",
+        "got": "^11.8.5",
         "graphql": "^15.7.2",
         "graphql-request": "^3.6.1",
         "graphql-type-json": "^0.3.2",

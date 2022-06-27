@@ -47,7 +47,19 @@ export default class Org extends Model {
         required: true,
         exposeToGQLAs: 'manual_invoicing',
     })
-    private readonly _manual_invoicing: boolean;
+    private _manual_invoicing: boolean;
+
+    @Field<boolean>({
+        required: false,
+        exposeToGQLAs: 'billing_start',
+    })
+    private _billing_start?: Date;
+
+    @Field<boolean>({
+        required: false,
+        exposeToGQLAs: 'billing_end',
+    })
+    private _billing_end?: Date;
 
     constructor(orgOwnerUser: User, name: string, tz = 'UTC', manualInvoicing = false) {
         super();
@@ -62,8 +74,28 @@ export default class Org extends Model {
         this._manual_invoicing = manualInvoicing;
     }
 
+    get billingStart(): Date | undefined {
+        return this._billing_start;
+    }
+
+    set billingStart(value: Date | undefined) {
+        this._billing_start = value;
+    }
+
+    get billingEnd(): Date | undefined {
+        return this._billing_end;
+    }
+
+    set billingEnd(value: Date | undefined) {
+        this._billing_end = value;
+    }
+
     get manualInvoicing(): boolean {
         return this._manual_invoicing;
+    }
+
+    set manualInvoicing(value: boolean) {
+        this._manual_invoicing = value;
     }
 
     get name(): string {

@@ -89,9 +89,6 @@ export default class APIServer {
         this.routing.fetchGetHandlers().forEach((route) => {
             app.get(route.path, route.handling);
         });
-        this.routing.fetchPostHandlers().forEach((route) => {
-            app.post(route.path, route.handling);
-        });
 
         (async () => {
             await this.gqlServer.start();
