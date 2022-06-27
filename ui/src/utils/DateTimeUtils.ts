@@ -344,6 +344,11 @@ export const timestampDisplay = (timestamp: UTCTimestamp): string => {
     return `${e.date}/${e.month}/${e.year}, ${e.hour}:${e.minute}:${e.seconds}`;
 };
 
+export const timestampDisplayDate = (timestamp: UTCTimestamp): string => {
+    const e = dateToPrintableUTCElements(new Date(timestamp));
+    return `${e.date}/${e.month}/${e.year}`;
+};
+
 export const dateStringDisplay = (v: string): string => {
     return timestampDisplay(dataMapStringToUTCTimestamp(v.toString()));
 };

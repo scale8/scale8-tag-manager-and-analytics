@@ -6,6 +6,9 @@ const PageAdminDashboardQuery = gql`
             id
             is_admin
         }
+        getOrgs {
+            id
+        }
     }
 `;
 

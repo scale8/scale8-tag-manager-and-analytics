@@ -1,9 +1,9 @@
-import { updateUsageJob } from './UpdateUsage';
 import { setupChecks } from './SetupChecks';
 import { testJob } from './TestJob';
 import { stripeSetup } from './StripeSetup';
 import { trackingSchemaUpdate } from './TrackingSchemaUpdate';
 import { trialStatusEmail } from './TrialStatusEmail';
+import { stripeSync } from './StripeSync';
 
 export interface Job {
     name: string;
@@ -11,10 +11,10 @@ export interface Job {
 }
 
 export const getJobs = () => [
-    updateUsageJob,
     setupChecks,
     testJob,
     stripeSetup,
+    stripeSync,
     trackingSchemaUpdate,
     trialStatusEmail,
 ];

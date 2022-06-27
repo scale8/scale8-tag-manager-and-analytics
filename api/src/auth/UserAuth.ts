@@ -12,4 +12,12 @@ export default class UserAuth {
         }
         return doThisWith(ctx.user);
     }
+    public asAdminUser<U>(ctx: CTX, doThisWith: (user: User) => U): U {
+        return this.asUser(ctx, (user) => {
+            if (!user.isAdmin) {
+                throw new AuthenticationError(userMessages.adminOnly, true);
+            }
+            return doThisWith(user);
+        });
+    }
 }

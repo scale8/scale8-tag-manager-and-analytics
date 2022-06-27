@@ -10,14 +10,11 @@ import OrgAuth from '../auth/OrgAuth';
 import ModelFromRepoFactory from '../container/factoryTypes/ModelFromRepoFactory';
 import RepoFromRepoNameFactory from '../container/factoryTypes/RepoFromRepoNameFactory';
 import Shell from '../mongo/database/Shell';
-import StripeService from '../payments/providers/StripeService';
 import BaseLogger from '../backends/logging/abstractions/BaseLogger';
 import BaseConfig from '../backends/configuration/abstractions/BaseConfig';
 
 @injectable()
 export default abstract class Manager<T extends Model> {
-    @inject(TYPES.StripeService) protected readonly stripeService!: StripeService;
-
     protected readonly repo: Repo<T>;
     protected readonly shell: Shell;
     protected readonly logger: BaseLogger;

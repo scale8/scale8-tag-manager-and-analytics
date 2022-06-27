@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useQuery } from '@apollo/client';
-import SignUpApprovalIcon from '../../components/atoms/Icons/SignUpApprovalIcon';
+import AdminOrgsIcon from '../../components/atoms/Icons/AdminOrgsIcon';
 import AdminDashboardIcon from '../../components/atoms/Icons/AdminDashboardIcon';
 import NavAdminQuery from '../../gql/queries/NavAdminQuery';
 import { NavAdmin } from '../../gql/generated/NavAdmin';
@@ -8,7 +8,7 @@ import { buildAdminButtonProps, buildTabButtonProps } from '../../utils/Breadcru
 import { Section, SectionProps } from '../abstractions/Section';
 import { SectionKey } from '../SectionsDetails';
 import { ChildrenOnlyProps } from '../../types/props/ChildrenOnlyProps';
-import { toAdmin, toSignupApproval } from '../../utils/NavigationPaths';
+import { toAdmin, toOrgsAdministration } from '../../utils/NavigationPaths';
 import { useRouter } from 'next/router';
 import { PageMenuButtonProps } from '../../components/molecules/SideMenuButton';
 
@@ -19,9 +19,9 @@ export const buildAdminTabsMenu = (): PageMenuButtonProps[] => [
         link: toAdmin,
     },
     {
-        icon: () => <SignUpApprovalIcon />,
-        label: 'Signup Approval',
-        link: toSignupApproval,
+        icon: () => <AdminOrgsIcon />,
+        label: 'Orgs Administration',
+        link: toOrgsAdministration,
     },
 ];
 

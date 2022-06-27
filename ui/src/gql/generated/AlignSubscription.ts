@@ -2,11 +2,13 @@
 /* eslint-disable */
 // This file was automatically generated and should not be edited.
 
+import { AlignSubscriptionInput } from "./globalTypes";
+
 // ====================================================
-// GraphQL query operation: ProductSettings
+// GraphQL mutation operation: AlignSubscription
 // ====================================================
 
-export interface ProductSettings_getOrg_tag_manager_account {
+export interface AlignSubscription_alignSubscription_tag_manager_account {
   __typename: "TagManagerAccount";
   id: string;
   /**
@@ -31,7 +33,7 @@ export interface ProductSettings_getOrg_tag_manager_account {
   enabled: boolean;
 }
 
-export interface ProductSettings_getOrg_data_manager_account {
+export interface AlignSubscription_alignSubscription_data_manager_account {
   __typename: "DataManagerAccount";
   /**
    * `DataManagerAccount` ID
@@ -59,20 +61,7 @@ export interface ProductSettings_getOrg_data_manager_account {
   enabled: boolean;
 }
 
-export interface ProductSettings_getOrg_me {
-  __typename: "OrgUser";
-  /**
-   * `OrgUser` ID
-   */
-  id: string;
-  /**
-   * If the `OrgUser` currently has ownership of this `Org`. Ownership is required
-   * to manage billing, upgrades, downgrades and termination of an Org.
-   */
-  owner: boolean;
-}
-
-export interface ProductSettings_getOrg {
+export interface AlignSubscription_alignSubscription {
   __typename: "Org";
   /**
    * A unique `Org` ID
@@ -98,28 +87,23 @@ export interface ProductSettings_getOrg {
    * A `TagManagerAccount` associated with this `Org`. A Scale8 Tag Manager account
    * might not exist yet unless a trial has been requested or product has been subscribed to.
    */
-  tag_manager_account: ProductSettings_getOrg_tag_manager_account;
+  tag_manager_account: AlignSubscription_alignSubscription_tag_manager_account;
   /**
    * A `DataManagerAccount` associated with this `Org`. A Scale8 Data Manager
    * account might not exist yet unless a trial has been requested or product has
    * been subscribed to.
    */
-  data_manager_account: ProductSettings_getOrg_data_manager_account;
-  /**
-   * `OrgUser` representation of current `User`
-   */
-  me: ProductSettings_getOrg_me;
+  data_manager_account: AlignSubscription_alignSubscription_data_manager_account;
 }
 
-export interface ProductSettings {
+export interface AlignSubscription {
   /**
    * @bound=Org
-   * Given a valid `Org` ID, this function will return an `Org` provided the API
-   * `User` has been granted at least **view** access.
+   * Aligns the accounts and org details to the payment method subscription.
    */
-  getOrg: ProductSettings_getOrg;
+  alignSubscription: AlignSubscription_alignSubscription;
 }
 
-export interface ProductSettingsVariables {
-  id: string;
+export interface AlignSubscriptionVariables {
+  alignSubscriptionInput?: AlignSubscriptionInput | null;
 }

@@ -21,7 +21,7 @@ export const toTagTester = '/testers/tag-tester';
 
 // Logged
 export const toAdmin = '/s8/admin/dashboard';
-export const toSignupApproval = '/s8/admin/signup-approval';
+export const toOrgsAdministration = '/s8/admin/orgs-administration';
 export const toOrgSelect = `/s8/select-org`;
 export const toOrgList = '/s8/orgs';
 

@@ -11,7 +11,6 @@ import GQLMethod from '../enums/GQLMethod';
 import { fetchOrg } from './OrgUtils';
 import Revision from '../mongo/models/tag/Revision';
 import { createActionGroupDistribution } from './ActionGroupDistributionUtils';
-import { createTagSkeleton } from './TagUtils';
 import PlatformRevision from '../mongo/models/tag/PlatformRevision';
 import AppPlatformRevision from '../mongo/models/tag/AppPlatformRevision';
 import { createEnvironment } from './EnvironmentUtils';
@@ -30,6 +29,7 @@ import { StorageProvider } from '../enums/StorageProvider';
 import { IngestEndpointDataMapSchema, StorageProviderConfig } from '../mongo/types/Types';
 import Hash from '../core/Hash';
 import { generateRevisionName } from '../../../common/utils/GenerateRevisionName';
+import TagService from '../tags/TagService';
 
 export const userTrackingSchema = [
     {
@@ -297,6 +297,7 @@ export const createApp = async (
     errorTrackingEnabled: boolean,
 ): Promise<App> => {
     const repoFactory = container.get<RepoFromModelFactory>(TYPES.RepoFromModelFactory);
+    const tagService = container.get<TagService>(TYPES.TagService);
 
     //connect this app with Scale8 core...
     const corePlatform = await repoFactory(Platform).findOneThrows(
@@ -352,7 +353,7 @@ export const createApp = async (
     );
 
     //create a head tag...
-    const headTag = await createTagSkeleton(
+    const headTag = await tagService.createTagSkeleton(
         actor,
         revision,
         'Main Tag',
@@ -364,7 +365,7 @@ export const createApp = async (
 
     //link tag back to revision
     revision.tagIds = [headTag.id];
-    //connect the new revision with latest version of our core...
+    //connect the new revision with the latest version of our core...
     const latestCorePlatformRevision = await repoFactory(PlatformRevision).findOneThrows(
         {
             _platform_id: corePlatform.id,

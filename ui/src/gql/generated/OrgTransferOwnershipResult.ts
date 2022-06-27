@@ -11,7 +11,7 @@ import { TransferOwnershipInput } from "./globalTypes";
 export interface OrgTransferOwnershipResult {
   /**
    * @bound=Org
-   * Trasfer the `Org` ownership to a target `User`.
+   * Transfer the `Org` ownership to a target `User`.
    */
   transferOwnership: boolean;
 }

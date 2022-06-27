@@ -517,6 +517,14 @@ export interface AddChildrenIngestEndpointDataMapsInput {
   ingest_endpoint_data_maps: IngestEndpointDataMapInput[];
 }
 
+export interface AdminAddMeToOrgInput {
+  org_id: string;
+}
+
+export interface AlignSubscriptionInput {
+  org_id: string;
+}
+
 export interface AppCreateInput {
   tag_manager_account_id: string;
   name: string;
@@ -1219,6 +1227,10 @@ export interface StorageBackend {
   aws_kinesis_config?: AWSKinesisConfig | null;
   gc_bigquery_stream_config?: GCBigQueryStreamConfig | null;
   mongo_push_config?: MongoDbPushConfig | null;
+}
+
+export interface SwitchToManualInvoicingInput {
+  org_id: string;
 }
 
 export interface TagCreateInput {

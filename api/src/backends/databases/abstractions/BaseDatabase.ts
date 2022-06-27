@@ -83,11 +83,11 @@ export default abstract class BaseDatabase {
         }
     }
 
-    protected getResultWithRange(
+    protected getResultWithRange<T>(
         queryOptions: AppQueryOptions,
-        result: any,
+        result: T,
     ): {
-        result: any;
+        result: T;
         from: Date;
         to: Date;
     } {
@@ -267,14 +267,17 @@ export default abstract class BaseDatabase {
         to: Date;
     }>;
 
-    public abstract usage(
+    public abstract appBillingCycleUsage(
+        app: App,
+        cycleStart: Date,
+        cycleEnd: Date,
+    ): Promise<{ result: number; from: Date; to: Date }>;
+
+    public abstract ingestBillingCycleUsage(
         ingestEndpoint: IngestEndpoint,
-        queryOptions: IngestQueryOptions,
-    ): Promise<{
-        result: { key: string; requests: number; bytes: number }[];
-        from: Date;
-        to: Date;
-    }>;
+        cycleStart: Date,
+        cycleEnd: Date,
+    ): Promise<{ result: { request_count: number; byte_count: number }; from: Date; to: Date }>;
 
     public abstract requests(
         ingestEndpoint: IngestEndpoint,

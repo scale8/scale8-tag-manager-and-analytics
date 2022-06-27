@@ -4,17 +4,21 @@ import { PageActionProps, pageActions } from '../../../actions/PageActions';
 import { useLoggedInState } from '../../../context/AppContext';
 import { useRouter } from 'next/router';
 import { toOrgList } from '../../../utils/NavigationPaths';
+import { useApolloClient } from '@apollo/client';
 
 const LeaveOrganizationSection: FC<{ id: string }> = (props: { id: string }) => {
     const { id } = props;
     const router = useRouter();
+    const client = useApolloClient();
     const { templateInteractions, orgUserState } = useLoggedInState();
     const { dispatchDialogAction, ask } = templateInteractions;
 
     const pageActionProps: PageActionProps = {
         dispatchDialogAction,
         refresh: () => {
-            router.push(toOrgList).then();
+            client.resetStore().then(() => {
+                router.push(toOrgList).then();
+            });
         },
     };
 

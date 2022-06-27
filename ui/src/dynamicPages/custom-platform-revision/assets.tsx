@@ -5,24 +5,13 @@ import { DynamicPageProps } from '../../pageLoader/DynamicPageLoader';
 import { PlatformAssetPageData } from '../../gql/generated/PlatformAssetPageData';
 import { buildStandardMainInfo, buildTableColumns } from '../../utils/InfoLabelsUtils';
 import PagePlatformAssetQuery from '../../gql/queries/PagePlatformAssetQuery';
+import { formatBytes } from '../../utils/MathUtils';
 
 export type PlatformAssetTableRow = {
     id: string;
     name: string;
     mimeType: string;
     size: string;
-};
-
-const formatBytes = (bytes: number, decimals = 2) => {
-    if (bytes === 0) return '0 Bytes';
-
-    const k = 1024;
-    const dm = decimals < 0 ? 0 : decimals;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 };
 
 const PlatformAssetsPage: FC<DynamicPageProps> = (props: DynamicPageProps) => {

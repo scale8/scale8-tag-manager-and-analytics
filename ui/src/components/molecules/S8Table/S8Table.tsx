@@ -12,7 +12,7 @@ import S8TableHead from './S8TableHead';
 import S8TableRowActionsCell from './S8TableRowActionsCell';
 import S8TableRowSelectCell from './S8TableRowSelectCell';
 import { Sparklines, SparklinesLine } from 'react-sparklines';
-import { timestampDisplay } from '../../../utils/DateTimeUtils';
+import { timestampDisplay, timestampDisplayDate } from '../../../utils/DateTimeUtils';
 import { navigationColorFromSectionLocator } from '../../../containers/SectionsDetails';
 import { useLoggedInState } from '../../../context/AppContext';
 import { useSparkLineStyle } from '../../../hooks/useSparkLineStyle';
@@ -135,7 +135,10 @@ const S8Table = <T extends RowData>(props: S8TableProps<T>): ReactElement => {
             case 'numeric':
                 return value.toString();
             case 'datetime': {
-                return timestampDisplay(value);
+                return value === null ? '-' : timestampDisplay(value);
+            }
+            case 'date': {
+                return value === null ? '-' : timestampDisplayDate(value);
             }
             default:
                 return value;

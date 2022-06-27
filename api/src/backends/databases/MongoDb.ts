@@ -1058,58 +1058,6 @@ export default class MongoDb extends BaseDatabase {
         }, {} as { [k: string]: any }) as { [p: string]: any };
     }
 
-    public async usage(
-        ingestEndpoint: IngestEndpoint,
-        queryOptions: IngestQueryOptions,
-    ): Promise<{
-        result: { key: string; requests: number; bytes: number }[];
-        from: Date;
-        to: Date;
-    }> {
-        const rows = await this.runAggregation(
-            ingestEndpoint,
-            [
-                {
-                    $match: this.getIngestEndpointFilter(queryOptions),
-                },
-                {
-                    $project: {
-                        _id: 0,
-                        key: {
-                            $dateToString: {
-                                format: this.getFormatForTimeSlice(queryOptions),
-                                date: '$dt',
-                            },
-                        },
-                        requests: 1,
-                        bytes: 1,
-                    },
-                },
-                {
-                    $group: {
-                        _id: '$key',
-                        requests: { $sum: '$requests' },
-                        bytes: { $sum: '$bytes' },
-                    },
-                },
-                {
-                    $project: {
-                        _id: 0,
-                        key: '$_id',
-                        requests: 1,
-                        bytes: 1,
-                    },
-                },
-                {
-                    $sort: { key: -1 },
-                },
-            ],
-            queryOptions.limit,
-        );
-
-        return this.getResultWithRange(queryOptions, rows);
-    }
-
     public async simpleIngestSum(
         ingestEndpoint: IngestEndpoint,
         queryOptions: IngestQueryOptions,
@@ -1154,6 +1102,35 @@ export default class MongoDb extends BaseDatabase {
         );
 
         return this.getResultWithRange(queryOptions, rows);
+    }
+
+    public async appBillingCycleUsage(
+        app: App,
+        cycleStart: Date,
+        cycleEnd: Date,
+    ): Promise<{ result: number; from: Date; to: Date }> {
+        //MongoDB is not used for the commercial version...
+        return {
+            result: 0,
+            from: cycleStart,
+            to: cycleEnd,
+        };
+    }
+
+    public async ingestBillingCycleUsage(
+        ingestEndpoint: IngestEndpoint,
+        cycleStart: Date,
+        cycleEnd: Date,
+    ): Promise<{ result: { request_count: number; byte_count: number }; from: Date; to: Date }> {
+        //MongoDB is not used for the commercial version...
+        return {
+            result: {
+                request_count: 0,
+                byte_count: 0,
+            },
+            from: cycleStart,
+            to: cycleEnd,
+        };
     }
 
     public async requests(

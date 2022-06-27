@@ -5,6 +5,11 @@ import { PageActionProps, pageActions } from '../../actions/PageActions';
 import { Box, Button, Card, darken, Grid, lighten } from '@mui/material';
 import TmLogo from '../atoms/TmLogo';
 import DmLogo from '../atoms/DmLogo';
+import {
+    accountDetailsFromOrgWithAccounts,
+    buildDataManagerPlanDetails,
+    buildTagManagerPlanDetails,
+} from '../../utils/AccountUtils';
 
 type AccountPlanCardProps = {
     data: ProductSettings;
@@ -37,107 +42,26 @@ const AccountPlanCard: FC<AccountPlanCardProps> = ({ data, type }) => {
         },
     };
 
-    const { tagManagerAccount, tagManagerProductId, dataManagerAccount, dataManagerProductId } =
-        accountDetailsFromProductSettings(data);
+    const {
+        tagManagerAccount,
+        tagManagerProductId,
+        dataManagerAccount,
+        dataManagerProductId,
+        currentTagManagerProduct,
+        currentDataManagerProduct,
+    } = accountDetailsFromOrgWithAccounts(data.getOrg, tagManagerProducts, dataManagerProducts);
 
-    const currentTagManagerProduct = tagManagerProductId
-        ? tagManagerProducts.find((_) => _.id === tagManagerProductId)
-        : undefined;
+    const tagManagerDetails = buildTagManagerPlanDetails(
+        data.getOrg,
+        tagManagerAccount,
+        currentTagManagerProduct,
+    );
 
-    const currentDataManagerProduct = dataManagerProductId
-        ? dataManagerProducts.find((_) => _.id === dataManagerProductId)
-        : undefined;
-
-    const tagManagerDetails = (() => {
-        if (!tagManagerAccount.enabled) {
-            return {
-                state: 'Inactive',
-                pageViews: '',
-                price: '',
-            };
-        }
-        if (data.getOrg.manual_invoicing) {
-            return {
-                state: 'Manual Invoicing',
-                pageViews: '',
-                price: '',
-            };
-        }
-        if (tagManagerAccount.trial_expired) {
-            return {
-                state: 'Trial Expired',
-                pageViews: '',
-                price: '',
-            };
-        }
-        if (tagManagerAccount.is_trial) {
-            return {
-                state: 'Trial',
-                pageViews: '',
-                price: '',
-            };
-        }
-        if (!currentTagManagerProduct) {
-            return {
-                state: 'Unavailable',
-                pageViews: '',
-                price: '',
-            };
-        }
-        return {
-            state: 'Active',
-            pageViews: currentTagManagerProduct?.page_views?.toLocaleString('en-GB') ?? '',
-            price: (currentTagManagerProduct?.amount ?? 0) / 100,
-        };
-    })();
-
-    const dataManagerDetails = (() => {
-        if (!dataManagerAccount.enabled) {
-            return {
-                state: 'Inactive',
-                requests: '',
-                gbs: '',
-                price: '',
-            };
-        }
-        if (data.getOrg.manual_invoicing) {
-            return {
-                state: 'Manual Invoicing',
-                requests: '',
-                gbs: '',
-                price: '',
-            };
-        }
-        if (dataManagerAccount.trial_expired) {
-            return {
-                state: 'Trial Expired',
-                requests: '',
-                gbs: '',
-                price: '',
-            };
-        }
-        if (dataManagerAccount.is_trial) {
-            return {
-                state: 'Trial',
-                requests: '',
-                gbs: '',
-                price: '',
-            };
-        }
-        if (!currentDataManagerProduct) {
-            return {
-                state: 'Unavailable',
-                pageViews: '',
-                price: '',
-            };
-        }
-        return {
-            state: 'Active',
-            requests: currentDataManagerProduct?.requests?.toLocaleString('en-GB') ?? '',
-            gbs: currentDataManagerProduct?.gbs?.toLocaleString('en-GB') ?? '',
-            price: (currentDataManagerProduct?.amount ?? 0) / 100,
-        };
-    })();
+    const dataManagerDetails = buildDataManagerPlanDetails(
+        data.getOrg,
+        dataManagerAccount,
+        currentDataManagerProduct,
+    );
 
     const currentState = type === 'tag' ? tagManagerDetails.state : dataManagerDetails.state;
 
