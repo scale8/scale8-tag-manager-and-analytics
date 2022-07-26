@@ -117,8 +117,35 @@ const dateToPrintableUTCElements = (d: Date) => {
 // Conversion
 //
 
-export const dateToUTCTimestamp = (d: Date, displayValueToUTC = false): UTCTimestamp => {
-    const dElements = displayValueToUTC ? dateToElements(d) : dateToUTCElements(d);
+export const UTCTimestampToCorrespondentDate = (value: UTCTimestamp) => {
+    const dElements = dateToUTCElements(new Date(value));
+    return new Date(
+        dElements.year,
+        dElements.month,
+        dElements.date,
+        dElements.hour,
+        dElements.minute,
+        dElements.seconds,
+        dElements.milliseconds,
+    );
+};
+
+export const dateToCorrespondentUTCTimestamp = (d: Date): UTCTimestamp => {
+    const dElements = dateToElements(d);
+
+    return Date.UTC(
+        dElements.year,
+        dElements.month,
+        dElements.date,
+        dElements.hour,
+        dElements.minute,
+        dElements.seconds,
+        dElements.milliseconds,
+    );
+};
+
+export const dateToUTCTimestamp = (d: Date): UTCTimestamp => {
+    const dElements = dateToUTCElements(d);
 
     return Date.UTC(
         dElements.year,
@@ -155,28 +182,28 @@ export const isSameMonthUTC = (left: UTCTimestamp, right: UTCTimestamp): boolean
 export const getTimezoneOffset = (): number => now.getTimezoneOffset();
 
 export const addDaysUTC = (value: UTCTimestamp, days: number): UTCTimestamp =>
-    dateToUTCTimestamp(addDays(new Date(value), days));
+    dateToCorrespondentUTCTimestamp(addDays(UTCTimestampToCorrespondentDate(value), days));
 
 export const subDaysUTC = (value: UTCTimestamp, days: number): UTCTimestamp =>
-    dateToUTCTimestamp(subDays(new Date(value), days));
+    dateToCorrespondentUTCTimestamp(subDays(UTCTimestampToCorrespondentDate(value), days));
 
 export const addHoursUTC = (value: UTCTimestamp, hours: number): UTCTimestamp =>
-    dateToUTCTimestamp(addHours(new Date(value), hours));
+    dateToCorrespondentUTCTimestamp(addHours(UTCTimestampToCorrespondentDate(value), hours));
 
 export const subHoursUTC = (value: UTCTimestamp, hours: number): UTCTimestamp =>
-    dateToUTCTimestamp(subHours(new Date(value), hours));
+    dateToCorrespondentUTCTimestamp(subHours(UTCTimestampToCorrespondentDate(value), hours));
 
 export const addMinutesUTC = (value: UTCTimestamp, minutes: number): UTCTimestamp =>
-    dateToUTCTimestamp(addMinutes(new Date(value), minutes));
+    dateToCorrespondentUTCTimestamp(addMinutes(UTCTimestampToCorrespondentDate(value), minutes));
 
 export const subMinutesUTC = (value: UTCTimestamp, minutes: number): UTCTimestamp =>
-    dateToUTCTimestamp(subMinutes(new Date(value), minutes));
+    dateToCorrespondentUTCTimestamp(subMinutes(UTCTimestampToCorrespondentDate(value), minutes));
 
 export const addMonthsUTC = (value: UTCTimestamp, months: number): UTCTimestamp =>
-    dateToUTCTimestamp(addMonths(new Date(value), months));
+    dateToCorrespondentUTCTimestamp(addMonths(UTCTimestampToCorrespondentDate(value), months));
 
 export const subMonthsUTC = (value: UTCTimestamp, months: number): UTCTimestamp =>
-    dateToUTCTimestamp(subMonths(new Date(value), months));
+    dateToCorrespondentUTCTimestamp(subMonths(UTCTimestampToCorrespondentDate(value), months));
 
 //
 // utility functions

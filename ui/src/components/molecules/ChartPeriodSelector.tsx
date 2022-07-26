@@ -15,7 +15,7 @@ import { ChartPeriodProps, ChartPeriodType } from '../../hooks/chart/useChartPer
 import {
     addDaysUTC,
     addMonthsUTC,
-    dateToUTCTimestamp,
+    dateToCorrespondentUTCTimestamp,
     displayDayMonth,
     displayMonthYear,
     isSameMonthUTC,
@@ -309,8 +309,8 @@ const ChartPeriodSelector: FC<ChartPeriodSelectorProps> = (props: ChartPeriodSel
                         if (endDate !== undefined && startDate !== undefined) {
                             setPeriod('custom');
                             setDate(undefined);
-                            setFrom(dateToUTCTimestamp(startDate, true));
-                            setTo(dateToUTCTimestamp(endDate, true));
+                            setFrom(dateToCorrespondentUTCTimestamp(startDate));
+                            setTo(dateToCorrespondentUTCTimestamp(endDate));
                             handleRangeClose();
                         }
                     }}
