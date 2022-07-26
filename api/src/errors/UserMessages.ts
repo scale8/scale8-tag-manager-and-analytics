@@ -14,6 +14,7 @@ const userMessages = {
     ingestEndpointFailed: 'Cannot find ingest endpoint details.',
     platformFailed: 'Cannot find platform details.',
     accountFailed: 'Cannot find account details.',
+    emailUpdateFailed: 'Cannot update email address.',
     revisionFailed: 'Cannot find revision details.',
     conditionFailed: 'Cannot find condition/exception details.',
     environmentFailed: 'Cannot find environment details.',

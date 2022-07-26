@@ -95,6 +95,10 @@ export default class UserManager extends Manager<User> {
             The date the \`User\` was last updated
             """
             updated_at: DateTime!
+            """
+            If the user should recieve product updates
+            """
+            is_product_updates_enabled: Boolean!
         }
 
         """
@@ -297,6 +301,10 @@ export default class UserManager extends Manager<User> {
             If provided the \`Logged in User\` email notifications setting to update
             """
             email_notifications: Boolean
+            """
+            If provided the \`Logged in User\` product updates setting to update
+            """
+            is_product_updates_enabled: Boolean
         }
 
         input ChangePasswordInput {
@@ -649,11 +657,17 @@ export default class UserManager extends Manager<User> {
                         throw new GenericError(
                             'This email is already assigned to another user',
                             LogPriority.DEBUG,
-                            userMessages.accountFailed,
+                            userMessages.emailUpdateFailed,
                         );
                     }
                 }
-                me.bulkGQLSet(args.meUpdateInput);
+                me.bulkGQLSet(args.meUpdateInput, [
+                    'first_name',
+                    'last_name',
+                    'email_notifications',
+                    'is_product_updates_enabled',
+                    'email', //we have done our checks, but we need to verify?
+                ]);
                 await this.repoFactory(User).save(me, 'SYSTEM');
                 return true;
             });
