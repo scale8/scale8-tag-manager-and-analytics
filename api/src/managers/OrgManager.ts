@@ -15,7 +15,6 @@ import DataManagerAccount from '../mongo/models/data/DataManagerAccount';
 import GenericError from '../errors/GenericError';
 import GQLMethod from '../enums/GQLMethod';
 import GQLError from '../errors/GQLError';
-import DataError from '../errors/DataError';
 import userMessages from '../errors/UserMessages';
 import { createOrg, fetchOrg, findUserAvailableByEmail, isUserInOrg } from '../utils/OrgUtils';
 import TagManagerAccountRepo from '../mongo/repos/tag/TagManagerAccountRepo';
@@ -748,35 +747,43 @@ export default class OrgManager extends Manager<Org> {
             }
         },
         startTagManagerTrial: async (parent: any, args: any, ctx: CTX) => {
-            const org = await fetchOrg(new ObjectId(args.startTagManagerTrialInput.org_id));
-            return await this.orgAuth.asUserWithOrgOwnership(ctx, org, async (me) => {
-                const account = await this.repoFactory<TagManagerAccountRepo>(
-                    TagManagerAccount,
-                ).getFromOrg(org);
-                account.enabled = true;
-                account.startTrial();
-                await this.repoFactory(TagManagerAccount).save(account, me, {
-                    gqlMethod: GQLMethod.CREATE,
-                });
-                return account.toGQLType();
-            });
+            throw new GQLError(
+                'We are no longer supporting new signups. We have a new version of the platform coming soon.',
+                true,
+            );
+            // const org = await fetchOrg(new ObjectId(args.startTagManagerTrialInput.org_id));
+            // return await this.orgAuth.asUserWithOrgOwnership(ctx, org, async (me) => {
+            //     const account = await this.repoFactory<TagManagerAccountRepo>(
+            //         TagManagerAccount,
+            //     ).getFromOrg(org);
+            //     account.enabled = true;
+            //     account.startTrial();
+            //     await this.repoFactory(TagManagerAccount).save(account, me, {
+            //         gqlMethod: GQLMethod.CREATE,
+            //     });
+            //     return account.toGQLType();
+            // });
         },
         startDataManagerTrial: async (parent: any, args: any, ctx: CTX) => {
+            throw new GQLError(
+                'We are no longer supporting new signups. We have a new version of the platform coming soon.',
+                true,
+            );
             /*
                 Logic for creating a data manager account = same as tag manager account
              */
-            const org = await fetchOrg(new ObjectId(args.startDataManagerTrialInput.org_id));
-            return await this.orgAuth.asUserWithOrgOwnership(ctx, org, async (me) => {
-                const account = await this.repoFactory<DataManagerAccountRepo>(
-                    DataManagerAccount,
-                ).getFromOrg(org);
-                account.enabled = true;
-                account.startTrial();
-                await this.repoFactory(DataManagerAccount).save(account, me, {
-                    gqlMethod: GQLMethod.CREATE,
-                });
-                return account.toGQLType();
-            });
+            // const org = await fetchOrg(new ObjectId(args.startDataManagerTrialInput.org_id));
+            // return await this.orgAuth.asUserWithOrgOwnership(ctx, org, async (me) => {
+            //     const account = await this.repoFactory<DataManagerAccountRepo>(
+            //         DataManagerAccount,
+            //     ).getFromOrg(org);
+            //     account.enabled = true;
+            //     account.startTrial();
+            //     await this.repoFactory(DataManagerAccount).save(account, me, {
+            //         gqlMethod: GQLMethod.CREATE,
+            //     });
+            //     return account.toGQLType();
+            // });
         },
         regenerateUserPassword: async (parent: any, args: any, ctx: CTX) => {
             const orgId = new ObjectId(args.regenerateUserPasswordInput.org_id);
@@ -1068,24 +1075,28 @@ export default class OrgManager extends Manager<Org> {
             });
         },
         createOrg: async (parent: any, args: any, ctx: CTX) => {
-            return await this.orgAuth.asUserWithOrgManagement(ctx, async (me) => {
-                if (
-                    (await this.repoFactory(Org).count({
-                        _org_owner_user_id: me.id,
-                    })) >= (await this.config.getMaxOrgs())
-                ) {
-                    throw new DataError(userMessages.maxOrgs, true);
-                }
-                return (
-                    await createOrg(
-                        me,
-                        args.orgCreateInput.name,
-                        [me],
-                        undefined,
-                        args.orgCreateInput.comments,
-                    )
-                ).toGQLType();
-            });
+            throw new GQLError(
+                'We are no longer allowing new Orgs from being created. We have a new version of the platform coming soon.',
+                true,
+            );
+            // return await this.orgAuth.asUserWithOrgManagement(ctx, async (me) => {
+            //     if (
+            //         (await this.repoFactory(Org).count({
+            //             _org_owner_user_id: me.id,
+            //         })) >= (await this.config.getMaxOrgs())
+            //     ) {
+            //         throw new DataError(userMessages.maxOrgs, true);
+            //     }
+            //     return (
+            //         await createOrg(
+            //             me,
+            //             args.orgCreateInput.name,
+            //             [me],
+            //             undefined,
+            //             args.orgCreateInput.comments,
+            //         )
+            //     ).toGQLType();
+            // });
         },
         updateOrg: async (parent: any, args: any, ctx: CTX) => {
             const orgId = new ObjectId(args.orgUpdateInput.id);
