@@ -26,6 +26,7 @@ import { LogPriority } from '../enums/LogPriority';
 import Hash from '../core/Hash';
 import AccountService from '../accounts/AccountService';
 import OrgService from '../orgs/OrgService';
+import DataError from '../errors/DataError';
 
 @injectable()
 export default class OrgManager extends Manager<Org> {
@@ -1075,28 +1076,31 @@ export default class OrgManager extends Manager<Org> {
             });
         },
         createOrg: async (parent: any, args: any, ctx: CTX) => {
-            throw new GQLError(
-                'We are no longer allowing new Orgs from being created. We have a new version of the platform coming soon.',
-                true,
-            );
-            // return await this.orgAuth.asUserWithOrgManagement(ctx, async (me) => {
-            //     if (
-            //         (await this.repoFactory(Org).count({
-            //             _org_owner_user_id: me.id,
-            //         })) >= (await this.config.getMaxOrgs())
-            //     ) {
-            //         throw new DataError(userMessages.maxOrgs, true);
-            //     }
-            //     return (
-            //         await createOrg(
-            //             me,
-            //             args.orgCreateInput.name,
-            //             [me],
-            //             undefined,
-            //             args.orgCreateInput.comments,
-            //         )
-            //     ).toGQLType();
-            // });
+            if (this.config.isCommercial()) {
+                throw new GQLError(
+                    'We are no longer allowing new Orgs from being created. We have a new version of the platform coming soon.',
+                    true,
+                );
+            } else {
+                return await this.orgAuth.asUserWithOrgManagement(ctx, async (me) => {
+                    if (
+                        (await this.repoFactory(Org).count({
+                            _org_owner_user_id: me.id,
+                        })) >= (await this.config.getMaxOrgs())
+                    ) {
+                        throw new DataError(userMessages.maxOrgs, true);
+                    }
+                    return (
+                        await createOrg(
+                            me,
+                            args.orgCreateInput.name,
+                            [me],
+                            undefined,
+                            args.orgCreateInput.comments,
+                        )
+                    ).toGQLType();
+                });
+            }
         },
         updateOrg: async (parent: any, args: any, ctx: CTX) => {
             const orgId = new ObjectId(args.orgUpdateInput.id);
