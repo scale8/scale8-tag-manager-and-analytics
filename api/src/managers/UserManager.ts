@@ -509,18 +509,24 @@ export default class UserManager extends Manager<User> {
             });
         },
         signUp: async (parent: any, args: any) => {
-            return this.signUpService.prepareSignup({
-                captchaToken: args.signUpInput.captcha_token,
-                signUpType: args.signUpInput.sign_up_type,
-                fullName: args.signUpInput.full_name,
-                domain: args.signUpInput.domain,
-                orgName: args.signUpInput.org_name,
-                password: args.signUpInput.password,
-                requestEmail: args.signUpInput.email,
-                inviteToken: args.signUpInput.invite_token,
-            });
+            if (this.config.isCommercial()) {
+                throw new GQLError(
+                    'We are no longer allowing signups. A new version is coming soon.',
+                    true,
+                );
+            } else {
+                return this.signUpService.prepareSignup({
+                    captchaToken: args.signUpInput.captcha_token,
+                    signUpType: args.signUpInput.sign_up_type,
+                    fullName: args.signUpInput.full_name,
+                    domain: args.signUpInput.domain,
+                    orgName: args.signUpInput.org_name,
+                    password: args.signUpInput.password,
+                    requestEmail: args.signUpInput.email,
+                    inviteToken: args.signUpInput.invite_token,
+                });
+            }
         },
-
         completeSignUp: async (
             parent: any,
             args: any,
