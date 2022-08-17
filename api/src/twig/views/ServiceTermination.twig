@@ -1,0 +1,22 @@
+{% extends 'BaseEmail.twig' %}
+
+{% block body %}{% apply spaceless %}
+    {{ bodyStart|raw }}
+
+    {{ hiFirstName|raw }}
+
+    {{ parSpacer|raw }}
+
+    {{ parStart|raw }}
+    We are closing down the Scale8 service on 30th September '22.
+    This has not been an easy decision to make and we have already been working with all our paying customers to support them long term. Customers who subscribed for the service on or before 16th August '22 will be supported.
+    We've had some incredible feedback on the platform, but ultimately it is time to pivot. We have identified a number of areas to focus our efforts on next.
+    The existing platform will remain a supported open-source project.
+    If you have any concerns or questions, please reach out to us.
+    Thank you again for signing up to Scale8 and supporting our project.
+    {{ parEnd|raw }}
+
+    {{ parSpacer|raw }}
+
+    {{ bodyEnd|raw }}
+{% endapply %}{% endblock %}
